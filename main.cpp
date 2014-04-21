@@ -42,16 +42,16 @@ int main(int argc, char *argv[])
     appTran.load(QString("mx-packageinstaller_") + QLocale::system().name(), "/usr/share/mx-packageinstaller/locale");
     a.installTranslator(&appTran);
 
-//    if (getuid() == 0) {
+    if (getuid() == 0) {
         mxpackageinstaller w;
         w.show();
 
         return a.exec();
 
-//    } else {
-//        QApplication::beep();
-//        QMessageBox::critical(0, QString::null,
-//                              QApplication::tr("You must run this program as root."));
-//        return 1;
-//    }
+    } else {
+        QApplication::beep();
+        QMessageBox::critical(0, QString::null,
+                              QApplication::tr("You must run this program as root."));
+        return 1;
+    }
 }
