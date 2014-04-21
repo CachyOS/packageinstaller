@@ -29,8 +29,6 @@
 #include <QFileDialog>
 #include <QScrollBar>
 
-#include <QDebug>
-
 mxpackageinstaller::mxpackageinstaller(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::mxpackageinstaller)
@@ -380,6 +378,7 @@ void mxpackageinstaller::on_treeWidget_itemExpanded() {
         }
         ++it;
     }
+    ui->treeWidget->resizeColumnToContents(3);
 }
 
 void mxpackageinstaller::on_treeWidget_itemCollapsed() {
@@ -390,6 +389,7 @@ void mxpackageinstaller::on_treeWidget_itemCollapsed() {
         }
         ++it;
     }
+    ui->treeWidget->resizeColumnToContents(3);
 }
 
 // Intall button clicked
@@ -413,7 +413,7 @@ void mxpackageinstaller::on_buttonInstall_clicked() {
 void mxpackageinstaller::on_buttonAbout_clicked() {
     QMessageBox msgBox(QMessageBox::NoIcon,
                        tr("About MX Package Installer"), "<p align=\"center\"><b><h2>" +
-                       tr("MX Package Installer") + "</h2></b></p><p align=\"center\">MX14+git20140418</p><p align=\"center\"><h3>" +
+                       tr("MX Package Installer") + "</h2></b></p><p align=\"center\">MX14+git20140421</p><p align=\"center\"><h3>" +
                        tr("Simple package installer for additional packages for antiX MX") + "</h3></p><p align=\"center\"><a href=\"http://www.mepiscommunity.org/mx\">http://www.mepiscommunity.org/mx</a><br /></p><p align=\"center\">" +
                        tr("Copyright (c) antiX") + "<br /><br /></p>", 0, this);
     msgBox.addButton(tr("License"), QMessageBox::AcceptRole);
