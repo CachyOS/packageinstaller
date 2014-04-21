@@ -4,3 +4,4 @@ translations/*.qm 	 usr/share/mx-packageinstaller/locales
 mx-packageinstaller.png	usr/share/pixmaps/mx
 icons/*                 usr/share/mx-packageinstaller/icons
 bm/*			usr/share/mx-packageinstaller/bm
+license.html   /usr/share/doc/mx-packageinstaller

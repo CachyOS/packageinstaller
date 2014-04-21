@@ -419,7 +419,7 @@ void mxpackageinstaller::on_buttonAbout_clicked() {
     msgBox.addButton(tr("License"), QMessageBox::AcceptRole);
     msgBox.addButton(QMessageBox::Cancel);
     if (msgBox.exec() == QMessageBox::AcceptRole)
-        displaySite("file:///usr/local/share/doc/mx-packageinstaller-license.html");
+        displaySite("file:///usr/share/doc/mx-packageinstaller/license.html");
 }
 
 
