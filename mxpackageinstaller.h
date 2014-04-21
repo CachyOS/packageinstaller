@@ -28,6 +28,7 @@
 #include <QMessageBox>
 #include <QProcess>
 #include <QTimer>
+#include <QTreeWidgetItem>
 
 namespace Ui {
 class mxpackageinstaller;
@@ -65,6 +66,7 @@ public slots:
     void postProcDone(int exitCode);
     void setConnections(QTimer* timer, QProcess* proc);
     void onStdoutAvailable();
+    void displayInfo(QTreeWidgetItem* item, int column);
 
     virtual void on_buttonInstall_clicked();
     virtual void on_buttonAbout_clicked();

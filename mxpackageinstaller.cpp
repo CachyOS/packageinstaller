@@ -28,6 +28,7 @@
 #include <QWebView>
 #include <QFileDialog>
 #include <QScrollBar>
+#include <QFormLayout>
 
 mxpackageinstaller::mxpackageinstaller(QWidget *parent) :
     QDialog(parent),
@@ -64,15 +65,17 @@ void mxpackageinstaller::setup() {
     ui->buttonCancel->setEnabled(true);
     ui->buttonInstall->setEnabled(true);
     QStringList columnNames;
-    columnNames << "Info" << "" << "Package" << "Description";
+    columnNames << "" << "" << "Package" << "Info" << "Description";
     ui->treeWidget->setHeaderLabels(columnNames);
     ui->treeWidget->resizeColumnToContents(0);
     ui->treeWidget->resizeColumnToContents(1);
+    ui->treeWidget->resizeColumnToContents(2);
+    ui->treeWidget->resizeColumnToContents(3);
     listPackages();
 }
 
 
-// parse '/usr/share/install-meta' for .bm files and add info in treeWidget
+// parse '/usr/share/mx-packageinsataller/bm' for .bm files and add info in treeWidget
 void mxpackageinstaller::listPackages(void) {
     QStringList filter("*.bm");
     QDir dir("/usr/share/mx-packageinstaller/bm");
@@ -95,11 +98,12 @@ void mxpackageinstaller::listPackages(void) {
             font.setBold(true);
             topLevelItem->setForeground(2, QBrush(Qt::darkGreen));
             topLevelItem->setFont(2, font);
-            topLevelItem->setIcon(0, *(new QIcon("/usr/share/mx-packageinstaller/icons/folder.png")));
+            topLevelItem->setIcon(0, QIcon("/usr/share/mx-packageinstaller/icons/folder.png"));
         }
         // add package name as childItem to treeWidget
         QTreeWidgetItem *childItem = new QTreeWidgetItem(topLevelItem);
         childItem->setText(2, name);
+        childItem->setIcon(3, QIcon("/usr/share/mx-packageinstaller/icons/info.png"));
 
         // add checkboxes
         childItem->setFlags(childItem->flags() | Qt::ItemIsUserCheckable);
@@ -107,18 +111,19 @@ void mxpackageinstaller::listPackages(void) {
 
 
         // add description from file
-        QString filename = "/usr/share/install-meta/" +  bmfilelist.at(i);
+        QString filename = "/usr/share/mx-packageinstaller/bm/" +  bmfilelist.at(i);
         QString cmd = QString("grep FLL_DESCRIPTION= %1 | cut -f 2 -d '='").arg(filename);
         QString out = getCmdOut(cmd);
         out.remove(QChar('"'));
-        childItem->setText(3, out);
+        childItem->setText(4, out);
 
         // add full name of file in treeWidget, but don't display it
-        childItem->setText(4, filename);
+        childItem->setText(5, filename);
     }
     ui->treeWidget->resizeColumnToContents(0);
     ui->treeWidget->resizeColumnToContents(2);
     ui->buttonInstall->setEnabled(false);
+    connect(ui->treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*, int)), SLOT(displayInfo(QTreeWidgetItem*,int)));
 }
 
 // get list of packages to install and start install processes
@@ -135,7 +140,7 @@ void mxpackageinstaller::install() {
     while (*it) {
         (*it)->setSelected(false); // deselect each item
         if ((*it)->checkState(1) == Qt::Checked) {
-            QString filename =  (*it)->text(4);
+            QString filename =  (*it)->text(5);
             (*it)->setCheckState(1, Qt::Unchecked);  // uncheck processed item
             (*it)->setSelected(true);                // select current item for passing to other functions
             QString cmd_preprocess = "source " + filename + " && printf '%s\\n' \"${FLL_PRE_PROCESSING[@]}\"";
@@ -233,7 +238,7 @@ void mxpackageinstaller::preProcDone(int exitCode) {
     QTreeWidgetItemIterator it(ui->treeWidget);
     while (*it) {
         if ((*it)->isSelected()) {
-            QString filename =  (*it)->text(4);
+            QString filename =  (*it)->text(5);
             QString cmd_package = "source " + filename + " && echo ${FLL_PACKAGES[@]}";
             package = getCmdOut(cmd_package);
         }
@@ -261,7 +266,7 @@ void mxpackageinstaller::aptgetDone(int exitCode) {
     QTreeWidgetItemIterator it(ui->treeWidget);
     while (*it) {
         if ((*it)->isSelected()) {
-            QString filename =  (*it)->text(4);
+            QString filename =  (*it)->text(5);
             package = (*it)->text(2);
             QString cmd_postprocess = "source " + filename + " && printf '%s\\n' \"${FLL_POST_PROCESSING[@]}\"";
             postprocess = getCmdOut(cmd_postprocess);
@@ -347,10 +352,61 @@ void mxpackageinstaller::onStdoutAvailable() {
     sb->setValue(sb->maximum());
 }
 
+void mxpackageinstaller::displayInfo(QTreeWidgetItem * item, int column) {
+    if (column == 3) {
+        QString desc = item->text(4);
+        QString filename = item->text(5);
+        QString cmd_preprocess = "source " + filename + " && printf '%s\\n' \"${FLL_PRE_PROCESSING[@]}\"";
+        QString preprocess = getCmdOut(cmd_preprocess);
+        QString cmd_package = "source " + filename + " && echo ${FLL_PACKAGES[@]}";
+        QString package = getCmdOut(cmd_package);
+        QString cmd_postprocess = "source " + filename + " && printf '%s\\n' \"${FLL_POST_PROCESSING[@]}\"";
+        QString postprocess = getCmdOut(cmd_postprocess);
+
+        QWidget *window = new QWidget(this, Qt::Dialog);
+        window->setWindowTitle(tr("Package information"));
+        window->resize(800, 500);
+
+        QLabel *titleLabel = new QLabel(filename.remove("/usr/share/mx-packageinstaller/bm/"));
+        QFont font;
+        font.setBold(true);
+        titleLabel->setFont(font);
+        QLabel *descLabel = new QLabel(desc + "\n");
+        QLabel *preBoxLabel = new QLabel(tr("PRE PROCESSING:"));
+        QTextBrowser *preBox = new QTextBrowser;
+        preBox->setText(preprocess);
+        QLabel *packageLabel = new QLabel(tr("PACKAGES TO BE INSTALLED:"));
+        QTextBrowser *packageBox = new QTextBrowser;
+        packageBox->setText(package);
+        packageBox->adjustSize();
+        QLabel *postBoxLabel = new QLabel(tr("POST PROCESSING:"));
+        QTextBrowser *postBox = new QTextBrowser;
+        postBox->setText(preprocess);
+        QPushButton *cancelBtn = new QPushButton(tr("Cancel"));
+        cancelBtn->setMaximumWidth(100);
+        cancelBtn->setIcon(QIcon("/usr/share/mx-packageinstaller/icons/gtk-cancel.png"));
+        connect(cancelBtn,SIGNAL(clicked()),window,SLOT(close()));
+
+        QFormLayout *layout = new QFormLayout;
+        layout->addRow(titleLabel);
+        layout->addRow(descLabel);
+        layout->addRow(preBoxLabel);
+        layout->addRow(preBox);
+        layout->addRow(packageLabel);
+        layout->addRow(packageBox);
+        layout->addRow(postBoxLabel);
+        layout->addRow(postBox);
+        layout->addRow(cancelBtn);
+
+        window->setLayout(layout);
+        window->show();
+    }
+}
+
 // resize columns when expanding
 void mxpackageinstaller::on_treeWidget_expanded() {
     ui->treeWidget->resizeColumnToContents(2);
-    ui->treeWidget->resizeColumnToContents(3);
+    ui->treeWidget->resizeColumnToContents(4);
 }
 
 void mxpackageinstaller::on_treeWidget_itemClicked() {
@@ -374,25 +430,25 @@ void mxpackageinstaller::on_treeWidget_itemExpanded() {
     QTreeWidgetItemIterator it(ui->treeWidget);
     while (*it) {
         if ((*it)->isExpanded()) {
-            (*it)->setIcon(0, *(new QIcon("/usr/share/mx-packageinstaller/icons/folder-open.png")));
+            (*it)->setIcon(0, QIcon("/usr/share/mx-packageinstaller/icons/folder-open.png"));
         }
         ++it;
     }
-    ui->treeWidget->resizeColumnToContents(3);
+    ui->treeWidget->resizeColumnToContents(4);
 }
 
 void mxpackageinstaller::on_treeWidget_itemCollapsed() {
     QTreeWidgetItemIterator it(ui->treeWidget);
     while (*it) {
         if (!(*it)->isExpanded()) {
-            (*it)->setIcon(0, *(new QIcon("/usr/share/mx-packageinstaller/icons/folder.png")));
+            (*it)->setIcon(0, QIcon("/usr/share/mx-packageinstaller/icons/folder.png"));
         }
         ++it;
     }
-    ui->treeWidget->resizeColumnToContents(3);
+    ui->treeWidget->resizeColumnToContents(4);
 }
 
-// Intall button clicked
+// Install button clicked
 void mxpackageinstaller::on_buttonInstall_clicked() {
     // on first page
     if (ui->stackedWidget->currentIndex() == 0) {
