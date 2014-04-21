@@ -1,0 +1,24 @@
+[Desktop Entry]
+Name=MX Package Installer
+Name[de]=
+Name[es]=
+Name[fr]=
+Name[it]=
+Name[nl]=
+Name[sv]=
+Name[el]=
+Name[ru]=
+Comment=Simple Package Installer
+Comment[de]=
+Comment[es]=
+Comment[fr]=
+Comment[it]=
+Comment[nl]=
+Comment[sv]=
+Comment[el]=
+Comment[ru]=
+Exec=gksu mx-packageinstaller
+Icon=mx-packageinstaller
+NoDisplay=false
+Categories=System;
+Type=Application

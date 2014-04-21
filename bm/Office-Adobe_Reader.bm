@@ -1,0 +1,28 @@
+FLL_DESCRIPTION="Adobe Reader PDF viewer."
+
+FLL_PRE_PROCESSING=(
+	"#!/bin/bash"
+	"echo \"---- in preprocessing ----\""
+        "echo \"Adding deb-multimedia repository to /etc/apt/sources.list.d/debian.list\""
+	"sed -i -r '/http:.*multimedia\.org.* wheezy/ s/^#+//' /etc/apt/sources.list.d/debian.list"
+        "apt-get update"
+        "echo \"---- preprocessing done----\""
+)
+
+FLL_PACKAGE_DEPMODS=(
+)
+
+FLL_PACKAGES=(
+	acroread 
+        mozilla-acroread 
+
+)
+
+FLL_POST_PROCESSING=(
+       "#!/bin/bash"
+       "echo \"---- in postprocessing ----\""
+       "echo \"Removing deb-multimedia repository from /etc/apt/sources.list.d/debian.list\""
+       "sed -i -r '/http:.*multimedia\.org.* wheezy/ s/^([^#])/#\1/' /etc/apt/sources.list.d/debian.list"
+       "echo \"---- postprocessing done----\""
+
+)

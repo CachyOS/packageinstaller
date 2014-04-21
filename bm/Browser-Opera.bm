@@ -1,0 +1,28 @@
+FLL_DESCRIPTION="Opera browser."
+
+FLL_PRE_PROCESSING=(
+	"#!/bin/bash"
+	"echo \"---- in preprocessing ----\""
+        "echo \"Adding Opera repository to /etc/apt/sources.list.d/various.list\""
+	"sed -i -r '/opera.com/ s/^#+//' /etc/apt/sources.list.d/various.list"
+        "wget -O - http://deb.opera.com/archive.key | apt-key add -" 
+        "apt-get update"
+        "echo \"---- preprocessing done----\""
+)
+
+FLL_PACKAGE_DEPMODS=(
+)
+
+FLL_PACKAGES=(
+     opera
+
+)
+
+FLL_POST_PROCESSING=(
+       "#!/bin/bash"
+       "echo \"---- in postprocessing ----\""
+       "echo \"Removing Opera repository from /etc/apt/sources.list.d/various.list\""
+       "sed -i -r '/opera.com/ s/^([^#])/#\1/' /etc/apt/sources.list.d/various.list"
+       "echo \"---- postprocessing done----\""
+
+)
