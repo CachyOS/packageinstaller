@@ -185,8 +185,6 @@ void mxpackageinstaller::update() {
 // run preprocess
 void mxpackageinstaller::preProc(QString preprocess) {
     QString outLabel = tr("Pre-processing... ");
-    ui->stackedWidget->setCurrentWidget(ui->outputPage);
-    ui->progressBar->setValue(0);
     ui->outputLabel->setText(outLabel);
     setConnections(timer, proc);
     disconnect(proc, SIGNAL(finished(int)), 0, 0);
@@ -200,8 +198,6 @@ void mxpackageinstaller::preProc(QString preprocess) {
 // run apt-get install
 void mxpackageinstaller::aptget(QString package) {
     QString outLabel = tr("Installing: ") + package;
-    ui->stackedWidget->setCurrentWidget(ui->outputPage);
-    ui->progressBar->setValue(0);
     ui->outputLabel->setText(outLabel);
     setConnections(timer, proc);
     disconnect(proc, SIGNAL(finished(int)), 0, 0);
@@ -216,8 +212,6 @@ void mxpackageinstaller::aptget(QString package) {
 // run postprocess
 void mxpackageinstaller::postProc(QString postprocess) {
     QString outLabel = tr("Post-processing... ");
-    ui->stackedWidget->setCurrentWidget(ui->outputPage);
-    ui->progressBar->setValue(0);
     ui->outputLabel->setText(outLabel);
     setConnections(timer, proc);
     disconnect(proc, SIGNAL(finished(int)), 0, 0);
