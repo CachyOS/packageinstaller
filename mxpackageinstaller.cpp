@@ -134,6 +134,7 @@ void mxpackageinstaller::install() {
     QString preprocess = "";
 
     //run apt-get update
+    setCursor(QCursor(Qt::WaitCursor));
     update();
 
     QTreeWidgetItemIterator it(ui->treeWidget);
@@ -141,7 +142,6 @@ void mxpackageinstaller::install() {
         (*it)->setSelected(false); // deselect each item
         if ((*it)->checkState(1) == Qt::Checked) {
             QString filename =  (*it)->text(5);
-            (*it)->setCheckState(1, Qt::Unchecked);  // uncheck processed item
             (*it)->setSelected(true);                // select current item for passing to other functions
             QString cmd_preprocess = "source " + filename + " && printf '%s\\n' \"${FLL_PRE_PROCESSING[@]}\"";
             preprocess = getCmdOut(cmd_preprocess);
@@ -149,6 +149,23 @@ void mxpackageinstaller::install() {
         }
         ++it;
     }
+    // process done at the end of cycle
+    setCursor(QCursor(Qt::ArrowCursor));
+    if (proc->exitCode() == 0) {
+        ui->outputLabel->setText(tr("Installation done."));
+        if (QMessageBox::information(this, tr("Success"),
+                                     tr("Process finished with success.<p><b>Do you want to exit MX Package Installer?</b>"),
+                                     QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok){
+            qApp->exit(0);
+        }
+    } else {
+        QMessageBox::critical(this, tr("Error"),
+                              tr("Postprocess finished. Errors have occurred."));
+    }
+    ui->buttonCancel->setEnabled(true);
+    ui->buttonInstall->setEnabled(true);
+    ui->buttonInstall->setText("< Back");
+    ui->buttonInstall->setIcon(QIcon());
 }
 // run update
 void mxpackageinstaller::update() {
@@ -248,12 +265,10 @@ void mxpackageinstaller::preProcDone(int exitCode) {
         ui->outputLabel->setText(tr("Preprocessing done."));
         aptget(package);
     } else {
+        setCursor(QCursor(Qt::ArrowCursor));
         QMessageBox::critical(this, tr("Error"),
                               tr("Pre-process finished. Errors have occurred installing: ") + package);
-        ui->buttonCancel->setEnabled(true);
-        ui->buttonInstall->setEnabled(true);
-        ui->buttonInstall->setText("< Back");
-        ui->buttonInstall->setIcon(QIcon());
+        setCursor(QCursor(Qt::WaitCursor));
     }
 }
 
@@ -277,19 +292,16 @@ void mxpackageinstaller::aptgetDone(int exitCode) {
         ui->outputLabel->setText(tr("Installation done."));
         postProc(postprocess);
     } else {
+        setCursor(QCursor(Qt::ArrowCursor));
         QMessageBox::critical(this, tr("Error"),
                               tr("Errors have occurred installing: ") + package);
-        ui->buttonCancel->setEnabled(true);
-        ui->buttonInstall->setEnabled(true);
-        ui->buttonInstall->setText("< Back");
-        ui->buttonInstall->setIcon(QIcon());
+        setCursor(QCursor(Qt::WaitCursor));
     }
 }
 
 void mxpackageinstaller::postProcDone(int exitCode) {
     timer->stop();
     ui->progressBar->setValue(100);
-    bool checked = false;
     QString package;
     QTreeWidgetItemIterator it(ui->treeWidget);
     while (*it) {
@@ -297,36 +309,7 @@ void mxpackageinstaller::postProcDone(int exitCode) {
             (*it)->setSelected(false);
             package = (*it)->text(2);
         }
-        if ((*it)->checkState(1) == Qt::Checked) {
-            checked = true;
-        }
         ++it;
-    }
-    if (exitCode == 0) {
-        if (!checked) {
-            ui->outputLabel->setText(tr("Installation done."));
-            if (QMessageBox::information(this, tr("Success"),
-                                         tr("Process finished with success.<p><b>Do you want to exit MX Package Installer?</b>"),
-                                         QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok){
-                qApp->exit(0);
-            } else { //success and no exit
-                ui->buttonCancel->setEnabled(true);
-                ui->buttonInstall->setEnabled(true);
-                ui->buttonInstall->setText("< Back");
-                ui->buttonInstall->setIcon(QIcon());
-            }
-        }
-    } else {
-        QMessageBox::critical(this, tr("Error"),
-                              tr("Postprocess finished. Errors have occurred installing") + package);
-        if (!checked) {
-            setup();
-        } else {
-            ui->buttonCancel->setEnabled(true);
-            ui->buttonInstall->setEnabled(true);
-            ui->buttonInstall->setText("< Back");
-            ui->buttonInstall->setIcon(QIcon());
-        }
     }
 }
 
@@ -372,16 +355,16 @@ void mxpackageinstaller::displayInfo(QTreeWidgetItem * item, int column) {
         font.setBold(true);
         titleLabel->setFont(font);
         QLabel *descLabel = new QLabel(desc + "\n");
-        QLabel *preBoxLabel = new QLabel(tr("PRE PROCESSING:"));
+        QLabel *preBoxLabel = new QLabel(tr("PRE PROCESSING:"));        
         QTextBrowser *preBox = new QTextBrowser;
-        preBox->setText(preprocess);
+        preBox->setText(preprocess);        
         QLabel *packageLabel = new QLabel(tr("PACKAGES TO BE INSTALLED:"));
         QTextBrowser *packageBox = new QTextBrowser;
         packageBox->setText(package);
-        packageBox->adjustSize();
+        packageBox->adjustSize();        
         QLabel *postBoxLabel = new QLabel(tr("POST PROCESSING:"));
         QTextBrowser *postBox = new QTextBrowser;
-        postBox->setText(preprocess);
+        postBox->setText(postprocess);
         QPushButton *cancelBtn = new QPushButton(tr("Cancel"));
         cancelBtn->setMaximumWidth(100);
         cancelBtn->setIcon(QIcon("/usr/share/mx-packageinstaller/icons/gtk-cancel.png"));
