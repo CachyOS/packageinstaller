@@ -41,6 +41,7 @@ class mxpackageinstaller : public QDialog
 protected:
     QProcess *proc;
     QTimer *timer;
+    void keyPressEvent(QKeyEvent* event);
 
 public:
     explicit mxpackageinstaller(QWidget *parent = 0);

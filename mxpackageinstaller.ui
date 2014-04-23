@@ -81,6 +81,16 @@
          </property>
         </widget>
        </item>
+       <item row="2" column="0">
+        <widget class="QCheckBox" name="yesCheckBox">
+         <property name="text">
+          <string>Use option --yes for apt-get install</string>
+         </property>
+         <property name="checked">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </widget>
      <widget class="QWidget" name="outputPage">

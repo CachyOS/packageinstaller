@@ -29,6 +29,8 @@
 #include <QFileDialog>
 #include <QScrollBar>
 #include <QFormLayout>
+#include <QKeyEvent>
+
 
 mxpackageinstaller::mxpackageinstaller(QWidget *parent) :
     QDialog(parent),
@@ -167,6 +169,7 @@ void mxpackageinstaller::install() {
     ui->buttonInstall->setText("< Back");
     ui->buttonInstall->setIcon(QIcon());
 }
+
 // run update
 void mxpackageinstaller::update() {
     QString outLabel = tr("Running apt-get update... ");
@@ -197,12 +200,17 @@ void mxpackageinstaller::preProc(QString preprocess) {
 
 // run apt-get install
 void mxpackageinstaller::aptget(QString package) {
+    QString cmd;
     QString outLabel = tr("Installing: ") + package;
     ui->outputLabel->setText(outLabel);
     setConnections(timer, proc);
     disconnect(proc, SIGNAL(finished(int)), 0, 0);
     connect(proc, SIGNAL(finished(int)), SLOT(aptgetDone(int)));
-    QString cmd = QString("apt-get -y install %1").arg(package);
+    if (ui->yesCheckBox->isChecked()) {
+        cmd = QString("apt-get -y install %1").arg(package);
+    } else {
+        cmd = QString("apt-get install %1").arg(package);
+    }
     QEventLoop loop;
     connect(proc, SIGNAL(finished(int)), &loop, SLOT(quit()));
     proc->start("/bin/bash", QStringList() << "-c" << cmd);
@@ -319,6 +327,21 @@ void mxpackageinstaller::setConnections(QTimer* timer, QProcess* proc) {
 }
 
 
+//// events ////
+
+// process 'y' and 'n' keystrokes
+void mxpackageinstaller::keyPressEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_Y) {
+       proc->write("y");
+       proc->closeWriteChannel();
+   } else if (event->key() == Qt::Key_N) {
+       proc->write("n");
+       proc->closeWriteChannel();
+   }
+}
+
+
 //// slots ////
 
 // update output box on Stdout
@@ -329,8 +352,8 @@ void mxpackageinstaller::onStdoutAvailable() {
     sb->setValue(sb->maximum());
 }
 
-void mxpackageinstaller::displayInfo(QTreeWidgetItem * item, int column) {
-    if (column == 3) {
+void mxpackageinstaller::displayInfo(QTreeWidgetItem * item, int column) {    
+    if (column == 3 && item->childCount() == 0) {
         QString desc = item->text(4);
         QString filename = item->text(5);
         QString cmd_preprocess = "source " + filename + " && printf '%s\\n' \"${FLL_PRE_PROCESSING[@]}\"";
@@ -446,7 +469,7 @@ void mxpackageinstaller::on_buttonInstall_clicked() {
 void mxpackageinstaller::on_buttonAbout_clicked() {
     QMessageBox msgBox(QMessageBox::NoIcon,
                        tr("About MX Package Installer"), "<p align=\"center\"><b><h2>" +
-                       tr("MX Package Installer") + "</h2></b></p><p align=\"center\">MX14+git20140421</p><p align=\"center\"><h3>" +
+                       tr("MX Package Installer") + "</h2></b></p><p align=\"center\">MX14+git20140423</p><p align=\"center\"><h3>" +
                        tr("Simple package installer for additional packages for antiX MX") + "</h3></p><p align=\"center\"><a href=\"http://www.mepiscommunity.org/mx\">http://www.mepiscommunity.org/mx</a><br /></p><p align=\"center\">" +
                        tr("Copyright (c) antiX") + "<br /><br /></p>", 0, this);
     msgBox.addButton(tr("License"), QMessageBox::AcceptRole);
