@@ -157,7 +157,7 @@ void mxpackageinstaller::install() {
         ui->outputLabel->setText(tr("Installation done."));
         if (QMessageBox::information(this, tr("Success"),
                                      tr("Process finished with success.<p><b>Do you want to exit MX Package Installer?</b>"),
-                                     QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok){
+                                     QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes){
             qApp->exit(0);
         }
     } else {
@@ -356,50 +356,11 @@ void mxpackageinstaller::displayInfo(QTreeWidgetItem * item, int column) {
     if (column == 3 && item->childCount() == 0) {
         QString desc = item->text(4);
         QString filename = item->text(5);
-        QString cmd_preprocess = "source " + filename + " && printf '%s\\n' \"${FLL_PRE_PROCESSING[@]}\"";
-        QString preprocess = getCmdOut(cmd_preprocess);
         QString cmd_package = "source " + filename + " && echo ${FLL_PACKAGES[@]}";
         QString package = getCmdOut(cmd_package);
-        QString cmd_postprocess = "source " + filename + " && printf '%s\\n' \"${FLL_POST_PROCESSING[@]}\"";
-        QString postprocess = getCmdOut(cmd_postprocess);
-
-        QWidget *window = new QWidget(this, Qt::Dialog);
-        window->setWindowTitle(tr("Package information"));
-        window->resize(800, 500);
-
-        QLabel *titleLabel = new QLabel(filename.remove("/usr/share/mx-packageinstaller/bm/"));
-        QFont font;
-        font.setBold(true);
-        titleLabel->setFont(font);
-        QLabel *descLabel = new QLabel(desc + "\n");
-        QLabel *preBoxLabel = new QLabel(tr("PRE PROCESSING:"));        
-        QTextBrowser *preBox = new QTextBrowser;
-        preBox->setText(preprocess);        
-        QLabel *packageLabel = new QLabel(tr("PACKAGES TO BE INSTALLED:"));
-        QTextBrowser *packageBox = new QTextBrowser;
-        packageBox->setText(package);
-        packageBox->adjustSize();        
-        QLabel *postBoxLabel = new QLabel(tr("POST PROCESSING:"));
-        QTextBrowser *postBox = new QTextBrowser;
-        postBox->setText(postprocess);
-        QPushButton *cancelBtn = new QPushButton(tr("Cancel"));
-        cancelBtn->setMaximumWidth(100);
-        cancelBtn->setIcon(QIcon("/usr/share/mx-packageinstaller/icons/gtk-cancel.png"));
-        connect(cancelBtn,SIGNAL(clicked()),window,SLOT(close()));
-
-        QFormLayout *layout = new QFormLayout;
-        layout->addRow(titleLabel);
-        layout->addRow(descLabel);
-        layout->addRow(preBoxLabel);
-        layout->addRow(preBox);
-        layout->addRow(packageLabel);
-        layout->addRow(packageBox);
-        layout->addRow(postBoxLabel);
-        layout->addRow(postBox);
-        layout->addRow(cancelBtn);
-
-        window->setLayout(layout);
-        window->show();
+        QString title = item->text(2);
+        QString msg = "<b>" + title + "</b><p>" + desc + "<p>" + tr("Packages to be installed: ") + package;
+        QMessageBox::information(this, tr("Info"), msg, QMessageBox::Cancel);
     }
 }
 
@@ -469,7 +430,7 @@ void mxpackageinstaller::on_buttonInstall_clicked() {
 void mxpackageinstaller::on_buttonAbout_clicked() {
     QMessageBox msgBox(QMessageBox::NoIcon,
                        tr("About MX Package Installer"), "<p align=\"center\"><b><h2>" +
-                       tr("MX Package Installer") + "</h2></b></p><p align=\"center\">MX14+git20140423</p><p align=\"center\"><h3>" +
+                       tr("MX Package Installer") + "</h2></b></p><p align=\"center\">MX14+git20140429</p><p align=\"center\"><h3>" +
                        tr("Simple package installer for additional packages for antiX MX") + "</h3></p><p align=\"center\"><a href=\"http://www.mepiscommunity.org/mx\">http://www.mepiscommunity.org/mx</a><br /></p><p align=\"center\">" +
                        tr("Copyright (c) antiX") + "<br /><br /></p>", 0, this);
     msgBox.addButton(tr("License"), QMessageBox::AcceptRole);
