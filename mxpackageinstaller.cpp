@@ -181,7 +181,10 @@ void mxpackageinstaller::update() {
     connect(proc, SIGNAL(finished(int)), this, SLOT(updateDone(int)));
     QEventLoop loop;
     connect(proc, SIGNAL(finished(int)), &loop, SLOT(quit()));
-    proc->start("apt-get update");
+    QString cmd = "apt-get update";
+    proc->start(cmd);
+    QString out = ui->outputBox->toPlainText() + cmd + "\n";
+    ui->outputBox->setPlainText(out);
     loop.exec();
 }
 
@@ -211,6 +214,8 @@ void mxpackageinstaller::aptget(QString package) {
     } else {
         cmd = QString("apt-get install %1").arg(package);
     }
+    QString out = ui->outputBox->toPlainText() + cmd + "\n";
+    ui->outputBox->setPlainText(out);
     QEventLoop loop;
     connect(proc, SIGNAL(finished(int)), &loop, SLOT(quit()));
     proc->start("/bin/bash", QStringList() << "-c" << cmd);
