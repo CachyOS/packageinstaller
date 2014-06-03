@@ -11,11 +11,13 @@ FLL_PACKAGE_DEPMODS=(
 )
 
 FLL_PACKAGES=(
-	im-switch
-        ibus-anthy 
-        #ibus-qt4 
-        ibus-gtk
-        ttf-kochi-gothic
+	im-config
+        ibus-anthy
+        ibus-mozc
+        ibus-qt4 
+        ibus-gtk3
+        python-appindicator
+        fonts-vlgothic
         manpages-ja
 )
 
