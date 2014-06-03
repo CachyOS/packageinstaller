@@ -11,10 +11,14 @@ FLL_PACKAGE_DEPMODS=(
 )
 
 FLL_PACKAGES=(
-	ttf-kochi-gothic
-	ttf-kochi-mincho
-	ttf-vlgothic
-	ttf-kiloji
+
+	fonts-vlgothic
+	fonts-takao-gothic
+	fonts-takao-mincho
+	fonts-ipafont-gothic
+	fonts-ipafont-mincho
+	fonts-ipaexfont-gothic
+	fonts-ipaexfont-mincho
 
 )
 
