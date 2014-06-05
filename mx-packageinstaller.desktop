@@ -1,17 +1,35 @@
 [Desktop Entry]
 Name=MX Package Installer
 Name[de]=MX Paket-Installer
+<<<<<<< HEAD
 Name[el]=Εγκατάσταση πακέτων του MX
+=======
+Name[es]=
+Name[fr]=
+Name[it]=
+>>>>>>> upstream/master
 Name[ja]=MX パッケージインストーラー
 Name[nl]=MX pakket installeerder
 Name[sv]=MX Paket-installerare
 Comment=Simple Package Installer
 Comment[de]=einfache Paket-Installation
+<<<<<<< HEAD
 Comment[el]=Απλή εγκατάσταση πακέτων
 Comment[ja]=シンプルなパッケージインストーラー
 Comment[nl]=eenvoudige pakket installeerder
 Comment[sv]=Enkel Paket-installerare
 Exec=su-to-root -X -c mx-packageinstaller
+=======
+Comment[es]=
+Comment[fr]=
+Comment[it]=
+Comment[ja]=シンプルなパッケージインストーラー
+Comment[nl]=eenvoudige pakket installeerder
+Comment[sv]=Enkel Paket-installerare
+Comment[el]=Απλή εγκατάσταση πακέτων
+Comment[ru]=
+Exec=su-to-root -c -X mx-packageinstaller
+>>>>>>> upstream/master
 Icon=/usr/share/pixmaps/mx/mx-packageinstaller.png
 NoDisplay=false
 Categories=System;

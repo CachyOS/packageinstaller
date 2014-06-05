@@ -12,9 +12,15 @@ FLL_PACKAGE_DEPMODS=(
 
 FLL_PACKAGES=(
 	im-config
+<<<<<<< HEAD
         ibus-anthy
         ibus-mozc
         ibus-qt4 
+=======
+        ibus-anthy 
+        ibus-mozc
+        ibus-qt4
+>>>>>>> upstream/master
         ibus-gtk3
         python-appindicator
         fonts-vlgothic
