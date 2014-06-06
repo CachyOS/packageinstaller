@@ -1,0 +1,18 @@
+[Desktop Entry]
+Name=MX Package Installer
+Name[de]=MX Paket-Installer
+Name[el]=Εγκατάσταση πακέτων του MX
+Name[ja]=MX パッケージインストーラー
+Name[nl]=MX pakket installeerder
+Name[sv]=MX Paket-installerare
+Comment=Simple Package Installer
+Comment[de]=einfache Paket-Installation
+Comment[el]=Απλή εγκατάσταση πακέτων
+Comment[ja]=シンプルなパッケージインストーラー
+Comment[nl]=eenvoudige pakket installeerder
+Comment[sv]=Enkel Paket-installerare
+Exec=su-to-root -X -c mx-packageinstaller
+Icon=/usr/share/pixmaps/mx/mx-packageinstaller.png
+NoDisplay=false
+Categories=System;
+Type=Application
