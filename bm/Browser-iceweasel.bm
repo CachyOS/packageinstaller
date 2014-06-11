@@ -1,0 +1,28 @@
+FLL_DESCRIPTION="Latest iceweasel (australis)."
+
+FLL_PRE_PROCESSING=(
+	"#!/bin/bash"
+	"echo \"---- in preprocessing ----\""
+        "echo \"Adding mozilla.debian.net repository to /etc/apt/sources.list.d/various.list\""
+	"sed -i -r '/mozilla/ s/^#+//' /etc/apt/sources.list.d/various.list" 
+        "apt-get update"
+        "echo \"---- preprocessing done----\""
+)
+
+FLL_PACKAGE_DEPMODS=(
+)
+
+FLL_PACKAGES=(
+
+     iceweasel 
+     
+)
+
+FLL_POST_PROCESSING=(
+       "#!/bin/bash"
+       "echo \"---- in postprocessing ----\""
+       "echo \"Removing mozilla.debian.net repository from /etc/apt/sources.list.d/various.list\""
+       "sed -i -r '/mozilla/ s/^([^#])/#\1/' /etc/apt/sources.list.d/various.list"
+       "echo \"---- postprocessing done----\""
+
+)
