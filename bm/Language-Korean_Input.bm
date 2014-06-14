@@ -12,10 +12,11 @@ FLL_PACKAGE_DEPMODS=(
 
 FLL_PACKAGES=(
 	ttf-alee
-	ttf-baekmuk
-	im-switch 
+	fonts-baekmuk
+	im-config
         ibus-hangul 
-        #ibus-qt4 
-        ibus-gtk
+        ibus-qt4 
+        ibus-gtk3
+        python-appindicator
 
 )
