@@ -11,11 +11,12 @@ FLL_PACKAGE_DEPMODS=(
 )
 
 FLL_PACKAGES=(
-	ttf-arphic-uming 
-        im-switch
+	fonts-arphic-uming
+        im-config
         ibus-pinyin
-        #ibus-qt4
-        ibus-gtk
+        ibus-qt4
+        ibus-gtk3
+        python-appindicator
         manpages-zh
 
 )
