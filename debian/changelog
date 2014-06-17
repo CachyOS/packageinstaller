@@ -1,3 +1,10 @@
+mx-packageinstaller (0.1mx140+2) mx; urgency=low
+
+  * update languages
+  * 
+
+ -- Adrin <adrian@mxlinux.org>  Tue, 17 Jun 2014 13:49:58 -0400
+
 mx-packageinstaller (0.1mx140+1) mx; urgency=low
 
   * Initial release. 
