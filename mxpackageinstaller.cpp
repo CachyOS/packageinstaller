@@ -166,7 +166,7 @@ void mxpackageinstaller::install() {
     }
     ui->buttonCancel->setEnabled(true);
     ui->buttonInstall->setEnabled(true);
-    ui->buttonInstall->setText("< Back");
+    ui->buttonInstall->setText(tr("< Back"));
     ui->buttonInstall->setIcon(QIcon());
 }
 
