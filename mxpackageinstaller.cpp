@@ -422,7 +422,7 @@ void mxpackageinstaller::on_buttonInstall_clicked() {
     // on output page
     } else if (ui->stackedWidget->currentWidget() == ui->outputPage) {
         ui->stackedWidget->setCurrentIndex(0);
-        ui->buttonInstall->setText("Install");
+        ui->buttonInstall->setText(tr("Install"));
         ui->buttonInstall->setIcon(QIcon("/usr/share/mx-packageinstaller/icons/dialog-ok.png"));
         on_treeWidget_itemClicked();
     } else {
