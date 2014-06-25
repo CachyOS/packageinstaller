@@ -1,3 +1,10 @@
+mx-packageinstaller (0.14.1mx141+3) mx; urgency=low
+
+  * Fixed Japanese output localization
+  * 
+
+ -- Adrian <adrian@mxlinux.org>  Wed, 25 Jun 2014 01:09:52 -0400
+
 mx-packageinstaller (0.14.1mx141+2) mx; urgency=low
 
   * update languages
