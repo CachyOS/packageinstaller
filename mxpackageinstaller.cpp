@@ -157,7 +157,7 @@ void mxpackageinstaller::install() {
         ui->outputLabel->setText(tr("Installation done."));
         if (QMessageBox::information(this, tr("Success"),
                                      tr("Process finished with success.<p><b>Do you want to exit MX Package Installer?</b>"),
-                                     QMessageBox::Yes, QMessageBox::No) == QMessageBox::Yes){
+                                     tr("Yes"), tr("No")) == 0){
             qApp->exit(0);
         }
     } else {
@@ -366,7 +366,7 @@ void mxpackageinstaller::displayInfo(QTreeWidgetItem * item, int column) {
         QString package = getCmdOut(cmd_package);
         QString title = item->text(2);
         QString msg = "<b>" + title + "</b><p>" + desc + "<p>" + tr("Packages to be installed: ") + package;
-        QMessageBox::information(this, tr("Info"), msg, QMessageBox::Cancel);
+        QMessageBox::information(this, tr("Info"), msg, tr("Cancel"));
     }
 }
 
@@ -440,7 +440,7 @@ void mxpackageinstaller::on_buttonAbout_clicked() {
                        tr("Simple package installer for additional packages for antiX MX") + "</h3></p><p align=\"center\"><a href=\"http://www.mepiscommunity.org/mx\">http://www.mepiscommunity.org/mx</a><br /></p><p align=\"center\">" +
                        tr("Copyright (c) antiX") + "<br /><br /></p>", 0, this);
     msgBox.addButton(tr("License"), QMessageBox::AcceptRole);
-    msgBox.addButton(QMessageBox::Cancel);
+    msgBox.addButton(tr("Cancel"), QMessageBox::DestructiveRole);
     if (msgBox.exec() == QMessageBox::AcceptRole)
         displaySite("file:///usr/share/doc/mx-packageinstaller/license.html");
 }
