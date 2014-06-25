@@ -351,7 +351,8 @@ void mxpackageinstaller::keyPressEvent(QKeyEvent *event)
 
 // update output box on Stdout
 void mxpackageinstaller::onStdoutAvailable() {
-    QString out = ui->outputBox->toPlainText() + proc->readAllStandardOutput();
+    QByteArray output = proc->readAllStandardOutput();
+    QString out = ui->outputBox->toPlainText() + QString::fromLocal8Bit(output);
     ui->outputBox->setPlainText(out);
     QScrollBar *sb = ui->outputBox->verticalScrollBar();
     sb->setValue(sb->maximum());
