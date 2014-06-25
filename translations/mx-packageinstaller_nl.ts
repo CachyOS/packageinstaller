@@ -11,7 +11,7 @@
     <name>mxpackageinstaller</name>
     <message>
         <location filename="mxpackageinstaller.ui" line="14"/>
-        <location filename="mxpackageinstaller.cpp" line="438"/>
+        <location filename="mxpackageinstaller.cpp" line="439"/>
         <source>MX Package Installer</source>
         <translation>MX Pakket Installeerder</translation>
     </message>
@@ -22,7 +22,7 @@
     </message>
     <message>
         <location filename="mxpackageinstaller.ui" line="67"/>
-        <location filename="mxpackageinstaller.cpp" line="368"/>
+        <location filename="mxpackageinstaller.cpp" line="369"/>
         <source>Info</source>
         <translation>Informatie</translation>
     </message>
@@ -63,6 +63,7 @@
     </message>
     <message>
         <location filename="mxpackageinstaller.ui" line="187"/>
+        <location filename="mxpackageinstaller.cpp" line="426"/>
         <source>Install</source>
         <translation>Installeer</translation>
     </message>
@@ -73,6 +74,8 @@
     </message>
     <message>
         <location filename="mxpackageinstaller.ui" line="210"/>
+        <location filename="mxpackageinstaller.cpp" line="369"/>
+        <location filename="mxpackageinstaller.cpp" line="443"/>
         <source>Cancel</source>
         <translation>Cancel</translation>
     </message>
@@ -113,6 +116,16 @@
         <translation>Proces succesvol beëindigd.&lt;p&gt;&lt;b&gt;Wilt u MX Pakketbeheer afsluiten?&lt;/b&gt;</translation>
     </message>
     <message>
+        <location filename="mxpackageinstaller.cpp" line="160"/>
+        <source>Yes</source>
+        <translation>Ja</translation>
+    </message>
+    <message>
+        <location filename="mxpackageinstaller.cpp" line="160"/>
+        <source>No</source>
+        <translation>Nee</translation>
+    </message>
+    <message>
         <location filename="mxpackageinstaller.cpp" line="164"/>
         <location filename="mxpackageinstaller.cpp" line="276"/>
         <location filename="mxpackageinstaller.cpp" line="303"/>
@@ -123,6 +136,11 @@
         <location filename="mxpackageinstaller.cpp" line="165"/>
         <source>Postprocess finished. Errors have occurred.</source>
         <translation>Nabewerking klaar. Er zijn fouten opgetreden.</translation>
+    </message>
+    <message>
+        <location filename="mxpackageinstaller.cpp" line="169"/>
+        <source>&lt; Back</source>
+        <translation>&lt; Terug</translation>
     </message>
     <message>
         <location filename="mxpackageinstaller.cpp" line="175"/>
@@ -160,27 +178,27 @@
         <translation>Fouten hebben zich voorgedaan tijdens de installatie: </translation>
     </message>
     <message>
-        <location filename="mxpackageinstaller.cpp" line="367"/>
+        <location filename="mxpackageinstaller.cpp" line="368"/>
         <source>Packages to be installed: </source>
         <translation>Pakketten worden geïnstalleerd:</translation>
     </message>
     <message>
-        <location filename="mxpackageinstaller.cpp" line="437"/>
+        <location filename="mxpackageinstaller.cpp" line="438"/>
         <source>About MX Package Installer</source>
         <translation>Over MX Pakket Installeerder</translation>
     </message>
     <message>
-        <location filename="mxpackageinstaller.cpp" line="439"/>
+        <location filename="mxpackageinstaller.cpp" line="440"/>
         <source>Simple package installer for additional packages for antiX MX</source>
         <translation>Eenvoudige pakket installeerder voor extra pakketten voor antiX MX</translation>
     </message>
     <message>
-        <location filename="mxpackageinstaller.cpp" line="440"/>
+        <location filename="mxpackageinstaller.cpp" line="441"/>
         <source>Copyright (c) antiX</source>
         <translation>Copyright (c) antiX</translation>
     </message>
     <message>
-        <location filename="mxpackageinstaller.cpp" line="441"/>
+        <location filename="mxpackageinstaller.cpp" line="442"/>
         <source>License</source>
         <translation>Licentie</translation>
     </message>
