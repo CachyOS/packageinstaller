@@ -1,4 +1,4 @@
-mx-packageinstaller (0.14.1mx141+3) mx; urgency=low
+mx-packageinstaller (0.14.1mx141+4) mx; urgency=low
 
   * Fixed Japanese output localization
   * 
