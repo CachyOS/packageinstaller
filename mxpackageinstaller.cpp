@@ -239,7 +239,7 @@ void mxpackageinstaller::postProc(QString postprocess) {
 
 // returns list of all install packages
 QStringList mxpackageinstaller::listInstalled() {
-    QString str = getCmdOut("dpkg --get-selections | cut -f1");
+    QString str = getCmdOut("dpkg --get-selections | grep -v deinstall | cut -f1");
     return str.split("\n");
 }
 
