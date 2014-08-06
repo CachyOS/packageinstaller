@@ -1,4 +1,4 @@
-FLL_DESCRIPTION="Japanese ibus"
+FLL_DESCRIPTION="Vietnamese Fonts & fcitx"
 
 FLL_PRE_PROCESSING=(
 	"#!/bin/bash"
@@ -11,14 +11,16 @@ FLL_PACKAGE_DEPMODS=(
 )
 
 FLL_PACKAGES=(
+
+        fcitx
+        fcitx-config-gtk
+        fcitx-frontend-all
+        fcitx-frontend-fbterm
+        fcitx-tools
+        fcitx-ui-classic
+        fcitx-ui-light 
+        fcitx-unikey
 	im-config
-        ibus-anthy 
-        ibus-mozc
-        ibus-qt4
-        ibus-gtk3
-        ibus-gtk
-        python-appindicator
-        fonts-vlgothic
-        manpages-ja
+        
 )
 
