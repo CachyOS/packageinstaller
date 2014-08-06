@@ -29,6 +29,7 @@
 #include <QProcess>
 #include <QTimer>
 #include <QTreeWidgetItem>
+#include <QHash>
 
 namespace Ui {
 class mxpackageinstaller;
@@ -52,11 +53,14 @@ public:
 
     void setup();
     void install();
-    void listPackages(void);
-    void update(void);
+    void listPackages();
+    void update();
     void preProc(QString preprocess);
     void aptget(QString package);
     void postProc(QString postprocess);
+
+    QStringList listInstalled();
+    bool checkInstalled(QString filename, QString name);
 
 public slots:
     void procStart();
@@ -78,7 +82,9 @@ public slots:
     virtual void on_treeWidget_itemCollapsed();
 
 private:
-    Ui::mxpackageinstaller *ui;
+    Ui::mxpackageinstaller *ui;    
+    QHash<QString, bool> hashPackages;
+    QStringList installedPackages;
 
 };
 

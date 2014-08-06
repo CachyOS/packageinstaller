@@ -31,7 +31,6 @@
 #include <QFormLayout>
 #include <QKeyEvent>
 
-
 mxpackageinstaller::mxpackageinstaller(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::mxpackageinstaller)
@@ -44,18 +43,6 @@ mxpackageinstaller::~mxpackageinstaller()
 {
     delete ui;
 }
-
-
-// Util function
-QString mxpackageinstaller::getCmdOut(QString cmd) {
-    proc = new QProcess(this);
-    proc->start("/bin/bash", QStringList() << "-c" << cmd);
-    proc->setReadChannel(QProcess::StandardOutput);
-    proc->setReadChannelMode(QProcess::MergedChannels);
-    proc->waitForFinished(-1);
-    return proc->readAllStandardOutput().trimmed();
-}
-
 
 // setup versious items first time program runs
 void mxpackageinstaller::setup() {
@@ -73,9 +60,19 @@ void mxpackageinstaller::setup() {
     ui->treeWidget->resizeColumnToContents(1);
     ui->treeWidget->resizeColumnToContents(2);
     ui->treeWidget->resizeColumnToContents(3);
+    installedPackages = listInstalled();
     listPackages();
 }
 
+// Util function
+QString mxpackageinstaller::getCmdOut(QString cmd) {
+    proc = new QProcess(this);
+    proc->start("/bin/bash", QStringList() << "-c" << cmd);
+    proc->setReadChannel(QProcess::StandardOutput);
+    proc->setReadChannelMode(QProcess::MergedChannels);
+    proc->waitForFinished(-1);
+    return proc->readAllStandardOutput().trimmed();
+}
 
 // parse '/usr/share/mx-packageinsataller/bm' for .bm files and add info in treeWidget
 void mxpackageinstaller::listPackages(void) {
@@ -121,6 +118,11 @@ void mxpackageinstaller::listPackages(void) {
 
         // add full name of file in treeWidget, but don't display it
         childItem->setText(5, filename);
+
+        // gray out installed items
+        if (checkInstalled(filename, name)) {
+            childItem->setDisabled(true);
+        }
     }
     ui->treeWidget->resizeColumnToContents(0);
     ui->treeWidget->resizeColumnToContents(2);
@@ -235,6 +237,33 @@ void mxpackageinstaller::postProc(QString postprocess) {
     loop.exec();
 }
 
+// returns list of all install packages
+QStringList mxpackageinstaller::listInstalled() {
+    QString str = getCmdOut("dpkg --get-selections | cut -f1");
+    return str.split("\n");
+}
+
+// checks if a specific package is already installed
+bool mxpackageinstaller::checkInstalled(QString filename, QString name) {
+    QString cmd_package = "source " + filename + " && echo ${FLL_PACKAGES[@]}";
+    QString packages = getCmdOut(cmd_package);
+    QStringList list = packages.split(" ");
+    // if no packages listed compare to the name of the program
+    if (list.contains("")) {
+        if (!installedPackages.contains(name, Qt::CaseInsensitive)) {
+            return false;
+        }
+    } else {
+        for (int i = 0; i < list.size(); ++i) {
+            if (!installedPackages.contains(list.at(i))) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+
 //// sync process events ////
 
 void mxpackageinstaller::procStart() {
@@ -265,6 +294,9 @@ void mxpackageinstaller::preProcDone(int exitCode) {
             QString filename =  (*it)->text(5);
             QString cmd_package = "source " + filename + " && echo ${FLL_PACKAGES[@]}";
             package = getCmdOut(cmd_package);
+            (*it)->setCheckState(1, Qt::Unchecked);
+            (*it)->setDisabled(true);
+
         }
         ++it;
     }
@@ -292,6 +324,9 @@ void mxpackageinstaller::aptgetDone(int exitCode) {
             package = (*it)->text(2);
             QString cmd_postprocess = "source " + filename + " && printf '%s\\n' \"${FLL_POST_PROCESSING[@]}\"";
             postprocess = getCmdOut(cmd_postprocess);
+            (*it)->setCheckState(1, Qt::Unchecked);
+            (*it)->setSelected(false);
+            (*it)->setDisabled(true);
         }
         ++it;
     }
@@ -308,13 +343,13 @@ void mxpackageinstaller::aptgetDone(int exitCode) {
 
 void mxpackageinstaller::postProcDone(int exitCode) {
     timer->stop();
-    ui->progressBar->setValue(100);
-    QString package;
+    ui->progressBar->setValue(100);    
     QTreeWidgetItemIterator it(ui->treeWidget);
     while (*it) {
         if ((*it)->isSelected()) {
+            (*it)->setCheckState(1, Qt::Unchecked);
             (*it)->setSelected(false);
-            package = (*it)->text(2);
+            (*it)->setDisabled(true);
         }
         ++it;
     }
@@ -357,6 +392,8 @@ void mxpackageinstaller::onStdoutAvailable() {
     QScrollBar *sb = ui->outputBox->verticalScrollBar();
     sb->setValue(sb->maximum());
 }
+
+
 
 void mxpackageinstaller::displayInfo(QTreeWidgetItem * item, int column) {    
     if (column == 3 && item->childCount() == 0) {
@@ -436,7 +473,7 @@ void mxpackageinstaller::on_buttonInstall_clicked() {
 void mxpackageinstaller::on_buttonAbout_clicked() {
     QMessageBox msgBox(QMessageBox::NoIcon,
                        tr("About MX Package Installer"), "<p align=\"center\"><b><h2>" +
-                       tr("MX Package Installer") + "</h2></b></p><p align=\"center\">MX14+git20140617</p><p align=\"center\"><h3>" +
+                       tr("MX Package Installer") + "</h2></b></p><p align=\"center\">MX14+git20140806</p><p align=\"center\"><h3>" +
                        tr("Simple package installer for additional packages for antiX MX") + "</h3></p><p align=\"center\"><a href=\"http://www.mepiscommunity.org/mx\">http://www.mepiscommunity.org/mx</a><br /></p><p align=\"center\">" +
                        tr("Copyright (c) antiX") + "<br /><br /></p>", 0, this);
     msgBox.addButton(tr("License"), QMessageBox::AcceptRole);
