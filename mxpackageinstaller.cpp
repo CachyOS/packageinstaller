@@ -293,10 +293,7 @@ void mxpackageinstaller::preProcDone(int exitCode) {
         if ((*it)->isSelected()) {
             QString filename =  (*it)->text(5);
             QString cmd_package = "source " + filename + " && echo ${FLL_PACKAGES[@]}";
-            package = getCmdOut(cmd_package);
-            (*it)->setCheckState(1, Qt::Unchecked);
-            (*it)->setDisabled(true);
-
+            package = getCmdOut(cmd_package);                    
         }
         ++it;
     }
@@ -323,10 +320,7 @@ void mxpackageinstaller::aptgetDone(int exitCode) {
             QString filename =  (*it)->text(5);
             package = (*it)->text(2);
             QString cmd_postprocess = "source " + filename + " && printf '%s\\n' \"${FLL_POST_PROCESSING[@]}\"";
-            postprocess = getCmdOut(cmd_postprocess);
-            (*it)->setCheckState(1, Qt::Unchecked);
-            (*it)->setSelected(false);
-            (*it)->setDisabled(true);
+            postprocess = getCmdOut(cmd_postprocess);  
         }
         ++it;
     }
@@ -349,7 +343,9 @@ void mxpackageinstaller::postProcDone(int exitCode) {
         if ((*it)->isSelected()) {
             (*it)->setCheckState(1, Qt::Unchecked);
             (*it)->setSelected(false);
-            (*it)->setDisabled(true);
+            if (exitCode == 0) {
+                (*it)->setDisabled(true);
+            }
         }
         ++it;
     }
