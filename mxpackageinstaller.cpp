@@ -155,17 +155,6 @@ void mxpackageinstaller::install() {
     }
     // process done at the end of cycle
     setCursor(QCursor(Qt::ArrowCursor));
-    if (proc->exitCode() == 0) {
-        ui->outputLabel->setText(tr("Installation done."));
-        if (QMessageBox::information(this, tr("Success"),
-                                     tr("Process finished with success.<p><b>Do you want to exit MX Package Installer?</b>"),
-                                     tr("Yes"), tr("No")) == 0){
-            qApp->exit(0);
-        }
-    } else {
-        QMessageBox::critical(this, tr("Error"),
-                              tr("Postprocess finished. Errors have occurred."));
-    }
     ui->buttonCancel->setEnabled(true);
     ui->buttonInstall->setEnabled(true);
     ui->buttonInstall->setText(tr("< Back"));
@@ -349,6 +338,17 @@ void mxpackageinstaller::postProcDone(int exitCode) {
         }
         ++it;
     }
+    if (exitCode == 0) {
+        ui->outputLabel->setText(tr("Installation done."));
+        if (QMessageBox::information(this, tr("Success"),
+                                     tr("Process finished with success.<p><b>Do you want to exit MX Package Installer?</b>"),
+                                     tr("Yes"), tr("No")) == 0){
+            qApp->exit(0);
+        }
+    } else {
+        QMessageBox::critical(this, tr("Error"),
+                              tr("Postprocess finished. Errors have occurred."));
+    }
 }
 
 
@@ -368,6 +368,9 @@ void mxpackageinstaller::setConnections(QTimer* timer, QProcess* proc) {
 // process keystrokes
 void mxpackageinstaller::keyPressEvent(QKeyEvent *event) {
     if (event->type() == QEvent::KeyPress) {
+        if(event->matches(QKeySequence::Copy)) {
+            proc->terminate();
+        }
         QString text = event->text();
         const char *c = text.toStdString().c_str();
         proc->write(c);
