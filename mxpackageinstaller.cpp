@@ -369,16 +369,14 @@ void mxpackageinstaller::setConnections(QTimer* timer, QProcess* proc) {
 
 //// events ////
 
-// process 'y' and 'n' keystrokes
-void mxpackageinstaller::keyPressEvent(QKeyEvent *event)
-{
-    if (event->key() == Qt::Key_Y) {
-       proc->write("y");
-       proc->closeWriteChannel();
-   } else if (event->key() == Qt::Key_N) {
-       proc->write("n");
-       proc->closeWriteChannel();
-   }
+// process keystrokes
+void mxpackageinstaller::keyPressEvent(QKeyEvent *event) {
+    if (event->type() == QEvent::KeyPress) {
+        QString text = event->text();
+        const char *c = text.toStdString().c_str();
+        proc->write(c);
+        proc->closeWriteChannel();
+    }
 }
 
 
