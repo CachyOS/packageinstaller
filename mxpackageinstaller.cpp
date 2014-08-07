@@ -155,6 +155,17 @@ void mxpackageinstaller::install() {
     }
     // process done at the end of cycle
     setCursor(QCursor(Qt::ArrowCursor));
+    if (proc->exitCode() == 0) {
+        ui->outputLabel->setText(tr("Installation done."));
+        if (QMessageBox::information(this, tr("Success"),
+                                     tr("Process finished with success.<p><b>Do you want to exit MX Package Installer?</b>"),
+                                     tr("Yes"), tr("No")) == 0){
+            qApp->exit(0);
+        }
+    } else {
+        QMessageBox::critical(this, tr("Error"),
+                              tr("Postprocess finished. Errors have occurred."));
+    }
     ui->buttonCancel->setEnabled(true);
     ui->buttonInstall->setEnabled(true);
     ui->buttonInstall->setText(tr("< Back"));
@@ -337,17 +348,6 @@ void mxpackageinstaller::postProcDone(int exitCode) {
             }
         }
         ++it;
-    }
-    if (exitCode == 0) {
-        ui->outputLabel->setText(tr("Installation done."));
-        if (QMessageBox::information(this, tr("Success"),
-                                     tr("Process finished with success.<p><b>Do you want to exit MX Package Installer?</b>"),
-                                     tr("Yes"), tr("No")) == 0){
-            qApp->exit(0);
-        }
-    } else {
-        QMessageBox::critical(this, tr("Error"),
-                              tr("Postprocess finished. Errors have occurred."));
     }
 }
 
