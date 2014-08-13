@@ -1,3 +1,9 @@
+mx-packageinstaller (0.14.2mx142+3) mx; urgency=medium
+
+  * Fixed Apache install
+
+ -- Adrian <adrian@mxlinux.org>  Wed, 13 Aug 2014 11:55:20 -0400
+
 mx-packageinstaller (0.14.2mx142+2) mx; urgency=medium
 
   * Grayed out installed programs
