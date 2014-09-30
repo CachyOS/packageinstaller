@@ -53,12 +53,13 @@ public:
 
     void setup();
     void install();
-    void listPackages();
+    void listPackages();    
     void update();
     void preProc(QString preprocess);
     void aptget(QString package);
     void postProc(QString postprocess);
 
+    QString getVersion(QString name);
     QStringList listInstalled();
     bool checkInstalled(QString filename, QString name);
 

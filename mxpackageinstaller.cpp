@@ -74,6 +74,13 @@ QString mxpackageinstaller::getCmdOut(QString cmd) {
     return proc->readAllStandardOutput().trimmed();
 }
 
+// Get version of the program
+QString mxpackageinstaller::getVersion(QString name) {
+    QString cmd = QString("dpkg -l %1 | awk 'NR==6 {print $3}'").arg(name);
+    return getCmdOut(cmd);
+}
+
+
 // parse '/usr/share/mx-packageinsataller/bm' for .bm files and add info in treeWidget
 void mxpackageinstaller::listPackages(void) {
     QStringList filter("*.bm");
@@ -470,7 +477,8 @@ void mxpackageinstaller::on_buttonInstall_clicked() {
 void mxpackageinstaller::on_buttonAbout_clicked() {
     QMessageBox msgBox(QMessageBox::NoIcon,
                        tr("About MX Package Installer"), "<p align=\"center\"><b><h2>" +
-                       tr("MX Package Installer") + "</h2></b></p><p align=\"center\">MX14+git20140813</p><p align=\"center\"><h3>" +
+                       tr("MX Package Installer") + "</h2></b></p><p align=\"center\">" + tr("Version: ") +
+                       getVersion("mx-packageinstaller") + "</p><p align=\"center\"><h3>" +
                        tr("Simple package installer for additional packages for antiX MX") + "</h3></p><p align=\"center\"><a href=\"http://www.mepiscommunity.org/mx\">http://www.mepiscommunity.org/mx</a><br /></p><p align=\"center\">" +
                        tr("Copyright (c) antiX") + "<br /><br /></p>", 0, this);
     msgBox.addButton(tr("License"), QMessageBox::AcceptRole);

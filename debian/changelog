@@ -1,3 +1,9 @@
+mx-packageinstaller (14.2+1) mx; urgency=medium
+
+  * fixed dependency, changed version format 
+
+ -- Adrian <adrian@mxlinux.org>  Tue, 30 Sep 2014 19:12:05 -0400
+
 mx-packageinstaller (0.14.2mx142+3) mx; urgency=medium
 
   * Fixed Apache install
