@@ -219,9 +219,9 @@ void mxpackageinstaller::aptget(QString package) {
     disconnect(proc, SIGNAL(finished(int)), 0, 0);
     connect(proc, SIGNAL(finished(int)), SLOT(aptgetDone(int)));
     if (ui->yesCheckBox->isChecked()) {
-        cmd = QString("apt-get -y install %1").arg(package);
+        cmd = QString("DEBIAN_FRONTEND=noninteractive apt-get -y install %1").arg(package);
     } else {
-        cmd = QString("apt-get install %1").arg(package);
+        cmd = QString("DEBIAN_FRONTEND=noninteractive apt-get install %1").arg(package);
     }
     QString out = ui->outputBox->toPlainText() + "# " + cmd + "\n";
     ui->outputBox->setPlainText(out);
@@ -484,22 +484,12 @@ void mxpackageinstaller::on_buttonAbout_clicked() {
     msgBox.addButton(tr("License"), QMessageBox::AcceptRole);
     msgBox.addButton(tr("Cancel"), QMessageBox::DestructiveRole);
     if (msgBox.exec() == QMessageBox::AcceptRole)
-        displaySite("file:///usr/share/doc/mx-packageinstaller/license.html");
+        system("mx-viewer file:///usr/share/doc/mx-packageinstaller/license.html");
 }
 
 
 // Help button clicked
 void mxpackageinstaller::on_buttonHelp_clicked() {
-    displaySite("file:///usr/local/share/doc/mxapps.html#packageinstaller");
+    system("mx-viewer file:///usr/local/share/doc/mxapps.html#packageinstaller");
 }
 
-// pop up a window and display website
-void mxpackageinstaller::displaySite(QString site) {
-    QWidget *window = new QWidget(this, Qt::Dialog);
-    window->setWindowTitle(this->windowTitle());
-    window->resize(800, 500);
-    QWebView *webview = new QWebView(window);
-    webview->load(QUrl(site));
-    webview->show();
-    window->show();
-}

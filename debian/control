@@ -10,6 +10,6 @@ Vcs-Git: git://github.com/AdrianTM/mx-packageinstaller
 
 Package: mx-packageinstaller
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends}, mx-viewer
 Description: MX program for installing additional packages.
  MX-packageinstaller is a program used for installing additional packages.

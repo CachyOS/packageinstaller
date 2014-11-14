@@ -49,7 +49,6 @@ public:
     ~mxpackageinstaller();
 
     QString getCmdOut(QString cmd);
-    void displaySite(QString site);
 
     void setup();
     void install();
