@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="es">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="es" version="2.0">
 <context>
     <name>QApplication</name>
     <message>
@@ -34,13 +32,9 @@
         <translation>Descripción</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Install additional packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;To use this feature, make sure you are connected to the internet.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Instale paquetes adicionales&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Para usar esta aplicación, asegúrese de estar conectado a Internet.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <location filename="../mxpackageinstaller.ui" line="80"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Install additional packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;To use this feature, make sure you are connected to the internet.&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Instalar paquetes adicionales&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Para usar esta herramienta, asegúrese de estar conectado a Internet.&lt;/p&gt;&lt;p&gt;Los ítemes en gris ya están instalados.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="87"/>
@@ -196,7 +190,7 @@
     <message>
         <location filename="../mxpackageinstaller.cpp" line="480"/>
         <source>Version: </source>
-        <translation type="unfinished"></translation>
+        <translation>Versión:</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="482"/>

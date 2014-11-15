@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="el">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="el" version="2.0">
 <context>
     <name>QApplication</name>
     <message>
@@ -34,13 +32,9 @@
         <translation>Περιγραφή</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Install additional packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;To use this feature, make sure you are connected to the internet.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="obsolete">&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Εγκατάσταση πρόσθετων πακέτων&lt;/ span&gt;&lt;/ p&gt;Για να χρησιμοποιήσετε αυτή τη εφαρμογή, βεβαιωθείτε ότι είστε συνδεδεμένοι στο διαδίκτυο.&lt;/ p&gt;&lt;/ body&gt;&lt;/ html&gt; </translation>
-    </message>
-    <message>
         <location filename="../mxpackageinstaller.ui" line="80"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Install additional packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;To use this feature, make sure you are connected to the internet.&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Εγκατάσταση πρόσθετων πακέτων&lt;/ span&gt;&lt;/ p&gt;&lt;p&gt;Για να χρησιμοποιήσετε αυτή τη εφαρμογή, βεβαιωθείτε ότι είστε συνδεδεμένοι στο διαδίκτυο.&lt;/ p&gt;&lt;p&gt;Τα γκριζαρισμένα στοιχεία έχουν ήδη εγκατασταθεί.&lt;/p&gt;&lt;/ body&gt;&lt;/ html&gt; </translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="87"/>
@@ -197,7 +191,7 @@
     <message>
         <location filename="../mxpackageinstaller.cpp" line="480"/>
         <source>Version: </source>
-        <translation type="unfinished"></translation>
+        <translation>Έκδοση:</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="482"/>
