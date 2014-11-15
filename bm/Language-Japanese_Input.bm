@@ -16,6 +16,7 @@ FLL_PACKAGES=(
         ibus-mozc
         ibus-qt4
         ibus-gtk3
+        ibus-gtk
         python-appindicator
         fonts-vlgothic
         manpages-ja

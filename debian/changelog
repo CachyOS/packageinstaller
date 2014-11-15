@@ -1,3 +1,27 @@
+mx-packageinstaller (14.3) mx; urgency=medium
+
+  * set installation as noninteractive
+
+ -- Adrian <adrian@mxlinux.org>  Fri, 14 Nov 2014 15:10:43 -0500
+
+mx-packageinstaller (14.2+1) mx; urgency=medium
+
+  * fixed dependency, changed version format 
+
+ -- Adrian <adrian@mxlinux.org>  Tue, 30 Sep 2014 19:12:05 -0400
+
+mx-packageinstaller (0.14.2mx142+3) mx; urgency=medium
+
+  * Fixed Apache install
+
+ -- Adrian <adrian@mxlinux.org>  Wed, 13 Aug 2014 11:55:20 -0400
+
+mx-packageinstaller (0.14.2mx142+2) mx; urgency=medium
+
+  * Grayed out installed programs
+
+ -- Adrian <adrian@mxlinux.org>  Wed, 06 Aug 2014 09:37:33 -0400
+
 mx-packageinstaller (0.14.1mx141+4) mx; urgency=low
 
   * Fixed Japanese output localization

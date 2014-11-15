@@ -31,7 +31,6 @@
 #include <QFormLayout>
 #include <QKeyEvent>
 
-
 mxpackageinstaller::mxpackageinstaller(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::mxpackageinstaller)
@@ -44,18 +43,6 @@ mxpackageinstaller::~mxpackageinstaller()
 {
     delete ui;
 }
-
-
-// Util function
-QString mxpackageinstaller::getCmdOut(QString cmd) {
-    proc = new QProcess(this);
-    proc->start("/bin/bash", QStringList() << "-c" << cmd);
-    proc->setReadChannel(QProcess::StandardOutput);
-    proc->setReadChannelMode(QProcess::MergedChannels);
-    proc->waitForFinished(-1);
-    return proc->readAllStandardOutput().trimmed();
-}
-
 
 // setup versious items first time program runs
 void mxpackageinstaller::setup() {
@@ -73,7 +60,24 @@ void mxpackageinstaller::setup() {
     ui->treeWidget->resizeColumnToContents(1);
     ui->treeWidget->resizeColumnToContents(2);
     ui->treeWidget->resizeColumnToContents(3);
+    installedPackages = listInstalled();
     listPackages();
+}
+
+// Util function
+QString mxpackageinstaller::getCmdOut(QString cmd) {
+    proc = new QProcess(this);
+    proc->start("/bin/bash", QStringList() << "-c" << cmd);
+    proc->setReadChannel(QProcess::StandardOutput);
+    proc->setReadChannelMode(QProcess::MergedChannels);
+    proc->waitForFinished(-1);
+    return proc->readAllStandardOutput().trimmed();
+}
+
+// Get version of the program
+QString mxpackageinstaller::getVersion(QString name) {
+    QString cmd = QString("dpkg -l %1 | awk 'NR==6 {print $3}'").arg(name);
+    return getCmdOut(cmd);
 }
 
 
@@ -121,6 +125,11 @@ void mxpackageinstaller::listPackages(void) {
 
         // add full name of file in treeWidget, but don't display it
         childItem->setText(5, filename);
+
+        // gray out installed items
+        if (checkInstalled(filename, name)) {
+            childItem->setDisabled(true);
+        }
     }
     ui->treeWidget->resizeColumnToContents(0);
     ui->treeWidget->resizeColumnToContents(2);
@@ -210,9 +219,9 @@ void mxpackageinstaller::aptget(QString package) {
     disconnect(proc, SIGNAL(finished(int)), 0, 0);
     connect(proc, SIGNAL(finished(int)), SLOT(aptgetDone(int)));
     if (ui->yesCheckBox->isChecked()) {
-        cmd = QString("apt-get -y install %1").arg(package);
+        cmd = QString("DEBIAN_FRONTEND=noninteractive apt-get -y install %1").arg(package);
     } else {
-        cmd = QString("apt-get install %1").arg(package);
+        cmd = QString("DEBIAN_FRONTEND=noninteractive apt-get install %1").arg(package);
     }
     QString out = ui->outputBox->toPlainText() + "# " + cmd + "\n";
     ui->outputBox->setPlainText(out);
@@ -234,6 +243,33 @@ void mxpackageinstaller::postProc(QString postprocess) {
     proc->start("/bin/bash", QStringList() << "-c" << postprocess);
     loop.exec();
 }
+
+// returns list of all install packages
+QStringList mxpackageinstaller::listInstalled() {
+    QString str = getCmdOut("dpkg --get-selections | grep -v deinstall | cut -f1");
+    return str.split("\n");
+}
+
+// checks if a specific package is already installed
+bool mxpackageinstaller::checkInstalled(QString filename, QString name) {
+    QString cmd_package = "source " + filename + " && echo ${FLL_PACKAGES[@]}";
+    QString packages = getCmdOut(cmd_package);
+    QStringList list = packages.split(" ");
+    // if no packages listed compare to the name of the program
+    if (list.contains("")) {
+        if (!installedPackages.contains(name, Qt::CaseInsensitive)) {
+            return false;
+        }
+    } else {
+        for (int i = 0; i < list.size(); ++i) {
+            if (!installedPackages.contains(list.at(i))) {
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
 
 //// sync process events ////
 
@@ -264,7 +300,7 @@ void mxpackageinstaller::preProcDone(int exitCode) {
         if ((*it)->isSelected()) {
             QString filename =  (*it)->text(5);
             QString cmd_package = "source " + filename + " && echo ${FLL_PACKAGES[@]}";
-            package = getCmdOut(cmd_package);
+            package = getCmdOut(cmd_package);                    
         }
         ++it;
     }
@@ -291,7 +327,7 @@ void mxpackageinstaller::aptgetDone(int exitCode) {
             QString filename =  (*it)->text(5);
             package = (*it)->text(2);
             QString cmd_postprocess = "source " + filename + " && printf '%s\\n' \"${FLL_POST_PROCESSING[@]}\"";
-            postprocess = getCmdOut(cmd_postprocess);
+            postprocess = getCmdOut(cmd_postprocess);  
         }
         ++it;
     }
@@ -308,13 +344,15 @@ void mxpackageinstaller::aptgetDone(int exitCode) {
 
 void mxpackageinstaller::postProcDone(int exitCode) {
     timer->stop();
-    ui->progressBar->setValue(100);
-    QString package;
+    ui->progressBar->setValue(100);    
     QTreeWidgetItemIterator it(ui->treeWidget);
     while (*it) {
         if ((*it)->isSelected()) {
+            (*it)->setCheckState(1, Qt::Unchecked);
             (*it)->setSelected(false);
-            package = (*it)->text(2);
+            if (exitCode == 0) {
+                (*it)->setDisabled(true);
+            }
         }
         ++it;
     }
@@ -334,16 +372,17 @@ void mxpackageinstaller::setConnections(QTimer* timer, QProcess* proc) {
 
 //// events ////
 
-// process 'y' and 'n' keystrokes
-void mxpackageinstaller::keyPressEvent(QKeyEvent *event)
-{
-    if (event->key() == Qt::Key_Y) {
-       proc->write("y");
-       proc->closeWriteChannel();
-   } else if (event->key() == Qt::Key_N) {
-       proc->write("n");
-       proc->closeWriteChannel();
-   }
+// process keystrokes
+void mxpackageinstaller::keyPressEvent(QKeyEvent *event) {
+    if (event->type() == QEvent::KeyPress) {
+        if(event->matches(QKeySequence::Copy)) {
+            proc->terminate();
+        }
+        QString text = event->text();
+        const char *c = text.toStdString().c_str();
+        proc->write(c);
+        proc->closeWriteChannel();
+    }
 }
 
 
@@ -357,6 +396,8 @@ void mxpackageinstaller::onStdoutAvailable() {
     QScrollBar *sb = ui->outputBox->verticalScrollBar();
     sb->setValue(sb->maximum());
 }
+
+
 
 void mxpackageinstaller::displayInfo(QTreeWidgetItem * item, int column) {    
     if (column == 3 && item->childCount() == 0) {
@@ -436,28 +477,19 @@ void mxpackageinstaller::on_buttonInstall_clicked() {
 void mxpackageinstaller::on_buttonAbout_clicked() {
     QMessageBox msgBox(QMessageBox::NoIcon,
                        tr("About MX Package Installer"), "<p align=\"center\"><b><h2>" +
-                       tr("MX Package Installer") + "</h2></b></p><p align=\"center\">MX14+git20140617</p><p align=\"center\"><h3>" +
+                       tr("MX Package Installer") + "</h2></b></p><p align=\"center\">" + tr("Version: ") +
+                       getVersion("mx-packageinstaller") + "</p><p align=\"center\"><h3>" +
                        tr("Simple package installer for additional packages for antiX MX") + "</h3></p><p align=\"center\"><a href=\"http://www.mepiscommunity.org/mx\">http://www.mepiscommunity.org/mx</a><br /></p><p align=\"center\">" +
                        tr("Copyright (c) antiX") + "<br /><br /></p>", 0, this);
     msgBox.addButton(tr("License"), QMessageBox::AcceptRole);
     msgBox.addButton(tr("Cancel"), QMessageBox::DestructiveRole);
     if (msgBox.exec() == QMessageBox::AcceptRole)
-        displaySite("file:///usr/share/doc/mx-packageinstaller/license.html");
+        system("mx-viewer file:///usr/share/doc/mx-packageinstaller/license.html");
 }
 
 
 // Help button clicked
 void mxpackageinstaller::on_buttonHelp_clicked() {
-    displaySite("file:///usr/local/share/doc/mxapps.html#packageinstaller");
+    system("mx-viewer file:///usr/local/share/doc/mxapps.html#packageinstaller");
 }
 
-// pop up a window and display website
-void mxpackageinstaller::displaySite(QString site) {
-    QWidget *window = new QWidget(this, Qt::Dialog);
-    window->setWindowTitle(this->windowTitle());
-    window->resize(800, 500);
-    QWebView *webview = new QWebView(window);
-    webview->load(QUrl(site));
-    webview->show();
-    window->show();
-}
