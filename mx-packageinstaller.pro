@@ -42,7 +42,8 @@ HEADERS  += mxpackageinstaller.h
 
 FORMS    += mxpackageinstaller.ui
 
-TRANSLATIONS += translations/mx-packageinstaller_el.ts \
+TRANSLATIONS += translations/mx-packageinstaller_ca.ts \
+		translations/mx-packageinstaller_el.ts \
                 translations/mx-packageinstaller_es.ts \
                 translations/mx-packageinstaller_fr.ts \
                 translations/mx-packageinstaller_ja.ts \
