@@ -1,0 +1,27 @@
+FLL_DESCRIPTION="Skype - VoIP, Instant messaging and Videoconferencing."
+
+FLL_PRE_PROCESSING=(
+	"#!/bin/bash"
+        "echo \"---- in preprocessing ----\""
+        "echo \"Connecting to Skype and downloading latest version\""  
+	"wget -O skype-install.deb http://www.skype.com/go/getskype-linux-deb"
+        "echo \"Installing Skype\"" 
+        "dpkg -i skype-install.deb"
+        "apt-get -f install -y"
+        "echo \"Installation completed.\""  
+        "echo \"---- preprocessing done----\""
+)
+
+FLL_PACKAGE_DEPMODS=(
+)
+
+FLL_PACKAGES=(
+      
+      pulseaudio 
+      pulseaudio-module-x11  
+      gstreamer0.10-pulseaudio 
+      rtkit 
+      pavucontrol
+    
+)
+
