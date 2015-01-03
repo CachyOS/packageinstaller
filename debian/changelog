@@ -1,3 +1,9 @@
+mx-packageinstaller (14.4) mx; urgency=medium
+
+  * added VirtualBox
+
+ -- Adrian <adrian@mxlinux.org>  Sat, 03 Jan 2015 13:35:45 -0500
+
 mx-packageinstaller (14.3) mx; urgency=medium
 
   * set installation as noninteractive
