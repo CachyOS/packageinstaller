@@ -192,8 +192,7 @@ void mxpackageinstaller::update() {
     connect(proc, SIGNAL(finished(int)), &loop, SLOT(quit()));
     QString cmd = "apt-get update";
     proc->start(cmd);
-    QString out = ui->outputBox->toPlainText() + "# " + cmd + "\n";
-    ui->outputBox->setPlainText(out);
+    ui->outputBox->insertPlainText("# " + cmd + "\n");
     loop.exec();
 }
 
@@ -223,8 +222,7 @@ void mxpackageinstaller::aptget(QString package) {
     } else {
         cmd = QString("DEBIAN_FRONTEND=noninteractive apt-get install %1").arg(package);
     }
-    QString out = ui->outputBox->toPlainText() + "# " + cmd + "\n";
-    ui->outputBox->setPlainText(out);
+    ui->outputBox->insertPlainText("# " + cmd + "\n");
     QEventLoop loop;
     connect(proc, SIGNAL(finished(int)), &loop, SLOT(quit()));
     proc->start("/bin/bash", QStringList() << "-c" << cmd);
@@ -391,8 +389,7 @@ void mxpackageinstaller::keyPressEvent(QKeyEvent *event) {
 // update output box on Stdout
 void mxpackageinstaller::onStdoutAvailable() {
     QByteArray output = proc->readAllStandardOutput();
-    QString out = ui->outputBox->toPlainText() + QString::fromUtf8(output);
-    ui->outputBox->setPlainText(out);
+    ui->outputBox->insertPlainText(output);
     QScrollBar *sb = ui->outputBox->verticalScrollBar();
     sb->setValue(sb->maximum());
 }
