@@ -20,10 +20,4 @@ FLL_PACKAGES=(
 )
 
 FLL_POST_PROCESSING=(
-       "#!/bin/bash"
-       "echo \"---- in postprocessing ----\""
-       "echo \"Removing Opera repository from /etc/apt/sources.list.d/various.list\""
-       "sed -i -r '/opera.com/ s/^([^#])/#\1/' /etc/apt/sources.list.d/various.list"
-       "echo \"---- postprocessing done----\""
-
 )

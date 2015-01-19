@@ -1,3 +1,9 @@
+mx-packageinstaller (15.1.1) mx; urgency=medium
+
+  * installing Opera and Iceweasel will keep sources on to allow updates
+
+ -- Adrian <adrian@mxlinux.org>  Mon, 19 Jan 2015 11:08:32 -0500
+
 mx-packageinstaller (15.1) mx; urgency=medium
 
   * gray out installed packages instead of disabling the item.
