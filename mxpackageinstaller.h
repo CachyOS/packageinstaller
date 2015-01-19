@@ -54,7 +54,6 @@ public:
     void setup();
     void install();
     void listPackages();
-    void update();
     void preProc(QString preprocess);
     void aptget(QString package);
     void postProc(QString postprocess);

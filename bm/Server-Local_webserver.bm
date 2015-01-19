@@ -3,6 +3,7 @@ FLL_DESCRIPTION="apache2, php5, mysql server applications."
 FLL_PRE_PROCESSING=(
 	"#!/bin/bash"
 	"echo \"---- in preprocessing ----\""
+        "apt-get update"
 	"# paste your code here (not necessary for normal install, only for preconfigs)"
 	"export DEBIAN_FRONTEND=noninteractive; apt-get -q -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" install apache2 apache2-utils apache2-mpm-prefork php5 php5-common mysql-server mysql-common libapache2-mod-php5 php5-mysql phpmyadmin"
 	"echo \"---- preprocessing done----\""

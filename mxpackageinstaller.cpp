@@ -92,7 +92,12 @@ void mxpackageinstaller::listPackages(void) {
     for (int i = 0; i < bmfilelist.size(); ++i) {
         QStringList info = bmfilelist.at(i).split("-");
         QString name = info.at(1);
-        name.chop(3);
+        if (info.size() == 3) { // if there's a "-" in the name, the string will be split in 3
+            name = info.at(1) + "-" + info.at(2); // readd - and second part of the name
+        } else if (info.size() == 4) { // if there's a "-" in the name, the string will be split in 4
+            name = info.at(1) + "-" + info.at(2) + "-" + info.at(3); // readd the remaining parts of the name
+        }
+        name.chop(3); // chop .bm part
         QString category = info.at(0);
 
         // add package category if treeWidget doesn't already have it
@@ -146,10 +151,7 @@ void mxpackageinstaller::install() {
     ui->outputBox->setText("");
     QString preprocess = "";
 
-    //run apt-get update
     setCursor(QCursor(Qt::WaitCursor));
-    update();
-
     QTreeWidgetItemIterator it(ui->treeWidget);
     while (*it) {
         (*it)->setSelected(false); // deselect each item
@@ -181,26 +183,12 @@ void mxpackageinstaller::install() {
     ui->buttonInstall->setIcon(QIcon());
 }
 
-// run update
-void mxpackageinstaller::update() {
-    QString outLabel = tr("Running apt-get update... ");
-    ui->stackedWidget->setCurrentWidget(ui->outputPage);
-    ui->progressBar->setValue(0);
-    ui->outputLabel->setText(outLabel);
-    setConnections(timer, proc);
-    disconnect(proc, SIGNAL(finished(int)), 0, 0);
-    connect(proc, SIGNAL(finished(int)), this, SLOT(updateDone(int)));
-    QEventLoop loop;
-    connect(proc, SIGNAL(finished(int)), &loop, SLOT(quit()));
-    QString cmd = "apt-get update";
-    proc->start(cmd);
-    ui->outputBox->insertPlainText("# " + cmd + "\n");
-    loop.exec();
-}
 
 // run preprocess
 void mxpackageinstaller::preProc(QString preprocess) {
     QString outLabel = tr("Pre-processing... ");
+    ui->stackedWidget->setCurrentWidget(ui->outputPage);
+    ui->progressBar->setValue(0);
     ui->outputLabel->setText(outLabel);
     setConnections(timer, proc);
     disconnect(proc, SIGNAL(finished(int)), 0, 0);
