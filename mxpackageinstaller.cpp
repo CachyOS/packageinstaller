@@ -4,22 +4,23 @@
  * Copyright (C) 2014 MX Authors
  *
  * Authors: Adrian
- *          MEPIS Community <http://forum.mepiscommunity.org>
+ *          MX & MEPIS Community <http://forum.mepiscommunity.org>
  *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * This file is part of MX Package Installer.
+ *
+ * MX Snapshot is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * MX Tools is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
- *****************************************************************************/
+ * You should have received a copy of the GNU General Public License
+ * along with MX Snapshot.  If not, see <http://www.gnu.org/licenses/>.
+ **********************************************************************/
 
 
 #include "mxpackageinstaller.h"
@@ -128,7 +129,8 @@ void mxpackageinstaller::listPackages(void) {
 
         // gray out installed items
         if (checkInstalled(filename, name)) {
-            childItem->setDisabled(true);
+            childItem->setForeground(2, QBrush(Qt::gray));
+            childItem->setForeground(4, QBrush(Qt::gray));
         }
     }
     ui->treeWidget->resizeColumnToContents(0);
@@ -298,7 +300,7 @@ void mxpackageinstaller::preProcDone(int exitCode) {
         if ((*it)->isSelected()) {
             QString filename =  (*it)->text(5);
             QString cmd_package = "source " + filename + " && echo ${FLL_PACKAGES[@]}";
-            package = getCmdOut(cmd_package);                    
+            package = getCmdOut(cmd_package);
         }
         ++it;
     }
@@ -325,7 +327,7 @@ void mxpackageinstaller::aptgetDone(int exitCode) {
             QString filename =  (*it)->text(5);
             package = (*it)->text(2);
             QString cmd_postprocess = "source " + filename + " && printf '%s\\n' \"${FLL_POST_PROCESSING[@]}\"";
-            postprocess = getCmdOut(cmd_postprocess);  
+            postprocess = getCmdOut(cmd_postprocess);
         }
         ++it;
     }
@@ -342,7 +344,7 @@ void mxpackageinstaller::aptgetDone(int exitCode) {
 
 void mxpackageinstaller::postProcDone(int exitCode) {
     timer->stop();
-    ui->progressBar->setValue(100);    
+    ui->progressBar->setValue(100);
     QTreeWidgetItemIterator it(ui->treeWidget);
     while (*it) {
         if ((*it)->isSelected()) {
@@ -396,7 +398,7 @@ void mxpackageinstaller::onStdoutAvailable() {
 
 
 
-void mxpackageinstaller::displayInfo(QTreeWidgetItem * item, int column) {    
+void mxpackageinstaller::displayInfo(QTreeWidgetItem * item, int column) {
     if (column == 3 && item->childCount() == 0) {
         QString desc = item->text(4);
         QString filename = item->text(5);

@@ -1,3 +1,9 @@
+mx-packageinstaller (15.1) mx; urgency=medium
+
+  * gray out installed packages instead of disabling the item.
+
+ -- Adrian <adrian@mxlinux.org>  Sun, 18 Jan 2015 22:33:14 -0500
+
 mx-packageinstaller (14.4) mx; urgency=medium
 
   * added VirtualBox
