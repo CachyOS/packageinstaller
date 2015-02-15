@@ -8,18 +8,18 @@
  *
  * This file is part of MX Package Installer.
  *
- * MX Snapshot is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * MX Tools is distributed in the hope that it will be useful,
+ * MX Package Installer is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with MX Snapshot.  If not, see <http://www.gnu.org/licenses/>.
+ * along with MX Package Installer.  If not, see <http://www.gnu.org/licenses/>.
  **********************************************************************/
 
 
@@ -468,9 +468,9 @@ void mxpackageinstaller::on_buttonAbout_clicked() {
                        getVersion("mx-packageinstaller") + "</p><p align=\"center\"><h3>" +
                        tr("Simple package installer for additional packages for antiX MX") + "</h3></p><p align=\"center\"><a href=\"http://www.mepiscommunity.org/mx\">http://www.mepiscommunity.org/mx</a><br /></p><p align=\"center\">" +
                        tr("Copyright (c) antiX") + "<br /><br /></p>", 0, this);
-    msgBox.addButton(tr("License"), QMessageBox::AcceptRole);
-    msgBox.addButton(tr("Cancel"), QMessageBox::DestructiveRole);
-    if (msgBox.exec() == QMessageBox::AcceptRole)
+    msgBox.addButton(tr("Cancel"), QMessageBox::AcceptRole); // because we want to display the buttons in reverse order we use counter-intuitive roles.
+    msgBox.addButton(tr("License"), QMessageBox::RejectRole);
+    if (msgBox.exec() == QMessageBox::RejectRole)
         system("mx-viewer file:///usr/share/doc/mx-packageinstaller/license.html");
 }
 
