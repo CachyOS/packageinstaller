@@ -477,6 +477,6 @@ void mxpackageinstaller::on_buttonAbout_clicked() {
 
 // Help button clicked
 void mxpackageinstaller::on_buttonHelp_clicked() {
-    system("mx-viewer file:///usr/local/share/doc/mxapps.html#packageinstaller");
+    system("mx-viewer http://www.mepiscommunity.org/public_html/user_manual_mx15/mxum.html#packageinstaller");
 }
 
