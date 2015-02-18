@@ -1,3 +1,9 @@
+mx-packageinstaller (15.2.1) mx; urgency=medium
+
+  * add deb-multimedia GPG key for Adobe Reader
+
+ -- Adrian <adrian@mxlinux.org>  Wed, 18 Feb 2015 18:37:18 -0500
+
 mx-packageinstaller (15.2) mx; urgency=medium
 
   * changed help URL
