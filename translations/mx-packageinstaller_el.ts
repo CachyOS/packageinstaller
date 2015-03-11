@@ -1,8 +1,10 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="el" version="2.0">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.0" language="el">
 <context>
     <name>QApplication</name>
     <message>
-        <location filename="../main.cpp" line="54"/>
+        <location filename="../main.cpp" line="55"/>
         <source>You must run this program as root.</source>
         <translation>Πρέπει να τρέξετε αυτή την εφασρμογή ως Root. </translation>
     </message>
@@ -11,7 +13,7 @@
     <name>mxpackageinstaller</name>
     <message>
         <location filename="../mxpackageinstaller.ui" line="14"/>
-        <location filename="../mxpackageinstaller.cpp" line="480"/>
+        <location filename="../mxpackageinstaller.cpp" line="467"/>
         <source>MX Package Installer</source>
         <translation>Εγκατάσταση πακέτων του MX</translation>
     </message>
@@ -22,7 +24,7 @@
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="67"/>
-        <location filename="../mxpackageinstaller.cpp" line="410"/>
+        <location filename="../mxpackageinstaller.cpp" line="397"/>
         <source>Info</source>
         <translation>Πληροφορίες</translation>
     </message>
@@ -63,7 +65,7 @@
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="187"/>
-        <location filename="../mxpackageinstaller.cpp" line="467"/>
+        <location filename="../mxpackageinstaller.cpp" line="454"/>
         <source>Install</source>
         <translation>Εγκατάσταση </translation>
     </message>
@@ -74,8 +76,8 @@
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="210"/>
-        <location filename="../mxpackageinstaller.cpp" line="410"/>
-        <location filename="../mxpackageinstaller.cpp" line="485"/>
+        <location filename="../mxpackageinstaller.cpp" line="397"/>
+        <location filename="../mxpackageinstaller.cpp" line="471"/>
         <source>Cancel</source>
         <translation>Ακύρωση</translation>
     </message>
@@ -100,111 +102,110 @@
         <translation>Alt+B</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="166"/>
-        <location filename="../mxpackageinstaller.cpp" line="335"/>
+        <location filename="../mxpackageinstaller.cpp" line="170"/>
+        <location filename="../mxpackageinstaller.cpp" line="323"/>
         <source>Installation done.</source>
         <translation>Τελείωσε η </translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="167"/>
+        <location filename="../mxpackageinstaller.cpp" line="171"/>
         <source>Success</source>
         <translation>Επιτυχία!</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="168"/>
+        <location filename="../mxpackageinstaller.cpp" line="172"/>
         <source>Process finished with success.&lt;p&gt;&lt;b&gt;Do you want to exit MX Package Installer?&lt;/b&gt;</source>
         <translation>Η διαδικασία τελείωσε με επιτυχία.&lt;p&gt; &lt;b&gt; Θέλετε να βγείτε;&lt;/ b&gt;</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="169"/>
+        <location filename="../mxpackageinstaller.cpp" line="173"/>
         <source>Yes</source>
         <translation>Ναι</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="169"/>
+        <location filename="../mxpackageinstaller.cpp" line="173"/>
         <source>No</source>
         <translation>Όχι</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="173"/>
-        <location filename="../mxpackageinstaller.cpp" line="312"/>
-        <location filename="../mxpackageinstaller.cpp" line="339"/>
+        <location filename="../mxpackageinstaller.cpp" line="177"/>
+        <location filename="../mxpackageinstaller.cpp" line="300"/>
+        <location filename="../mxpackageinstaller.cpp" line="327"/>
         <source>Error</source>
         <translation>Σφάλμα</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="174"/>
+        <location filename="../mxpackageinstaller.cpp" line="178"/>
         <source>Postprocess finished. Errors have occurred.</source>
         <translation>H Μετα-επεξεργασία τελείωσε με λάθη. </translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="178"/>
+        <location filename="../mxpackageinstaller.cpp" line="182"/>
         <source>&lt; Back</source>
         <translation>&lt; Πίσω </translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="184"/>
         <source>Running apt-get update... </source>
-        <translation>Εκτελώντας την εντολή apt-get update ... </translation>
+        <translation type="obsolete">Εκτελώντας την εντολή apt-get update ... </translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="202"/>
+        <location filename="../mxpackageinstaller.cpp" line="189"/>
         <source>Pre-processing... </source>
         <translation>Προ-επεξεργασία ... </translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="216"/>
+        <location filename="../mxpackageinstaller.cpp" line="205"/>
         <source>Installing: </source>
         <translation>Γίνει η εγκατάσταση</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="236"/>
+        <location filename="../mxpackageinstaller.cpp" line="224"/>
         <source>Post-processing... </source>
         <translation>Μετα-επεξεργασία ...</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="308"/>
+        <location filename="../mxpackageinstaller.cpp" line="296"/>
         <source>Preprocessing done.</source>
         <translation>Η Προεπεξεργασία τελειώσε.</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="313"/>
+        <location filename="../mxpackageinstaller.cpp" line="301"/>
         <source>Pre-process finished. Errors have occurred installing: </source>
         <translation>Η Προεπεξεργασία τελειώσε 
 </translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="340"/>
+        <location filename="../mxpackageinstaller.cpp" line="328"/>
         <source>Errors have occurred installing: </source>
         <translation>Σφάλμα κατά την εγκατάσταση:</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="409"/>
+        <location filename="../mxpackageinstaller.cpp" line="396"/>
         <source>Packages to be installed: </source>
         <translation>Τα πακέτα που πρόκειται να εγκατασταθεί: </translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="479"/>
+        <location filename="../mxpackageinstaller.cpp" line="466"/>
         <source>About MX Package Installer</source>
         <translation>Περί </translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="480"/>
+        <location filename="../mxpackageinstaller.cpp" line="467"/>
         <source>Version: </source>
         <translation>Έκδοση:</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="482"/>
+        <location filename="../mxpackageinstaller.cpp" line="469"/>
         <source>Simple package installer for additional packages for antiX MX</source>
         <translation>Απλή εγκατάστασης πρόσθετων πακέτων</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="483"/>
+        <location filename="../mxpackageinstaller.cpp" line="470"/>
         <source>Copyright (c) antiX</source>
         <translation>Copyright (c) antiX </translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="484"/>
+        <location filename="../mxpackageinstaller.cpp" line="472"/>
         <source>License</source>
         <translation>Άδεια</translation>
     </message>

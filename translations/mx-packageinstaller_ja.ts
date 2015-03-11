@@ -1,8 +1,10 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="ja" version="2.0">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.0" language="ja">
 <context>
     <name>QApplication</name>
     <message>
-        <location filename="../main.cpp" line="54"/>
+        <location filename="../main.cpp" line="55"/>
         <source>You must run this program as root.</source>
         <translation>このプログラムは root で実行する必要があります。</translation>
     </message>
@@ -11,7 +13,7 @@
     <name>mxpackageinstaller</name>
     <message>
         <location filename="../mxpackageinstaller.ui" line="14"/>
-        <location filename="../mxpackageinstaller.cpp" line="480"/>
+        <location filename="../mxpackageinstaller.cpp" line="467"/>
         <source>MX Package Installer</source>
         <translation>MX Package Installer</translation>
     </message>
@@ -22,7 +24,7 @@
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="67"/>
-        <location filename="../mxpackageinstaller.cpp" line="410"/>
+        <location filename="../mxpackageinstaller.cpp" line="397"/>
         <source>Info</source>
         <translation>情報</translation>
     </message>
@@ -63,7 +65,7 @@
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="187"/>
-        <location filename="../mxpackageinstaller.cpp" line="467"/>
+        <location filename="../mxpackageinstaller.cpp" line="454"/>
         <source>Install</source>
         <translation>インストール</translation>
     </message>
@@ -74,8 +76,8 @@
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="210"/>
-        <location filename="../mxpackageinstaller.cpp" line="410"/>
-        <location filename="../mxpackageinstaller.cpp" line="485"/>
+        <location filename="../mxpackageinstaller.cpp" line="397"/>
+        <location filename="../mxpackageinstaller.cpp" line="471"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
@@ -100,110 +102,109 @@
         <translation>Alt+B</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="166"/>
-        <location filename="../mxpackageinstaller.cpp" line="335"/>
+        <location filename="../mxpackageinstaller.cpp" line="170"/>
+        <location filename="../mxpackageinstaller.cpp" line="323"/>
         <source>Installation done.</source>
         <translation>インストール完了。</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="167"/>
+        <location filename="../mxpackageinstaller.cpp" line="171"/>
         <source>Success</source>
         <translation>完了</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="168"/>
+        <location filename="../mxpackageinstaller.cpp" line="172"/>
         <source>Process finished with success.&lt;p&gt;&lt;b&gt;Do you want to exit MX Package Installer?&lt;/b&gt;</source>
         <translation>処理が完了しました。&lt;p&gt;&lt;b&gt;MX Package Installer を終了しますか？&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="169"/>
+        <location filename="../mxpackageinstaller.cpp" line="173"/>
         <source>Yes</source>
         <translation>はい</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="169"/>
+        <location filename="../mxpackageinstaller.cpp" line="173"/>
         <source>No</source>
         <translation>いいえ</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="173"/>
-        <location filename="../mxpackageinstaller.cpp" line="312"/>
-        <location filename="../mxpackageinstaller.cpp" line="339"/>
+        <location filename="../mxpackageinstaller.cpp" line="177"/>
+        <location filename="../mxpackageinstaller.cpp" line="300"/>
+        <location filename="../mxpackageinstaller.cpp" line="327"/>
         <source>Error</source>
         <translation>エラー</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="174"/>
+        <location filename="../mxpackageinstaller.cpp" line="178"/>
         <source>Postprocess finished. Errors have occurred.</source>
         <translation>前処理が完了しました。エラーが発生しました。</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="178"/>
+        <location filename="../mxpackageinstaller.cpp" line="182"/>
         <source>&lt; Back</source>
         <translation>&lt; 戻る</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="184"/>
         <source>Running apt-get update... </source>
-        <translation>apt-get update の実行...</translation>
+        <translation type="obsolete">apt-get update の実行...</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="202"/>
+        <location filename="../mxpackageinstaller.cpp" line="189"/>
         <source>Pre-processing... </source>
         <translation>前処理中...</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="216"/>
+        <location filename="../mxpackageinstaller.cpp" line="205"/>
         <source>Installing: </source>
         <translation>インストール中:</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="236"/>
+        <location filename="../mxpackageinstaller.cpp" line="224"/>
         <source>Post-processing... </source>
         <translation>後処理中...</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="308"/>
+        <location filename="../mxpackageinstaller.cpp" line="296"/>
         <source>Preprocessing done.</source>
         <translation>前処理 完了。</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="313"/>
+        <location filename="../mxpackageinstaller.cpp" line="301"/>
         <source>Pre-process finished. Errors have occurred installing: </source>
         <translation>前処理が完了しました。インストールでエラーが発生しました:</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="340"/>
+        <location filename="../mxpackageinstaller.cpp" line="328"/>
         <source>Errors have occurred installing: </source>
         <translation>インストールでエラーが発生しました:</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="409"/>
+        <location filename="../mxpackageinstaller.cpp" line="396"/>
         <source>Packages to be installed: </source>
         <translation>インストールするパッケージ: </translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="479"/>
+        <location filename="../mxpackageinstaller.cpp" line="466"/>
         <source>About MX Package Installer</source>
         <translation>MX Package Installer について</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="480"/>
+        <location filename="../mxpackageinstaller.cpp" line="467"/>
         <source>Version: </source>
         <translation>Version: </translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="482"/>
+        <location filename="../mxpackageinstaller.cpp" line="469"/>
         <source>Simple package installer for additional packages for antiX MX</source>
         <translation>AntiX・MX のシンプルな追加パッケージインストーラー</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="483"/>
+        <location filename="../mxpackageinstaller.cpp" line="470"/>
         <source>Copyright (c) antiX</source>
         <translation>Copyright (c) antiX</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="484"/>
+        <location filename="../mxpackageinstaller.cpp" line="472"/>
         <source>License</source>
         <translation>ライセンス</translation>
     </message>
