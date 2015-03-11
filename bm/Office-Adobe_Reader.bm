@@ -3,10 +3,13 @@ FLL_DESCRIPTION="Adobe Reader PDF viewer."
 FLL_PRE_PROCESSING=(
 	"#!/bin/bash"
 	"echo \"---- in preprocessing ----\""
-        "echo \"Adding deb-multimedia repository to /etc/apt/sources.list.d/debian.list\""
-	"sed -i -r '/http:.*multimedia\.org.* wheezy/ s/^#+//' /etc/apt/sources.list.d/debian.list"
-        "apt-get update"
-        "echo \"---- preprocessing done----\""
+	"echo \"Adding deb-multimedia repository GPG key\""
+	"gpg --keyserver keyserver.ubuntu.com --recv-keys 5C808C2B65558117"
+	"gpg --armor --export 5C808C2B65558117 | apt-key add - " 
+	"echo \"Adding deb-multimedia repository to /etc/apt/sources.list.d/debian.list\""
+	"apt-key list | grep -q deb-multimedia.org; [ $? -ne 0 ] || sed -i -r '/http:.*multimedia\.org.* wheezy/ s/^#+//' /etc/apt/sources.list.d/debian.list"
+	"apt-key list | grep -q deb-multimedia.org; [ $? -ne 0 ] || apt-get update"
+	"echo \"---- preprocessing done----\""
 )
 
 FLL_PACKAGE_DEPMODS=(

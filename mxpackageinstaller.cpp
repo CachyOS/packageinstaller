@@ -4,22 +4,23 @@
  * Copyright (C) 2014 MX Authors
  *
  * Authors: Adrian
- *          MEPIS Community <http://forum.mepiscommunity.org>
+ *          MX & MEPIS Community <http://forum.mepiscommunity.org>
  *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * This file is part of MX Package Installer.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * MX Package Installer is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
- *****************************************************************************/
+ * You should have received a copy of the GNU General Public License
+ * along with MX Package Installer.  If not, see <http://www.gnu.org/licenses/>.
+ **********************************************************************/
 
 
 #include "mxpackageinstaller.h"
@@ -91,7 +92,12 @@ void mxpackageinstaller::listPackages(void) {
     for (int i = 0; i < bmfilelist.size(); ++i) {
         QStringList info = bmfilelist.at(i).split("-");
         QString name = info.at(1);
-        name.chop(3);
+        if (info.size() == 3) { // if there's a "-" in the name, the string will be split in 3
+            name = info.at(1) + "-" + info.at(2); // readd - and second part of the name
+        } else if (info.size() == 4) { // if there's a "-" in the name, the string will be split in 4
+            name = info.at(1) + "-" + info.at(2) + "-" + info.at(3); // readd the remaining parts of the name
+        }
+        name.chop(3); // chop .bm part
         QString category = info.at(0);
 
         // add package category if treeWidget doesn't already have it
@@ -128,7 +134,8 @@ void mxpackageinstaller::listPackages(void) {
 
         // gray out installed items
         if (checkInstalled(filename, name)) {
-            childItem->setDisabled(true);
+            childItem->setForeground(2, QBrush(Qt::gray));
+            childItem->setForeground(4, QBrush(Qt::gray));
         }
     }
     ui->treeWidget->resizeColumnToContents(0);
@@ -144,10 +151,7 @@ void mxpackageinstaller::install() {
     ui->outputBox->setText("");
     QString preprocess = "";
 
-    //run apt-get update
     setCursor(QCursor(Qt::WaitCursor));
-    update();
-
     QTreeWidgetItemIterator it(ui->treeWidget);
     while (*it) {
         (*it)->setSelected(false); // deselect each item
@@ -179,26 +183,12 @@ void mxpackageinstaller::install() {
     ui->buttonInstall->setIcon(QIcon());
 }
 
-// run update
-void mxpackageinstaller::update() {
-    QString outLabel = tr("Running apt-get update... ");
-    ui->stackedWidget->setCurrentWidget(ui->outputPage);
-    ui->progressBar->setValue(0);
-    ui->outputLabel->setText(outLabel);
-    setConnections(timer, proc);
-    disconnect(proc, SIGNAL(finished(int)), 0, 0);
-    connect(proc, SIGNAL(finished(int)), this, SLOT(updateDone(int)));
-    QEventLoop loop;
-    connect(proc, SIGNAL(finished(int)), &loop, SLOT(quit()));
-    QString cmd = "apt-get update";
-    proc->start(cmd);
-    ui->outputBox->insertPlainText("# " + cmd + "\n");
-    loop.exec();
-}
 
 // run preprocess
 void mxpackageinstaller::preProc(QString preprocess) {
     QString outLabel = tr("Pre-processing... ");
+    ui->stackedWidget->setCurrentWidget(ui->outputPage);
+    ui->progressBar->setValue(0);
     ui->outputLabel->setText(outLabel);
     setConnections(timer, proc);
     disconnect(proc, SIGNAL(finished(int)), 0, 0);
@@ -298,7 +288,7 @@ void mxpackageinstaller::preProcDone(int exitCode) {
         if ((*it)->isSelected()) {
             QString filename =  (*it)->text(5);
             QString cmd_package = "source " + filename + " && echo ${FLL_PACKAGES[@]}";
-            package = getCmdOut(cmd_package);                    
+            package = getCmdOut(cmd_package);
         }
         ++it;
     }
@@ -325,7 +315,7 @@ void mxpackageinstaller::aptgetDone(int exitCode) {
             QString filename =  (*it)->text(5);
             package = (*it)->text(2);
             QString cmd_postprocess = "source " + filename + " && printf '%s\\n' \"${FLL_POST_PROCESSING[@]}\"";
-            postprocess = getCmdOut(cmd_postprocess);  
+            postprocess = getCmdOut(cmd_postprocess);
         }
         ++it;
     }
@@ -342,7 +332,7 @@ void mxpackageinstaller::aptgetDone(int exitCode) {
 
 void mxpackageinstaller::postProcDone(int exitCode) {
     timer->stop();
-    ui->progressBar->setValue(100);    
+    ui->progressBar->setValue(100);
     QTreeWidgetItemIterator it(ui->treeWidget);
     while (*it) {
         if ((*it)->isSelected()) {
@@ -396,7 +386,7 @@ void mxpackageinstaller::onStdoutAvailable() {
 
 
 
-void mxpackageinstaller::displayInfo(QTreeWidgetItem * item, int column) {    
+void mxpackageinstaller::displayInfo(QTreeWidgetItem * item, int column) {
     if (column == 3 && item->childCount() == 0) {
         QString desc = item->text(4);
         QString filename = item->text(5);
@@ -478,15 +468,15 @@ void mxpackageinstaller::on_buttonAbout_clicked() {
                        getVersion("mx-packageinstaller") + "</p><p align=\"center\"><h3>" +
                        tr("Simple package installer for additional packages for antiX MX") + "</h3></p><p align=\"center\"><a href=\"http://www.mepiscommunity.org/mx\">http://www.mepiscommunity.org/mx</a><br /></p><p align=\"center\">" +
                        tr("Copyright (c) antiX") + "<br /><br /></p>", 0, this);
-    msgBox.addButton(tr("License"), QMessageBox::AcceptRole);
-    msgBox.addButton(tr("Cancel"), QMessageBox::DestructiveRole);
-    if (msgBox.exec() == QMessageBox::AcceptRole)
+    msgBox.addButton(tr("Cancel"), QMessageBox::AcceptRole); // because we want to display the buttons in reverse order we use counter-intuitive roles.
+    msgBox.addButton(tr("License"), QMessageBox::RejectRole);
+    if (msgBox.exec() == QMessageBox::RejectRole)
         system("mx-viewer file:///usr/share/doc/mx-packageinstaller/license.html");
 }
 
 
 // Help button clicked
 void mxpackageinstaller::on_buttonHelp_clicked() {
-    system("mx-viewer file:///usr/local/share/doc/mxapps.html#packageinstaller");
+    system("mx-viewer http://www.mepiscommunity.org/user_manual_mx15/mxum.html#packageinstaller");
 }
 

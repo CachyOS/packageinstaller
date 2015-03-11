@@ -1,0 +1,28 @@
+Format: 1.8
+Date: Wed, 11 Mar 2015 13:32:08 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source i386
+Version: 15.3mx14
+Distribution: mx
+Urgency: medium
+Maintainer: Steven Pusser (Stevo) <maintainer@mepiscommunity.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description: 
+ mx-packageinstaller - MX program for installing additional packages.
+Changes: 
+ mx-packageinstaller (15.3mx14) mx; urgency=medium
+ .
+   * download and install sig for Opera repos
+Checksums-Sha1: 
+ 830e124d40fe299d3b9f8b0ab49d40fa05b8cc11 692 mx-packageinstaller_15.3mx14.dsc
+ 5c7ac78a57ea507dfc3b47d952f05a0f02a17853 59938 mx-packageinstaller_15.3mx14.tar.gz
+ 452c48ac6a16d46b7e0501098fbc1c94222e237d 67114 mx-packageinstaller_15.3mx14_i386.deb
+Checksums-Sha256: 
+ a646197b666c8aecc63e7d46d65104c6b512f8dc8f1b6ededa99f0397109bc41 692 mx-packageinstaller_15.3mx14.dsc
+ 6908fe292e4bc1c5dc3f063dad000b66208ef73a51af4bbeb05bbe9b976987a9 59938 mx-packageinstaller_15.3mx14.tar.gz
+ 1f11c97444485b32b4f73c1e4c773a6675edebcd67c35b2c004a6f2e6d2f97cd 67114 mx-packageinstaller_15.3mx14_i386.deb
+Files: 
+ 0c7f72f99058b70a49729ef34cd7c3e5 692 admin optional mx-packageinstaller_15.3mx14.dsc
+ 51918ca7f87c534bf71ad7095dbbe6a1 59938 admin optional mx-packageinstaller_15.3mx14.tar.gz
+ e2bd0b0a4ab6739ab1b2a588027d6614 67114 admin optional mx-packageinstaller_15.3mx14_i386.deb

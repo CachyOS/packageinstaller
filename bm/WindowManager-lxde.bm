@@ -2,6 +2,7 @@ FLL_DESCRIPTION="LXDE-basic"
 
 FLL_PRE_PROCESSING=(
 	"#!/bin/bash"
+        "apt-get update"
 	"echo \"---- in preprocessing ----\""
 	"# paste your code here (not necessary for normal install, only for preconfigs)"
 	"echo \"---- preprocessing done----\""

@@ -1,3 +1,39 @@
+mx-packageinstaller (15.3mx14) mx; urgency=medium
+
+  * download and install sig for Opera repos
+
+ -- Adrian <adrian@mxlinux.org>  Wed, 11 Mar 2015 13:32:08 -0400
+
+mx-packageinstaller (15.2.1) mx; urgency=medium
+
+  * add deb-multimedia GPG key for Adobe Reader
+
+ -- Adrian <adrian@mxlinux.org>  Wed, 18 Feb 2015 18:37:18 -0500
+
+mx-packageinstaller (15.2) mx; urgency=medium
+
+  * changed help URL
+
+ -- Adrian <adrian@mxlinux.org>  Sun, 15 Feb 2015 10:44:48 -0500
+
+mx-packageinstaller (15.1.2) mx; urgency=medium
+
+  * added Google Chrome
+
+ -- Adrian <adrian@mxlinux.org>  Mon, 19 Jan 2015 15:33:19 -0500
+
+mx-packageinstaller (15.1.1) mx; urgency=medium
+
+  * installing Opera and Iceweasel will keep sources on to allow updates
+
+ -- Adrian <adrian@mxlinux.org>  Mon, 19 Jan 2015 11:08:32 -0500
+
+mx-packageinstaller (15.1) mx; urgency=medium
+
+  * gray out installed packages instead of disabling the item.
+
+ -- Adrian <adrian@mxlinux.org>  Sun, 18 Jan 2015 22:33:14 -0500
+
 mx-packageinstaller (14.4) mx; urgency=medium
 
   * added VirtualBox

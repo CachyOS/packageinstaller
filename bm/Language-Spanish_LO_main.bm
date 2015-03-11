@@ -3,6 +3,7 @@ FLL_DESCRIPTION="Spanish Language Meta-Package for LibreOffice."
 FLL_PRE_PROCESSING=(
         "#!/bin/bash"
         "echo \"---- in preprocessing ----\""
+        "apt-get update"
         "# paste your code here (not necessary for normal install, only for preconfigs)"
         "echo \"---- preprocessing done----\""
 )

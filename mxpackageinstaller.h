@@ -4,22 +4,23 @@
  * Copyright (C) 2014 MX Authors
  *
  * Authors: Adrian
- *          MEPIS Community <http://forum.mepiscommunity.org>
+ *          MX & MEPIS Community <http://forum.mepiscommunity.org>
  *
- * This program is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
+ * This file is part of MX Package Installer.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * MX Package Installer is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU Lesser General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program; if not, write to the Free Software Foundation,
- * Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
- *****************************************************************************/
+ * You should have received a copy of the GNU General Public License
+ * along with MX Package Installer.  If not, see <http://www.gnu.org/licenses/>.
+ **********************************************************************/
 
 
 #ifndef MXPACKAGEINSTALLER_H
@@ -38,7 +39,7 @@ class mxpackageinstaller;
 class mxpackageinstaller : public QDialog
 {
     Q_OBJECT
-    
+
 protected:
     QProcess *proc;
     QTimer *timer;
@@ -52,8 +53,7 @@ public:
 
     void setup();
     void install();
-    void listPackages();    
-    void update();
+    void listPackages();
     void preProc(QString preprocess);
     void aptget(QString package);
     void postProc(QString postprocess);
@@ -82,7 +82,7 @@ public slots:
     virtual void on_treeWidget_itemCollapsed();
 
 private:
-    Ui::mxpackageinstaller *ui;    
+    Ui::mxpackageinstaller *ui;
     QHash<QString, bool> hashPackages;
     QStringList installedPackages;
 
