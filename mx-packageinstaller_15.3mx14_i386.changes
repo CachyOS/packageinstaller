@@ -15,14 +15,14 @@ Changes:
  .
    * download and install sig for Opera repos
 Checksums-Sha1: 
- 4960e02ab466179ba6c38b42bd25940db33d86c8 695 mx-packageinstaller_15.3mx14.dsc
- 649c33ed78f363bb5981eea4a337350e5050d3ad 247527 mx-packageinstaller_15.3mx14.tar.gz
- c9413d466567e42ce5501b80a8342afd06868a16 66866 mx-packageinstaller_15.3mx14_i386.deb
+ ecd035389b96f32d507dd8b20e0a40cd54064794 692 mx-packageinstaller_15.3mx14.dsc
+ ea7031e06bfebd16e0e16a99759af4e848577d4b 59759 mx-packageinstaller_15.3mx14.tar.gz
+ 6dc8bb8726288880a8fe64d5b10afe760ff31bc9 67358 mx-packageinstaller_15.3mx14_i386.deb
 Checksums-Sha256: 
- 1b6a696aee5dfedf7abb6738b68698b33c14f9654304c2508cad26bfb2169327 695 mx-packageinstaller_15.3mx14.dsc
- b50bc202e1b81bede62af74fb8fc07b4a708e7264a848e2936923182df0630eb 247527 mx-packageinstaller_15.3mx14.tar.gz
- 5e87d4410e8754278e4e19f4f4229ac8f46d3f8d92894628f971db79f8ffdd67 66866 mx-packageinstaller_15.3mx14_i386.deb
+ a1e943f5ab76b0c9b41330462a99a5d2246b6f39ac4790e538e7d65939277130 692 mx-packageinstaller_15.3mx14.dsc
+ 960be8f26fd47d2a130259a1364483beff7ed78401db2e8a68712081c8b56689 59759 mx-packageinstaller_15.3mx14.tar.gz
+ 14a0f3bbf8e7c1c84968a6abf5100dfd27c058964079441095118c52ebccd175 67358 mx-packageinstaller_15.3mx14_i386.deb
 Files: 
- 31d37501a9d4275602f9601c48c6f4a9 695 admin optional mx-packageinstaller_15.3mx14.dsc
- 9bec9cc554ca4b1395aa0c8fbee50886 247527 admin optional mx-packageinstaller_15.3mx14.tar.gz
- 88d3a88bc6d21ad477b530b9e6222a8e 66866 admin optional mx-packageinstaller_15.3mx14_i386.deb
+ 8843c00230f779951b84f05d0429327d 692 admin optional mx-packageinstaller_15.3mx14.dsc
+ a2b00943a3a71b5fdfae95ec35420fb7 59759 admin optional mx-packageinstaller_15.3mx14.tar.gz
+ b81f8b0c4762ab4cce78bb9a26ce028c 67358 admin optional mx-packageinstaller_15.3mx14_i386.deb
