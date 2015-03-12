@@ -20,4 +20,5 @@ FLL_PACKAGES=(
 )
 
 FLL_POST_PROCESSING=(
+        "if [ -f /etc/apt/sources.list.d/opera.list ]; then sed -i -r '/opera.com/ s/^([^#])/#\1/' /etc/apt/sources.list.d/various.list; apt-get update; fi"
 )
