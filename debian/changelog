@@ -1,3 +1,9 @@
+mx-packageinstaller (15.3.1mx14) mx; urgency=medium
+
+  * update manual URL
+
+ -- Adrian <adrian@mxlinux.org>  Fri, 20 Mar 2015 16:42:28 -0400
+
 mx-packageinstaller (15.3mx14) mx; urgency=medium
 
   * download and install sig for Opera repos
