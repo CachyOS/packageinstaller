@@ -26,7 +26,6 @@
 #include "mxpackageinstaller.h"
 #include "ui_mxpackageinstaller.h"
 
-#include <QWebView>
 #include <QFileDialog>
 #include <QScrollBar>
 #include <QFormLayout>

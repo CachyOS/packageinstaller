@@ -15,14 +15,14 @@ Changes:
  .
    * update manual URL
 Checksums-Sha1: 
- 2117100a3121607b39121c1dc9b2a70c434bc219 700 mx-packageinstaller_15.3.1mx14.dsc
- 3992a1ee8fe46b138202fbd00a1a034f9fd1bbc6 60342 mx-packageinstaller_15.3.1mx14.tar.gz
- 404e093ace24449d782d52fdc4cb8f860396bc87 66984 mx-packageinstaller_15.3.1mx14_i386.deb
+ 1574c86582c4407b50fb688ba0efb99885391a79 700 mx-packageinstaller_15.3.1mx14.dsc
+ 939ee1a20aba4bfdf1b7fcdf29165314a8fdca05 60175 mx-packageinstaller_15.3.1mx14.tar.gz
+ 87b3da529cbba54eb5fb0f72369b2daab1fac48a 67088 mx-packageinstaller_15.3.1mx14_i386.deb
 Checksums-Sha256: 
- a773a93031afca47967da4acb3f123c1ed44f9244c89447f987cec8948e29e7a 700 mx-packageinstaller_15.3.1mx14.dsc
- f0576cfcde14f34d0505318ce656d6b6975cb56cd3ee4b068b1eecf8511dbe5c 60342 mx-packageinstaller_15.3.1mx14.tar.gz
- fbcb389531c3d34ed81a59abdfa2e1cca4c9357d01c25474fdd5f7d822144fa5 66984 mx-packageinstaller_15.3.1mx14_i386.deb
+ 4ed73b565edfe5ed24883e6ab3b674a68a71165294dd100a99507ea5fc1dd2a9 700 mx-packageinstaller_15.3.1mx14.dsc
+ 0832864e831573aa186d7994459e05a02c70b604e03656bd4f33ba1fe522b62b 60175 mx-packageinstaller_15.3.1mx14.tar.gz
+ 5ad49638327b690bf856ca6282eb7e9c39d018324d0f80a56c72b167210695a4 67088 mx-packageinstaller_15.3.1mx14_i386.deb
 Files: 
- 5e01ffb02769d3648558618a55f109a5 700 admin optional mx-packageinstaller_15.3.1mx14.dsc
- 8bc1f3d5d3e85193d7f62acce11eb938 60342 admin optional mx-packageinstaller_15.3.1mx14.tar.gz
- 3b6c5701023f12d88d410b8d410b3ce8 66984 admin optional mx-packageinstaller_15.3.1mx14_i386.deb
+ 1300f9f816d5eb5ee79dc9a3481fcee3 700 admin optional mx-packageinstaller_15.3.1mx14.dsc
+ e57f4c997bbb18d6f86992e61b8f8683 60175 admin optional mx-packageinstaller_15.3.1mx14.tar.gz
+ 54ac8bc96ba086898ec4e324d28c498c 67088 admin optional mx-packageinstaller_15.3.1mx14_i386.deb
