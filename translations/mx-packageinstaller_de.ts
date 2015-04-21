@@ -2,16 +2,16 @@
 <context>
     <name>QApplication</name>
     <message>
-        <location filename="../main.cpp" line="54"/>
+        <location filename="../main.cpp" line="55"/>
         <source>You must run this program as root.</source>
-        <translation>Dieses Programm muss als &quot;root&quot;-Benutzer ausgeführt werden</translation>
+        <translation>Dieses Programm muss als Benutzer &quot;root&quot; ausgeführt werden</translation>
     </message>
 </context>
 <context>
     <name>mxpackageinstaller</name>
     <message>
         <location filename="../mxpackageinstaller.ui" line="14"/>
-        <location filename="../mxpackageinstaller.cpp" line="480"/>
+        <location filename="../mxpackageinstaller.cpp" line="466"/>
         <source>MX Package Installer</source>
         <translation>MX Paket-Installer</translation>
     </message>
@@ -22,7 +22,7 @@
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="67"/>
-        <location filename="../mxpackageinstaller.cpp" line="410"/>
+        <location filename="../mxpackageinstaller.cpp" line="396"/>
         <source>Info</source>
         <translation>Info</translation>
     </message>
@@ -63,21 +63,21 @@
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="187"/>
-        <location filename="../mxpackageinstaller.cpp" line="467"/>
+        <location filename="../mxpackageinstaller.cpp" line="453"/>
         <source>Install</source>
         <translation>Installieren</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="207"/>
         <source>Cancel any changes then quit</source>
-        <translation>Änderungen zurückziehen und dann den Vorgang beenden</translation>
+        <translation>Änderungen verwerfen und abbrechen</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="210"/>
-        <location filename="../mxpackageinstaller.cpp" line="410"/>
-        <location filename="../mxpackageinstaller.cpp" line="485"/>
+        <location filename="../mxpackageinstaller.cpp" line="396"/>
+        <location filename="../mxpackageinstaller.cpp" line="470"/>
         <source>Cancel</source>
-        <translation>Ablehnen</translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="217"/>
@@ -100,110 +100,105 @@
         <translation>Alt+B</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="166"/>
-        <location filename="../mxpackageinstaller.cpp" line="335"/>
+        <location filename="../mxpackageinstaller.cpp" line="169"/>
+        <location filename="../mxpackageinstaller.cpp" line="322"/>
         <source>Installation done.</source>
         <translation>Installation beendet.</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="167"/>
+        <location filename="../mxpackageinstaller.cpp" line="170"/>
         <source>Success</source>
         <translation>Erfolg</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="168"/>
+        <location filename="../mxpackageinstaller.cpp" line="171"/>
         <source>Process finished with success.&lt;p&gt;&lt;b&gt;Do you want to exit MX Package Installer?&lt;/b&gt;</source>
         <translation>Prozess erfolgreich.&lt;p&gt;&lt;b&gt;Wollen Sie den MX Paket-Installer beenden?</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="169"/>
+        <location filename="../mxpackageinstaller.cpp" line="172"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="169"/>
+        <location filename="../mxpackageinstaller.cpp" line="172"/>
         <source>No</source>
         <translation>Nein</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="173"/>
-        <location filename="../mxpackageinstaller.cpp" line="312"/>
-        <location filename="../mxpackageinstaller.cpp" line="339"/>
+        <location filename="../mxpackageinstaller.cpp" line="176"/>
+        <location filename="../mxpackageinstaller.cpp" line="299"/>
+        <location filename="../mxpackageinstaller.cpp" line="326"/>
         <source>Error</source>
         <translation>Fehler</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="174"/>
+        <location filename="../mxpackageinstaller.cpp" line="177"/>
         <source>Postprocess finished. Errors have occurred.</source>
         <translation>Nachbearbeiten beendet. Es sind Fehler aufgetreten.</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="178"/>
+        <location filename="../mxpackageinstaller.cpp" line="181"/>
         <source>&lt; Back</source>
         <translation>&lt; Zurück</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="184"/>
-        <source>Running apt-get update... </source>
-        <translation>Ausführen von apt-get update...</translation>
-    </message>
-    <message>
-        <location filename="../mxpackageinstaller.cpp" line="202"/>
+        <location filename="../mxpackageinstaller.cpp" line="188"/>
         <source>Pre-processing... </source>
         <translation>Vorverarbeitung...</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="216"/>
+        <location filename="../mxpackageinstaller.cpp" line="204"/>
         <source>Installing: </source>
         <translation>Installieren von:</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="236"/>
+        <location filename="../mxpackageinstaller.cpp" line="223"/>
         <source>Post-processing... </source>
         <translation>Nachbearbeitung...</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="308"/>
+        <location filename="../mxpackageinstaller.cpp" line="295"/>
         <source>Preprocessing done.</source>
         <translation>Vorverarbeitung erfolgt.</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="313"/>
+        <location filename="../mxpackageinstaller.cpp" line="300"/>
         <source>Pre-process finished. Errors have occurred installing: </source>
         <translation>Vorverarbeitung abgeschlossen. Beim installieren sind Fehler aufgetreten.</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="340"/>
+        <location filename="../mxpackageinstaller.cpp" line="327"/>
         <source>Errors have occurred installing: </source>
         <translation>Beim installieren sind Fehler aufgetreten.</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="409"/>
+        <location filename="../mxpackageinstaller.cpp" line="395"/>
         <source>Packages to be installed: </source>
         <translation>Zu installierende Pakete:</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="479"/>
+        <location filename="../mxpackageinstaller.cpp" line="465"/>
         <source>About MX Package Installer</source>
         <translation>Über den MX Paket-Installer</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="480"/>
+        <location filename="../mxpackageinstaller.cpp" line="466"/>
         <source>Version: </source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="482"/>
+        <location filename="../mxpackageinstaller.cpp" line="468"/>
         <source>Simple package installer for additional packages for antiX MX</source>
         <translation>Einfaches antiX/MX Paket-Instalationsprogramm für zusätzliche Pakete.</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="483"/>
+        <location filename="../mxpackageinstaller.cpp" line="469"/>
         <source>Copyright (c) antiX</source>
         <translation>Copyright (c) antiX&lt;br /&gt;&lt;br /&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="484"/>
+        <location filename="../mxpackageinstaller.cpp" line="471"/>
         <source>License</source>
         <translation>Lizenz</translation>
     </message>

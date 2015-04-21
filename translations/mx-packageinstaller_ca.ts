@@ -1,12 +1,10 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="ca">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ca" version="2.0">
 <context>
     <name>QApplication</name>
     <message>
         <location filename="../main.cpp" line="55"/>
         <source>You must run this program as root.</source>
-        <translation>Cal ser administrador per executar aquest programa</translation>
+        <translation>Cal ser usuari principal per executar aquest programa</translation>
     </message>
 </context>
 <context>
@@ -143,10 +141,6 @@
         <location filename="../mxpackageinstaller.cpp" line="181"/>
         <source>&lt; Back</source>
         <translation>&lt; Enrera </translation>
-    </message>
-    <message>
-        <source>Running apt-get update... </source>
-        <translation type="obsolete">Executant apt-get update...</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="188"/>

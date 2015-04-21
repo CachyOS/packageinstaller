@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.0" language="fr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fr" version="2.0">
 <context>
     <name>QApplication</name>
     <message>
@@ -143,10 +141,6 @@
         <location filename="../mxpackageinstaller.cpp" line="181"/>
         <source>&lt; Back</source>
         <translation>&lt; Précédent</translation>
-    </message>
-    <message>
-        <source>Running apt-get update... </source>
-        <translation type="obsolete">Exécute apt-get update... </translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="188"/>
