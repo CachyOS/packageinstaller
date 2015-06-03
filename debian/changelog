@@ -1,3 +1,9 @@
+mx-packageinstaller (15.6mx14) mx; urgency=medium
+
+  * changed documentation URL
+
+ -- Adrian <adrian@mxlinux.org>  Wed, 03 Jun 2015 13:07:22 -0400
+
 mx-packageinstaller (15.4mx14) mx; urgency=medium
 
   * added translation

@@ -476,6 +476,6 @@ void mxpackageinstaller::on_buttonAbout_clicked() {
 
 // Help button clicked
 void mxpackageinstaller::on_buttonHelp_clicked() {
-    system("mx-viewer http://mepiscommunity.org/doc_mx/packageinstaller.html");
+    system("mx-viewer http://mepiscommunity.org/wiki/help-files/help-mx-package-installer");
 }
 
