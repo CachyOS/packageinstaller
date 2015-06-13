@@ -1,0 +1,28 @@
+Format: 1.8
+Date: Sat, 13 Jun 2015 12:25:37 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source i386
+Version: 15.6.1mx14
+Distribution: mx
+Urgency: medium
+Maintainer: Steven Pusser (Stevo) <maintainer@mepiscommunity.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description: 
+ mx-packageinstaller - MX program for installing additional packages.
+Changes: 
+ mx-packageinstaller (15.6.1mx14) mx; urgency=medium
+ .
+   * hide output box
+Checksums-Sha1: 
+ e1e5c783a1089b850c9ca0292c1cf18e90bd3cc1 703 mx-packageinstaller_15.6.1mx14.dsc
+ 0d41809e3179296e41b400a153d8709fed8dcb13 122625 mx-packageinstaller_15.6.1mx14.tar.gz
+ 4e5651384dffe1d56b8db32047380995c8dcd3de 69098 mx-packageinstaller_15.6.1mx14_i386.deb
+Checksums-Sha256: 
+ a996d057502ff8eb9d9335c154016de751578b789020d8f87dba8ff266e3d9f1 703 mx-packageinstaller_15.6.1mx14.dsc
+ 54a00806a908e06268ab81689cd89cac81111769c0e3b8e492ad31677209b084 122625 mx-packageinstaller_15.6.1mx14.tar.gz
+ 9e68a7be1e2409c94b9e7ba4fc71a24c7e0f08b7edc1e287b9cdd116c5660ebf 69098 mx-packageinstaller_15.6.1mx14_i386.deb
+Files: 
+ d3daa2bb3e1932fb7e91a791462b4940 703 admin optional mx-packageinstaller_15.6.1mx14.dsc
+ 94ae43e9fcc75adfed4b993be701fa8d 122625 admin optional mx-packageinstaller_15.6.1mx14.tar.gz
+ 68b5f22508c375726d760a4ea33c837c 69098 admin optional mx-packageinstaller_15.6.1mx14_i386.deb

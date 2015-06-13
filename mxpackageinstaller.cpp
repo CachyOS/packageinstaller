@@ -31,6 +31,8 @@
 #include <QFormLayout>
 #include <QKeyEvent>
 
+//#include <QDebug>
+
 mxpackageinstaller::mxpackageinstaller(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::mxpackageinstaller)
@@ -62,6 +64,10 @@ void mxpackageinstaller::setup() {
     ui->treeWidget->resizeColumnToContents(3);
     installedPackages = listInstalled();
     listPackages();
+    QSize size = this->size();
+    heightApp = size.height();
+    heightOutput = ui->outputBox->height();
+    ui->outputBox->setFixedHeight(0);
 }
 
 // Util function
@@ -147,7 +153,7 @@ void mxpackageinstaller::listPackages(void) {
 void mxpackageinstaller::install() {
     ui->buttonCancel->setEnabled(false);
     ui->buttonInstall->setEnabled(false);
-    ui->outputBox->setText("");
+    ui->outputBox->setPlainText("");
     QString preprocess = "";
 
     setCursor(QCursor(Qt::WaitCursor));
@@ -185,6 +191,7 @@ void mxpackageinstaller::install() {
 
 // run preprocess
 void mxpackageinstaller::preProc(QString preprocess) {
+    this->setFixedHeight(150);
     QString outLabel = tr("Pre-processing... ");
     ui->stackedWidget->setCurrentWidget(ui->outputPage);
     ui->progressBar->setValue(0);
@@ -272,7 +279,7 @@ void mxpackageinstaller::procTime() {
     ui->progressBar->setValue(i);
 }
 
-void mxpackageinstaller::updateDone(int exitCode) {
+void mxpackageinstaller::updateDone(int) {
     timer->stop();
     ui->progressBar->setValue(100);
 }
@@ -453,6 +460,7 @@ void mxpackageinstaller::on_buttonInstall_clicked() {
         ui->buttonInstall->setText(tr("Install"));
         ui->buttonInstall->setIcon(QIcon("/usr/share/mx-packageinstaller/icons/dialog-ok.png"));
         on_treeWidget_itemClicked();
+        this->setFixedHeight(heightApp);
     } else {
         qApp->exit(0);
     }
@@ -479,3 +487,17 @@ void mxpackageinstaller::on_buttonHelp_clicked() {
     system("mx-viewer http://mepiscommunity.org/wiki/help-files/help-mx-package-installer");
 }
 
+
+// Show/hide details button clicked
+void mxpackageinstaller::on_buttonDetails_clicked()
+{
+    if (ui->outputBox->height() == 0) {
+        ui->outputBox->setFixedHeight(heightOutput);
+        this->setFixedHeight(heightApp);
+        ui->buttonDetails->setText(tr("Hide details"));
+    } else {
+        ui->outputBox->setFixedHeight(0);
+        this->setFixedHeight(150);
+        ui->buttonDetails->setText(tr("Show details"));
+    }
+}

@@ -1,0 +1,340 @@
+ dpkg-buildpackage -rfakeroot -d -us -uc -aamd64
+dpkg-buildpackage: source package mx-packageinstaller
+dpkg-buildpackage: source version 15.6.1mx14
+dpkg-buildpackage: source changed by Adrian <adrian@mxlinux.org>
+dpkg-architecture: warning: specified GNU system type x86_64-linux-gnu does not match gcc system type i486-linux-gnu, try setting a correct CC environment variable
+ dpkg-source --before-build build
+dpkg-buildpackage: host architecture amd64
+ fakeroot debian/rules clean
+dh clean --parallel 
+   dh_testdir -O--parallel
+   debian/rules override_dh_auto_clean
+make[1]: Entering directory `/home/adrian/build'
+dh_auto_clean
+make[2]: Entering directory `/home/adrian/build'
+rm -f moc_mxpackageinstaller.cpp
+rm -f ui_mxpackageinstaller.h
+rm -f main.o mxpackageinstaller.o moc_mxpackageinstaller.o
+rm -f *~ core *.core
+rm -f mx-packageinstaller 
+rm -f Makefile
+make[2]: Leaving directory `/home/adrian/build'
+rm -f src/translations/*.qm
+make[1]: Leaving directory `/home/adrian/build'
+   dh_clean -O--parallel
+ dpkg-source -b build
+dpkg-source: info: using source format `3.0 (native)'
+dpkg-source: info: building mx-packageinstaller in mx-packageinstaller_15.6.1mx14.tar.gz
+dpkg-source: info: building mx-packageinstaller in mx-packageinstaller_15.6.1mx14.dsc
+ debian/rules build
+dh build --parallel 
+   dh_testdir -O--parallel
+   dh_auto_configure -O--parallel
+   debian/rules override_dh_auto_build
+make[1]: Entering directory `/home/adrian/build'
+lrelease-qt4 mx-packageinstaller.pro
+Updating '/home/adrian/build/translations/mx-packageinstaller_ca.qm'...
+    Generated 38 translation(s) (38 finished and 0 unfinished)
+    Ignored 2 untranslated source text(s)
+Updating '/home/adrian/build/translations/mx-packageinstaller_de.qm'...
+    Generated 38 translation(s) (38 finished and 0 unfinished)
+    Ignored 2 untranslated source text(s)
+Updating '/home/adrian/build/translations/mx-packageinstaller_el.qm'...
+    Generated 38 translation(s) (38 finished and 0 unfinished)
+    Ignored 2 untranslated source text(s)
+Updating '/home/adrian/build/translations/mx-packageinstaller_es.qm'...
+    Generated 38 translation(s) (38 finished and 0 unfinished)
+    Ignored 2 untranslated source text(s)
+Updating '/home/adrian/build/translations/mx-packageinstaller_fr.qm'...
+    Generated 38 translation(s) (38 finished and 0 unfinished)
+    Ignored 2 untranslated source text(s)
+Updating '/home/adrian/build/translations/mx-packageinstaller_it.qm'...
+    Generated 38 translation(s) (38 finished and 0 unfinished)
+    Ignored 2 untranslated source text(s)
+Updating '/home/adrian/build/translations/mx-packageinstaller_ja.qm'...
+    Generated 38 translation(s) (38 finished and 0 unfinished)
+    Ignored 2 untranslated source text(s)
+Updating '/home/adrian/build/translations/mx-packageinstaller_nl.qm'...
+    Generated 38 translation(s) (38 finished and 0 unfinished)
+    Ignored 2 untranslated source text(s)
+Updating '/home/adrian/build/translations/mx-packageinstaller_pl.qm'...
+    Generated 38 translation(s) (38 finished and 0 unfinished)
+    Ignored 2 untranslated source text(s)
+Updating '/home/adrian/build/translations/mx-packageinstaller_ro.qm'...
+    Generated 38 translation(s) (38 finished and 0 unfinished)
+    Ignored 2 untranslated source text(s)
+Updating '/home/adrian/build/translations/mx-packageinstaller_sv.qm'...
+    Generated 38 translation(s) (38 finished and 0 unfinished)
+    Ignored 2 untranslated source text(s)
+dh_auto_build -- QMAKE=qmake-qt4 LRELEASE=lrelease-qt4 QMAKE_OPTS="DEFINES+=NO_DEBUG_ON_CONSOLE"
+make[2]: Entering directory `/home/adrian/build'
+/usr/lib/i386-linux-gnu/qt4/bin/uic mxpackageinstaller.ui -o ui_mxpackageinstaller.h
+g++ -c -pipe -O2 -Wall -W -D_REENTRANT -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED -I/usr/share/qt4/mkspecs/linux-g++ -I. -I/usr/include/qt4/QtCore -I/usr/include/qt4/QtGui -I/usr/include/qt4 -I. -I. -o main.o main.cpp
+g++ -c -pipe -O2 -Wall -W -D_REENTRANT -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED -I/usr/share/qt4/mkspecs/linux-g++ -I. -I/usr/include/qt4/QtCore -I/usr/include/qt4/QtGui -I/usr/include/qt4 -I. -I. -o mxpackageinstaller.o mxpackageinstaller.cpp
+/usr/lib/i386-linux-gnu/qt4/bin/moc -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED -I/usr/share/qt4/mkspecs/linux-g++ -I. -I/usr/include/qt4/QtCore -I/usr/include/qt4/QtGui -I/usr/include/qt4 -I. -I. mxpackageinstaller.h -o moc_mxpackageinstaller.cpp
+g++ -c -pipe -O2 -Wall -W -D_REENTRANT -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED -I/usr/share/qt4/mkspecs/linux-g++ -I. -I/usr/include/qt4/QtCore -I/usr/include/qt4/QtGui -I/usr/include/qt4 -I. -I. -o moc_mxpackageinstaller.o moc_mxpackageinstaller.cpp
+g++ -Wl,-O1 -o mx-packageinstaller main.o mxpackageinstaller.o moc_mxpackageinstaller.o    -L/usr/lib/i386-linux-gnu -lQtGui -lQtCore -lpthread 
+make[2]: Leaving directory `/home/adrian/build'
+make[1]: Leaving directory `/home/adrian/build'
+   dh_auto_test -O--parallel
+ fakeroot debian/rules binary
+dh binary --parallel 
+   dh_testroot -O--parallel
+   dh_prep -O--parallel
+   dh_installdirs -O--parallel
+   debian/rules override_dh_auto_install
+make[1]: Entering directory `/home/adrian/build'
+dh_auto_install -- QMAKE=qmake-qt4 LRELEASE=lrelease-qt4 QMAKE_OPTS="DEFINES+=NO_DEBUG_ON_CONSOLE"
+make[1]: Leaving directory `/home/adrian/build'
+   dh_install -O--parallel
+   dh_installdocs -O--parallel
+   dh_installchangelogs -O--parallel
+   dh_installexamples -O--parallel
+   dh_installman -O--parallel
+   dh_installcatalogs -O--parallel
+   dh_installcron -O--parallel
+   dh_installdebconf -O--parallel
+   dh_installemacsen -O--parallel
+   dh_installifupdown -O--parallel
+   dh_installinfo -O--parallel
+   dh_pysupport -O--parallel
+dh_pysupport: This program is deprecated, you should use dh_python2 instead. Migration guide: http://deb.li/dhs2p
+   dh_installinit -O--parallel
+   dh_installmenu -O--parallel
+   dh_installmime -O--parallel
+   dh_installmodules -O--parallel
+   dh_installlogcheck -O--parallel
+   dh_installlogrotate -O--parallel
+   dh_installpam -O--parallel
+   dh_installppp -O--parallel
+   dh_installudev -O--parallel
+   dh_installwm -O--parallel
+   dh_installxfonts -O--parallel
+   dh_installgsettings -O--parallel
+   dh_bugfiles -O--parallel
+   dh_ucf -O--parallel
+   dh_lintian -O--parallel
+   dh_gconf -O--parallel
+   dh_icons -O--parallel
+   dh_perl -O--parallel
+   dh_usrlocal -O--parallel
+   dh_link -O--parallel
+   dh_compress -O--parallel
+   dh_fixperms -O--parallel
+   dh_strip -O--parallel
+   dh_makeshlibs -O--parallel
+   dh_shlibdeps -O--parallel
+   dh_installdeb -O--parallel
+   dh_gencontrol -O--parallel
+   dh_md5sums -O--parallel
+   debian/rules override_dh_builddeb
+make[1]: Entering directory `/home/adrian/build'
+dh_builddeb -- -Z xz
+dpkg-deb: building package `mx-packageinstaller' in `../mx-packageinstaller_15.6.1mx14_amd64.deb'.
+make[1]: Leaving directory `/home/adrian/build'
+ dpkg-genchanges  >../mx-packageinstaller_15.6.1mx14_amd64.changes
+dpkg-genchanges: including full source code in upload
+ dpkg-source --after-build build
+dpkg-buildpackage: full upload; Debian-native package (full source is included)
+Now running lintian...
+E: mx-packageinstaller changes: bad-distribution-in-changes-file mx
+W: mx-packageinstaller source: changelog-should-mention-nmu
+W: mx-packageinstaller source: source-nmu-has-incorrect-version-number 15.6.1mx14
+W: mx-packageinstaller source: empty-short-license-in-dep5-copyright (paragraph at line 6)
+W: mx-packageinstaller source: file-without-copyright-information LICENSE
+W: mx-packageinstaller source: file-without-copyright-information README.md
+W: mx-packageinstaller source: file-without-copyright-information bm/Audio-Audacity.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Audio-DeaDBeeF.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Audio-Guayadeque.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Audio-MOC.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Audio-MPD.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Audio-Pithos.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Audio-Pulseaudio.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Audio-audacious.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Audio-qmmp.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Audio-xmms.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Browser-Chromium.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Browser-Firefox.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Browser-Google-Chrome-stable.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Browser-Iceweasel.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Browser-Netsurf.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Browser-Opera.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Browser-Qupzilla.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Email-Thunderbird.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/FileManagers-PCManFM.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/FileManagers-ROXFiler.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/FileManagers-SpaceFM.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Graphics-Blender.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Graphics-Gimp_Basic.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Graphics-Gimp_Full.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Graphics-ImageMagik.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Graphics-Inkscape.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Graphics-Scribus.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Graphics-Shotwell.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Graphics-gscan2pdf.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Catalan.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Catalan_IW.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Catalan_LO_main.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Chinese_CN_IW.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Chinese_CN_LO_main.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Chinese_Font.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Chinese_Input.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Chinese_Input_fcitx.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Chinese_TW_IW.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Chinese_TW_LO_main.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Croatian.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Croatian_Additional.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Croatian_IW.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Croatian_LO_main.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Czech.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Czech_IW.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Czech_LO_main.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Dutch.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Dutch_IW.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Dutch_LO_main.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-English_GB_LO_main.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-English_US_LO_main.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-French.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-French_IW.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-French_LO_main.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-German.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-German_IW.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-German_LO_main.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Greek.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Greek_IW.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Greek_LO_main.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Hungarian.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Hungarian_IW.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Hungarian_LO_main.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Italian.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Italian_IW.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Italian_LO_main.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Japanese_Font.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Japanese_IW.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Japanese_Input.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Japanese_Input_fcitx.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Japanese_LO_main.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Korean_IW.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Korean_Input.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Korean_Input_fcitx.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Korean_LO_main.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Norwegian.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Norwegian_IW.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Norwegian_LO_main.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Polish_Core.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Polish_IW.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Polish_LO_main.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Portugese(BR).bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Portugese(BR)_LO_main.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Portugese.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Portuguese(BR)_IW.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Portuguese_IW.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Romanian.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Romanian_IW.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Romanian_LO_main.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Russian_Core.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Russian_Fonts.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Russian_IW.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Russian_LO_main.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Spanish.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Spanish_IW.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Spanish_LO_main.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Swedish.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Swedish_IW.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Swedish_LO_main.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Ukrainian_Core.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Ukrainian_Fonts.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Ukrainian_IW.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Ukrainian_LO_main.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Vietnamese_Input.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Language-Vietnamese_Input_fcitx.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Messaging-Pidgin.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Messaging-Skype.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Messaging-finch.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Misc-Java.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Misc-Virtualbox.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Misc-Wine.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Network-Blueman.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Network-Dropbox.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Network-Remmina.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Network-Security_Tor.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Newsreader-newsbeuter.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Newsreader-pan.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Office-Adobe_Reader.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Office-Calibre.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Office-Dictionary.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Office-GnuCash.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Office-Gnumeric_Abiword.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Printing-HP_printing_extras.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Screencast-SimpleScreenRecorder.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Screencast-recordMyDesktop.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Server-Local_webserver.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Torrent-Deluge.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Torrent-qBittorrent.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Torrent-rTorrent.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Video-DVDStyler.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Video-MPlayer.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Video-Netflix.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Video-OpenShot.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Video-Pipelight.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Video-SMPlayer.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/Video-SMTube.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/WindowManager-gnome_ultra.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/WindowManager-icewm.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/WindowManager-kde4_lite.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/WindowManager-kde4_standard.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/WindowManager-lxde.bm
+W: mx-packageinstaller source: file-without-copyright-information bm/WindowManager-mate.bm
+W: mx-packageinstaller source: file-without-copyright-information debian/changelog
+W: mx-packageinstaller source: file-without-copyright-information debian/compat
+W: mx-packageinstaller source: file-without-copyright-information debian/control
+W: mx-packageinstaller source: file-without-copyright-information debian/copyright
+W: mx-packageinstaller source: file-without-copyright-information debian/install
+W: mx-packageinstaller source: file-without-copyright-information debian/rules
+W: mx-packageinstaller source: file-without-copyright-information debian/source/format
+W: mx-packageinstaller source: file-without-copyright-information icons/accessories-text-editor.png
+W: mx-packageinstaller source: file-without-copyright-information icons/dialog-ok.png
+W: mx-packageinstaller source: file-without-copyright-information icons/folder-open.png
+W: mx-packageinstaller source: file-without-copyright-information icons/folder.png
+W: mx-packageinstaller source: file-without-copyright-information icons/gnome-help.png
+W: mx-packageinstaller source: file-without-copyright-information icons/gtk-cancel.png
+W: mx-packageinstaller source: file-without-copyright-information icons/info.png
+W: mx-packageinstaller source: file-without-copyright-information icons/mxfcelogo.png
+W: mx-packageinstaller source: file-without-copyright-information license.html
+W: mx-packageinstaller source: file-without-copyright-information main.cpp
+W: mx-packageinstaller source: file-without-copyright-information mx-packageinstaller.desktop
+W: mx-packageinstaller source: file-without-copyright-information mx-packageinstaller.png
+W: mx-packageinstaller source: file-without-copyright-information mx-packageinstaller.pro
+W: mx-packageinstaller source: file-without-copyright-information mx-packageinstaller_15.6mx14.tar.gz
+W: mx-packageinstaller source: file-without-copyright-information mxpackageinstaller.cpp
+W: mx-packageinstaller source: file-without-copyright-information mxpackageinstaller.h
+W: mx-packageinstaller source: file-without-copyright-information mxpackageinstaller.ui
+W: mx-packageinstaller source: file-without-copyright-information translations/mx-packageinstaller_ca.qm
+W: mx-packageinstaller source: file-without-copyright-information translations/mx-packageinstaller_ca.ts
+W: mx-packageinstaller source: file-without-copyright-information translations/mx-packageinstaller_de.qm
+W: mx-packageinstaller source: file-without-copyright-information translations/mx-packageinstaller_de.ts
+W: mx-packageinstaller source: file-without-copyright-information translations/mx-packageinstaller_el.qm
+W: mx-packageinstaller source: file-without-copyright-information translations/mx-packageinstaller_el.ts
+W: mx-packageinstaller source: file-without-copyright-information translations/mx-packageinstaller_en.ts
+W: mx-packageinstaller source: file-without-copyright-information translations/mx-packageinstaller_es.qm
+W: mx-packageinstaller source: file-without-copyright-information translations/mx-packageinstaller_es.ts
+W: mx-packageinstaller source: file-without-copyright-information translations/mx-packageinstaller_fr.qm
+W: mx-packageinstaller source: file-without-copyright-information translations/mx-packageinstaller_fr.ts
+W: mx-packageinstaller source: file-without-copyright-information translations/mx-packageinstaller_it.qm
+W: mx-packageinstaller source: file-without-copyright-information translations/mx-packageinstaller_it.ts
+W: mx-packageinstaller source: file-without-copyright-information translations/mx-packageinstaller_ja.qm
+W: mx-packageinstaller source: file-without-copyright-information translations/mx-packageinstaller_ja.ts
+W: mx-packageinstaller source: file-without-copyright-information translations/mx-packageinstaller_nl.qm
+W: mx-packageinstaller source: file-without-copyright-information translations/mx-packageinstaller_nl.ts
+W: mx-packageinstaller source: file-without-copyright-information translations/mx-packageinstaller_pl.qm
+W: mx-packageinstaller source: file-without-copyright-information translations/mx-packageinstaller_pl.ts
+W: mx-packageinstaller source: file-without-copyright-information translations/mx-packageinstaller_ro.qm
+W: mx-packageinstaller source: file-without-copyright-information translations/mx-packageinstaller_ro.ts
+W: mx-packageinstaller source: file-without-copyright-information translations/mx-packageinstaller_sv.qm
+W: mx-packageinstaller source: file-without-copyright-information translations/mx-packageinstaller_sv.ts
+W: mx-packageinstaller source: missing-license-paragraph-in-dep5-copyright no_license_text_found (paragraph at line 36)
+W: mx-packageinstaller source: out-of-date-standards-version 3.9.5 (current is 3.9.6)
+W: mx-packageinstaller: hardening-no-relro usr/sbin/mx-packageinstaller
+E: mx-packageinstaller: copyright-should-refer-to-common-license-file-for-lgpl
+W: mx-packageinstaller: binary-without-manpage usr/sbin/mx-packageinstaller
+Finished running lintian.

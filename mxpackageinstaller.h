@@ -61,11 +61,13 @@ public:
     QString getVersion(QString name);
     QStringList listInstalled();
     bool checkInstalled(QString filename, QString name);
+    int heightApp;
+    int heightOutput;
 
 public slots:
     void procStart();
     void procTime();
-    void updateDone(int exitCode);
+    void updateDone(int);
     void preProcDone(int exitCode);
     void aptgetDone(int exitCode);
     void postProcDone(int exitCode);
@@ -80,6 +82,9 @@ public slots:
     virtual void on_treeWidget_itemClicked();
     virtual void on_treeWidget_itemExpanded();
     virtual void on_treeWidget_itemCollapsed();
+
+private slots:
+    void on_buttonDetails_clicked();
 
 private:
     Ui::mxpackageinstaller *ui;
