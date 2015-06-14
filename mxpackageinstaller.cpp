@@ -191,7 +191,7 @@ void mxpackageinstaller::install() {
 
 // run preprocess
 void mxpackageinstaller::preProc(QString preprocess) {
-    this->setFixedHeight(150);
+    this->setFixedHeight(170);
     QString outLabel = tr("Pre-processing... ");
     ui->stackedWidget->setCurrentWidget(ui->outputPage);
     ui->progressBar->setValue(0);
@@ -497,7 +497,7 @@ void mxpackageinstaller::on_buttonDetails_clicked()
         ui->buttonDetails->setText(tr("Hide details"));
     } else {
         ui->outputBox->setFixedHeight(0);
-        this->setFixedHeight(150);
+        this->setFixedHeight(170);
         ui->buttonDetails->setText(tr("Show details"));
     }
 }

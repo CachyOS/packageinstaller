@@ -305,7 +305,7 @@ W: mx-packageinstaller source: file-without-copyright-information main.cpp
 W: mx-packageinstaller source: file-without-copyright-information mx-packageinstaller.desktop
 W: mx-packageinstaller source: file-without-copyright-information mx-packageinstaller.png
 W: mx-packageinstaller source: file-without-copyright-information mx-packageinstaller.pro
-W: mx-packageinstaller source: file-without-copyright-information mx-packageinstaller_15.6mx14.tar.gz
+W: mx-packageinstaller source: file-without-copyright-information mx-packageinstaller_15.6.1mx14_amd64.build
 W: mx-packageinstaller source: file-without-copyright-information mxpackageinstaller.cpp
 W: mx-packageinstaller source: file-without-copyright-information mxpackageinstaller.h
 W: mx-packageinstaller source: file-without-copyright-information mxpackageinstaller.ui
