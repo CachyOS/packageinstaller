@@ -1,3 +1,9 @@
+mx-packageinstaller (15.7mx14) mx; urgency=medium
+
+  * fcitx update
+
+ -- Adrian <adrian@mxlinux.org>  Tue, 30 Jun 2015 09:49:44 -0400
+
 mx-packageinstaller (15.6.1mx14) mx; urgency=medium
 
   * hide output box
