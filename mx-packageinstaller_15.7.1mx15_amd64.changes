@@ -1,0 +1,28 @@
+Format: 1.8
+Date: Tue, 30 Jun 2015 16:06:16 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 15.7.1mx15
+Distribution: mx
+Urgency: medium
+Maintainer: Steven Pusser (Stevo) <maintainer@mepiscommunity.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX program for installing additional packages.
+Changes:
+ mx-packageinstaller (15.7.1mx15) mx; urgency=medium
+ .
+   * update to qt5
+Checksums-Sha1:
+ b55223b73d19922c5eaed39d7e10a9eb3afe7f9d 688 mx-packageinstaller_15.7.1mx15.dsc
+ 73687ff79f141c9573b59d1960c0871095babdfa 62116 mx-packageinstaller_15.7.1mx15.tar.xz
+ e49d939784831c2f86796562fc01fa6cb5362203 73036 mx-packageinstaller_15.7.1mx15_amd64.deb
+Checksums-Sha256:
+ 312fa7d68038bfa4105924ae1be7a6cb594b53efe0aa05164e89a83b92036f64 688 mx-packageinstaller_15.7.1mx15.dsc
+ b21ca76e09ae73b983f707037b74145576a7941d0b5901035a98bad5a3ef883f 62116 mx-packageinstaller_15.7.1mx15.tar.xz
+ fb4cb7865c231bc3fbc089339f25bb1ef4a8d23d43f109218bcd2b76621e588c 73036 mx-packageinstaller_15.7.1mx15_amd64.deb
+Files:
+ 11516738a24ba607463fd2ded7eae3a0 688 admin optional mx-packageinstaller_15.7.1mx15.dsc
+ 2ec02f4cd8b74305e10225cfbb0150c5 62116 admin optional mx-packageinstaller_15.7.1mx15.tar.xz
+ 22287f4c60f17ba922a121c2f5e99632 73036 admin optional mx-packageinstaller_15.7.1mx15_amd64.deb
