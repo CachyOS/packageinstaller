@@ -1,0 +1,28 @@
+Format: 1.8
+Date: Thu, 09 Jul 2015 20:13:51 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source i386
+Version: 15.7.2mx15
+Distribution: mx
+Urgency: medium
+Maintainer: Steven Pusser (Stevo) <maintainer@mepiscommunity.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX program for installing additional packages.
+Changes:
+ mx-packageinstaller (15.7.2mx15) mx; urgency=medium
+ .
+   * added build-deps, fixed license
+Checksums-Sha1:
+ b20be3aa167e181ee5ee8a7586e8e911b73c07cb 724 mx-packageinstaller_15.7.2mx15.dsc
+ b9519bbef843b7c75dd02317e674cd71ffdefa66 171756 mx-packageinstaller_15.7.2mx15.tar.xz
+ f5d6a404cce59f7842e17593cb6a3f2802992d34 72584 mx-packageinstaller_15.7.2mx15_i386.deb
+Checksums-Sha256:
+ 2fb179c785c9ec567a00a2f3141c2722682e1477b88306de8de4ca7b1c285134 724 mx-packageinstaller_15.7.2mx15.dsc
+ 2245ae75ef3156eba2ae69fbf2b4b720b130d617d0f6e01c93a63f30969649a4 171756 mx-packageinstaller_15.7.2mx15.tar.xz
+ 094c831fbbaf8e9a0aebce03b66538f30114fd2d38a8e3562499b088cccc9629 72584 mx-packageinstaller_15.7.2mx15_i386.deb
+Files:
+ 5715f79b83acb81410c03158cdf96bfc 724 admin optional mx-packageinstaller_15.7.2mx15.dsc
+ 7414b0a91fb8b08199d1922c3a6d3819 171756 admin optional mx-packageinstaller_15.7.2mx15.tar.xz
+ 40b5e98e0180e3ae59cfa589ce125ffd 72584 admin optional mx-packageinstaller_15.7.2mx15_i386.deb

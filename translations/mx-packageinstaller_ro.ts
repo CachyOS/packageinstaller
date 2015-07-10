@@ -77,7 +77,7 @@
     <message>
         <location filename="../mxpackageinstaller.ui" line="111"/>
         <location filename="../mxpackageinstaller.cpp" line="403"/>
-        <location filename="../mxpackageinstaller.cpp" line="478"/>
+        <location filename="../mxpackageinstaller.cpp" line="479"/>
         <source>Cancel</source>
         <translation>Anulează</translation>
     </message>
@@ -206,7 +206,7 @@
         <translation>Copyright (c) antiX</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="479"/>
+        <location filename="../mxpackageinstaller.cpp" line="478"/>
         <source>License</source>
         <translation>Licență</translation>
     </message>

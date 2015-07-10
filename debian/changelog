@@ -1,3 +1,9 @@
+mx-packageinstaller (15.7.2mx15) mx; urgency=medium
+
+  * added build-deps, fixed license
+
+ -- Adrian <adrian@mxlinux.org>  Thu, 09 Jul 2015 20:13:51 -0400
+
 mx-packageinstaller (15.7.1mx15) mx; urgency=medium
 
   * update to qt5
