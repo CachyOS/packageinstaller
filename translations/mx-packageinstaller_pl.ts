@@ -19,17 +19,20 @@
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="218"/>
+        <location filename="../mxpackageinstaller.cpp" line="59"/>
         <source>Package</source>
         <translation>Pakiet</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="223"/>
+        <location filename="../mxpackageinstaller.cpp" line="59"/>
         <location filename="../mxpackageinstaller.cpp" line="403"/>
         <source>Info</source>
         <translation>Informacje</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="228"/>
+        <location filename="../mxpackageinstaller.cpp" line="59"/>
         <source>Description</source>
         <translation>Opis</translation>
     </message>

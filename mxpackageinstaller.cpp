@@ -56,7 +56,7 @@ void mxpackageinstaller::setup() {
     ui->buttonCancel->setEnabled(true);
     ui->buttonInstall->setEnabled(true);
     QStringList columnNames;
-    columnNames << "" << "" << "Package" << "Info" << "Description";
+    columnNames << "" << "" << tr("Package") << tr("Info") << tr("Description");
     ui->treeWidget->setHeaderLabels(columnNames);
     ui->treeWidget->resizeColumnToContents(0);
     ui->treeWidget->resizeColumnToContents(1);

@@ -15,14 +15,14 @@ Changes:
  .
    * added build-deps, fixed license
 Checksums-Sha1:
- b20be3aa167e181ee5ee8a7586e8e911b73c07cb 724 mx-packageinstaller_15.7.2mx15.dsc
- b9519bbef843b7c75dd02317e674cd71ffdefa66 171756 mx-packageinstaller_15.7.2mx15.tar.xz
- f5d6a404cce59f7842e17593cb6a3f2802992d34 72584 mx-packageinstaller_15.7.2mx15_i386.deb
+ c6664771dc773ff7442e82f5c23c6d10db46ccfa 724 mx-packageinstaller_15.7.2mx15.dsc
+ 31750abd9d012a2e34682cd9fa10d4f15481488c 226516 mx-packageinstaller_15.7.2mx15.tar.xz
+ b61c138e98e37700f12fc42c6762a5bcc3164bfe 72406 mx-packageinstaller_15.7.2mx15_i386.deb
 Checksums-Sha256:
- 2fb179c785c9ec567a00a2f3141c2722682e1477b88306de8de4ca7b1c285134 724 mx-packageinstaller_15.7.2mx15.dsc
- 2245ae75ef3156eba2ae69fbf2b4b720b130d617d0f6e01c93a63f30969649a4 171756 mx-packageinstaller_15.7.2mx15.tar.xz
- 094c831fbbaf8e9a0aebce03b66538f30114fd2d38a8e3562499b088cccc9629 72584 mx-packageinstaller_15.7.2mx15_i386.deb
+ 6a0ae5d3e5ee49f7ecf64e85626f431ef953292aae45ae3001063e6d7e359761 724 mx-packageinstaller_15.7.2mx15.dsc
+ 40eb44989854558e4e7aa8871c4be3044b6f1af9d277d752c07b403bcdd91d63 226516 mx-packageinstaller_15.7.2mx15.tar.xz
+ 4b4245c3be31a9a938ba2cad72be1beed299859418e8912475fbd32da776bf71 72406 mx-packageinstaller_15.7.2mx15_i386.deb
 Files:
- 5715f79b83acb81410c03158cdf96bfc 724 admin optional mx-packageinstaller_15.7.2mx15.dsc
- 7414b0a91fb8b08199d1922c3a6d3819 171756 admin optional mx-packageinstaller_15.7.2mx15.tar.xz
- 40b5e98e0180e3ae59cfa589ce125ffd 72584 admin optional mx-packageinstaller_15.7.2mx15_i386.deb
+ 7be00ba1e1ef2a3bffa50dd589c0aff7 724 admin optional mx-packageinstaller_15.7.2mx15.dsc
+ bbae5d88868dc55255bdcd53f1bc62bc 226516 admin optional mx-packageinstaller_15.7.2mx15.tar.xz
+ 66a2a3a6f4428add2c0a5e606e85194e 72406 admin optional mx-packageinstaller_15.7.2mx15_i386.deb
