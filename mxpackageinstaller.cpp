@@ -478,13 +478,13 @@ void mxpackageinstaller::on_buttonAbout_clicked() {
     msgBox.addButton(tr("License"), QMessageBox::AcceptRole);
     msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
     if (msgBox.exec() == QMessageBox::AcceptRole)
-        system("mx-viewer file:///usr/share/doc/mx-packageinstaller/license.html");
+        system("mx-viewer file:///usr/share/doc/mx-packageinstaller/license.html '" + tr("MX Package Installer").toUtf8() + " " + tr("License").toUtf8() + "'");
 }
 
 
 // Help button clicked
 void mxpackageinstaller::on_buttonHelp_clicked() {
-    system("mx-viewer http://mepiscommunity.org/wiki/help-files/help-mx-package-installer");
+    system("mx-viewer http://mepiscommunity.org/wiki/help-files/help-mx-package-installer '" + tr("MX Package Installer").toUtf8() + " " + tr("Help").toUtf8() + "'");
 }
 
 

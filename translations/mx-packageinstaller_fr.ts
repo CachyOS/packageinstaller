@@ -14,6 +14,8 @@
     <message>
         <location filename="../mxpackageinstaller.ui" line="14"/>
         <location filename="../mxpackageinstaller.cpp" line="474"/>
+        <location filename="../mxpackageinstaller.cpp" line="481"/>
+        <location filename="../mxpackageinstaller.cpp" line="487"/>
         <source>MX Package Installer</source>
         <translation>MX Installateur de paquets</translation>
     </message>
@@ -53,6 +55,7 @@
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="49"/>
+        <location filename="../mxpackageinstaller.cpp" line="487"/>
         <source>Help</source>
         <translation>Aide</translation>
     </message>
@@ -210,6 +213,7 @@
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="478"/>
+        <location filename="../mxpackageinstaller.cpp" line="481"/>
         <source>License</source>
         <translation>License</translation>
     </message>
