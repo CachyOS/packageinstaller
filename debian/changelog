@@ -1,3 +1,9 @@
+mx-packageinstaller (15.7.3mx15) mx; urgency=medium
+
+  * new translations
+
+ -- Adrian <adrian@mxlinux.org>  Mon, 27 Jul 2015 17:06:58 -0400
+
 mx-packageinstaller (15.7.2mx15) mx; urgency=medium
 
   * added build-deps, fixed license
