@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ca">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ca" version="2.0">
 <context>
     <name>QApplication</name>
     <message>
@@ -18,35 +16,6 @@
         <location filename="../mxpackageinstaller.cpp" line="487"/>
         <source>MX Package Installer</source>
         <translation>Instal·lador de paquets de MX</translation>
-    </message>
-    <message>
-        <location filename="../mxpackageinstaller.ui" line="218"/>
-        <location filename="../mxpackageinstaller.cpp" line="59"/>
-        <source>Package</source>
-        <translation>Paquet</translation>
-    </message>
-    <message>
-        <location filename="../mxpackageinstaller.ui" line="223"/>
-        <location filename="../mxpackageinstaller.cpp" line="59"/>
-        <location filename="../mxpackageinstaller.cpp" line="403"/>
-        <source>Info</source>
-        <translation>Informació</translation>
-    </message>
-    <message>
-        <location filename="../mxpackageinstaller.ui" line="228"/>
-        <location filename="../mxpackageinstaller.cpp" line="59"/>
-        <source>Description</source>
-        <translation>Descripció</translation>
-    </message>
-    <message>
-        <location filename="../mxpackageinstaller.ui" line="236"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Install additional packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;To use this feature, make sure you are connected to the internet.&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Instal·la paquets addicionals&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Per usar aquesta característica, assegureu-vos d&apos;estar connectats a internet.&lt;/p&gt;&lt;p&gt;Els ítems de color gris ja han estat instal·lats.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <location filename="../mxpackageinstaller.ui" line="243"/>
-        <source>Use option --yes for apt-get install</source>
-        <translation>Usat l&apos;opció --yes per apt-get install</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="46"/>
@@ -108,10 +77,39 @@
         <translation>Alt+B</translation>
     </message>
     <message>
+        <location filename="../mxpackageinstaller.ui" line="218"/>
+        <location filename="../mxpackageinstaller.cpp" line="59"/>
+        <source>Package</source>
+        <translation>Paquet</translation>
+    </message>
+    <message>
+        <location filename="../mxpackageinstaller.ui" line="223"/>
+        <location filename="../mxpackageinstaller.cpp" line="59"/>
+        <location filename="../mxpackageinstaller.cpp" line="403"/>
+        <source>Info</source>
+        <translation>Informació</translation>
+    </message>
+    <message>
+        <location filename="../mxpackageinstaller.ui" line="228"/>
+        <location filename="../mxpackageinstaller.cpp" line="59"/>
+        <source>Description</source>
+        <translation>Descripció</translation>
+    </message>
+    <message>
+        <location filename="../mxpackageinstaller.ui" line="236"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Install additional packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;To use this feature, make sure you are connected to the internet.&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Instal·la paquets addicionals&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Per usar aquesta característica, assegureu-vos d&apos;estar connectats a internet.&lt;/p&gt;&lt;p&gt;Els ítems de color gris ja han estat instal·lats.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../mxpackageinstaller.ui" line="243"/>
+        <source>Use option --yes for apt-get install</source>
+        <translation>Usat l&apos;opció --yes per apt-get install</translation>
+    </message>
+    <message>
         <location filename="../mxpackageinstaller.ui" line="273"/>
         <location filename="../mxpackageinstaller.cpp" line="501"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>Mostra els detalls </translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="175"/>
@@ -220,7 +218,7 @@
     <message>
         <location filename="../mxpackageinstaller.cpp" line="497"/>
         <source>Hide details</source>
-        <translation type="unfinished"></translation>
+        <translation>Amaga els detalls </translation>
     </message>
 </context>
 </TS>

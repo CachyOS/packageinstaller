@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sv">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="sv" version="2.0">
 <context>
     <name>QApplication</name>
     <message>
@@ -18,35 +16,6 @@
         <location filename="../mxpackageinstaller.cpp" line="487"/>
         <source>MX Package Installer</source>
         <translation>MX Paket-installerare</translation>
-    </message>
-    <message>
-        <location filename="../mxpackageinstaller.ui" line="218"/>
-        <location filename="../mxpackageinstaller.cpp" line="59"/>
-        <source>Package</source>
-        <translation>Paket</translation>
-    </message>
-    <message>
-        <location filename="../mxpackageinstaller.ui" line="223"/>
-        <location filename="../mxpackageinstaller.cpp" line="59"/>
-        <location filename="../mxpackageinstaller.cpp" line="403"/>
-        <source>Info</source>
-        <translation>Info</translation>
-    </message>
-    <message>
-        <location filename="../mxpackageinstaller.ui" line="228"/>
-        <location filename="../mxpackageinstaller.cpp" line="59"/>
-        <source>Description</source>
-        <translation>Beskrivning</translation>
-    </message>
-    <message>
-        <location filename="../mxpackageinstaller.ui" line="236"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Install additional packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;To use this feature, make sure you are connected to the internet.&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Installera ytterligare paket&lt;/span&gt;&lt;/p&gt;&lt;p&gt;För att göra detta, kontrollera att du är ansluten till internet.&lt;/p&gt;&lt;p&gt;Gråfärgade saker har redan installerats..&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <location filename="../mxpackageinstaller.ui" line="243"/>
-        <source>Use option --yes for apt-get install</source>
-        <translation>Använd alternativet --yes för apt-get install</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="46"/>
@@ -108,10 +77,39 @@
         <translation>Alt+B</translation>
     </message>
     <message>
+        <location filename="../mxpackageinstaller.ui" line="218"/>
+        <location filename="../mxpackageinstaller.cpp" line="59"/>
+        <source>Package</source>
+        <translation>Paket</translation>
+    </message>
+    <message>
+        <location filename="../mxpackageinstaller.ui" line="223"/>
+        <location filename="../mxpackageinstaller.cpp" line="59"/>
+        <location filename="../mxpackageinstaller.cpp" line="403"/>
+        <source>Info</source>
+        <translation>Info</translation>
+    </message>
+    <message>
+        <location filename="../mxpackageinstaller.ui" line="228"/>
+        <location filename="../mxpackageinstaller.cpp" line="59"/>
+        <source>Description</source>
+        <translation>Beskrivning</translation>
+    </message>
+    <message>
+        <location filename="../mxpackageinstaller.ui" line="236"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Install additional packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;To use this feature, make sure you are connected to the internet.&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Installera ytterligare paket&lt;/span&gt;&lt;/p&gt;&lt;p&gt;För att göra detta, kontrollera att du är ansluten till internet.&lt;/p&gt;&lt;p&gt;Gråfärgade saker har redan installerats..&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../mxpackageinstaller.ui" line="243"/>
+        <source>Use option --yes for apt-get install</source>
+        <translation>Använd alternativet --yes för apt-get install</translation>
+    </message>
+    <message>
         <location filename="../mxpackageinstaller.ui" line="273"/>
         <location filename="../mxpackageinstaller.cpp" line="501"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>Visa detaljer</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="175"/>
@@ -220,7 +218,7 @@
     <message>
         <location filename="../mxpackageinstaller.cpp" line="497"/>
         <source>Hide details</source>
-        <translation type="unfinished"></translation>
+        <translation>Göm detaljer</translation>
     </message>
 </context>
 </TS>

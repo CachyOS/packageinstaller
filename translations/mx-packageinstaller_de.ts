@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="de">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="de" version="2.0">
 <context>
     <name>QApplication</name>
     <message>
@@ -18,35 +16,6 @@
         <location filename="../mxpackageinstaller.cpp" line="487"/>
         <source>MX Package Installer</source>
         <translation>MX Paket-Installer</translation>
-    </message>
-    <message>
-        <location filename="../mxpackageinstaller.ui" line="218"/>
-        <location filename="../mxpackageinstaller.cpp" line="59"/>
-        <source>Package</source>
-        <translation>Paket</translation>
-    </message>
-    <message>
-        <location filename="../mxpackageinstaller.ui" line="223"/>
-        <location filename="../mxpackageinstaller.cpp" line="59"/>
-        <location filename="../mxpackageinstaller.cpp" line="403"/>
-        <source>Info</source>
-        <translation>Info</translation>
-    </message>
-    <message>
-        <location filename="../mxpackageinstaller.ui" line="228"/>
-        <location filename="../mxpackageinstaller.cpp" line="59"/>
-        <source>Description</source>
-        <translation>Beschreibung</translation>
-    </message>
-    <message>
-        <location filename="../mxpackageinstaller.ui" line="236"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Install additional packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;To use this feature, make sure you are connected to the internet.&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Installieren Sie zusätzliche Pakete&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Um diese Funktion zu verwenden, stellen Sie sicher, dass Sie mit dem Internet verbunden sind.&lt;/p&gt;&lt;p&gt;Ausgegraute Titel sind schon installiert worden.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <location filename="../mxpackageinstaller.ui" line="243"/>
-        <source>Use option --yes for apt-get install</source>
-        <translation>Verwenden Sie die Option --yes für apt-get install</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="46"/>
@@ -108,10 +77,39 @@
         <translation>Alt+B</translation>
     </message>
     <message>
+        <location filename="../mxpackageinstaller.ui" line="218"/>
+        <location filename="../mxpackageinstaller.cpp" line="59"/>
+        <source>Package</source>
+        <translation>Paket</translation>
+    </message>
+    <message>
+        <location filename="../mxpackageinstaller.ui" line="223"/>
+        <location filename="../mxpackageinstaller.cpp" line="59"/>
+        <location filename="../mxpackageinstaller.cpp" line="403"/>
+        <source>Info</source>
+        <translation>Info</translation>
+    </message>
+    <message>
+        <location filename="../mxpackageinstaller.ui" line="228"/>
+        <location filename="../mxpackageinstaller.cpp" line="59"/>
+        <source>Description</source>
+        <translation>Beschreibung</translation>
+    </message>
+    <message>
+        <location filename="../mxpackageinstaller.ui" line="236"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Install additional packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;To use this feature, make sure you are connected to the internet.&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Installieren Sie zusätzliche Pakete&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Um diese Funktion zu verwenden, stellen Sie sicher, dass Sie mit dem Internet verbunden sind.&lt;/p&gt;&lt;p&gt;Ausgegraute Titel sind schon installiert worden.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../mxpackageinstaller.ui" line="243"/>
+        <source>Use option --yes for apt-get install</source>
+        <translation>Verwenden Sie die Option --yes für apt-get install</translation>
+    </message>
+    <message>
         <location filename="../mxpackageinstaller.ui" line="273"/>
         <location filename="../mxpackageinstaller.cpp" line="501"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation>Details zeigen</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="175"/>
@@ -220,7 +218,7 @@
     <message>
         <location filename="../mxpackageinstaller.cpp" line="497"/>
         <source>Hide details</source>
-        <translation type="unfinished"></translation>
+        <translation>Details ausblenden</translation>
     </message>
 </context>
 </TS>
