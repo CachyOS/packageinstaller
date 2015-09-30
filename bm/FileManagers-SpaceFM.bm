@@ -4,7 +4,6 @@ FLL_PRE_PROCESSING=(
 	"#!/bin/bash"
 	"echo \"---- in preprocessing ----\""
         "apt-get update"
-	"apt-get install -t wheezy-backports spacefm --yes"
 	"echo \"---- preprocessing done----\""
 )
 
@@ -12,7 +11,9 @@ FLL_PACKAGE_DEPMODS=(
 )
 
 FLL_PACKAGES=(
-	
+
+	spacefm
+	udevil
         
         	
 )
