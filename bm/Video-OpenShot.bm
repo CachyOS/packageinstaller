@@ -3,8 +3,6 @@ FLL_DESCRIPTION="OpenShot - non-linear video editor."
 FLL_PRE_PROCESSING=(
 	"#!/bin/bash"
 	"echo \"---- in preprocessing ----\""
-        "echo \"Adding MEPISCR TESTING repository to /etc/apt/sources.list.d/mepis.list\""
-	"sed -i -r '/testrepo/ s/^#+//' /etc/apt/sources.list.d/mepis.list" 
         "apt-get update"
         "echo \"---- preprocessing done----\""
 )
@@ -21,9 +19,6 @@ FLL_PACKAGES=(
 
 FLL_POST_PROCESSING=(
        "#!/bin/bash"
-       "echo \"---- in postprocessing ----\""
-       "echo \"Removing MEPISCR TESTING repository from /etc/apt/sources.list.d/mepis.list\""
-       "sed -i -r '/testrepo/ s/^([^#])/#\1/' /etc/apt/sources.list.d/mepis.list"
        "echo \"---- postprocessing done----\""
 
 )
