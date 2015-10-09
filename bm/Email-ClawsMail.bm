@@ -1,0 +1,25 @@
+FLL_DESCRIPTION="Claws Mail lightweight email client"
+
+FLL_PRE_PROCESSING=(
+	"#!/bin/bash"
+	"echo \"---- in preprocessing ----\""
+        "apt-get update"
+        "echo \"---- preprocessing done----\""
+)
+
+
+FLL_PACKAGE_DEPMODS=(
+)
+
+FLL_PACKAGES=(
+     claws-mail
+     claws-mail-i18n 
+     
+)
+
+FLL_POST_PROCESSING=(
+       "#!/bin/bash"
+       "echo \"---- in postprocessing ----\""
+       "echo \"---- postprocessing done----\""
+
+)
