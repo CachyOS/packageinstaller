@@ -1,0 +1,18 @@
+FLL_DESCRIPTION="Latvian localisation of Firefox"
+
+
+FLL_PRE_PROCESSING=(
+	"#!/bin/bash"
+	"echo \"---- in preprocessing ----\""
+        "apt-get update"
+	"# paste your code here (not necessary for normal install, only for preconfigs)"
+	"echo \"---- preprocessing done----\""
+)
+
+FLL_PACKAGE_DEPMODS=(
+)
+
+FLL_PACKAGES=(
+	firefox-l10n-xpi-lv
+)
+
