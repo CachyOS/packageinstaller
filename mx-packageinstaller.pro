@@ -29,7 +29,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui webkit
+QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -45,12 +45,14 @@ HEADERS  += mxpackageinstaller.h
 FORMS    += mxpackageinstaller.ui
 
 TRANSLATIONS += translations/mx-packageinstaller_ca.ts \
+                translations/mx-packageinstaller_de.ts \
                 translations/mx-packageinstaller_el.ts \
                 translations/mx-packageinstaller_es.ts \
                 translations/mx-packageinstaller_fr.ts \
-                translations/mx-packageinstaller_ja.ts \
                 translations/mx-packageinstaller_it.ts \
+                translations/mx-packageinstaller_ja.ts \
                 translations/mx-packageinstaller_nl.ts \
+                translations/mx-packageinstaller_pl.ts \
                 translations/mx-packageinstaller_ro.ts \
                 translations/mx-packageinstaller_sv.ts
 

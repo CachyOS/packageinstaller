@@ -26,11 +26,12 @@
 #include "mxpackageinstaller.h"
 #include "ui_mxpackageinstaller.h"
 
-#include <QWebView>
 #include <QFileDialog>
 #include <QScrollBar>
 #include <QFormLayout>
 #include <QKeyEvent>
+
+//#include <QDebug>
 
 mxpackageinstaller::mxpackageinstaller(QWidget *parent) :
     QDialog(parent),
@@ -55,7 +56,7 @@ void mxpackageinstaller::setup() {
     ui->buttonCancel->setEnabled(true);
     ui->buttonInstall->setEnabled(true);
     QStringList columnNames;
-    columnNames << "" << "" << "Package" << "Info" << "Description";
+    columnNames << "" << "" << tr("Package") << tr("Info") << tr("Description");
     ui->treeWidget->setHeaderLabels(columnNames);
     ui->treeWidget->resizeColumnToContents(0);
     ui->treeWidget->resizeColumnToContents(1);
@@ -63,6 +64,10 @@ void mxpackageinstaller::setup() {
     ui->treeWidget->resizeColumnToContents(3);
     installedPackages = listInstalled();
     listPackages();
+    QSize size = this->size();
+    heightApp = size.height();
+    heightOutput = ui->outputBox->height();
+    ui->outputBox->setFixedHeight(0);
 }
 
 // Util function
@@ -148,7 +153,7 @@ void mxpackageinstaller::listPackages(void) {
 void mxpackageinstaller::install() {
     ui->buttonCancel->setEnabled(false);
     ui->buttonInstall->setEnabled(false);
-    ui->outputBox->setText("");
+    ui->outputBox->setPlainText("");
     QString preprocess = "";
 
     setCursor(QCursor(Qt::WaitCursor));
@@ -186,6 +191,7 @@ void mxpackageinstaller::install() {
 
 // run preprocess
 void mxpackageinstaller::preProc(QString preprocess) {
+    this->setFixedHeight(170);
     QString outLabel = tr("Pre-processing... ");
     ui->stackedWidget->setCurrentWidget(ui->outputPage);
     ui->progressBar->setValue(0);
@@ -273,7 +279,7 @@ void mxpackageinstaller::procTime() {
     ui->progressBar->setValue(i);
 }
 
-void mxpackageinstaller::updateDone(int exitCode) {
+void mxpackageinstaller::updateDone(int) {
     timer->stop();
     ui->progressBar->setValue(100);
 }
@@ -454,6 +460,7 @@ void mxpackageinstaller::on_buttonInstall_clicked() {
         ui->buttonInstall->setText(tr("Install"));
         ui->buttonInstall->setIcon(QIcon("/usr/share/mx-packageinstaller/icons/dialog-ok.png"));
         on_treeWidget_itemClicked();
+        this->setFixedHeight(heightApp);
     } else {
         qApp->exit(0);
     }
@@ -468,15 +475,29 @@ void mxpackageinstaller::on_buttonAbout_clicked() {
                        getVersion("mx-packageinstaller") + "</p><p align=\"center\"><h3>" +
                        tr("Simple package installer for additional packages for antiX MX") + "</h3></p><p align=\"center\"><a href=\"http://www.mepiscommunity.org/mx\">http://www.mepiscommunity.org/mx</a><br /></p><p align=\"center\">" +
                        tr("Copyright (c) antiX") + "<br /><br /></p>", 0, this);
-    msgBox.addButton(tr("Cancel"), QMessageBox::AcceptRole); // because we want to display the buttons in reverse order we use counter-intuitive roles.
-    msgBox.addButton(tr("License"), QMessageBox::RejectRole);
-    if (msgBox.exec() == QMessageBox::RejectRole)
-        system("mx-viewer file:///usr/share/doc/mx-packageinstaller/license.html");
+    msgBox.addButton(tr("License"), QMessageBox::AcceptRole);
+    msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
+    if (msgBox.exec() == QMessageBox::AcceptRole)
+        system("mx-viewer file:///usr/share/doc/mx-packageinstaller/license.html '" + tr("MX Package Installer").toUtf8() + " " + tr("License").toUtf8() + "'");
 }
 
 
 // Help button clicked
 void mxpackageinstaller::on_buttonHelp_clicked() {
-    system("mx-viewer http://www.mepiscommunity.org/user_manual_mx15/mxum.html#packageinstaller");
+    system("mx-viewer http://mepiscommunity.org/wiki/help-files/help-mx-package-installer '" + tr("MX Package Installer").toUtf8() + " " + tr("Help").toUtf8() + "'");
 }
 
+
+// Show/hide details button clicked
+void mxpackageinstaller::on_buttonDetails_clicked()
+{
+    if (ui->outputBox->height() == 0) {
+        ui->outputBox->setFixedHeight(heightOutput);
+        this->setFixedHeight(heightApp);
+        ui->buttonDetails->setText(tr("Hide details"));
+    } else {
+        ui->outputBox->setFixedHeight(0);
+        this->setFixedHeight(170);
+        ui->buttonDetails->setText(tr("Show details"));
+    }
+}

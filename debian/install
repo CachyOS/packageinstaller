@@ -1,7 +1,7 @@
 mx-packageinstaller 		 usr/sbin
-mx-packageinstaller.desktop	         usr/share/applications/mx
-translations/*.qm 	 usr/share/mx-packageinstaller/locale
+mx-packageinstaller.desktop      usr/share/applications/mx
+translations/*.qm 	usr/share/mx-packageinstaller/locale
 mx-packageinstaller.png	usr/share/pixmaps/mx
 icons/*                 usr/share/mx-packageinstaller/icons
 bm/*			usr/share/mx-packageinstaller/bm
-license.html   /usr/share/doc/mx-packageinstaller
+license.html   		usr/share/doc/mx-packageinstaller

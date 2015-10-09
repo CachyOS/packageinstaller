@@ -23,5 +23,9 @@ FLL_PACKAGES=(
         fcitx-hangul
         fonts-baekmuk
         im-config
-
+        fcitx-config-gtk2
+        fcitx-frontend-gtk2
+        fcitx-frontend-gtk3
+        fcitx-frontend-qt4
+        fcitx-frontend-qt5
 )

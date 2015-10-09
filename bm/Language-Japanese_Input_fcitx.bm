@@ -21,7 +21,12 @@ FLL_PACKAGES=(
         fcitx-ui-light 
         fcitx-anthy
         fcitx-mozc
-        fcitx-table-all 
+        fcitx-table-all
+        fcitx-config-gtk2
+        fcitx-frontend-gtk2
+        fcitx-frontend-gtk3
+        fcitx-frontend-qt4
+        fcitx-frontend-qt5
         im-config
         
 )

@@ -2,9 +2,10 @@ Source: mx-packageinstaller
 Section: admin
 Priority: optional
 Maintainer: Steven Pusser (Stevo) <maintainer@mepiscommunity.org>
-Build-Depends: qt4-qmake,
+Build-Depends: qt5-qmake,
+	qt5-default,
+	qttools5-dev-tools,
 	debhelper (>=7.0.50~),
-	libqtwebkit-dev
 Standards-Version: 3.9.5
 Vcs-Git: git://github.com/AdrianTM/mx-packageinstaller
 

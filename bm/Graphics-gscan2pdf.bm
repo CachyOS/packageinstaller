@@ -13,5 +13,7 @@ FLL_PACKAGE_DEPMODS=(
 
 FLL_PACKAGES=(
 	gscan2pdf 
-
+	djvulibre-bin
+	gocr 
+	unpaper
 )

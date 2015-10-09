@@ -22,12 +22,11 @@
  * along with MX Package Installer.  If not, see <http://www.gnu.org/licenses/>.
  **********************************************************************/
 
-
-#include <QApplication>
 #include "mxpackageinstaller.h"
-#include <qtranslator.h>
-#include <qlocale.h>
 #include <unistd.h>
+#include <QApplication>
+#include <QTranslator>
+#include <QLocale>
 #include <QIcon>
 
 int main(int argc, char *argv[])

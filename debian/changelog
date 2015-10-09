@@ -1,3 +1,51 @@
+mx-packageinstaller (15.7.3mx15) mx; urgency=medium
+
+  * new translations
+
+ -- Adrian <adrian@mxlinux.org>  Mon, 27 Jul 2015 17:06:58 -0400
+
+mx-packageinstaller (15.7.2mx15) mx; urgency=medium
+
+  * added build-deps, fixed license
+
+ -- Adrian <adrian@mxlinux.org>  Thu, 09 Jul 2015 20:13:51 -0400
+
+mx-packageinstaller (15.7.1mx15) mx; urgency=medium
+
+  * update to qt5
+
+ -- Adrian <adrian@mxlinux.org>  Tue, 30 Jun 2015 16:06:16 -0400
+
+mx-packageinstaller (15.7mx14) mx; urgency=medium
+
+  * fcitx update
+
+ -- Adrian <adrian@mxlinux.org>  Tue, 30 Jun 2015 09:49:44 -0400
+
+mx-packageinstaller (15.6.1mx14) mx; urgency=medium
+
+  * hide output box
+
+ -- Adrian <adrian@mxlinux.org>  Sat, 13 Jun 2015 12:25:37 -0400
+
+mx-packageinstaller (15.6mx14) mx; urgency=medium
+
+  * changed documentation URL
+
+ -- Adrian <adrian@mxlinux.org>  Wed, 03 Jun 2015 13:07:22 -0400
+
+mx-packageinstaller (15.4mx14) mx; urgency=medium
+
+  * added translation
+
+ -- Adrian <adrian@mxlinux.org>  Tue, 21 Apr 2015 14:11:19 -0400
+
+mx-packageinstaller (15.3.1mx14) mx; urgency=medium
+
+  * update manual URL
+
+ -- Adrian <adrian@mxlinux.org>  Fri, 20 Mar 2015 16:42:28 -0400
+
 mx-packageinstaller (15.3mx14) mx; urgency=medium
 
   * download and install sig for Opera repos
