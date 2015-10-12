@@ -1,0 +1,28 @@
+Format: 1.8
+Date: Mon, 12 Oct 2015 16:47:16 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source i386
+Version: 15.10.2mx15
+Distribution: mx
+Urgency: medium
+Maintainer: Steven Pusser (Stevo) <maintainer@mepiscommunity.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX program for installing additional packages.
+Changes:
+ mx-packageinstaller (15.10.2mx15) mx; urgency=medium
+ .
+   * fixed Chromium, Adobe.
+Checksums-Sha1:
+ 0a0b0d01e2fde03d5e669c0c4930171886631172 728 mx-packageinstaller_15.10.2mx15.dsc
+ 04a89911ca3d7eca077336c88f1f69659a146eba 114184 mx-packageinstaller_15.10.2mx15.tar.xz
+ c696867ecd3fd7c4edf31f7ceec344e705195c2c 79082 mx-packageinstaller_15.10.2mx15_i386.deb
+Checksums-Sha256:
+ 4d70dfd243d23c7a0920ade8ad3d121bbb838ea74ff773068dcc15d547070c16 728 mx-packageinstaller_15.10.2mx15.dsc
+ 12eeff6ab15ed50294aa282ec54c4f72e0807054ec2113922ae946e4c1626f3e 114184 mx-packageinstaller_15.10.2mx15.tar.xz
+ b3d311a4f5eeaab4e5052c1123b22a37e5a0db2d0eaef78d3a299ebc026eb8c7 79082 mx-packageinstaller_15.10.2mx15_i386.deb
+Files:
+ 715a92f356e0c61d8fd981b8a6a5a8ca 728 admin optional mx-packageinstaller_15.10.2mx15.dsc
+ a8f9c7ab51077e3e32601d5747b1e0c6 114184 admin optional mx-packageinstaller_15.10.2mx15.tar.xz
+ 4c4927e0f3bff39f2d419556df915379 79082 admin optional mx-packageinstaller_15.10.2mx15_i386.deb
