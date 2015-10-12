@@ -16,8 +16,7 @@ FLL_PACKAGE_DEPMODS=(
 )
 
 FLL_PACKAGES=(
-	acroread 
-        mozilla-acroread 
+	acroread
 
 )
 
