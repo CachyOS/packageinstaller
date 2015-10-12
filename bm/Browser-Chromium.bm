@@ -13,7 +13,7 @@ FLL_PACKAGE_DEPMODS=(
 
 FLL_PACKAGES=(
      chromium
-     chromium-browser-l10n
+     chromium-l10n
 
 )
 
