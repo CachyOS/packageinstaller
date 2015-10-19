@@ -1,3 +1,9 @@
+mx-packageinstaller (15.10.3mx15) mx; urgency=medium
+
+  * updated dvdstyler; removed netflix, pipelight
+
+ -- Adrian <adrian@mxlinux.org>  Mon, 19 Oct 2015 16:17:06 -0400
+
 mx-packageinstaller (15.10.2mx15) mx; urgency=medium
 
   * fixed Chromium, Adobe.

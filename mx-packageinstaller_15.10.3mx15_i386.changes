@@ -1,0 +1,28 @@
+Format: 1.8
+Date: Mon, 19 Oct 2015 16:17:06 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source i386
+Version: 15.10.3mx15
+Distribution: mx
+Urgency: medium
+Maintainer: Steven Pusser (Stevo) <maintainer@mepiscommunity.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description: 
+ mx-packageinstaller - MX program for installing additional packages.
+Changes: 
+ mx-packageinstaller (15.10.3mx15) mx; urgency=medium
+ .
+   * updated dvdstyler; removed netflix, pipelight
+Checksums-Sha1: 
+ 5ae32472b54bc2b1e6093b4c6bbc085cf2ebe6d6 723 mx-packageinstaller_15.10.3mx15.dsc
+ 5bde3ba89a0826df571863c09bdae2d8aac13bce 178371 mx-packageinstaller_15.10.3mx15.tar.gz
+ c0ebb28862c334e007921c83ce816e5673efe11f 79020 mx-packageinstaller_15.10.3mx15_i386.deb
+Checksums-Sha256: 
+ 97aa42c34454e181b69ea35a630e33454b5989ae6e98841faa3df046fd6945b9 723 mx-packageinstaller_15.10.3mx15.dsc
+ f4523e5e30ea617943816dccf7a7c1aa95837acf3d4ad634fc1e507a2cff6af6 178371 mx-packageinstaller_15.10.3mx15.tar.gz
+ 51b81b85539830a6effe7adfe31fac07d9f2e4acbae50d5a101accd376125ab6 79020 mx-packageinstaller_15.10.3mx15_i386.deb
+Files: 
+ c38e08769b054718584cfd7831e55187 723 admin optional mx-packageinstaller_15.10.3mx15.dsc
+ 1aa6664bc74fa6b4225461dfd0d46107 178371 admin optional mx-packageinstaller_15.10.3mx15.tar.gz
+ 9a682bc613bf66f8c8341afa6d0f98de 79020 admin optional mx-packageinstaller_15.10.3mx15_i386.deb
