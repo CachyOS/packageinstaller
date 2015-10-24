@@ -14,16 +14,16 @@ FLL_PACKAGE_DEPMODS=(
 FLL_PACKAGES=(
 	gimp
 	gimp-data
-        gimp-help-en 
+        #gimp-help-en 
         gimp-data-extras
         gimp-cbmplugs
         gimp-dcraw
         gimp-dds 
-        gimp-dimage-color  
+        #gimp-dimage-color  
         gimp-gap 
         gimp-gluas 
         gimp-gmic 
-        gimp-help-common 
+        #gimp-help-common 
         gimp-lensfun  
         #gimp-plugin-registry 
         #gimp-resynthesizer
