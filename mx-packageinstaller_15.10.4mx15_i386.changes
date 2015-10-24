@@ -15,14 +15,14 @@ Changes:
  .
    * added Russian translations, various fixes
 Checksums-Sha1:
- c6dfe03c33bf7746f3dff28b278cb60efb8295ce 725 mx-packageinstaller_15.10.4mx15.dsc
- b3b59c93f6a0db2023df393633addba82482719a 56496 mx-packageinstaller_15.10.4mx15.tar.xz
- 753c7aacc97e1800d3d965f21ad2418f5aecc472 78914 mx-packageinstaller_15.10.4mx15_i386.deb
+ e042a90ecb2d6cb8cc22977cfb8307cb2d7e5ce2 728 mx-packageinstaller_15.10.4mx15.dsc
+ 0f1e0e12d39782db0fcb9c279ff0f6777222b547 114768 mx-packageinstaller_15.10.4mx15.tar.xz
+ 27fc026a0417151d5d748b867789333221c8590d 78922 mx-packageinstaller_15.10.4mx15_i386.deb
 Checksums-Sha256:
- 72501bb2fb4b504db53b537abc75c9ce42f041fbbfc2061cb0295c985f8005ca 725 mx-packageinstaller_15.10.4mx15.dsc
- 7c440cbd74b81ab1a0cdf607ffc5896983ab190e6c6f0ead7c469fc0dd0b2d2a 56496 mx-packageinstaller_15.10.4mx15.tar.xz
- 0b6641e0234b0a73c30a9b113fba18ef615780d449a031847ac1eea42a183d0e 78914 mx-packageinstaller_15.10.4mx15_i386.deb
+ 1b70bb686500de44d94b53991e3803a9f223d6020ddec4f8fad0a27c30aa6df7 728 mx-packageinstaller_15.10.4mx15.dsc
+ b0a886f02f8f7d28c0637831becc6acd020dcfec866b4754c7a9ffc9074b37a8 114768 mx-packageinstaller_15.10.4mx15.tar.xz
+ d537cf8b7c898983195b031026c26f79b7825c1a8de437ca721ba3b229fd9a9d 78922 mx-packageinstaller_15.10.4mx15_i386.deb
 Files:
- 5dc44139bd3a2f8da6dbe4e4e46f642a 725 admin optional mx-packageinstaller_15.10.4mx15.dsc
- 2c3c020a6021cbd1ee42948bb77240b6 56496 admin optional mx-packageinstaller_15.10.4mx15.tar.xz
- 24dfc290794a2f34954d091848ffe2b1 78914 admin optional mx-packageinstaller_15.10.4mx15_i386.deb
+ 09c4ff0b3de74ed2b7ed6ecac1621faf 728 admin optional mx-packageinstaller_15.10.4mx15.dsc
+ 47f026eb8a4e5b19e7126259c8f70d89 114768 admin optional mx-packageinstaller_15.10.4mx15.tar.xz
+ d3d469d13a034d6356979286956978b7 78922 admin optional mx-packageinstaller_15.10.4mx15_i386.deb
