@@ -3,6 +3,7 @@ FLL_DESCRIPTION="Skype - VoIP, Instant messaging and Videoconferencing."
 FLL_PRE_PROCESSING=(
 	"#!/bin/bash"
         "echo \"---- in preprocessing ----\""
+        "apt-get update"
         "echo \"Connecting to Skype and downloading latest version\""  
 	"wget -O skype-install.deb http://www.skype.com/go/getskype-linux-deb"
         "echo \"Installing Skype\"" 
