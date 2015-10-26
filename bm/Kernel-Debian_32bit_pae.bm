@@ -1,4 +1,4 @@
-FLL_DESCRIPTION="Fallback Debian 3.16 w/ PAE linux kernel for older hardware."
+FLL_DESCRIPTION="Fallback Debian 3.16 (32bit PAE linux kernel for older hardware.)"
 
 FLL_PRE_PROCESSING=(
 	"#!/bin/bash"
