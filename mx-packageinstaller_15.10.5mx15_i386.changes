@@ -1,0 +1,28 @@
+Format: 1.8
+Date: Tue, 27 Oct 2015 11:42:18 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source i386
+Version: 15.10.5mx15
+Distribution: mx
+Urgency: medium
+Maintainer: Steven Pusser (Stevo) <maintainer@mepiscommunity.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description: 
+ mx-packageinstaller - MX program for installing additional packages.
+Changes: 
+ mx-packageinstaller (15.10.5mx15) mx; urgency=medium
+ .
+   * update kernel installation
+Checksums-Sha1: 
+ bb161ef04cc14c2fbeee91d7763ce833084157e5 723 mx-packageinstaller_15.10.5mx15.dsc
+ 4a83bc67178ffc47e60353fab92d7890e63ae8c9 179841 mx-packageinstaller_15.10.5mx15.tar.gz
+ f9f55df554838627ee63dbbc9eea2e178ffc51de 79188 mx-packageinstaller_15.10.5mx15_i386.deb
+Checksums-Sha256: 
+ b742c8c06336cffd227170693b9fe16116e29bd53188623ad2b38b9f890f2dee 723 mx-packageinstaller_15.10.5mx15.dsc
+ 4bd1a2f258b3c079bdadbb6ad116b684e35efe22cc939a074dd68d3230eb5e79 179841 mx-packageinstaller_15.10.5mx15.tar.gz
+ 8752e2eb9de5bcb1bee6ed87f7c569149a6f75beec6558c6a31f9dd39a7be120 79188 mx-packageinstaller_15.10.5mx15_i386.deb
+Files: 
+ 263cd7c75dc53164f24f411965d9580c 723 admin optional mx-packageinstaller_15.10.5mx15.dsc
+ 2f31cdea3a22488e154fc6dd313f53c4 179841 admin optional mx-packageinstaller_15.10.5mx15.tar.gz
+ daa0600060768541c0649888e5c18862 79188 admin optional mx-packageinstaller_15.10.5mx15_i386.deb
