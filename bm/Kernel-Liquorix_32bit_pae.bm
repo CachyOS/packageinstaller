@@ -1,0 +1,31 @@
+FLL_DESCRIPTION="Liquorix Kernel (with PAE, latest 4.x from MX TEST repo)"
+
+FLL_PRE_PROCESSING=(
+	"#!/bin/bash"
+	"echo \"---- in preprocessing ----\""
+	"echo \"Adding MX TEST repository to /etc/apt/sources.list.d/\""
+	"echo \"deb http://main.mepis-deb.org/mx/testrepo/ mx15 test\">/etc/apt/sources.list.d/mxtestrepotemp.list"
+        "apt-get update"
+	"echo \"---- preprocessing done----\""
+)
+
+FLL_PACKAGE_DEPMODS=(
+)
+
+FLL_PACKAGES=(
+	
+	linux-image-liquorix-686-pae
+	linux-headers-liquorix-686-pae
+	broadcom-sta-dkms
+	ndiswrapper-dkms
+
+)
+
+FLL_POST_PROCESSING=(
+       "#!/bin/bash"
+       "echo \"---- in postprocessing ----\""
+       "echo \"Removing MX TEST repository from /etc/apt/sources.list.d/\""
+	"rm -f /etc/apt/sources.list.d/mxtestrepotemp.list"
+	"echo \"---- postprocessing done----\""
+
+)
