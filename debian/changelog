@@ -1,3 +1,9 @@
+mx-packageinstaller (15.10.6mx15) mx; urgency=medium
+
+  * new translations
+
+ -- Adrian <adrian@mxlinux.org>  Wed, 28 Oct 2015 16:34:56 -0400
+
 mx-packageinstaller (15.10.5mx15) mx; urgency=medium
 
   * update kernel installation
