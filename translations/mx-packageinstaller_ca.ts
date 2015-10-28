@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ca">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ca" version="2.0">
 <context>
     <name>QApplication</name>
     <message>
@@ -17,7 +15,7 @@
         <location filename="../mxpackageinstaller.cpp" line="481"/>
         <location filename="../mxpackageinstaller.cpp" line="487"/>
         <source>MX Package Installer</source>
-        <translation>Instal·lador de paquets de MX</translation>
+        <translation>MX Package Installer</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="46"/>
@@ -149,7 +147,7 @@
     <message>
         <location filename="../mxpackageinstaller.cpp" line="183"/>
         <source>Postprocess finished. Errors have occurred.</source>
-        <translation>S&apos;ha acabat el post procés amb errors.</translation>
+        <translation>S&apos;ha acabat el postprocés amb errors.</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="187"/>
@@ -159,7 +157,7 @@
     <message>
         <location filename="../mxpackageinstaller.cpp" line="195"/>
         <source>Pre-processing... </source>
-        <translation>Pre-processant...</translation>
+        <translation>Preprocessant...</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="211"/>
@@ -169,17 +167,17 @@
     <message>
         <location filename="../mxpackageinstaller.cpp" line="230"/>
         <source>Post-processing... </source>
-        <translation>Post-processant...</translation>
+        <translation>Postprocessant...</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="302"/>
         <source>Preprocessing done.</source>
-        <translation>S&apos;ha acabat el pre-procés. </translation>
+        <translation>S&apos;ha acabat el preprocés. </translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="307"/>
         <source>Pre-process finished. Errors have occurred installing: </source>
-        <translation>S&apos;ha acabat el pre-procés. S&apos;han trobat errors instal·lant: </translation>
+        <translation>S&apos;ha acabat el preprocés. S&apos;han trobat errors instal·lant: </translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="334"/>
