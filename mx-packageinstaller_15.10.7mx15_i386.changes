@@ -7,31 +7,31 @@ Source: mx-packageinstaller
 Binary: mx-packageinstaller
 Architecture: i386
 Version: 15.10.7mx15
-Distribution: UNRELEASED
+Distribution: mx
 Urgency: medium
 Maintainer: Steven Pusser (Stevo) <maintainer@mepiscommunity.org>
 Changed-By: Adrian <adrian@mxlinux.org>
-Description:
+Description: 
  mx-packageinstaller - MX program for installing additional packages.
-Changes:
- mx-packageinstaller (15.10.7mx15) UNRELEASED; urgency=medium
+Changes: 
+ mx-packageinstaller (15.10.7mx15) mx; urgency=medium
  .
    * Run apt-get update only once, read 32/64bit only .bm files
-Checksums-Sha1:
- f6c99a39ae665e8a8816ec5e221d8b8bde401897 81382 mx-packageinstaller_15.10.7mx15_i386.deb
-Checksums-Sha256:
- 14116b6e3ddd29110e405a1996eb3620e51591eee98c4a0190bbe6944bcd664c 81382 mx-packageinstaller_15.10.7mx15_i386.deb
-Files:
- 1030be6b564ebdb90e69f58439884f55 81382 admin optional mx-packageinstaller_15.10.7mx15_i386.deb
+Checksums-Sha1: 
+ 39d907b7b08ee06f2ee270309654490cdc1de225 63888 mx-packageinstaller_15.10.7mx15_i386.deb
+Checksums-Sha256: 
+ 686a6d1c6f794149b1237d78e38ccb3c81e1eef240f9450e0303feff951bc11a 63888 mx-packageinstaller_15.10.7mx15_i386.deb
+Files: 
+ 66613c71d785d74dfd987018ce4b7901 63888 admin optional mx-packageinstaller_15.10.7mx15_i386.deb
 
 -----BEGIN PGP SIGNATURE-----
-Version: GnuPG v1
+Version: GnuPG v1.4.12 (GNU/Linux)
 
-iQEcBAEBAgAGBQJWMh1HAAoJEHCTjHgGee6Yx+4H/0szoApSAilThW9ywftLcp8R
-TD0Wrz5zdO/lpxlcsA0UXr2KR5GPYLowwV51gkzZjNorm55jJNWAZ2na3hO4Zh+O
-7UmJ21HCRLXT7pXfS2iTr0DGXT+h/e0bOW3Kt0aGSeVp2racMYeTMqssfvvWuXCh
-/K5NLeZuil6T+I5bR2evtGGpMy6r0M5Kz2gyIQfFw08VBMgZi3NE1s+lCIOSquec
-jAXaoLIViaFc7GVeuwtCow8kYRkZDXbhpPWxRuMh8OEA65r6zkSJ8EYnc76jHj2W
-cgg4fhYCaYkEncoXllKa3bi7gLzvcbizMyw7QPeGrSq3nlNejD2P2Z62cu4a3fs=
-=5GYv
+iQEcBAEBAgAGBQJWMmPVAAoJEHCTjHgGee6YlrMH/AmOn066AwgEpJ2d05yAIaeX
+YLXwOtThD1C3rQMIvN2CyR2Z/xqpiyEQXxywSZuEkVJN2fKXyS3VVwUCjbvvoEbU
+VJ8DUdxeA7sTmNah4yXKy+90FlAi495u1zdEnaie49I74g9ebCUMIoKYtSK6cltd
+SZvlq+rKaF1bG0m3QMV2Qxe7EOyT7OG8p4Wi+ZYHq9tdm6Nk1Z8gNou8+gfb7ow7
+nygMmpH5QtmUMBLIgRyJWYo3xCOg85TLNSNHUVtwl3jX+WXgBQy49v7XlszPc0lV
+2/laUZbPFQeas2+gPokULWey+wz8rBvVAGfsKqA0/iAcjPR25OPX8H9yN/mf0ZE=
+=53Rn
 -----END PGP SIGNATURE-----

@@ -92,7 +92,7 @@ bool mxpackageinstaller::is32bit()
     return (getCmdOut("uname -m") == "i686");
 }
 
-// parse '/usr/share/mx-packageinsataller/bm' for .bm files and add info in treeWidget
+// parse '/usr/share/mx-packageinstaller-pkglist' for .bm files and add info in treeWidget
 void mxpackageinstaller::listPackages(void) {
     QStringList filter("*.bm");
     if (is32bit()) {     // list arch specific programs
@@ -100,7 +100,7 @@ void mxpackageinstaller::listPackages(void) {
     } else {
         filter << "*.bm_only64bit";
     }
-    QDir dir("/usr/share/mx-packageinstaller/bm");
+    QDir dir("/usr/share/mx-packageinstaller-pkglist");
     QStringList bmfilelist = dir.entryList(filter);
     QTreeWidgetItem *topLevelItem = NULL;
 
@@ -140,7 +140,7 @@ void mxpackageinstaller::listPackages(void) {
 
 
         // add description from file
-        QString filename = "/usr/share/mx-packageinstaller/bm/" +  bmfilelist.at(i);
+        QString filename = "/usr/share/mx-packageinstaller-pkglist/" +  bmfilelist.at(i);
         QString cmd = QString("grep FLL_DESCRIPTION= %1 | cut -f 2 -d '='").arg(filename);
         QString out = getCmdOut(cmd);
         out.remove(QChar('"'));
@@ -180,6 +180,7 @@ void mxpackageinstaller::install() {
             QString cmd_preprocess = "source " + filename + " && printf '%s\\n' \"${FLL_PRE_PROCESSING[@]}\"";
             if (first_run) {
                 update();
+                first_run = false;
             }
             preprocess = getCmdOut(cmd_preprocess);
             preProc(preprocess);

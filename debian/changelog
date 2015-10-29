@@ -1,4 +1,4 @@
-mx-packageinstaller (15.10.7mx15) UNRELEASED; urgency=medium
+mx-packageinstaller (15.10.7mx15) mx; urgency=medium
 
   * Run apt-get update only once, read 32/64bit only .bm files
 
