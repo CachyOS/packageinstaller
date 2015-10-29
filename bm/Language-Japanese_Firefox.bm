@@ -4,7 +4,6 @@ FLL_DESCRIPTION="Japanese localisation of Firefox"
 FLL_PRE_PROCESSING=(
 	"#!/bin/bash"
 	"echo \"---- in preprocessing ----\""
-        "apt-get update"
 	"# paste your code here (not necessary for normal install, only for preconfigs)"
 	"echo \"---- preprocessing done----\""
 )

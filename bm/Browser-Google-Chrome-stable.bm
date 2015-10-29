@@ -3,7 +3,6 @@ FLL_DESCRIPTION="Latest Google Chrome browser (stable)"
 FLL_PRE_PROCESSING=(
    "#!/bin/bash"
         "echo \"---- in preprocessing ----\""
-	"apt-get update"
         "echo \"Connecting to dl.google.com and downloading the latest version of Google Chrome browser\""  
         "wget -qO- dl.google.com/linux/chrome/deb/dists/stable/main/binary-$(dpkg --print-architecture)/Packages | grep ^Filename.*google-chrome-stable.*deb | cut -d' ' -f2 | sed 's ^ dl.google.com/linux/chrome/deb/ ' | xargs wget"
         "echo \"Installing Google Chrome browser\"" 
