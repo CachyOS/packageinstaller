@@ -1,3 +1,6 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
 Format: 1.8
 Date: Wed, 28 Oct 2015 16:34:56 -0400
 Source: mx-packageinstaller
@@ -15,14 +18,26 @@ Changes:
  .
    * new translations
 Checksums-Sha1:
- d0ef0871d235a7ba04b6b676a15f982bb7004550 728 mx-packageinstaller_15.10.6mx15.dsc
- 91127630bf95c21e0f8bd69aca32b005e52337fd 171624 mx-packageinstaller_15.10.6mx15.tar.xz
- 5e5bb411549be6f0f0ce1b39c7fbb7d3337e3fac 79402 mx-packageinstaller_15.10.6mx15_amd64.deb
+ a5e5bb5ea97c4b2d30ffb0224e3b7f0df68bace0 1249 mx-packageinstaller_15.10.6mx15.dsc
+ 952ae21153908367b61e45d434fcded64099bba4 344028 mx-packageinstaller_15.10.6mx15.tar.xz
+ e6be8f6b0ed498a6a3a401601880cd4908ef291a 79328 mx-packageinstaller_15.10.6mx15_amd64.deb
 Checksums-Sha256:
- 58665b16c343252df06578c07280e99e1ddddc3933d13bea9d3faad3abcaff8a 728 mx-packageinstaller_15.10.6mx15.dsc
- b8d5a8197a679fbfedd04e0c2b5f811673d0c4b5dc7afda2761dfa9a080932ac 171624 mx-packageinstaller_15.10.6mx15.tar.xz
- a5ca6b6ae7e42f0547d4092fdcf59cb78d18a0da51276be8dc145570db87dcf5 79402 mx-packageinstaller_15.10.6mx15_amd64.deb
+ c68305547c9236a229d93b413cc2d38e047a4e9ab16df70dc5bad3a58a1105a7 1249 mx-packageinstaller_15.10.6mx15.dsc
+ 8eb251d5de55c888ae7a38a620d456dd26e428fc9ac83c9b12d322bcef19a505 344028 mx-packageinstaller_15.10.6mx15.tar.xz
+ e9ac8f1e8c9bc74cb1bd3b4a987bb66d44444c7c2672562737b5749956f58bd1 79328 mx-packageinstaller_15.10.6mx15_amd64.deb
 Files:
- 824eeed857e9a3d213a7a0c5733700d7 728 admin optional mx-packageinstaller_15.10.6mx15.dsc
- e719b5f1009504c993fdf53966b9230f 171624 admin optional mx-packageinstaller_15.10.6mx15.tar.xz
- 004df1ab899cd363536b50810dd3c259 79402 admin optional mx-packageinstaller_15.10.6mx15_amd64.deb
+ 73c03e0f87ae8dcf7d23de4d814863b8 1249 admin optional mx-packageinstaller_15.10.6mx15.dsc
+ c0c03af9fd5b983ca020012c0117b316 344028 admin optional mx-packageinstaller_15.10.6mx15.tar.xz
+ bc565c77ec572be46eff4e7fa2cabed1 79328 admin optional mx-packageinstaller_15.10.6mx15_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQEcBAEBAgAGBQJWMXa+AAoJEHCTjHgGee6YFuMIALWtO6iP7GK7706ri4Ina8qY
+NpDdm/aIM+6vDJ6fNOLjcvLIwJ6gOgPBTL2N+fH2paYO75jvUpTwbbj7xmpwzaDa
+SXX24p0AYlSrdA0mBkbeBVBOpm2r+ErvksEw4tOjEgNSTpaz31wJyxM3gzyGCoLb
+1HTGZCuughxGjcqgQ57aFHOa9Y98gPD43VRg4Cy/Tleq/ADNUKfNONpuHyaazPY8
+2vNZKxl7P7ln9ol7J+Uj2Wspv3r01/Hk6TnUnoUCfQQsopp3lxTr2aqxZU8jQnjW
+SAsFdzSi+YcnJ8i6bBb05HqXDUm35PPhtmJD6Hk/wi87YAYmJS659ONWyNFZErE=
+=hGva
+-----END PGP SIGNATURE-----

@@ -1,28 +1,37 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
 Format: 1.8
 Date: Wed, 28 Oct 2015 16:34:56 -0400
 Source: mx-packageinstaller
 Binary: mx-packageinstaller
-Architecture: source i386
+Architecture: i386
 Version: 15.10.6mx15
 Distribution: mx
 Urgency: medium
 Maintainer: Steven Pusser (Stevo) <maintainer@mepiscommunity.org>
 Changed-By: Adrian <adrian@mxlinux.org>
-Description: 
+Description:
  mx-packageinstaller - MX program for installing additional packages.
-Changes: 
+Changes:
  mx-packageinstaller (15.10.6mx15) mx; urgency=medium
  .
    * new translations
-Checksums-Sha1: 
- 923e21adbdc7e10b0eefe57158912bcbb001171e 723 mx-packageinstaller_15.10.6mx15.dsc
- cc1fc190749f3a681f55877e7a49f306f10e8097 122128 mx-packageinstaller_15.10.6mx15.tar.gz
- 7919578e513bb74f449ceb6deb4908c10dc0b277 80108 mx-packageinstaller_15.10.6mx15_i386.deb
-Checksums-Sha256: 
- aa1eaf63b80183d6d93e6be0683ba3c1250f56cf6ef87f1aaa754142031acb9e 723 mx-packageinstaller_15.10.6mx15.dsc
- 46af4d788734f31356bf08f8afe56e473508e3c42321a8d7a5c7d18530d42e3e 122128 mx-packageinstaller_15.10.6mx15.tar.gz
- a044ad4e6ee116a35c0b8ca21acc1d5329bb6f646ad66b19e523ee398bb59b42 80108 mx-packageinstaller_15.10.6mx15_i386.deb
-Files: 
- a269435e63d61d7b8b1dccf2c5b3a47a 723 admin optional mx-packageinstaller_15.10.6mx15.dsc
- 3d56d0425639da7c566db93a64be2f0b 122128 admin optional mx-packageinstaller_15.10.6mx15.tar.gz
- 462cb1acf68892fb1cca81d5e699b42d 80108 admin optional mx-packageinstaller_15.10.6mx15_i386.deb
+Checksums-Sha1:
+ d5fd9b3e40b1f3748599e2f870dbb3260a27ed7d 80562 mx-packageinstaller_15.10.6mx15_i386.deb
+Checksums-Sha256:
+ a2bc8fb07a82c12e4fcaf4d68996cf35ad7e5d6a249975593c09ba4572bafd07 80562 mx-packageinstaller_15.10.6mx15_i386.deb
+Files:
+ 04ecfb7398fe316253e72c76ffd277f9 80562 admin optional mx-packageinstaller_15.10.6mx15_i386.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQEcBAEBAgAGBQJWMX7vAAoJEHCTjHgGee6YH9gH/jR0F141cdLjVEXgA/SjMZbI
+AtUQA3JR+/5SbHWTCnQSMXXWVkUcc9J8Ov5TD/pKOu9qG7zBKo4J06O8Jaky+IbR
+3hVisnFvYfyDUetmVWtNQn+VAAoLH86EDu6tDt4GySlkPq/zR0PoLr1ftK1AuFwD
+XeyyCAkrAPR5TNEuoEK9Ka5BPcWRZJWoy73mUelNINnMm8x0ipfeD3lfey3aDYK0
+2WkwMaKcZVp8uEoasdg/g9L192DGeakmCPxECyudD8LLqXQI/XKO5RgyziJAiI7d
+KPNoXwN9G596zsO/EXzd0QOwTAcjiXpgk1x9s2AgZC2Cq9v9RkBlAy/mXenQQTM=
+=9FK6
+-----END PGP SIGNATURE-----
