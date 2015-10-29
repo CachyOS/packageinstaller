@@ -1,3 +1,9 @@
+mx-packageinstaller (15.10.8mx15) mx; urgency=medium
+
+  * fix output box size after install
+
+ -- Adrian <adrian@mxlinux.org>  Thu, 29 Oct 2015 16:48:20 -0400
+
 mx-packageinstaller (15.10.7mx15) mx; urgency=medium
 
   * Run apt-get update only once, read 32/64bit only .bm files

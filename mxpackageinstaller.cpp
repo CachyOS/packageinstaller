@@ -170,7 +170,10 @@ void mxpackageinstaller::install() {
     QString preprocess = "";
 
     setCursor(QCursor(Qt::WaitCursor));
+    ui->outputBox->setFixedHeight(0);
     this->setFixedHeight(170);
+    ui->buttonDetails->setText(tr("Show details"));
+
     QTreeWidgetItemIterator it(ui->treeWidget);
     while (*it) {
         (*it)->setSelected(false); // deselect each item

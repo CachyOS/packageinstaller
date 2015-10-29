@@ -1,0 +1,37 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Thu, 29 Oct 2015 16:48:20 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: i386
+Version: 15.10.8mx15
+Distribution: mx
+Urgency: medium
+Maintainer: Steven Pusser (Stevo) <maintainer@mepiscommunity.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description: 
+ mx-packageinstaller - MX program for installing additional packages.
+Changes: 
+ mx-packageinstaller (15.10.8mx15) mx; urgency=medium
+ .
+   * fix output box size after install
+Checksums-Sha1: 
+ d6be78d21514a3efa48b70fd6201cce32b25265d 63948 mx-packageinstaller_15.10.8mx15_i386.deb
+Checksums-Sha256: 
+ d9ae73d474654361af3cf5a9484f761ee40eab1b1dde5b00830d8e478ba400b2 63948 mx-packageinstaller_15.10.8mx15_i386.deb
+Files: 
+ 089aba8447096df1f8b0e9482d5c8665 63948 admin optional mx-packageinstaller_15.10.8mx15_i386.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1.4.12 (GNU/Linux)
+
+iQEcBAEBAgAGBQJWMoY6AAoJEHCTjHgGee6Y5ekH/RkbhX+dYVKhmjwvaJxAKRTP
+lyEsxg/rX5vPZqoyJ9T93YdGjol65fpSF6vkxyL6x16yWv/cRW6Rst0ky6eEQCTZ
+b3TY+anXG6ADKOaoUYAdVevd72TtN3xflW+jdpgE1vvnZZCkfgrI5pHin95ZkPuY
+8U5RMhlm9aJ2HTZL6g/lKu/PuK5QyvczGc7n1U2jXYs/nW4fPnzIPfUXTrKvbyp/
+2Do7MJg0D0D2NE0Ijj0e8dy3q9eRr2oeOSp18aY3hL96SjzAFi4exYHtFkg2cc+q
+u1cnD3Saaw7wEt5JO+fKxrCBX+NQ5IhkRMuSOxu0hOrRJYAoZKqRn8Jg6PwDbPQ=
+=JbIg
+-----END PGP SIGNATURE-----
