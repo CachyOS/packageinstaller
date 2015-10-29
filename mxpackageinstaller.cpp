@@ -86,10 +86,20 @@ QString mxpackageinstaller::getVersion(QString name) {
     return getCmdOut(cmd);
 }
 
+// Check if running from a 32bit environment
+bool mxpackageinstaller::is32bit()
+{
+    return (getCmdOut("uname -m") == "i686");
+}
 
 // parse '/usr/share/mx-packageinsataller/bm' for .bm files and add info in treeWidget
 void mxpackageinstaller::listPackages(void) {
     QStringList filter("*.bm");
+    if (is32bit()) {     // list arch specific programs
+        filter << "*.bm_only32bit";
+    } else {
+        filter << "*.bm_only64bit";
+    }
     QDir dir("/usr/share/mx-packageinstaller/bm");
     QStringList bmfilelist = dir.entryList(filter);
     QTreeWidgetItem *topLevelItem = NULL;
@@ -102,7 +112,9 @@ void mxpackageinstaller::listPackages(void) {
         } else if (info.size() == 4) { // if there's a "-" in the name, the string will be split in 4
             name = info.at(1) + "-" + info.at(2) + "-" + info.at(3); // readd the remaining parts of the name
         }
-        name.chop(3); // chop .bm part
+        name.remove(".bm_only32bit");
+        name.remove(".bm_only64bit");
+        name.remove(".bm");
         QString category = info.at(0);
 
         // add package category if treeWidget doesn't already have it
@@ -151,12 +163,14 @@ void mxpackageinstaller::listPackages(void) {
 
 // get list of packages to install and start install processes
 void mxpackageinstaller::install() {
+    bool first_run = true;
     ui->buttonCancel->setEnabled(false);
     ui->buttonInstall->setEnabled(false);
     ui->outputBox->setPlainText("");
     QString preprocess = "";
 
     setCursor(QCursor(Qt::WaitCursor));
+    this->setFixedHeight(170);
     QTreeWidgetItemIterator it(ui->treeWidget);
     while (*it) {
         (*it)->setSelected(false); // deselect each item
@@ -164,6 +178,9 @@ void mxpackageinstaller::install() {
             QString filename =  (*it)->text(5);
             (*it)->setSelected(true);                // select current item for passing to other functions
             QString cmd_preprocess = "source " + filename + " && printf '%s\\n' \"${FLL_PRE_PROCESSING[@]}\"";
+            if (first_run) {
+                update();
+            }
             preprocess = getCmdOut(cmd_preprocess);
             preProc(preprocess);
         }
@@ -188,10 +205,26 @@ void mxpackageinstaller::install() {
     ui->buttonInstall->setIcon(QIcon());
 }
 
+// run update
+void mxpackageinstaller::update() {
+    QString outLabel = tr("Running apt-get update... ");
+    ui->stackedWidget->setCurrentWidget(ui->outputPage);
+    ui->progressBar->setValue(0);
+    ui->outputLabel->setText(outLabel);
+    setConnections(timer, proc);
+    disconnect(proc, SIGNAL(finished(int)), 0, 0);
+    connect(proc, SIGNAL(finished(int)), this, SLOT(updateDone(int)));
+    QEventLoop loop;
+    connect(proc, SIGNAL(finished(int)), &loop, SLOT(quit()));
+    QString cmd = "apt-get update";
+    proc->start(cmd);
+    ui->outputBox->insertPlainText("# " + cmd + "\n");
+    loop.exec();
+}
+
 
 // run preprocess
-void mxpackageinstaller::preProc(QString preprocess) {
-    this->setFixedHeight(170);
+void mxpackageinstaller::preProc(QString preprocess) {    
     QString outLabel = tr("Pre-processing... ");
     ui->stackedWidget->setCurrentWidget(ui->outputPage);
     ui->progressBar->setValue(0);

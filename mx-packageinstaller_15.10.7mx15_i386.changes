@@ -1,0 +1,37 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Thu, 29 Oct 2015 10:16:15 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: i386
+Version: 15.10.7mx15
+Distribution: UNRELEASED
+Urgency: medium
+Maintainer: Steven Pusser (Stevo) <maintainer@mepiscommunity.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX program for installing additional packages.
+Changes:
+ mx-packageinstaller (15.10.7mx15) UNRELEASED; urgency=medium
+ .
+   * Run apt-get update only once, read 32/64bit only .bm files
+Checksums-Sha1:
+ f6c99a39ae665e8a8816ec5e221d8b8bde401897 81382 mx-packageinstaller_15.10.7mx15_i386.deb
+Checksums-Sha256:
+ 14116b6e3ddd29110e405a1996eb3620e51591eee98c4a0190bbe6944bcd664c 81382 mx-packageinstaller_15.10.7mx15_i386.deb
+Files:
+ 1030be6b564ebdb90e69f58439884f55 81382 admin optional mx-packageinstaller_15.10.7mx15_i386.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQEcBAEBAgAGBQJWMh1HAAoJEHCTjHgGee6Yx+4H/0szoApSAilThW9ywftLcp8R
+TD0Wrz5zdO/lpxlcsA0UXr2KR5GPYLowwV51gkzZjNorm55jJNWAZ2na3hO4Zh+O
+7UmJ21HCRLXT7pXfS2iTr0DGXT+h/e0bOW3Kt0aGSeVp2racMYeTMqssfvvWuXCh
+/K5NLeZuil6T+I5bR2evtGGpMy6r0M5Kz2gyIQfFw08VBMgZi3NE1s+lCIOSquec
+jAXaoLIViaFc7GVeuwtCow8kYRkZDXbhpPWxRuMh8OEA65r6zkSJ8EYnc76jHj2W
+cgg4fhYCaYkEncoXllKa3bi7gLzvcbizMyw7QPeGrSq3nlNejD2P2Z62cu4a3fs=
+=5GYv
+-----END PGP SIGNATURE-----

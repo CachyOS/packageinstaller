@@ -1,3 +1,9 @@
+mx-packageinstaller (15.10.7mx15) UNRELEASED; urgency=medium
+
+  * Run apt-get update only once, read 32/64bit only .bm files
+
+ -- Adrian <adrian@mxlinux.org>  Thu, 29 Oct 2015 10:16:15 -0400
+
 mx-packageinstaller (15.10.6mx15) mx; urgency=medium
 
   * new translations

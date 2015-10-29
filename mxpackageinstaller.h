@@ -30,7 +30,6 @@
 #include <QProcess>
 #include <QTimer>
 #include <QTreeWidgetItem>
-#include <QHash>
 
 namespace Ui {
 class mxpackageinstaller;
@@ -61,13 +60,15 @@ public:
     QString getVersion(QString name);
     QStringList listInstalled();
     bool checkInstalled(QString filename, QString name);
+    bool is32bit();
     int heightApp;
     int heightOutput;
 
 public slots:
     void procStart();
     void procTime();
-    void updateDone(int);
+    void update();
+    void updateDone(int);   
     void preProcDone(int exitCode);
     void aptgetDone(int exitCode);
     void postProcDone(int exitCode);
@@ -88,7 +89,6 @@ private slots:
 
 private:
     Ui::mxpackageinstaller *ui;
-    QHash<QString, bool> hashPackages;
     QStringList installedPackages;
 
 };

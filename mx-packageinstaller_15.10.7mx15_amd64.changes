@@ -1,0 +1,43 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Thu, 29 Oct 2015 10:16:15 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 15.10.7mx15
+Distribution: UNRELEASED
+Urgency: medium
+Maintainer: Steven Pusser (Stevo) <maintainer@mepiscommunity.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX program for installing additional packages.
+Changes:
+ mx-packageinstaller (15.10.7mx15) UNRELEASED; urgency=medium
+ .
+   * Run apt-get update only once, read 32/64bit only .bm files
+Checksums-Sha1:
+ 3ad8ff0d1f40a28f7e4f55a35b77641a79725212 1249 mx-packageinstaller_15.10.7mx15.dsc
+ 19306b5b7d13444a1220c5909692d953358063dd 708176 mx-packageinstaller_15.10.7mx15.tar.xz
+ bcc33159c913fb2b3c2c4f9cfd9b2f3054694744 80136 mx-packageinstaller_15.10.7mx15_amd64.deb
+Checksums-Sha256:
+ 03cb5a737e2b7c9346e90169de829f94e32786ddd7506de5fe46ef667b262ef8 1249 mx-packageinstaller_15.10.7mx15.dsc
+ 82ebc1c7ab92867542a0eb3bdf0d9dc1d7818c7d5bbd250d1a307bc271c50d64 708176 mx-packageinstaller_15.10.7mx15.tar.xz
+ 4fab6f4512b480017c63f22778fa1ef202665a11e502575730446e5d5ac5f667 80136 mx-packageinstaller_15.10.7mx15_amd64.deb
+Files:
+ 629afad6c2a689a3df7e1ecb1f5ea66c 1249 admin optional mx-packageinstaller_15.10.7mx15.dsc
+ 62feb825a70ffb533bf8cff11ef639b0 708176 admin optional mx-packageinstaller_15.10.7mx15.tar.xz
+ cd117638de51443e3e47df748c9df4e9 80136 admin optional mx-packageinstaller_15.10.7mx15_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQEcBAEBAgAGBQJWMjGfAAoJEHCTjHgGee6YOG0H/0S4T7h/yTJqsiTCtQqa8Pj+
+6r18nBMw8OrqNlrg/DFDEByxgjNS39l/v5J30q9xAmDYu4QDLosqYeouOzS06xjh
+2DSdZNeejPhdq3e61KZF91gniTcd+nzTurrhuIvUQhXVsFbWkHwpofdHv1m/Fa72
+tADzqRrb/W4tQEre4NJPKowzST9eJsLOn87HXTEQ3lT0RnMEto1bpMELsyVzLP5F
+HEo0ZaVOxECykwqQ66R1NN3HlKKE2DtYiGtj3GxfxRxLMUeAsTK7gJn4r+y4tTft
+ZM1sLBq0AtNt4usOs1/lfi6dAG+MLxCRIv9NQeFwU6htA2+HrP8TJPu5LQdRhZU=
+=Zxfj
+-----END PGP SIGNATURE-----
