@@ -1,3 +1,9 @@
+mx-packageinstaller (15.10.9mx15) mx; urgency=medium
+
+  * fixed multiple installation bug 
+
+ -- Adrian <adrian@mxlinux.org>  Fri, 30 Oct 2015 10:42:54 -0400
+
 mx-packageinstaller (15.10.8mx15) mx; urgency=medium
 
   * fix output box size after install

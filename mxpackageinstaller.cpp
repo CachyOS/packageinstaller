@@ -175,9 +175,9 @@ void mxpackageinstaller::install() {
     ui->buttonDetails->setText(tr("Show details"));
 
     QTreeWidgetItemIterator it(ui->treeWidget);
+    ui->treeWidget->clearSelection(); //deselect all items
     while (*it) {
-        (*it)->setSelected(false); // deselect each item
-        if ((*it)->checkState(1) == Qt::Checked) {
+        if ((*it)->checkState(1) == Qt::Checked) {            
             QString filename =  (*it)->text(5);
             (*it)->setSelected(true);                // select current item for passing to other functions
             QString cmd_preprocess = "source " + filename + " && printf '%s\\n' \"${FLL_PRE_PROCESSING[@]}\"";
@@ -328,7 +328,7 @@ void mxpackageinstaller::preProcDone(int exitCode) {
     QString package = "";
     QTreeWidgetItemIterator it(ui->treeWidget);
     while (*it) {
-        if ((*it)->isSelected()) {
+        if ((*it)->isSelected()) {            
             QString filename =  (*it)->text(5);
             QString cmd_package = "source " + filename + " && echo ${FLL_PACKAGES[@]}";
             package = getCmdOut(cmd_package);
@@ -354,7 +354,7 @@ void mxpackageinstaller::aptgetDone(int exitCode) {
     QString postprocess = "";
     QTreeWidgetItemIterator it(ui->treeWidget);
     while (*it) {
-        if ((*it)->isSelected()) {
+        if ((*it)->isSelected()) {            
             QString filename =  (*it)->text(5);
             package = (*it)->text(2);
             QString cmd_postprocess = "source " + filename + " && printf '%s\\n' \"${FLL_POST_PROCESSING[@]}\"";
@@ -378,7 +378,7 @@ void mxpackageinstaller::postProcDone(int exitCode) {
     ui->progressBar->setValue(100);
     QTreeWidgetItemIterator it(ui->treeWidget);
     while (*it) {
-        if ((*it)->isSelected()) {
+        if ((*it)->isSelected()) {            
             (*it)->setCheckState(1, Qt::Unchecked);
             (*it)->setSelected(false);
             if (exitCode == 0) {
@@ -505,7 +505,8 @@ void mxpackageinstaller::on_buttonInstall_clicked() {
 
 
 // About button clicked
-void mxpackageinstaller::on_buttonAbout_clicked() {
+void mxpackageinstaller::on_buttonAbout_clicked()
+{
     QMessageBox msgBox(QMessageBox::NoIcon,
                        tr("About MX Package Installer"), "<p align=\"center\"><b><h2>" +
                        tr("MX Package Installer") + "</h2></b></p><p align=\"center\">" + tr("Version: ") +
@@ -520,7 +521,8 @@ void mxpackageinstaller::on_buttonAbout_clicked() {
 
 
 // Help button clicked
-void mxpackageinstaller::on_buttonHelp_clicked() {
+void mxpackageinstaller::on_buttonHelp_clicked()
+{
     system("mx-viewer http://mepiscommunity.org/wiki/help-files/help-mx-package-installer '" + tr("MX Package Installer").toUtf8() + " " + tr("Help").toUtf8() + "'");
 }
 
