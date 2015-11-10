@@ -68,6 +68,7 @@ void mxpackageinstaller::setup() {
     heightApp = size.height();
     heightOutput = ui->outputBox->height();
     ui->outputBox->setFixedHeight(0);
+    ui->outputBox->setReadOnly(true);
 }
 
 // Util function
@@ -177,7 +178,7 @@ void mxpackageinstaller::install() {
     QTreeWidgetItemIterator it(ui->treeWidget);
     ui->treeWidget->clearSelection(); //deselect all items
     while (*it) {
-        if ((*it)->checkState(1) == Qt::Checked) {            
+        if ((*it)->checkState(1) == Qt::Checked) {
             QString filename =  (*it)->text(5);
             (*it)->setSelected(true);                // select current item for passing to other functions
             QString cmd_preprocess = "source " + filename + " && printf '%s\\n' \"${FLL_PRE_PROCESSING[@]}\"";
@@ -228,7 +229,7 @@ void mxpackageinstaller::update() {
 
 
 // run preprocess
-void mxpackageinstaller::preProc(QString preprocess) {    
+void mxpackageinstaller::preProc(QString preprocess) {
     QString outLabel = tr("Pre-processing... ");
     ui->stackedWidget->setCurrentWidget(ui->outputPage);
     ui->progressBar->setValue(0);
@@ -328,7 +329,7 @@ void mxpackageinstaller::preProcDone(int exitCode) {
     QString package = "";
     QTreeWidgetItemIterator it(ui->treeWidget);
     while (*it) {
-        if ((*it)->isSelected()) {            
+        if ((*it)->isSelected()) {
             QString filename =  (*it)->text(5);
             QString cmd_package = "source " + filename + " && echo ${FLL_PACKAGES[@]}";
             package = getCmdOut(cmd_package);
@@ -354,7 +355,7 @@ void mxpackageinstaller::aptgetDone(int exitCode) {
     QString postprocess = "";
     QTreeWidgetItemIterator it(ui->treeWidget);
     while (*it) {
-        if ((*it)->isSelected()) {            
+        if ((*it)->isSelected()) {
             QString filename =  (*it)->text(5);
             package = (*it)->text(2);
             QString cmd_postprocess = "source " + filename + " && printf '%s\\n' \"${FLL_POST_PROCESSING[@]}\"";
@@ -378,7 +379,7 @@ void mxpackageinstaller::postProcDone(int exitCode) {
     ui->progressBar->setValue(100);
     QTreeWidgetItemIterator it(ui->treeWidget);
     while (*it) {
-        if ((*it)->isSelected()) {            
+        if ((*it)->isSelected()) {
             (*it)->setCheckState(1, Qt::Unchecked);
             (*it)->setSelected(false);
             if (exitCode == 0) {

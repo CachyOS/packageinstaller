@@ -1,3 +1,9 @@
+mx-packageinstaller (15.11mx15) mx; urgency=medium
+
+  * set output box read-only
+
+ -- Adrian <adrian@mxlinux.org>  Tue, 10 Nov 2015 09:35:57 -0500
+
 mx-packageinstaller (15.10.9mx15) mx; urgency=medium
 
   * fixed multiple installation bug 
