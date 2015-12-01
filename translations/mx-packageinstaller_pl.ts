@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="pl" version="2.0">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="pl">
 <context>
     <name>QApplication</name>
     <message>
@@ -110,7 +112,7 @@
         <location filename="../mxpackageinstaller.cpp" line="176"/>
         <location filename="../mxpackageinstaller.cpp" line="541"/>
         <source>Show details</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="197"/>
@@ -224,7 +226,7 @@
     <message>
         <location filename="../mxpackageinstaller.cpp" line="537"/>
         <source>Hide details</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

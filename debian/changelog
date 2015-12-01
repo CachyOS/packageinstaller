@@ -1,3 +1,9 @@
+mx-packageinstaller (15.12mx15) mx; urgency=medium
+
+  * new translations
+
+ -- Adrian <adrian@mxlinux.org>  Tue, 01 Dec 2015 08:46:51 -0500
+
 mx-packageinstaller (15.11mx15) mx; urgency=medium
 
   * set output box read-only
