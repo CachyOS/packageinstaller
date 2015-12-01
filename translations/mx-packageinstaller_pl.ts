@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="pl">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="pl" version="2.0">
 <context>
     <name>QApplication</name>
     <message>
@@ -112,7 +110,7 @@
         <location filename="../mxpackageinstaller.cpp" line="176"/>
         <location filename="../mxpackageinstaller.cpp" line="541"/>
         <source>Show details</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="197"/>
@@ -160,7 +158,7 @@
     <message>
         <location filename="../mxpackageinstaller.cpp" line="215"/>
         <source>Running apt-get update... </source>
-        <translation type="unfinished"></translation>
+        <translation>Uruchomienie apt-get update...</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="233"/>
@@ -226,7 +224,7 @@
     <message>
         <location filename="../mxpackageinstaller.cpp" line="537"/>
         <source>Hide details</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
     </message>
 </context>
 </TS>
