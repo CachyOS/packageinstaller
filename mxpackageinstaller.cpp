@@ -510,6 +510,7 @@ void mxpackageinstaller::on_buttonInstall_clicked() {
 // About button clicked
 void mxpackageinstaller::on_buttonAbout_clicked()
 {
+    this->hide();
     QMessageBox msgBox(QMessageBox::NoIcon,
                        tr("About MX Package Installer"), "<p align=\"center\"><b><h2>" +
                        tr("MX Package Installer") + "</h2></b></p><p align=\"center\">" + tr("Version: ") +
@@ -520,13 +521,16 @@ void mxpackageinstaller::on_buttonAbout_clicked()
     msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
     if (msgBox.exec() == QMessageBox::AcceptRole)
         system("mx-viewer file:///usr/share/doc/mx-packageinstaller/license.html '" + tr("MX Package Installer").toUtf8() + " " + tr("License").toUtf8() + "'");
+    this->show();
 }
 
 
 // Help button clicked
 void mxpackageinstaller::on_buttonHelp_clicked()
 {
+    this->hide();
     system("mx-viewer http://mepiscommunity.org/wiki/help-files/help-mx-package-installer '" + tr("MX Package Installer").toUtf8() + " " + tr("Help").toUtf8() + "'");
+    this->show();
 }
 
 

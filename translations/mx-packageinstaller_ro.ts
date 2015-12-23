@@ -13,9 +13,9 @@
     <name>mxpackageinstaller</name>
     <message>
         <location filename="../mxpackageinstaller.ui" line="14"/>
-        <location filename="../mxpackageinstaller.cpp" line="515"/>
-        <location filename="../mxpackageinstaller.cpp" line="522"/>
-        <location filename="../mxpackageinstaller.cpp" line="529"/>
+        <location filename="../mxpackageinstaller.cpp" line="516"/>
+        <location filename="../mxpackageinstaller.cpp" line="523"/>
+        <location filename="../mxpackageinstaller.cpp" line="532"/>
         <source>MX Package Installer</source>
         <translation>MX Instalator Programe</translation>
     </message>
@@ -26,7 +26,7 @@
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="49"/>
-        <location filename="../mxpackageinstaller.cpp" line="529"/>
+        <location filename="../mxpackageinstaller.cpp" line="532"/>
         <source>Help</source>
         <translation>Ajutor</translation>
     </message>
@@ -54,7 +54,7 @@
     <message>
         <location filename="../mxpackageinstaller.ui" line="111"/>
         <location filename="../mxpackageinstaller.cpp" line="443"/>
-        <location filename="../mxpackageinstaller.cpp" line="520"/>
+        <location filename="../mxpackageinstaller.cpp" line="521"/>
         <source>Cancel</source>
         <translation>Anulează</translation>
     </message>
@@ -110,7 +110,7 @@
     <message>
         <location filename="../mxpackageinstaller.ui" line="273"/>
         <location filename="../mxpackageinstaller.cpp" line="176"/>
-        <location filename="../mxpackageinstaller.cpp" line="543"/>
+        <location filename="../mxpackageinstaller.cpp" line="547"/>
         <source>Show details</source>
         <translation>Arată detalii</translation>
     </message>
@@ -198,33 +198,33 @@
         <translation>Programe de instalat:</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="514"/>
+        <location filename="../mxpackageinstaller.cpp" line="515"/>
         <source>About MX Package Installer</source>
         <translation>Info despre MX Instalator Programe</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="515"/>
+        <location filename="../mxpackageinstaller.cpp" line="516"/>
         <source>Version: </source>
         <translation>Versiune:</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="517"/>
+        <location filename="../mxpackageinstaller.cpp" line="518"/>
         <source>Simple package installer for additional packages for antiX MX</source>
         <translation>Instalator de programe adiționale pentru antiX MX.</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="518"/>
+        <location filename="../mxpackageinstaller.cpp" line="519"/>
         <source>Copyright (c) antiX</source>
         <translation>Copyright (c) antiX</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="519"/>
-        <location filename="../mxpackageinstaller.cpp" line="522"/>
+        <location filename="../mxpackageinstaller.cpp" line="520"/>
+        <location filename="../mxpackageinstaller.cpp" line="523"/>
         <source>License</source>
         <translation>Licență</translation>
     </message>
     <message>
-        <location filename="../mxpackageinstaller.cpp" line="539"/>
+        <location filename="../mxpackageinstaller.cpp" line="543"/>
         <source>Hide details</source>
         <translation>Ascunde detalii</translation>
     </message>

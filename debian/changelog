@@ -1,3 +1,9 @@
+mx-packageinstaller (15.12.2mx15) mx; urgency=medium
+
+  * hide GUI when displaying help/license
+
+ -- Adrian <adrian@mxlinux.org>  Tue, 22 Dec 2015 21:59:02 -0500
+
 mx-packageinstaller (15.12.1mx15) mx; urgency=medium
 
   * better filtering for installed packages
