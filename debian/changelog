@@ -1,3 +1,9 @@
+mx-packageinstaller (16.5mx15) mx; urgency=medium
+
+  * new desktop file
+
+ -- dolphinoracle <dolphinoracle@gmail.com>  Mon, 23 May 2016 07:33:33 -0400
+
 mx-packageinstaller (15.12.2mx15) mx; urgency=medium
 
   * hide GUI when displaying help/license
