@@ -1,0 +1,28 @@
+Format: 1.8
+Date: Mon, 23 May 2016 07:33:33 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 16.5mx15
+Distribution: mx
+Urgency: medium
+Maintainer: Steven Pusser (Stevo) <maintainer@mepiscommunity.org>
+Changed-By: dolphinoracle <dolphinoracle@gmail.com>
+Description:
+ mx-packageinstaller - MX program for installing additional packages.
+Changes:
+ mx-packageinstaller (16.5mx15) mx; urgency=medium
+ .
+   * new desktop file
+Checksums-Sha1:
+ 4f4df866996611f5073c7a5f244d19ca8eff7115 716 mx-packageinstaller_16.5mx15.dsc
+ 10ff7e963a7939076c43a2d16ba32c7546d74dfd 372844 mx-packageinstaller_16.5mx15.tar.xz
+ 0098178566231e703a0657c7986f3b907cae470b 63212 mx-packageinstaller_16.5mx15_amd64.deb
+Checksums-Sha256:
+ dafdb263eca5e5bcfb4b6a34e62d3da34f81ec6db20d12e92a4f0fb8b590c777 716 mx-packageinstaller_16.5mx15.dsc
+ e0f9c372554d3d59223b54f98ad165efa4bf13776a878e5cbae97123e1285cf6 372844 mx-packageinstaller_16.5mx15.tar.xz
+ f99659ba315fbc772e3e7071a0bb8be066ba681c00f4bb865867da06259a023b 63212 mx-packageinstaller_16.5mx15_amd64.deb
+Files:
+ 451162ec00a2ef4dc931df5bd9668bdc 716 admin optional mx-packageinstaller_16.5mx15.dsc
+ 73d8b8e0f76e67997c95ce46599bcf74 372844 admin optional mx-packageinstaller_16.5mx15.tar.xz
+ aa7e738125d627f4ea6098a05b977ddc 63212 admin optional mx-packageinstaller_16.5mx15_amd64.deb

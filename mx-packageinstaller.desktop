@@ -26,5 +26,5 @@ Comment[sv]=Enkel Paket-installerare
 Exec=su-to-root -X -c mx-packageinstaller
 Icon=mx-packageinstaller
 NoDisplay=false
-Categories=System;
+Categories=System;MX-Software;
 Type=Application
