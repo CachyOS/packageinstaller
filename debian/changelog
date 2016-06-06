@@ -1,3 +1,9 @@
+mx-packageinstaller (16.6mx15) mx; urgency=medium
+
+  * minor change
+
+ -- Adrian <adrian@mxlinux.org>  Mon, 06 Jun 2016 18:07:44 -0400
+
 mx-packageinstaller (16.5mx15) mx; urgency=medium
 
   * new desktop file

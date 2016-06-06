@@ -1,0 +1,37 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Mon, 06 Jun 2016 18:07:44 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: i386
+Version: 16.6mx15
+Distribution: mx
+Urgency: medium
+Maintainer: Steven Pusser (Stevo) <maintainer@mepiscommunity.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX program for installing additional packages.
+Changes:
+ mx-packageinstaller (16.6mx15) mx; urgency=medium
+ .
+   * minor change
+Checksums-Sha1:
+ c0d531d8ea76478364c78871fcff908f1a4d7a8a 64026 mx-packageinstaller_16.6mx15_i386.deb
+Checksums-Sha256:
+ feadf2fecbe6cfe3a3cf06d506cb36cf8f25d31577d3dcd9a3bc8381880d91e8 64026 mx-packageinstaller_16.6mx15_i386.deb
+Files:
+ 4ab3ae2e958669514fe0348f6d5b5941 64026 admin optional mx-packageinstaller_16.6mx15_i386.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQEcBAEBAgAGBQJXVfWFAAoJEHCTjHgGee6Y3moH/2qWZqdpGf4kogxPmoMB6uOx
+SLJ1we9EH2+Gqyd0jjS8tU5biAy208R1YXRokPoqQQxBQWnA2tzwuSfBbAldIFeF
+/gvR3xSWFonNPDOjpWZrMRTu4iX+uWMESJLHsb4IsLGXfpT/EYWHiYLP5kwj6Ysr
+nS/hYImXfqFRbLe7E/mTW7PPcx6vy7o/xYaqXBqzfJi1YCxk0u5/6FGJjmplhWHc
+LOKEXQeQPdEgHvRd/+e/f45i2rbWglpoXDfNTOCfvSQCAkte9eIErfBX3vCzVjJh
+HNfwcIJUUwuuEEnVSQKiE5U3Uo5j6HPqxf49kcvXdylFL4NZy9eT+kYkomHF81E=
+=cKel
+-----END PGP SIGNATURE-----

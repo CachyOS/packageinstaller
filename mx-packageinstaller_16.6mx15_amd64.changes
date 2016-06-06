@@ -1,0 +1,43 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Mon, 06 Jun 2016 18:07:44 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 16.6mx15
+Distribution: mx
+Urgency: medium
+Maintainer: Steven Pusser (Stevo) <maintainer@mepiscommunity.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX program for installing additional packages.
+Changes:
+ mx-packageinstaller (16.6mx15) mx; urgency=medium
+ .
+   * minor change
+Checksums-Sha1:
+ 7ee10db174d6f1df641d397b9dcc2ec2ee48b120 1237 mx-packageinstaller_16.6mx15.dsc
+ 51e0af062c4122c4d7e101c280cc1205ef156948 422120 mx-packageinstaller_16.6mx15.tar.xz
+ 7a810f7cc8173f44300005b9d0e146edb2276cfe 63348 mx-packageinstaller_16.6mx15_amd64.deb
+Checksums-Sha256:
+ 4e98c7d64fb9fa8d8d3282dd5a45543e15fc3dbb0030db238e21298374431ccc 1237 mx-packageinstaller_16.6mx15.dsc
+ e420f4272cd1f772954cd508c8e6e980c19673772ed9f94fe24d76f244a91e71 422120 mx-packageinstaller_16.6mx15.tar.xz
+ 5922d07b65c15efa5f663e9d03cc47573059b5a92a452355457579a03ce0c514 63348 mx-packageinstaller_16.6mx15_amd64.deb
+Files:
+ 53a84154fcb044572a1a7aaa30ed5698 1237 admin optional mx-packageinstaller_16.6mx15.dsc
+ bdf5831eb4650964496ddd816610fa2f 422120 admin optional mx-packageinstaller_16.6mx15.tar.xz
+ 355b47c00f9ff00cfd7a88fd1929983c 63348 admin optional mx-packageinstaller_16.6mx15_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQEcBAEBAgAGBQJXVfRbAAoJEHCTjHgGee6Y2QEIAIyr7hvTyPjftoJNz8/SnG7H
+c8kIvIVdGiUylqfNL128LIlpsngJlKuutVIh5Sel9DEENLCTBS4i3lmWLt/G3Xli
+dBM3i6Th1q8lrZFbtCv3VHKo1mIdXkaKMjtVKNBseVbsAGcPZQHogKDWSn6Uh+cV
+s9KbvxlV5yuSkWNyKtcQexU3Zjfh1HHX7gWAgcYOs2dn/oingD1qpBbn/JCrGgQ9
+JZhTgPtkK8Ms4BwtCPmgy1C55FJ7GzYmCPaJ6B1I+jf4Enml8QPh2XEerknb2n+0
+bJHZfCUb4l/AaxHyQOzy1TrQOaYJGdKSw9AZiY8mSix5UR3PRAvMqBZ5nzZ4p28=
+=pris
+-----END PGP SIGNATURE-----
