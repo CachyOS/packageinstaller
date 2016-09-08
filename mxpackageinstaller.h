@@ -65,10 +65,12 @@ public:
     int heightOutput;
 
 public slots:
+    void closeSearch();
+    void findPackage();
     void procStart();
     void procTime();
     void update();
-    void updateDone(int);   
+    void updateDone(int);
     void preProcDone(int exitCode);
     void aptgetDone(int exitCode);
     void postProcDone(int exitCode);

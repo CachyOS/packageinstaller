@@ -1,3 +1,9 @@
+mx-packageinstaller (16.9mx15) mx; urgency=medium
+
+  * added search box
+
+ -- Adrian <adrian@mxlinux.org>  Thu, 08 Sep 2016 16:51:25 -0400
+
 mx-packageinstaller (16.6mx15) mx; urgency=medium
 
   * minor change

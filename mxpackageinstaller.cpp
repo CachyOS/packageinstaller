@@ -31,7 +31,7 @@
 #include <QFormLayout>
 #include <QKeyEvent>
 
-//#include <QDebug>
+#include <QDebug>
 
 mxpackageinstaller::mxpackageinstaller(QWidget *parent) :
     QDialog(parent),
@@ -69,6 +69,8 @@ void mxpackageinstaller::setup() {
     heightOutput = ui->outputBox->height();
     ui->outputBox->setFixedHeight(0);
     ui->outputBox->setReadOnly(true);
+    connect(ui->searchBox,SIGNAL(textChanged(QString)),this, SLOT(findPackage()));
+    ui->searchBox->setFocus();
 }
 
 // Util function
@@ -408,6 +410,10 @@ void mxpackageinstaller::setConnections(QTimer* timer, QProcess* proc) {
 
 // process keystrokes
 void mxpackageinstaller::keyPressEvent(QKeyEvent *event) {
+    if (event->matches(QKeySequence::Find))
+        ui->searchBox->setFocus();
+    if (event->key() == Qt::Key_Escape)
+        closeSearch();
     if (event->type() == QEvent::KeyPress) {
         if(event->matches(QKeySequence::Copy)) {
             proc->terminate();
@@ -546,4 +552,33 @@ void mxpackageinstaller::on_buttonDetails_clicked()
         this->setFixedHeight(170);
         ui->buttonDetails->setText(tr("Show details"));
     }
+}
+
+// find packages
+void mxpackageinstaller::findPackage()
+{
+    QString word = ui->searchBox->text();
+    if (word == "") {
+        ui->treeWidget->reset();
+        return;
+    }
+    QList<QTreeWidgetItem *> found_items = ui->treeWidget->findItems(word, Qt::MatchContains|Qt::MatchRecursive, 2);
+    QTreeWidgetItemIterator it(ui->treeWidget);
+    while (*it) {
+        if ((*it)->childCount() == 0) { // if child
+            if (found_items.contains(*it)) {
+                (*it)->parent()->setExpanded(true);
+                (*it)->setHidden(false);
+            } else {
+                (*it)->setHidden(true);
+            }
+        }
+        ++it;
+    }
+}
+
+void mxpackageinstaller::closeSearch()
+{
+    ui->searchBox->clear();
+    ui->treeWidget->reset();
 }
