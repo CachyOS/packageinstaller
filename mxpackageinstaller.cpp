@@ -50,6 +50,7 @@ mxpackageinstaller::~mxpackageinstaller()
 void mxpackageinstaller::setup() {
     proc = new QProcess(this);
     timer = new QTimer(this);
+    lock_file = new LockFile("/var/lib/dpkg/lock");
     proc->setReadChannel(QProcess::StandardOutput);
     proc->setReadChannelMode(QProcess::MergedChannels);
     ui->stackedWidget->setCurrentIndex(0);
@@ -224,6 +225,7 @@ void mxpackageinstaller::update() {
     QEventLoop loop;
     connect(proc, SIGNAL(finished(int)), &loop, SLOT(quit()));
     QString cmd = "apt-get update";
+    lock_file->unlock();
     proc->start(cmd);
     ui->outputBox->insertPlainText("# " + cmd + "\n");
     loop.exec();
@@ -241,6 +243,7 @@ void mxpackageinstaller::preProc(QString preprocess) {
     connect(proc, SIGNAL(finished(int)), this, SLOT(preProcDone(int)));
     QEventLoop loop;
     connect(proc, SIGNAL(finished(int)), &loop, SLOT(quit()));
+    lock_file->unlock();
     proc->start("/bin/bash", QStringList() << "-c" << preprocess);
     loop.exec();
 }
@@ -261,6 +264,7 @@ void mxpackageinstaller::aptget(QString package) {
     ui->outputBox->insertPlainText("# " + cmd + "\n");
     QEventLoop loop;
     connect(proc, SIGNAL(finished(int)), &loop, SLOT(quit()));
+    lock_file->unlock();
     proc->start("/bin/bash", QStringList() << "-c" << cmd);
     loop.exec();
 }
@@ -274,6 +278,7 @@ void mxpackageinstaller::postProc(QString postprocess) {
     connect(proc, SIGNAL(finished(int)), SLOT(postProcDone(int)));
     QEventLoop loop;
     connect(proc, SIGNAL(finished(int)), &loop, SLOT(quit()));
+    lock_file->unlock();
     proc->start("/bin/bash", QStringList() << "-c" << postprocess);
     loop.exec();
 }
@@ -324,12 +329,14 @@ void mxpackageinstaller::procTime() {
 void mxpackageinstaller::updateDone(int) {
     timer->stop();
     ui->progressBar->setValue(100);
+    lock_file->lock();
 }
 
 
-void mxpackageinstaller::preProcDone(int exitCode) {
+void mxpackageinstaller::preProcDone(int exitCode) {    
     timer->stop();
     ui->progressBar->setValue(100);
+    lock_file->lock();
     QString package = "";
     QTreeWidgetItemIterator it(ui->treeWidget);
     while (*it) {
@@ -355,6 +362,7 @@ void mxpackageinstaller::preProcDone(int exitCode) {
 void mxpackageinstaller::aptgetDone(int exitCode) {
     timer->stop();
     ui->progressBar->setValue(100);
+    lock_file->lock();
     QString package;
     QString postprocess = "";
     QTreeWidgetItemIterator it(ui->treeWidget);
@@ -381,6 +389,7 @@ void mxpackageinstaller::aptgetDone(int exitCode) {
 void mxpackageinstaller::postProcDone(int exitCode) {
     timer->stop();
     ui->progressBar->setValue(100);
+    lock_file->lock();
     QTreeWidgetItemIterator it(ui->treeWidget);
     while (*it) {
         if ((*it)->isSelected()) {

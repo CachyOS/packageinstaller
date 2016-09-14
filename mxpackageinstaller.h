@@ -26,6 +26,8 @@
 #ifndef MXPACKAGEINSTALLER_H
 #define MXPACKAGEINSTALLER_H
 
+#include <lockfile.h>
+
 #include <QMessageBox>
 #include <QProcess>
 #include <QTimer>
@@ -90,6 +92,7 @@ private slots:
     void on_buttonDetails_clicked();
 
 private:
+    LockFile *lock_file;
     Ui::mxpackageinstaller *ui;
     QStringList installedPackages;
 

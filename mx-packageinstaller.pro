@@ -38,9 +38,11 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mxpackageinstaller.cpp
+        mxpackageinstaller.cpp \
+    lockfile.cpp
 
-HEADERS  += mxpackageinstaller.h
+HEADERS  += mxpackageinstaller.h \
+    lockfile.h
 
 FORMS    += mxpackageinstaller.ui
 
