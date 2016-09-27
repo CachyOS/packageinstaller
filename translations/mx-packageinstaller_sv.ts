@@ -1,17 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="sv">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="sv" version="2.1">
 <context>
     <name>QApplication</name>
     <message>
         <location filename="../main.cpp" line="51"/>
         <source>Unable to get exclusive lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Kan inte utföra exklusiv låsning</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="52"/>
         <source>Another package management application (like Synaptic or apt-get), is already running. Please close that application first</source>
-        <translation type="unfinished"></translation>
+        <translation>En annan pakethanterare (som Synaptic eller apt-get), körs redan. Var vänlig stäng det programmet först</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="69"/>
@@ -91,7 +89,17 @@
     <message>
         <location filename="../mxpackageinstaller.ui" line="183"/>
         <source>search</source>
-        <translation type="unfinished"></translation>
+        <translation>sök</translation>
+    </message>
+    <message>
+        <location filename="../mxpackageinstaller.ui" line="193"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Install additional packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;To use this feature, make sure you are connected to the internet.&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Installera ytterligare paket&lt;/span&gt;&lt;/p&gt;&lt;p&gt;För att göra detta, kontrollera att du är ansluten till internet.&lt;/p&gt;&lt;p&gt;Gråfärgade saker har redan installerats..&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../mxpackageinstaller.ui" line="200"/>
+        <source>Use option --yes for apt-get install</source>
+        <translation>Använd alternativet --yes för apt-get install</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="245"/>
@@ -111,16 +119,6 @@
         <location filename="../mxpackageinstaller.cpp" line="60"/>
         <source>Description</source>
         <translation>Beskrivning</translation>
-    </message>
-    <message>
-        <location filename="../mxpackageinstaller.ui" line="193"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Install additional packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;To use this feature, make sure you are connected to the internet.&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Installera ytterligare paket&lt;/span&gt;&lt;/p&gt;&lt;p&gt;För att göra detta, kontrollera att du är ansluten till internet.&lt;/p&gt;&lt;p&gt;Gråfärgade saker har redan installerats..&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <location filename="../mxpackageinstaller.ui" line="200"/>
-        <source>Use option --yes for apt-get install</source>
-        <translation>Använd alternativet --yes för apt-get install</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="296"/>

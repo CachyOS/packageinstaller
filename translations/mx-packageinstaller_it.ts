@@ -1,17 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="it">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="it" version="2.1">
 <context>
     <name>QApplication</name>
     <message>
         <location filename="../main.cpp" line="51"/>
         <source>Unable to get exclusive lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Non si riesce ad ottenere un blocco esclusivo</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="52"/>
         <source>Another package management application (like Synaptic or apt-get), is already running. Please close that application first</source>
-        <translation type="unfinished"></translation>
+        <translation>Un altro gestore di pacchetti (come Synaptic o apt-get) è già in funzione.
+Prego, chiudi prima quell&apos;applicazione.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="69"/>
@@ -91,7 +90,17 @@
     <message>
         <location filename="../mxpackageinstaller.ui" line="183"/>
         <source>search</source>
-        <translation type="unfinished"></translation>
+        <translation>cerca</translation>
+    </message>
+    <message>
+        <location filename="../mxpackageinstaller.ui" line="193"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Install additional packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;To use this feature, make sure you are connected to the internet.&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Installa pacchetti di software supplementare&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Per poter usare questa funzione, assicurati di essere connesso ad internet.&lt;/p&gt;&lt;p&gt;Gli elementi colorati in grigio indicano che sono già stati installati.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../mxpackageinstaller.ui" line="200"/>
+        <source>Use option --yes for apt-get install</source>
+        <translation>Usare, in apt-get install, l&apos;opzione --yes </translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="245"/>
@@ -111,16 +120,6 @@
         <location filename="../mxpackageinstaller.cpp" line="60"/>
         <source>Description</source>
         <translation>Descrizione</translation>
-    </message>
-    <message>
-        <location filename="../mxpackageinstaller.ui" line="193"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Install additional packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;To use this feature, make sure you are connected to the internet.&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Installa pacchetti di software supplementare&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Per poter usare questa funzione, assicurati di essere connesso ad internet.&lt;/p&gt;&lt;p&gt;Gli elementi colorati in grigio indicano che sono già stati installati.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <location filename="../mxpackageinstaller.ui" line="200"/>
-        <source>Use option --yes for apt-get install</source>
-        <translation>Usare, in apt-get install, l&apos;opzione --yes </translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="296"/>
@@ -185,7 +184,7 @@
     <message>
         <location filename="../mxpackageinstaller.cpp" line="254"/>
         <source>Installing: </source>
-        <translation>Installando:</translation>
+        <translation>Installazione:</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="274"/>

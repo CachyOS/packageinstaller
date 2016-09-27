@@ -1,17 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ru">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ru" version="2.1">
 <context>
     <name>QApplication</name>
     <message>
         <location filename="../main.cpp" line="51"/>
         <source>Unable to get exclusive lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось получить свою блокировку</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="52"/>
         <source>Another package management application (like Synaptic or apt-get), is already running. Please close that application first</source>
-        <translation type="unfinished"></translation>
+        <translation>Другое приложение управления пакетами (например, Synaptic или apt-get), уже работает. Пожалуйста, закройте сначала это приложение</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="69"/>
@@ -91,7 +89,17 @@
     <message>
         <location filename="../mxpackageinstaller.ui" line="183"/>
         <source>search</source>
-        <translation type="unfinished"></translation>
+        <translation>поиск</translation>
+    </message>
+    <message>
+        <location filename="../mxpackageinstaller.ui" line="193"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Install additional packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;To use this feature, make sure you are connected to the internet.&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Установить дополнительные пакеты&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Чтобы использовать эту функцию, убедитесь, что вы подключены к Интернету.&lt;/p&gt;&lt;p&gt;Элементы, отмеченные серым, уже установлены.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../mxpackageinstaller.ui" line="200"/>
+        <source>Use option --yes for apt-get install</source>
+        <translation>Использовать опцию --yes for apt-get install</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="245"/>
@@ -111,16 +119,6 @@
         <location filename="../mxpackageinstaller.cpp" line="60"/>
         <source>Description</source>
         <translation>Описание</translation>
-    </message>
-    <message>
-        <location filename="../mxpackageinstaller.ui" line="193"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Install additional packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;To use this feature, make sure you are connected to the internet.&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Установить дополнительные пакеты&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Чтобы использовать эту функцию, убедитесь, что вы подключены к Интернету.&lt;/p&gt;&lt;p&gt;Элементы, отмеченные серым, уже установлены.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <location filename="../mxpackageinstaller.ui" line="200"/>
-        <source>Use option --yes for apt-get install</source>
-        <translation>Использовать опцию --yes for apt-get install</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="296"/>

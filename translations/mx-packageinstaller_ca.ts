@@ -1,17 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ca">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ca" version="2.1">
 <context>
     <name>QApplication</name>
     <message>
         <location filename="../main.cpp" line="51"/>
         <source>Unable to get exclusive lock</source>
-        <translation type="unfinished"></translation>
+        <translation>No es pot bloquejar en exclusiva</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="52"/>
         <source>Another package management application (like Synaptic or apt-get), is already running. Please close that application first</source>
-        <translation type="unfinished"></translation>
+        <translation>Hi ha un altre gestor de paquets (com Synaptic o apt-get) funcionant alhora. Si us plau, tanqueu primer aquesta aplicació.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="69"/>
@@ -91,7 +89,17 @@
     <message>
         <location filename="../mxpackageinstaller.ui" line="183"/>
         <source>search</source>
-        <translation type="unfinished"></translation>
+        <translation>cerca</translation>
+    </message>
+    <message>
+        <location filename="../mxpackageinstaller.ui" line="193"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Install additional packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;To use this feature, make sure you are connected to the internet.&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Instal·la paquets addicionals&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Per usar aquesta característica, assegureu-vos d&apos;estar connectats a internet.&lt;/p&gt;&lt;p&gt;Els ítems de color gris ja han estat instal·lats.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../mxpackageinstaller.ui" line="200"/>
+        <source>Use option --yes for apt-get install</source>
+        <translation>Usat l&apos;opció --yes per apt-get install</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="245"/>
@@ -111,16 +119,6 @@
         <location filename="../mxpackageinstaller.cpp" line="60"/>
         <source>Description</source>
         <translation>Descripció</translation>
-    </message>
-    <message>
-        <location filename="../mxpackageinstaller.ui" line="193"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Install additional packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;To use this feature, make sure you are connected to the internet.&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Instal·la paquets addicionals&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Per usar aquesta característica, assegureu-vos d&apos;estar connectats a internet.&lt;/p&gt;&lt;p&gt;Els ítems de color gris ja han estat instal·lats.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <location filename="../mxpackageinstaller.ui" line="200"/>
-        <source>Use option --yes for apt-get install</source>
-        <translation>Usat l&apos;opció --yes per apt-get install</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="296"/>

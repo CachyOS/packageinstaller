@@ -1,17 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="ro">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="ro" version="2.1">
 <context>
     <name>QApplication</name>
     <message>
         <location filename="../main.cpp" line="51"/>
         <source>Unable to get exclusive lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Nu se poate obține blocare exclusivă</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="52"/>
         <source>Another package management application (like Synaptic or apt-get), is already running. Please close that application first</source>
-        <translation type="unfinished"></translation>
+        <translation>O altă aplicație de gestionare a pachetelor (cum ar fi Synaptic sau apt-get), se execută deja. Vă rugăm să închideți mai întâi această aplicație</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="69"/>
@@ -91,7 +89,17 @@
     <message>
         <location filename="../mxpackageinstaller.ui" line="183"/>
         <source>search</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished"/>
+    </message>
+    <message>
+        <location filename="../mxpackageinstaller.ui" line="193"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Install additional packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;To use this feature, make sure you are connected to the internet.&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Instalare programe adiționale&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Trebuie să fiți conectat la internet pentru a folosi acest program.&lt;/p&gt;&lt;p&gt;Articolele gri sunt deja instalate.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="../mxpackageinstaller.ui" line="200"/>
+        <source>Use option --yes for apt-get install</source>
+        <translation>Folosește opțiunea --yes pentru apt-get intall</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="245"/>
@@ -111,16 +119,6 @@
         <location filename="../mxpackageinstaller.cpp" line="60"/>
         <source>Description</source>
         <translation>Descriere</translation>
-    </message>
-    <message>
-        <location filename="../mxpackageinstaller.ui" line="193"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Install additional packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;To use this feature, make sure you are connected to the internet.&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Instalare programe adiționale&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Trebuie să fiți conectat la internet pentru a folosi acest program.&lt;/p&gt;&lt;p&gt;Articolele gri sunt deja instalate.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <location filename="../mxpackageinstaller.ui" line="200"/>
-        <source>Use option --yes for apt-get install</source>
-        <translation>Folosește opțiunea --yes pentru apt-get intall</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="296"/>
