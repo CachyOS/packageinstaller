@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="it" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="it">
 <context>
     <name>QApplication</name>
     <message>
@@ -223,13 +225,13 @@ Prego, chiudi prima quell&apos;applicazione.</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="533"/>
-        <source>Simple package installer for additional packages for antiX MX</source>
-        <translation>Installatore di gruppi di pacchetti, detti metapacchetti, di software aggiuntivo per antiX MX</translation>
+        <source>Simple package installer for additional packages for MX Linux</source>
+        <translation>Installatore di gruppi di pacchetti, detti metapacchetti, di software aggiuntivo per MX Linux</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="534"/>
-        <source>Copyright (c) antiX</source>
-        <translation>Copyright (c) antiX</translation>
+        <source>Copyright (c) MX Linux</source>
+        <translation>Copyright (c) MX Linux</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="535"/>

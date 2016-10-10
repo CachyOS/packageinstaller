@@ -222,13 +222,13 @@
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="533"/>
-        <source>Simple package installer for additional packages for antiX MX</source>
-        <translation>Simple package installer for additional packages for antiX MX</translation>
+        <source>Simple package installer for additional packages for MX Linux</source>
+        <translation>Simple package installer for additional packages for MX Linux</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="534"/>
-        <source>Copyright (c) antiX</source>
-        <translation>Copyright (c) antiX</translation>
+        <source>Copyright (c) MX Linux</source>
+        <translation>Copyright (c) MX Linux</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="535"/>

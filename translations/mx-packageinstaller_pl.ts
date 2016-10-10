@@ -1,15 +1,17 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="pl" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="pl">
 <context>
     <name>QApplication</name>
     <message>
         <location filename="../main.cpp" line="51"/>
         <source>Unable to get exclusive lock</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../main.cpp" line="52"/>
         <source>Another package management application (like Synaptic or apt-get), is already running. Please close that application first</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../main.cpp" line="69"/>
@@ -89,7 +91,7 @@
     <message>
         <location filename="../mxpackageinstaller.ui" line="183"/>
         <source>search</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="193"/>
@@ -125,7 +127,7 @@
         <location filename="../mxpackageinstaller.cpp" line="179"/>
         <location filename="../mxpackageinstaller.cpp" line="562"/>
         <source>Show details</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="200"/>
@@ -222,13 +224,13 @@
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="533"/>
-        <source>Simple package installer for additional packages for antiX MX</source>
-        <translation>Prosty instalator pakietów dla dodatkowych paczek dystrybucji antiX MX</translation>
+        <source>Simple package installer for additional packages for MX Linux</source>
+        <translation>Prosty instalator pakietów dla dodatkowych paczek dystrybucji MX Linux</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="534"/>
-        <source>Copyright (c) antiX</source>
-        <translation>Copyright (c) antiX </translation>
+        <source>Copyright (c) MX Linux</source>
+        <translation>Copyright (c) MX Linux </translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="535"/>
@@ -239,7 +241,7 @@
     <message>
         <location filename="../mxpackageinstaller.cpp" line="558"/>
         <source>Hide details</source>
-        <translation type="unfinished"/>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

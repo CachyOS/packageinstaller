@@ -1,0 +1,43 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Mon, 10 Oct 2016 13:46:58 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 16.10mx16
+Distribution: mx
+Urgency: medium
+Maintainer: Steven Pusser (Stevo) <maintainer@mepiscommunity.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX program for installing additional packages.
+Changes:
+ mx-packageinstaller (16.10mx16) mx; urgency=medium
+ .
+   * changed URLs
+Checksums-Sha1:
+ 9043a76998ef601bd6e4ec5263f90958f2f73f6e 1238 mx-packageinstaller_16.10mx16.dsc
+ 8d284a88a9ab707f26b3b5ec499de4c74b547a8d 49812 mx-packageinstaller_16.10mx16.tar.xz
+ 4cf13a0b28be0833ee691ca5e54a776b2ea716f9 66078 mx-packageinstaller_16.10mx16_amd64.deb
+Checksums-Sha256:
+ a5bc1b681e760329880b42da9f4119b687819f9c52a28a3374f31d28365f9a17 1238 mx-packageinstaller_16.10mx16.dsc
+ e0ddde3b3c8a7b12dd5b04eb850998b1b8b54efb31f26b088e1a0cc371e6dea5 49812 mx-packageinstaller_16.10mx16.tar.xz
+ eccbe0f467f061d4028d961a9abed6506011c8fd7cbb8daf6a0feb4bfa8b7a5f 66078 mx-packageinstaller_16.10mx16_amd64.deb
+Files:
+ 0815dd6ce1a83560fb59ae57e28aceeb 1238 admin optional mx-packageinstaller_16.10mx16.dsc
+ d2a63aefeebaf68860a2056cd0b63467 49812 admin optional mx-packageinstaller_16.10mx16.tar.xz
+ 3baf997037219a5b0102488433266012 66078 admin optional mx-packageinstaller_16.10mx16_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQEcBAEBAgAGBQJX+9V1AAoJEHCTjHgGee6YoZMIAIuNagAeOKT2BOB6Aq/w5Bwq
+X4tXgOgTDsU5QedQPdzqpItIkik3CxEYhFykH2yMqrqxYi2MsOc1P+ERHTHEWsq7
+2mLaAw/rRTB3C3yeaD0xdmHXuJQGX+bvnadf9EeVsU/a9oZEpq/QplKtxvUqj3fZ
+6fQVtpFeovpNA6eEjoLVWY4OCJRZAWIgqclbbE4L1Qdi6Bl7YsW1OGPvruscHrAM
+tD5LWf+YWmMIfCFCdoTxZf+yk3qZZEZHMrkn3UR5xCphpq0cQ2/BYCw25HjzNARe
+dOJfDWbXnMjQKfuOe1K7/DV5lv8WgGjLeA4ESfyC8fp2+7xz97hlmSMY67ngFbE=
+=UXdJ
+-----END PGP SIGNATURE-----

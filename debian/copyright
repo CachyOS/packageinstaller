@@ -10,7 +10,7 @@ Files: ./mxpackageinstaller.cpp
 # licensecheck(1): ./mxpackageinstaller.cpp: LGPL (v3 or later)
 License:
   Authors: Adrian
- MEPIS Community <http://forum.mepiscommunity.org>
+ MX Linux <http://mxlinux.org>
  .
  This program is free software; you can redistribute it and/or modify it
  under the terms of the GNU Lesser General Public License as published by
@@ -27,7 +27,7 @@ License:
  Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
 
 #----------------------------------------------------------------------------
-Copyright: 51-2110 # * Copyright (C) MX Authors # * # * Authors: Adrian # *          MEPIS Community <http://forum.mepiscommunity.org> # * # * This program is free software; you can redistribute it and/or modify it # * under the terms of the GNU Lesser General Public License as published by # * the Free Software Foundation; either version 3 of the License, or # * (at your option) any later version. # * # * This program is distributed in the hope that it will be useful, # * but WITHOUT ANY WARRANTY; without even the implied warranty of # * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the # * GNU Lesser General Public License for more details. # * # * You should have received a copy of the GNU Lesser General Public License # * along with this program; if not, write to the Free Software Foundation, # * Inc., Franklin Street, Fifth Floor, Boston MA USA.
+Copyright: 51-2110 # * Copyright (C) MX Authors # * # * Authors: Adrian # *          MX Linux <http://mxlinux.org> # * # * This program is free software; you can redistribute it and/or modify it # * under the terms of the GNU Lesser General Public License as published by # * the Free Software Foundation; either version 3 of the License, or # * (at your option) any later version. # * # * This program is distributed in the hope that it will be useful, # * but WITHOUT ANY WARRANTY; without even the implied warranty of # * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the # * GNU Lesser General Public License for more details. # * # * You should have received a copy of the GNU Lesser General Public License # * along with this program; if not, write to the Free Software Foundation, # * Inc., Franklin Street, Fifth Floor, Boston MA USA.
 Files: ./mx-packageinstaller.pro
 # licensecheck(1): ./mx-packageinstaller.pro: LGPL (v3 or later)
 License: NO_LICENSE_TEXT_FOUND

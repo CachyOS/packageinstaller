@@ -4,7 +4,7 @@
  * Copyright (C) 2014 MX Authors
  *
  * Authors: Adrian
- *          MX & MEPIS Community <http://forum.mepiscommunity.org>
+ *          MX Linux <http://mxlinux.org>
  *
  * This file is part of MX Package Installer.
  *
@@ -530,8 +530,8 @@ void mxpackageinstaller::on_buttonAbout_clicked()
                        tr("About MX Package Installer"), "<p align=\"center\"><b><h2>" +
                        tr("MX Package Installer") + "</h2></b></p><p align=\"center\">" + tr("Version: ") +
                        getVersion("mx-packageinstaller") + "</p><p align=\"center\"><h3>" +
-                       tr("Simple package installer for additional packages for antiX MX") + "</h3></p><p align=\"center\"><a href=\"http://www.mepiscommunity.org/mx\">http://www.mepiscommunity.org/mx</a><br /></p><p align=\"center\">" +
-                       tr("Copyright (c) antiX") + "<br /><br /></p>", 0, this);
+                       tr("Simple package installer for additional packages for MX Linux") + "</h3></p><p align=\"center\"><a href=\"http://mxlinux.org\">http://mxlinux.org</a><br /></p><p align=\"center\">" +
+                       tr("Copyright (c) MX Linux") + "<br /><br /></p>", 0, this);
     msgBox.addButton(tr("License"), QMessageBox::AcceptRole);
     msgBox.addButton(tr("Cancel"), QMessageBox::RejectRole);
     if (msgBox.exec() == QMessageBox::AcceptRole)
@@ -544,7 +544,7 @@ void mxpackageinstaller::on_buttonAbout_clicked()
 void mxpackageinstaller::on_buttonHelp_clicked()
 {
     this->hide();
-    system("mx-viewer http://mepiscommunity.org/wiki/help-files/help-mx-package-installer '" + tr("MX Package Installer").toUtf8() + " " + tr("Help").toUtf8() + "'");
+    system("mx-viewer https://mxlinux.org/wiki/help-files/help-mx-package-installer '" + tr("MX Package Installer").toUtf8() + " " + tr("Help").toUtf8() + "'");
     this->show();
 }
 

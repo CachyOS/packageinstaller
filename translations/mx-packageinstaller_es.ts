@@ -1,4 +1,6 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="es" version="2.1">
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE TS>
+<TS version="2.1" language="es">
 <context>
     <name>QApplication</name>
     <message>
@@ -222,13 +224,13 @@
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="533"/>
-        <source>Simple package installer for additional packages for antiX MX</source>
-        <translation>Instalador de paquetes simple para antiX MX</translation>
+        <source>Simple package installer for additional packages for MX Linux</source>
+        <translation>Instalador de paquetes simple para MX Linux</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="534"/>
-        <source>Copyright (c) antiX</source>
-        <translation>Derechos de Autor (c) antiX</translation>
+        <source>Copyright (c) MX Linux</source>
+        <translation>Derechos de Autor (c) MX Linux</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="535"/>

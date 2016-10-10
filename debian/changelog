@@ -1,3 +1,9 @@
+mx-packageinstaller (16.10mx16) mx; urgency=medium
+
+  * changed URLs
+
+ -- Adrian <adrian@mxlinux.org>  Mon, 10 Oct 2016 13:46:58 -0400
+
 mx-packageinstaller (16.9mx15+2) mx; urgency=medium
 
   * added dpkg lock
