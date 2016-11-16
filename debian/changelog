@@ -1,3 +1,9 @@
+mx-packageinstaller (16.11mx16) mx; urgency=medium
+
+  * new translations
+
+ -- Adrian <adrian@mxlinux.org>  Wed, 16 Nov 2016 13:20:06 -0500
+
 mx-packageinstaller (16.10mx16) mx; urgency=medium
 
   * changed URLs
