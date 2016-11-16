@@ -1,17 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="el">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="el" version="2.1">
 <context>
     <name>QApplication</name>
     <message>
         <location filename="../main.cpp" line="51"/>
         <source>Unable to get exclusive lock</source>
-        <translation type="unfinished"></translation>
+        <translation>Ανίκανος να πάρει αποκλειστικό κλείδωμα</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="52"/>
         <source>Another package management application (like Synaptic or apt-get), is already running. Please close that application first</source>
-        <translation type="unfinished"></translation>
+        <translation>Μια άλλη εφαρμογή διαχείρισης πακέτων (όπως Synaptic η apt-get), βρίσκεται ήδη σε λειτουργία. Κλείστε πρώτα την εφαρμογή.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="69"/>
@@ -91,7 +89,7 @@
     <message>
         <location filename="../mxpackageinstaller.ui" line="183"/>
         <source>search</source>
-        <translation type="unfinished"></translation>
+        <translation>aναζήτηση </translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="193"/>
@@ -231,7 +229,7 @@
     <message>
         <location filename="../mxpackageinstaller.cpp" line="534"/>
         <source>Copyright (c) MX Linux</source>
-        <translation>Copyright (c) MX Linux </translation>
+        <translation>Copyright (c)  MX Linux </translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="535"/>

@@ -1,22 +1,20 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="fr">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fr" version="2.1">
 <context>
     <name>QApplication</name>
     <message>
         <location filename="../main.cpp" line="51"/>
         <source>Unable to get exclusive lock</source>
-        <translation>Peut pas obtenir le verrou exclusif</translation>
+        <translation>Impossible d&apos;obtenir le verrou exclusif</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="52"/>
         <source>Another package management application (like Synaptic or apt-get), is already running. Please close that application first</source>
-        <translation>Une autre application qui sert à gérer les paquets (comme Synaptic ou apt-get) est déjà en train d&apos;exécution. Il faut terminer d&apos;abord cette application.</translation>
+        <translation>Une autre application qui sert à gérer les paquets (comme Synaptic ou apt-get) est déjà en cours d&apos;exécution. Il faut d&apos;abord fermer cette application.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="69"/>
         <source>You must run this program as root.</source>
-        <translation>Vous devez lancer cette application avec les droits root.</translation>
+        <translation>Vous devez lancer cette application avec les droits administrateur.</translation>
     </message>
 </context>
 <context>
@@ -27,7 +25,7 @@
         <location filename="../mxpackageinstaller.cpp" line="538"/>
         <location filename="../mxpackageinstaller.cpp" line="547"/>
         <source>MX Package Installer</source>
-        <translation>MX Installateur de paquets</translation>
+        <translation>Installateur de paquets MX</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="46"/>
@@ -143,7 +141,7 @@
     <message>
         <location filename="../mxpackageinstaller.cpp" line="202"/>
         <source>Process finished with success.&lt;p&gt;&lt;b&gt;Do you want to exit MX Package Installer?&lt;/b&gt;</source>
-        <translation>Processus terminé avec succès.&lt;p&gt;&lt;b&gt;Voulez-vous quitter MX Installateur de paquets?&lt;/b&gt;</translation>
+        <translation>Processus terminé avec succès.&lt;p&gt;&lt;b&gt;Voulez-vous quitter Installateur de paquets MX ?&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="203"/>
