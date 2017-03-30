@@ -1,6 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS>
-<TS version="2.1" language="pt">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="pt" version="2.1">
 <context>
     <name>QApplication</name>
     <message>
@@ -11,12 +9,12 @@
     <message>
         <location filename="../main.cpp" line="52"/>
         <source>Another package management application (like Synaptic or apt-get), is already running. Please close that application first</source>
-        <translation>Está em execussão outra aplicação de gestão de pacotes (p. ex. Synaptic ou apt-get). Primeiro feche a aplicação em execussão.</translation>
+        <translation>Está em execução outra aplicação de gestão de pacotes (p. ex. Synaptic ou apt-get). Primeiro feche a aplicação em execução.</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="69"/>
         <source>You must run this program as root.</source>
-        <translation>Tem que executar este programa com a conta de raíz (root)</translation>
+        <translation>Tem que executar este programa como root.</translation>
     </message>
 </context>
 <context>
@@ -101,7 +99,7 @@
     <message>
         <location filename="../mxpackageinstaller.ui" line="200"/>
         <source>Use option --yes for apt-get install</source>
-        <translation>Usar a opção --sim (--yes) para instalar com o apt-get</translation>
+        <translation>Usar a opção --yes para instalar com o apt-get</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.ui" line="245"/>
@@ -175,7 +173,7 @@
     <message>
         <location filename="../mxpackageinstaller.cpp" line="218"/>
         <source>Running apt-get update... </source>
-        <translation>O apt-get update está em execussão...</translation>
+        <translation>O apt-get update está em execução...</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="237"/>
@@ -225,7 +223,7 @@
     <message>
         <location filename="../mxpackageinstaller.cpp" line="533"/>
         <source>Simple package installer for additional packages for MX Linux</source>
-        <translation>Instalador de pacotes simples, para pacotes adicionais para o Linux MX</translation>
+        <translation>Instalador de pacotes simples para instalação de pacotes adicionais ao Linux MX</translation>
     </message>
     <message>
         <location filename="../mxpackageinstaller.cpp" line="534"/>
