@@ -18,26 +18,26 @@ Changes:
  .
    * new translations
 Checksums-Sha1:
- a2a74219cf7e93b92a86a0fe22dd62f09c81ae95 1234 mx-packageinstaller_17.3mx16.dsc
- 83bdf645d95bd73ea9e13dbce8b292a41a133946 52668 mx-packageinstaller_17.3mx16.tar.xz
- 0fd56a04415b5792a57d7e342f78f792d0923d4f 69276 mx-packageinstaller_17.3mx16_amd64.deb
+ 3c5f5dc6ca5bde168e475bd60a2c12430df52367 1234 mx-packageinstaller_17.3mx16.dsc
+ 140f671304b7dd0e52fd50cb78a870842750f33b 52648 mx-packageinstaller_17.3mx16.tar.xz
+ 4e675e2c27a41201ffde4a6f9a667531165ab3f4 69080 mx-packageinstaller_17.3mx16_amd64.deb
 Checksums-Sha256:
- 8e8043c37a04eab505b1ae5cafc16514bcac2e79f782c54b82e11c98be13024c 1234 mx-packageinstaller_17.3mx16.dsc
- c34206045599e26b7ed5e592403e82ad14caea1317387b7adcf5b3f2ef791fe0 52668 mx-packageinstaller_17.3mx16.tar.xz
- b43d090090ef5dafec6446441a10dc64ac0f87ac4af07d0e0606c9e2ce054bd1 69276 mx-packageinstaller_17.3mx16_amd64.deb
+ 2e66e77c748b902dc9075e7344602d9fcfae33cedd89e935a6823dd5e98edc1f 1234 mx-packageinstaller_17.3mx16.dsc
+ 56ad1a0fe628bbe3be3ba28355147587f7e233bc80d3d6ad60263fa2de39c583 52648 mx-packageinstaller_17.3mx16.tar.xz
+ 2f7fbe7003c67a7ee88ec0ee3466fbb5dc2b1609fb958e94496216e85a9befc9 69080 mx-packageinstaller_17.3mx16_amd64.deb
 Files:
- 7b32caeb8088e4f84be499d94576db59 1234 admin optional mx-packageinstaller_17.3mx16.dsc
- a4342c1d306f1f326c06250446036c2e 52668 admin optional mx-packageinstaller_17.3mx16.tar.xz
- 80b6da6b2032ff9543e3f0d910f2e916 69276 admin optional mx-packageinstaller_17.3mx16_amd64.deb
+ f0fd53446e319e34c82cf9d2eddb2f73 1234 admin optional mx-packageinstaller_17.3mx16.dsc
+ 1fc5a6124be11de43f3926f683edd7a2 52648 admin optional mx-packageinstaller_17.3mx16.tar.xz
+ 77b3f5d6b6646762878f18c7a8722b5c 69080 admin optional mx-packageinstaller_17.3mx16_amd64.deb
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1
 
-iQEcBAEBAgAGBQJY3QwGAAoJEHCTjHgGee6YUlEIANWmx3gt/Zo0M5T4VZXNEuI8
-ZMMbRA4hTFsct4t0V6UyPpSMvFQaILCOCTcI6skUdKA1qHF0Uk425w8yiKDS7Dyq
-Cb/LXFUahR8GOQwiIqNAceXhN9R2oDb+7AG/FxNIU7Uu92C031x3UbB7zqA00ojR
-oFsH4+hkWOWrBzp/Yyp7unCPy2Q6ukeHJgBvtftYyqf7yXtvvBL7LTBvhEVEube+
-Z+NNUgAJHBUhijV04sJzFEjSabIbyIxdYozUEnVNUC3njxQ49nwvk5Oi+5g0aa9E
-OpAqd9sVhFhhH4GOWG13zqm0+3Ypo9SWUAiOWkw3yOMLu9utHjsyai6dMRxSFtM=
-=yBnZ
+iQEcBAEBAgAGBQJY3Q49AAoJEHCTjHgGee6YHhUH/i2UYdQbGms8HnsUibIJuG0/
+nf1wFwf6U5CWgz3m1JMf/LNmqkyLdwpqgTrIk/ITgtw2mP0vnchDFtd9/0ooaDuB
+Ifj/05razS4MUVKh812myxrJtelTZFFIFYftrCGQQoWjOpbTmkmAUjUivRb2tKo5
+lnGUlXPUMufID3A0uWlprWn9K/D1AkH5ytrkyPVzqU3kwvQsWK2nW6CP94y3r6RK
+n0ys7efKgFySCGpWFUsyMvO96qi8ehu1KMxMytj/wakVlKGO7TCvSBuv8H2CgoEC
++Z0k/RUksXxQ8ktLNItvSnomyLxlfjieg/HsnAj2NKhnd8uLuOLjUBxaEW1vu/g=
+=Oj7I
 -----END PGP SIGNATURE-----
