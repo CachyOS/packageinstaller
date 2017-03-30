@@ -1,0 +1,37 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Thu, 30 Mar 2017 09:45:08 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: i386
+Version: 17.3mx16
+Distribution: mx
+Urgency: medium
+Maintainer: Steven Pusser (Stevo) <maintainer@mepiscommunity.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX program for installing additional packages.
+Changes:
+ mx-packageinstaller (17.3mx16) mx; urgency=medium
+ .
+   * new translations
+Checksums-Sha1:
+ 1faab35f2e0fc9f86f80364a5a98961e77452c39 69792 mx-packageinstaller_17.3mx16_i386.deb
+Checksums-Sha256:
+ 6af5aff6b5d8d1c4b38cc72ade1919f7698ea0832e0bd7f948ad9559e750e293 69792 mx-packageinstaller_17.3mx16_i386.deb
+Files:
+ fb2d30b2922316d37a231547223d7953 69792 admin optional mx-packageinstaller_17.3mx16_i386.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQEcBAEBAgAGBQJY3QwmAAoJEHCTjHgGee6YYdQH/RX7z3NFEWgD9uNbh/p17DT+
+TzmgUuUHAUZYBVgf4A+m4j7wPVAvXAIXFNdelFtlOZU9uNNcyVcqaPDeIF8IGS9r
+1N1J9Hr7NAf/dLAHic3A02Ep9Ihe3zApO+6ZzDw48nTNYy83NmXZy3uoip3djL3K
+cxKoz3pLAqV7sxlpOKlnoEEnzzyRxhmv+gJj5OhIP/4IqwZ5rumkKRP5DMnHHmVi
+UM5sdTPrPiyW8fhzZ5z/Mg3PWwzKwmTnBL6YJUgE3rywfTDC8duoq1M0zSh9w3bm
+yZA3eqUv99kW9eyEl0RG/mZCKR/VxoXFkbeYfa5UFs6Jr7uqPhOinIWTVW0DoTY=
+=AG+e
+-----END PGP SIGNATURE-----
