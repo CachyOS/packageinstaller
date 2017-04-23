@@ -1,35 +1,39 @@
-/*****************************************************************************
- * main.cpp
- *****************************************************************************
- * Copyright (C) 2014 MX Authors
+/**********************************************************************
+ *  main.cpp
+ **********************************************************************
+ * Copyright (C) 2017 MX Authors
  *
  * Authors: Adrian
+ *          Dolphin_Oracle
  *          MX Linux <http://mxlinux.org>
  *
- * This file is part of MX Package Installer.
+ * This file is part of mx-packageinstaller.
  *
- * This program is free software: you can redistribute it and/or modify
+ * mx-packageinstaller is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
- * MX Package Installer is distributed in the hope that it will be useful,
+ * mx-packageinstaller is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with MX Package Installer.  If not, see <http://www.gnu.org/licenses/>.
+ * along with mx-packageinstaller.  If not, see <http://www.gnu.org/licenses/>.
  **********************************************************************/
 
-#include "mxpackageinstaller.h"
+#include "mainwindow.h"
 #include "lockfile.h"
-
 #include <unistd.h>
+
 #include <QApplication>
 #include <QTranslator>
 #include <QLocale>
 #include <QIcon>
+
+#include <QDebug>
+
 
 int main(int argc, char *argv[])
 {
@@ -56,12 +60,9 @@ int main(int argc, char *argv[])
         } else {
             lock_file.lock();
         }
-        mxpackageinstaller w;
+        MainWindow w;
         w.show();
-
         return a.exec();
-        lock_file.unlock();
-
     } else {
         QApplication::beep();
         QMessageBox::critical(0, QString::null,

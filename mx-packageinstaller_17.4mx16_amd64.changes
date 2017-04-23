@@ -1,0 +1,43 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Sat, 22 Apr 2017 20:05:45 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 17.4mx16
+Distribution: mx
+Urgency: medium
+Maintainer: Steven Pusser (Stevo) <maintainer@mepiscommunity.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (17.4mx16) mx; urgency=medium
+ .
+   * rewrote app to include installation from MX Test Repo and Debian Backports
+Checksums-Sha1:
+ d9fe48f22840a4abdf225c92f91f0c7528941cfa 1204 mx-packageinstaller_17.4mx16.dsc
+ b46524cdbac42c8743216d0e18c6177b3701c6dc 195096 mx-packageinstaller_17.4mx16.tar.xz
+ 7e9622a622870c00e5b7a4467cf7f955302242a6 82942 mx-packageinstaller_17.4mx16_amd64.deb
+Checksums-Sha256:
+ 3e6f338133dccab351ea1db317a56d44c8870d09e6202cf0d03c1be2135eb23e 1204 mx-packageinstaller_17.4mx16.dsc
+ 7b79286da012f871e92c302d703d40dcef98cadb4819818a3a0ce76a36dbbf62 195096 mx-packageinstaller_17.4mx16.tar.xz
+ 15d9a914e91d89aa204c0d78ae0d8d6f58ba66c904e2ec1c18812422605492d4 82942 mx-packageinstaller_17.4mx16_amd64.deb
+Files:
+ 925ebaa6cb8aa488d857e3ef8d648d37 1204 admin optional mx-packageinstaller_17.4mx16.dsc
+ 869ecec79c671a78014a176988c4975b 195096 admin optional mx-packageinstaller_17.4mx16.tar.xz
+ 36c82a0462af6e38ffbe0700eb17a46b 82942 admin optional mx-packageinstaller_17.4mx16_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQEcBAEBAgAGBQJY+/y3AAoJEHCTjHgGee6YfB0IAIKLde8dVICgzJ9HyeoRa1p3
+iHBIAvmagTMbOk7/Wgt0nFdmJ6YWjDBRHM1ubcEtGriLtku3QM0yo/k14SSw1v6w
+Ne/LVyJd52/QKcwVg1kL9oXYwgCk/+AUUBoQmS66c81toucWBBev9JbbFLwV0/Gk
+A1eQTmKwMRYkxWyXd+a9eBv3L8QXgUEVLvSnq/qgKUDJwz4m9YBwK2Iq73ScvHwy
+UO8heBB9FZIpR/8PtFj9rVFQGUnnBET5+farJSY2NtcT4Eg4TMC5Eud2cpmYtlzS
+soI//eoPnCAUGQWqdmSIMd/mE6aBzEoAja1y5L5/LHEpcLKNnvhcWhKsEEQQ7bo=
+=E3rX
+-----END PGP SIGNATURE-----

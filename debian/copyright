@@ -1,82 +1,12 @@
-Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: mx-packageinstaller
-Source: git://github.com/AdrianTM/mx-packageinstaller
+Copyright (2017) by Adrian, Dolphin_Oracle; MX Linux <http://mxlinux.org>
 
-#----------------------------------------------------------------------------
-Copyright: 2014 MX Authors
-Files: ./mxpackageinstaller.cpp
-	./mxpackageinstaller.h
-	./main.cpp
-# licensecheck(1): ./mxpackageinstaller.cpp: LGPL (v3 or later)
-License:
-  Authors: Adrian
- MX Linux <http://mxlinux.org>
- .
- This program is free software; you can redistribute it and/or modify it
- under the terms of the GNU Lesser General Public License as published by
- the Free Software Foundation; either version 3 of the License, or
- (at your option) any later version.
- .
- This program is distributed in the hope that it will be useful,
- but WITHOUT ANY WARRANTY; without even the implied warranty of
- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- GNU Lesser General Public License for more details.
- .
- You should have received a copy of the GNU Lesser General Public License
- along with this program; if not, write to the Free Software Foundation,
- Inc., 51 Franklin Street, Fifth Floor, Boston MA 02110-1301, USA.
+and released under the GPL 3
 
-#----------------------------------------------------------------------------
-Copyright: 51-2110 # * Copyright (C) MX Authors # * # * Authors: Adrian # *          MX Linux <http://mxlinux.org> # * # * This program is free software; you can redistribute it and/or modify it # * under the terms of the GNU Lesser General Public License as published by # * the Free Software Foundation; either version 3 of the License, or # * (at your option) any later version. # * # * This program is distributed in the hope that it will be useful, # * but WITHOUT ANY WARRANTY; without even the implied warranty of # * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the # * GNU Lesser General Public License for more details. # * # * You should have received a copy of the GNU Lesser General Public License # * along with this program; if not, write to the Free Software Foundation, # * Inc., Franklin Street, Fifth Floor, Boston MA USA.
-Files: ./mx-packageinstaller.pro
-# licensecheck(1): ./mx-packageinstaller.pro: LGPL (v3 or later)
-License: NO_LICENSE_TEXT_FOUND
 
-#----------------------------------------------------------------------------
-Copyright: NO_COPYRIGHT_INFO_FOUND
-Files: ./mxpackageinstaller.ui
-	./translations/mx-packageinstaller_pl.ts
-	./translations/mx-packageinstaller_el.ts
-	./translations/mx-packageinstaller_ro.ts
-	./translations/mx-packageinstaller_ca.ts
-	./translations/mx-packageinstaller_zh_CN.ts
-	./translations/mx-packageinstaller_de.ts
-	./translations/mx-packageinstaller_fr.ts
-	./translations/mx-packageinstaller_ja.ts
-	./translations/mx-packageinstaller_pt.ts
-	./translations/mx-packageinstaller_hi.ts
-	./translations/mx-packageinstaller_zh_TW.ts
-	./translations/mx-packageinstaller_pt_BR.ts
-	./translations/mx-packageinstaller_nl.ts
-	./translations/mx-packageinstaller_ko.ts
-	./translations/mx-packageinstaller_ar.ts
-	./translations/mx-packageinstaller_it.ts
-	./translations/mx-packageinstaller_es.ts
-	./debian/control
-# licensecheck(1): ./mxpackageinstaller.ui: *No copyright* UNKNOWN
-License: NO_LICENSE_TEXT_FOUND
+Files: debian/* 
 
-#----------------------------------------------------------------------------
-# Binary files (skipped):
-# ./mx-packageinstaller.png
-# ./icons/gnome-help.png
-# ./icons/accessories-text-editor.png
-# ./icons/dialog-ok.png
-# ./icons/mxfcelogo.png
-# ./icons/gtk-cancel.png
+Packaging copyright 2017 by Steven Pusser [maintainer@mepiscommunity.org]
 
-#----------------------------------------------------------------------------
-# This is meant only as a template example.
-#
-# Edit this accordinng to the "Machine-readable debian/copyright file" as
-# http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/ .
-#
-# Generate typical license templates with the "debmake -c" to STDOUT
-# and merge them into here as needed.  See "man 8 debmake" for more.
-#
-# licensecheck(1) from the devscripts package is used here to determin
-# the name of the license that applies.
-#
-# Please avoid to pick license terms that are more restrictive than the
-# packaged work, as it may make Debian's contributions unacceptable upstream.
+and is released under the GPL 3 license. 
+
 

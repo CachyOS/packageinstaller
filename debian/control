@@ -3,14 +3,18 @@ Section: admin
 Priority: optional
 Maintainer: Steven Pusser (Stevo) <maintainer@mepiscommunity.org>
 Build-Depends: qt5-qmake,
-	qt5-default,
-	qttools5-dev-tools,
-	debhelper (>=7.0.50~),
+	debhelper (>=7.0.50~)
 Standards-Version: 3.9.5
 Vcs-Git: git://github.com/AdrianTM/mx-packageinstaller
 
 Package: mx-packageinstaller
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}, mx-viewer, mx-packageinstaller-pkglist, menu
-Description: MX program for installing additional packages.
- MX-packageinstaller is a program used for installing additional packages.
+Depends: ${misc:Depends}, ${shlibs:Depends}, mx-viewer, mx-packageinstaller-pkglist (>= 17.4), menu, wget
+Conflicts: mx-test-installer, mx-debian-backports-installer, mx-package-manager
+Replaces: mx-test-installer, mx-debian-backports-installer, mx-package-manager
+Provides: mx-test-installer, mx-debian-backports-installer
+Description: MX Package Installer
+ MX Package Installer is a tool used for managing packages on MX Linux
+ - installs popular programs from different sources
+ - installs programs from the MX Test repo
+ - installs programs from Debian Backports repo
