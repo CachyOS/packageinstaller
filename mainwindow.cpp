@@ -1264,7 +1264,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         {
             QMessageBox msgBox(QMessageBox::Question,
                                tr("Repo Selection"),
-                               tr("Plese select repo to load"));
+                               tr("Please select repo to load"));
             msgBox.addButton(tr("Debian Backports Repo"), QMessageBox::AcceptRole);
             msgBox.addButton(tr("MX Test Repo"), QMessageBox::AcceptRole);
             msgBox.addButton(tr("Stable Repo"), QMessageBox::AcceptRole);

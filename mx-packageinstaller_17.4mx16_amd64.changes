@@ -18,26 +18,26 @@ Changes:
  .
    * rewrote app to include installation from MX Test Repo and Debian Backports
 Checksums-Sha1:
- d9fe48f22840a4abdf225c92f91f0c7528941cfa 1204 mx-packageinstaller_17.4mx16.dsc
- b46524cdbac42c8743216d0e18c6177b3701c6dc 195096 mx-packageinstaller_17.4mx16.tar.xz
- 7e9622a622870c00e5b7a4467cf7f955302242a6 82942 mx-packageinstaller_17.4mx16_amd64.deb
+ ea2fc42739cb1dc68d417d7423f0432a4a825738 1201 mx-packageinstaller_17.4mx16.dsc
+ 662ea7381b8ae023d7b11cdb160a9688fb91bcfb 47936 mx-packageinstaller_17.4mx16.tar.xz
+ e7c636438fbfb5ed708ee9eb8a14325c6bcc8597 82900 mx-packageinstaller_17.4mx16_amd64.deb
 Checksums-Sha256:
- 3e6f338133dccab351ea1db317a56d44c8870d09e6202cf0d03c1be2135eb23e 1204 mx-packageinstaller_17.4mx16.dsc
- 7b79286da012f871e92c302d703d40dcef98cadb4819818a3a0ce76a36dbbf62 195096 mx-packageinstaller_17.4mx16.tar.xz
- 15d9a914e91d89aa204c0d78ae0d8d6f58ba66c904e2ec1c18812422605492d4 82942 mx-packageinstaller_17.4mx16_amd64.deb
+ 1ddd26da617c42cf418d5c764c318ccf002a1aa31c3c2e033fd4b174555c4592 1201 mx-packageinstaller_17.4mx16.dsc
+ 96fb67d91f38507b7f2147019caaf37e9d377a244d2599faf7090e7d739f1937 47936 mx-packageinstaller_17.4mx16.tar.xz
+ 73b7b7e0f0c1c2cbeb6a6d317c6760a26c977c21a8a2772895a19555d93828b5 82900 mx-packageinstaller_17.4mx16_amd64.deb
 Files:
- 925ebaa6cb8aa488d857e3ef8d648d37 1204 admin optional mx-packageinstaller_17.4mx16.dsc
- 869ecec79c671a78014a176988c4975b 195096 admin optional mx-packageinstaller_17.4mx16.tar.xz
- 36c82a0462af6e38ffbe0700eb17a46b 82942 admin optional mx-packageinstaller_17.4mx16_amd64.deb
+ 10fe42ed085b3cd8179fe27697bf0755 1201 admin optional mx-packageinstaller_17.4mx16.dsc
+ fa2a5533ee153dd6caaa6ee6fe9605aa 47936 admin optional mx-packageinstaller_17.4mx16.tar.xz
+ 97c57accbc01ef5f51e755c95b5d951e 82900 admin optional mx-packageinstaller_17.4mx16_amd64.deb
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1
 
-iQEcBAEBAgAGBQJY+/y3AAoJEHCTjHgGee6YfB0IAIKLde8dVICgzJ9HyeoRa1p3
-iHBIAvmagTMbOk7/Wgt0nFdmJ6YWjDBRHM1ubcEtGriLtku3QM0yo/k14SSw1v6w
-Ne/LVyJd52/QKcwVg1kL9oXYwgCk/+AUUBoQmS66c81toucWBBev9JbbFLwV0/Gk
-A1eQTmKwMRYkxWyXd+a9eBv3L8QXgUEVLvSnq/qgKUDJwz4m9YBwK2Iq73ScvHwy
-UO8heBB9FZIpR/8PtFj9rVFQGUnnBET5+farJSY2NtcT4Eg4TMC5Eud2cpmYtlzS
-soI//eoPnCAUGQWqdmSIMd/mE6aBzEoAja1y5L5/LHEpcLKNnvhcWhKsEEQQ7bo=
-=E3rX
+iQEcBAEBAgAGBQJY/K0wAAoJEHCTjHgGee6YyhAH/RZetblldvjT16NZ7FgYQbrf
+5r1YzGXoroZlh4icZIJLZQj1j9TOS8tZYe5N2RCvoU2ZV8WRI4qo1FFtPBUaPXdM
+Axsit5byS75lEQ+raGWfAuLcOO0S3LQXAMb9BCLEFC9HiTE88wxGl83fHNCxy4Lv
+SzPhuVvG73b1+mwdkAUR3iGrB6m+AjviCGQ+HyzUHMBUavEEvH0R2wsFNZNcKAMm
+tE3T+khXQe3nlZhit/8YbW4oeL9mmGvkmbefHWkpB+HqTwVsqxIJyIJ6vn5NXt74
+YRcsbt0Ed2gF3lUbsflVqSdcrPnpOiN4xZPygy/pGfbcVp1n6hjUOT8/3L/3klA=
+=m7C9
 -----END PGP SIGNATURE-----

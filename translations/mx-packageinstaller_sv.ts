@@ -412,7 +412,7 @@
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1267"/>
-        <source>Plese select repo to load</source>
+        <source>Please select repo to load</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
