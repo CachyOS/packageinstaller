@@ -727,7 +727,7 @@ void MainWindow::installSelected()
 // Check if online
 bool MainWindow::checkOnline()
 {
-    return(system("wget -q --spider http://google.com >/dev/null 2>&1") == 0);
+    return(system("wget -q --spider http://mxrepo.com >/dev/null 2>&1") == 0);
 }
 
 // Build the list of available packages from various source
