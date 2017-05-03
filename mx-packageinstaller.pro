@@ -45,15 +45,22 @@ FORMS    += \
     mainwindow.ui
 
 TRANSLATIONS += translations/mx-packageinstaller_ca.ts \
+                translations/mx-packageinstaller_cs.ts \
                 translations/mx-packageinstaller_de.ts \
                 translations/mx-packageinstaller_el.ts \
                 translations/mx-packageinstaller_es.ts \
                 translations/mx-packageinstaller_fr.ts \
                 translations/mx-packageinstaller_it.ts \
                 translations/mx-packageinstaller_ja.ts \
+                translations/mx-packageinstaller_lt.ts \
                 translations/mx-packageinstaller_nl.ts \
+                translations/mx-packageinstaller_pl.ts \
+                translations/mx-packageinstaller_pt.ts \
                 translations/mx-packageinstaller_ro.ts \
-                translations/mx-packageinstaller_sv.ts
+                translations/mx-packageinstaller_ru.ts \
+                translations/mx-packageinstaller_sk.ts \
+                translations/mx-packageinstaller_sv.ts \
+                translations/mx-packageinstaller_tr.ts
 
 RESOURCES += \
     images.qrc

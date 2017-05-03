@@ -1,12 +1,14 @@
 [Desktop Entry]
 Name=MX Package Installer
 Name[ca]=MX Package Installer
+Name[cs]=MX Instalátor softvéru
 Name[de]=MX Paket-Installer
 Name[el]=Εγκατάσταση πακέτων του MX
 Name[es]=MX Instalador de Paquetes
 Name[fr]=MX Installateur de paquets
 Name[it]=MX Installa Meta-pacchetti
 Name[ja]=MX パッケージインストーラー
+Name[lt]=MX Paketų diegimo programa
 Name[nl]=MX pakket installeerder
 Name[pt]=MX_Instalador de Pacotes
 Name[ro]=MX Instalator Programe
@@ -14,13 +16,15 @@ Name[ru]=MX Установщик пакетов
 Name[sv]=MX Paket-installerare
 Name[tr]=MX Paket Yükleyici
 Comment=Simple package installer
-Comment[ca]=Instal·lador senzill de paquets 
+Comment[ca]=Instal·lador senzill de paquets
+Comment[cs]=Instaluje programy
 Comment[de]=einfache Installation von Paketen
 Comment[el]=Απλή εγκατάσταση πακέτων
 Comment[es]=Instalador de paquetes simple
 Comment[fr]=Installateur simple pour paquets supplémentaires
 Comment[it]=Installazione semplice di Meta-pacchetti
 Comment[ja]=シンプルなパッケージインストーラー
+Comment[lt]=Paprasta paketų diegimo programa
 Comment[nl]=Eenvoudige Pakket Installeerder
 Comment[pt]=Um instalador de pacotes fácil de usar
 Comment[ro]=Instalator de programe adiționale
@@ -32,4 +36,5 @@ Icon=mx-packageinstaller
 NoDisplay=false
 Categories=System;MX-Software;
 Type=Application
+
 
