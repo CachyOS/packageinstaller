@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="nl">
+<TS version="2.1" language="cs">
 <context>
     <name>MainWindow</name>
     <message>
@@ -10,170 +10,170 @@
         <location filename="../mainwindow.cpp" line="1176"/>
         <location filename="../mainwindow.cpp" line="1184"/>
         <source>MX Package Installer</source>
-        <translation>MX Pakket Installeerder</translation>
+        <translation>MX Instalátor softvéru </translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="42"/>
         <source>Popular Applications</source>
-        <translation>Populaire Toepassingen</translation>
+        <translation>Oblíbené aplikace</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="68"/>
         <location filename="../mainwindow.cpp" line="72"/>
         <source>Package</source>
-        <translation>Pakket</translation>
+        <translation>Balík</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="73"/>
         <location filename="../mainwindow.cpp" line="72"/>
         <source>Info</source>
-        <translation>Informatie</translation>
+        <translation>Info</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="78"/>
         <location filename="../mainwindow.ui" line="363"/>
         <location filename="../mainwindow.cpp" line="72"/>
         <source>Description</source>
-        <translation>Beschrijving</translation>
+        <translation>Popis</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="98"/>
         <location filename="../mainwindow.ui" line="332"/>
         <source>search</source>
-        <translation>zoeken</translation>
+        <translation>Hledat</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="108"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Manage popular packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Beheer populaire pakketten&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Grijzig gekleurde items zijn reeds geïnstalleerd.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Spravovat oblíbené balíky&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Šedé položky již byly nainstalovány.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="138"/>
         <source>Full App Catalog</source>
-        <translation>Volledige Toepassingen Catalogus</translation>
+        <translation>Kompletní seznam aplikací</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="144"/>
         <source>Select source</source>
-        <translation>Selecteer bron</translation>
+        <translation>Vybrat zdroj</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="150"/>
         <location filename="../mainwindow.cpp" line="1270"/>
         <source>Stable Repo</source>
-        <translation>Stabiele Pakketbron</translation>
+        <translation>Hlavní repozitář</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="160"/>
         <location filename="../mainwindow.cpp" line="1269"/>
         <source>MX Test Repo</source>
-        <translation>MX Test Pakketbron</translation>
+        <translation>Testovací repozitář</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="170"/>
         <location filename="../mainwindow.cpp" line="1268"/>
         <source>Debian Backports Repo</source>
-        <translation>Debian Backports Pakketbron</translation>
+        <translation>Debian Beackports repozitář</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="258"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filter packages according to their status.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filter pakketten op hun status.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filtrovat balíky dle statusu.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="261"/>
         <location filename="../mainwindow.ui" line="265"/>
         <location filename="../mainwindow.cpp" line="1310"/>
         <source>All packages</source>
-        <translation>Alle pakketten</translation>
+        <translation>Všechny balíky</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="270"/>
         <location filename="../mainwindow.cpp" line="1323"/>
         <source>Installed</source>
-        <translation>Geïnstalleerd</translation>
+        <translation>Nainstalováno</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="275"/>
         <location filename="../mainwindow.cpp" line="1321"/>
         <source>Upgradable</source>
-        <translation>Opwaardeerbaar</translation>
+        <translation>Možné aktualizovat</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="280"/>
         <location filename="../mainwindow.cpp" line="1325"/>
         <source>Not installed</source>
-        <translation>Niet geïnstalleerd</translation>
+        <translation>Nenainstalováno</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="288"/>
         <source>Greyed out items have already been installed.</source>
-        <translation>Uitgegrijsde onderdelen zijn reeds geïnstalleerd.</translation>
+        <translation>Zešednuté položky již byly nainstalovány.</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="313"/>
         <source>Refresh list</source>
-        <translation>Ververs lijst</translation>
+        <translation>Obnovit seznam</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="353"/>
         <source>Package Name</source>
-        <translation>Pakket Naam</translation>
+        <translation>Název balíku</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="358"/>
         <source>Version</source>
-        <translation>Versie</translation>
+        <translation>Verze</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="373"/>
         <source>Displayed</source>
-        <translation>Afgebeeld</translation>
+        <translation>Zobrazeno</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="381"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;= Upgradable package. Newer version available in selected repository.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;= Opwaarderbaar pakket. Nieuwere versie beschikbaar in de geselecteerde pakketbron.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;= Balík je možné aktualizovat, ve vybraném repozitáři je dostupná novější verze programu.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="403"/>
         <source>Total packages:</source>
-        <translation>Totaal pakketten:</translation>
+        <translation>Balíků  celkem:</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="433"/>
         <source>Installed:</source>
-        <translation>Geïnstalleerd:</translation>
+        <translation>Nainstalováno:</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="463"/>
         <source>Upgradable:</source>
-        <translation>Opwaardeerbaar:</translation>
+        <translation>Možné aktualizovat:</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="477"/>
         <source>Upgrade All</source>
-        <translation>Waardeer Alles Op</translation>
+        <translation>Aktualizovat všechno</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="502"/>
         <source>Hide library and developer packages</source>
-        <translation>Verberg bibliotheek- en ontwikkelaarspakketten</translation>
+        <translation>Skrýt knihovny a vývojářské balíky</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="545"/>
         <source>Uninstall</source>
-        <translation>Deïnstalleer</translation>
+        <translation>Odinstalovat</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="579"/>
         <source>About this application</source>
-        <translation>Over deze toepassing</translation>
+        <translation>O této aplikaci</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="582"/>
         <source>About...</source>
-        <translation>Over...</translation>
+        <translation>O programu</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="590"/>
@@ -183,12 +183,12 @@
     <message>
         <location filename="../mainwindow.ui" line="606"/>
         <source>Display help </source>
-        <translation>Toon help</translation>
+        <translation>Zobrazit nápovědu</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="609"/>
         <source>Help</source>
-        <translation>Help</translation>
+        <translation>Nápověda</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="617"/>
@@ -200,17 +200,17 @@
         <location filename="../mainwindow.cpp" line="1217"/>
         <location filename="../mainwindow.cpp" line="1368"/>
         <source>Install</source>
-        <translation>Installeer</translation>
+        <translation>Instalovat</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="673"/>
         <source>Quit application</source>
-        <translation>Verlaat de applicatie</translation>
+        <translation>Ukončit aplikaci</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="676"/>
         <source>Close</source>
-        <translation>Sluiten</translation>
+        <translation>Zavřít</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="684"/>
@@ -220,205 +220,205 @@
     <message>
         <location filename="../mainwindow.cpp" line="97"/>
         <source>Uninstalling packages...</source>
-        <translation>Pakketten deïnstalleren...</translation>
+        <translation>Odstraňování balíků...</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="114"/>
         <source>Running apt-get update... </source>
-        <translation>Apt-get update uitvoeren...</translation>
+        <translation>Spouští se apt-get update...</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="285"/>
         <location filename="../mainwindow.cpp" line="1174"/>
         <location filename="../mainwindow.cpp" line="1271"/>
         <source>Cancel</source>
-        <translation>Cancel</translation>
+        <translation>Zrušit</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="291"/>
         <source>Please wait...</source>
-        <translation>Even wachten aub...</translation>
+        <translation>Prosím vyčkejte...</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="424"/>
         <source>Updating package list...</source>
-        <translation>Pakkettenlijst opwaarderen...</translation>
+        <translation>Aktualizace seznamu balíků...</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="460"/>
         <location filename="../mainwindow.cpp" line="480"/>
         <source>Version </source>
-        <translation>Versie</translation>
+        <translation>Verze</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="460"/>
         <source> in stable repo</source>
-        <translation>in stabiele pakketbron</translation>
+        <translation>v hlavním repozitáři</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="465"/>
         <source>Not available in stable repo</source>
-        <translation>Niet beschikbaar in stabiele pakketbron</translation>
+        <translation>Není dostupné v hlavním repozitáři</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="474"/>
         <source>Latest version </source>
-        <translation>Laatste versie</translation>
+        <translation>Nejnovější verze</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="474"/>
         <source> already installed</source>
-        <translation>reeds geïnstalleerd</translation>
+        <translation>Nainstalováno</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="480"/>
         <source> installed</source>
-        <translation>geïnstalleerd</translation>
+        <translation>Nainstalováno</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="512"/>
         <source>Warning</source>
-        <translation>Waarschuwing</translation>
+        <translation>Varování</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="513"/>
         <source>You are about to use Debian Backports, which contains packages taken from the next Debian release (called &apos;testing&apos;), adjusted and recompiled for usage on Debian stable. They cannot be tested as extensively as in the stable releases of Debian and MX Linux, and are provided on an as-is basis, with risk of incompatibilities with other components in Debian stable. Use with care!</source>
-        <translation>U gaat de Debian Backports gebruiken welke pakketten bevat vanuit de eerstvolgende Debian uitgave (genaamd &apos;testing&apos;), aangepast en opnieuw gecompileerd voor gebruik op Debian stable. Ze kunnen niet zo uitgebreid getest worden als in de stabiele uitgaven van Debian en MX Linux en worden geleverd op een zoals-is basis, met het risico op incompatibiliteit met andere componenten in Debian stable. Voorzichtigheid is geboden!</translation>
+        <translation>Chystáte se použít zdroj Debian Backports, který obsahuje softvérové balíky převzaté z budoucího vydání Debian-u (nazývaný taky &apos;testovací větev&apos;), přizpůsobené pro použití v stabilním Debian-u. Tyto balíky nemohou být otestovány tak rozsáhle jako balíky ze stabilní větve Debian-u a MX Linuxu a jsou poskytovány tak-jak-jsou, s rizikem ztráty kompatibility s jinými komponenty ze stabilní větve Debian-u. Používejte se vší opatrností!  </translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="521"/>
         <source>Do not show this message again</source>
-        <translation>Laat dit bericht niet meer zien</translation>
+        <translation>Znovu nezobrazovat tuto zprávu.</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="562"/>
         <location filename="../mainwindow.cpp" line="654"/>
         <location filename="../mainwindow.cpp" line="754"/>
         <source>Error</source>
-        <translation>Fout</translation>
+        <translation>Chyba</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="562"/>
         <location filename="../mainwindow.cpp" line="654"/>
         <location filename="../mainwindow.cpp" line="754"/>
         <source>Internet is not available, won&apos;t be able to download the list of packages</source>
-        <translation>Internet is niet beschikbaar, kan geen pakketlijst downloaden</translation>
+        <translation>Není k dispozici internetové připojení, stažení seznamu balíků nebude možné</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="567"/>
         <source>Installing packages...</source>
-        <translation>Pakketten installeren...</translation>
+        <translation>Instalace balíků...</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="598"/>
         <source>Installing...</source>
-        <translation>Bezig met installeren...</translation>
+        <translation>Instalace...</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="604"/>
         <source>Post-processing...</source>
-        <translation>Installatie nabewerking...</translation>
+        <translation>Dokončování...</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="627"/>
         <source>Pre-processing for </source>
-        <translation>Installatie voorbereiding voor</translation>
+        <translation>Příprava pro</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="634"/>
         <source>Installing </source>
-        <translation>Installeren</translation>
+        <translation>Instalace</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="640"/>
         <source>Post-processing for </source>
-        <translation>Installatie nabewerking voor</translation>
+        <translation>Dokončování pro</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="689"/>
         <source>Done</source>
-        <translation>Klaar</translation>
+        <translation>Hotovo</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="690"/>
         <source>Process finished.&lt;p&gt;&lt;b&gt;Do you want to exit MX Package Installer?&lt;/b&gt;</source>
-        <translation>Proces beëindigd.&lt;p&gt;&lt;b&gt;Wilt u MX Pakketinstalleerder afsluiten?&lt;/b&gt;</translation>
+        <translation>Proces byl úspěšně dokončen.&lt;p&gt;&lt;b&gt;Přejete si ukončit program MX Instalátor softvéru?&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="691"/>
         <source>Yes</source>
-        <translation>Ja</translation>
+        <translation>Ano</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="691"/>
         <source>No</source>
-        <translation>Nee</translation>
+        <translation>Ne</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="762"/>
         <source>Downloading package info...</source>
-        <translation>Downloaden pakketten info...</translation>
+        <translation>Stahuji infrmace o balících...</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="840"/>
         <source>Reading downloaded file...</source>
-        <translation>Gedownload bestand lezen...</translation>
+        <translation>Prohledávám stažený soubor...</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1040"/>
         <source>Packages to be installed: </source>
-        <translation>Pakketten worden geïnstalleerd:</translation>
+        <translation>Balíky k instalaci:</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1077"/>
         <source>Package info</source>
-        <translation>Pakket info</translation>
+        <translation>Informace o balíku</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1168"/>
         <source>About MX Package Installer</source>
-        <translation>Over MX Pakket Installeerder</translation>
+        <translation>O programu MX Instalátor softvéru </translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1169"/>
         <source>Version: </source>
-        <translation>Versie:</translation>
+        <translation>Verze:</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1170"/>
         <source>Package Installer for MX Linux</source>
-        <translation>Pakket Installeerder voor MX Linux</translation>
+        <translation>Program pro instalaci dodatečného softvéru pro MX Linux</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1172"/>
         <source>Copyright (c) MX Linux</source>
-        <translation>Copyright (c) MX Linux</translation>
+        <translation>Vlastnická práva (c) MX Linux</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1173"/>
         <location filename="../mainwindow.cpp" line="1176"/>
         <source>License</source>
-        <translation>Licentie</translation>
+        <translation>Licence</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1215"/>
         <source>Reinstall</source>
-        <translation>Opnieuw installeren</translation>
+        <translation>Přeinstalovat</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1266"/>
         <source>Repo Selection</source>
-        <translation>Pakketbron Selectie</translation>
+        <translation>Výběr repozitáře</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1267"/>
         <source>Please select repo to load</source>
-        <translation>Selecteer aub pakketbron te laden</translation>
+        <translation>Prosím vyberte repozitář k načtení</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1366"/>
         <source>Upgrade</source>
-        <translation>Opwaarderen</translation>
+        <translation>Aktualizovat</translation>
     </message>
 </context>
 <context>
@@ -426,17 +426,18 @@
     <message>
         <location filename="../main.cpp" line="56"/>
         <source>Unable to get exclusive lock</source>
-        <translation>Niet in staat om exclusief slot te verkrijgen</translation>
+        <translation>Nebylo možné zamknout soubor</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="57"/>
         <source>Another package management application (like Synaptic or apt-get), is already running. Please close that application first</source>
-        <translation>Een ander pakketbeheerprogramma (zoals Synaptic of apt-get) is reeds in gebruik. Sluit aub eerst dat programma</translation>
+        <translation>Jiná aplikace pro správu softvéru (napr. Synaptic nebo apt-get) již běží.
+Prosím nejdřiv ji ukončete</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="69"/>
         <source>You must run this program as root.</source>
-        <translation>U dient deze toepassing als &apos;root&apos; uit te voeren.</translation>
+        <translation>Tuto aplikaci musíte spustit jako root.</translation>
     </message>
 </context>
 </TS>

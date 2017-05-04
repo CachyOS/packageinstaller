@@ -1,3 +1,9 @@
+mx-packageinstaller (17.5mx16) mx; urgency=medium
+
+  * new translations
+
+ -- Adrian <adrian@mxlinux.org>  Wed, 03 May 2017 11:15:40 -0400
+
 mx-packageinstaller (17.4mx16) mx; urgency=medium
 
   * rewrote app to include installation from MX Test Repo and Debian Backports
