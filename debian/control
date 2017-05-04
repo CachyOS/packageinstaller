@@ -10,9 +10,9 @@ Vcs-Git: git://github.com/AdrianTM/mx-packageinstaller
 Package: mx-packageinstaller
 Architecture: any
 Depends: ${misc:Depends}, ${shlibs:Depends}, mx-viewer, mx-packageinstaller-pkglist (>= 17.4), menu, wget
-Conflicts: mx-test-installer, mx-debian-backports-installer, mx-package-manager, mx-package-manager-pkglist
-Replaces: mx-test-installer, mx-debian-backports-installer, mx-package-manager, mx-package-manager-pkglist
-Provides: mx-test-installer, mx-debian-backports-installer
+Conflicts: mx-test-repo-installer, mx-debian-backports-installer, mx-package-manager, mx-package-manager-pkglist
+Replaces: mx-test-repo-installer, mx-debian-backports-installer, mx-package-manager, mx-package-manager-pkglist
+Provides: mx-test-repo-installer, mx-debian-backports-installer
 Description: MX Package Installer
  MX Package Installer is a tool used for managing packages on MX Linux
  - installs popular programs from different sources
