@@ -1,0 +1,37 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Mon, 08 May 2017 20:26:42 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: i386
+Version: 17.5mx16+1
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (17.5mx16+1) mx; urgency=medium
+ .
+   * remove conflicts in control file to allow upgrade without dist-upgrade
+Checksums-Sha1:
+ b6af31160b457443e71d9d32ed87eec31575eb75 105860 mx-packageinstaller_17.5mx16+1_i386.deb
+Checksums-Sha256:
+ ee7324fb9de711872093b0b20106394a7ed3610ab81021e08fbb9bdc5d42f48f 105860 mx-packageinstaller_17.5mx16+1_i386.deb
+Files:
+ d3c22c89af5bf9f08b4ed6c84eeac2f5 105860 admin optional mx-packageinstaller_17.5mx16+1_i386.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQEcBAEBAgAGBQJZER8jAAoJEHCTjHgGee6Y4hUH/A2GiD8JY2u4ta82E5MUi/za
+Wk6fiqfZZBtwStHTjNXq7JJuvaqGqQySmGej7bzLJtZZpkYARJtwvxRgQOTrQSFR
+GvRw5xcRK2tQSoVEGSptuzfMVXm8JKU7mosynJn/MwRa0r5tUc4W7wvk8chXcdVR
+2fEm9Ij0RybeWkxa8LI/iysaT5RJ5sCSpX3lQihcn71ypf9HBFNtXt479wRwnlWb
+kgo9pv14UXnWwE1p4GphmO287QBQr9e+suZgw95V4inpu3VuhF4JEszLfV1yslop
+c3sYebPMoChVwkatJivSuiULV6QhSwj5l1ipBKaWnQiACukxqWEPPcSRHT5jHVk=
+=j8Ok
+-----END PGP SIGNATURE-----

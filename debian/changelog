@@ -1,3 +1,9 @@
+mx-packageinstaller (17.5mx16+1) mx; urgency=medium
+
+  * remove conflicts in control file to allow upgrade without dist-upgrade
+
+ -- Adrian <adrian@mxlinux.org>  Mon, 08 May 2017 20:26:42 -0400
+
 mx-packageinstaller (17.5mx16) mx; urgency=medium
 
   * new translations
