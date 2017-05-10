@@ -111,13 +111,16 @@ bool MainWindow::update()
     lock_file->unlock();
     setConnections();
     progress->show();
+    progCancel->setDisabled(false);
     progress->setLabelText(tr("Running apt-get update... "));
     if (cmd->run("apt-get update") == 0) {
         lock_file->lock();
+        progCancel->setDisabled(true);
         updated_once = true;
         return true;
     }
     lock_file->lock();
+    progCancel->setDisabled(true);
     return false;
 }
 

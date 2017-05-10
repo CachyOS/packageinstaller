@@ -1,0 +1,43 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Tue, 09 May 2017 21:01:42 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 17.5mx16+2
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (17.5mx16+2) mx; urgency=medium
+ .
+   * cancel active during apt-get update
+Checksums-Sha1:
+ aa96d3dd1df67960cda46ac09b9fe859d07a38a3 1183 mx-packageinstaller_17.5mx16+2.dsc
+ 5e9221e9125e9faccd92d33b1ceaa418788a474b 68064 mx-packageinstaller_17.5mx16+2.tar.xz
+ a9e017088628fd849ea1f2d578b1f08c4f1f1254 104994 mx-packageinstaller_17.5mx16+2_amd64.deb
+Checksums-Sha256:
+ dd1cfdf5c2e475e16e1043efbfedd019ea5593241b792a0e595773351370ed36 1183 mx-packageinstaller_17.5mx16+2.dsc
+ bbbf01bc48dd3c3194b3ea8b4d979841de1f5c90c849cf19ce869511426cc787 68064 mx-packageinstaller_17.5mx16+2.tar.xz
+ b8dd44525146ade476511c3c93cac28bf36a735782defe0a49c7ab682d2d738d 104994 mx-packageinstaller_17.5mx16+2_amd64.deb
+Files:
+ e11f619c6095b4ce58b5cc0e8115b82e 1183 admin optional mx-packageinstaller_17.5mx16+2.dsc
+ a1c5be13484c3716b02463e2e04a8696 68064 admin optional mx-packageinstaller_17.5mx16+2.tar.xz
+ 39f023a9197ff15c4bc0a201889ed053 104994 admin optional mx-packageinstaller_17.5mx16+2_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQEcBAEBAgAGBQJZEmd8AAoJEHCTjHgGee6YNq4H/iAVzm5WJCjdvwI5V51+ohsm
+9Bzm8N3uebQoC2xdSj0HsFc9Er3C551Zz4Rlh/E5LQrxsw98R6lTpD8/I06GXcyN
+hFPUKqeZ2Fdr0z4qJ3gin1mq7HbW+LcUgJFG7MmLtkUyzfw5pN1eRSIT5uT3Gmvp
+2NrUaedBzKeVEJ9yJUVO/6OJx5EgP41WYp7Nb4+Vcng8oK5aYwbTPONngbVyaNzu
+W+qeumXW8fjepKrsQ6kTIOpOFbThaBpqWfgeFXDZpUdpVWs9iQhA1FqMhQGySMZW
+1W01xNGW81wlSeq4Lq58aHtNwYztQc9bycDHTreiy6+aenr5WkGZNhESp/BTRL8=
+=O0aX
+-----END PGP SIGNATURE-----

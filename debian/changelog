@@ -1,3 +1,9 @@
+mx-packageinstaller (17.5mx16+2) mx; urgency=medium
+
+  * cancel active during apt-get update 
+
+ -- Adrian <adrian@mxlinux.org>  Tue, 09 May 2017 21:01:42 -0400
+
 mx-packageinstaller (17.5mx16+1) mx; urgency=medium
 
   * remove conflicts in control file to allow upgrade without dist-upgrade
