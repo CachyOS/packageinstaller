@@ -91,7 +91,6 @@ void MainWindow::setup()
 // Uninstall listed packages
 void MainWindow::uninstall(const QString &names)
 {
-    this->hide();
     lock_file->unlock();
     qDebug() << "uninstall list: " << names;
     QString title = tr("Uninstalling packages...");
@@ -99,7 +98,6 @@ void MainWindow::uninstall(const QString &names)
     lock_file->lock();
     refreshPopularApps();
     clearCache();
-    this->show();
     if (ui->tabOtherRepos->isVisible()) {
         buildPackageLists();
     }
@@ -324,7 +322,7 @@ void MainWindow::displayPopularApps()
             font.setBold(true);
             //topLevelItem->setForeground(2, QBrush(Qt::darkGreen));
             topLevelItem->setFont(2, font);
-            topLevelItem->setIcon(0, QIcon::fromTheme("folder-green"));
+            topLevelItem->setIcon(0, QIcon::fromTheme("folder"));
         } else {
             topLevelItem = ui->treePopularApps->findItems(category, Qt::MatchFixedString, 2).at(0); //find first match; add the child there
         }
@@ -565,7 +563,6 @@ void MainWindow::install(const QString &names)
         QMessageBox::critical(this, tr("Error"), tr("Internet is not available, won't be able to download the list of packages"));
         return;
     }
-    this->hide();
     lock_file->unlock();
     QString title = tr("Installing packages...");
     if (ui->radioBackports->isChecked()) {
@@ -575,7 +572,6 @@ void MainWindow::install(const QString &names)
     }
 
     lock_file->lock();
-    this->show();
 }
 
 // install a list of application and run postprocess for each of them.
@@ -597,10 +593,8 @@ void MainWindow::installBatch(const QStringList &name_list)
 
     if (install_names != "") {
         progress->hide();
-        this->hide();
         progress->setLabelText(tr("Installing..."));
         install(install_names);
-        this->show();
         progress->show();
     }
     setConnections();
@@ -633,10 +627,8 @@ void MainWindow::installPopularApp(const QString &name)
 
     if (install_names != "") {
         progress->hide();
-        this->hide();
         progress->setLabelText(tr("Installing ") + name);
         install(install_names);
-        this->show();
         progress->show();
     }
     setConnections();
@@ -696,7 +688,6 @@ void MainWindow::installPopularApps()
     }
     refreshPopularApps();
     clearCache();
-    this->show();
 }
 
 // Install selected items from ui->treeOther
@@ -1232,7 +1223,7 @@ void MainWindow::on_treePopularApps_itemExpanded(QTreeWidgetItem *item)
 // Tree item collapsed
 void MainWindow::on_treePopularApps_itemCollapsed(QTreeWidgetItem *item)
 {
-    item->setIcon(0, QIcon::fromTheme("folder-green"));
+    item->setIcon(0, QIcon::fromTheme("folder"));
     ui->treePopularApps->resizeColumnToContents(2);
     ui->treePopularApps->resizeColumnToContents(4);
 }

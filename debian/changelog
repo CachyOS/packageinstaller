@@ -1,3 +1,9 @@
+mx-packageinstaller (17.5mx16+3) mx; urgency=medium
+
+  * minor changes
+
+ -- Adrian <adrian@mxlinux.org>  Fri, 19 May 2017 15:38:49 -0400
+
 mx-packageinstaller (17.5mx16+2) mx; urgency=medium
 
   * cancel active during apt-get update 

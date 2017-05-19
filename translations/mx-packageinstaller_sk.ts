@@ -6,9 +6,9 @@
     <message>
         <location filename="../mainwindow.ui" line="20"/>
         <location filename="../mainwindow.cpp" line="69"/>
-        <location filename="../mainwindow.cpp" line="1172"/>
-        <location filename="../mainwindow.cpp" line="1179"/>
-        <location filename="../mainwindow.cpp" line="1187"/>
+        <location filename="../mainwindow.cpp" line="1163"/>
+        <location filename="../mainwindow.cpp" line="1170"/>
+        <location filename="../mainwindow.cpp" line="1178"/>
         <source>MX Package Installer</source>
         <translation>MX Inštalátor programov</translation>
     </message>
@@ -59,19 +59,19 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="150"/>
-        <location filename="../mainwindow.cpp" line="1273"/>
+        <location filename="../mainwindow.cpp" line="1264"/>
         <source>Stable Repo</source>
         <translation>Hlavný repozitár</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="160"/>
-        <location filename="../mainwindow.cpp" line="1272"/>
+        <location filename="../mainwindow.cpp" line="1263"/>
         <source>MX Test Repo</source>
         <translation>TEST repozitár</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="170"/>
-        <location filename="../mainwindow.cpp" line="1271"/>
+        <location filename="../mainwindow.cpp" line="1262"/>
         <source>Debian Backports Repo</source>
         <translation>Debian Backports repozitár</translation>
     </message>
@@ -83,25 +83,25 @@
     <message>
         <location filename="../mainwindow.ui" line="261"/>
         <location filename="../mainwindow.ui" line="265"/>
-        <location filename="../mainwindow.cpp" line="1313"/>
+        <location filename="../mainwindow.cpp" line="1304"/>
         <source>All packages</source>
         <translation>Všetky balíky</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="270"/>
-        <location filename="../mainwindow.cpp" line="1326"/>
+        <location filename="../mainwindow.cpp" line="1317"/>
         <source>Installed</source>
         <translation>Nainštalované</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="275"/>
-        <location filename="../mainwindow.cpp" line="1324"/>
+        <location filename="../mainwindow.cpp" line="1315"/>
         <source>Upgradable</source>
         <translation>Povýšiteľné</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="280"/>
-        <location filename="../mainwindow.cpp" line="1328"/>
+        <location filename="../mainwindow.cpp" line="1319"/>
         <source>Not installed</source>
         <translation>Nenainštalované</translation>
     </message>
@@ -197,8 +197,8 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="628"/>
-        <location filename="../mainwindow.cpp" line="1220"/>
-        <location filename="../mainwindow.cpp" line="1371"/>
+        <location filename="../mainwindow.cpp" line="1211"/>
+        <location filename="../mainwindow.cpp" line="1362"/>
         <source>Install</source>
         <translation>Inštalovať</translation>
     </message>
@@ -218,205 +218,205 @@
         <translation>Alt+N</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="97"/>
+        <location filename="../mainwindow.cpp" line="96"/>
         <source>Uninstalling packages...</source>
         <translation>Odstraňovanie balíkov...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="115"/>
+        <location filename="../mainwindow.cpp" line="113"/>
         <source>Running apt-get update... </source>
         <translation>Spúšťam apt-get update...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="288"/>
-        <location filename="../mainwindow.cpp" line="1177"/>
-        <location filename="../mainwindow.cpp" line="1274"/>
+        <location filename="../mainwindow.cpp" line="286"/>
+        <location filename="../mainwindow.cpp" line="1168"/>
+        <location filename="../mainwindow.cpp" line="1265"/>
         <source>Cancel</source>
         <translation>Zrušiť</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="294"/>
+        <location filename="../mainwindow.cpp" line="292"/>
         <source>Please wait...</source>
         <translation>Čakajte prosím...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="427"/>
+        <location filename="../mainwindow.cpp" line="425"/>
         <source>Updating package list...</source>
         <translation>Aktualizácia zoznamu balíkov...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="463"/>
-        <location filename="../mainwindow.cpp" line="483"/>
+        <location filename="../mainwindow.cpp" line="461"/>
+        <location filename="../mainwindow.cpp" line="481"/>
         <source>Version </source>
         <translation>Verzia</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="463"/>
+        <location filename="../mainwindow.cpp" line="461"/>
         <source> in stable repo</source>
         <translation>v hlavnom repozitári</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="468"/>
+        <location filename="../mainwindow.cpp" line="466"/>
         <source>Not available in stable repo</source>
         <translation>V hlavnom repozitári nie je k dispozícii</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="477"/>
+        <location filename="../mainwindow.cpp" line="475"/>
         <source>Latest version </source>
         <translation>Najnovšia verzia</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="477"/>
+        <location filename="../mainwindow.cpp" line="475"/>
         <source> already installed</source>
         <translation>už nainštalované</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="483"/>
+        <location filename="../mainwindow.cpp" line="481"/>
         <source> installed</source>
         <translation>nainštalované</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="515"/>
+        <location filename="../mainwindow.cpp" line="513"/>
         <source>Warning</source>
         <translation>Upozornenie</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="516"/>
+        <location filename="../mainwindow.cpp" line="514"/>
         <source>You are about to use Debian Backports, which contains packages taken from the next Debian release (called &apos;testing&apos;), adjusted and recompiled for usage on Debian stable. They cannot be tested as extensively as in the stable releases of Debian and MX Linux, and are provided on an as-is basis, with risk of incompatibilities with other components in Debian stable. Use with care!</source>
         <translation>Chystáte sa použiť Backporty Debianu, ktoré obsahujú inštalačné balíky prevziate z novšej distribúcie Debianu (nazývanej tiež &apos;testing&apos;), tieto boli upravené pre používanie v stabilnom Debiane. Nemohli však byť otestovené v takej miere ako balíky zo stabilnej distribúcie Debianu a MX Linux a sú preto zprístupnené tak ako sú, tj. s určitým rizikom nekompatibility s ostatnými komponentami zo stabilného Debianu. Použivajte ich preto s opatrnosťou!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="524"/>
+        <location filename="../mainwindow.cpp" line="522"/>
         <source>Do not show this message again</source>
         <translation>Túto spravu už nezobrazovať</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="565"/>
-        <location filename="../mainwindow.cpp" line="657"/>
-        <location filename="../mainwindow.cpp" line="757"/>
+        <location filename="../mainwindow.cpp" line="563"/>
+        <location filename="../mainwindow.cpp" line="649"/>
+        <location filename="../mainwindow.cpp" line="748"/>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="565"/>
-        <location filename="../mainwindow.cpp" line="657"/>
-        <location filename="../mainwindow.cpp" line="757"/>
+        <location filename="../mainwindow.cpp" line="563"/>
+        <location filename="../mainwindow.cpp" line="649"/>
+        <location filename="../mainwindow.cpp" line="748"/>
         <source>Internet is not available, won&apos;t be able to download the list of packages</source>
         <translation>Nie ste pripojení k internetu, zoznam balíkov sa nebude dať stiahnuť</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="570"/>
+        <location filename="../mainwindow.cpp" line="567"/>
         <source>Installing packages...</source>
         <translation>Inštalácia balíkov...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="601"/>
+        <location filename="../mainwindow.cpp" line="596"/>
         <source>Installing...</source>
         <translation>Inštalácia...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="607"/>
+        <location filename="../mainwindow.cpp" line="601"/>
         <source>Post-processing...</source>
         <translation>Dokončovanie...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="630"/>
+        <location filename="../mainwindow.cpp" line="624"/>
         <source>Pre-processing for </source>
         <translation>Príprava pre</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="637"/>
+        <location filename="../mainwindow.cpp" line="630"/>
         <source>Installing </source>
         <translation>Inštalácia</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="643"/>
+        <location filename="../mainwindow.cpp" line="635"/>
         <source>Post-processing for </source>
         <translation>Dokončovanie pre</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="692"/>
+        <location filename="../mainwindow.cpp" line="684"/>
         <source>Done</source>
         <translation>Hotovo</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="693"/>
+        <location filename="../mainwindow.cpp" line="685"/>
         <source>Process finished.&lt;p&gt;&lt;b&gt;Do you want to exit MX Package Installer?&lt;/b&gt;</source>
         <translation>Proces bol úspešne dokončený.&lt;p&gt;&lt;b&gt;Ukončiť MX Inštalátor programov?&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="694"/>
+        <location filename="../mainwindow.cpp" line="686"/>
         <source>Yes</source>
         <translation>Ano</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="694"/>
+        <location filename="../mainwindow.cpp" line="686"/>
         <source>No</source>
         <translation>Nie</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="765"/>
+        <location filename="../mainwindow.cpp" line="756"/>
         <source>Downloading package info...</source>
         <translation>Sťahovanie informácií o balíku...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="843"/>
+        <location filename="../mainwindow.cpp" line="834"/>
         <source>Reading downloaded file...</source>
         <translation>Čítam stiahnutý súbor...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1043"/>
+        <location filename="../mainwindow.cpp" line="1034"/>
         <source>Packages to be installed: </source>
         <translation>Programy k inštalácii:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1080"/>
+        <location filename="../mainwindow.cpp" line="1071"/>
         <source>Package info</source>
         <translation>Informácia o balíku</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1171"/>
+        <location filename="../mainwindow.cpp" line="1162"/>
         <source>About MX Package Installer</source>
         <translation>O programe MX Inštalátor programov</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1172"/>
+        <location filename="../mainwindow.cpp" line="1163"/>
         <source>Version: </source>
         <translation>Verzia:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1173"/>
+        <location filename="../mainwindow.cpp" line="1164"/>
         <source>Package Installer for MX Linux</source>
         <translation>Inštalátor dodatočných programov pre MX linux</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1175"/>
+        <location filename="../mainwindow.cpp" line="1166"/>
         <source>Copyright (c) MX Linux</source>
         <translation>Copyright (c) MX Linux</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1176"/>
-        <location filename="../mainwindow.cpp" line="1179"/>
+        <location filename="../mainwindow.cpp" line="1167"/>
+        <location filename="../mainwindow.cpp" line="1170"/>
         <source>License</source>
         <translation>Licencia</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1218"/>
+        <location filename="../mainwindow.cpp" line="1209"/>
         <source>Reinstall</source>
         <translation>Preinštalovať</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1269"/>
+        <location filename="../mainwindow.cpp" line="1260"/>
         <source>Repo Selection</source>
         <translation>Výber repozitára</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1270"/>
+        <location filename="../mainwindow.cpp" line="1261"/>
         <source>Please select repo to load</source>
         <translation>Prosím vyberte repozitár k načítaniu</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1369"/>
+        <location filename="../mainwindow.cpp" line="1360"/>
         <source>Upgrade</source>
         <translation>Aktualizovať</translation>
     </message>
