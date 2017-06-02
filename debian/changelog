@@ -1,3 +1,9 @@
+mx-packageinstaller (17.6mx16) mx; urgency=medium
+
+  * updated translation
+
+ -- Adrian <adrian@mxlinux.org>  Fri, 02 Jun 2017 14:46:55 -0400
+
 mx-packageinstaller (17.5mx16+3) mx; urgency=medium
 
   * minor changes
