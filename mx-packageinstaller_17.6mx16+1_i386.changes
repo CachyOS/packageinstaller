@@ -1,0 +1,37 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Tue, 13 Jun 2017 12:29:43 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: i386
+Version: 17.6mx16+1
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (17.6mx16+1) mx; urgency=medium
+ .
+   * fix testing sources
+Checksums-Sha1:
+ 9081bab2624675a39068274c54a773154e61d4a7 105952 mx-packageinstaller_17.6mx16+1_i386.deb
+Checksums-Sha256:
+ 8241ae396e4dc9f97fdcdc7c022236ba348c1e17fc1586639389a63fce4b9cc7 105952 mx-packageinstaller_17.6mx16+1_i386.deb
+Files:
+ 32b6d87761831fb2937710b46ea2579f 105952 admin optional mx-packageinstaller_17.6mx16+1_i386.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQEcBAEBAgAGBQJZQBP8AAoJEHCTjHgGee6YkEkH/iTfUO0xIJixoggnPFz+H1ZV
+ZvoJXan+hITY2CBYHohnvz0Ksns47xwg1zFReJ9p33JgNqTSoF8+5PPows8/kJ81
+89SQY1An6IxSGbOsDyhXBZs+quvZZT38WeZUMGwqf9dqI90exIh4Uus2BHwf4hed
+Tt7z6tVn+nUbD27z6/kBVa4Qmw1W3qPZ80ssT3ZeLnbQLxlYFfryCtyna/J0JX+K
+AlaKG1kk37po4rWklDUIXSJ5cs/9Xf78HGhg+JbSRz+Uhwi6RFLeVLMmiNMA3nP6
+qeXnKWFeJJTs4ZOl7cNwaCx1LKqoIA+guKTqxkOA/IgfiPLze/sgE/NYyhHgTWA=
+=vklo
+-----END PGP SIGNATURE-----
