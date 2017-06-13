@@ -1,3 +1,9 @@
+mx-packageinstaller (17.6mx16+3) mx; urgency=medium
+
+  * fix potential problem if repo not present and mx.list doesn't end with new line
+
+ -- Adrian <adrian@mxlinux.org>  Tue, 13 Jun 2017 18:17:49 -0400
+
 mx-packageinstaller (17.6mx16+2) mx; urgency=medium
 
   * fix testing sources, leave enabled if enabled initially

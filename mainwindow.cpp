@@ -703,7 +703,7 @@ void MainWindow::installSelected()
         } else if (cmd->run("grep -q '^#\\s*deb.*mx15 test' /etc/apt/sources.list.d/mx.list") == 0) { // commented out line
             cmd->run("sed -i '/^#*\\s*deb.*mx15 test/s/^#*//' /etc/apt/sources.list.d/mx.list"); // uncomment
         } else { // doesn't exist, add
-            cmd->run("echo 'deb http://mxrepo.com/mx/testrepo/ mx15 test' >> /etc/apt/sources.list.d/mx.list");
+            cmd->run("echo -e '\ndeb http://mxrepo.com/mx/testrepo/ mx15 test' >> /etc/apt/sources.list.d/mx.list");
         }
         update();
     } else if (ui->radioBackports->isChecked()) {
