@@ -1,3 +1,9 @@
+mx-packageinstaller (17.6mx16+2) mx; urgency=medium
+
+  * fix testing sources, leave enabled if enabled initially
+
+ -- Adrian <adrian@mxlinux.org>  Tue, 13 Jun 2017 14:51:31 -0400
+
 mx-packageinstaller (17.6mx16+1) mx; urgency=medium
 
   * fix testing sources

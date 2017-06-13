@@ -693,11 +693,18 @@ void MainWindow::installPopularApps()
 // Install selected items from ui->treeOther
 void MainWindow::installSelected()
 {
+    bool initiallyEnabled = false;
     QString names = change_list.join(" ");
 
     // change sources as needed
     if(ui->radioMXtest->isChecked()) {
-        cmd->run("sed -i 's/#\s*deb/deb/g' /etc/apt/sources.list.d/mx.list");
+        if (cmd->run("grep -q '^deb.*mx15 test' /etc/apt/sources.list.d/mx.list") == 0) {  // enabled
+            initiallyEnabled = true;
+        } else if (cmd->run("grep -q '^#\\s*deb.*mx15 test' /etc/apt/sources.list.d/mx.list") == 0) { // commented out line
+            cmd->run("sed -i '/^#*\\s*deb.*mx15 test/s/^#*//' /etc/apt/sources.list.d/mx.list"); // uncomment
+        } else { // doesn't exist, add
+            cmd->run("echo 'deb http://mxrepo.com/mx/testrepo/ mx15 test' >> /etc/apt/sources.list.d/mx.list");
+        }
         update();
     } else if (ui->radioBackports->isChecked()) {
         cmd->run("echo deb http://ftp.debian.org/debian jessie-backports main contrib non-free>/etc/apt/sources.list.d/mxpm-temp.list");
@@ -708,7 +715,7 @@ void MainWindow::installSelected()
     if (ui->radioBackports->isChecked()) {
         cmd->run("rm -f /etc/apt/sources.list.d/mxpm-temp.list");
         update();
-    } else if (ui->radioMXtest->isChecked()) {
+    } else if (ui->radioMXtest->isChecked() && !initiallyEnabled) {
         cmd->run("sed -i 's/.*mx15 test/#&/'  /etc/apt/sources.list.d/mx.list");
         update();
     }
