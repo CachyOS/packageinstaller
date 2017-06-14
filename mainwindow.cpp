@@ -293,6 +293,7 @@ void MainWindow::setProgressDialog()
     progress->setAutoClose(false);
     progress->setBar(bar);
     bar->setTextVisible(false);
+    progress->reset();
 }
 
 // Display Popular Apps in the treePopularApps
