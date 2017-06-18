@@ -62,6 +62,12 @@ void MainWindow::setup()
     } else {
         arch = "i386";
     }
+    QString ver_num = getDebianVersion();
+    if (ver_num == "8") {
+        ver_name = "jessie";
+    } else if (ver_name == "9") {
+        ver_name = "stretch";
+    }
     setProgressDialog();
     lock_file = new LockFile("/var/lib/dpkg/lock");
     connect(qApp, &QApplication::aboutToQuit, this, &MainWindow::cleanup);
@@ -145,6 +151,11 @@ void MainWindow::updateInterface()
     ui->searchBox->setFocus();
     ui->treeOther->blockSignals(false);
     findPackageOther();
+}
+
+QString MainWindow::getDebianVersion()
+{
+    return cmd->getOutput("cat /etc/debian_version | cut -f1 -d'.'");
 }
 
 // Write the name of the apps in a temp file
@@ -567,7 +578,7 @@ void MainWindow::install(const QString &names)
     lock_file->unlock();
     QString title = tr("Installing packages...");
     if (ui->radioBackports->isChecked()) {
-        cmd->run("x-terminal-emulator -T '" +  title + "' -e apt-get install -t jessie-backports --reinstall " + names);
+        cmd->run("x-terminal-emulator -T '" +  title + "' -e apt-get install -t " + ver_name + "-backports --reinstall " + names);
     } else {
         cmd->run("x-terminal-emulator -T '" +  title + "' -e apt-get install --reinstall " + names);
     }
@@ -708,7 +719,7 @@ void MainWindow::installSelected()
         }
         update();
     } else if (ui->radioBackports->isChecked()) {
-        cmd->run("echo deb http://ftp.debian.org/debian jessie-backports main contrib non-free>/etc/apt/sources.list.d/mxpm-temp.list");
+        cmd->run("echo deb http://ftp.debian.org/debian " + ver_name + "-backports main contrib non-free>/etc/apt/sources.list.d/mxpm-temp.list");
         update();
     }
     progress->hide();
@@ -791,21 +802,21 @@ bool MainWindow::downloadPackageList(bool force_download)
                 !QFile(tmp_dir + "/contribPackages").exists() ||
                 !QFile(tmp_dir + "/nonfreePackages").exists() || force_download) {
             progress->show();
-            int err = cmd->run("wget ftp://ftp.us.debian.org/debian/dists/jessie-backports/main/binary-" + arch +
+            int err = cmd->run("wget ftp://ftp.us.debian.org/debian/dists/" + ver_name + "-backports/main/binary-" + arch +
                                 "/Packages.gz -O mainPackages.gz && gzip -df mainPackages.gz");
             if (err != 0 ) {
                 QFile::remove(tmp_dir + "/mainPackages.gz");
                 QFile::remove(tmp_dir + "/mainPackages");
                 return false;
             }
-            err = cmd->run("wget ftp://ftp.us.debian.org/debian/dists/jessie-backports/contrib/binary-" + arch +
+            err = cmd->run("wget ftp://ftp.us.debian.org/debian/dists/" + ver_name + "-backports/contrib/binary-" + arch +
                                 "/Packages.gz -O contribPackages.gz && gzip -df contribPackages.gz");
             if (err != 0 ) {
                 QFile::remove(tmp_dir + "/contribPackages.gz");
                 QFile::remove(tmp_dir + "/contribPackages");
                 return false;
             }
-            err = cmd->run("wget ftp://ftp.us.debian.org/debian/dists/jessie-backports/non-free/binary-" + arch +
+            err = cmd->run("wget ftp://ftp.us.debian.org/debian/dists/" + ver_name + "-backports/non-free/binary-" + arch +
                                 "/Packages.gz -O nonfreePackages.gz && gzip -df nonfreePackages.gz");
             if (err != 0 ) {
                 QFile::remove(tmp_dir + "/nonfreePackages.gz");
@@ -813,7 +824,7 @@ bool MainWindow::downloadPackageList(bool force_download)
                 return false;
             }
             progCancel->setDisabled(true);
-            cmd->run("cat mainPackages + contribPackages + nonfreePackages > allPackages");
+            cmd->run("cat mainPackages contribPackages nonfreePackages > allPackages");
         }
     }
     return true;

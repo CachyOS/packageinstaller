@@ -72,7 +72,7 @@ public:
     void ifDownloadFailed();
     void install(const QString &names);
     void installBatch(const QStringList &name_list);
-    void installPopularApp(const QString &name);    
+    void installPopularApp(const QString &name);
     void installPopularApps();
     void installSelected();
     void loadPmFiles();
@@ -84,6 +84,7 @@ public:
     bool update();
     void updateInterface();
 
+    QString getDebianVersion();
     QString getVersion(QString name);
     QString writeTmpFile(QString apps);
     QStringList listInstalled();
@@ -133,6 +134,7 @@ private:
     QString arch;
     QString stable_raw;
     QString tmp_dir;
+    QString ver_name;
     QStringList app_info_list;
     QStringList installed_packages;
     QStringList change_list;

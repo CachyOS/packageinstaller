@@ -1,3 +1,9 @@
+mx-packageinstaller (17.6mx16+4) mx; urgency=medium
+
+  * fix for Stretch
+
+ -- Adrian <adrian@mxlinux.org>  Sun, 18 Jun 2017 11:38:57 -0400
+
 mx-packageinstaller (17.6mx16+3) mx; urgency=medium
 
   * fix potential problem if repo not present and mx.list doesn't end with new line
