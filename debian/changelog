@@ -1,3 +1,9 @@
+mx-packageinstaller (17.6mx16+5) mx; urgency=medium
+
+  * removes deprecated packages 
+
+ -- Adrian <adrian@mxlinux.org>  Wed, 28 Jun 2017 13:37:48 -0400
+
 mx-packageinstaller (17.6mx16+4) mx; urgency=medium
 
   * fix for Stretch
