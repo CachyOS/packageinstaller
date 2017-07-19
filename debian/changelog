@@ -1,3 +1,10 @@
+mx-packageinstaller (17.7) mx; urgency=medium
+
+  * generalize code for MX17
+  * fix bug updating installed package list after installation
+
+ -- Adrian <adrian@mxlinux.org>  Wed, 19 Jul 2017 12:42:43 -0400
+
 mx-packageinstaller (17.6mx16+5) mx; urgency=medium
 
   * removes deprecated packages 
