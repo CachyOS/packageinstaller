@@ -733,6 +733,7 @@ void MainWindow::installSelected()
     }
     change_list.clear();
     clearCache();
+    installed_packages = listInstalled();
     buildPackageLists();
 }
 
