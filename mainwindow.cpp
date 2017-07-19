@@ -710,12 +710,16 @@ void MainWindow::installSelected()
 
     // change sources as needed
     if(ui->radioMXtest->isChecked()) {
-        if (cmd->run("grep -q '^deb.*mx15 test' /etc/apt/sources.list.d/mx.list") == 0) {  // enabled
+        if (cmd->run("grep -q '^deb.* test' /etc/apt/sources.list.d/mx.list") == 0) {  // enabled
             initiallyEnabled = true;
-        } else if (cmd->run("grep -q '^#\\s*deb.*mx15 test' /etc/apt/sources.list.d/mx.list") == 0) { // commented out line
-            cmd->run("sed -i '/^#*\\s*deb.*mx15 test/s/^#*//' /etc/apt/sources.list.d/mx.list"); // uncomment
+        } else if (cmd->run("grep -q '^#\\s*deb.* test' /etc/apt/sources.list.d/mx.list") == 0) { // commented out line
+            cmd->run("sed -i '/^#*\\s*deb.* test/s/^#*//' /etc/apt/sources.list.d/mx.list"); // uncomment
         } else { // doesn't exist, add
-            cmd->run("echo -e '\ndeb http://mxrepo.com/mx/testrepo/ mx15 test' >> /etc/apt/sources.list.d/mx.list");
+            if (ver_name == "jessie") { // use 'mx15' for Stretch based MX, user version name for newer versions
+                cmd->run("echo -e '\ndeb http://mxrepo.com/mx/testrepo/ mx15 test' >> /etc/apt/sources.list.d/mx.list");
+            } else {
+                cmd->run("echo -e '\ndeb http://mxrepo.com/mx/testrepo/ " + ver_name + " test' >> /etc/apt/sources.list.d/mx.list");
+            }
         }
         update();
     } else if (ui->radioBackports->isChecked()) {
@@ -728,7 +732,7 @@ void MainWindow::installSelected()
         cmd->run("rm -f /etc/apt/sources.list.d/mxpm-temp.list");
         update();
     } else if (ui->radioMXtest->isChecked() && !initiallyEnabled) {
-        cmd->run("sed -i 's/.*mx15 test/#&/'  /etc/apt/sources.list.d/mx.list");
+        cmd->run("sed -i 's/.* test/#&/'  /etc/apt/sources.list.d/mx.list");  // comment out the line
         update();
     }
     change_list.clear();
@@ -763,6 +767,8 @@ bool MainWindow::buildPackageLists(bool force_download)
 // Download the Packages.gz from sources
 bool MainWindow::downloadPackageList(bool force_download)
 {
+    QString repo_name;
+
     if (!checkOnline()) {
         QMessageBox::critical(this, tr("Error"), tr("Internet is not available, won't be able to download the list of packages"));
         return false;
@@ -789,12 +795,19 @@ bool MainWindow::downloadPackageList(bool force_download)
             }
         }
     } else if (ui->radioMXtest->isChecked())  {
-        if (!QFile(tmp_dir + "/mx15Packages").exists() || force_download) {
+        if (!QFile(tmp_dir + "/mxPackages").exists() || force_download) {
             progress->show();
-            if (cmd->run("wget http://mxrepo.com/mx/testrepo/dists/mx15/test/binary-" + arch +
-                             "/Packages.gz -O mx15Packages.gz && gzip -df mx15Packages.gz") != 0) {
-                QFile::remove(tmp_dir + "/mx15Packages.gz");
-                QFile::remove(tmp_dir + "/mx15Packages");
+
+            if (ver_name == "jessie") { // repo name is 'mx15' for Strech, use Debian version name for later versions
+                repo_name = "mx15";
+            } else {
+                repo_name = ver_name;
+            }
+
+            if (cmd->run("wget http://mxrepo.com/mx/testrepo/dists/" + repo_name + "/test/binary-" + arch +
+                             "/Packages.gz -O mxPackages.gz && gzip -df mxPackages.gz") != 0) {
+                QFile::remove(tmp_dir + "/mxPackages.gz");
+                QFile::remove(tmp_dir + "/mxPackages");
                 return false;
             }
         }
@@ -852,7 +865,7 @@ bool MainWindow::readPackageList(bool force_download)
          progress->show();
          progress->setLabelText(tr("Reading downloaded file..."));
          if (ui->radioMXtest->isChecked())  { // read MX Test list
-             file.setFileName(tmp_dir + "/mx15Packages");
+             file.setFileName(tmp_dir + "/mxPackages");
          } else if (ui->radioBackports->isChecked()) {  // read Backports lsit
              file.setFileName(tmp_dir + "/allPackages");
          }
