@@ -65,7 +65,7 @@ void MainWindow::setup()
     QString ver_num = getDebianVersion();
     if (ver_num == "8") {
         ver_name = "jessie";
-    } else if (ver_name == "9") {
+    } else if (ver_num == "9") {
         ver_name = "stretch";
     }
     setProgressDialog();
