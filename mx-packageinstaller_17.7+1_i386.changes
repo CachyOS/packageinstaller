@@ -1,0 +1,37 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Fri, 21 Jul 2017 08:15:42 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: i386
+Version: 17.7+1
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (17.7+1) mx; urgency=medium
+ .
+   * fix bug for Stretch
+Checksums-Sha1:
+ 45c9abc568115816f78e97294eae2100f98993e6 107054 mx-packageinstaller_17.7+1_i386.deb
+Checksums-Sha256:
+ b0c6e4eb9522a762d06566ad24d1dbbc5ba6404ee3734cc4166314fa59fd55cd 107054 mx-packageinstaller_17.7+1_i386.deb
+Files:
+ fbae4b611e066c99fdc7d53f157f0597 107054 admin optional mx-packageinstaller_17.7+1_i386.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQEcBAEBAgAGBQJZcfC/AAoJEHCTjHgGee6YMO0IALEVea8+NZ1bVJLkgTkZwLjI
+Nucbdgn8hu3RZu4Xkq5ETAbOx8s7ithKdOyk4UHcGodmVxXJJp8AdfkR8sDDxpX0
+TZ6VlaV2S8vbh0GNhw+NUrAPjTmghl0hI0C1nGcjz8eLmM2hWTwH7aHYnJ1qvOYV
+Jm+bVZESh8QrkLBFjUORuX3aLYFjgIKct9iG+291nYN9OK5/B1jfA6GtWKlkROhZ
+74JqzIwQGk2bqqkaDMqCJFbUL0q1GWwPGcZxJf0lzoc8I5HeQy5PzCKiYzkwVzgY
+bFso0890ctzuZ5KBED2qUJKN4oqsfQYyeLBWASMGNLJOY6aCRYiP48CPVjSJhAI=
+=HPWt
+-----END PGP SIGNATURE-----

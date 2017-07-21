@@ -1,3 +1,9 @@
+mx-packageinstaller (17.7+1) mx; urgency=medium
+
+  * fix bug for Stretch
+
+ -- Adrian <adrian@mxlinux.org>  Fri, 21 Jul 2017 08:15:42 -0400
+
 mx-packageinstaller (17.7) mx; urgency=medium
 
   * generalize code for MX17
