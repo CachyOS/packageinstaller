@@ -984,7 +984,7 @@ bool MainWindow::checkInstalled(const QString &names)
         return false;
     }
     foreach(const QString &name, names.split("\n")) {
-        if (!installed_packages.contains(name)) {
+        if (!installed_packages.contains(name.trimmed())) {
             return false;
         }
     }

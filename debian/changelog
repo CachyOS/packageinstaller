@@ -1,3 +1,9 @@
+mx-packageinstaller (17.10) mx; urgency=medium
+
+  * trim package names
+
+ -- Adrian <adrian@mxlinux.org>  Sat, 14 Oct 2017 18:56:41 -0400
+
 mx-packageinstaller (17.7+1) mx; urgency=medium
 
   * fix bug for Stretch

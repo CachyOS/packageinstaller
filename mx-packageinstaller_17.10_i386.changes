@@ -1,0 +1,37 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Sat, 14 Oct 2017 18:56:41 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: i386
+Version: 17.10
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (17.10) mx; urgency=medium
+ .
+   * trim package names
+Checksums-Sha1:
+ e945abf08f27e00c17d4d2fe5fbb0af99efbb7b2 107218 mx-packageinstaller_17.10_i386.deb
+Checksums-Sha256:
+ d159c6d8adbaf5cb45f9c06dc36db73764f8904f47fee9e4a07cc048c1a0e357 107218 mx-packageinstaller_17.10_i386.deb
+Files:
+ 4a01c73d0d3a5f11ae6766a1c2de6ae6 107218 admin optional mx-packageinstaller_17.10_i386.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQEcBAEBAgAGBQJZ4sVOAAoJEHCTjHgGee6YwxYH/0Q8J40xAMtCCKyb5JOyszJT
+jCPSrOGMg4aqI8I1xVSly8ftxNvOSjdx4P4Eevr1IwMwxQYtbna8bqFSpsQb2mOT
+XyLBa/LR9fBuLDAdEmPTgGe5ssgsyppGFl6T7qh0I0TPnFxGp2wYkN+WYgkmqUVl
+yLDuYxzR87nzO/h+XiZMayWeJDdBQ8Q5EOpoyUiAIxXCifAQ8MidmeJGEEST4FmT
+jy8oC9OorwuiM0SAPficv7dYUg8T4ZNSRL58b2zILzsUaM1mtCAGSvbbhwo6FUjm
+wgPqFbutuAvmAGOAHpxs54/DW+zjQZL6Ayob4TO/YvVbCIAlTqYPTYs+OQhi59A=
+=hncD
+-----END PGP SIGNATURE-----
