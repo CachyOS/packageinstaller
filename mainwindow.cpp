@@ -100,7 +100,7 @@ void MainWindow::uninstall(const QString &names)
     lock_file->unlock();
     qDebug() << "uninstall list: " << names;
     QString title = tr("Uninstalling packages...");
-    cmd->run("x-terminal-emulator -T '" + title + "' -e apt-get remove " + names);
+    cmd->run("x-terminal-emulator -T '" + title + "' -e script -ac \"apt-get remove " + names + "\" /var/log/mxpi.log");
     lock_file->lock();
     refreshPopularApps();
     clearCache();
@@ -117,7 +117,7 @@ bool MainWindow::update()
     progress->show();
     progCancel->setDisabled(false);
     progress->setLabelText(tr("Running apt-get update... "));
-    if (cmd->run("apt-get update") == 0) {
+    if (cmd->run("apt-get update | tee -a /var/log/mxpi.log") == 0) {
         lock_file->lock();
         progCancel->setDisabled(true);
         updated_once = true;
@@ -578,9 +578,9 @@ void MainWindow::install(const QString &names)
     lock_file->unlock();
     QString title = tr("Installing packages...");
     if (ui->radioBackports->isChecked()) {
-        cmd->run("x-terminal-emulator -T '" +  title + "' -e apt-get install -t " + ver_name + "-backports --reinstall " + names);
+        cmd->run("x-terminal-emulator -T '" +  title + "' -e script -ac \"apt-get install -t " + ver_name + "-backports --reinstall " + names + "\" /var/log/mxpi.log");
     } else {
-        cmd->run("x-terminal-emulator -T '" +  title + "' -e apt-get install --reinstall " + names);
+        cmd->run("x-terminal-emulator -T '" +  title + "' -e script -ac \"apt-get install --reinstall " + names + "\" /var/log/mxpi.log");
     }
 
     lock_file->lock();

@@ -434,7 +434,7 @@
         <translation>Μια άλλη εφαρμογή διαχείρισης πακέτων (όπως Synaptic η apt-get), βρίσκεται ήδη σε λειτουργία. Κλείστε πρώτα την εφαρμογή.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="69"/>
+        <location filename="../main.cpp" line="72"/>
         <source>You must run this program as root.</source>
         <translation>Πρέπει να τρέξετε αυτή την εφασρμογή ως Root. </translation>
     </message>

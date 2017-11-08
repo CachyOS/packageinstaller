@@ -434,7 +434,7 @@
         <translation>Hi ha un altre gestor de paquets (com Synaptic o apt-get) funcionant alhora. Si us plau, tanqueu primer aquesta aplicació.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="69"/>
+        <location filename="../main.cpp" line="72"/>
         <source>You must run this program as root.</source>
         <translation>Cal ser usuari principal per executar aquest programa</translation>
     </message>

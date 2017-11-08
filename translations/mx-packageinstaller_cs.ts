@@ -435,7 +435,7 @@
 Prosím nejdřiv ji ukončete</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="69"/>
+        <location filename="../main.cpp" line="72"/>
         <source>You must run this program as root.</source>
         <translation>Tuto aplikaci musíte spustit jako root.</translation>
     </message>

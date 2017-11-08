@@ -434,7 +434,7 @@
         <translation>Está em execução outra aplicação de gestão de pacotes (p. ex. Synaptic ou apt-get). Primeiro feche a aplicação em execução.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="69"/>
+        <location filename="../main.cpp" line="72"/>
         <source>You must run this program as root.</source>
         <translation>Tem que executar este programa como root.</translation>
     </message>

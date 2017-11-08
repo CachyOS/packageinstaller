@@ -434,7 +434,7 @@
         <translation>O altă aplicație de gestionare a pachetelor (cum ar fi Synaptic sau apt-get), se execută deja. Vă rugăm să închideți mai întâi această aplicație</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="69"/>
+        <location filename="../main.cpp" line="72"/>
         <source>You must run this program as root.</source>
         <translation>Trebuie să rulați programul ca administrator.</translation>
     </message>

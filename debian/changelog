@@ -1,3 +1,9 @@
+mx-packageinstaller (17.11) mx; urgency=medium
+
+  * add logs
+
+ -- Adrian <adrian@mxlinux.org>  Tue, 07 Nov 2017 20:41:16 -0500
+
 mx-packageinstaller (17.10) mx; urgency=medium
 
   * trim package names

@@ -434,7 +434,7 @@
         <translation>En annan pakethanterare (som Synaptic eller apt-get), körs redan. Var vänlig stäng det programmet först</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="69"/>
+        <location filename="../main.cpp" line="72"/>
         <source>You must run this program as root.</source>
         <translation>Du måste köra detta program som root</translation>
     </message>

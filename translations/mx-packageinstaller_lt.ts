@@ -434,7 +434,7 @@
         <translation>Jau yra vykdoma kita (tokia kaip Synaptic ar apt-get) paketų tvarkymo programa. Prašome, iš pradžių, užverti tą programą</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="69"/>
+        <location filename="../main.cpp" line="72"/>
         <source>You must run this program as root.</source>
         <translation>Jūs privalote vykdyti šią programą kaip pagrindinis (root) naudotojas.</translation>
     </message>

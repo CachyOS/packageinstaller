@@ -435,7 +435,7 @@
 Prego, chiudi prima quell&apos;applicazione.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="69"/>
+        <location filename="../main.cpp" line="72"/>
         <source>You must run this program as root.</source>
         <translation>Devi avviare questo programma come amministratore</translation>
     </message>

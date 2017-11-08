@@ -60,6 +60,9 @@ int main(int argc, char *argv[])
         } else {
             lock_file.lock();
         }
+        QFile("/var/log/mxpi.log.old").remove();
+        QFile::copy("/var/log/mxpi.log", "/var/log/mxpi.log.old");
+        QFile("/var/log/mxpi.log").remove();
         MainWindow w;
         w.show();
         return a.exec();

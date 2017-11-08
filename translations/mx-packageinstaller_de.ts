@@ -434,7 +434,7 @@
         <translation>Ein weiterer Paketmanager (vielleicht synaptic oder apt-get) läuft zur Zeit. Bitte jenen erst beenden.</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="69"/>
+        <location filename="../main.cpp" line="72"/>
         <source>You must run this program as root.</source>
         <translation>Dieses Programm muss als Benutzer &quot;root&quot; ausgeführt werden</translation>
     </message>

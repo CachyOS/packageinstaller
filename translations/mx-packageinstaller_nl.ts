@@ -434,7 +434,7 @@
         <translation>Een ander pakketbeheerprogramma (zoals Synaptic of apt-get) is reeds in gebruik. Sluit aub eerst dat programma</translation>
     </message>
     <message>
-        <location filename="../main.cpp" line="69"/>
+        <location filename="../main.cpp" line="72"/>
         <source>You must run this program as root.</source>
         <translation>U dient deze toepassing als &apos;root&apos; uit te voeren.</translation>
     </message>
