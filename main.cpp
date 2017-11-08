@@ -60,10 +60,12 @@ int main(int argc, char *argv[])
         } else {
             lock_file.lock();
         }
-        system("echo '-----------------------------------------------------------\nNEW MXPI SESSION\
-               \n-----------------------------------------------------------' >> /var/log/mxpi.log.old");
-        system("cat /var/log/mxpi.log >> /var/log/mxpi.log.old");
-        system("rm /var/log/mxpi.log");
+        if (QFile("/var/log/mxpi.log").exists()) {
+            system("echo '-----------------------------------------------------------\nMXPI SESSION\
+                   \n-----------------------------------------------------------' >> /var/log/mxpi.log.old");
+            system("cat /var/log/mxpi.log >> /var/log/mxpi.log.old");
+            system("rm /var/log/mxpi.log");
+        }
         MainWindow w;
         w.show();
         return a.exec();

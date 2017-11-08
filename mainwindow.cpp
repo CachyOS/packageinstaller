@@ -965,9 +965,7 @@ void MainWindow::clearCache()
     tree_mx_test->clear();
     tree_backports->clear();
     app_info_list.clear();
-    if (!QFile::remove(tmp_dir + "/listapps")) {
-        qDebug() << "could not remove listapps file";
-    }
+    QFile::remove(tmp_dir + "/listapps");
     qDebug() << "tree cleared";
 }
 

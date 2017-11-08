@@ -18,20 +18,20 @@ Changes:
  .
    * add logs
 Checksums-Sha1:
- a423ddad2d55c1036f4bfc91510c6a5cfb34466b 107678 mx-packageinstaller_17.11_i386.deb
+ c1705810f155e462011cf67b28cf4431b4c387a8 107666 mx-packageinstaller_17.11_i386.deb
 Checksums-Sha256:
- 59ab6f4953bf1570be4a7f1f570fceb19eecf8ca4838d01ac2de6679891f293b 107678 mx-packageinstaller_17.11_i386.deb
+ 3c4916edc316e2af2378ba11566901a056d126b9082e49f77eccb6bcc4346756 107666 mx-packageinstaller_17.11_i386.deb
 Files:
- e93467b94aefb3786e67bb2119207fd7 107678 admin optional mx-packageinstaller_17.11_i386.deb
+ f47bc4ec0bdbce1789b90457ef1f6682 107666 admin optional mx-packageinstaller_17.11_i386.deb
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1
 
-iQEcBAEBAgAGBQJaAm19AAoJEHCTjHgGee6YMzMIAJC7HpteXzcyi8riXWwdh1a9
-t8UVAeg7UAB9DJ2I+xLQXtvyPsMto32VBq5Nh31YijJz5Cd5+dsbHJY28lj6cwek
-IS4+r2v51I32nzWuQG/jdybdrPq0TFlsrqauORyheibGl+nPns1UwL4MbPca/lYG
-5mKrFIMbsdFRYa9iK/lhsXDTUZBqJv9lwxA3+ZnLg1CgAQqnaBznc9VfSPoxg15E
-KH5IN+CRSi0tJHfbkUg1JJCdU4bkGdxjSx7UPc8rzZ3PpZx0MMTmhhgRlZE5CqGp
-z/sjjZ/MO5X7ejMaIMv/njgRK1ctYdTt68rbk5BDcaLGbMJ+yqXwgz2IGKI4VTg=
-=dQrX
+iQEcBAEBAgAGBQJaA1JaAAoJEHCTjHgGee6YfqUH/j4LxN+FIWljg5iVoVtUOug2
+htwJpNdpwoaGBYkzDDmOudhICokXGUocCv8EoyekTQVMKzjNDl6IK6NmsTD+i2Mi
+n1YfDlitCEODUtXiWE3D5Hz2Mydu/KruAKhVytPhSPZn/uOcVNiPt/goT63Zc02m
+eSajJvgqKaMRXdidqVtjAXo6u6Hu69NIjZ3zlIg2TcohMLJw8xU/sEYdtyKujB17
+52MSyPH43ABQ4YIY4PzCVz0e6P5QyUWErXcMng0bTxe1YfSmpuq1y8Ot6fZq3b9i
+28vlfKxXiKcrUsNMQLEDVAqk5+7PeHTPuzJofM06nWWZPU9f1q7nAUg2Kpv+pYc=
+=1b8o
 -----END PGP SIGNATURE-----

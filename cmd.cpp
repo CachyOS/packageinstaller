@@ -88,7 +88,6 @@ bool Cmd::kill()
         return true; // returns true because process is not running
     }
     qDebug() << "killing parent process:" << proc->pid();
-    system("kill -KILL -P " + proc->pid());
     proc->kill();
     proc->deleteLater();
     emit finished(proc->exitCode(), proc->exitStatus());
@@ -103,7 +102,6 @@ bool Cmd::terminate()
         return true; // returns true because process is not running
     }
     qDebug() << "terminating parent process:" << proc->pid();
-    system("kill -TERM -P " + proc->pid());
     proc->terminate();
     emit finished(proc->exitCode(), proc->exitStatus());
     return (!this->isRunning());
