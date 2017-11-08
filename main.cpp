@@ -60,9 +60,10 @@ int main(int argc, char *argv[])
         } else {
             lock_file.lock();
         }
-        QFile("/var/log/mxpi.log.old").remove();
-        QFile::copy("/var/log/mxpi.log", "/var/log/mxpi.log.old");
-        QFile("/var/log/mxpi.log").remove();
+        system("echo '-----------------------------------------------------------\nNEW MXPI SESSION\
+               \n-----------------------------------------------------------' >> /var/log/mxpi.log.old");
+        system("cat /var/log/mxpi.log >> /var/log/mxpi.log.old");
+        system("rm /var/log/mxpi.log");
         MainWindow w;
         w.show();
         return a.exec();
