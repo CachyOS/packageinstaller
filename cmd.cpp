@@ -64,9 +64,8 @@ int Cmd::run(const QString &cmd_str, int est_duration)
     QEventLoop loop;
     connect(proc, static_cast<void (QProcess::*)(int)>(&QProcess::finished), &loop, &QEventLoop::quit);
     connect(proc, &QProcess::readyReadStandardOutput, this, &Cmd::onStdoutAvailable);
-    loop.exec();
-
     qDebug() << "running cmd:" << proc->arguments().at(1);
+    loop.exec();
 
     emit finished(proc->exitCode(), proc->exitStatus());
     if (proc->exitCode() != 0) {
