@@ -29,7 +29,7 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="tabApps">
       <property name="sizePolicy">
@@ -609,7 +609,9 @@
         <string>Help</string>
        </property>
        <property name="icon">
-        <iconset theme="help-contents"/>
+        <iconset theme="help-contents">
+         <normaloff/>
+        </iconset>
        </property>
        <property name="shortcut">
         <string>Alt+H</string>

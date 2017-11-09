@@ -823,6 +823,7 @@ bool MainWindow::downloadPackageList(bool force_download)
                 QFile::remove(tmp_dir + "/mainPackages");
                 return false;
             }
+            cmd->run("sleep 3");
             err = cmd->run("wget ftp://ftp.us.debian.org/debian/dists/" + ver_name + "-backports/contrib/binary-" + arch +
                                 "/Packages.gz -O contribPackages.gz && gzip -df contribPackages.gz");
             if (err != 0 ) {
@@ -830,6 +831,7 @@ bool MainWindow::downloadPackageList(bool force_download)
                 QFile::remove(tmp_dir + "/contribPackages");
                 return false;
             }
+            cmd->run("sleep 3");
             err = cmd->run("wget ftp://ftp.us.debian.org/debian/dists/" + ver_name + "-backports/non-free/binary-" + arch +
                                 "/Packages.gz -O nonfreePackages.gz && gzip -df nonfreePackages.gz");
             if (err != 0 ) {
@@ -1298,6 +1300,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
             case 0:
                 ui->radioBackports->blockSignals(true);
                 ui->radioBackports->setChecked(true);
+                displayWarning();
                 ui->radioBackports->blockSignals(false);
                 break;
             case 1:
@@ -1416,7 +1419,6 @@ void MainWindow::on_radioMXtest_toggled(bool checked)
 void MainWindow::on_radioBackports_toggled(bool checked)
 {
     if(checked) {
-        displayWarning();
         buildPackageLists();
     }
 }
@@ -1463,3 +1465,4 @@ void MainWindow::on_buttonUpgradeAll_clicked()
     clearCache();
     buildPackageLists();
 }
+
