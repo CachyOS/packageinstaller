@@ -1,0 +1,38 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Thu, 09 Nov 2017 10:23:01 -0500
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: i386
+Version: 17.11+1
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (17.11+1) mx; urgency=medium
+ .
+   * fix warning on first click for Backports
+   * added delay between Backports package list downloads
+Checksums-Sha1:
+ 967e634162d8ea701bd8f25f3dd41cac01515e9c 107932 mx-packageinstaller_17.11+1_i386.deb
+Checksums-Sha256:
+ 286ea42f804da40a17afda4029654762018634ad81f7ed08c58a01a483bde32c 107932 mx-packageinstaller_17.11+1_i386.deb
+Files:
+ e4cb0efd970cfa6072f9f301cb987d8d 107932 admin optional mx-packageinstaller_17.11+1_i386.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQEcBAEBAgAGBQJaBHtPAAoJEHCTjHgGee6YGH8IAJjYvVfbx7hcUJZnfd6zxov2
+GsXxeor+ErlAsET32YLjoOVADMVkXfq42HGmib9rxLVHOFCR5k7Z1zO0AIHb//7r
+L1RBJ0YvoaP4V6MnE8t2lW/6IBCOymXez+3WJBlotDJ+dVDtFl5JQJ0qFI9qOYTq
+gNS0wZELEBFREp0SJ6OIBwKJ360ISrPa7l64msUp2fUtHX6rblzx4kNQHyTaxjPd
+OD04t8Z5nBr/8Cx2UVG0s74ernuHMSoQfGo7oLhLFam2g1iB4TSsvy49jTb7n/zP
+zGs04SSRUqjJObsZn2OLoDC7uJKD9+wM5cOpQsy2hmau8VigHX1myEIDsAKJRmw=
+=fQYk
+-----END PGP SIGNATURE-----
