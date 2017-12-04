@@ -1,3 +1,9 @@
+mx-packageinstaller (17.12) mx; urgency=medium
+
+  * new translation
+
+ -- Adrian <adrian@mxlinux.org>  Mon, 04 Dec 2017 14:47:12 -0500
+
 mx-packageinstaller (17.11+1) mx; urgency=medium
 
   * fix warning on first click for Backports
