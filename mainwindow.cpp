@@ -39,7 +39,7 @@
 
 #include <QDebug>
 
-MainWindow::MainWindow(QWidget* parent) :
+MainWindow::MainWindow(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::MainWindow)
 {
@@ -95,7 +95,7 @@ void MainWindow::setup()
 }
 
 // Uninstall listed packages
-void MainWindow::uninstall(const QString& names)
+void MainWindow::uninstall(const QString &names)
 {
     lock_file->unlock();
     qDebug() << "uninstall list: " << names;
@@ -216,7 +216,7 @@ void MainWindow::loadPmFiles()
 }
 
 // Process dom documents (from .pm files)
-void MainWindow::processDoc(const QDomDocument& doc)
+void MainWindow::processDoc(const QDomDocument &doc)
 {
     /*  Order items in list:
         0 "category"
@@ -310,8 +310,8 @@ void MainWindow::setProgressDialog()
 // Display Popular Apps in the treePopularApps
 void MainWindow::displayPopularApps()
 {
-    QTreeWidgetItem* topLevelItem = NULL;
-    QTreeWidgetItem* childItem;
+    QTreeWidgetItem *topLevelItem = NULL;
+    QTreeWidgetItem *childItem;
 
     foreach (const QStringList &list, popular_apps) {
         QString category = list.at(0);
@@ -411,7 +411,7 @@ void MainWindow::displayPackages(bool force_refresh)
     VersionNumber installed;
     VersionNumber candidate;
 
-    QTreeWidgetItem* widget_item;
+    QTreeWidgetItem *widget_item;
 
     // create a list of apps, create a hash with app_name, app_info
     QMap<QString, QStringList>::iterator i;
@@ -529,7 +529,7 @@ void MainWindow::displayWarning()
                           "and are provided on an as-is basis, with risk of incompatibilities with other components "\
                           "in Debian stable. Use with care!"), 0, 0);
     msgBox.addButton(QMessageBox::Close);
-    QCheckBox* cb = new QCheckBox();
+    QCheckBox *cb = new QCheckBox();
     msgBox.setCheckBox(cb);
     cb->setText(tr("Do not show this message again"));
     connect(cb, &QCheckBox::clicked, this, &MainWindow::disableWarning);
@@ -569,7 +569,7 @@ void MainWindow::ifDownloadFailed()
 }
 
 // Install the list of apps
-void MainWindow::install(const QString& names)
+void MainWindow::install(const QString &names)
 {
     if (!checkOnline()) {
         QMessageBox::critical(this, tr("Error"), tr("Internet is not available, won't be able to download the list of packages"));
@@ -930,11 +930,11 @@ void MainWindow::clearUi()
 }
 
 // Copy QTreeWidgets
-void MainWindow::copyTree(QTreeWidget* from, QTreeWidget* to)
+void MainWindow::copyTree(QTreeWidget *from, QTreeWidget *to)
 {
 
     to->clear();
-    QTreeWidgetItem* item;
+    QTreeWidgetItem *item;
     QTreeWidgetItemIterator it(from);
     while (*it) {
         item = new QTreeWidgetItem();
@@ -1011,7 +1011,7 @@ bool MainWindow::checkUpgradable(const QStringList &name_list)
     if (name_list.size() == 0) {
         return false;
     }
-    QList<QTreeWidgetItem*> item_list;
+    QList<QTreeWidgetItem *> item_list;
     foreach(const QString &name, name_list) {
         item_list = ui->treeOther->findItems(name, Qt::MatchExactly, 2);
         if (item_list.isEmpty()) {
@@ -1055,7 +1055,7 @@ void MainWindow::disableWarning(bool checked)
 }
 
 // Display info when clicking the "info" icon of the package
-void MainWindow::displayInfo(QTreeWidgetItem* item, int column)
+void MainWindow::displayInfo(QTreeWidgetItem *item, int column)
 {
     if (column == 3 && item->childCount() == 0) {
         QString desc = item->text(4);
@@ -1070,8 +1070,8 @@ void MainWindow::displayInfo(QTreeWidgetItem* item, int column)
         if (!url.isValid() || url.isEmpty() || url.url() == "none") {
             qDebug() << "no screenshot for: " << title;
         } else {
-            QNetworkAccessManager* manager = new QNetworkAccessManager(this);
-            QNetworkReply* reply = manager->get(QNetworkRequest(url));
+            QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+            QNetworkReply *reply = manager->get(QNetworkRequest(url));
 
             QEventLoop loop;
             connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
@@ -1121,7 +1121,7 @@ void MainWindow::findPackage()
         }
         return;
     }
-    QList<QTreeWidgetItem*> found_items = ui->treePopularApps->findItems(word, Qt::MatchContains|Qt::MatchRecursive, 2);
+    QList<QTreeWidgetItem *> found_items = ui->treePopularApps->findItems(word, Qt::MatchContains|Qt::MatchRecursive, 2);
 
     // hide/unhide items
     while (*it) {
@@ -1159,7 +1159,7 @@ void MainWindow::findPackage()
 void MainWindow::findPackageOther()
 {
     QString word = ui->searchBox->text();
-    QList<QTreeWidgetItem*> found_items = ui->treeOther->findItems(word, Qt::MatchContains, 2);
+    QList<QTreeWidgetItem *> found_items = ui->treeOther->findItems(word, Qt::MatchContains, 2);
     QTreeWidgetItemIterator it(ui->treeOther);
     while (*it) {
       if ((*it)->text(6) == "true" && found_items.contains(*it)) {
@@ -1255,7 +1255,7 @@ void MainWindow::on_treePopularApps_itemClicked()
 }
 
 // Tree item expanded
-void MainWindow::on_treePopularApps_itemExpanded(QTreeWidgetItem* item)
+void MainWindow::on_treePopularApps_itemExpanded(QTreeWidgetItem *item)
 {
     item->setIcon(0, QIcon::fromTheme("folder-open"));
     ui->treePopularApps->resizeColumnToContents(2);
@@ -1263,7 +1263,7 @@ void MainWindow::on_treePopularApps_itemExpanded(QTreeWidgetItem* item)
 }
 
 // Tree item collapsed
-void MainWindow::on_treePopularApps_itemCollapsed(QTreeWidgetItem* item)
+void MainWindow::on_treePopularApps_itemCollapsed(QTreeWidgetItem *item)
 {
     item->setIcon(0, QIcon::fromTheme("folder"));
     ui->treePopularApps->resizeColumnToContents(2);
@@ -1338,9 +1338,9 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 
 
 // Filter items according to selected filter
-void MainWindow::on_comboFilter_activated(const QString& arg1)
+void MainWindow::on_comboFilter_activated(const QString &arg1)
 {
-    QList<QTreeWidgetItem*> found_items;
+    QList<QTreeWidgetItem *> found_items;
     QTreeWidgetItemIterator it(ui->treeOther);
     ui->treeOther->blockSignals(true);
 
@@ -1378,7 +1378,7 @@ void MainWindow::on_comboFilter_activated(const QString& arg1)
 }
 
 // When selecting on item in the list
-void MainWindow::on_treeOther_itemChanged(QTreeWidgetItem* item)
+void MainWindow::on_treeOther_itemChanged(QTreeWidgetItem *item)
 {
     /* if all apps are uninstalled (or some installed) -> enable Install, disable Uinstall
      * if all apps are installed or upgradable -> enable Uninstall, enable Install
@@ -1460,7 +1460,7 @@ void MainWindow::on_buttonUpgradeAll_clicked()
 {
     QString names;
     QTreeWidgetItemIterator it(ui->treeOther);
-    QList<QTreeWidgetItem*> found_items;
+    QList<QTreeWidgetItem *> found_items;
     found_items = ui->treeOther->findItems("upgradable", Qt::MatchExactly, 5);
 
     while (*it) {

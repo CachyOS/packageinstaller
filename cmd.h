@@ -33,16 +33,16 @@ class Cmd : public QObject
 {
     Q_OBJECT
 public:
-    explicit Cmd(QObject* parent = 0);
+    explicit Cmd(QObject *parent = 0);
     ~Cmd();
 
     bool isRunning();
-    int run(const QString& cmd_str, int = 0); // with option estimated time of completion
+    int run(const QString &cmd_str, int = 0); // with option estimated time of completion
     QString getOutput();
-    QString getOutput(const QString& cmd_str);
+    QString getOutput(const QString &cmd_str);
 
 signals:
-    void outputAvailable(const QString& output);
+    void outputAvailable(const QString &output);
     void runTime(int, int); // runtime counter with estimated time
     void started();
     void finished(int exitCode, QProcess::ExitStatus exitStatus);
@@ -58,9 +58,9 @@ private slots:
     void tick(); // slot called by timer that emits a counter
 
 private:
-    QProcess* proc;
+    QProcess *proc;
     QString output;
-    QTimer* timer;
+    QTimer *timer;
     int counter;
     int est_duration; //estimated completion time
 

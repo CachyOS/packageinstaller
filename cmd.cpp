@@ -28,7 +28,7 @@
 
 #include <QDebug>
 
-Cmd::Cmd(QObject* parent) :
+Cmd::Cmd(QObject *parent) :
     QObject(parent)
 {
     proc = new QProcess(this);
@@ -43,7 +43,7 @@ Cmd::~Cmd()
 }
 
 // this function is running the command, takes cmd_str and optional estimated completion time
-int Cmd::run(const QString& cmd_str, int est_duration)
+int Cmd::run(const QString &cmd_str, int est_duration)
 {
     this->est_duration = est_duration;
     if (proc->state() != QProcess::NotRunning) {
