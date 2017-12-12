@@ -8,7 +8,7 @@
         <location filename="../mainwindow.cpp" line="75"/>
         <location filename="../mainwindow.cpp" line="1195"/>
         <location filename="../mainwindow.cpp" line="1202"/>
-        <location filename="../mainwindow.cpp" line="1210"/>
+        <location filename="../mainwindow.cpp" line="1220"/>
         <source>MX Package Installer</source>
         <translation>MX Instalátor softvéru </translation>
     </message>
@@ -59,19 +59,19 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="150"/>
-        <location filename="../mainwindow.cpp" line="1296"/>
+        <location filename="../mainwindow.cpp" line="1306"/>
         <source>Stable Repo</source>
         <translation>Hlavní repozitář</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="160"/>
-        <location filename="../mainwindow.cpp" line="1295"/>
+        <location filename="../mainwindow.cpp" line="1305"/>
         <source>MX Test Repo</source>
         <translation>Testovací repozitář</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="170"/>
-        <location filename="../mainwindow.cpp" line="1294"/>
+        <location filename="../mainwindow.cpp" line="1304"/>
         <source>Debian Backports Repo</source>
         <translation>Debian Beackports repozitář</translation>
     </message>
@@ -83,25 +83,25 @@
     <message>
         <location filename="../mainwindow.ui" line="261"/>
         <location filename="../mainwindow.ui" line="265"/>
-        <location filename="../mainwindow.cpp" line="1337"/>
+        <location filename="../mainwindow.cpp" line="1347"/>
         <source>All packages</source>
         <translation>Všechny balíky</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="270"/>
-        <location filename="../mainwindow.cpp" line="1350"/>
+        <location filename="../mainwindow.cpp" line="1360"/>
         <source>Installed</source>
         <translation>Nainstalováno</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="275"/>
-        <location filename="../mainwindow.cpp" line="1348"/>
+        <location filename="../mainwindow.cpp" line="1358"/>
         <source>Upgradable</source>
         <translation>Možné aktualizovat</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="280"/>
-        <location filename="../mainwindow.cpp" line="1352"/>
+        <location filename="../mainwindow.cpp" line="1362"/>
         <source>Not installed</source>
         <translation>Nenainstalováno</translation>
     </message>
@@ -197,8 +197,8 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="630"/>
-        <location filename="../mainwindow.cpp" line="1243"/>
-        <location filename="../mainwindow.cpp" line="1395"/>
+        <location filename="../mainwindow.cpp" line="1253"/>
+        <location filename="../mainwindow.cpp" line="1405"/>
         <source>Install</source>
         <translation>Instalovat</translation>
     </message>
@@ -230,7 +230,7 @@
     <message>
         <location filename="../mainwindow.cpp" line="297"/>
         <location filename="../mainwindow.cpp" line="1200"/>
-        <location filename="../mainwindow.cpp" line="1297"/>
+        <location filename="../mainwindow.cpp" line="1307"/>
         <source>Cancel</source>
         <translation>Zrušit</translation>
     </message>
@@ -401,22 +401,22 @@
         <translation>Licence</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1241"/>
+        <location filename="../mainwindow.cpp" line="1251"/>
         <source>Reinstall</source>
         <translation>Přeinstalovat</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1292"/>
+        <location filename="../mainwindow.cpp" line="1302"/>
         <source>Repo Selection</source>
         <translation>Výběr repozitáře</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1293"/>
+        <location filename="../mainwindow.cpp" line="1303"/>
         <source>Please select repo to load</source>
         <translation>Prosím vyberte repozitář k načtení</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1393"/>
+        <location filename="../mainwindow.cpp" line="1403"/>
         <source>Upgrade</source>
         <translation>Aktualizovat</translation>
     </message>

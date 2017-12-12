@@ -1,3 +1,9 @@
+mx-packageinstaller (17.12+1) mx; urgency=medium
+
+  * added FR help
+
+ -- Adrian <adrian@mxlinux.org>  Mon, 11 Dec 2017 22:58:45 -0500
+
 mx-packageinstaller (17.12) mx; urgency=medium
 
   * new translation

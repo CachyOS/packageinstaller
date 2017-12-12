@@ -1,0 +1,43 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Mon, 11 Dec 2017 22:58:45 -0500
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 17.12+1
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (17.12+1) mx; urgency=medium
+ .
+   * added FR help
+Checksums-Sha1:
+ c07376c91192a27a1be89a35dc63be18f093d397 1171 mx-packageinstaller_17.12+1.dsc
+ d6e55e8e824269ea5b5b811526ad10a619fd5b4b 69748 mx-packageinstaller_17.12+1.tar.xz
+ 6c997df15c3afba68f49e608958465aa4bad2820 107598 mx-packageinstaller_17.12+1_amd64.deb
+Checksums-Sha256:
+ e0c03038b9da17d9ed2e37e6982ed7814fef13bb9551d5a3b7d22c3e63fe51e1 1171 mx-packageinstaller_17.12+1.dsc
+ be9c9d252d72f7f4c9cb314a78756bb938236ff15b8411962e3266aca9a5190f 69748 mx-packageinstaller_17.12+1.tar.xz
+ e3e043563876b1eed3e6329adb226aa7336717cb09deca572ad47b2c1ef28944 107598 mx-packageinstaller_17.12+1_amd64.deb
+Files:
+ aeff5a9f7fac35de36f415726f8aee80 1171 admin optional mx-packageinstaller_17.12+1.dsc
+ c9707d846fe4ef248b6ac6cf35744d1b 69748 admin optional mx-packageinstaller_17.12+1.tar.xz
+ b9ec2e95b5141fbcb5f41ad816239621 107598 admin optional mx-packageinstaller_17.12+1_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQEcBAEBAgAGBQJaL1QWAAoJEHCTjHgGee6Ya74IAK//Tdm9eWQEKMlyscihlFrW
+o7kB/Au2zQo03KrniJMjqkH8Cc7YRvPkWA8lGjxXGv7glrNQ9ciVFwjA439BQsvk
+HGHIHpck9y09D5l12GJByLiJLA59kajD9VJAiuXwbckMDUPGZM4D1Yjk7cziI4V/
+Bal8DNLaOEdwd3YvtMQTU7Bo2yIWBlcb6Tr7HuKKQKyFyPdKlh71inZnAIhgtfiO
+0ud347NAR34iX4y2LZGgFYhvJ/IDNnSBjWJyCwo97Xf/J1rYIzdH11QUlYjYES71
+uG6WqU37LtqF3izS3OzUanlAqtF0irmOO5GiP998d3BDcsfPCLjBxEp/KAy4loE=
+=ubFx
+-----END PGP SIGNATURE-----

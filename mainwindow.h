@@ -54,9 +54,9 @@ public:
 
     QString version;
 
-    bool checkInstalled(const QString &names);
-    bool checkInstalled(const QStringList &name_list);
-    bool checkUpgradable(const QStringList &name_list);
+    bool checkInstalled(const QString& names);
+    bool checkInstalled(const QStringList& name_list);
+    bool checkUpgradable(const QStringList& name_list);
     bool checkOnline();
     bool buildPackageLists(bool force_download = false);
     bool downloadPackageList(bool force_download = false);
@@ -68,19 +68,19 @@ public:
     void displayPopularApps();
     void displayPackages(bool force_refresh = false);
     void displayWarning();
-    void downloadImage(const QUrl &url);
+    void downloadImage(const QUrl& url);
     void ifDownloadFailed();
-    void install(const QString &names);
-    void installBatch(const QStringList &name_list);
-    void installPopularApp(const QString &name);
+    void install(const QString& names);
+    void installBatch(const QStringList& name_list);
+    void installPopularApp(const QString& name);
     void installPopularApps();
     void installSelected();
     void loadPmFiles();
-    void processDoc(const QDomDocument &doc);
+    void processDoc(const QDomDocument& doc);
     void refreshPopularApps();
     void setProgressDialog();
     void setup();
-    void uninstall(const QString &names);
+    void uninstall(const QString& names);
     bool update();
     void updateInterface();
 
@@ -108,12 +108,12 @@ private slots:
     void on_buttonHelp_clicked();
     void on_treePopularApps_expanded();
     void on_treePopularApps_itemClicked();
-    void on_treePopularApps_itemExpanded(QTreeWidgetItem *item);
-    void on_treePopularApps_itemCollapsed(QTreeWidgetItem *item);
+    void on_treePopularApps_itemExpanded(QTreeWidgetItem* item);
+    void on_treePopularApps_itemCollapsed(QTreeWidgetItem* item);
     void on_buttonUninstall_clicked();
     void on_tabWidget_currentChanged(int index);
-    void on_comboFilter_activated(const QString &arg1);
-    void on_treeOther_itemChanged(QTreeWidgetItem *item);
+    void on_comboFilter_activated(const QString& arg1);
+    void on_treeOther_itemChanged(QTreeWidgetItem* item);
     void on_radioStable_toggled(bool checked);
     void on_radioMXtest_toggled(bool checked);
     void on_radioBackports_toggled(bool checked);
@@ -125,12 +125,12 @@ private:
     bool updated_once;
     bool warning_displayed;
     int height_app;
-    Cmd *cmd;
-    LockFile *lock_file;
-    QPushButton *progCancel;
+    Cmd* cmd;
+    LockFile* lock_file;
+    QPushButton* progCancel;
     QList<QStringList> popular_apps;
-    QProgressBar *bar;
-    QProgressDialog *progress;
+    QProgressBar* bar;
+    QProgressDialog* progress;
     QString arch;
     QString stable_raw;
     QString tmp_dir;
@@ -141,11 +141,11 @@ private:
     QMap<QString, QStringList> backports_list;
     QMap<QString, QStringList> mx_list;
     QMap<QString, QStringList> stable_list;
-    QTimer *timer;
-    QTreeWidget *tree_stable;
-    QTreeWidget *tree_mx_test;
-    QTreeWidget *tree_backports;
-    Ui::MainWindow *ui;
+    QTimer* timer;
+    QTreeWidget* tree_stable;
+    QTreeWidget* tree_mx_test;
+    QTreeWidget* tree_backports;
+    Ui::MainWindow* ui;
 };
 
 
