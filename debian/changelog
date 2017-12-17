@@ -1,3 +1,9 @@
+mx-packageinstaller (17.12+4) mx; urgency=medium
+
+  * additional language about log file 
+
+ -- dolphin oracle <dolphin@littlebyte>  Sun, 17 Dec 2017 18:12:21 -0500
+
 mx-packageinstaller (17.12+3) mx; urgency=medium
 
   *  additional logging of apt-get update output, preserves exit code
