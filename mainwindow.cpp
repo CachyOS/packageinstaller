@@ -112,19 +112,26 @@ void MainWindow::uninstall(const QString &names)
 // Run apt-get update
 bool MainWindow::update()
 {
+    QString msg;
     lock_file->unlock();
     setConnections();
     progress->show();
     progCancel->setDisabled(false);
     progress->setLabelText(tr("Running apt-get update... "));
-    if (cmd->run("apt-get update | tee -a /var/log/mxpi.log") == 0) {
+    if (cmd->run("apt-get update -o Acquire::http:Timeout=10 -o Acquire::https:Timeout=10 -o Acquire::ftp:Timeout=10") == 0) {
         lock_file->lock();
+        msg="echo sources updated OK >>/var/log/mxpi.log";
+        system(msg.toUtf8());
         progCancel->setDisabled(true);
         updated_once = true;
         return true;
     }
     lock_file->lock();
+    msg="echo problem updating sources >>/var/log/mxpi.log";
     progCancel->setDisabled(true);
+    progress->close();
+    system(msg.toUtf8());
+     QMessageBox::critical(this, tr("Error"), tr("There was a problem updating sources.  Some sources may not have provided updates."));
     return false;
 }
 
@@ -804,7 +811,7 @@ bool MainWindow::downloadPackageList(bool force_download)
                 repo_name = ver_name;
             }
 
-            if (cmd->run("wget http://mxrepo.com/mx/testrepo/dists/" + repo_name + "/test/binary-" + arch +
+            if (cmd->run("wget --append-output=/var/log/mxpi.log http://mxrepo.com/mx/testrepo/dists/" + repo_name + "/test/binary-" + arch +
                              "/Packages.gz -O mxPackages.gz && gzip -df mxPackages.gz") != 0) {
                 QFile::remove(tmp_dir + "/mxPackages.gz");
                 QFile::remove(tmp_dir + "/mxPackages");
@@ -816,23 +823,23 @@ bool MainWindow::downloadPackageList(bool force_download)
                 !QFile(tmp_dir + "/contribPackages").exists() ||
                 !QFile(tmp_dir + "/nonfreePackages").exists() || force_download) {
             progress->show();
-            int err = cmd->run("wget ftp://ftp.us.debian.org/debian/dists/" + ver_name + "-backports/main/binary-" + arch +
+            int err = cmd->run("wget --append-output=/var/log/mxpi.log --timeout=5 ftp://ftp.us.debian.org/debian/dists/" + ver_name + "-backports/main/binary-" + arch +
                                 "/Packages.gz -O mainPackages.gz && gzip -df mainPackages.gz");
             if (err != 0 ) {
                 QFile::remove(tmp_dir + "/mainPackages.gz");
                 QFile::remove(tmp_dir + "/mainPackages");
                 return false;
             }
-            cmd->run("sleep 3");
-            err = cmd->run("wget ftp://ftp.us.debian.org/debian/dists/" + ver_name + "-backports/contrib/binary-" + arch +
+            //cmd->run("sleep 3");
+            err = cmd->run("wget --append-output=/var/log/mxpi.log --timeout=5 ftp://ftp.us.debian.org/debian/dists/" + ver_name + "-backports/contrib/binary-" + arch +
                                 "/Packages.gz -O contribPackages.gz && gzip -df contribPackages.gz");
             if (err != 0 ) {
                 QFile::remove(tmp_dir + "/contribPackages.gz");
                 QFile::remove(tmp_dir + "/contribPackages");
                 return false;
             }
-            cmd->run("sleep 3");
-            err = cmd->run("wget ftp://ftp.us.debian.org/debian/dists/" + ver_name + "-backports/non-free/binary-" + arch +
+            //cmd->run("sleep 3");
+            err = cmd->run("wget --append-output=/var/log/mxpi.log --timeout=5 ftp://ftp.us.debian.org/debian/dists/" + ver_name + "-backports/non-free/binary-" + arch +
                                 "/Packages.gz -O nonfreePackages.gz && gzip -df nonfreePackages.gz");
             if (err != 0 ) {
                 QFile::remove(tmp_dir + "/nonfreePackages.gz");
