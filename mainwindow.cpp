@@ -118,7 +118,7 @@ bool MainWindow::update()
     progress->show();
     progCancel->setDisabled(false);
     progress->setLabelText(tr("Running apt-get update... "));
-    if (cmd->run("apt-get update -o Acquire::http:Timeout=10 -o Acquire::https:Timeout=10 -o Acquire::ftp:Timeout=10") == 0) {
+    if (cmd->run("apt-get update -o Acquire::http:Timeout=10 -o Acquire::https:Timeout=10 -o Acquire::ftp:Timeout=10>>/var/log/mxpi.log") == 0) {
         lock_file->lock();
         msg="echo sources updated OK >>/var/log/mxpi.log";
         system(msg.toUtf8());
