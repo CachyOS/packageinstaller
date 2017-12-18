@@ -131,7 +131,7 @@ bool MainWindow::update()
     progCancel->setDisabled(true);
     progress->close();
     system(msg.toUtf8());
-     QMessageBox::critical(this, tr("Error"), tr("There was a problem updating sources.  Some sources may not have provided updates. Check /var/log/mxpi.log for more information"));
+    QMessageBox::critical(this, tr("Error"), tr("There was a problem updating sources. Some sources may not have provided updates. For more info check: ") + "<a href=\"/var/log/mxpi.log\">/var/log/mxpi.log</a>");
     return false;
 }
 

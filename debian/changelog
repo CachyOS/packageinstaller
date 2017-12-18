@@ -1,3 +1,9 @@
+mx-packageinstaller (17.12+5) mx; urgency=medium
+
+  * new build
+
+ -- Adrian <adrian@mxlinux.org>  Mon, 18 Dec 2017 11:55:22 -0500
+
 mx-packageinstaller (17.12+4) mx; urgency=medium
 
   * additional language about log file 
