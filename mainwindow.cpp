@@ -131,7 +131,8 @@ bool MainWindow::update()
     progCancel->setDisabled(true);
     progress->close();
     system(msg.toUtf8());
-    QMessageBox::critical(this, tr("Error"), tr("There was a problem updating sources. Some sources may not have provided updates. For more info check: ") + "<a href=\"/var/log/mxpi.log\">/var/log/mxpi.log</a>");
+    QMessageBox::critical(this, tr("Error"), tr("There was a problem updating sources. Some sources may not have provided updates. For more info check: ") +
+                          "<a href=\"/var/log/mxpi.log\">/var/log/mxpi.log</a>");
     return false;
 }
 
@@ -823,24 +824,24 @@ bool MainWindow::downloadPackageList(bool force_download)
                 !QFile(tmp_dir + "/contribPackages").exists() ||
                 !QFile(tmp_dir + "/nonfreePackages").exists() || force_download) {
             progress->show();
-            int err = cmd->run("wget --append-output=/var/log/mxpi.log --timeout=5 ftp://ftp.us.debian.org/debian/dists/" + ver_name + "-backports/main/binary-" + arch +
-                                "/Packages.gz -O mainPackages.gz && gzip -df mainPackages.gz");
+            int err = cmd->run("wget --append-output=/var/log/mxpi.log --timeout=5 ftp://ftp.us.debian.org/debian/dists/" +
+                               ver_name + "-backports/main/binary-" + arch + "/Packages.gz -O mainPackages.gz && gzip -df mainPackages.gz");
             if (err != 0 ) {
                 QFile::remove(tmp_dir + "/mainPackages.gz");
                 QFile::remove(tmp_dir + "/mainPackages");
                 return false;
             }
             //cmd->run("sleep 3");
-            err = cmd->run("wget --append-output=/var/log/mxpi.log --timeout=5 ftp://ftp.us.debian.org/debian/dists/" + ver_name + "-backports/contrib/binary-" + arch +
-                                "/Packages.gz -O contribPackages.gz && gzip -df contribPackages.gz");
+            err = cmd->run("wget --append-output=/var/log/mxpi.log --timeout=5 ftp://ftp.us.debian.org/debian/dists/" +
+                           ver_name + "-backports/contrib/binary-" + arch + "/Packages.gz -O contribPackages.gz && gzip -df contribPackages.gz");
             if (err != 0 ) {
                 QFile::remove(tmp_dir + "/contribPackages.gz");
                 QFile::remove(tmp_dir + "/contribPackages");
                 return false;
             }
             //cmd->run("sleep 3");
-            err = cmd->run("wget --append-output=/var/log/mxpi.log --timeout=5 ftp://ftp.us.debian.org/debian/dists/" + ver_name + "-backports/non-free/binary-" + arch +
-                                "/Packages.gz -O nonfreePackages.gz && gzip -df nonfreePackages.gz");
+            err = cmd->run("wget --append-output=/var/log/mxpi.log --timeout=5 ftp://ftp.us.debian.org/debian/dists/" +
+                           ver_name + "-backports/non-free/binary-" + arch + "/Packages.gz -O nonfreePackages.gz && gzip -df nonfreePackages.gz");
             if (err != 0 ) {
                 QFile::remove(tmp_dir + "/nonfreePackages.gz");
                 QFile::remove(tmp_dir + "/nonfreePackages");
@@ -1213,8 +1214,6 @@ void MainWindow::on_buttonAbout_clicked()
 // Help button clicked
 void MainWindow::on_buttonHelp_clicked()
 {
-    this->hide();
-
     QLocale locale;
     QString lang = locale.bcp47Name();
 
@@ -1224,9 +1223,8 @@ void MainWindow::on_buttonHelp_clicked()
         url = "https://mxlinux.org/wiki/help-files/help-mx-installateur-de-paquets";
     }
 
-    QString cmd = QString("mx-viewer %1 \"%2\"").arg(url).arg(tr("MX Package Installer"));
+    QString cmd = QString("mx-viewer %1 \"%2\"&").arg(url).arg(tr("MX Package Installer"));
     system(cmd.toUtf8());
-    this->show();
 }
 
 // Resize columns when expanding
