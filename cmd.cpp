@@ -25,7 +25,6 @@
 #include "cmd.h"
 
 #include <QEventLoop>
-
 #include <QDebug>
 
 Cmd::Cmd(QObject *parent) :
@@ -40,6 +39,13 @@ Cmd::Cmd(QObject *parent) :
 
 Cmd::~Cmd()
 {
+    if (proc->state() != QProcess::NotRunning) {
+        if(!this->terminate()) {
+            this->kill();
+        }
+    }
+    delete timer;
+    delete proc;
 }
 
 // this function is running the command, takes cmd_str and optional estimated completion time
@@ -88,7 +94,7 @@ bool Cmd::kill()
     }
     qDebug() << "killing parent process:" << proc->pid();
     proc->kill();
-    proc->deleteLater();
+    proc->waitForFinished(100);
     emit finished(proc->exitCode(), proc->exitStatus());
     return (!this->isRunning());
 }
@@ -102,6 +108,7 @@ bool Cmd::terminate()
     }
     qDebug() << "terminating parent process:" << proc->pid();
     proc->terminate();
+    proc->waitForFinished(100);
     emit finished(proc->exitCode(), proc->exitStatus());
     return (!this->isRunning());
 }
