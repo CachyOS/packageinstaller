@@ -119,9 +119,13 @@ bool MainWindow::update()
 {
     QString msg;
     lock_file->unlock();
-    ui->tabWidget->setTabText(2, tr("Refreshing sources..."));
-    ui->tabWidget->setTabEnabled(0, false);
-    ui->tabWidget->setTabEnabled(1, false);
+    if (!ui->tabOtherRepos->isVisible()) { // don't display in output if calling to refresh from tabOtherRepos
+        ui->tabWidget->setTabText(2, tr("Refreshing sources..."));
+        ui->tabWidget->setTabEnabled(0, false);
+        ui->tabWidget->setTabEnabled(1, false);
+    } else {
+        progress->show();
+    }
     setConnections();
     if (cmd->run("apt-get update -o Acquire::http:Timeout=10 -o Acquire::https:Timeout=10 -o Acquire::ftp:Timeout=10 | tee -a /var/log/mxpi.log") == 0) {
         lock_file->lock();
@@ -821,7 +825,9 @@ bool MainWindow::downloadPackageList(bool force_download)
         tmp_dir = cmd->getOutput("mktemp -d /tmp/mxpm-XXXXXXXX");
     }
     QDir::setCurrent(tmp_dir);
-    setConnections();
+    connect(cmd, &Cmd::runTime, this, &MainWindow::updateBar);  // processes runtime emited by Cmd to be used by a progress bar
+    connect(cmd, &Cmd::started, this, &MainWindow::cmdStart);
+    connect(cmd, &Cmd::finished, this, &MainWindow::cmdDone);
     progress->setLabelText(tr("Downloading package info..."));
     progCancel->setEnabled(true);
     if (ui->radioStable->isChecked()) {
