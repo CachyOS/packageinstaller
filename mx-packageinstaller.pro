@@ -30,13 +30,11 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-    cmd.cpp \
     mainwindow.cpp \
     lockfile.cpp \
     versionnumber.cpp
 
 HEADERS  += \
-    cmd.h \
     mainwindow.h \
     lockfile.h \
     versionnumber.h
@@ -65,4 +63,4 @@ TRANSLATIONS += translations/mx-packageinstaller_ca.ts \
 RESOURCES += \
     images.qrc
 
-
+unix:!macx: LIBS += -lcmd

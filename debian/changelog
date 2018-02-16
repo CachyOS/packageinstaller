@@ -1,3 +1,9 @@
+mx-packageinstaller (18.2) mx; urgency=medium
+
+  * display terminal output in Qt app
+
+ -- Adrian <adrian@mxlinux.org>  Thu, 15 Feb 2018 18:16:34 -0500
+
 mx-packageinstaller (17.12+5) mx; urgency=medium
 
   * new build

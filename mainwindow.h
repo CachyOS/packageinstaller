@@ -39,7 +39,6 @@
 #include <cmd.h>
 #include <lockfile.h>
 
-
 namespace Ui {
 class MainWindow;
 }
@@ -60,7 +59,14 @@ public:
     bool checkOnline();
     bool buildPackageLists(bool force_download = false);
     bool downloadPackageList(bool force_download = false);
+    bool install(const QString &names);
+    bool installBatch(const QStringList &name_list);
+    bool installPopularApp(const QString &name);
+    bool installPopularApps();
+    bool installSelected();
     bool readPackageList(bool force_download = false);
+    bool uninstall(const QString &names);
+    bool update();
 
     void cancelDownload();
     void clearUi();
@@ -70,24 +76,19 @@ public:
     void displayWarning();
     void downloadImage(const QUrl &url);
     void ifDownloadFailed();
-    void install(const QString &names);
-    void installBatch(const QStringList &name_list);
-    void installPopularApp(const QString &name);
-    void installPopularApps();
-    void installSelected();
     void loadPmFiles();
     void processDoc(const QDomDocument &doc);
     void refreshPopularApps();
     void setProgressDialog();
     void setup();
-    void uninstall(const QString &names);
-    bool update();
     void updateInterface();
+    void updateModifiedPackages(QStringList modifiedPackages);
 
     QString getDebianVersion();
     QString getVersion(QString name);
     QString writeTmpFile(QString apps);
     QStringList listInstalled();
+    QStringList listModifiedPackages();
 
 public slots:
 
@@ -101,7 +102,8 @@ private slots:
     void findPackage();
     void findPackageOther();
     void setConnections();
-    void tock(int, int); // tick-tock, updates progressBar when tick signal is emited
+    void updateBar(int, int); // updates progressBar when tick signal is emited
+    void updateOutput(QString out);
 
     void on_buttonInstall_clicked();
     void on_buttonAbout_clicked();
@@ -120,6 +122,10 @@ private slots:
     void on_buttonForceUpdate_clicked();
     void on_checkHideLibs_clicked(bool checked);
     void on_buttonUpgradeAll_clicked();
+    void on_buttonEnter_clicked();
+    void on_lineEdit_returnPressed();
+
+    void on_buttonCancel_clicked();
 
 private:
     bool updated_once;
