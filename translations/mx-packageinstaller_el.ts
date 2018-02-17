@@ -59,19 +59,19 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="159"/>
-        <location filename="../mainwindow.cpp" line="1419"/>
+        <location filename="../mainwindow.cpp" line="1421"/>
         <source>Stable Repo</source>
         <translation>Αποθετήριο Stable</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="169"/>
-        <location filename="../mainwindow.cpp" line="1418"/>
+        <location filename="../mainwindow.cpp" line="1420"/>
         <source>MX Test Repo</source>
         <translation>MX Test Repo</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="179"/>
-        <location filename="../mainwindow.cpp" line="1417"/>
+        <location filename="../mainwindow.cpp" line="1419"/>
         <source>Debian Backports Repo</source>
         <translation>Debian Backports Repo</translation>
     </message>
@@ -83,25 +83,25 @@
     <message>
         <location filename="../mainwindow.ui" line="270"/>
         <location filename="../mainwindow.ui" line="274"/>
-        <location filename="../mainwindow.cpp" line="1468"/>
+        <location filename="../mainwindow.cpp" line="1470"/>
         <source>All packages</source>
         <translation>Ολα τα Πακέτa</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="279"/>
-        <location filename="../mainwindow.cpp" line="1481"/>
+        <location filename="../mainwindow.cpp" line="1483"/>
         <source>Installed</source>
         <translation>Εγκαταστημένο</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="284"/>
-        <location filename="../mainwindow.cpp" line="1479"/>
+        <location filename="../mainwindow.cpp" line="1481"/>
         <source>Upgradable</source>
         <translation>Αναβαθμίση</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="289"/>
-        <location filename="../mainwindow.cpp" line="1483"/>
+        <location filename="../mainwindow.cpp" line="1485"/>
         <source>Not installed</source>
         <translation>Μην Εγκαταστημένο</translation>
     </message>
@@ -173,7 +173,7 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="549"/>
-        <source>enter here the response to prompts and press Enter</source>
+        <source>Respond here, or just press Enter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -219,7 +219,7 @@
     <message>
         <location filename="../mainwindow.ui" line="687"/>
         <location filename="../mainwindow.cpp" line="1348"/>
-        <location filename="../mainwindow.cpp" line="1526"/>
+        <location filename="../mainwindow.cpp" line="1528"/>
         <source>Install</source>
         <translation>Εγκατάσταση </translation>
     </message>
@@ -259,7 +259,7 @@
     <message>
         <location filename="../mainwindow.cpp" line="334"/>
         <location filename="../mainwindow.cpp" line="1298"/>
-        <location filename="../mainwindow.cpp" line="1420"/>
+        <location filename="../mainwindow.cpp" line="1422"/>
         <source>Cancel</source>
         <translation>Ακύρωση</translation>
     </message>
@@ -327,7 +327,7 @@
         <location filename="../mainwindow.cpp" line="1271"/>
         <location filename="../mainwindow.cpp" line="1282"/>
         <location filename="../mainwindow.cpp" line="1399"/>
-        <location filename="../mainwindow.cpp" line="1600"/>
+        <location filename="../mainwindow.cpp" line="1602"/>
         <source>Error</source>
         <translation>Σφάλμα</translation>
     </message>
@@ -375,7 +375,7 @@
     <message>
         <location filename="../mainwindow.cpp" line="1268"/>
         <location filename="../mainwindow.cpp" line="1278"/>
-        <location filename="../mainwindow.cpp" line="1596"/>
+        <location filename="../mainwindow.cpp" line="1598"/>
         <source>Done</source>
         <translation>Ολοκληρώθηκε</translation>
     </message>
@@ -384,12 +384,12 @@
         <translation type="vanished">Η διαδικασία τελείωσε.&lt;p&gt; &lt;b&gt; Θέλετε να βγείτε;&lt;/ b&gt;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1625"/>
+        <location filename="../mainwindow.cpp" line="1627"/>
         <source>Yes</source>
         <translation>Ναι</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1625"/>
+        <location filename="../mainwindow.cpp" line="1627"/>
         <source>No</source>
         <translation>Όχι</translation>
     </message>
@@ -422,14 +422,14 @@
         <location filename="../mainwindow.cpp" line="1268"/>
         <location filename="../mainwindow.cpp" line="1278"/>
         <location filename="../mainwindow.cpp" line="1392"/>
-        <location filename="../mainwindow.cpp" line="1596"/>
+        <location filename="../mainwindow.cpp" line="1598"/>
         <source>Processing finished successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1271"/>
         <location filename="../mainwindow.cpp" line="1282"/>
-        <location filename="../mainwindow.cpp" line="1600"/>
+        <location filename="../mainwindow.cpp" line="1602"/>
         <source>Problem detected while installing, please inspect the console output.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -475,27 +475,27 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1415"/>
+        <location filename="../mainwindow.cpp" line="1417"/>
         <source>Repo Selection</source>
         <translation>Επιλογή </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1416"/>
+        <location filename="../mainwindow.cpp" line="1418"/>
         <source>Please select repo to load</source>
         <translation>Παρακαλούμε επιλέξτε repo για φόρτωση</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1524"/>
+        <location filename="../mainwindow.cpp" line="1526"/>
         <source>Upgrade</source>
         <translation>Αναβάθμιση</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1623"/>
+        <location filename="../mainwindow.cpp" line="1625"/>
         <source>Quit?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1624"/>
+        <location filename="../mainwindow.cpp" line="1626"/>
         <source>Process still running, quiting might leave the system in an instable state.&lt;p&gt;&lt;b&gt;Are you sure you want to exit MX Package Installer?&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>

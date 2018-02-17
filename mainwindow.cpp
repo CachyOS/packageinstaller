@@ -1406,9 +1406,11 @@ void MainWindow::on_tabWidget_currentChanged(int index)
     ui->tabWidget->setTabText(2, tr("Console Output"));
     switch (index) {
     case 0:
+        ui->tabWidget->setTabEnabled(0, true);
         refreshPopularApps();
         break;
     case 1:
+        ui->tabWidget->setTabEnabled(1, true);
         // show select message if the current tree is not cached
         if (app_info_list.size() == 0) {
             QMessageBox msgBox(QMessageBox::Question,
@@ -1535,21 +1537,21 @@ void MainWindow::on_treeOther_itemChanged(QTreeWidgetItem *item)
 
 void MainWindow::on_radioStable_toggled(bool checked)
 {
-    if(checked && tree_stable->topLevelItemCount() == 0) {
+    if(checked) {
         buildPackageLists();
     }
 }
 
 void MainWindow::on_radioMXtest_toggled(bool checked)
 {
-    if(checked && tree_stable->topLevelItemCount() == 0) {
+    if(checked) {
         buildPackageLists();
     }
 }
 
 void MainWindow::on_radioBackports_toggled(bool checked)
 {
-    if(checked && tree_stable->topLevelItemCount() == 0) {
+    if(checked) {
         buildPackageLists();
     }
 }

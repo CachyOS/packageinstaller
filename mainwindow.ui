@@ -29,7 +29,7 @@
    <item row="0" column="0">
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>2</number>
      </property>
      <property name="documentMode">
       <bool>false</bool>
@@ -546,7 +546,7 @@
        <item row="1" column="0">
         <widget class="QLineEdit" name="lineEdit">
          <property name="placeholderText">
-          <string>enter here the response to prompts and press Enter</string>
+          <string>Respond here, or just press Enter</string>
          </property>
         </widget>
        </item>
