@@ -1274,8 +1274,8 @@ void MainWindow::on_buttonInstall_clicked()
         }
     } else {
         if (installSelected()) {
-            QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
             updateModifiedPackages(listModifiedPackages());
+            QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
             ui->tabWidget->setCurrentWidget(ui->tabOtherRepos);
         } else {
             QMessageBox::critical(this, tr("Error"), tr("Problem detected while installing, please inspect the console output."));
@@ -1388,6 +1388,7 @@ void MainWindow::on_buttonUninstall_clicked()
     ui->tabWidget->setCurrentWidget(ui->tabOutput);
 
     if (uninstall(names)) {
+        updateModifiedPackages(listModifiedPackages());
         QMessageBox::information(this, tr("Success"), tr("Processing finished successfully."));
         if (popular) {
             ui->tabWidget->setCurrentWidget(ui->tabApps);
@@ -1596,8 +1597,8 @@ void MainWindow::on_buttonUpgradeAll_clicked()
     }
 
     if (install(names)) {
-        QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
         updateModifiedPackages(listModifiedPackages());
+        QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
         ui->tabWidget->setCurrentWidget(ui->tabOtherRepos);
     } else {
         QMessageBox::critical(this, tr("Error"), tr("Problem detected while installing, please inspect the console output."));
