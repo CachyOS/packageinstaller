@@ -435,7 +435,6 @@ void MainWindow::displayPackages(bool force_refresh)
         }
         list = stable_list;
     }
-    progress->show();
 
     QHash<QString, VersionNumber> hashInstalled; // hash that contains (app_name, VersionNumber) returned by apt-cache policy
     QHash<QString, VersionNumber> hashCandidate; // hash that contains (app_name, VersionNumber) returned by apt-cache policy for candidates
@@ -470,6 +469,7 @@ void MainWindow::displayPackages(bool force_refresh)
     QString tmp_file_name = writeTmpFile(apps);
 
     if (app_info_list.size() == 0 || force_refresh) {
+        progress->show();
         progress->setLabelText(tr("Updating package list..."));
         connect(cmd, &Cmd::runTime, this, &MainWindow::updateBar);  // processes runtime emited by Cmd to be used by a progress bar
         connect(cmd, &Cmd::started, this, &MainWindow::cmdStart);
@@ -1407,9 +1407,11 @@ void MainWindow::on_tabWidget_currentChanged(int index)
     switch (index) {
     case 0:
         ui->tabWidget->setTabEnabled(0, true);
+        ui->tabWidget->setTabEnabled(1, true);
         refreshPopularApps();
         break;
     case 1:
+        ui->tabWidget->setTabEnabled(0, true);
         ui->tabWidget->setTabEnabled(1, true);
         // show select message if the current tree is not cached
         if (app_info_list.size() == 0) {
