@@ -1263,18 +1263,22 @@ void MainWindow::on_buttonInstall_clicked()
     ui->outputBox->clear();
 
     if (ui->tabApps->isVisible()) { // Popular apps tab
-        if (installPopularApps()) {
+        bool success = installPopularApps();
+        if(app_info_list.size() > 0) { // update list if it already exists
+            updateModifiedPackages(listModifiedPackages());
+            buildPackageLists();
+        }
+        if (success) {
             QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
             ui->tabWidget->setCurrentWidget(ui->tabApps);
         } else {
             QMessageBox::critical(this, tr("Error"), tr("Problem detected while installing, please inspect the console output."));
         }
-        if(app_info_list.size() > 0) { // update list if it already exists
-            updateModifiedPackages(listModifiedPackages());
-        }
     } else {
-        if (installSelected()) {
-            updateModifiedPackages(listModifiedPackages());
+        bool success = installSelected();
+        updateModifiedPackages(listModifiedPackages());
+        buildPackageLists();
+        if (success) {
             QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
             ui->tabWidget->setCurrentWidget(ui->tabOtherRepos);
         } else {
@@ -1388,7 +1392,10 @@ void MainWindow::on_buttonUninstall_clicked()
     ui->tabWidget->setCurrentWidget(ui->tabOutput);
 
     if (uninstall(names)) {
-        updateModifiedPackages(listModifiedPackages());
+        if(app_info_list.size() > 0) { // update list if it already exists
+            updateModifiedPackages(listModifiedPackages());
+            buildPackageLists();
+        }
         QMessageBox::information(this, tr("Success"), tr("Processing finished successfully."));
         if (popular) {
             ui->tabWidget->setCurrentWidget(ui->tabApps);
@@ -1396,6 +1403,10 @@ void MainWindow::on_buttonUninstall_clicked()
             ui->tabWidget->setCurrentWidget(ui->tabOtherRepos);
         }
     } else {
+        if(app_info_list.size() > 0) { // update list if it already exists
+            updateModifiedPackages(listModifiedPackages());
+            buildPackageLists();
+        }
         QMessageBox::critical(this, tr("Error"), tr("We encountered a problem uninstalling the program"));
     }
 }
@@ -1598,9 +1609,12 @@ void MainWindow::on_buttonUpgradeAll_clicked()
 
     if (install(names)) {
         updateModifiedPackages(listModifiedPackages());
+        buildPackageLists();
         QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
         ui->tabWidget->setCurrentWidget(ui->tabOtherRepos);
     } else {
+        updateModifiedPackages(listModifiedPackages());
+        buildPackageLists();
         QMessageBox::critical(this, tr("Error"), tr("Problem detected while installing, please inspect the console output."));
     }
 }
