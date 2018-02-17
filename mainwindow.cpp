@@ -908,14 +908,13 @@ bool MainWindow::readPackageList(bool force_download)
 
     progCancel->setDisabled(true);
     // don't process if the lists are already populated
-    if (!(stable_list.isEmpty() || mx_list.isEmpty() || backports_list.isEmpty() || force_download)) {
+    if (!((ui->radioStable->isChecked() && stable_list.isEmpty()) || (ui->radioMXtest->isChecked() && mx_list.isEmpty())||
+          (ui->radioBackports->isChecked() && backports_list.isEmpty()) || force_download)) {
         return true;
     }
     if (ui->radioStable->isChecked()) { // read Stable list
         list = stable_raw.split("\n");
     } else {
-         progress->show();
-         progress->setLabelText(tr("Reading downloaded file..."));
          if (ui->radioMXtest->isChecked())  { // read MX Test list
              file.setFileName(tmp_dir + "/mxPackages");
          } else if (ui->radioBackports->isChecked()) {  // read Backports lsit
