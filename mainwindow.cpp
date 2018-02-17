@@ -1592,9 +1592,13 @@ void MainWindow::on_buttonUpgradeAll_clicked()
         ++it;
     }
 
-    install(names);
-    clearCache();
-    buildPackageLists();
+    if (install(names)) {
+        QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
+        updateModifiedPackages(listModifiedPackages());
+        ui->tabWidget->setCurrentWidget(ui->tabOtherRepos);
+    } else {
+        QMessageBox::critical(this, tr("Error"), tr("Problem detected while installing, please inspect the console output."));
+    }
 }
 
 

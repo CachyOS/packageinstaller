@@ -327,6 +327,7 @@
         <location filename="../mainwindow.cpp" line="1271"/>
         <location filename="../mainwindow.cpp" line="1282"/>
         <location filename="../mainwindow.cpp" line="1399"/>
+        <location filename="../mainwindow.cpp" line="1600"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
@@ -374,6 +375,7 @@
     <message>
         <location filename="../mainwindow.cpp" line="1268"/>
         <location filename="../mainwindow.cpp" line="1278"/>
+        <location filename="../mainwindow.cpp" line="1596"/>
         <source>Done</source>
         <translation>Hecho</translation>
     </message>
@@ -382,12 +384,12 @@
         <translation type="vanished">Proceso completado.&lt;p&gt;&lt;b&gt;Desea salir del MX Instalador de Paquetes?&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1621"/>
+        <location filename="../mainwindow.cpp" line="1625"/>
         <source>Yes</source>
         <translation>Sí</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1621"/>
+        <location filename="../mainwindow.cpp" line="1625"/>
         <source>No</source>
         <translation>No</translation>
     </message>
@@ -420,12 +422,14 @@
         <location filename="../mainwindow.cpp" line="1268"/>
         <location filename="../mainwindow.cpp" line="1278"/>
         <location filename="../mainwindow.cpp" line="1392"/>
+        <location filename="../mainwindow.cpp" line="1596"/>
         <source>Processing finished successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1271"/>
         <location filename="../mainwindow.cpp" line="1282"/>
+        <location filename="../mainwindow.cpp" line="1600"/>
         <source>Problem detected while installing, please inspect the console output.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -486,12 +490,12 @@
         <translation>Actualizar</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1619"/>
+        <location filename="../mainwindow.cpp" line="1623"/>
         <source>Quit?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1620"/>
+        <location filename="../mainwindow.cpp" line="1624"/>
         <source>Process still running, quiting might leave the system in an instable state.&lt;p&gt;&lt;b&gt;Are you sure you want to exit MX Package Installer?&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
