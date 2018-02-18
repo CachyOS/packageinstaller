@@ -38,20 +38,25 @@ QString AptCache::getArch()
 
 void AptCache::parseContent()
 {
-    QString package;
-    QString version;
-    QString description;
+    QStringList package_list;
+    QStringList version_list;
+    QStringList description_list;
     QStringList list = files_content.split("\n");
 
     foreach(QString line, list) {
         if (line.startsWith("Package: ")) {
-            package = line.remove("Package: ");
+            package_list << line.remove("Package: ");
         } else if (line.startsWith("Version: ")) {
-            version =line.remove("Version: ");
+            version_list << line.remove("Version: ");
         } else if (line.startsWith("Description: ")) {
-            description = line.remove("Description: ");
+            description_list << line.remove("Description: ");
         }
-        candidates.insert(package, QStringList() << version << description);
+    }
+    for (int i = 0; i < package_list.size(); ++i) {
+        if (candidates.contains(package_list.at(i)) && (VersionNumber(version_list.at(i)) <= VersionNumber(candidates.value(package_list.at(i)).at(0)))) {
+            continue;
+        }
+        candidates.insert(package_list.at(i), QStringList() << version_list.at(i) << description_list.at(i));
     }
 }
 
@@ -59,7 +64,7 @@ bool AptCache::readFile(const QString &file_name)
 {
     QFile file(dir_name + file_name);
     if(!file.open(QFile::ReadOnly)) {
-        qDebug() << "Count not open file: " << file.fileName();
+        qDebug() << "Could not open file: " << file.fileName();
         return false;
     }
     files_content += file.readAll();

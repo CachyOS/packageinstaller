@@ -86,7 +86,6 @@ public:
 
     QString getDebianVersion();
     QString getVersion(QString name);
-    QString writeTmpFile(QString apps);
     QStringList listInstalled();
 
 public slots:

@@ -173,20 +173,6 @@ QString MainWindow::getDebianVersion()
     return cmd->getOutput("cat /etc/debian_version | cut -f1 -d'.'", QStringList() << "quiet");
 }
 
-// Write the name of the apps in a temp file -- needed because we cannot pass too many apps in command line
-QString MainWindow::writeTmpFile(QString apps)
-{
-    QFile file(tmp_dir + "/listapps");
-    if(!file.open(QFile::WriteOnly)) {
-        qDebug() << "Count not open file: " << file.fileName();
-    }
-    QTextStream stream(&file);
-    stream << apps;
-    file.close();
-    return file.fileName();
-}
-
-
 // Set proc and timer connections
 void MainWindow::setConnections()
 {
@@ -449,7 +435,6 @@ void MainWindow::displayPackages(bool force_refresh)
     for (int i = 0; i < ui->treeOther->columnCount(); ++i) {
         ui->treeOther->resizeColumnToContents(i);
     }
-    QString tmp_file_name = writeTmpFile(apps);
 
     for (int i = 0; i < ui->treeOther->columnCount(); ++i) {
         ui->treeOther->resizeColumnToContents(i);
@@ -865,41 +850,50 @@ bool MainWindow::downloadPackageList(bool force_download)
 // Process downloaded *Packages.gz files
 bool MainWindow::readPackageList(bool force_download)
 {
-    QFile file;
-    QMap<QString, QStringList> map;
-    QStringList list;
-    QString package;
-    QString version;
-    QString description;
-
     progCancel->setDisabled(true);
     // don't process if the lists are already populated
     if (!((ui->radioStable->isChecked() && stable_list.isEmpty()) || (ui->radioMXtest->isChecked() && mx_list.isEmpty())||
           (ui->radioBackports->isChecked() && backports_list.isEmpty()) || force_download)) {
         return true;
     }
+
+    QFile file;
     if (ui->radioMXtest->isChecked())  { // read MX Test list
         file.setFileName(tmp_dir + "/mxPackages");
+        if(!file.open(QFile::ReadOnly)) {
+            qDebug() << "Could not open file: " << file.fileName();
+            return false;
+        }
     } else if (ui->radioBackports->isChecked()) {  // read Backports lsit
         file.setFileName(tmp_dir + "/allPackages");
+        if(!file.open(QFile::ReadOnly)) {
+            qDebug() << "Could not open file: " << file.fileName();
+            return false;
+        }
     }
-    if(!file.open(QFile::ReadOnly)) {
-        qDebug() << "Count not open file: " << file.fileName();
-        return false;
-    }
+
     QString file_content = file.readAll();
     file.close();
-    list = file_content.split("\n");
+
+    QStringList list = file_content.split("\n");
+
+    QMap<QString, QStringList> map;
+    QStringList package_list;
+    QStringList version_list;
+    QStringList description_list;
 
     foreach(QString line, list) {
         if (line.startsWith("Package: ")) {
-            package = line.remove("Package: ");
+            package_list << line.remove("Package: ");
         } else if (line.startsWith("Version: ")) {
-            version = line.remove("Version: ");
+            version_list << line.remove("Version: ");
         } else if (line.startsWith("Description: ")) {
-            description = line.remove("Description: ");
+            description_list << line.remove("Description: ");
         }
-        map.insert(package, QStringList() << version << description);
+    }
+
+    for (int i = 0; i < package_list.size(); ++i) {
+        map.insert(package_list.at(i), QStringList() << version_list.at(i) << description_list.at(i));
     }
 
     if (ui->radioMXtest->isChecked())  {
@@ -907,6 +901,7 @@ bool MainWindow::readPackageList(bool force_download)
     } else if (ui->radioBackports->isChecked()) {
         backports_list = map;
     }
+
     return true;
 }
 
