@@ -623,7 +623,9 @@ bool MainWindow::installBatch(const QStringList &name_list)
     setConnections();
     ui->tabWidget->setTabText(2, tr("Post-processing..."));
     lock_file->unlock();
-    cmd->run(postinstall, QStringList() << "slowtick");
+    if (cmd->run(postinstall, QStringList() << "slowtick") != 0) {
+        result = false;
+    }
     lock_file->lock();
     return result;
 }
