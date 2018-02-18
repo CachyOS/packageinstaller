@@ -112,7 +112,7 @@ bool MainWindow::uninstall(const QString &names)
     }
     ui->tabWidget->setTabEnabled(0, true);
     ui->tabWidget->setTabEnabled(1, true);
-    return (cmd->getExitCode() == 0);
+    return (cmd->getExitCode(true) == 0);
 }
 
 // Run apt-get update
@@ -146,8 +146,10 @@ void MainWindow::updateInterface()
 {
     ui->tabWidget->setTabEnabled(0, true);
     ui->tabWidget->setTabEnabled(1, true);
+
     QList<QTreeWidgetItem *> upgr_list = ui->treeOther->findItems("upgradable", Qt::MatchExactly, 5);
     QList<QTreeWidgetItem *> inst_list = ui->treeOther->findItems("installed", Qt::MatchExactly, 5);
+
     ui->labelNumApps->setText(QString::number(ui->treeOther->topLevelItemCount()));
     ui->labelNumUpgr->setText(QString::number(upgr_list.count()));
     ui->labelNumInst->setText(QString::number(inst_list.count() + upgr_list.count()));
@@ -579,7 +581,7 @@ bool MainWindow::install(const QString &names)
     lock_file->lock();
     ui->tabWidget->setTabEnabled(0, true);
     ui->tabWidget->setTabEnabled(1, true);
-    return (cmd->getExitCode() == 0);
+    return (cmd->getExitCode(true) == 0);
 }
 
 // install a list of application and run postprocess for each of them.
@@ -600,16 +602,18 @@ bool MainWindow::installBatch(const QStringList &name_list)
     }
 
     if (install_names != "") {
-        setConnections();
         if (!install(install_names)) {
             result = false;
         }
     }
-    setConnections();
-    ui->tabWidget->setTabText(2, tr("Post-processing..."));
-    lock_file->unlock();
-    if (cmd->run(postinstall, QStringList() << "slowtick") != 0) {
-        result = false;
+    if (postinstall != "\n") {
+        qDebug() << "Post-install";
+        setConnections();
+        ui->tabWidget->setTabText(2, tr("Post-processing..."));
+        lock_file->unlock();
+        if (cmd->run(postinstall, QStringList() << "slowtick") != 0) {
+            result = false;
+        }
     }
     lock_file->lock();
     return result;
@@ -634,6 +638,7 @@ bool MainWindow::installPopularApp(const QString &name)
 
     // preinstall
     if (preinstall != "") {
+        qDebug() << "Pre-install";
         setConnections();
         ui->tabWidget->setTabText(2, tr("Pre-processing for ") + name);
         lock_file->unlock();
@@ -650,6 +655,7 @@ bool MainWindow::installPopularApp(const QString &name)
 
     // postinstall
     if (postinstall != "") {
+        qDebug() << "Post-install";
         setConnections();
         ui->tabWidget->setTabText(2, tr("Post-processing for ") + name);
         lock_file->unlock();
