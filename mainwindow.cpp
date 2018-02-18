@@ -647,7 +647,9 @@ bool MainWindow::installPopularApp(const QString &name)
     setConnections();
     ui->tabWidget->setTabText(2, tr("Pre-processing for ") + name);
     lock_file->unlock();
-    cmd->run(preinstall);
+    if (cmd->run(preinstall) != 0) {
+        return false;
+    }
 
     if (install_names != "") {
         ui->tabWidget->setTabText(2, tr("Installing ") + name);
