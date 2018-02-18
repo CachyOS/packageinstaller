@@ -631,21 +631,30 @@ bool MainWindow::installPopularApp(const QString &name)
             install_names = list.at(7);
         }
     }
-    setConnections();
-    ui->tabWidget->setTabText(2, tr("Pre-processing for ") + name);
-    lock_file->unlock();
-    if (cmd->run(preinstall) != 0) {
-        return false;
+
+    // preinstall
+    if (preinstall != "") {
+        setConnections();
+        ui->tabWidget->setTabText(2, tr("Pre-processing for ") + name);
+        lock_file->unlock();
+        if (cmd->run(preinstall) != 0) {
+            return false;
+        }
     }
 
+    // install
     if (install_names != "") {
         ui->tabWidget->setTabText(2, tr("Installing ") + name);
         result = install(install_names);
     }
-    setConnections();
-    ui->tabWidget->setTabText(2, tr("Post-processing for ") + name);
-    lock_file->unlock();
-    cmd->run(postinstall);
+
+    // postinstall
+    if (postinstall != "") {
+        setConnections();
+        ui->tabWidget->setTabText(2, tr("Post-processing for ") + name);
+        lock_file->unlock();
+        cmd->run(postinstall);
+    }
     lock_file->lock();
     return result;
 }
