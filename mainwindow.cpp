@@ -122,8 +122,6 @@ bool MainWindow::update()
     lock_file->unlock();
     if (!ui->tabOtherRepos->isVisible()) { // don't display in output if calling to refresh from tabOtherRepos
         ui->tabWidget->setTabText(2, tr("Refreshing sources..."));
-        ui->tabWidget->setTabEnabled(0, false);
-        ui->tabWidget->setTabEnabled(1, false);
     } else {
         progress->show();
     }
@@ -146,6 +144,8 @@ bool MainWindow::update()
 // Update interface when done loading info
 void MainWindow::updateInterface()
 {
+    ui->tabWidget->setTabEnabled(0, true);
+    ui->tabWidget->setTabEnabled(1, true);
     QList<QTreeWidgetItem *> upgr_list = ui->treeOther->findItems("upgradable", Qt::MatchExactly, 5);
     QList<QTreeWidgetItem *> inst_list = ui->treeOther->findItems("installed", Qt::MatchExactly, 5);
     ui->labelNumApps->setText(QString::number(ui->treeOther->topLevelItemCount()));
@@ -190,10 +190,10 @@ QString MainWindow::writeTmpFile(QString apps)
 // Set proc and timer connections
 void MainWindow::setConnections()
 {
-    connect(cmd, &Cmd::runTime, this, &MainWindow::updateBar);  // processes runtime emited by Cmd to be used by a progress bar
-    connect(cmd, &Cmd::outputAvailable, this, &MainWindow::updateOutput);
-    connect(cmd, &Cmd::started, this, &MainWindow::cmdStart);
-    connect(cmd, &Cmd::finished, this, &MainWindow::cmdDone);
+    connect(cmd, &Cmd::runTime, this, &MainWindow::updateBar, Qt::UniqueConnection);  // processes runtime emited by Cmd to be used by a progress bar
+    connect(cmd, &Cmd::outputAvailable, this, &MainWindow::updateOutput, Qt::UniqueConnection);
+    connect(cmd, &Cmd::started, this, &MainWindow::cmdStart, Qt::UniqueConnection);
+    connect(cmd, &Cmd::finished, this, &MainWindow::cmdDone, Qt::UniqueConnection);
 }
 
 // Processes tick emited by Cmd to be used by a progress bar
@@ -790,9 +790,9 @@ bool MainWindow::downloadPackageList(bool force_download)
         tmp_dir = cmd->getOutput("mktemp -d /tmp/mxpm-XXXXXXXX");
     }
     QDir::setCurrent(tmp_dir);
-    connect(cmd, &Cmd::runTime, this, &MainWindow::updateBar);  // processes runtime emited by Cmd to be used by a progress bar
-    connect(cmd, &Cmd::started, this, &MainWindow::cmdStart);
-    connect(cmd, &Cmd::finished, this, &MainWindow::cmdDone);
+    connect(cmd, &Cmd::runTime, this, &MainWindow::updateBar, Qt::UniqueConnection);  // processes runtime emited by Cmd to be used by a progress bar
+    connect(cmd, &Cmd::started, this, &MainWindow::cmdStart, Qt::UniqueConnection);
+    connect(cmd, &Cmd::finished, this, &MainWindow::cmdDone, Qt::UniqueConnection);
     progress->setLabelText(tr("Downloading package info..."));
     progCancel->setEnabled(true);
     if (stable_list.isEmpty() || force_download) {
@@ -1227,6 +1227,8 @@ void MainWindow::on_buttonInstall_clicked()
             QMessageBox::critical(this, tr("Error"), tr("Problem detected while installing, please inspect the console output."));
         }
     }
+    ui->tabWidget->setTabEnabled(0, true);
+    ui->tabWidget->setTabEnabled(1, true);
 }
 
 // About button clicked
@@ -1351,6 +1353,8 @@ void MainWindow::on_buttonUninstall_clicked()
         }
         QMessageBox::critical(this, tr("Error"), tr("We encountered a problem uninstalling the program"));
     }
+    ui->tabWidget->setTabEnabled(0, true);
+    ui->tabWidget->setTabEnabled(1, true);
 }
 
 // Actions on switching the tabs
@@ -1559,6 +1563,8 @@ void MainWindow::on_buttonUpgradeAll_clicked()
         buildPackageLists();
         QMessageBox::critical(this, tr("Error"), tr("Problem detected while installing, please inspect the console output."));
     }
+    ui->tabWidget->setTabEnabled(0, true);
+    ui->tabWidget->setTabEnabled(1, true);
 }
 
 

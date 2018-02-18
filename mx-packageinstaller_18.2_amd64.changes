@@ -18,26 +18,26 @@ Changes:
  .
    * display terminal output in Qt app
 Checksums-Sha1:
- b035413cec48d88955b685533c6aad2689174d19 1159 mx-packageinstaller_18.2.dsc
- aaf70e34ca721653f2b16ae1494b97bd390a7e80 70112 mx-packageinstaller_18.2.tar.xz
- 33a4a3e5bbae367191a6a09ab03e44f81f63b71e 107920 mx-packageinstaller_18.2_amd64.deb
+ 909724b7288a63f329e9d215ef1df69d7f57e0a1 1159 mx-packageinstaller_18.2.dsc
+ 3a0c2ddde00d9d904d1482ff28390290e1670f7a 70108 mx-packageinstaller_18.2.tar.xz
+ e621583d3aa71d099ed5bf26cdc0c396610112f5 108190 mx-packageinstaller_18.2_amd64.deb
 Checksums-Sha256:
- 38f3e8571bc2eed2c8af6d23e3813e1a9d4b40126bcce37b27d11364fb49afb9 1159 mx-packageinstaller_18.2.dsc
- fbe5e96468156ea7b92a5081c9431b91c29aedb8ff5c172caf2698f212e3f9f4 70112 mx-packageinstaller_18.2.tar.xz
- 9ed2a68b05b30ce5cc365b3c2dc730183231eb559c22479e5cd313197f28fc8e 107920 mx-packageinstaller_18.2_amd64.deb
+ c1c9ef50c3e6c8fb150b46da7a5c700b200ca48daa3a39b61a28fed066112a83 1159 mx-packageinstaller_18.2.dsc
+ f358244536f1b484cebb30b9faf4cf60e84ef356604035b4e9ffc9e8b9710180 70108 mx-packageinstaller_18.2.tar.xz
+ 815c016738a27a9c8ba9a73b73fedbf6660dcb5af2e2e548a2867c0b3cb229d6 108190 mx-packageinstaller_18.2_amd64.deb
 Files:
- 01c5dcefc41c32608760f7b7a8dc968b 1159 admin optional mx-packageinstaller_18.2.dsc
- 13b02c4f1c4d094062e907e0dca834e9 70112 admin optional mx-packageinstaller_18.2.tar.xz
- 6ec9ece5054767bd11c28ae017881451 107920 admin optional mx-packageinstaller_18.2_amd64.deb
+ d4e645aa76fc92210e9ccfdebd7f3813 1159 admin optional mx-packageinstaller_18.2.dsc
+ 1835b073d8116fa1e8856ad2f5fa515d 70108 admin optional mx-packageinstaller_18.2.tar.xz
+ f96fecda3e02fbf862a03cae4a2d2c8c 108190 admin optional mx-packageinstaller_18.2_amd64.deb
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1
 
-iQEcBAEBAgAGBQJaiU9nAAoJEHCTjHgGee6YlNMH/jPi5tDEVMtQfqLouA0RJhW/
-pvcM70PglewMDJvMLS5yCG3VFDROo/fHfNgqhBsX3I6fRJaNN+Br0bG1PXDB7yA+
-vXf37PCYgTTQszj4IYeCxK9LbQ0cOHHFnue13bN89wwPRPD1BpZQXjHdnyd09C3q
-WBi9ucB2eJA5Nkx903/4fxyyMJTDLkd8u6JEfhGKOUhbIKmsNn2C8M+mJg0/eU9f
-hISzoi/cb2uTqmpXcof2lGUFxzhsGzV1ENmyj6z+6aNdwpHofi7j8NkhISwuBUzK
-hKmuqxUbWYUYjaWEVYDsPJ0DCpqrapuWpMtZfe1S7b2rAmPEVFW1SgDO+n8ncg4=
-=wo95
+iQEcBAEBAgAGBQJaiZTyAAoJEHCTjHgGee6Yc2YH/jEIho0/+QOyj8ovej7GntNC
+XnHyY+4zRA9FSXfOp5XWTbgd1SkvkzOGAcIq+gG7zTRf0cUq0LalhKFhd3URFJmu
+QQBwktZr1/isM6cmx+2g0otkIcScUK7ekF+CgysCF4m0ypFrVXEgGB5pnKSgfQK1
+btR22X7jONnhyfYwYI5sk7NDij+6zyNXEm1pMZIKIWc07nW8JTogveRSSHVEAwL4
+kMIVyLnsSKjd8EvywWa0TlMgnEbKLLeP3N5zXYhBDVfx4231ZRDS76Itm5dt+GjE
+Da5T5KljFwnu//EOVmn8UCDDI++/BEE2FbgWNPDqrlV1T7zKizMvwkPFWma66Ok=
+=WVQH
 -----END PGP SIGNATURE-----
