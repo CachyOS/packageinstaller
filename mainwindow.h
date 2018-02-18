@@ -38,7 +38,7 @@
 
 #include <cmd.h>
 #include <lockfile.h>
-#include <aptcache.h>
+#include <versionnumber.h>
 
 namespace Ui {
 class MainWindow;
@@ -129,7 +129,7 @@ private:
     bool updated_once;
     bool warning_displayed;
     int height_app;
-    AptCache cache;
+
     Cmd *cmd;
     LockFile *lock_file;
     QPushButton *progCancel;

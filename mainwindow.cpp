@@ -58,8 +58,11 @@ void MainWindow::setup()
 {
     ui->tabWidget->blockSignals(true);
     cmd = new Cmd(this);
-    listInstalledVersions();
-    arch = cache.getArch();
+    if (system("arch | grep -q x86_64") == 0) {
+        arch = "amd64";
+    } else {
+        arch = "i386";
+    }
     QString ver_num = getDebianVersion();
     if (ver_num == "8") {
         ver_name = "jessie";
@@ -800,6 +803,7 @@ bool MainWindow::downloadPackageList(bool force_download)
             }
         }
         progress->show();
+        AptCache cache;
         stable_list = cache.getCandidates();
     }
     if (ui->radioMXtest->isChecked())  {
