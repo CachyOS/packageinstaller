@@ -27,6 +27,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "versionnumber.h"
+#include "aptcache.h"
 
 #include <QFileDialog>
 #include <QScrollBar>
@@ -57,11 +58,8 @@ void MainWindow::setup()
 {
     ui->tabWidget->blockSignals(true);
     cmd = new Cmd(this);
-    if (system("arch | grep -q x86_64") == 0) {
-        arch = "amd64";
-    } else {
-        arch = "i386";
-    }
+    listInstalledVersions();
+    arch = cache.getArch();
     QString ver_num = getDebianVersion();
     if (ver_num == "8") {
         ver_name = "jessie";
@@ -106,8 +104,8 @@ bool MainWindow::uninstall(const QString &names)
     cmd->run("DEBIAN_FRONTEND=gnome apt-get remove " + names + "| tee -a /var/log/mxpi.log");
     lock_file->lock();
     this->disconnect();
-    if (app_info_list.size() != 0) {
-        updateModifiedPackages(listModifiedPackages());
+    if (stable_list.size() != 0) {
+        clearCache();
     }
     ui->tabWidget->setTabEnabled(0, true);
     ui->tabWidget->setTabEnabled(1, true);
@@ -164,23 +162,6 @@ void MainWindow::updateInterface()
     progress->hide();
     ui->searchBox->setFocus();
     ui->treeOther->blockSignals(false);
-    findPackageOther();
-}
-
-
-// Update apt_info_list with the newly modified package info
-void MainWindow::updateModifiedPackages(QStringList modifiedPackages)
-{
-    foreach (const QString &name, modifiedPackages) {
-        QRegularExpression re = QRegularExpression("\\n" + name + ":.*", QRegularExpression::DotMatchesEverythingOption);
-        app_info_list.removeAt(app_info_list.indexOf(re));
-    }
-    QString info_installed = cmd->getOutput("LC_ALL=en_US.UTF-8 apt-cache policy " +  modifiedPackages.join(" ") + "|grep Candidate -B2");
-    app_info_list << info_installed.split("--");
-
-    tree_mx_test->clear();
-    tree_backports->clear();
-    tree_stable->clear();
 }
 
 // Returns Debian main version number
@@ -436,8 +417,7 @@ void MainWindow::displayPackages(bool force_refresh)
         list = stable_list;
     }
 
-    QHash<QString, VersionNumber> hashInstalled; // hash that contains (app_name, VersionNumber) returned by apt-cache policy
-    QHash<QString, VersionNumber> hashCandidate; // hash that contains (app_name, VersionNumber) returned by apt-cache policy for candidates
+    QHash<QString, VersionNumber> hashInstalled = listInstalledVersions();
     QString app_name;
     QString app_info;
     QString apps;
@@ -468,23 +448,6 @@ void MainWindow::displayPackages(bool force_refresh)
     }
     QString tmp_file_name = writeTmpFile(apps);
 
-    if (app_info_list.size() == 0 || force_refresh) {
-        progress->show();
-        progress->setLabelText(tr("Updating package list..."));
-        connect(cmd, &Cmd::runTime, this, &MainWindow::updateBar);  // processes runtime emited by Cmd to be used by a progress bar
-        connect(cmd, &Cmd::started, this, &MainWindow::cmdStart);
-        connect(cmd, &Cmd::finished, this, &MainWindow::cmdDone);
-        QString info_installed = cmd->getOutput("LC_ALL=en_US.UTF-8 xargs apt-cache policy <" + tmp_file_name + "|grep Candidate -B2", QStringList() << "slowtick");
-        app_info_list = info_installed.split("--"); // list of installed apps
-    }
-    // create a hash of name and installed version
-    foreach(const QString &item, app_info_list) {
-        app_name = item.section(":", 0, 0).trimmed();
-        installed = item.section("\n  ", 1, 1).trimmed().section(": ", 1, 1); // Installed version
-        candidate = item.section("\n  ", 2, 2).trimmed().section(": ", 1, 1);
-        hashInstalled.insert(app_name, installed);
-        hashCandidate.insert(app_name, candidate);
-    }
     for (int i = 0; i < ui->treeOther->columnCount(); ++i) {
         ui->treeOther->resizeColumnToContents(i);
     }
@@ -501,24 +464,23 @@ void MainWindow::displayPackages(bool force_refresh)
             (*it)->setHidden(true);
         }
         app_ver = (*it)->text(3);
-        installed = hashInstalled[app_name];
-        candidate = hashCandidate[app_name];
-        VersionNumber repocandidate(app_ver); // candidate from the selected repo, might be different than the one from Stable
+        installed = hashInstalled.value(app_name);
+        candidate = VersionNumber(list.value(app_name).at(0));
+        VersionNumber repo_candidate(app_ver); // candidate from the selected repo, might be different than the one from Stable
 
         (*it)->setIcon(1, QIcon()); // reset update icon
-        if (installed.toString() == "(none)") {
+        if (installed.toString() == "") {
             for (int i = 0; i < ui->treeOther->columnCount(); ++i) {
-                (*it)->setToolTip(i, tr("Version ") + candidate.toString() + tr(" in stable repo"));
-            }
-            (*it)->setText(5, "not installed");
-        } else if (installed.toString() == "") {
-            for (int i = 0; i < ui->treeOther->columnCount(); ++i) {
-               (*it)->setToolTip(i, tr("Not available in stable repo"));
+                if (stable_list.contains(app_name)) {
+                    (*it)->setToolTip(i, tr("Version ") + stable_list.value(app_name).at(0) + tr(" in stable repo"));
+                } else {
+                    (*it)->setToolTip(i, tr("Not available in stable repo"));
+                }
             }
             (*it)->setText(5, "not installed");
         } else {
             inst_count++;
-            if (installed >= repocandidate) {
+            if (installed >= repo_candidate) {
                 for (int i = 0; i < ui->treeOther->columnCount(); ++i) {
                     (*it)->setForeground(2, QBrush(Qt::gray));
                     (*it)->setForeground(4, QBrush(Qt::gray));
@@ -830,21 +792,17 @@ bool MainWindow::downloadPackageList(bool force_download)
     connect(cmd, &Cmd::finished, this, &MainWindow::cmdDone);
     progress->setLabelText(tr("Downloading package info..."));
     progCancel->setEnabled(true);
-    if (ui->radioStable->isChecked()) {
-        if (stable_raw.isEmpty() || force_download) {
-            if (force_download) {
-                if (!update()) {
-                    return false;
-                }
-            }
+    if (stable_list.isEmpty() || force_download) {
+        if (force_download) {
             progress->show();
-            if (cmd->run("LC_ALL=en_US.UTF-8 apt-cache dumpavail", QStringList() << "slowtick") == 0) {
-                stable_raw = cmd->getOutput();
-            } else {
+            if (!update()) {
                 return false;
             }
         }
-    } else if (ui->radioMXtest->isChecked())  {
+        progress->show();
+        stable_list = cache.getCandidates();
+    }
+    if (ui->radioMXtest->isChecked())  {
         if (!QFile(tmp_dir + "/mxPackages").exists() || force_download) {
             progress->show();
 
@@ -861,7 +819,7 @@ bool MainWindow::downloadPackageList(bool force_download)
                 return false;
             }
         }
-    } else {
+    } else if (ui->radioBackports->isChecked()){
         if (!QFile(tmp_dir + "/mainPackages").exists() ||
                 !QFile(tmp_dir + "/contribPackages").exists() ||
                 !QFile(tmp_dir + "/nonfreePackages").exists() || force_download) {
@@ -902,9 +860,9 @@ bool MainWindow::readPackageList(bool force_download)
     QFile file;
     QMap<QString, QStringList> map;
     QStringList list;
-    QStringList package_list;
-    QStringList version_list;
-    QStringList description_list;
+    QString package;
+    QString version;
+    QString description;
 
     progCancel->setDisabled(true);
     // don't process if the lists are already populated
@@ -912,37 +870,31 @@ bool MainWindow::readPackageList(bool force_download)
           (ui->radioBackports->isChecked() && backports_list.isEmpty()) || force_download)) {
         return true;
     }
-    if (ui->radioStable->isChecked()) { // read Stable list
-        list = stable_raw.split("\n");
-    } else {
-         if (ui->radioMXtest->isChecked())  { // read MX Test list
-             file.setFileName(tmp_dir + "/mxPackages");
-         } else if (ui->radioBackports->isChecked()) {  // read Backports lsit
-             file.setFileName(tmp_dir + "/allPackages");
-         }
-         if(!file.open(QFile::ReadOnly)) {
-             qDebug() << "Count not open file: " << file.fileName();
-             return false;
-         }
-         QString file_content = file.readAll();
-         list = file_content.split("\n");
-         file.close();
+    if (ui->radioMXtest->isChecked())  { // read MX Test list
+        file.setFileName(tmp_dir + "/mxPackages");
+    } else if (ui->radioBackports->isChecked()) {  // read Backports lsit
+        file.setFileName(tmp_dir + "/allPackages");
     }
+    if(!file.open(QFile::ReadOnly)) {
+        qDebug() << "Count not open file: " << file.fileName();
+        return false;
+    }
+    QString file_content = file.readAll();
+    file.close();
+    list = file_content.split("\n");
+
     foreach(QString line, list) {
         if (line.startsWith("Package: ")) {
-            package_list << line.remove("Package: ");
+            package = line.remove("Package: ");
         } else if (line.startsWith("Version: ")) {
-            version_list << line.remove("Version: ");
+            version = line.remove("Version: ");
         } else if (line.startsWith("Description: ")) {
-            description_list << line.remove("Description: ");
+            description = line.remove("Description: ");
         }
+        map.insert(package, QStringList() << version << description);
     }
-    for (int i = 0; i < package_list.size(); ++i) {
-        map.insert(package_list.at(i), QStringList() << version_list.at(i) << description_list.at(i));
-    }
-    if (ui->radioStable->isChecked()) {
-        stable_list = map;
-    } else if (ui->radioMXtest->isChecked())  {
+
+    if (ui->radioMXtest->isChecked())  {
         mx_list = map;
     } else if (ui->radioBackports->isChecked()) {
         backports_list = map;
@@ -980,7 +932,6 @@ void MainWindow::clearUi()
 // Copy QTreeWidgets
 void MainWindow::copyTree(QTreeWidget *from, QTreeWidget *to)
 {
-
     to->clear();
     QTreeWidgetItem *item;
     QTreeWidgetItemIterator it(from);
@@ -1015,9 +966,6 @@ void MainWindow::clearCache()
     tree_stable->clear();
     tree_mx_test->clear();
     tree_backports->clear();
-    app_info_list.clear();
-    QFile::remove(tmp_dir + "/listapps");
-    qDebug() << "tree cleared";
 }
 
 // Get version of the program
@@ -1077,39 +1025,29 @@ bool MainWindow::checkUpgradable(const QStringList &name_list)
 // Returns list of all installed packages
 QStringList MainWindow::listInstalled()
 {
-    QString str = cmd->getOutput("dpkg --get-selections | grep -v deinstall | cut -f1", QStringList() << "slowtick");
+    QString str = cmd->getOutput("dpkg --get-selections | grep -v deinstall | cut -f1", QStringList() << "slowtick" << "quiet");
     str.remove(":i386");
     str.remove(":amd64");
     return str.split("\n");
 }
 
-// returns of list of modified packages after the last apt-get command
-QStringList MainWindow::listModifiedPackages()
+QHash<QString, VersionNumber> MainWindow::listInstalledVersions()
 {
-    QString file_name = "/var/log/apt/history.log";
-    QFile file(file_name);
-    if (!file.open(QFile::ReadOnly | QFile::Text)) {
-        qDebug() << "Could not open: " << file.fileName();
-        return QStringList();
-    }
-    QString file_content = file.readAll();
-    file.close();
-    QStringList list = file_content.split(QRegularExpression("\n\n"));
-    QString last_entry = list.last();
-    QStringList lines = last_entry.split("\n");
+    QString out = cmd->getOutput("dpkg -l | grep '^ii'", QStringList() << "quiet");
+    QStringList list = out.split("\n");
 
-    QStringList result;
-    foreach (QString line, lines) {
-        foreach (const QString &keyword, QStringList() << "Remove: " << "Install: " << "Upgrade: ") {
-            if (line.startsWith(keyword)) {
-                line.remove(keyword);
-                line.remove(QRegularExpression(":.*?\\)"));
-                result << line.split(", ");
-            }
-        }
+    QString name;
+    QStringList item;
+    QHash<QString, VersionNumber> result;
+    foreach (QString line, list) {
+        item = line.split(QRegularExpression("\\s{2,}"));
+        name = item.at(1);
+        name.remove(":i386").remove(":amd64");
+        result.insert(name, VersionNumber(item.at(2)));
     }
     return result;
 }
+
 
 // Things to do when the command starts
 void MainWindow::cmdStart()
@@ -1264,8 +1202,8 @@ void MainWindow::on_buttonInstall_clicked()
 
     if (ui->tabApps->isVisible()) { // Popular apps tab
         bool success = installPopularApps();
-        if(app_info_list.size() > 0) { // update list if it already exists
-            updateModifiedPackages(listModifiedPackages());
+        if(stable_list.size() > 0) { // update list if it already exists
+            clearCache();
             buildPackageLists();
         }
         if (success) {
@@ -1276,7 +1214,7 @@ void MainWindow::on_buttonInstall_clicked()
         }
     } else {
         bool success = installSelected();
-        updateModifiedPackages(listModifiedPackages());
+        clearCache();
         buildPackageLists();
         if (success) {
             QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
@@ -1392,8 +1330,8 @@ void MainWindow::on_buttonUninstall_clicked()
     ui->tabWidget->setCurrentWidget(ui->tabOutput);
 
     if (uninstall(names)) {
-        if(app_info_list.size() > 0) { // update list if it already exists
-            updateModifiedPackages(listModifiedPackages());
+        if(stable_list.size() > 0) { // update list if it already exists
+            clearCache();
             buildPackageLists();
         }
         QMessageBox::information(this, tr("Success"), tr("Processing finished successfully."));
@@ -1403,8 +1341,8 @@ void MainWindow::on_buttonUninstall_clicked()
             ui->tabWidget->setCurrentWidget(ui->tabOtherRepos);
         }
     } else {
-        if(app_info_list.size() > 0) { // update list if it already exists
-            updateModifiedPackages(listModifiedPackages());
+        if(stable_list.size() > 0) { // update list if it already exists
+            clearCache();
             buildPackageLists();
         }
         QMessageBox::critical(this, tr("Error"), tr("We encountered a problem uninstalling the program"));
@@ -1425,7 +1363,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         ui->tabWidget->setTabEnabled(0, true);
         ui->tabWidget->setTabEnabled(1, true);
         // show select message if the current tree is not cached
-        if (app_info_list.size() == 0) {
+        if (stable_list.size() == 0) {
             QMessageBox msgBox(QMessageBox::Question,
                                tr("Repo Selection"),
                                tr("Please select repo to load"));
@@ -1608,12 +1546,12 @@ void MainWindow::on_buttonUpgradeAll_clicked()
     }
 
     if (install(names)) {
-        updateModifiedPackages(listModifiedPackages());
+        clearCache();
         buildPackageLists();
         QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
         ui->tabWidget->setCurrentWidget(ui->tabOtherRepos);
     } else {
-        updateModifiedPackages(listModifiedPackages());
+        clearCache();
         buildPackageLists();
         QMessageBox::critical(this, tr("Error"), tr("Problem detected while installing, please inspect the console output."));
     }
@@ -1646,3 +1584,4 @@ void MainWindow::on_buttonCancel_clicked()
     }
     return qApp->quit();
 }
+

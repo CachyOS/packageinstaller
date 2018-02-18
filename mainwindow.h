@@ -38,6 +38,7 @@
 
 #include <cmd.h>
 #include <lockfile.h>
+#include <aptcache.h>
 
 namespace Ui {
 class MainWindow;
@@ -82,13 +83,11 @@ public:
     void setProgressDialog();
     void setup();
     void updateInterface();
-    void updateModifiedPackages(QStringList modifiedPackages);
 
     QString getDebianVersion();
     QString getVersion(QString name);
     QString writeTmpFile(QString apps);
     QStringList listInstalled();
-    QStringList listModifiedPackages();
 
 public slots:
 
@@ -124,13 +123,13 @@ private slots:
     void on_buttonUpgradeAll_clicked();
     void on_buttonEnter_clicked();
     void on_lineEdit_returnPressed();
-
     void on_buttonCancel_clicked();
 
 private:
     bool updated_once;
     bool warning_displayed;
     int height_app;
+    AptCache cache;
     Cmd *cmd;
     LockFile *lock_file;
     QPushButton *progCancel;
@@ -141,7 +140,6 @@ private:
     QString stable_raw;
     QString tmp_dir;
     QString ver_name;
-    QStringList app_info_list;
     QStringList installed_packages;
     QStringList change_list;
     QMap<QString, QStringList> backports_list;
@@ -152,6 +150,8 @@ private:
     QTreeWidget *tree_mx_test;
     QTreeWidget *tree_backports;
     Ui::MainWindow *ui;
+
+    QHash<QString, VersionNumber> listInstalledVersions();
 };
 
 

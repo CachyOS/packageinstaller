@@ -5,10 +5,10 @@
     <name>MainWindow</name>
     <message>
         <location filename="../mainwindow.ui" line="20"/>
-        <location filename="../mainwindow.cpp" line="75"/>
-        <location filename="../mainwindow.cpp" line="1296"/>
-        <location filename="../mainwindow.cpp" line="1303"/>
-        <location filename="../mainwindow.cpp" line="1319"/>
+        <location filename="../mainwindow.cpp" line="73"/>
+        <location filename="../mainwindow.cpp" line="1234"/>
+        <location filename="../mainwindow.cpp" line="1241"/>
+        <location filename="../mainwindow.cpp" line="1257"/>
         <source>MX Package Installer</source>
         <translation>MX Paket-installerare</translation>
     </message>
@@ -19,20 +19,20 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="77"/>
-        <location filename="../mainwindow.cpp" line="78"/>
+        <location filename="../mainwindow.cpp" line="76"/>
         <source>Package</source>
         <translation>Paket</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="82"/>
-        <location filename="../mainwindow.cpp" line="78"/>
+        <location filename="../mainwindow.cpp" line="76"/>
         <source>Info</source>
         <translation>Info</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="87"/>
         <location filename="../mainwindow.ui" line="375"/>
-        <location filename="../mainwindow.cpp" line="78"/>
+        <location filename="../mainwindow.cpp" line="76"/>
         <source>Description</source>
         <translation>Beskrivning</translation>
     </message>
@@ -59,19 +59,19 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="159"/>
-        <location filename="../mainwindow.cpp" line="1434"/>
+        <location filename="../mainwindow.cpp" line="1372"/>
         <source>Stable Repo</source>
         <translation>Stable förrådet</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="169"/>
-        <location filename="../mainwindow.cpp" line="1433"/>
+        <location filename="../mainwindow.cpp" line="1371"/>
         <source>MX Test Repo</source>
         <translation>MX Test Repo</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="179"/>
-        <location filename="../mainwindow.cpp" line="1432"/>
+        <location filename="../mainwindow.cpp" line="1370"/>
         <source>Debian Backports Repo</source>
         <translation>Debian Backports förråd</translation>
     </message>
@@ -83,25 +83,25 @@
     <message>
         <location filename="../mainwindow.ui" line="270"/>
         <location filename="../mainwindow.ui" line="274"/>
-        <location filename="../mainwindow.cpp" line="1483"/>
+        <location filename="../mainwindow.cpp" line="1421"/>
         <source>All packages</source>
         <translation>Alla paket</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="279"/>
-        <location filename="../mainwindow.cpp" line="1496"/>
+        <location filename="../mainwindow.cpp" line="1434"/>
         <source>Installed</source>
         <translation>Installerad</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="284"/>
-        <location filename="../mainwindow.cpp" line="1494"/>
+        <location filename="../mainwindow.cpp" line="1432"/>
         <source>Upgradable</source>
         <translation>Uppgraderingsbar</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="289"/>
-        <location filename="../mainwindow.cpp" line="1498"/>
+        <location filename="../mainwindow.cpp" line="1436"/>
         <source>Not installed</source>
         <translation>Inte installerad</translation>
     </message>
@@ -162,7 +162,7 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="531"/>
-        <location filename="../mainwindow.cpp" line="1417"/>
+        <location filename="../mainwindow.cpp" line="1355"/>
         <source>Console Output</source>
         <translation type="unfinished"></translation>
     </message>
@@ -218,8 +218,8 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="687"/>
-        <location filename="../mainwindow.cpp" line="1351"/>
-        <location filename="../mainwindow.cpp" line="1541"/>
+        <location filename="../mainwindow.cpp" line="1289"/>
+        <location filename="../mainwindow.cpp" line="1479"/>
         <source>Install</source>
         <translation>Installera</translation>
     </message>
@@ -248,7 +248,7 @@
         <translation type="vanished">Alt+N</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="104"/>
+        <location filename="../mainwindow.cpp" line="102"/>
         <source>Uninstalling packages...</source>
         <translation>Avinstallerar paket...</translation>
     </message>
@@ -257,94 +257,93 @@
         <translation type="vanished">Kör apt-get update... </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="334"/>
-        <location filename="../mainwindow.cpp" line="1301"/>
-        <location filename="../mainwindow.cpp" line="1435"/>
+        <location filename="../mainwindow.cpp" line="315"/>
+        <location filename="../mainwindow.cpp" line="1239"/>
+        <location filename="../mainwindow.cpp" line="1373"/>
         <source>Cancel</source>
         <translation>Avbryt</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="340"/>
+        <location filename="../mainwindow.cpp" line="321"/>
         <source>Please wait...</source>
         <translation>Var vänlig vänta...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="473"/>
         <source>Updating package list...</source>
-        <translation>Uppdaterar paketlista...</translation>
+        <translation type="vanished">Uppdaterar paketlista...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="511"/>
-        <location filename="../mainwindow.cpp" line="531"/>
+        <location filename="../mainwindow.cpp" line="475"/>
+        <location filename="../mainwindow.cpp" line="493"/>
         <source>Version </source>
         <translation>Version</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="511"/>
+        <location filename="../mainwindow.cpp" line="475"/>
         <source> in stable repo</source>
         <translation>i stabila förrådet, stable</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="516"/>
+        <location filename="../mainwindow.cpp" line="477"/>
         <source>Not available in stable repo</source>
         <translation>Ej tillgängligt i stabila förrådet, stable</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="525"/>
+        <location filename="../mainwindow.cpp" line="487"/>
         <source>Latest version </source>
         <translation>Senaste version</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="525"/>
+        <location filename="../mainwindow.cpp" line="487"/>
         <source> already installed</source>
         <translation>redan installerad</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="531"/>
+        <location filename="../mainwindow.cpp" line="493"/>
         <source> installed</source>
         <translation>installerad</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="563"/>
+        <location filename="../mainwindow.cpp" line="525"/>
         <source>Warning</source>
         <translation>Varning</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="564"/>
+        <location filename="../mainwindow.cpp" line="526"/>
         <source>You are about to use Debian Backports, which contains packages taken from the next Debian release (called &apos;testing&apos;), adjusted and recompiled for usage on Debian stable. They cannot be tested as extensively as in the stable releases of Debian and MX Linux, and are provided on an as-is basis, with risk of incompatibilities with other components in Debian stable. Use with care!</source>
         <translation>Du är på väg att använda Debian Backports, som innehåller paket från nästa Debianutgåva (kallad &apos;testing&apos;), justerade och omkompilerade för användning i Debian stable. De kan inte testas lika noga som i de stabila utgåvorna av Debian och MX Linux, och kommer som de är, med risk för inkompatibilitet med andra komponenter i Debian stable. Använd försiktigt!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="572"/>
+        <location filename="../mainwindow.cpp" line="534"/>
         <source>Do not show this message again</source>
         <translation>Visa inte det här meddelandet igen</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="140"/>
-        <location filename="../mainwindow.cpp" line="617"/>
-        <location filename="../mainwindow.cpp" line="711"/>
-        <location filename="../mainwindow.cpp" line="821"/>
-        <location filename="../mainwindow.cpp" line="1275"/>
-        <location filename="../mainwindow.cpp" line="1285"/>
-        <location filename="../mainwindow.cpp" line="1410"/>
-        <location filename="../mainwindow.cpp" line="1618"/>
+        <location filename="../mainwindow.cpp" line="138"/>
+        <location filename="../mainwindow.cpp" line="579"/>
+        <location filename="../mainwindow.cpp" line="673"/>
+        <location filename="../mainwindow.cpp" line="783"/>
+        <location filename="../mainwindow.cpp" line="1213"/>
+        <location filename="../mainwindow.cpp" line="1223"/>
+        <location filename="../mainwindow.cpp" line="1348"/>
+        <location filename="../mainwindow.cpp" line="1556"/>
         <source>Error</source>
         <translation>Fel</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="140"/>
+        <location filename="../mainwindow.cpp" line="138"/>
         <source>There was a problem updating sources. Some sources may not have provided updates. For more info check: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="617"/>
-        <location filename="../mainwindow.cpp" line="711"/>
-        <location filename="../mainwindow.cpp" line="821"/>
+        <location filename="../mainwindow.cpp" line="579"/>
+        <location filename="../mainwindow.cpp" line="673"/>
+        <location filename="../mainwindow.cpp" line="783"/>
         <source>Internet is not available, won&apos;t be able to download the list of packages</source>
         <translation>Internet inte tillgängligt, kan inte ladda ner paketlistan</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="621"/>
+        <location filename="../mainwindow.cpp" line="583"/>
         <source>Installing packages...</source>
         <translation>Installerar paketen...</translation>
     </message>
@@ -353,29 +352,29 @@
         <translation type="vanished">Installerar...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="659"/>
+        <location filename="../mainwindow.cpp" line="621"/>
         <source>Post-processing...</source>
         <translation>Efterbehandlar...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="683"/>
+        <location filename="../mainwindow.cpp" line="645"/>
         <source>Pre-processing for </source>
         <translation>Förbereder för</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="688"/>
+        <location filename="../mainwindow.cpp" line="650"/>
         <source>Installing </source>
         <translation>Installerar</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="692"/>
+        <location filename="../mainwindow.cpp" line="654"/>
         <source>Post-processing for </source>
         <translation>Efterbehandlar för</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1272"/>
-        <location filename="../mainwindow.cpp" line="1282"/>
-        <location filename="../mainwindow.cpp" line="1613"/>
+        <location filename="../mainwindow.cpp" line="1210"/>
+        <location filename="../mainwindow.cpp" line="1220"/>
+        <location filename="../mainwindow.cpp" line="1551"/>
         <source>Done</source>
         <translation>Klar</translation>
     </message>
@@ -384,22 +383,22 @@
         <translation type="vanished">Processen avslutad.&lt;p&gt;&lt;b&gt;Vill du stänga MX Paket-installerare?&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1643"/>
+        <location filename="../mainwindow.cpp" line="1581"/>
         <source>Yes</source>
         <translation>Ja</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1643"/>
+        <location filename="../mainwindow.cpp" line="1581"/>
         <source>No</source>
         <translation>Nej</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="831"/>
+        <location filename="../mainwindow.cpp" line="793"/>
         <source>Downloading package info...</source>
         <translation>Laddar ner paketinformation...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="123"/>
+        <location filename="../mainwindow.cpp" line="121"/>
         <source>Refreshing sources...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -408,93 +407,93 @@
         <translation type="vanished">Läser nerladdad fil...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1147"/>
+        <location filename="../mainwindow.cpp" line="1085"/>
         <source>Packages to be installed: </source>
         <translation>Paket som ska installeras:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1184"/>
+        <location filename="../mainwindow.cpp" line="1122"/>
         <source>Package info</source>
         <translation>Paketinformation</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1272"/>
-        <location filename="../mainwindow.cpp" line="1282"/>
-        <location filename="../mainwindow.cpp" line="1399"/>
-        <location filename="../mainwindow.cpp" line="1613"/>
+        <location filename="../mainwindow.cpp" line="1210"/>
+        <location filename="../mainwindow.cpp" line="1220"/>
+        <location filename="../mainwindow.cpp" line="1337"/>
+        <location filename="../mainwindow.cpp" line="1551"/>
         <source>Processing finished successfully.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1275"/>
-        <location filename="../mainwindow.cpp" line="1285"/>
-        <location filename="../mainwindow.cpp" line="1618"/>
+        <location filename="../mainwindow.cpp" line="1213"/>
+        <location filename="../mainwindow.cpp" line="1223"/>
+        <location filename="../mainwindow.cpp" line="1556"/>
         <source>Problem detected while installing, please inspect the console output.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1295"/>
+        <location filename="../mainwindow.cpp" line="1233"/>
         <source>About MX Package Installer</source>
         <translation>Om MX Paket-installerare</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1296"/>
+        <location filename="../mainwindow.cpp" line="1234"/>
         <source>Version: </source>
         <translation>Version:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1297"/>
+        <location filename="../mainwindow.cpp" line="1235"/>
         <source>Package Installer for MX Linux</source>
         <translation>Paketinstallerare för MX Linux</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1299"/>
+        <location filename="../mainwindow.cpp" line="1237"/>
         <source>Copyright (c) MX Linux</source>
         <translation>Copyright (c) MX Linux</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1300"/>
-        <location filename="../mainwindow.cpp" line="1303"/>
+        <location filename="../mainwindow.cpp" line="1238"/>
+        <location filename="../mainwindow.cpp" line="1241"/>
         <source>License</source>
         <translation>Licens</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1349"/>
+        <location filename="../mainwindow.cpp" line="1287"/>
         <source>Reinstall</source>
         <translation>Ominstallera</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1399"/>
+        <location filename="../mainwindow.cpp" line="1337"/>
         <source>Success</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1410"/>
+        <location filename="../mainwindow.cpp" line="1348"/>
         <source>We encountered a problem uninstalling the program</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1430"/>
+        <location filename="../mainwindow.cpp" line="1368"/>
         <source>Repo Selection</source>
         <translation>Val av förråd</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1431"/>
+        <location filename="../mainwindow.cpp" line="1369"/>
         <source>Please select repo to load</source>
         <translation>Var vänlig välj förråd att aktivera</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1539"/>
+        <location filename="../mainwindow.cpp" line="1477"/>
         <source>Upgrade</source>
         <translation>Uppgradera</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1641"/>
+        <location filename="../mainwindow.cpp" line="1579"/>
         <source>Quit?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1642"/>
+        <location filename="../mainwindow.cpp" line="1580"/>
         <source>Process still running, quiting might leave the system in an instable state.&lt;p&gt;&lt;b&gt;Are you sure you want to exit MX Package Installer?&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
