@@ -1,0 +1,37 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Thu, 15 Feb 2018 18:16:34 -0500
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: i386
+Version: 18.2
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (18.2) mx; urgency=medium
+ .
+   * display terminal output in Qt app
+Checksums-Sha1:
+ 1f8d266b6cece399d1d00017c8e0c87070bec9be 109808 mx-packageinstaller_18.2_i386.deb
+Checksums-Sha256:
+ b4c895bdb6e0c89a7281f5c4d3f7c83991f6b17e88ebdab9464773c241321c83 109808 mx-packageinstaller_18.2_i386.deb
+Files:
+ 312a0dca1c317d3b447a7f3fffc23662 109808 admin optional mx-packageinstaller_18.2_i386.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQEcBAEBAgAGBQJaikuNAAoJEHCTjHgGee6Y5hEIAJuzTNRbICTFE+TWGdWc84SR
+Ej3d/1TSvQSybsn6HBpZJtm4HCO+7K7uBgTYgBmbPyzAcORM+fe5jVTAIsJhQX31
+lb769IRQOSYxIGGHDPjMl0TxkzxZAmMQNjZa/SKA0Q37QmsFOYqUBTX0H3lbdvMJ
+iWOALbLMFB8ptTifiJlGBme2lzbIxoXJ258eNPEfyt4xiXOw9mL/1XthjM0Lp9nj
+k/H3y5E1CLKXv/6/0M4QoWg31K3MW7TLp1Ym8feXiqM8JPaiWjWnLWvRIslDpwrQ
+AIPObuoNiRay3Qf9TW5c5wAtf7fAQ66mMppz2w9x4+0gs5lGZ9fD7GrwLO3t5/w=
+=HdES
+-----END PGP SIGNATURE-----
