@@ -18,20 +18,20 @@ Changes:
  .
    * display terminal output in Qt app
 Checksums-Sha1:
- 1f8d266b6cece399d1d00017c8e0c87070bec9be 109808 mx-packageinstaller_18.2_i386.deb
+ 9e66c59ab5f1e00119a6e7b42b01b96afe8b6a3e 115560 mx-packageinstaller_18.2_i386.deb
 Checksums-Sha256:
- b4c895bdb6e0c89a7281f5c4d3f7c83991f6b17e88ebdab9464773c241321c83 109808 mx-packageinstaller_18.2_i386.deb
+ 2dd849aedd6a25b6397bb22b60fd24d7c420e9a251a07ae68e176b66992b6b6d 115560 mx-packageinstaller_18.2_i386.deb
 Files:
- 312a0dca1c317d3b447a7f3fffc23662 109808 admin optional mx-packageinstaller_18.2_i386.deb
+ 5d7a8454d7146a04ea06dc6f093da361 115560 admin optional mx-packageinstaller_18.2_i386.deb
 
 -----BEGIN PGP SIGNATURE-----
 Version: GnuPG v1
 
-iQEcBAEBAgAGBQJaikuNAAoJEHCTjHgGee6Y5hEIAJuzTNRbICTFE+TWGdWc84SR
-Ej3d/1TSvQSybsn6HBpZJtm4HCO+7K7uBgTYgBmbPyzAcORM+fe5jVTAIsJhQX31
-lb769IRQOSYxIGGHDPjMl0TxkzxZAmMQNjZa/SKA0Q37QmsFOYqUBTX0H3lbdvMJ
-iWOALbLMFB8ptTifiJlGBme2lzbIxoXJ258eNPEfyt4xiXOw9mL/1XthjM0Lp9nj
-k/H3y5E1CLKXv/6/0M4QoWg31K3MW7TLp1Ym8feXiqM8JPaiWjWnLWvRIslDpwrQ
-AIPObuoNiRay3Qf9TW5c5wAtf7fAQ66mMppz2w9x4+0gs5lGZ9fD7GrwLO3t5/w=
-=HdES
+iQEcBAEBAgAGBQJai3k+AAoJEHCTjHgGee6YlHUH/0e/bUlFv5UuTNJYM3/IFbGp
+f6/aCV2H28HKglq7KbmxOt7RByhRtdeRbCC2waOrKLi59bkhsC/CqD0Rvw+O2Vr7
+MHG2eIAg3x2Hk9NileOMCbnMxHiL7LZeuLdo9aUNQQsSvZ7vxOEPiXtFbAVZwYw5
+i3H/d6WOL0tDPMAFzEsQD+RB/nnhWHRiJleSAINGmMSvMFPQJZOCcQVaP1KML5hV
+MH3d+ZDq8EFVCNTYOjCkbt1Qpp7k+qGL9426fKUPnyEwsSc4qu3qCxLaE0CuuE4p
+kkBPV+oWfLgY1VMWybJ4b3Gy0XlFeHlOQYuh9ONmN2H6mqpQ87zjIRJlOS6SU/8=
+=m7pV
 -----END PGP SIGNATURE-----
