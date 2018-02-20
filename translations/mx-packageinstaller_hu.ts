@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="sk" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="hu" version="2.1">
 <context>
     <name>MainWindow</name>
     <message>
@@ -8,155 +8,155 @@
         <location filename="mainwindow.cpp" line="1299"/>
         <location filename="mainwindow.cpp" line="1315"/>
         <source>MX Package Installer</source>
-        <translation>MX Inštalátor programov</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="51"/>
         <source>Popular Applications</source>
-        <translation>Obľúbené aplikácie</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="77"/>
         <location filename="mainwindow.cpp" line="78"/>
         <source>Package</source>
-        <translation>Balík</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="82"/>
         <location filename="mainwindow.cpp" line="78"/>
         <source>Info</source>
-        <translation>Info</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="87"/>
         <location filename="mainwindow.ui" line="375"/>
         <location filename="mainwindow.cpp" line="78"/>
         <source>Description</source>
-        <translation>Popis</translation>
+        <translation>Leírás</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="107"/>
         <location filename="mainwindow.ui" line="344"/>
         <source>search</source>
-        <translation>hľadať</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="117"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Manage popular packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Správca obľúbených programov&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Položky s šedou farbou sú už nainštalované.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="147"/>
         <source>Full App Catalog</source>
-        <translation>Úplný zoznam aplikácií</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="153"/>
         <source>Select source</source>
-        <translation>Vyberte zdroj</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="159"/>
         <location filename="mainwindow.cpp" line="1423"/>
         <source>Stable Repo</source>
-        <translation>Hlavný repozitár</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="169"/>
         <location filename="mainwindow.cpp" line="1422"/>
         <source>MX Test Repo</source>
-        <translation>TEST repozitár</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="179"/>
         <location filename="mainwindow.cpp" line="1421"/>
         <source>Debian Backports Repo</source>
-        <translation>Debian Backports repozitár</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="267"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filter packages according to their status.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filtrovať balíky podľa ich statusu.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="270"/>
         <location filename="mainwindow.ui" line="274"/>
         <location filename="mainwindow.cpp" line="1472"/>
         <source>All packages</source>
-        <translation>Všetky balíky</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="279"/>
         <location filename="mainwindow.cpp" line="1485"/>
         <source>Installed</source>
-        <translation>Nainštalované</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="284"/>
         <location filename="mainwindow.cpp" line="1483"/>
         <source>Upgradable</source>
-        <translation>Povýšiteľné</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="289"/>
         <location filename="mainwindow.cpp" line="1487"/>
         <source>Not installed</source>
-        <translation>Nenainštalované</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="297"/>
         <source>Greyed out items have already been installed.</source>
-        <translation>Položky s šedivou farbou sú už nainštalované.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="322"/>
         <source>Refresh list</source>
-        <translation>Obnoviť zoznam</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="365"/>
         <source>Package Name</source>
-        <translation>Názov balíku</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="370"/>
         <source>Version</source>
-        <translation>Verzia</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="385"/>
         <source>Displayed</source>
-        <translation>Zobrazené</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="393"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;= Upgradable package. Newer version available in selected repository.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;= Povýšiteľný balík. V zvolenom repozitári je k dispozícii novšia verzia programu.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="415"/>
         <source>Total packages:</source>
-        <translation>Balíkov celkovo:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="445"/>
         <source>Installed:</source>
-        <translation>Nainštalované:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="475"/>
         <source>Upgradable:</source>
-        <translation>Povýšiteľné:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="489"/>
         <source>Upgrade All</source>
-        <translation>Aktualizovať všetko</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="517"/>
         <source>Hide library and developer packages</source>
-        <translation>Schovať knižnice a vývojárske balíky</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="531"/>
@@ -167,7 +167,7 @@
     <message>
         <location filename="mainwindow.ui" line="537"/>
         <source>Enter</source>
-        <translation>Enter</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="549"/>
@@ -177,7 +177,7 @@
     <message>
         <location filename="mainwindow.ui" line="593"/>
         <source>Uninstall</source>
-        <translation>Odinštalovať</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="601"/>
@@ -187,12 +187,12 @@
     <message>
         <location filename="mainwindow.ui" line="633"/>
         <source>About this application</source>
-        <translation>O tejto aplikácii</translation>
+        <translation>Az alkalmazásról</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="636"/>
         <source>About...</source>
-        <translation>O Programe</translation>
+        <translation>Névjegy</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="644"/>
@@ -202,12 +202,12 @@
     <message>
         <location filename="mainwindow.ui" line="660"/>
         <source>Display help </source>
-        <translation>Zobraziť nápovedu</translation>
+        <translation>Súgó megjelenítése</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="663"/>
         <source>Help</source>
-        <translation>Pomocník</translation>
+        <translation>Súgó</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="671"/>
@@ -219,7 +219,7 @@
         <location filename="mainwindow.cpp" line="1347"/>
         <location filename="mainwindow.cpp" line="1530"/>
         <source>Install</source>
-        <translation>Inštalovať</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="695"/>
@@ -229,22 +229,22 @@
     <message>
         <location filename="mainwindow.ui" line="730"/>
         <source>Quit application</source>
-        <translation>Zatvoriť aplikáciu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="733"/>
         <source>Close</source>
-        <translation>Zatvoriť</translation>
+        <translation>Bezár</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="741"/>
         <source>Alt+C</source>
-        <translation>Alt+C</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="104"/>
         <source>Uninstalling packages...</source>
-        <translation>Odstraňovanie balíkov...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="123"/>
@@ -261,7 +261,7 @@
         <location filename="mainwindow.cpp" line="1399"/>
         <location filename="mainwindow.cpp" line="1604"/>
         <source>Error</source>
-        <translation>Chyba</translation>
+        <translation>Hiba</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="140"/>
@@ -273,117 +273,117 @@
         <location filename="mainwindow.cpp" line="1297"/>
         <location filename="mainwindow.cpp" line="1424"/>
         <source>Cancel</source>
-        <translation>Zrušiť</translation>
+        <translation>Mégsem</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="340"/>
         <source>Please wait...</source>
-        <translation>Čakajte prosím...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="473"/>
         <source>Updating package list...</source>
-        <translation>Aktualizácia zoznamu balíkov...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="511"/>
         <location filename="mainwindow.cpp" line="531"/>
         <source>Version </source>
-        <translation>Verzia</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="511"/>
         <source> in stable repo</source>
-        <translation>v hlavnom repozitári</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="516"/>
         <source>Not available in stable repo</source>
-        <translation>V hlavnom repozitári nie je k dispozícii</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="525"/>
         <source>Latest version </source>
-        <translation>Najnovšia verzia</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="525"/>
         <source> already installed</source>
-        <translation>už nainštalované</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="531"/>
         <source> installed</source>
-        <translation>nainštalované</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="563"/>
         <source>Warning</source>
-        <translation>Upozornenie</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="564"/>
         <source>You are about to use Debian Backports, which contains packages taken from the next Debian release (called &apos;testing&apos;), adjusted and recompiled for usage on Debian stable. They cannot be tested as extensively as in the stable releases of Debian and MX Linux, and are provided on an as-is basis, with risk of incompatibilities with other components in Debian stable. Use with care!</source>
-        <translation>Chystáte sa použiť Backporty Debianu, ktoré obsahujú inštalačné balíky prevziate z novšej distribúcie Debianu (nazývanej tiež &apos;testing&apos;), tieto boli upravené pre používanie v stabilnom Debiane. Nemohli však byť otestovené v takej miere ako balíky zo stabilnej distribúcie Debianu a MX Linux a sú preto zprístupnené tak ako sú, tj. s určitým rizikom nekompatibility s ostatnými komponentami zo stabilného Debianu. Použivajte ich preto s opatrnosťou!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="572"/>
         <source>Do not show this message again</source>
-        <translation>Túto spravu už nezobrazovať</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="617"/>
         <location filename="mainwindow.cpp" line="711"/>
         <location filename="mainwindow.cpp" line="821"/>
         <source>Internet is not available, won&apos;t be able to download the list of packages</source>
-        <translation>Nie ste pripojení k internetu, zoznam balíkov sa nebude dať stiahnuť</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="621"/>
         <source>Installing packages...</source>
-        <translation>Inštalácia balíkov...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="659"/>
         <source>Post-processing...</source>
-        <translation>Dokončovanie...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="683"/>
         <source>Pre-processing for </source>
-        <translation>Príprava pre</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="688"/>
         <source>Installing </source>
-        <translation>Inštalácia</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="692"/>
         <source>Post-processing for </source>
-        <translation>Dokončovanie pre</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="831"/>
         <source>Downloading package info...</source>
-        <translation>Sťahovanie informácií o balíku...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1147"/>
         <source>Packages to be installed: </source>
-        <translation>Programy k inštalácii:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1184"/>
         <source>Package info</source>
-        <translation>Informácia o balíku</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1267"/>
         <location filename="mainwindow.cpp" line="1278"/>
         <location filename="mainwindow.cpp" line="1601"/>
         <source>Done</source>
-        <translation>Hotovo</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1267"/>
@@ -403,17 +403,17 @@
     <message>
         <location filename="mainwindow.cpp" line="1291"/>
         <source>About MX Package Installer</source>
-        <translation>O programe MX Inštalátor programov</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1292"/>
         <source>Version: </source>
-        <translation>Verzia:</translation>
+        <translation>Verzió:</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1293"/>
         <source>Package Installer for MX Linux</source>
-        <translation>Inštalátor dodatočných programov pre MX linux</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1295"/>
@@ -424,17 +424,17 @@
         <location filename="mainwindow.cpp" line="1296"/>
         <location filename="mainwindow.cpp" line="1299"/>
         <source>License</source>
-        <translation>Licencia</translation>
+        <translation>Liszensz</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1345"/>
         <source>Reinstall</source>
-        <translation>Preinštalovať</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1392"/>
         <source>Success</source>
-        <translation>Úspech</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1399"/>
@@ -444,17 +444,17 @@
     <message>
         <location filename="mainwindow.cpp" line="1419"/>
         <source>Repo Selection</source>
-        <translation>Výber repozitára</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1420"/>
         <source>Please select repo to load</source>
-        <translation>Prosím vyberte repozitár k načítaniu</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1528"/>
         <source>Upgrade</source>
-        <translation>Aktualizovať</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1627"/>
@@ -469,12 +469,12 @@
     <message>
         <location filename="mainwindow.cpp" line="1629"/>
         <source>Yes</source>
-        <translation>Ano</translation>
+        <translation>Igen</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1629"/>
         <source>No</source>
-        <translation>Nie</translation>
+        <translation>Nem</translation>
     </message>
 </context>
 <context>
@@ -482,18 +482,17 @@
     <message>
         <location filename="main.cpp" line="56"/>
         <source>Unable to get exclusive lock</source>
-        <translation>Prístup odoprený</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="main.cpp" line="57"/>
         <source>Another package management application (like Synaptic or apt-get), is already running. Please close that application first</source>
-        <translation>Iná aplikácia na správu balíkov (ako je Synaptic alebo apt-get) už beží. 
-Prosím najskôr ju ukončite.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="main.cpp" line="75"/>
         <source>You must run this program as root.</source>
-        <translation>Tento program musíte spustiť ako root užívateľ.</translation>
+        <translation>Root felhasználóként kell futtatnia ezt a programot!</translation>
     </message>
 </context>
 </TS>
