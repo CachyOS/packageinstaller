@@ -809,6 +809,11 @@ bool MainWindow::downloadPackageList(bool force_download)
         progress->show();
         AptCache cache;
         stable_list = cache.getCandidates();
+        if (stable_list.isEmpty()) {
+            update();
+            AptCache cache;
+            stable_list = cache.getCandidates();
+        }
     }
     if (ui->radioMXtest->isChecked())  {
         if (!QFile(tmp_dir + "/mxPackages").exists() || force_download) {
