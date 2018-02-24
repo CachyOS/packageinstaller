@@ -1253,7 +1253,6 @@ void MainWindow::on_buttonInstall_clicked()
 // About button clicked
 void MainWindow::on_buttonAbout_clicked()
 {
-    this->hide();
     QMessageBox msgBox(QMessageBox::NoIcon,
                        tr("About MX Package Installer"), "<p align=\"center\"><b><h2>" +
                        tr("MX Package Installer") + "</h2></b></p><p align=\"center\">" + tr("Version: ") + version + "</p><p align=\"center\"><h3>" +
@@ -1263,9 +1262,14 @@ void MainWindow::on_buttonAbout_clicked()
     msgBox.addButton(tr("License"), QMessageBox::AcceptRole);
     msgBox.addButton(tr("Cancel"), QMessageBox::NoRole);
     if (msgBox.exec() == QMessageBox::AcceptRole) {
-        system("mx-viewer file:///usr/share/doc/mx-packageinstaller/license.html '" + tr("MX Package Installer").toUtf8() + " " + tr("License").toUtf8() + "'");
+        Cmd c;
+        QString user = c.getOutput("logname");
+        if (system("command -v mx-viewer") == 0) { // use mx-viewer if available
+            system("su " + user.toUtf8() + " -c \"mx-viewer file:///usr/share/doc/mx-packageinstaller/license.html '" + tr("MX Package Installer").toUtf8() + " " + tr("License").toUtf8() + "'\"&");
+        } else {
+            system("su " + user.toUtf8() + " -c \"xdg-open file:///usr/share/doc/mx-packageinstaller/license.html\"&");
+        }
     }
-    this->show();
 }
 // Help button clicked
 void MainWindow::on_buttonHelp_clicked()
@@ -1278,8 +1282,10 @@ void MainWindow::on_buttonHelp_clicked()
     if (lang.startsWith("fr")) {
         url = "https://mxlinux.org/wiki/help-files/help-mx-installateur-de-paquets";
     }
-
-    QString cmd = QString("mx-viewer %1 \"%2\"&").arg(url).arg(tr("MX Package Installer"));
+    Cmd c;
+    QString user = c.getOutput("logname");
+    QString exec = (system("command -v mx-viewer") == 0) ? "mx-viewer" : "xdg-open";   // use mx-viewer if available
+    QString cmd = QString("su " + user + " -c \'" + exec + " \"%1\"\'&").arg(url);
     system(cmd.toUtf8());
 }
 
