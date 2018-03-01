@@ -643,6 +643,11 @@ bool MainWindow::installPopularApp(const QString &name)
         ui->tabWidget->setTabText(2, tr("Pre-processing for ") + name);
         lock_file->unlock();
         if (cmd->run(preinstall) != 0) {
+            QFile file("/etc/apt/sources.list.d/mxpitemp.list"); // remove temp source list if it exists
+            if (file.exists()) {
+                file.remove();
+                update();
+            }
             return false;
         }
     }

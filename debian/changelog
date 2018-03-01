@@ -1,3 +1,9 @@
+mx-packageinstaller (18.3) mx; urgency=medium
+
+  * remove temp list in case of apt-get failure
+
+ -- Adrian <adrian@mxlinux.org>  Thu, 01 Mar 2018 13:00:09 -0500
+
 mx-packageinstaller (18.2+1) mx; urgency=medium
 
   * check if list is of packages is empty and run apt-get update
