@@ -1258,6 +1258,7 @@ void MainWindow::on_buttonInstall_clicked()
 // About button clicked
 void MainWindow::on_buttonAbout_clicked()
 {
+    this->hide();
     QMessageBox msgBox(QMessageBox::NoIcon,
                        tr("About MX Package Installer"), "<p align=\"center\"><b><h2>" +
                        tr("MX Package Installer") + "</h2></b></p><p align=\"center\">" + tr("Version: ") + version + "</p><p align=\"center\"><h3>" +
@@ -1275,6 +1276,7 @@ void MainWindow::on_buttonAbout_clicked()
             system("su " + user.toUtf8() + " -c \"xdg-open file:///usr/share/doc/mx-packageinstaller/license.html\"&");
         }
     }
+    this->show();
 }
 // Help button clicked
 void MainWindow::on_buttonHelp_clicked()
