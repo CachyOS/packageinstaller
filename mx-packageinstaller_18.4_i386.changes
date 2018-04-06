@@ -1,0 +1,37 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA1
+
+Format: 1.8
+Date: Thu, 05 Apr 2018 13:16:10 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: i386
+Version: 18.4
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (18.4) mx; urgency=medium
+ .
+   * remove source selection pop-up
+Checksums-Sha1:
+ f1798e7cb4c1a8bf80a918e9fc4ea3ab0a1455d1 118222 mx-packageinstaller_18.4_i386.deb
+Checksums-Sha256:
+ cd0f24e062c264860ac467ac9e21198e72cda949eac5fd316381874e3bd4996e 118222 mx-packageinstaller_18.4_i386.deb
+Files:
+ e5e2b44dfbb354eb779298d44e7fba39 118222 admin optional mx-packageinstaller_18.4_i386.deb
+
+-----BEGIN PGP SIGNATURE-----
+Version: GnuPG v1
+
+iQEcBAEBAgAGBQJaxlq/AAoJEHCTjHgGee6YZOMH+QHuQwz/js2aa64J5nVqMPec
+M5oM/gHEj7ZIYLF8RVly8WiFINu3kFbpqFVqu5eDPUSk4oBXBVRxFVBY06YKO/vU
++Px+rRZgva+4hb8uP1jQ8n2Dm8pDb35phVB1VzORQ8tlFFIqe42+KX7kNRJ2MaMU
+TGrNZi4QDr2uYnWqhyWj5/+nzWzQFaZtrl1zPRmdTK+sSO8GgvRNaClzAZa1XElE
+cNv3cIQbzEG9lFy/PFXpiBef/wXSWJ1CV54Q+KFWHddr84PvvRoBKPRqLuJgJa0y
+8PHfbYp2JdtTeRkhI8HPRS5x7dJ42pBl8SGCT1xGF6mi+mo8h6NluMWHb/YbjLY=
+=NrQr
+-----END PGP SIGNATURE-----

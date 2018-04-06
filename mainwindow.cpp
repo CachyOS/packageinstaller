@@ -1404,35 +1404,38 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         ui->tabWidget->setTabEnabled(1, true);
         // show select message if the current tree is not cached
         if (stable_list.size() == 0) {
-            QMessageBox msgBox(QMessageBox::Question,
-                               tr("Repo Selection"),
-                               tr("Please select repo to load"));
-            msgBox.addButton(tr("Debian Backports Repo"), QMessageBox::AcceptRole);
-            msgBox.addButton(tr("MX Test Repo"), QMessageBox::AcceptRole);
-            msgBox.addButton(tr("Stable Repo"), QMessageBox::AcceptRole);
-            msgBox.addButton(tr("Cancel"), QMessageBox::NoRole);
-            int ret = msgBox.exec();
-            switch (ret) {
-            case 0:
-                ui->radioBackports->blockSignals(true);
-                ui->radioBackports->setChecked(true);
-                displayWarning();
-                ui->radioBackports->blockSignals(false);
-                break;
-            case 1:
-                ui->radioMXtest->blockSignals(true);
-                ui->radioMXtest->setChecked(true);
-                ui->radioMXtest->blockSignals(false);
-                break;
-            case 2:
-                ui->radioStable->blockSignals(true);
-                ui->radioStable->setChecked(true);
-                ui->radioStable->blockSignals(false);
-                break;
-            default:
-                ui->tabWidget->setCurrentIndex(0);
-                return;
-            }
+//            QMessageBox msgBox(QMessageBox::Question,
+//                               tr("Repo Selection"),
+//                               tr("Please select repo to load"));
+//            msgBox.addButton(tr("Debian Backports Repo"), QMessageBox::AcceptRole);
+//            msgBox.addButton(tr("MX Test Repo"), QMessageBox::AcceptRole);
+//            msgBox.addButton(tr("Stable Repo"), QMessageBox::AcceptRole);
+//            msgBox.addButton(tr("Cancel"), QMessageBox::NoRole);
+//            int ret = msgBox.exec();
+//            switch (ret) {
+//            case 0:
+//                ui->radioBackports->blockSignals(true);
+//                ui->radioBackports->setChecked(true);
+//                displayWarning();
+//                ui->radioBackports->blockSignals(false);
+//                break;
+//            case 1:
+//                ui->radioMXtest->blockSignals(true);
+//                ui->radioMXtest->setChecked(true);
+//                ui->radioMXtest->blockSignals(false);
+//                break;
+//            case 2:
+//                ui->radioStable->blockSignals(true);
+//                ui->radioStable->setChecked(true);
+//                ui->radioStable->blockSignals(false);
+//                break;
+//            default:
+//                ui->tabWidget->setCurrentIndex(0);
+//                return;
+//            }
+            ui->radioStable->blockSignals(true);
+            ui->radioStable->setChecked(true);
+            ui->radioStable->blockSignals(false);
             buildPackageLists();
         } else { // check if trees needs update
             if ((ui->radioStable->isChecked() && tree_stable->topLevelItemCount() == 0) ||
@@ -1542,6 +1545,7 @@ void MainWindow::on_radioMXtest_toggled(bool checked)
 
 void MainWindow::on_radioBackports_toggled(bool checked)
 {
+    displayWarning();
     if(checked) {
         buildPackageLists();
     }

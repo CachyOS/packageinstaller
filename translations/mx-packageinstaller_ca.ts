@@ -58,19 +58,16 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="159"/>
-        <location filename="../mainwindow.cpp" line="1412"/>
         <source>Stable Repo</source>
         <translation>Dipòsit estable</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="169"/>
-        <location filename="../mainwindow.cpp" line="1411"/>
         <source>MX Test Repo</source>
         <translation>Dipòsit MX Test</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="179"/>
-        <location filename="../mainwindow.cpp" line="1410"/>
         <source>Debian Backports Repo</source>
         <translation>Dipòsit Debian Backports</translation>
     </message>
@@ -82,25 +79,25 @@
     <message>
         <location filename="../mainwindow.ui" line="270"/>
         <location filename="../mainwindow.ui" line="274"/>
-        <location filename="../mainwindow.cpp" line="1461"/>
+        <location filename="../mainwindow.cpp" line="1464"/>
         <source>All packages</source>
         <translation>Tots els paquets</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="279"/>
-        <location filename="../mainwindow.cpp" line="1474"/>
+        <location filename="../mainwindow.cpp" line="1477"/>
         <source>Installed</source>
         <translation>Instal·lat</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="284"/>
-        <location filename="../mainwindow.cpp" line="1472"/>
+        <location filename="../mainwindow.cpp" line="1475"/>
         <source>Upgradable</source>
         <translation>Actualitzable</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="289"/>
-        <location filename="../mainwindow.cpp" line="1476"/>
+        <location filename="../mainwindow.cpp" line="1479"/>
         <source>Not installed</source>
         <translation>No instal·lat</translation>
     </message>
@@ -218,7 +215,7 @@
     <message>
         <location filename="../mainwindow.ui" line="687"/>
         <location filename="../mainwindow.cpp" line="1327"/>
-        <location filename="../mainwindow.cpp" line="1519"/>
+        <location filename="../mainwindow.cpp" line="1522"/>
         <source>Install</source>
         <translation>Instal·la</translation>
     </message>
@@ -260,7 +257,7 @@
         <location filename="../mainwindow.cpp" line="1241"/>
         <location filename="../mainwindow.cpp" line="1251"/>
         <location filename="../mainwindow.cpp" line="1386"/>
-        <location filename="../mainwindow.cpp" line="1596"/>
+        <location filename="../mainwindow.cpp" line="1600"/>
         <source>Error</source>
         <translation>Error</translation>
     </message>
@@ -272,7 +269,6 @@
     <message>
         <location filename="../mainwindow.cpp" line="306"/>
         <location filename="../mainwindow.cpp" line="1269"/>
-        <location filename="../mainwindow.cpp" line="1413"/>
         <source>Cancel</source>
         <translation>Cancel·la </translation>
     </message>
@@ -377,7 +373,7 @@
     <message>
         <location filename="../mainwindow.cpp" line="1238"/>
         <location filename="../mainwindow.cpp" line="1248"/>
-        <location filename="../mainwindow.cpp" line="1591"/>
+        <location filename="../mainwindow.cpp" line="1595"/>
         <source>Done</source>
         <translation>Fet </translation>
     </message>
@@ -385,14 +381,14 @@
         <location filename="../mainwindow.cpp" line="1238"/>
         <location filename="../mainwindow.cpp" line="1248"/>
         <location filename="../mainwindow.cpp" line="1375"/>
-        <location filename="../mainwindow.cpp" line="1591"/>
+        <location filename="../mainwindow.cpp" line="1595"/>
         <source>Processing finished successfully.</source>
         <translation>S&apos;ha acabat el processat amb èxit.</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1241"/>
         <location filename="../mainwindow.cpp" line="1251"/>
-        <location filename="../mainwindow.cpp" line="1596"/>
+        <location filename="../mainwindow.cpp" line="1600"/>
         <source>Problem detected while installing, please inspect the console output.</source>
         <translation>S&apos;ha detectat un problema mentre s&apos;instal·lava; si us plau comproveu la sortida de consola.</translation>
     </message>
@@ -438,37 +434,35 @@
         <translation>He trobat un problema desinstal·lant el programa </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1408"/>
         <source>Repo Selection</source>
-        <translation>Tria de dipòsit</translation>
+        <translation type="vanished">Tria de dipòsit</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1409"/>
         <source>Please select repo to load</source>
-        <translation>Si us plau trieu el dipòsit que cal carregar </translation>
+        <translation type="vanished">Si us plau trieu el dipòsit que cal carregar </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1517"/>
+        <location filename="../mainwindow.cpp" line="1520"/>
         <source>Upgrade</source>
         <translation>Actualitza</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1621"/>
+        <location filename="../mainwindow.cpp" line="1625"/>
         <source>Quit?</source>
         <translation>Sortir?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1622"/>
+        <location filename="../mainwindow.cpp" line="1626"/>
         <source>Process still running, quiting might leave the system in an instable state.&lt;p&gt;&lt;b&gt;Are you sure you want to exit MX Package Installer?&lt;/b&gt;</source>
         <translation>El procés encara funciona, si sortiu el sistema pot quedar en un estat  inestable.&lt;p&gt;&lt;b&gt;Esteu segur de voler sortir de MX Package Installer?&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1623"/>
+        <location filename="../mainwindow.cpp" line="1627"/>
         <source>Yes</source>
         <translation>Sí </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1623"/>
+        <location filename="../mainwindow.cpp" line="1627"/>
         <source>No</source>
         <translation>No </translation>
     </message>

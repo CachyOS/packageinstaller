@@ -58,19 +58,16 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="159"/>
-        <location filename="../mainwindow.cpp" line="1412"/>
         <source>Stable Repo</source>
         <translation>安定倉庫</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="169"/>
-        <location filename="../mainwindow.cpp" line="1411"/>
         <source>MX Test Repo</source>
         <translation>MX 測試倉庫</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="179"/>
-        <location filename="../mainwindow.cpp" line="1410"/>
         <source>Debian Backports Repo</source>
         <translation>Debian 回溯移植倉庫</translation>
     </message>
@@ -82,25 +79,25 @@
     <message>
         <location filename="../mainwindow.ui" line="270"/>
         <location filename="../mainwindow.ui" line="274"/>
-        <location filename="../mainwindow.cpp" line="1461"/>
+        <location filename="../mainwindow.cpp" line="1464"/>
         <source>All packages</source>
         <translation>所有軟體</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="279"/>
-        <location filename="../mainwindow.cpp" line="1474"/>
+        <location filename="../mainwindow.cpp" line="1477"/>
         <source>Installed</source>
         <translation>已安裝</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="284"/>
-        <location filename="../mainwindow.cpp" line="1472"/>
+        <location filename="../mainwindow.cpp" line="1475"/>
         <source>Upgradable</source>
         <translation>可升級</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="289"/>
-        <location filename="../mainwindow.cpp" line="1476"/>
+        <location filename="../mainwindow.cpp" line="1479"/>
         <source>Not installed</source>
         <translation>未安裝</translation>
     </message>
@@ -218,7 +215,7 @@
     <message>
         <location filename="../mainwindow.ui" line="687"/>
         <location filename="../mainwindow.cpp" line="1327"/>
-        <location filename="../mainwindow.cpp" line="1519"/>
+        <location filename="../mainwindow.cpp" line="1522"/>
         <source>Install</source>
         <translation>安裝</translation>
     </message>
@@ -260,7 +257,7 @@
         <location filename="../mainwindow.cpp" line="1241"/>
         <location filename="../mainwindow.cpp" line="1251"/>
         <location filename="../mainwindow.cpp" line="1386"/>
-        <location filename="../mainwindow.cpp" line="1596"/>
+        <location filename="../mainwindow.cpp" line="1600"/>
         <source>Error</source>
         <translation>錯誤</translation>
     </message>
@@ -272,7 +269,6 @@
     <message>
         <location filename="../mainwindow.cpp" line="306"/>
         <location filename="../mainwindow.cpp" line="1269"/>
-        <location filename="../mainwindow.cpp" line="1413"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -377,7 +373,7 @@
     <message>
         <location filename="../mainwindow.cpp" line="1238"/>
         <location filename="../mainwindow.cpp" line="1248"/>
-        <location filename="../mainwindow.cpp" line="1591"/>
+        <location filename="../mainwindow.cpp" line="1595"/>
         <source>Done</source>
         <translation>完成</translation>
     </message>
@@ -385,14 +381,14 @@
         <location filename="../mainwindow.cpp" line="1238"/>
         <location filename="../mainwindow.cpp" line="1248"/>
         <location filename="../mainwindow.cpp" line="1375"/>
-        <location filename="../mainwindow.cpp" line="1591"/>
+        <location filename="../mainwindow.cpp" line="1595"/>
         <source>Processing finished successfully.</source>
         <translation>程序順利進行完畢。</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1241"/>
         <location filename="../mainwindow.cpp" line="1251"/>
-        <location filename="../mainwindow.cpp" line="1596"/>
+        <location filename="../mainwindow.cpp" line="1600"/>
         <source>Problem detected while installing, please inspect the console output.</source>
         <translation>安裝軟體時發現問題，請參考終端機輸出的訊息。</translation>
     </message>
@@ -438,37 +434,35 @@
         <translation>移除該程式時發生問題</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1408"/>
         <source>Repo Selection</source>
-        <translation>選擇倉庫</translation>
+        <translation type="vanished">選擇倉庫</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1409"/>
         <source>Please select repo to load</source>
-        <translation>請選擇要載入哪一個軟體倉庫</translation>
+        <translation type="vanished">請選擇要載入哪一個軟體倉庫</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1517"/>
+        <location filename="../mainwindow.cpp" line="1520"/>
         <source>Upgrade</source>
         <translation>升級</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1621"/>
+        <location filename="../mainwindow.cpp" line="1625"/>
         <source>Quit?</source>
         <translation>退出？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1622"/>
+        <location filename="../mainwindow.cpp" line="1626"/>
         <source>Process still running, quiting might leave the system in an instable state.&lt;p&gt;&lt;b&gt;Are you sure you want to exit MX Package Installer?&lt;/b&gt;</source>
         <translation>程序還在運作，此時退出可能會使系統處於不穩定的狀態。&lt;p&gt;&lt;b&gt;你真的要關閉 MX 軟體安裝工具嗎？&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1623"/>
+        <location filename="../mainwindow.cpp" line="1627"/>
         <source>Yes</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1623"/>
+        <location filename="../mainwindow.cpp" line="1627"/>
         <source>No</source>
         <translation>否</translation>
     </message>
