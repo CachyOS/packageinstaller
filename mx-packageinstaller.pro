@@ -50,7 +50,10 @@ TRANSLATIONS += translations/mx-packageinstaller_am.ts \
                 translations/mx-packageinstaller_de.ts \
                 translations/mx-packageinstaller_el.ts \
                 translations/mx-packageinstaller_es.ts \
+                translations/mx-packageinstaller_fi.ts \
                 translations/mx-packageinstaller_fr.ts \
+                translations/mx-packageinstaller_hi.ts \
+                translations/mx-packageinstaller_hr.ts \
                 translations/mx-packageinstaller_hu.ts \
                 translations/mx-packageinstaller_it.ts \
                 translations/mx-packageinstaller_ja.ts \

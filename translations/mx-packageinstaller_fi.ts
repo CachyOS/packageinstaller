@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="es" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fi" version="2.1">
 <context>
     <name>MainWindow</name>
     <message>
@@ -7,158 +7,158 @@
         <location filename="mainwindow.cpp" line="1264"/>
         <location filename="mainwindow.cpp" line="1274"/>
         <source>MX Package Installer</source>
-        <translation>MX Instalar Paquetes</translation>
+        <translation>MX Pakettien asennus</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="51"/>
         <source>Popular Applications</source>
-        <translation>Aplicaciones populares</translation>
+        <translation>Suositut sovellukset</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="77"/>
         <location filename="mainwindow.cpp" line="79"/>
         <source>Package</source>
-        <translation>Paquete</translation>
+        <translation>Paketti</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="82"/>
         <location filename="mainwindow.cpp" line="79"/>
         <source>Info</source>
-        <translation>Info</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="87"/>
         <location filename="mainwindow.ui" line="375"/>
         <location filename="mainwindow.cpp" line="79"/>
         <source>Description</source>
-        <translation>Descripción</translation>
+        <translation>Kuvaus</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="107"/>
         <location filename="mainwindow.ui" line="344"/>
         <source>search</source>
-        <translation>busca</translation>
+        <translation>hae</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="117"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Manage popular packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Gestionar paquetes populares&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Ítems en gris ya están instalados.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="147"/>
         <source>Full App Catalog</source>
-        <translation>Catalogo de Todos los Aps</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="153"/>
         <source>Select source</source>
-        <translation>Seleccionar fuente </translation>
+        <translation>Valitse lähde</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="159"/>
         <source>Stable Repo</source>
-        <translation>Repo estable</translation>
+        <translation>Vakaa (Stable) pakettivarasto</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="169"/>
         <source>MX Test Repo</source>
-        <translation>MX Repo de Test</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="179"/>
         <source>Debian Backports Repo</source>
-        <translation>Repo Debian de Backports</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="267"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filter packages according to their status.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filtrar paquetes según su estado.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="270"/>
         <location filename="mainwindow.ui" line="274"/>
         <location filename="mainwindow.cpp" line="1464"/>
         <source>All packages</source>
-        <translation>Todos los paquetes</translation>
+        <translation>Kaikki paketit</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="279"/>
         <location filename="mainwindow.cpp" line="1477"/>
         <source>Installed</source>
-        <translation>Instalado</translation>
+        <translation>Asennettu</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="284"/>
         <location filename="mainwindow.cpp" line="1475"/>
         <source>Upgradable</source>
-        <translation>Actualizable</translation>
+        <translation>Päivitettävissä</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="289"/>
         <location filename="mainwindow.cpp" line="1479"/>
         <source>Not installed</source>
-        <translation>No instalado</translation>
+        <translation>Ei asennettu</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="297"/>
         <source>Greyed out items have already been installed.</source>
-        <translation>Los ítemes en gris ya se instalaron.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="322"/>
         <source>Refresh list</source>
-        <translation>Recargar lista</translation>
+        <translation>Päivitä luettelo</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="365"/>
         <source>Package Name</source>
-        <translation>Nombre del paquete</translation>
+        <translation>Paketin nimi</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="370"/>
         <source>Version</source>
-        <translation>Versión</translation>
+        <translation>Versio</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="385"/>
         <source>Displayed</source>
-        <translation>Desplegado</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="393"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;= Upgradable package. Newer version available in selected repository.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;= Paquete actualizable. Versión más nuevo disponible en repositorio seleccionado.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="415"/>
         <source>Total packages:</source>
-        <translation>Paquetes totales:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="445"/>
         <source>Installed:</source>
-        <translation>Instalado:</translation>
+        <translation>Asennettu:</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="475"/>
         <source>Upgradable:</source>
-        <translation>Actualizable:</translation>
+        <translation>Päivitettävissä:</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="489"/>
         <source>Upgrade All</source>
-        <translation>Actualizar Todos:</translation>
+        <translation>Päivitä kaikki</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="517"/>
         <source>Hide library and developer packages</source>
-        <translation>Ocultar paquetes de bibliotecas y desarrolladores</translation>
+        <translation>Piilota kirjasto- ja kehityspaketit</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="531"/>
         <location filename="mainwindow.cpp" line="1395"/>
         <source>Console Output</source>
-        <translation>Salida en consola</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="537"/>
@@ -168,27 +168,27 @@
     <message>
         <location filename="mainwindow.ui" line="549"/>
         <source>Respond here, or just press Enter</source>
-        <translation>Respuesta aquí, o solo oprimir Entrar</translation>
+        <translation>Vastaa tähän, tai paina vain Enter</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="593"/>
         <source>Uninstall</source>
-        <translation>Desinstalar</translation>
+        <translation>Poista</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="601"/>
         <source>Alt+U</source>
-        <translation>Alt+U</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="633"/>
         <source>About this application</source>
-        <translation>Acerca de esta aplicación</translation>
+        <translation>Tietoja tästä sovelluksesta</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="636"/>
         <source>About...</source>
-        <translation>Acerca de...</translation>
+        <translation>Tietoja...</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="644"/>
@@ -198,12 +198,12 @@
     <message>
         <location filename="mainwindow.ui" line="660"/>
         <source>Display help </source>
-        <translation>Mostrar la ayuda</translation>
+        <translation>Näytä ohje</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="663"/>
         <source>Help</source>
-        <translation>Ayuda</translation>
+        <translation>Ohje</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="671"/>
@@ -215,37 +215,37 @@
         <location filename="mainwindow.cpp" line="1327"/>
         <location filename="mainwindow.cpp" line="1522"/>
         <source>Install</source>
-        <translation>Instalar</translation>
+        <translation>Asenna</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="695"/>
         <source>Alt+I</source>
-        <translation>Alt+I</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="730"/>
         <source>Quit application</source>
-        <translation>Terminar aplicación</translation>
+        <translation>Sulje sovellus</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="733"/>
         <source>Close</source>
-        <translation>Cerrar</translation>
+        <translation>Sulje</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="741"/>
         <source>Alt+C</source>
-        <translation>Alt+C</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="105"/>
         <source>Uninstalling packages...</source>
-        <translation>Desinstalando paquetes...</translation>
+        <translation>Poistetaan paketteja...</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="124"/>
         <source>Refreshing sources...</source>
-        <translation>Recargando fuentes.. </translation>
+        <translation>Päivitetään lähdeluetteloita...</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="139"/>
@@ -257,123 +257,123 @@
         <location filename="mainwindow.cpp" line="1386"/>
         <location filename="mainwindow.cpp" line="1600"/>
         <source>Error</source>
-        <translation>Error</translation>
+        <translation>Virhe</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="139"/>
         <source>There was a problem updating sources. Some sources may not have provided updates. For more info check: </source>
-        <translation>Hubo problema recargando fuentes. Algunos fuentes parece no tener actualizaciones. Para más información, revisa:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="306"/>
         <location filename="mainwindow.cpp" line="1269"/>
         <source>Cancel</source>
-        <translation>Cancelar</translation>
+        <translation>Peruuta</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="312"/>
         <source>Please wait...</source>
-        <translation>Por favor, espere...</translation>
+        <translation>Odota, ole hyvä...</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="465"/>
         <location filename="mainwindow.cpp" line="483"/>
         <source>Version </source>
-        <translation>Versión</translation>
+        <translation>Versio</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="465"/>
         <source> in stable repo</source>
-        <translation>en el repo de estable</translation>
+        <translation>vakaassa pakettivarastossa</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="467"/>
         <source>Not available in stable repo</source>
-        <translation>No disponible en repo de estable</translation>
+        <translation>Ei saatavana vakaassa pakettivarastossa</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="477"/>
         <source>Latest version </source>
-        <translation>Versión más reciente</translation>
+        <translation>Viimeisin versio</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="477"/>
         <source> already installed</source>
-        <translation>ya instalada</translation>
+        <translation>on jo asennettu</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="483"/>
         <source> installed</source>
-        <translation>instalada</translation>
+        <translation>asennettu</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="515"/>
         <source>Warning</source>
-        <translation>Advertencia</translation>
+        <translation>Varoitus</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="516"/>
         <source>You are about to use Debian Backports, which contains packages taken from the next Debian release (called &apos;testing&apos;), adjusted and recompiled for usage on Debian stable. They cannot be tested as extensively as in the stable releases of Debian and MX Linux, and are provided on an as-is basis, with risk of incompatibilities with other components in Debian stable. Use with care!</source>
-        <translation>Va a usar Debian Backports, que contiene paquetes tomados de la próxima versión de Debian (llamada &apos;prueba&apos;), ajustados y recompilados para el uso en Debian stable. Estos no pueden ser probados extensivamente como en las versiones estables de Debian y MX Linux, y se proporcionan &apos;como están&apos;, con el riesgo de incompatibilidades con otros componentes en Debian stable. ¡Utilícelos con cuidado!</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="524"/>
         <source>Do not show this message again</source>
-        <translation>No mostrar este mensaje de nuevo</translation>
+        <translation>Älä näytä tätä viestiä uudelleen</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="569"/>
         <location filename="mainwindow.cpp" line="685"/>
         <location filename="mainwindow.cpp" line="795"/>
         <source>Internet is not available, won&apos;t be able to download the list of packages</source>
-        <translation>Internet no esta disponible, no puede bajar la lista de paquetes</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="573"/>
         <source>Installing packages...</source>
-        <translation>Instalando paquetes...</translation>
+        <translation>Asennetaan paketteja...</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="612"/>
         <source>Post-processing...</source>
-        <translation>Post-procesamiento...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="643"/>
         <source>Pre-processing for </source>
-        <translation>Pre-procesamiento para </translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="657"/>
         <source>Installing </source>
-        <translation>Instalando</translation>
+        <translation>Asennetaan</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="665"/>
         <source>Post-processing for </source>
-        <translation>Post-procesamiento para </translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="805"/>
         <source>Downloading package info...</source>
-        <translation>Bajando info de paquetes...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1113"/>
         <source>Packages to be installed: </source>
-        <translation>Paquetes a instalar:</translation>
+        <translation>Paketit, jotka tullaan asentamaan:</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1150"/>
         <source>Package info</source>
-        <translation>Info de paquetes</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1238"/>
         <location filename="mainwindow.cpp" line="1248"/>
         <location filename="mainwindow.cpp" line="1595"/>
         <source>Done</source>
-        <translation>Hecho</translation>
+        <translation>Valmis</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1238"/>
@@ -381,80 +381,80 @@
         <location filename="mainwindow.cpp" line="1375"/>
         <location filename="mainwindow.cpp" line="1595"/>
         <source>Processing finished successfully.</source>
-        <translation>Procesamiento completo con éxito. </translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1241"/>
         <location filename="mainwindow.cpp" line="1251"/>
         <location filename="mainwindow.cpp" line="1600"/>
         <source>Problem detected while installing, please inspect the console output.</source>
-        <translation>Problema detectado durante instalación, favor inspeccionar salida en consola.</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1263"/>
         <source>About MX Package Installer</source>
-        <translation>Sobre MX Instalador de Paquetes</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1264"/>
         <source>Version: </source>
-        <translation>Versión:</translation>
+        <translation>Versio: </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1265"/>
         <source>Package Installer for MX Linux</source>
-        <translation>Instalador de Paquetes para MX Linux</translation>
+        <translation>Pakettien asennusohjelma MX Linuxille</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1267"/>
         <source>Copyright (c) MX Linux</source>
-        <translation>Derechos de Autor (c) MX Linux</translation>
+        <translation>Copyright (c) MX Linux</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1268"/>
         <location filename="mainwindow.cpp" line="1274"/>
         <source>License</source>
-        <translation>Licencia</translation>
+        <translation>Lisenssi</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1325"/>
         <source>Reinstall</source>
-        <translation>Reinstalar</translation>
+        <translation>Asenna uudelleen</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1375"/>
         <source>Success</source>
-        <translation>Exito</translation>
+        <translation>Onnistui</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1386"/>
         <source>We encountered a problem uninstalling the program</source>
-        <translation>Encontro problema durante desinstalación del programa</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1520"/>
         <source>Upgrade</source>
-        <translation>Actualizar</translation>
+        <translation>Päivitä</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1625"/>
         <source>Quit?</source>
-        <translation>Salir?</translation>
+        <translation>Lopeta?</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1626"/>
         <source>Process still running, quiting might leave the system in an instable state.&lt;p&gt;&lt;b&gt;Are you sure you want to exit MX Package Installer?&lt;/b&gt;</source>
-        <translation>Proceso todavia ejecutando, saliendo puede dejar el sistema en un estado inestable.&lt;p&gt;&lt;b&gt;¿Esta segura que desea salir del MX Instalador de Paquetes?&lt;/b&gt;</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1627"/>
         <source>Yes</source>
-        <translation>Sí</translation>
+        <translation>Kyllä</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1627"/>
         <source>No</source>
-        <translation>No</translation>
+        <translation>Ei</translation>
     </message>
 </context>
 <context>
@@ -462,17 +462,17 @@
     <message>
         <location filename="main.cpp" line="56"/>
         <source>Unable to get exclusive lock</source>
-        <translation>No se pudo obtener el bloqueo exclusivo</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="main.cpp" line="57"/>
         <source>Another package management application (like Synaptic or apt-get), is already running. Please close that application first</source>
-        <translation>Otra aplicación de manejo de paquetes (como Synaptic o apt-get) ya está ejecutándose. Por favor cierre dicha aplicación primero. </translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="main.cpp" line="75"/>
         <source>You must run this program as root.</source>
-        <translation>Debe ejecutar este programa como root.</translation>
+        <translation>Sinun täytyy suorittaa tämä ohjelma pääkäyttäjänä.</translation>
     </message>
 </context>
 </TS>
