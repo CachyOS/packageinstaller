@@ -3,7 +3,10 @@ Section: admin
 Priority: optional
 Maintainer: Adrian <adrian@mxlinux.org>
 Build-Depends: qt5-qmake,
-	debhelper (>=9)
+	qt5-default,
+	qttools5-dev-tools,
+	debhelper (>=9),
+	libcmd
 Standards-Version: 3.9.8
 Vcs-Git: git://github.com/AdrianTM/mx-packageinstaller
 
