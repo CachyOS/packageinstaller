@@ -349,7 +349,7 @@ void MainWindow::displayPopularApps()
         // add package name as childItem to treePopularApps
         childItem = new QTreeWidgetItem(topLevelItem);
         childItem->setText(2, name);
-        childItem->setIcon(3, QIcon::fromTheme("info"));
+        childItem->setIcon(3, QIcon::fromTheme("dialog-information"));
 
         // add checkboxes
         childItem->setFlags(childItem->flags() | Qt::ItemIsUserCheckable);
