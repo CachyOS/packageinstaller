@@ -1,0 +1,46 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Format: 1.8
+Date: Tue, 19 Jun 2018 00:43:03 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 18.6.1
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (18.6.1) mx; urgency=medium
+ .
+   * change info icon
+Checksums-Sha1:
+ cdbd3628194d6259c0ec75e12950b60f5b2403e5 1243 mx-packageinstaller_18.6.1.dsc
+ 96847a425ea454fd4bdb32d31c9d0c1363eb0644 76336 mx-packageinstaller_18.6.1.tar.xz
+ 7a35e01798e471257205fa9d420b6970641d155f 11283 mx-packageinstaller_18.6.1_amd64.buildinfo
+ 26c46c25562d08845c601eb54b9cdcf75d371ff2 118052 mx-packageinstaller_18.6.1_amd64.deb
+Checksums-Sha256:
+ f932c72772542d81e0e854d0628cd249d04163be283ee1e224030871a733e017 1243 mx-packageinstaller_18.6.1.dsc
+ 5a7bd472d6e4883228c8f147e536a4e90b57027e625820110aaa4329e4dcc878 76336 mx-packageinstaller_18.6.1.tar.xz
+ cd5a0e8394a3726b85c677a55b5fcf0a8ebcc70d12a6045469055ceab537c608 11283 mx-packageinstaller_18.6.1_amd64.buildinfo
+ 0bcf351d30f1dc076ca9cf16b14a25a4acaeab4a58c95d067affd9f13a72d961 118052 mx-packageinstaller_18.6.1_amd64.deb
+Files:
+ 9e9bf8124bbff1a10088821219e6b4dd 1243 admin optional mx-packageinstaller_18.6.1.dsc
+ d867a153f60892305ba651a2b047c62d 76336 admin optional mx-packageinstaller_18.6.1.tar.xz
+ cfa1bc601fe323df08382571a4f3ea0f 11283 admin optional mx-packageinstaller_18.6.1_amd64.buildinfo
+ 1dccea0ac59e5a546a1c69f81e569bfe 118052 admin optional mx-packageinstaller_18.6.1_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCAAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAlsqhjYTHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumJvsB/0T5fOQswZcB4/gDzLT7Chmt51AMbMu
+kDEJdxpxVYTMqakosP370ALrnuzvZbdjK8W0UmC/vYhrjU7S6JFZtKyO67GL4bWh
+ZxQNuvR/a/51rH4QXFm5V79qD94xQ9b5Ui2UyGAx3h+LadnFaX0TwcD6N+0apfVf
+p0jSVnXWZ77sTAHbhNY5gJQyjlzuKNL4cKwph2qpGAlGLXNLRqv0ZbYzJYmMG6tC
+wff6XUA9jlKeKLZsdg1PzlvTiwjvghVo6WHs56SsE+dVyM/mU3zHN6yuvsdFAdKV
+zu/qOPD1Z2JoQr3x6xPMtxR3CF5smYbilKCyhIugrRPYmZVEhF8ennAa
+=OZx1
+-----END PGP SIGNATURE-----
