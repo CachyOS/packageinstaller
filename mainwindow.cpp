@@ -1265,16 +1265,38 @@ void MainWindow::on_buttonAbout_clicked()
                        tr("Package Installer for MX Linux") +
                        "</h3></p><p align=\"center\"><a href=\"http://mxlinux.org\">http://mxlinux.org</a><br /></p><p align=\"center\">" +
                        tr("Copyright (c) MX Linux") + "<br /><br /></p>");
-    msgBox.addButton(tr("License"), QMessageBox::AcceptRole);
-    msgBox.addButton(tr("Cancel"), QMessageBox::NoRole);
-    if (msgBox.exec() == QMessageBox::AcceptRole) {
-        Cmd c;
-        QString user = c.getOutput("logname");
+    QPushButton *btnLicense = msgBox.addButton(tr("License"), QMessageBox::HelpRole);
+    QPushButton *btnChangelog = msgBox.addButton(tr("Changelog"), QMessageBox::HelpRole);
+    QPushButton *btnCancel = msgBox.addButton(tr("Cancel"), QMessageBox::NoRole);
+    btnCancel->setIcon(QIcon::fromTheme("window-close"));
+
+    msgBox.exec();
+
+    Cmd cmd;
+    if (msgBox.clickedButton() == btnLicense) {
+        QString user = cmd.getOutput("logname");
         if (system("command -v mx-viewer") == 0) { // use mx-viewer if available
             system("su " + user.toUtf8() + " -c \"mx-viewer file:///usr/share/doc/mx-packageinstaller/license.html '" + tr("MX Package Installer").toUtf8() + " " + tr("License").toUtf8() + "'\"&");
         } else {
             system("su " + user.toUtf8() + " -c \"xdg-open file:///usr/share/doc/mx-packageinstaller/license.html\"&");
         }
+    } else if (msgBox.clickedButton() == btnChangelog) {
+        QDialog *changelog = new QDialog(this);
+        changelog->resize(600, 500);
+
+        QTextEdit *text = new QTextEdit;
+        text->setReadOnly(true);
+        text->setText(cmd.getOutput("zless /usr/share/doc/" + QFileInfo(QCoreApplication::applicationFilePath()).fileName()  + "/changelog.gz"));
+
+        QPushButton *btnClose = new QPushButton(tr("&Close"));
+        btnClose->setIcon(QIcon::fromTheme("window-close"));
+        connect(btnClose, &QPushButton::clicked, changelog, &QDialog::close);
+
+        QVBoxLayout *layout = new QVBoxLayout;
+        layout->addWidget(text);
+        layout->addWidget(btnClose);
+        changelog->setLayout(layout);
+        changelog->exec();
     }
     this->show();
 }
