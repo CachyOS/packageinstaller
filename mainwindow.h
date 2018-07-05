@@ -85,6 +85,7 @@ public:
     void updateInterface();
 
     QString getDebianVersion();
+    QString getLocalizedName(QDomElement element);
     QString getVersion(QString name);
     QStringList listInstalled();
 

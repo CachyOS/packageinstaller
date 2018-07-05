@@ -175,6 +175,19 @@ QString MainWindow::getDebianVersion()
     return cmd->getOutput("cat /etc/debian_version | cut -f1 -d'.'", QStringList() << "quiet");
 }
 
+// Returns localized name for elements
+QString MainWindow::getLocalizedName(QDomElement element)
+{
+    QLocale locale;
+    QDomElement child = element.firstChildElement();
+    for(; (!child.isNull()); child = child.nextSiblingElement()) {
+        if (child.tagName() == locale.name()) {
+            return child.text().trimmed();
+        }
+    }
+    return element.text().trimmed();
+}
+
 // Set proc and timer connections
 void MainWindow::setConnections()
 {
@@ -256,11 +269,11 @@ void MainWindow::processDoc(const QDomDocument &doc)
 
     for (; !element.isNull(); element = element.nextSiblingElement()) {
         if (element.tagName() == "category") {
-            category = element.text().trimmed();
+            category = getLocalizedName(element);
         } else if (element.tagName() == "name") {
-            name = element.text().trimmed();
+            name = getLocalizedName(element);
         } else if (element.tagName() == "description") {
-            description = element.text().trimmed();
+            description = getLocalizedName(element);
         } else if (element.tagName() == "installable") {
             installable = element.text().trimmed();
         } else if (element.tagName() == "screenshot") {
