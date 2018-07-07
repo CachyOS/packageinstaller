@@ -201,8 +201,13 @@ QString MainWindow::getLocalizedName(QDomElement element)
             return child.text().trimmed();
         }
     }
-    // return element text if no subtags
-    return element.text().trimmed();
+
+    child = element.firstChildElement();
+    if (child.isNull()) {
+        return element.text().trimmed(); // if no language tags are present
+    } else {
+        return child.text().trimmed(); // return first language tag if neither the specified locale nor "en" is found.
+    }
 }
 
 // Set proc and timer connections
