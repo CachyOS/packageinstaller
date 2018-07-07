@@ -179,12 +179,29 @@ QString MainWindow::getDebianVersion()
 QString MainWindow::getLocalizedName(QDomElement element)
 {
     QLocale locale;
+
+    // pass one, find fully localized string, e.g. "pt_BR"
     QDomElement child = element.firstChildElement();
-    for(; (!child.isNull()); child = child.nextSiblingElement()) {
-        if (child.tagName() == locale.name()) {
+    for(; (!child.isNull()); child = child.nextSiblingElement() ) {
+        if (child.tagName() == locale.name() && !child.text().trimmed().isEmpty()) {
             return child.text().trimmed();
         }
     }
+    // pass two, find language, e.g. "pt"
+    child = element.firstChildElement();
+    for(; (!child.isNull()); child = child.nextSiblingElement()) {
+        if (child.tagName() == locale.bcp47Name() && !child.text().trimmed().isEmpty()) {
+            return child.text().trimmed();
+        }
+    }
+    // pass three, return "en" or "en_US"
+    child = element.firstChildElement();
+    for(; (!child.isNull()); child = child.nextSiblingElement()) {
+        if ((child.tagName() == "en" || child.tagName() == "en_US") && !child.text().trimmed().isEmpty()) {
+            return child.text().trimmed();
+        }
+    }
+    // return element text if no subtags
     return element.text().trimmed();
 }
 
