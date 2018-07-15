@@ -42,7 +42,8 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    dictionary("/usr/share/mx-packageinstaller-pkglist/category.dict", QSettings::IniFormat)
 {
     ui->setupUi(this);
     setup();
@@ -142,7 +143,7 @@ bool MainWindow::update()
 }
 
 // Update interface when done loading info
-void MainWindow::updateInterface()
+void MainWindow::updateInterface() const
 {
     ui->tabWidget->setTabEnabled(0, true);
     ui->tabWidget->setTabEnabled(1, true);
@@ -170,16 +171,14 @@ void MainWindow::updateInterface()
 }
 
 // Returns Debian main version number
-QString MainWindow::getDebianVersion()
+QString MainWindow::getDebianVersion() const
 {
     return cmd->getOutput("cat /etc/debian_version | cut -f1 -d'.'", QStringList() << "quiet");
 }
 
 // Returns localized name for elements
-QString MainWindow::getLocalizedName(QDomElement element)
+QString MainWindow::getLocalizedName(const QDomElement element) const
 {
-    QLocale locale;
-
     // pass one, find fully localized string, e.g. "pt_BR"
     QDomElement child = element.firstChildElement();
     for(; (!child.isNull()); child = child.nextSiblingElement() ) {
@@ -190,7 +189,7 @@ QString MainWindow::getLocalizedName(QDomElement element)
     // pass two, find language, e.g. "pt"
     child = element.firstChildElement();
     for(; (!child.isNull()); child = child.nextSiblingElement()) {
-        if (child.tagName() == locale.bcp47Name() && !child.text().trimmed().isEmpty()) {
+        if (child.tagName() == locale.name().section("_", 0, 0) && !child.text().trimmed().isEmpty()) {
             return child.text().trimmed();
         }
     }
@@ -210,8 +209,29 @@ QString MainWindow::getLocalizedName(QDomElement element)
     }
 }
 
+// get translation for the category
+QString MainWindow::getTranslation(const QString item)
+{
+    if (locale.name() == "en_US" ) { // no need for translation
+        return item;
+    }
+
+    dictionary.beginGroup(item);
+
+    QString trans = dictionary.value(locale.name()).toString(); // try pt_BR format
+    if (trans == "") {
+        trans = dictionary.value(locale.name().section("_", 0, 0)).toString(); // try pt format
+        if (trans == "") {
+            dictionary.endGroup();
+            return item;  // return original item if no translation found
+        }
+    }
+    dictionary.endGroup();
+    return trans;
+}
+
 // Set proc and timer connections
-void MainWindow::setConnections()
+void MainWindow::setConnections() const
 {
     connect(cmd, &Cmd::runTime, this, &MainWindow::updateBar, Qt::UniqueConnection);  // processes runtime emited by Cmd to be used by a progress bar
     connect(cmd, &Cmd::outputAvailable, this, &MainWindow::updateOutput, Qt::UniqueConnection);
@@ -227,7 +247,7 @@ void MainWindow::updateBar(int counter, int duration)
     bar->setValue(counter % (max_value + 1));
 }
 
-void MainWindow::updateOutput(QString out)
+void MainWindow::updateOutput(const QString out) const
 {
     ui->outputBox->insertPlainText(out);
 
@@ -291,7 +311,7 @@ void MainWindow::processDoc(const QDomDocument &doc)
 
     for (; !element.isNull(); element = element.nextSiblingElement()) {
         if (element.tagName() == "category") {
-            category = getLocalizedName(element);
+            category = getTranslation(element.text().trimmed());
         } else if (element.tagName() == "name") {
             name = getLocalizedName(element);
         } else if (element.tagName() == "description") {
@@ -352,7 +372,7 @@ void MainWindow::setProgressDialog()
 }
 
 // Display Popular Apps in the treePopularApps
-void MainWindow::displayPopularApps()
+void MainWindow::displayPopularApps() const
 {
     QTreeWidgetItem *topLevelItem = NULL;
     QTreeWidgetItem *childItem;
@@ -799,7 +819,7 @@ bool MainWindow::installSelected()
 }
 
 // Check if online
-bool MainWindow::checkOnline()
+bool MainWindow::checkOnline() const
 {
     return(system("wget -q --spider http://mxrepo.com >/dev/null 2>&1") == 0);
 }
@@ -972,7 +992,7 @@ void MainWindow::cancelDownload()
 }
 
 // Clear UI when building package list
-void MainWindow::clearUi()
+void MainWindow::clearUi() const
 {
     ui->comboFilter->setEnabled(false);
     ui->comboFilter->setCurrentIndex(0);
@@ -993,7 +1013,7 @@ void MainWindow::clearUi()
 }
 
 // Copy QTreeWidgets
-void MainWindow::copyTree(QTreeWidget *from, QTreeWidget *to)
+void MainWindow::copyTree(QTreeWidget *from, QTreeWidget *to) const
 {
     to->clear();
     QTreeWidgetItem *item;
@@ -1007,7 +1027,7 @@ void MainWindow::copyTree(QTreeWidget *from, QTreeWidget *to)
 }
 
 // Cleanup environment when window is closed
-void MainWindow::cleanup()
+void MainWindow::cleanup() const
 {
     qDebug() << "cleanup code";
     cmd->disconnect();
@@ -1032,13 +1052,13 @@ void MainWindow::clearCache()
 }
 
 // Get version of the program
-QString MainWindow::getVersion(QString name)
+QString MainWindow::getVersion(const QString name) const
 {
     return cmd->getOutput("dpkg -l "+ name + "| awk 'NR==6 {print $3}'", QStringList() << "quiet");
 }
 
 // Return true if all the packages listed are installed
-bool MainWindow::checkInstalled(const QString &names)
+bool MainWindow::checkInstalled(const QString &names) const
 {
     if (names == "") {
         return false;
@@ -1052,7 +1072,7 @@ bool MainWindow::checkInstalled(const QString &names)
 }
 
 // Return true if all the packages in the list are installed
-bool MainWindow::checkInstalled(const QStringList &name_list)
+bool MainWindow::checkInstalled(const QStringList &name_list) const
 {
     if (name_list.size() == 0) {
         return false;
@@ -1066,7 +1086,7 @@ bool MainWindow::checkInstalled(const QStringList &name_list)
 }
 
 // return true if all the items in the list are upgradable
-bool MainWindow::checkUpgradable(const QStringList &name_list)
+bool MainWindow::checkUpgradable(const QStringList &name_list) const
 {
     if (name_list.size() == 0) {
         return false;
@@ -1086,7 +1106,7 @@ bool MainWindow::checkUpgradable(const QStringList &name_list)
 
 
 // Returns list of all installed packages
-QStringList MainWindow::listInstalled()
+QStringList MainWindow::listInstalled() const
 {
     QString str = cmd->getOutput("dpkg --get-selections | grep -v deinstall | cut -f1", QStringList() << "slowtick" << "quiet");
     str.remove(":i386");
@@ -1137,7 +1157,7 @@ void MainWindow::disableWarning(bool checked)
 }
 
 // Display info when clicking the "info" icon of the package
-void MainWindow::displayInfo(QTreeWidgetItem *item, int column)
+void MainWindow::displayInfo(const QTreeWidgetItem *item, int column)
 {
     if (column == 3 && item->childCount() == 0) {
         QString desc = item->text(4);
@@ -1188,7 +1208,7 @@ void MainWindow::displayInfo(QTreeWidgetItem *item, int column)
 }
 
 // Find package in view
-void MainWindow::findPackage()
+void MainWindow::findPackage() const
 {
     QTreeWidgetItemIterator it(ui->treePopularApps);
     QString word = ui->searchPopular->text();
@@ -1238,7 +1258,7 @@ void MainWindow::findPackage()
 }
 
 // Find packages in the second tab (other sources)
-void MainWindow::findPackageOther()
+void MainWindow::findPackageOther() const
 {
     QString word = ui->searchBox->text();
     QList<QTreeWidgetItem *> found_items = ui->treeOther->findItems(word, Qt::MatchContains, 2);

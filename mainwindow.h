@@ -54,10 +54,10 @@ public:
 
     QString version;
 
-    bool checkInstalled(const QString &names);
-    bool checkInstalled(const QStringList &name_list);
-    bool checkUpgradable(const QStringList &name_list);
-    bool checkOnline();
+    bool checkInstalled(const QString &names) const;
+    bool checkInstalled(const QStringList &name_list) const;
+    bool checkUpgradable(const QStringList &name_list) const;
+    bool checkOnline() const;
     bool buildPackageLists(bool force_download = false);
     bool downloadPackageList(bool force_download = false);
     bool install(const QString &names);
@@ -70,39 +70,38 @@ public:
     bool update();
 
     void cancelDownload();
-    void clearUi();
-    void copyTree(QTreeWidget *, QTreeWidget *);
-    void displayPopularApps();
+    void clearUi() const;
+    void copyTree(QTreeWidget *, QTreeWidget *) const;
+    void displayPopularApps() const;
     void displayPackages(bool force_refresh = false);
     void displayWarning();
-    void downloadImage(const QUrl &url);
     void ifDownloadFailed();
     void loadPmFiles();
     void processDoc(const QDomDocument &doc);
     void refreshPopularApps();
     void setProgressDialog();
     void setup();
-    void updateInterface();
+    void updateInterface() const;
 
-    QString getDebianVersion();
-    QString getLocalizedName(QDomElement element);
-    QString getVersion(QString name);
-    QStringList listInstalled();
+    QString getDebianVersion() const;
+    QString getLocalizedName(const QDomElement element) const;
+    QString getTranslation(const QString item);
+    QString getVersion(const QString name) const;
+    QStringList listInstalled() const;
 
 public slots:
 
 private slots:
-    void cleanup();
+    void cleanup() const;
     void clearCache();
     void cmdStart();
     void cmdDone();
     void disableWarning(bool checked);
-    void displayInfo(QTreeWidgetItem *item, int column);
-    void findPackage();
-    void findPackageOther();
-    void setConnections();
+    void displayInfo(const QTreeWidgetItem *item, int column);
+    void findPackage() const;
+    void findPackageOther() const;
     void updateBar(int, int); // updates progressBar when tick signal is emited
-    void updateOutput(QString out);
+    void updateOutput(const QString out) const;
 
     void on_buttonInstall_clicked();
     void on_buttonAbout_clicked();
@@ -134,6 +133,7 @@ private:
     LockFile *lock_file;
     QPushButton *progCancel;
     QList<QStringList> popular_apps;
+    QLocale locale;
     QProgressBar *bar;
     QProgressDialog *progress;
     QString arch;
@@ -150,8 +150,11 @@ private:
     QTreeWidget *tree_mx_test;
     QTreeWidget *tree_backports;
     Ui::MainWindow *ui;
-
+    QSettings dictionary;
     QHash<QString, VersionNumber> listInstalledVersions();
+
+    void setConnections() const;
+
 };
 
 

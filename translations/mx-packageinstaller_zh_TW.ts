@@ -5,9 +5,9 @@
     <name>MainWindow</name>
     <message>
         <location filename="../mainwindow.ui" line="20"/>
-        <location filename="../mainwindow.cpp" line="76"/>
-        <location filename="../mainwindow.cpp" line="1299"/>
-        <location filename="../mainwindow.cpp" line="1314"/>
+        <location filename="../mainwindow.cpp" line="77"/>
+        <location filename="../mainwindow.cpp" line="1319"/>
+        <location filename="../mainwindow.cpp" line="1334"/>
         <source>MX Package Installer</source>
         <translation>MX 軟體安裝工具</translation>
     </message>
@@ -18,20 +18,20 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="77"/>
-        <location filename="../mainwindow.cpp" line="79"/>
+        <location filename="../mainwindow.cpp" line="80"/>
         <source>Package</source>
         <translation>軟體</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="82"/>
-        <location filename="../mainwindow.cpp" line="79"/>
+        <location filename="../mainwindow.cpp" line="80"/>
         <source>Info</source>
         <translation>資料</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="87"/>
         <location filename="../mainwindow.ui" line="375"/>
-        <location filename="../mainwindow.cpp" line="79"/>
+        <location filename="../mainwindow.cpp" line="80"/>
         <source>Description</source>
         <translation>簡介</translation>
     </message>
@@ -79,25 +79,25 @@
     <message>
         <location filename="../mainwindow.ui" line="270"/>
         <location filename="../mainwindow.ui" line="274"/>
-        <location filename="../mainwindow.cpp" line="1521"/>
+        <location filename="../mainwindow.cpp" line="1541"/>
         <source>All packages</source>
         <translation>所有軟體</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="279"/>
-        <location filename="../mainwindow.cpp" line="1534"/>
+        <location filename="../mainwindow.cpp" line="1554"/>
         <source>Installed</source>
         <translation>已安裝</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="284"/>
-        <location filename="../mainwindow.cpp" line="1532"/>
+        <location filename="../mainwindow.cpp" line="1552"/>
         <source>Upgradable</source>
         <translation>可升級</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="289"/>
-        <location filename="../mainwindow.cpp" line="1536"/>
+        <location filename="../mainwindow.cpp" line="1556"/>
         <source>Not installed</source>
         <translation>未安裝</translation>
     </message>
@@ -158,7 +158,7 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="531"/>
-        <location filename="../mainwindow.cpp" line="1452"/>
+        <location filename="../mainwindow.cpp" line="1472"/>
         <source>Console Output</source>
         <translation>終端機輸出</translation>
     </message>
@@ -214,8 +214,8 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="687"/>
-        <location filename="../mainwindow.cpp" line="1384"/>
-        <location filename="../mainwindow.cpp" line="1579"/>
+        <location filename="../mainwindow.cpp" line="1404"/>
+        <location filename="../mainwindow.cpp" line="1599"/>
         <source>Install</source>
         <translation>安裝</translation>
     </message>
@@ -240,231 +240,231 @@
         <translation>Alt+C</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="105"/>
+        <location filename="../mainwindow.cpp" line="106"/>
         <source>Uninstalling packages...</source>
         <translation>正在移除軟體……</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="124"/>
+        <location filename="../mainwindow.cpp" line="125"/>
         <source>Refreshing sources...</source>
         <translation>更新來源……</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="139"/>
-        <location filename="../mainwindow.cpp" line="604"/>
-        <location filename="../mainwindow.cpp" line="720"/>
-        <location filename="../mainwindow.cpp" line="830"/>
-        <location filename="../mainwindow.cpp" line="1276"/>
-        <location filename="../mainwindow.cpp" line="1286"/>
-        <location filename="../mainwindow.cpp" line="1443"/>
-        <location filename="../mainwindow.cpp" line="1657"/>
+        <location filename="../mainwindow.cpp" line="140"/>
+        <location filename="../mainwindow.cpp" line="624"/>
+        <location filename="../mainwindow.cpp" line="740"/>
+        <location filename="../mainwindow.cpp" line="850"/>
+        <location filename="../mainwindow.cpp" line="1296"/>
+        <location filename="../mainwindow.cpp" line="1306"/>
+        <location filename="../mainwindow.cpp" line="1463"/>
+        <location filename="../mainwindow.cpp" line="1677"/>
         <source>Error</source>
         <translation>錯誤</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="139"/>
+        <location filename="../mainwindow.cpp" line="140"/>
         <source>There was a problem updating sources. Some sources may not have provided updates. For more info check: </source>
         <translation>更新來源時發生問題。可能有一些軟體來源並未提供更新檔。詳細訊息請見：</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="341"/>
-        <location filename="../mainwindow.cpp" line="1305"/>
+        <location filename="../mainwindow.cpp" line="361"/>
+        <location filename="../mainwindow.cpp" line="1325"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="347"/>
+        <location filename="../mainwindow.cpp" line="367"/>
         <source>Please wait...</source>
         <translation>請稍待……</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="500"/>
-        <location filename="../mainwindow.cpp" line="518"/>
+        <location filename="../mainwindow.cpp" line="520"/>
+        <location filename="../mainwindow.cpp" line="538"/>
         <source>Version </source>
         <translation>版本</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="500"/>
+        <location filename="../mainwindow.cpp" line="520"/>
         <source> in stable repo</source>
         <translation>在安定倉庫裡面</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="502"/>
+        <location filename="../mainwindow.cpp" line="522"/>
         <source>Not available in stable repo</source>
         <translation>安定倉庫裡面沒有該軟體</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="512"/>
+        <location filename="../mainwindow.cpp" line="532"/>
         <source>Latest version </source>
         <translation>最新版本</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="512"/>
+        <location filename="../mainwindow.cpp" line="532"/>
         <source> already installed</source>
         <translation>在系統上已經安裝了</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="518"/>
+        <location filename="../mainwindow.cpp" line="538"/>
         <source> installed</source>
         <translation>已安裝</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="550"/>
+        <location filename="../mainwindow.cpp" line="570"/>
         <source>Warning</source>
         <translation>注意</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="551"/>
+        <location filename="../mainwindow.cpp" line="571"/>
         <source>You are about to use Debian Backports, which contains packages taken from the next Debian release (called &apos;testing&apos;), adjusted and recompiled for usage on Debian stable. They cannot be tested as extensively as in the stable releases of Debian and MX Linux, and are provided on an as-is basis, with risk of incompatibilities with other components in Debian stable. Use with care!</source>
         <translation>即將利用 Debian 回溯移植倉庫，裡面的軟體來自 Debian 下一個正式發行版（稱為 &apos;testing&apos; ），經過調校、編譯，以供 Debian 安定版使用。這些軟體的測試過程沒辦法像 Debian 和 MX Linux 的安定版那麼精細，基本上它們以依其所是的狀態提供出來，有可能與 Debian 安定版當中的其他元件並不相容。小心使用！</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="559"/>
+        <location filename="../mainwindow.cpp" line="579"/>
         <source>Do not show this message again</source>
         <translation>不再顯示此一訊息</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="604"/>
-        <location filename="../mainwindow.cpp" line="720"/>
-        <location filename="../mainwindow.cpp" line="830"/>
+        <location filename="../mainwindow.cpp" line="624"/>
+        <location filename="../mainwindow.cpp" line="740"/>
+        <location filename="../mainwindow.cpp" line="850"/>
         <source>Internet is not available, won&apos;t be able to download the list of packages</source>
         <translation>無法連上網際網路，因此不能下載軟體列表。</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="608"/>
+        <location filename="../mainwindow.cpp" line="628"/>
         <source>Installing packages...</source>
         <translation>正在安裝軟體……</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="647"/>
+        <location filename="../mainwindow.cpp" line="667"/>
         <source>Post-processing...</source>
         <translation>後續處理當中……</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="678"/>
+        <location filename="../mainwindow.cpp" line="698"/>
         <source>Pre-processing for </source>
         <translation>前置處理</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="692"/>
+        <location filename="../mainwindow.cpp" line="712"/>
         <source>Installing </source>
         <translation>正在安裝……</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="700"/>
+        <location filename="../mainwindow.cpp" line="720"/>
         <source>Post-processing for </source>
         <translation>後續處理</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="840"/>
+        <location filename="../mainwindow.cpp" line="860"/>
         <source>Downloading package info...</source>
         <translation>正在下載軟體資料……</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1148"/>
+        <location filename="../mainwindow.cpp" line="1168"/>
         <source>Packages to be installed: </source>
         <translation>即將安裝的軟體：</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1185"/>
+        <location filename="../mainwindow.cpp" line="1205"/>
         <source>Package info</source>
         <translation>軟體資料</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1273"/>
-        <location filename="../mainwindow.cpp" line="1283"/>
-        <location filename="../mainwindow.cpp" line="1652"/>
+        <location filename="../mainwindow.cpp" line="1293"/>
+        <location filename="../mainwindow.cpp" line="1303"/>
+        <location filename="../mainwindow.cpp" line="1672"/>
         <source>Done</source>
         <translation>完成</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1273"/>
-        <location filename="../mainwindow.cpp" line="1283"/>
-        <location filename="../mainwindow.cpp" line="1432"/>
-        <location filename="../mainwindow.cpp" line="1652"/>
+        <location filename="../mainwindow.cpp" line="1293"/>
+        <location filename="../mainwindow.cpp" line="1303"/>
+        <location filename="../mainwindow.cpp" line="1452"/>
+        <location filename="../mainwindow.cpp" line="1672"/>
         <source>Processing finished successfully.</source>
         <translation>程序順利進行完畢。</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1276"/>
-        <location filename="../mainwindow.cpp" line="1286"/>
-        <location filename="../mainwindow.cpp" line="1657"/>
+        <location filename="../mainwindow.cpp" line="1296"/>
+        <location filename="../mainwindow.cpp" line="1306"/>
+        <location filename="../mainwindow.cpp" line="1677"/>
         <source>Problem detected while installing, please inspect the console output.</source>
         <translation>安裝軟體時發現問題，請參考終端機輸出的訊息。</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1298"/>
+        <location filename="../mainwindow.cpp" line="1318"/>
         <source>About MX Package Installer</source>
         <translation>關於 MX 軟體安裝工具</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1299"/>
+        <location filename="../mainwindow.cpp" line="1319"/>
         <source>Version: </source>
         <translation>版本：</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1300"/>
+        <location filename="../mainwindow.cpp" line="1320"/>
         <source>Package Installer for MX Linux</source>
         <translation>MX Linux 軟體安裝工具</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1302"/>
+        <location filename="../mainwindow.cpp" line="1322"/>
         <source>Copyright (c) MX Linux</source>
         <translation>版權所有 (c) MX Linux</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1303"/>
-        <location filename="../mainwindow.cpp" line="1314"/>
+        <location filename="../mainwindow.cpp" line="1323"/>
+        <location filename="../mainwindow.cpp" line="1334"/>
         <source>License</source>
         <translation>授權條款</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1304"/>
+        <location filename="../mainwindow.cpp" line="1324"/>
         <source>Changelog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1326"/>
+        <location filename="../mainwindow.cpp" line="1346"/>
         <source>&amp;Close</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1382"/>
+        <location filename="../mainwindow.cpp" line="1402"/>
         <source>Reinstall</source>
         <translation>重新安裝</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1432"/>
+        <location filename="../mainwindow.cpp" line="1452"/>
         <source>Success</source>
         <translation>成功</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1443"/>
+        <location filename="../mainwindow.cpp" line="1463"/>
         <source>We encountered a problem uninstalling the program</source>
         <translation>移除該程式時發生問題</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1577"/>
+        <location filename="../mainwindow.cpp" line="1597"/>
         <source>Upgrade</source>
         <translation>升級</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1682"/>
+        <location filename="../mainwindow.cpp" line="1702"/>
         <source>Quit?</source>
         <translation>退出？</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1683"/>
+        <location filename="../mainwindow.cpp" line="1703"/>
         <source>Process still running, quiting might leave the system in an instable state.&lt;p&gt;&lt;b&gt;Are you sure you want to exit MX Package Installer?&lt;/b&gt;</source>
         <translation>程序還在運作，此時退出可能會使系統處於不穩定的狀態。&lt;p&gt;&lt;b&gt;你真的要關閉 MX 軟體安裝工具嗎？&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1684"/>
+        <location filename="../mainwindow.cpp" line="1704"/>
         <source>Yes</source>
         <translation>是</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1684"/>
+        <location filename="../mainwindow.cpp" line="1704"/>
         <source>No</source>
         <translation>否</translation>
     </message>
