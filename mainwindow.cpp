@@ -218,9 +218,9 @@ QString MainWindow::getTranslation(const QString item)
 
     dictionary.beginGroup(item);
 
-    QString trans = dictionary.value(locale.name()).toString(); // try pt_BR format
+    QString trans = dictionary.value(locale.name()).toString().toLatin1(); // try pt_BR format
     if (trans == "") {
-        trans = dictionary.value(locale.name().section("_", 0, 0)).toString(); // try pt format
+        trans = dictionary.value(locale.name().section("_", 0, 0)).toString().toLatin1(); // try pt format
         if (trans == "") {
             dictionary.endGroup();
             return item;  // return original item if no translation found
@@ -313,7 +313,7 @@ void MainWindow::processDoc(const QDomDocument &doc)
         if (element.tagName() == "category") {
             category = getTranslation(element.text().trimmed());
         } else if (element.tagName() == "name") {
-            name = getLocalizedName(element);
+            name = element.text().trimmed();
         } else if (element.tagName() == "description") {
             description = getLocalizedName(element);
         } else if (element.tagName() == "installable") {
