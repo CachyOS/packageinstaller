@@ -219,9 +219,9 @@ QString MainWindow::getTranslation(const QString item)
     dictionary.beginGroup(item);
 
     QString trans = dictionary.value(locale.name()).toString().toLatin1(); // try pt_BR format
-    if (trans == "") {
+    if (trans.isEmpty()) {
         trans = dictionary.value(locale.name().section("_", 0, 0)).toString().toLatin1(); // try pt format
-        if (trans == "") {
+        if (trans.isEmpty()) {
             dictionary.endGroup();
             return item;  // return original item if no translation found
         }
@@ -514,7 +514,7 @@ void MainWindow::displayPackages(bool force_refresh)
         VersionNumber repo_candidate(app_ver); // candidate from the selected repo, might be different than the one from Stable
 
         (*it)->setIcon(1, QIcon()); // reset update icon
-        if (installed.toString() == "") {
+        if (installed.toString().isEmpty()) {
             for (int i = 0; i < ui->treeOther->columnCount(); ++i) {
                 if (stable_list.contains(app_name)) {
                     (*it)->setToolTip(i, tr("Version ") + stable_list.value(app_name).at(0) + tr(" in stable repo"));
@@ -752,7 +752,7 @@ bool MainWindow::installPopularApps()
             foreach (const QStringList &list, popular_apps) {
                 if (list.at(1) == name) {
                     QString preinstall = list.at(5);
-                    if (preinstall == "") {  // add to batch processing if there is not preinstall command
+                    if (preinstall.isEmpty()) {  // add to batch processing if there is not preinstall command
                         batch_names << name;
                         (*it)->setCheckState(1, Qt::Unchecked);
                     }
@@ -850,7 +850,7 @@ bool MainWindow::downloadPackageList(bool force_download)
         QMessageBox::critical(this, tr("Error"), tr("Internet is not available, won't be able to download the list of packages"));
         return false;
     }
-    if (tmp_dir == "") {
+    if (tmp_dir.isEmpty()) {
         tmp_dir = cmd->getOutput("mktemp -d /tmp/mxpm-XXXXXXXX");
     }
     QDir::setCurrent(tmp_dir);
@@ -1060,7 +1060,7 @@ QString MainWindow::getVersion(const QString name) const
 // Return true if all the packages listed are installed
 bool MainWindow::checkInstalled(const QString &names) const
 {
-    if (names == "") {
+    if (names.isEmpty()) {
         return false;
     }
     foreach(const QString &name, names.split("\n")) {
@@ -1212,7 +1212,7 @@ void MainWindow::findPackage() const
 {
     QTreeWidgetItemIterator it(ui->treePopularApps);
     QString word = ui->searchPopular->text();
-    if (word == "") {
+    if (word.isEmpty()) {
         while (*it) {
             (*it)->setExpanded(false);
             ++it;
