@@ -656,7 +656,7 @@ bool MainWindow::installBatch(const QStringList &name_list)
         }
     }
 
-    if (install_names != "") {
+    if (!install_names.isEmpty()) {
         if (!install(install_names)) {
             result = false;
         }
@@ -692,7 +692,7 @@ bool MainWindow::installPopularApp(const QString &name)
     }
 
     // preinstall
-    if (preinstall != "") {
+    if (!preinstall.isEmpty()) {
         qDebug() << "Pre-install";
         setConnections();
         ui->tabWidget->setTabText(2, tr("Pre-processing for ") + name);
@@ -708,13 +708,13 @@ bool MainWindow::installPopularApp(const QString &name)
     }
 
     // install
-    if (install_names != "") {
+    if (!install_names.isEmpty()) {
         ui->tabWidget->setTabText(2, tr("Installing ") + name);
         result = install(install_names);
     }
 
     // postinstall
-    if (postinstall != "") {
+    if (!postinstall.isEmpty()) {
         qDebug() << "Post-install";
         setConnections();
         ui->tabWidget->setTabText(2, tr("Post-processing for ") + name);
