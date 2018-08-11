@@ -1,3 +1,9 @@
+mx-packageinstaller (18.8) mx; urgency=medium
+
+  * fix icons other themes
+
+ -- Adrian <adrian@mxlinux.org>  Sat, 11 Aug 2018 17:00:40 -0400
+
 mx-packageinstaller (18.7.2) mx; urgency=medium
 
   * fix encoding

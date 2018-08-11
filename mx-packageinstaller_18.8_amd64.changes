@@ -1,0 +1,43 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Format: 1.8
+Date: Sat, 11 Aug 2018 17:00:40 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 18.8
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (18.8) mx; urgency=medium
+ .
+   * fix icons other themes
+Checksums-Sha1:
+ 36de791c07363f12f9f3d41521daf4a5f9aa8102 1235 mx-packageinstaller_18.8.dsc
+ 0427585b90460c8b056aa4b0ba4abeedaf6a06eb 77364 mx-packageinstaller_18.8.tar.xz
+ 9293ed6928bc3196b0c568cc5e935028ea6cd206 122288 mx-packageinstaller_18.8_amd64.deb
+Checksums-Sha256:
+ 7769352717394798f3d0600012e6187d3375e7010517292138fb68a42ec1e5a6 1235 mx-packageinstaller_18.8.dsc
+ 939edc64fe08131f8e7c1f514571fb278cd4a10a0cb1fab8d96b4bce75b12228 77364 mx-packageinstaller_18.8.tar.xz
+ 00f55c8319ace9b9aa3e9568d549bb353d3e12f74c07d5d05ac04b6883dbb1a8 122288 mx-packageinstaller_18.8_amd64.deb
+Files:
+ c4e1634f3d532f3395550a8e77f53428 1235 admin optional mx-packageinstaller_18.8.dsc
+ 6fa097da8a868dccffe8e0f5a2f08811 77364 admin optional mx-packageinstaller_18.8.tar.xz
+ a42d3c4e679d3d2613272d1760ac2257 122288 admin optional mx-packageinstaller_18.8_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCAAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAltvUBoTHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumBmNB/9N35rdclJIlITYNdMBVI/YgkABhcMk
+hhO2NmDPXpslrTE/Gj1d0Rcst6GkxhLwnzmtZFsEzpU5/uOs+HCpSoHMMtarDbXX
+Qc0V69DoIX8KRIVyEMREmxNv4WTuBuhGIYu9Z44r2Aw2nQeFmNiNzYQ+So3f45G6
+Phhbq1VZGtQvSwBo6KmEJYFepWtB8rOk678GD1dho1ibsUZG5TVn5kncRqBlUd2D
+N9XMwE3cOZgzd+ovHuWHCovLROMr7G7JBnmCJ7Secun4MjZZiv4hPt58ObKd31AQ
+10i+83ZIsuW/81uD9Ph9W8ZYBekAUqdVwMSMmBSEKRrHIKvr3JgDZ6wC
+=nEjr
+-----END PGP SIGNATURE-----
