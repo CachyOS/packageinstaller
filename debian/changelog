@@ -1,3 +1,9 @@
+mx-packageinstaller (18.8.1) mx; urgency=medium
+
+  * GUI change: display all sources in tabs
+
+ -- Adrian <adrian@mxlinux.org>  Sat, 18 Aug 2018 14:59:26 -0400
+
 mx-packageinstaller (18.8) mx; urgency=medium
 
   * fix icons other themes
