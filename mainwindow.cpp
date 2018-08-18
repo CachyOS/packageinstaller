@@ -512,7 +512,7 @@ void MainWindow::displayPackages()
     // update tree
     while (*it) {
         app_name = (*it)->text(2);
-        if (((app_name.startsWith("lib") && !app_name.startsWith("libreoffice")) || app_name.endsWith("-dev")) && ui->checkHideLibs->isChecked()) {
+        if (isFilteredName(app_name) && ui->checkHideLibs->isChecked()) {
             (*it)->setHidden(true);
         }
         app_ver = (*it)->text(3);
@@ -792,6 +792,13 @@ bool MainWindow::installSelected()
     change_list.clear();
     installed_packages = listInstalled();
     return result;
+}
+
+
+// check if the name is filtered (lib, dev, dbg, etc.)
+bool MainWindow::isFilteredName(const QString &name) const
+{
+    return ((name.startsWith("lib") && !name.startsWith("libreoffice")) || name.endsWith("-dev") || name.endsWith("-dbg") || name.endsWith("-dbgsym"));
 }
 
 // Check if online
@@ -1299,7 +1306,7 @@ void MainWindow::findPackageOther()
       }
       // hide libs
       QString app_name = (*it)->text(2);
-      if (((app_name.startsWith("lib") && !app_name.startsWith("libreoffice")) || app_name.endsWith("-dev")) && ui->checkHideLibs->isChecked()) {
+      if (isFilteredName(app_name) && ui->checkHideLibs->isChecked()) {
           (*it)->setHidden(true);
       }
       ++it;
@@ -1685,7 +1692,7 @@ void MainWindow::on_checkHideLibs_toggled(bool checked)
     QTreeWidgetItemIterator it(ui->treeStable);
     while (*it) {
         QString app_name = (*it)->text(2);
-        if (((app_name.startsWith("lib") && !app_name.startsWith("libreoffice")) || app_name.endsWith("-dev")) && checked) {
+        if (isFilteredName(app_name) && checked) {
             (*it)->setHidden(true);
         } else {
             (*it)->setHidden(false);

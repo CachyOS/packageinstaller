@@ -53,7 +53,6 @@ public:
     ~MainWindow();
 
     QString version;
-
     bool checkInstalled(const QString &names) const;
     bool checkInstalled(const QStringList &name_list) const;
     bool checkUpgradable(const QStringList &name_list) const;
@@ -66,6 +65,7 @@ public:
     bool installPopularApp(const QString &name);
     bool installPopularApps();
     bool installSelected();
+    bool isFilteredName(const QString &name) const;
     bool readPackageList(bool force_download = false);
     bool uninstall(const QString &names);
     bool update();
