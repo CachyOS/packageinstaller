@@ -18,26 +18,26 @@ Changes:
  .
    * GUI change: display all sources in tabs
 Checksums-Sha1:
- bb1cee147567bb1e07a2faa7a13dfad735d61dd7 1243 mx-packageinstaller_18.8.1.dsc
- a21db5c996235f4fd2e0601c165583d6cedd1a1b 78288 mx-packageinstaller_18.8.1.tar.xz
- 93f55a4467fa14672e79187e0467c95b84bf4fbf 131534 mx-packageinstaller_18.8.1_amd64.deb
+ 28d0f1e742cf2949373291d36da1fb35bc0c71c2 1243 mx-packageinstaller_18.8.1.dsc
+ 6b81a136fe6f8dde05de4477ca313c53d8ce7d75 78364 mx-packageinstaller_18.8.1.tar.xz
+ 8a1726ccb3ecdcd18afd8141412f2f3bbf2849ce 131332 mx-packageinstaller_18.8.1_amd64.deb
 Checksums-Sha256:
- a62df90986065e2027b0c592ed682d2c574a8cc3a35bfd29ed1cf31b42e5ec46 1243 mx-packageinstaller_18.8.1.dsc
- d4ca892fde9d375e26983c2091c3a45ad9d3693182c160b0119ff4fed3f29031 78288 mx-packageinstaller_18.8.1.tar.xz
- b47ffe18346ea7fa2a360c763703456663a07c99030a7a921e1be5040783927b 131534 mx-packageinstaller_18.8.1_amd64.deb
+ 7a1d410e4a52bcc12d8be695e6a0bac66fd04691b847f67845e6b4487b70ffa5 1243 mx-packageinstaller_18.8.1.dsc
+ c96ede103439fed35fe2dbb598381b60f4c744978e5bdea48c2a751ee1b7ad81 78364 mx-packageinstaller_18.8.1.tar.xz
+ 7aa37d300d6efa983591dcaf07e8ed99c3ee4bcc14da032c83a7a543fdfc1d65 131332 mx-packageinstaller_18.8.1_amd64.deb
 Files:
- 753f465b211d5f5583b48ca2ccbf99a1 1243 admin optional mx-packageinstaller_18.8.1.dsc
- e3b6107a5575ff2d6657da1a9dcabfad 78288 admin optional mx-packageinstaller_18.8.1.tar.xz
- 7ff71f94982f08c5d875083981f7388c 131534 admin optional mx-packageinstaller_18.8.1_amd64.deb
+ 54ab559effe7bfaeabf79a09df7f5be0 1243 admin optional mx-packageinstaller_18.8.1.dsc
+ 1b137f6bd8b310a554919f0f0fd03609 78364 admin optional mx-packageinstaller_18.8.1.tar.xz
+ 0331645ef42017a694dde43d046d2a51 131332 admin optional mx-packageinstaller_18.8.1_amd64.deb
 
 -----BEGIN PGP SIGNATURE-----
 
-iQFHBAEBCAAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAlt4mhcTHGFkcmlhbkBt
-eGxpbnV4Lm9yZwAKCRBwk4x4BnnumN7WCACLJxFsfj9SNNdSd0g6bDd45ia04VLl
-zAIQJcTtgR/muAB6WjdZJ1bs6JxDp884i+qVhTfNfcfSpfsqxH5X4rMVpFyiQpsb
-yc9TzTq1RgmZK5StA/QOzMTLAbY55XSzlM3DMR2eyPaUAGASW64BU6XKGL138cag
-FjH63c2eXZIurej5Mn/nABidoxBGAXitXNgT1eaVwgd/GDlQVlsp3A42c67fGpOA
-ec5YhWfanNLBxRKwJ0saL3DmTJOZtGqJ7op/hX1CuG8pf2I+LbI3QW87K+wejwv8
-l1xBjinSonqg7cUWvpJU6yglD/01VAVlHTlvYsjImlVI/SVtL7MgXQ97
-=+b3m
+iQFHBAEBCAAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAlt5Z3ITHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumDt9CACR2I0hflqT0F+2ud6P2G9s8UkccxkD
+RPPfmQxrQ3fmAJrIZbJvOrDCqj5U3xXRGPIvNBUrghNBEsR4A2ZR7cIJFKF7N0+F
+JAPk+0WTtSojuoXZjLFtjG7/o79ObXFCsZPE24Jd4Y+sdIr+slJj+jyMKD5k9tqY
+RVY+wXsv7yf0YRdwNyKcGTywyx90pVLgrd8Ijh46SdQgbVbDvxrYcfQaEgeyTyrb
+NbHGTAKykxdabLj603Ds+mHat1+Z0RuM2o6kUr4SgaM335oqidOV0FMM+j9U8/qG
+orm8yS3WhSoWcyNtN93Fllom/yy5HfXWVgkg4+PAOoe4OgoAOtA63IRJ
+=1Ot2
 -----END PGP SIGNATURE-----

@@ -1239,6 +1239,9 @@ void MainWindow::findPopular() const
 {
     QTreeWidgetItemIterator it(ui->treePopularApps);
     QString word = ui->searchPopular->text();
+    if (word.length() == 1) {
+        return;
+    }
     if (word.isEmpty()) {
         while (*it) {
             (*it)->setExpanded(false);
@@ -1295,6 +1298,9 @@ void MainWindow::findPackageOther()
         word = ui->searchBoxMX->text();
     } else if (tree == ui->treeBackports) {
         word = ui->searchBoxBP->text();
+    }
+    if (word.length() == 1) {
+        return;
     }
 
     QList<QTreeWidgetItem *> found_items = tree->findItems(word, Qt::MatchContains, 2);
