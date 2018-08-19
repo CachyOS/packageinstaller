@@ -1251,6 +1251,7 @@ void MainWindow::findPopular() const
         return;
     }
     QList<QTreeWidgetItem *> found_items = ui->treePopularApps->findItems(word, Qt::MatchContains|Qt::MatchRecursive, 2);
+    found_items << ui->treePopularApps->findItems(word, Qt::MatchContains|Qt::MatchRecursive, 4);
 
     // hide/unhide items
     while (*it) {
@@ -1297,6 +1298,7 @@ void MainWindow::findPackageOther()
     }
 
     QList<QTreeWidgetItem *> found_items = tree->findItems(word, Qt::MatchContains, 2);
+    found_items << tree->findItems(word, Qt::MatchContains, 4);
     QTreeWidgetItemIterator it(tree);
     while (*it) {
       if ((*it)->text(6) == "true" && found_items.contains(*it)) {
@@ -1613,6 +1615,13 @@ void MainWindow::filterChanged(const QString &arg1)
     }
     findPackageOther();
     tree->blockSignals(false);
+    if (ui->tabStable->isVisible()) {
+        ui->searchBoxStable->setFocus();
+    } else if (ui->tabMXtest->isVisible()) {
+        ui->searchBoxMX->setFocus();
+    } else if (ui->tabBackports->isVisible()) {
+        ui->searchBoxBP->setFocus();
+    }
 }
 
 // When selecting on item in the list
