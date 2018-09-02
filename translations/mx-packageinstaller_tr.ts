@@ -496,6 +496,11 @@
         <translation>Başarılı</translation>
     </message>
     <message>
+        <location filename="../mainwindow.cpp" line="1699"/>
+        <source>You might need to reboot to see installed items in the menu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../mainwindow.cpp" line="1598"/>
         <location filename="../mainwindow.cpp" line="1618"/>
         <source>We encountered a problem uninstalling the program</source>
@@ -515,11 +520,6 @@ OK to go ahead and install it?</source>
     <message>
         <location filename="../mainwindow.cpp" line="1699"/>
         <source>Needs reboot</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.cpp" line="1699"/>
-        <source>Flatpak was just installed, you might need to reboot before being able to find the installed items in the menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
