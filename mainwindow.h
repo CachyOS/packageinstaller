@@ -59,7 +59,6 @@ public:
     bool checkOnline() const;
     bool buildPackageLists(bool force_download = false);
     bool downloadPackageList(bool force_download = false);
-    void enableTabs(bool enable);
     bool install(const QString &names);
     bool installBatch(const QStringList &name_list);
     bool installPopularApp(const QString &name);
@@ -76,13 +75,17 @@ public:
     void copyTree(QTreeWidget *, QTreeWidget *) const;
     void displayPopularApps() const;
     void displayPackages();
+    void displayFlatpaks();
     void displayWarning();
+    void enableTabs(bool enable);
     void ifDownloadFailed();
+    void listFlatpakRemotes();
     void loadPmFiles();
     void processDoc(const QDomDocument &doc);
     void refreshPopularApps();
     void setCurrentTree();
     void setProgressDialog();
+    void setSearchFocus();
     void setup();
     void updateInterface();
 
@@ -91,6 +94,7 @@ public:
     QString getTranslation(const QString item);
     QString getVersion(const QString name) const;
     QStringList listInstalled() const;
+    QStringList listFlatpaks(const QString remote) const;
 
 
 public slots:
@@ -121,6 +125,7 @@ private slots:
     void on_treeStable_itemChanged(QTreeWidgetItem *item);
     void on_treeMXtest_itemChanged(QTreeWidgetItem *item);
     void on_treeBackports_itemChanged(QTreeWidgetItem *item);
+    void on_treeFlatpak_itemChanged(QTreeWidgetItem *item);
 
     void on_buttonForceUpdateStable_clicked();
     void on_buttonForceUpdateMX_clicked();
@@ -135,11 +140,15 @@ private slots:
     void on_lineEdit_returnPressed();
     void on_buttonCancel_clicked();
 
+    void on_comboRemote_activated();
+
+    void on_buttonUpgradeFP_clicked();
 
 private:
     bool updated_once;
     bool warning_displayed;
     int height_app;
+    QString indexFilterFP;
 
     Cmd *cmd;
     LockFile *lock_file;

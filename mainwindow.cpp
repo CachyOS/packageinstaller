@@ -86,6 +86,10 @@ void MainWindow::setup()
     ui->treeMXtest->hideColumn(6); // Displayed status true/false
     ui->treeBackports->hideColumn(5); // Status of the package: installed, upgradable, etc
     ui->treeBackports->hideColumn(6); // Displayed status true/false
+    ui->treeFlatpak->hideColumn(3);
+    ui->treeFlatpak->hideColumn(4);
+    ui->treeFlatpak->hideColumn(5);
+    ui->treeFlatpak->hideColumn(6);
     ui->icon->setIcon(QIcon::fromTheme("software-update-available", QIcon(":/icons/software-update-available.png")));
     ui->icon_2->setIcon(QIcon::fromTheme("software-update-available", QIcon(":/icons/software-update-available.png")));
     ui->icon_3->setIcon(QIcon::fromTheme("software-update-available", QIcon(":/icons/software-update-available.png")));
@@ -97,11 +101,13 @@ void MainWindow::setup()
     connect(ui->searchBoxStable, &QLineEdit::textChanged, this, &MainWindow::findPackageOther);
     connect(ui->searchBoxMX, &QLineEdit::textChanged, this, &MainWindow::findPackageOther);
     connect(ui->searchBoxBP, &QLineEdit::textChanged, this, &MainWindow::findPackageOther);
+    connect(ui->searchBoxFlatpak, &QLineEdit::textChanged, this, &MainWindow::findPackageOther);
 
     // connect combo filters
     connect(ui->comboFilterStable, &QComboBox::currentTextChanged, this, &MainWindow::filterChanged);
     connect(ui->comboFilterMX, &QComboBox::currentTextChanged, this, &MainWindow::filterChanged);
     connect(ui->comboFilterBP, &QComboBox::currentTextChanged, this, &MainWindow::filterChanged);
+    connect(ui->comboFilterFlatpak, &QComboBox::currentTextChanged, this, &MainWindow::filterChanged);
 
     ui->searchPopular->setFocus();
     updated_once = false;
@@ -389,6 +395,19 @@ void MainWindow::setProgressDialog()
     progress->reset();
 }
 
+void MainWindow::setSearchFocus()
+{
+    if (ui->tabStable->isVisible()) {
+        ui->searchBoxStable->setFocus();
+    } else if (ui->tabMXtest->isVisible()) {
+        ui->searchBoxMX->setFocus();
+    } else if (ui->tabBackports->isVisible()) {
+        ui->searchBoxBP->setFocus();
+    } else if (ui->tabFlatpak->isVisible()) {
+        ui->searchBoxFlatpak->setFocus();
+    }
+}
+
 // Display Popular Apps in the treePopularApps
 void MainWindow::displayPopularApps() const
 {
@@ -555,6 +574,47 @@ void MainWindow::displayPackages()
     newtree->blockSignals(false);
 }
 
+void MainWindow::displayFlatpaks()
+{
+    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    ui->treeFlatpak->clear();
+    ui->comboFilterFlatpak->setCurrentIndex(0);
+    ui->treeFlatpak->blockSignals(true);
+
+    QStringList flatpaks = listFlatpaks(ui->comboRemote->currentText());
+    QStringList installed = cmd->getOutput("flatpak list").split("\n");
+
+    int total_count = 0;
+    int inst_count = 0;
+    QTreeWidgetItem *widget_item;
+
+    foreach (QString name, flatpaks) {
+        total_count++;
+        widget_item = new QTreeWidgetItem(ui->treeFlatpak);
+        widget_item->setCheckState(0, Qt::Unchecked);
+        widget_item->setText(2, name);
+        if (installed.contains(name)) {
+            inst_count++;
+            widget_item->setForeground(2, QBrush(Qt::gray));
+            widget_item->setText(5, "installed");
+        } else {
+            widget_item->setText(5, "not installed");
+        }
+        widget_item->setText(6, "true"); // all items are displayed till filtered
+    }
+
+    for (int i = 0; i < ui->treeFlatpak->columnCount(); ++i) {
+        ui->treeFlatpak->resizeColumnToContents(i);
+    }
+
+    ui->labelNumAppFP->setText(QString::number(total_count));
+    ui->labelNumInstFP->setText(QString::number(inst_count));
+
+    ui->searchBoxFlatpak->clear();
+    ui->searchBoxFlatpak->setFocus();
+    ui->treeFlatpak->blockSignals(false);
+}
+
 // Display warning for Debian Backports
 void MainWindow::displayWarning()
 {
@@ -588,6 +648,17 @@ void MainWindow::ifDownloadFailed()
     qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
     progress->hide();
     ui->tabWidget->setCurrentWidget(ui->tabPopular);
+}
+
+
+// List the flatpak remote and loade them into combobox
+void MainWindow::listFlatpakRemotes()
+{
+    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    QStringList list = cmd->getOutput("flatpak remote-list").split("\n");
+    ui->comboRemote->addItems(list);
+    //set flathub default
+    ui->comboRemote->setCurrentIndex(ui->comboRemote->findText("flathub"));
 }
 
 // Install the list of apps
@@ -916,7 +987,7 @@ bool MainWindow::downloadPackageList(bool force_download)
 
 void MainWindow::enableTabs(bool enable)
 {
-    for (int tab = 0; tab < 4; ++tab) {
+    for (int tab = 0; tab < 5; ++tab) {
         ui->tabWidget->setTabEnabled(tab, enable);
     }
 }
@@ -1123,12 +1194,27 @@ QStringList MainWindow::listInstalled() const
 }
 
 
+// Return list flatpaks from current remote
+QStringList MainWindow::listFlatpaks(const QString remote) const
+{
+    QStringList list = cmd->getOutput("flatpak remote-ls " + remote).split("\n");
+    QStringList updated_list;
+    foreach (QString item, list) {  // remove .Debug and .Sources
+        item = item.trimmed();
+        if (!item.endsWith(".Debug") && !item.endsWith(".Sources")) {
+            updated_list << item;
+        }
+    }
+    return updated_list;
+}
+
+
 // return the visible tree
 void MainWindow::setCurrentTree()
 {
     qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
     QList<QTreeWidget *> list;
-    list << ui->treePopularApps << ui->treeStable << ui->treeMXtest << ui->treeBackports;
+    list << ui->treePopularApps << ui->treeStable << ui->treeMXtest << ui->treeBackports << ui->treeFlatpak;
 
     foreach (QTreeWidget *item, list) {
         if (item->isVisible()) {
@@ -1298,6 +1384,8 @@ void MainWindow::findPackageOther()
         word = ui->searchBoxMX->text();
     } else if (tree == ui->treeBackports) {
         word = ui->searchBoxBP->text();
+    } else if (tree == ui->treeFlatpak) {
+        word = ui->searchBoxFlatpak->text();
     }
     if (word.length() == 1) {
         return;
@@ -1347,6 +1435,15 @@ void MainWindow::on_buttonInstall_clicked()
             ui->tabWidget->setCurrentWidget(tree->parentWidget());
         } else {
             refreshPopularApps();
+            QMessageBox::critical(this, tr("Error"), tr("Problem detected while installing, please inspect the console output."));
+        }
+    } else if (tree == ui->treeFlatpak) {
+        qDebug() << "change_list" << change_list.join(" ");
+        setConnections();
+        if (cmd->run("flatpak install -y " + ui->comboRemote->currentText() + " " + change_list.join(" ")) == 0) {
+            QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
+            ui->tabWidget->setCurrentWidget(ui->tabFlatpak);
+        } else {
             QMessageBox::critical(this, tr("Error"), tr("Problem detected while installing, please inspect the console output."));
         }
     } else {
@@ -1492,6 +1589,16 @@ void MainWindow::on_buttonUninstall_clicked()
             }
             ++it;
         }
+    } else if (tree == ui->treeFlatpak) {
+        setConnections();
+        if (cmd->run("flatpak uninstall " + change_list.join(" ")) == 0) {
+            QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
+            ui->tabWidget->setCurrentWidget(ui->tabFlatpak);
+        } else {
+            QMessageBox::critical(this, tr("Error"), tr("We encountered a problem uninstalling the program"));
+        }
+        enableTabs(true);
+        return;
     } else {
         names = change_list.join(" ");
     }
@@ -1534,13 +1641,13 @@ void MainWindow::on_tabWidget_currentChanged(int index)
     }
 
     switch (index) {
-    case 0:
+    case 0:  // Popular
         enableTabs(true);
         setCurrentTree();
         ui->searchPopular->clear();
         ui->searchPopular->setFocus();
         break;
-    case 1:
+    case 1:  // Stable
         enableTabs(true);
         setCurrentTree();
         change_list.clear();
@@ -1550,7 +1657,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         ui->searchBoxStable->clear();
         ui->searchBoxStable->setFocus();
         break;
-    case 2:
+    case 2:  // Test
         enableTabs(true);
         setCurrentTree();
         change_list.clear();
@@ -1560,7 +1667,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         ui->searchBoxMX->clear();
         ui->searchBoxMX->setFocus();
         break;
-    case 3:
+    case 3:  // Backports
         enableTabs(true);
         setCurrentTree();
         displayWarning();
@@ -1571,7 +1678,32 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         ui->searchBoxBP->clear();
         ui->searchBoxBP->setFocus();
         break;
-    case 4:
+    case 4: // Flatpak
+        setCursor(QCursor(Qt::BusyCursor));
+        enableTabs(true);
+        ui->comboRemote->clear();
+        ui->comboFilterBP->setCurrentIndex(0);
+        if(!checkInstalled("flatpak")) {
+            int ans = QMessageBox::question(this, tr("Flatpak not installed"), tr("Flatpak is not currently installed.\nOK to go ahead and install it?"));
+            if (ans == QMessageBox::No) {
+                ui->tabWidget->setCurrentIndex(0);
+                break;
+            }
+            ui->tabWidget->setTabEnabled(ui->tabWidget->indexOf(ui->tabOutput), true);
+            ui->tabWidget->setCurrentWidget(ui->tabOutput);
+            install("flatpak");
+            installed_packages = listInstalled();
+            buildPackageLists();
+            ui->tabWidget->setCurrentWidget(ui->tabFlatpak);
+            ui->tabWidget->setTabEnabled(ui->tabWidget->indexOf(ui->tabOutput), false);
+        }
+        setCurrentTree();
+        cmd->run("flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo");
+        listFlatpakRemotes();
+        displayFlatpaks();
+        setCursor(QCursor(Qt::ArrowCursor));
+        break;
+    case 5: // Output
         ui->buttonInstall->setDisabled(true);
         ui->buttonUninstall->setDisabled(true);
         break;
@@ -1597,6 +1729,7 @@ void MainWindow::filterChanged(const QString &arg1)
             ++it;
         }
         findPackageOther();
+        setSearchFocus();
         tree->blockSignals(false);
         return;
     }
@@ -1616,18 +1749,13 @@ void MainWindow::filterChanged(const QString &arg1)
         } else {
             (*it)->setHidden(true);
             (*it)->setText(6, "false");
+            (*it)->setCheckState(0, Qt::Unchecked); // uncheck hidden items
         }
         ++it;
     }
     findPackageOther();
+    setSearchFocus();
     tree->blockSignals(false);
-    if (ui->tabStable->isVisible()) {
-        ui->searchBoxStable->setFocus();
-    } else if (ui->tabMXtest->isVisible()) {
-        ui->searchBoxMX->setFocus();
-    } else if (ui->tabBackports->isVisible()) {
-        ui->searchBoxBP->setFocus();
-    }
 }
 
 // When selecting on item in the list
@@ -1647,6 +1775,11 @@ void MainWindow::on_treeBackports_itemChanged(QTreeWidgetItem *item)
     buildChangeList(item);
 }
 
+void MainWindow::on_treeFlatpak_itemChanged(QTreeWidgetItem *item)
+{
+    buildChangeList(item);
+}
+
 // Build the change_list when selecting on item in the tree
 void MainWindow::buildChangeList(QTreeWidgetItem *item)
 {
@@ -1655,6 +1788,11 @@ void MainWindow::buildChangeList(QTreeWidgetItem *item)
      * if all apps are installed or upgradable -> enable Uninstall, enable Install
      * if all apps are upgradable -> change Install label to Upgrade;
      */
+
+    if (change_list.isEmpty() && indexFilterFP.isEmpty()) { // remember the Flatpak combo location first time this is called
+        indexFilterFP = ui->comboFilterFlatpak->currentText();
+    }
+
     QString newapp = QString(item->text(2));
     if (item->checkState(0) == Qt::Checked) {
         ui->buttonInstall->setEnabled(true);
@@ -1663,16 +1801,32 @@ void MainWindow::buildChangeList(QTreeWidgetItem *item)
         change_list.removeOne(newapp);
     }
 
-    if (!checkInstalled(change_list)) {
-        ui->buttonUninstall->setEnabled(false);
-    } else {
-        ui->buttonUninstall->setEnabled(true);
-    }
+    if (tree != ui->treeFlatpak) {
+        if (!checkInstalled(change_list)) {
+            ui->buttonUninstall->setEnabled(false);
+        } else {
+            ui->buttonUninstall->setEnabled(true);
+        }
 
-    if (checkUpgradable(change_list)) {
-        ui->buttonInstall->setText(tr("Upgrade"));
-    } else {
-        ui->buttonInstall->setText(tr("Install"));
+        if (checkUpgradable(change_list)) {
+            ui->buttonInstall->setText(tr("Upgrade"));
+        } else {
+            ui->buttonInstall->setText(tr("Install"));
+        }
+    } else { // for Flatpaks allow selection only of installed or not installed items so one clicks on an installed item only installed items should be displayed and the other way round
+        if (item->text(5) == "installed") {
+            ui->comboFilterFlatpak->setCurrentText(tr("Installed"));
+            ui->buttonUninstall->setEnabled(true);
+            ui->buttonInstall->setEnabled(false);
+        } else {
+            ui->comboFilterFlatpak->setCurrentText(tr("Not installed"));
+            ui->buttonUninstall->setEnabled(false);
+            ui->buttonInstall->setEnabled(true);
+        }
+        if (change_list.isEmpty()) { // reset comboFilterFlatpak if nothing is selected
+            ui->comboFilterFlatpak->setCurrentText(indexFilterFP);
+            indexFilterFP.clear();
+        }
     }
 
     if (change_list.isEmpty()) {
@@ -1790,4 +1944,23 @@ void MainWindow::on_checkHideLibsBP_clicked(bool checked)
 }
 
 
+// on change flatpack remote
+void MainWindow::on_comboRemote_activated()
+{
+    displayFlatpaks();
+}
 
+void MainWindow::on_buttonUpgradeFP_clicked()
+{
+    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    showOutput();
+    setConnections();
+
+    if(cmd->run("flatpak update") == 0) {
+        QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
+        ui->tabWidget->setCurrentWidget(ui->tabFlatpak);
+    } else {
+        QMessageBox::critical(this, tr("Error"), tr("Problem detected while installing, please inspect the console output."));
+    }
+    enableTabs(true);
+}

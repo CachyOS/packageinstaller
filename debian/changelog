@@ -1,3 +1,9 @@
+mx-packageinstaller (18.9) mx; urgency=medium
+
+  * add Flatpak manager tab
+
+ -- Adrian <adrian@mxlinux.org>  Sun, 02 Sep 2018 16:16:17 -0400
+
 mx-packageinstaller (18.8.1) mx; urgency=medium
 
   * GUI change: display all sources in tabs

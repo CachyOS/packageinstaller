@@ -1,0 +1,43 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Format: 1.8
+Date: Sun, 02 Sep 2018 16:16:17 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 18.9
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (18.9) mx; urgency=medium
+ .
+   * add Flatpak manager tab
+Checksums-Sha1:
+ e910b06008df1f0d89a3c3db0f1ee62fa37bd780 1235 mx-packageinstaller_18.9.dsc
+ f701e3a1f98e43623c6c01ba856a0f5f6814ccdf 79956 mx-packageinstaller_18.9.tar.xz
+ 44a8f1edecaa65c55e65d62343ea0de17541225f 139066 mx-packageinstaller_18.9_amd64.deb
+Checksums-Sha256:
+ 273b50e9d85a070a526546cbca413963531413c3f8167605156f941394357da5 1235 mx-packageinstaller_18.9.dsc
+ 876f91850a7ff4e1ea378c933405f15f6d38fafb64c13994181004a4395aacfb 79956 mx-packageinstaller_18.9.tar.xz
+ d676474122e98d482c843f7eea19f7e456f67374376ba0270d7c4f13a7d1f43f 139066 mx-packageinstaller_18.9_amd64.deb
+Files:
+ 406691b551d6fac7192674732bda558a 1235 admin optional mx-packageinstaller_18.9.dsc
+ c6ea0da6379329d8c406f72432ba2d25 79956 admin optional mx-packageinstaller_18.9.tar.xz
+ a5ad1161343112dabfd0885a286ad3a0 139066 admin optional mx-packageinstaller_18.9_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCAAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAluMRp8THGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumKvCCACkYstvd1OIIpAZ9SYlA28XhJmOAU1d
+fffdpA2tfgIPi2+d8dAADCbwDdmQ5MpwNoHBlGA+Arz7OC4zN4kvmkdhO4R+06N4
+PaWqpcheRV1nc27ASHvCDZDQ/e9Ul2bCCxvP8SQNxQwdxuJSHgzHTPWk/0yri3jW
+NkQpBI0F/wUD4qrQM3pj6lSH2CvhHPl7b5f2JFuRsRUgNHGvbcjEWpJRziYMv1tV
+5X8O5yheHbgERXeGM916ZhjSiym7zqAsFhsJGsqVLKIAryEW5RKi/jTW/2ov8Se4
+eaVVA6YKMOncmBP/e4gvrB4q4ztrioZgySey/z44RhpAYOwBfZ+E0ley
+=1to1
+-----END PGP SIGNATURE-----
