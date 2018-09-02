@@ -1696,6 +1696,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
             buildPackageLists();
             ui->tabWidget->setCurrentWidget(ui->tabFlatpak);
             ui->tabWidget->setTabEnabled(ui->tabWidget->indexOf(ui->tabOutput), false);
+            QMessageBox::warning(this, tr("Needs reboot"), tr("Flatpak was just installed, you might need to reboot before being able to find the installed items in the menu"));
         }
         setCurrentTree();
         cmd->run("flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo");

@@ -73,7 +73,7 @@
         <location filename="../mainwindow.ui" line="911"/>
         <location filename="../mainwindow.ui" line="1168"/>
         <location filename="../mainwindow.ui" line="1172"/>
-        <location filename="../mainwindow.cpp" line="1725"/>
+        <location filename="../mainwindow.cpp" line="1726"/>
         <source>All packages</source>
         <translation>Všechny balíky</translation>
     </message>
@@ -82,8 +82,8 @@
         <location filename="../mainwindow.ui" line="584"/>
         <location filename="../mainwindow.ui" line="916"/>
         <location filename="../mainwindow.ui" line="1177"/>
-        <location filename="../mainwindow.cpp" line="1739"/>
-        <location filename="../mainwindow.cpp" line="1818"/>
+        <location filename="../mainwindow.cpp" line="1740"/>
+        <location filename="../mainwindow.cpp" line="1819"/>
         <source>Installed</source>
         <translation>Nainstalováno</translation>
     </message>
@@ -91,7 +91,7 @@
         <location filename="../mainwindow.ui" line="185"/>
         <location filename="../mainwindow.ui" line="589"/>
         <location filename="../mainwindow.ui" line="921"/>
-        <location filename="../mainwindow.cpp" line="1737"/>
+        <location filename="../mainwindow.cpp" line="1738"/>
         <source>Upgradable</source>
         <translation>Možné aktualizovat</translation>
     </message>
@@ -100,8 +100,8 @@
         <location filename="../mainwindow.ui" line="594"/>
         <location filename="../mainwindow.ui" line="926"/>
         <location filename="../mainwindow.ui" line="1182"/>
-        <location filename="../mainwindow.cpp" line="1741"/>
-        <location filename="../mainwindow.cpp" line="1822"/>
+        <location filename="../mainwindow.cpp" line="1742"/>
+        <location filename="../mainwindow.cpp" line="1823"/>
         <source>Not installed</source>
         <translation>Nenainstalováno</translation>
     </message>
@@ -194,7 +194,7 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1144"/>
-        <source>Flatpak Manager</source>
+        <source>Flatpak</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -261,7 +261,7 @@
     <message>
         <location filename="../mainwindow.ui" line="1545"/>
         <location filename="../mainwindow.cpp" line="1554"/>
-        <location filename="../mainwindow.cpp" line="1814"/>
+        <location filename="../mainwindow.cpp" line="1815"/>
         <source>Install</source>
         <translation>Instalovat</translation>
     </message>
@@ -305,8 +305,8 @@
         <location filename="../mainwindow.cpp" line="1457"/>
         <location filename="../mainwindow.cpp" line="1598"/>
         <location filename="../mainwindow.cpp" line="1618"/>
-        <location filename="../mainwindow.cpp" line="1898"/>
-        <location filename="../mainwindow.cpp" line="1963"/>
+        <location filename="../mainwindow.cpp" line="1899"/>
+        <location filename="../mainwindow.cpp" line="1964"/>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
@@ -424,8 +424,8 @@
         <location filename="../mainwindow.cpp" line="1444"/>
         <location filename="../mainwindow.cpp" line="1454"/>
         <location filename="../mainwindow.cpp" line="1595"/>
-        <location filename="../mainwindow.cpp" line="1894"/>
-        <location filename="../mainwindow.cpp" line="1960"/>
+        <location filename="../mainwindow.cpp" line="1895"/>
+        <location filename="../mainwindow.cpp" line="1961"/>
         <source>Done</source>
         <translation>Hotovo</translation>
     </message>
@@ -435,8 +435,8 @@
         <location filename="../mainwindow.cpp" line="1454"/>
         <location filename="../mainwindow.cpp" line="1595"/>
         <location filename="../mainwindow.cpp" line="1611"/>
-        <location filename="../mainwindow.cpp" line="1894"/>
-        <location filename="../mainwindow.cpp" line="1960"/>
+        <location filename="../mainwindow.cpp" line="1895"/>
+        <location filename="../mainwindow.cpp" line="1961"/>
         <source>Processing finished successfully.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -444,8 +444,8 @@
         <location filename="../mainwindow.cpp" line="1438"/>
         <location filename="../mainwindow.cpp" line="1447"/>
         <location filename="../mainwindow.cpp" line="1457"/>
-        <location filename="../mainwindow.cpp" line="1898"/>
-        <location filename="../mainwindow.cpp" line="1963"/>
+        <location filename="../mainwindow.cpp" line="1899"/>
+        <location filename="../mainwindow.cpp" line="1964"/>
         <source>Problem detected while installing, please inspect the console output.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -513,27 +513,37 @@ OK to go ahead and install it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1812"/>
+        <location filename="../mainwindow.cpp" line="1699"/>
+        <source>Needs reboot</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="1699"/>
+        <source>Flatpak was just installed, you might need to reboot before being able to find the installed items in the menu</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="1813"/>
         <source>Upgrade</source>
         <translation>Aktualizovat</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1924"/>
+        <location filename="../mainwindow.cpp" line="1925"/>
         <source>Quit?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1925"/>
+        <location filename="../mainwindow.cpp" line="1926"/>
         <source>Process still running, quiting might leave the system in an instable state.&lt;p&gt;&lt;b&gt;Are you sure you want to exit MX Package Installer?&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1926"/>
+        <location filename="../mainwindow.cpp" line="1927"/>
         <source>Yes</source>
         <translation>Ano</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1926"/>
+        <location filename="../mainwindow.cpp" line="1927"/>
         <source>No</source>
         <translation>Ne</translation>
     </message>

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1031</width>
+    <width>1167</width>
     <height>528</height>
    </rect>
   </property>
@@ -1141,7 +1141,7 @@
      </widget>
      <widget class="QWidget" name="tabFlatpak">
       <attribute name="title">
-       <string>Flatpak Manager</string>
+       <string>Flatpak</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_8">
        <item row="1" column="7">
