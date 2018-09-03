@@ -147,6 +147,8 @@ private slots:
 
     void on_buttonRemotes_clicked();
 
+    void on_cb_user_only_clicked(bool checked);
+
 private:
     bool updated_once;
     bool warning_displayed;
@@ -164,6 +166,9 @@ private:
     QString stable_raw;
     QString tmp_dir;
     QString ver_name;
+    QString run_as_user;
+    QString user_switch;
+    QString end_quote;
     QStringList installed_packages;
     QStringList change_list;
     QMap<QString, QStringList> backports_list;
