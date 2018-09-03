@@ -18,26 +18,26 @@ Changes:
  .
    * add Flatpak manager tab
 Checksums-Sha1:
- 0b6f34c694902c180860a46c04458cb094896f15 1235 mx-packageinstaller_18.9.dsc
- 64f92f25264d8d2f95cd7c68d382ffa8245117ae 83068 mx-packageinstaller_18.9.tar.xz
- 822bbb73d880fb190e486f5c28448a8c498480e6 146540 mx-packageinstaller_18.9_amd64.deb
+ eadac087f912402b14f8f6b84d8590ae4ce9ca24 1235 mx-packageinstaller_18.9.dsc
+ 3a2c84501b7f2288d4d258661de889bd27c43323 83016 mx-packageinstaller_18.9.tar.xz
+ dc83cdb2ff12c98706aacc8efce225ea24ee37f5 146304 mx-packageinstaller_18.9_amd64.deb
 Checksums-Sha256:
- 388d34a492b8a893a9f872f452a112ee5ba8b5a92da303e12fe9a1fdfb7b3b43 1235 mx-packageinstaller_18.9.dsc
- 7b8b439260aa2824383f25c0f086e5c3fa9db7e883aa3699581bf05778ade8da 83068 mx-packageinstaller_18.9.tar.xz
- a4834cb671462cdbb8f3377d8b933c49fa1408cee386b1d87a99dce601418333 146540 mx-packageinstaller_18.9_amd64.deb
+ 1fe288d7145b9894998e5e4e946c2bfae8fc3c00ae47ba49ab732cf36514d0dc 1235 mx-packageinstaller_18.9.dsc
+ 9bc576ff1f7fdc9e76663d75d9b1b2f0522e0aa202393750c1ceac8d801258fc 83016 mx-packageinstaller_18.9.tar.xz
+ 66a6ad03519ea91863c178b506f6cb9a1607c2ebde43315097fd03577a41bd61 146304 mx-packageinstaller_18.9_amd64.deb
 Files:
- 234ec663926a97767f98e3e5b13555f0 1235 admin optional mx-packageinstaller_18.9.dsc
- 1ffaac7501b24a60a47cadd3be4a383b 83068 admin optional mx-packageinstaller_18.9.tar.xz
- 3dfc58e8fef4b174b81b9dd1513d96f0 146540 admin optional mx-packageinstaller_18.9_amd64.deb
+ cd43eaf543ad85233104944210704de8 1235 admin optional mx-packageinstaller_18.9.dsc
+ ec19ea59c782fe7294d10f17aef65926 83016 admin optional mx-packageinstaller_18.9.tar.xz
+ eadd3ce3175ef00dc1912e7420ed17ea 146304 admin optional mx-packageinstaller_18.9_amd64.deb
 
 -----BEGIN PGP SIGNATURE-----
 
-iQFHBAEBCAAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAluNX30THGFkcmlhbkBt
-eGxpbnV4Lm9yZwAKCRBwk4x4BnnumKKKB/487RpPPM3PmjC6iwglz7qYfbUjytGZ
-YoIsFNAbrTEJccNVQoaHXDQ5YgpzYBtpJDzZtgXhX3U6EWiWdFUKqqt4Wnr2RHad
-zdtuYRiN8GOfzvx2499Di9OMXsZ63vKVoOZj8C6Nyc15B0T6DY4X8uJVsjOMO0wE
-yWa6Kl1iGnOtWtnEtHsaJ3s+qchByKU47QT7+hGorIkNAGjuJgXKic8iGQaT7hnm
-N84hcPOoNyCpHJ+3kwV6uUHRpH2QaAfbUaO7Q2sSw6H9vopWMKSyxSsSUNIHjdo4
-775UzpoQkOARl/F84x3RH/XHkRx98+EhKtRWK2pMUiBS9j71lU+WDAFm
-=jvgn
+iQFHBAEBCAAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAluNbIgTHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumP9ICADR8+zvMLnSSdruGIPTVSk5CRJzKWj4
+tZ87nsYOiZx2dReQAVmPT+An5Js1IRCH3P4npMhYfSrklDF3q+n/SfRTSFE8kNde
+9DVw2Yk6NUi713Hvr3uykspQU1yKk98velG2m9iT2+scKBmQYlbpMqKQf3fmTxnP
+4zc/1z/NHqqE7GU+MWpZH1O80sox0h1RtBET+pjiSE5YASNy+ZN4+yNR428rWjJR
+3XMljnpl1peIv108p/wHRAAQG26+GzsuOvT8EsujDG1P5y+2tVAXCH+PZWz1qPfM
+IoAOj0JvKxNCZbKTUh2eI85Ca+v4UCX+IVxjs+SgTUxT79jyC2bdVil5
+=zmbW
 -----END PGP SIGNATURE-----

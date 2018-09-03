@@ -260,6 +260,7 @@ void MainWindow::setConnections() const
     qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
     connect(cmd, &Cmd::runTime, this, &MainWindow::updateBar, Qt::UniqueConnection);  // processes runtime emited by Cmd to be used by a progress bar
     connect(cmd, &Cmd::outputAvailable, this, &MainWindow::updateOutput, Qt::UniqueConnection);
+    connect(cmd, &Cmd::errorAvailable, this, &MainWindow::updateOutput, Qt::UniqueConnection);
     connect(cmd, &Cmd::started, this, &MainWindow::cmdStart, Qt::UniqueConnection);
     connect(cmd, &Cmd::finished, this, &MainWindow::cmdDone, Qt::UniqueConnection);
 }
