@@ -491,7 +491,7 @@ void MainWindow::displayPackages()
     } else if (tree == ui->treeBackports) {
         list = backports_list;
         newtree = ui->treeBackports;
-    } else { // for ui-treeStable AND ui->treePopularApps
+    } else { // for ui-treeStable, ui->treePopularApps, ui->treeFlatpak
         list = stable_list;
         newtree = ui->treeStable;
     }
@@ -1444,13 +1444,16 @@ void MainWindow::on_buttonInstall_clicked()
         }
     } else if (tree == ui->treeFlatpak) {
         setConnections();
+        setCursor(QCursor(Qt::BusyCursor));
         if (cmd->run(run_as_user + "flatpak install -y " + user_switch + ui->comboRemote->currentText() + " " + change_list.join(" ") + end_quote) == 0) {
             displayFlatpaks();
+            setCursor(QCursor(Qt::ArrowCursor));
             QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
             ui->tabWidget->blockSignals(true);
             ui->tabWidget->setCurrentWidget(ui->tabFlatpak);
             ui->tabWidget->blockSignals(false);
         } else {
+            setCursor(QCursor(Qt::ArrowCursor));
             QMessageBox::critical(this, tr("Error"), tr("Problem detected while installing, please inspect the console output."));
         }
     } else {
@@ -1600,6 +1603,7 @@ void MainWindow::on_buttonUninstall_clicked()
         QString cmd_str = "";
         bool success = true;
 
+        setCursor(QCursor(Qt::BusyCursor));
         foreach (QString app, change_list) {
             if (ui->cb_user_only->isChecked()) {
                 cmd_str = "su $(logname) -c \"flatpak uninstall --user " + app + "\"";
@@ -1611,6 +1615,8 @@ void MainWindow::on_buttonUninstall_clicked()
                 success = false;
             }
         }
+        setCursor(QCursor(Qt::ArrowCursor));
+
         if (success) { // success if all processed successfuly, failure if one failed
             displayFlatpaks();
             QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
@@ -1702,8 +1708,8 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         ui->searchBoxBP->setFocus();
         break;
     case 4: // Flatpak
-        setCursor(QCursor(Qt::BusyCursor));
         enableTabs(true);
+        setCurrentTree();
         ui->comboRemote->clear();
         ui->comboFilterBP->setCurrentIndex(0);
         ui->cb_user_only->setChecked(false);
@@ -1715,18 +1721,44 @@ void MainWindow::on_tabWidget_currentChanged(int index)
             }
             ui->tabWidget->setTabEnabled(ui->tabWidget->indexOf(ui->tabOutput), true);
             ui->tabWidget->setCurrentWidget(ui->tabOutput);
+            setCursor(QCursor(Qt::BusyCursor));
             install("flatpak");
             installed_packages = listInstalled();
-            buildPackageLists();
-            ui->tabWidget->setCurrentWidget(ui->tabFlatpak);
-            ui->tabWidget->setTabEnabled(ui->tabWidget->indexOf(ui->tabOutput), false);
+            if (!checkInstalled("flatpak")) {
+                QMessageBox::critical(this, tr("Flatpak not installed"), tr("Flatpak was not installed"));
+                ui->tabWidget->setCurrentIndex(0);
+                setCursor(QCursor(Qt::ArrowCursor));
+                break;
+            }
+            if (ui->treeStable) { // mark flatpak installed in stable tree
+                QHash<QString, VersionNumber> hashInstalled = listInstalledVersions();
+                VersionNumber installed = hashInstalled.value("flatpak");
+                QList<QTreeWidgetItem *> found_items  = ui->treeStable->findItems("flatpak", Qt::MatchExactly, 2);
+                foreach (QTreeWidgetItem *item, found_items) {
+                    for (int i = 0; i < ui->treeStable->columnCount(); ++i) {
+                        item->setForeground(2, QBrush(Qt::gray));
+                        item->setForeground(4, QBrush(Qt::gray));
+                        item->setToolTip(i, tr("Latest version ") + installed.toString() + tr(" already installed"));
+                    }
+                    item->setText(5, "installed");
+                }
+            }
+            cmd->run("flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo");
+            //cmd->run("su $(logname) -c \"flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo\"");
+            listFlatpakRemotes();
+            displayFlatpaks();
+            setCursor(QCursor(Qt::ArrowCursor));
             QMessageBox::warning(this, tr("Needs reboot"), tr("You might need to reboot to see installed items in the menu"));
+            ui->tabWidget->blockSignals(true);
+            ui->tabWidget->setCurrentWidget(ui->tabFlatpak);
+            ui->tabWidget->blockSignals(false);
+            break;
         }
-        setCurrentTree();
+        setCursor(QCursor(Qt::BusyCursor));
         cmd->run("flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo");
+        setCursor(QCursor(Qt::ArrowCursor));
         listFlatpakRemotes();
         displayFlatpaks();
-        setCursor(QCursor(Qt::ArrowCursor));
         break;
     case 5: // Output
         ui->buttonInstall->setDisabled(true);
@@ -1742,7 +1774,6 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 void MainWindow::filterChanged(const QString &arg1)
 {
     qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
-
     QList<QTreeWidgetItem *> found_items;
     QTreeWidgetItemIterator it(tree);
     tree->blockSignals(true);
@@ -1970,7 +2001,7 @@ void MainWindow::on_checkHideLibsBP_clicked(bool checked)
 
 
 // on change flatpack remote
-void MainWindow::on_comboRemote_activated()
+void MainWindow::on_comboRemote_activated(int)
 {
     displayFlatpaks();
 }

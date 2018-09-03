@@ -141,10 +141,8 @@ private slots:
     void on_lineEdit_returnPressed();
     void on_buttonCancel_clicked();
 
-    void on_comboRemote_activated();
-
+    void on_comboRemote_activated(int);
     void on_buttonUpgradeFP_clicked();
-
     void on_buttonRemotes_clicked();
 
     void on_cb_user_only_clicked(bool checked);
