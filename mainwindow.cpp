@@ -1597,8 +1597,6 @@ void MainWindow::on_buttonUninstall_clicked()
             ++it;
         }
     } else if (tree == ui->treeFlatpak) {
-        setConnections();
-
         QString cmd_str = "";
         bool success = true;
 
@@ -1608,6 +1606,7 @@ void MainWindow::on_buttonUninstall_clicked()
             } else { // try first to remove as system and then if it fails try as user
                 cmd_str = "flatpak uninstall " + app + " || su $(logname) -c \"flatpak uninstall --user " + app + "\"";
             }
+            setConnections();
             if (cmd->run(cmd_str) != 0) { // success if all processed successfuly, failure if one failed
                 success = false;
             }
