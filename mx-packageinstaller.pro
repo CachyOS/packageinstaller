@@ -33,13 +33,15 @@ SOURCES += main.cpp\
     mainwindow.cpp \
     lockfile.cpp \
     versionnumber.cpp \
-    aptcache.cpp
+    aptcache.cpp \
+    remotes.cpp
 
 HEADERS  += \
     mainwindow.h \
     lockfile.h \
     versionnumber.h \
-    aptcache.h
+    aptcache.h \
+    remotes.h
 
 FORMS    += \
     mainwindow.ui

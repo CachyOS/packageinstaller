@@ -1257,22 +1257,6 @@
           <enum>QFrame::Raised</enum>
          </property>
          <layout class="QGridLayout" name="gridLayout_7">
-          <item row="2" column="5">
-           <spacer name="horizontalSpacer_16">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeType">
-             <enum>QSizePolicy::Expanding</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>20</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
           <item row="2" column="4">
            <widget class="QLabel" name="labelNumInstFP">
             <property name="text">
@@ -1294,6 +1278,27 @@
             </property>
            </widget>
           </item>
+          <item row="2" column="3">
+           <widget class="QLabel" name="labelInstalled_4">
+            <property name="text">
+             <string>Installed:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="7">
+           <widget class="QPushButton" name="buttonUpgradeFP">
+            <property name="text">
+             <string>Upgrade All</string>
+            </property>
+            <property name="icon">
+             <iconset theme="system-upgrade">
+              <normaloff>.</normaloff>.</iconset>
+            </property>
+            <property name="autoDefault">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
           <item row="2" column="2">
            <spacer name="horizontalSpacer_15">
             <property name="orientation">
@@ -1310,21 +1315,29 @@
             </property>
            </spacer>
           </item>
-          <item row="2" column="3">
-           <widget class="QLabel" name="labelInstalled_4">
-            <property name="text">
-             <string>Installed:</string>
+          <item row="2" column="5">
+           <spacer name="horizontalSpacer_16">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
             </property>
-           </widget>
+            <property name="sizeType">
+             <enum>QSizePolicy::Expanding</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
           <item row="2" column="6">
-           <widget class="QPushButton" name="buttonUpgradeFP">
+           <widget class="QPushButton" name="buttonRemotes">
             <property name="text">
-             <string>Upgrade All</string>
+             <string>Manage Remotes</string>
             </property>
             <property name="icon">
-             <iconset theme="system-upgrade">
-              <normaloff>.</normaloff>.</iconset>
+             <iconset theme="configure"/>
             </property>
             <property name="autoDefault">
              <bool>false</bool>

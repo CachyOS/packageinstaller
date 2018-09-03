@@ -23,22 +23,24 @@
  * along with mx-packageinstaller.  If not, see <http://www.gnu.org/licenses/>.
  **********************************************************************/
 
-
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
-#include "versionnumber.h"
-#include "aptcache.h"
-
 #include <QFileDialog>
+#include <QImageReader>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QProgressBar>
 #include <QScrollBar>
 #include <QTextStream>
 #include <QtXml/QtXml>
-#include <QProgressBar>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QImageReader>
 
 #include <QDebug>
+
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
+
+#include "aptcache.h"
+#include "versionnumber.h"
+
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QDialog(parent),
@@ -655,6 +657,7 @@ void MainWindow::ifDownloadFailed()
 void MainWindow::listFlatpakRemotes()
 {
     qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    ui->comboRemote->clear();
     QStringList list = cmd->getOutput("flatpak remote-list").split("\n");
     ui->comboRemote->addItems(list);
     //set flathub default
@@ -1964,4 +1967,19 @@ void MainWindow::on_buttonUpgradeFP_clicked()
         QMessageBox::critical(this, tr("Error"), tr("Problem detected while installing, please inspect the console output."));
     }
     enableTabs(true);
+}
+
+void MainWindow::on_buttonRemotes_clicked()
+{
+    QStringList items;
+    for (int index = 0; index < ui->comboRemote->count(); index++) {
+        items << ui->comboRemote->itemText(index);
+    }
+
+    ManageRemotes *dialog = new ManageRemotes(items);
+    dialog->exec();
+    if (dialog->isChanged()) {
+        listFlatpakRemotes();
+        displayFlatpaks();
+    }
 }

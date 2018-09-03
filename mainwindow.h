@@ -37,8 +37,9 @@
 #include <QTreeWidgetItem>
 
 #include <cmd.h>
-#include <lockfile.h>
-#include <versionnumber.h>
+#include "remotes.h"
+#include "lockfile.h"
+#include "versionnumber.h"
 
 namespace Ui {
 class MainWindow;
@@ -143,6 +144,8 @@ private slots:
     void on_comboRemote_activated();
 
     void on_buttonUpgradeFP_clicked();
+
+    void on_buttonRemotes_clicked();
 
 private:
     bool updated_once;

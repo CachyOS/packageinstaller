@@ -23,16 +23,18 @@
  * along with mx-packageinstaller.  If not, see <http://www.gnu.org/licenses/>.
  **********************************************************************/
 
-#include "mainwindow.h"
-#include "lockfile.h"
-#include <unistd.h>
-
 #include <QApplication>
 #include <QTranslator>
 #include <QLocale>
 #include <QIcon>
 
 #include <QDebug>
+
+#include "mainwindow.h"
+#include "lockfile.h"
+#include <unistd.h>
+
+
 
 
 int main(int argc, char *argv[])
