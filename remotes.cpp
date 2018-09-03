@@ -8,7 +8,8 @@
 
 #include <QDebug>
 
-ManageRemotes::ManageRemotes(const QStringList& items)
+ManageRemotes::ManageRemotes(QWidget *parent, const QStringList& items) :
+    QDialog(parent)
 {
     setWindowTitle(tr("Manage Flatpak Remotes"));
     changed = false;

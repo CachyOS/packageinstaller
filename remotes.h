@@ -8,7 +8,7 @@ class ManageRemotes : public QDialog
 {
     Q_OBJECT
 public:
-    explicit ManageRemotes(const QStringList &items);
+    explicit ManageRemotes(QWidget *parent = 0, const QStringList &items = QStringList());
     bool isChanged();
 
 signals:

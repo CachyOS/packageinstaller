@@ -1976,7 +1976,7 @@ void MainWindow::on_buttonRemotes_clicked()
         items << ui->comboRemote->itemText(index);
     }
 
-    ManageRemotes *dialog = new ManageRemotes(items);
+    ManageRemotes *dialog = new ManageRemotes(this, items);
     dialog->exec();
     if (dialog->isChanged()) {
         listFlatpakRemotes();
