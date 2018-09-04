@@ -1,3 +1,6 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
 Format: 1.8
 Date: Sun, 02 Sep 2018 16:16:17 -0400
 Source: mx-packageinstaller
@@ -15,17 +18,29 @@ Changes:
  .
    * add Flatpak manager tab
 Checksums-Sha1:
- acc18ebcb4f77044ee63cc1c191b4e8720677ad1 673 mx-packageinstaller_18.9.dsc
- 2586450a7998154fcd1f245f20f47c6bd53ae2d0 83132 mx-packageinstaller_18.9.tar.xz
- 394f99950a4d52df9b7cbae9708a3b458ed3978a 10702 mx-packageinstaller_18.9_amd64.buildinfo
- 15a6fa9e2168e5115fc77b33d898215029c162cf 148136 mx-packageinstaller_18.9_amd64.deb
+ 804f9c6aa13eb50a5f20104ff19394039dff6262 1235 mx-packageinstaller_18.9.dsc
+ 8e3aeb03a554edf6a8e8423e92995f1d82e15c4d 83164 mx-packageinstaller_18.9.tar.xz
+ 478ea1f690bf577ed6211d38c6225379078e8e23 11267 mx-packageinstaller_18.9_amd64.buildinfo
+ 640c1e40ebd4f848f58f1df6382f72f817bc685e 148128 mx-packageinstaller_18.9_amd64.deb
 Checksums-Sha256:
- 614690ba9891215942bc168b38ac9dacee1c2952b660e997a6fd4ce03ee47dcb 673 mx-packageinstaller_18.9.dsc
- 14b16a97ed75314f43a6c5d3432361d1ba55ec37008d80f58e6e31a73bb0da65 83132 mx-packageinstaller_18.9.tar.xz
- 39c157041773d4077f253270779f955d85c0cbff55ac3c7fd2ede552b7a8c8b6 10702 mx-packageinstaller_18.9_amd64.buildinfo
- 64084a8bc42f8f37ef0990d343e04d7c6876c528a8a27ed847212f78da408aa7 148136 mx-packageinstaller_18.9_amd64.deb
+ b9b29e1147520b4e5bb1292c2d856dcf0af65f8821ac6ca377c0a8bed4327d00 1235 mx-packageinstaller_18.9.dsc
+ 3f1d6c591b9f6e7b2396a7d6e6bfbd3bf1c373458571759c4876974a3546abdb 83164 mx-packageinstaller_18.9.tar.xz
+ 60c8ac7ff8ad0305495799282755f84fec0bb721ed2a0268a580375c9774faa9 11267 mx-packageinstaller_18.9_amd64.buildinfo
+ 35136b4d0e3b252bccba867f2619033e08ef061d165c9f9b96a17e8c38a26e88 148128 mx-packageinstaller_18.9_amd64.deb
 Files:
- be398973b63e7ff893fecb0a4296c4a1 673 admin optional mx-packageinstaller_18.9.dsc
- 03af34cb222f59ff6dcd0be943e34775 83132 admin optional mx-packageinstaller_18.9.tar.xz
- e8970cb7c915f1c17729384d45292621 10702 admin optional mx-packageinstaller_18.9_amd64.buildinfo
- b8354e053ebca6e302e02893f94f5844 148136 admin optional mx-packageinstaller_18.9_amd64.deb
+ f3500ca70adf4aa0ee2a03fb99972e54 1235 admin optional mx-packageinstaller_18.9.dsc
+ d480ff07efaf4dfa35e0fb982c780bee 83164 admin optional mx-packageinstaller_18.9.tar.xz
+ 762810155109a95b156cbd2d517b73c8 11267 admin optional mx-packageinstaller_18.9_amd64.buildinfo
+ d9b126e93a18ca7362d0c31f8a345e81 148128 admin optional mx-packageinstaller_18.9_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCAAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAluOxwATHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumN/qB/9mGtWc392ozFJNUv+Aq6SeZX/y7OWa
+2PlSZ6Lu4keq+p7nK6EbSNZ+h04O8+uYluznDLpNu8te+eX3ymv43ANBLtZIj4BW
+rSgbxnagyieM5PxD36I4GsgfxrRJx38rJ5i2Na1jtIKTfJxsHRrK2EultXZAKOF4
+47jaVdGVMr+SuKAmNs60p6sD2ruylUbhPKlvk3+dgMbrOA2KwuPH5peGzaECxon6
+KMDZZAKqQtBJAgDyZHx1YpDL/q5sBHQPe85511+X5RA/5rkBZfF47/2rtLTervBy
+SoAJ2dWB/jPXmfKetDfnT69Uf+vnrwpKLUsD6lmjgLv0V0uWi4h4B3rb
+=awxV
+-----END PGP SIGNATURE-----

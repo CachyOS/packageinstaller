@@ -73,7 +73,7 @@
         <location filename="../mainwindow.ui" line="911"/>
         <location filename="../mainwindow.ui" line="1168"/>
         <location filename="../mainwindow.ui" line="1172"/>
-        <location filename="../mainwindow.cpp" line="1780"/>
+        <location filename="../mainwindow.cpp" line="1781"/>
         <source>All packages</source>
         <translation type="unfinished"></translation>
     </message>
@@ -82,8 +82,8 @@
         <location filename="../mainwindow.ui" line="584"/>
         <location filename="../mainwindow.ui" line="916"/>
         <location filename="../mainwindow.ui" line="1182"/>
-        <location filename="../mainwindow.cpp" line="1794"/>
-        <location filename="../mainwindow.cpp" line="1891"/>
+        <location filename="../mainwindow.cpp" line="1795"/>
+        <location filename="../mainwindow.cpp" line="1892"/>
         <source>Installed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -91,7 +91,7 @@
         <location filename="../mainwindow.ui" line="185"/>
         <location filename="../mainwindow.ui" line="589"/>
         <location filename="../mainwindow.ui" line="921"/>
-        <location filename="../mainwindow.cpp" line="1792"/>
+        <location filename="../mainwindow.cpp" line="1793"/>
         <source>Upgradable</source>
         <translation type="unfinished"></translation>
     </message>
@@ -100,8 +100,8 @@
         <location filename="../mainwindow.ui" line="594"/>
         <location filename="../mainwindow.ui" line="926"/>
         <location filename="../mainwindow.ui" line="1187"/>
-        <location filename="../mainwindow.cpp" line="1796"/>
-        <location filename="../mainwindow.cpp" line="1895"/>
+        <location filename="../mainwindow.cpp" line="1797"/>
+        <location filename="../mainwindow.cpp" line="1896"/>
         <source>Not installed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -195,7 +195,7 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1177"/>
-        <location filename="../mainwindow.cpp" line="1801"/>
+        <location filename="../mainwindow.cpp" line="1802"/>
         <source>Installed runtimes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -217,6 +217,7 @@
     <message>
         <location filename="../mainwindow.ui" line="1403"/>
         <location filename="../mainwindow.cpp" line="1656"/>
+        <location filename="../mainwindow.cpp" line="1754"/>
         <source>Console Output</source>
         <translation type="unfinished"></translation>
     </message>
@@ -273,7 +274,7 @@
     <message>
         <location filename="../mainwindow.ui" line="1571"/>
         <location filename="../mainwindow.cpp" line="1569"/>
-        <location filename="../mainwindow.cpp" line="1887"/>
+        <location filename="../mainwindow.cpp" line="1888"/>
         <source>Install</source>
         <translation type="unfinished"></translation>
     </message>
@@ -317,8 +318,8 @@
         <location filename="../mainwindow.cpp" line="1472"/>
         <location filename="../mainwindow.cpp" line="1627"/>
         <location filename="../mainwindow.cpp" line="1647"/>
-        <location filename="../mainwindow.cpp" line="1971"/>
-        <location filename="../mainwindow.cpp" line="2036"/>
+        <location filename="../mainwindow.cpp" line="1972"/>
+        <location filename="../mainwindow.cpp" line="2037"/>
         <source>Error</source>
         <translation>त्रुटि</translation>
     </message>
@@ -438,8 +439,8 @@
         <location filename="../mainwindow.cpp" line="1456"/>
         <location filename="../mainwindow.cpp" line="1469"/>
         <location filename="../mainwindow.cpp" line="1622"/>
-        <location filename="../mainwindow.cpp" line="1967"/>
-        <location filename="../mainwindow.cpp" line="2033"/>
+        <location filename="../mainwindow.cpp" line="1968"/>
+        <location filename="../mainwindow.cpp" line="2034"/>
         <source>Done</source>
         <translation type="unfinished"></translation>
     </message>
@@ -449,8 +450,8 @@
         <location filename="../mainwindow.cpp" line="1469"/>
         <location filename="../mainwindow.cpp" line="1622"/>
         <location filename="../mainwindow.cpp" line="1640"/>
-        <location filename="../mainwindow.cpp" line="1967"/>
-        <location filename="../mainwindow.cpp" line="2033"/>
+        <location filename="../mainwindow.cpp" line="1968"/>
+        <location filename="../mainwindow.cpp" line="2034"/>
         <source>Processing finished successfully.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -458,8 +459,8 @@
         <location filename="../mainwindow.cpp" line="1448"/>
         <location filename="../mainwindow.cpp" line="1462"/>
         <location filename="../mainwindow.cpp" line="1472"/>
-        <location filename="../mainwindow.cpp" line="1971"/>
-        <location filename="../mainwindow.cpp" line="2036"/>
+        <location filename="../mainwindow.cpp" line="1972"/>
+        <location filename="../mainwindow.cpp" line="2037"/>
         <source>Problem detected while installing, please inspect the console output.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -547,27 +548,27 @@ OK to go ahead and install it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1885"/>
+        <location filename="../mainwindow.cpp" line="1886"/>
         <source>Upgrade</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1997"/>
+        <location filename="../mainwindow.cpp" line="1998"/>
         <source>Quit?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1998"/>
+        <location filename="../mainwindow.cpp" line="1999"/>
         <source>Process still running, quiting might leave the system in an instable state.&lt;p&gt;&lt;b&gt;Are you sure you want to exit MX Package Installer?&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1999"/>
+        <location filename="../mainwindow.cpp" line="2000"/>
         <source>Yes</source>
         <translation>हाँ</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1999"/>
+        <location filename="../mainwindow.cpp" line="2000"/>
         <source>No</source>
         <translation>नहीं</translation>
     </message>

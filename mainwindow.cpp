@@ -1751,6 +1751,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
             ui->tabWidget->blockSignals(true);
             ui->tabWidget->setCurrentWidget(ui->tabFlatpak);
             ui->tabWidget->blockSignals(false);
+            ui->tabWidget->setTabText(ui->tabWidget->indexOf(ui->tabOutput), tr("Console Output"));
             break;
         }
         setCursor(QCursor(Qt::BusyCursor));
