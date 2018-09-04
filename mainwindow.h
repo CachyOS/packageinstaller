@@ -75,8 +75,9 @@ public:
     void clearUi();
     void copyTree(QTreeWidget *, QTreeWidget *) const;
     void displayPopularApps() const;
-    void displayPackages();
+    void displayFiltered(const QStringList &list) const;
     void displayFlatpaks();
+    void displayPackages();
     void displayWarning();
     void enableTabs(bool enable);
     void ifDownloadFailed();
@@ -144,8 +145,7 @@ private slots:
     void on_comboRemote_activated(int);
     void on_buttonUpgradeFP_clicked();
     void on_buttonRemotes_clicked();
-
-    void on_cb_user_only_clicked(bool checked);
+    void on_cb_user_activated(int index);
 
 private:
     bool updated_once;

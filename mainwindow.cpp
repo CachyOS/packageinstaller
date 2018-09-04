@@ -479,6 +479,24 @@ void MainWindow::displayPopularApps() const
 }
 
 
+// Display only the listed apps
+void MainWindow::displayFiltered(const QStringList &list) const
+{
+    QTreeWidgetItemIterator it(tree);
+    while (*it) {
+        if (list.contains((*it)->text(2))) {
+            (*it)->setHidden(false);
+            (*it)->setText(6, "true"); // Displayed flag
+        } else {
+            (*it)->setHidden(true);
+            (*it)->setText(6, "false");
+            (*it)->setCheckState(0, Qt::Unchecked); // uncheck hidden items
+        }
+        ++it;
+    }
+}
+
+
 // Display available packages
 void MainWindow::displayPackages()
 {
@@ -1211,7 +1229,7 @@ QStringList MainWindow::listFlatpaks(const QString remote) const
     QStringList list = cmd->getOutput("su $(logname) -c \"flatpak remote-ls " + user + remote + "\"").remove(" ").split("\n");
     QStringList updated_list;
     foreach (QString item, list) {  // remove .Debug and .Sources
-        if (!item.endsWith(".Debug") && !item.endsWith(".Sources")) {
+        if (!item.endsWith(".Debug") && !item.endsWith(".Sources") && !item.endsWith(".Locale")) {
             updated_list << item;
         }
     }
@@ -1712,7 +1730,8 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         setCurrentTree();
         ui->comboRemote->clear();
         ui->comboFilterBP->setCurrentIndex(0);
-        ui->cb_user_only->setChecked(false);
+        ui->cb_user->setCurrentIndex(0);
+
         if(!checkInstalled("flatpak")) {
             int ans = QMessageBox::question(this, tr("Flatpak not installed"), tr("Flatpak is not currently installed.\nOK to go ahead and install it?"));
             if (ans == QMessageBox::No) {
@@ -1801,17 +1820,11 @@ void MainWindow::filterChanged(const QString &arg1)
     if (tree == ui->treeFlatpak) {
         if (arg1 == tr("Installed runtimes")) {
             QStringList runtimes = cmd->getOutput("su $(logname) -c \"flatpak list --runtime " + user + "\"").remove(" ").split("\n");
-            while (*it) {
-                if (runtimes.contains((*it)->text(2))) {
-                    (*it)->setHidden(false);
-                    (*it)->setText(6, "true"); // Displayed flag
-                } else {
-                    (*it)->setHidden(true);
-                    (*it)->setText(6, "false");
-                    (*it)->setCheckState(0, Qt::Unchecked); // uncheck hidden items
-                }
-                ++it;
-            }
+            displayFiltered(runtimes);
+            return;
+        } else if (arg1 == tr("Installed packages")) {
+            QStringList apps = cmd->getOutput("su $(logname) -c \"flatpak list " + user + "\"").remove(" ").split("\n");
+            displayFiltered(apps);
             return;
         }
     }
@@ -2054,15 +2067,15 @@ void MainWindow::on_buttonRemotes_clicked()
     }
 }
 
-void MainWindow::on_cb_user_only_clicked(bool checked)
+void MainWindow::on_cb_user_activated(int index)
 {
-    if (checked) {
+    if (index == 0) {
+        user = "--system ";
+    } else {
         user = "--user ";
         setCursor(QCursor(Qt::BusyCursor));
         cmd->run("su $(logname) -c \"flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo\"");
         setCursor(QCursor(Qt::ArrowCursor));
-    } else {
-        user = "--system ";
     }
     listFlatpakRemotes();
     displayFlatpaks();

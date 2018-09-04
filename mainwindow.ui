@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1261</width>
+    <width>1031</width>
     <height>528</height>
    </rect>
   </property>
@@ -1144,7 +1144,7 @@
        <string>Flatpaks</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_8">
-       <item row="1" column="7">
+       <item row="1" column="9">
         <widget class="QComboBox" name="comboFilterFlatpak">
          <property name="enabled">
           <bool>true</bool>
@@ -1174,12 +1174,12 @@
          </item>
          <item>
           <property name="text">
-           <string>Installed runtimes</string>
+           <string>Installed packages</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Installed</string>
+           <string>Installed runtimes</string>
           </property>
          </item>
          <item>
@@ -1189,7 +1189,7 @@
          </item>
         </widget>
        </item>
-       <item row="2" column="7">
+       <item row="2" column="9">
         <widget class="QLineEdit" name="searchBoxFlatpak">
          <property name="minimumSize">
           <size>
@@ -1211,7 +1211,7 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="0" colspan="8">
+       <item row="3" column="0" colspan="10">
         <widget class="QTreeWidget" name="treeFlatpak">
          <property name="sortingEnabled">
           <bool>false</bool>
@@ -1253,7 +1253,7 @@
          </column>
         </widget>
        </item>
-       <item row="4" column="0" colspan="8">
+       <item row="4" column="0" colspan="10">
         <widget class="QFrame" name="frame_4">
          <property name="frameShape">
           <enum>QFrame::StyledPanel</enum>
@@ -1350,17 +1350,27 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="6">
-           <widget class="QCheckBox" name="cb_user_only">
-            <property name="text">
-             <string>Only for current user</string>
-            </property>
-           </widget>
-          </item>
          </layout>
         </widget>
        </item>
-       <item row="2" column="0">
+       <item row="1" column="0">
+        <widget class="QComboBox" name="cb_user">
+         <property name="currentText">
+          <string>For all users</string>
+         </property>
+         <item>
+          <property name="text">
+           <string>For all users</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>For current user</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
         <widget class="QLabel" name="label_8">
          <property name="text">
           <string>Greyed out items have already been installed.</string>
@@ -1373,24 +1383,27 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="3">
+       <item row="1" column="8">
         <widget class="QComboBox" name="comboRemote"/>
        </item>
-       <item row="1" column="2">
+       <item row="1" column="7">
         <widget class="QLabel" name="label_9">
          <property name="text">
           <string>Remote:</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="0" colspan="2">
+       <item row="1" column="1" colspan="6">
         <spacer name="horizontalSpacer_14">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Expanding</enum>
+         </property>
          <property name="sizeHint" stdset="0">
           <size>
-           <width>808</width>
+           <width>40</width>
            <height>26</height>
           </size>
          </property>
@@ -1517,6 +1530,22 @@
        </property>
       </spacer>
      </item>
+     <item row="0" column="5">
+      <spacer name="horizontalSpacer2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Expanding</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
      <item row="0" column="1">
       <widget class="QPushButton" name="buttonHelp">
        <property name="sizePolicy">
@@ -1542,22 +1571,6 @@
         <bool>false</bool>
        </property>
       </widget>
-     </item>
-     <item row="0" column="5">
-      <spacer name="horizontalSpacer2">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Expanding</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
      </item>
      <item row="0" column="7">
       <widget class="QPushButton" name="buttonInstall">
