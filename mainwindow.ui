@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1167</width>
+    <width>1261</width>
     <height>528</height>
    </rect>
   </property>
@@ -1170,6 +1170,11 @@
          <item>
           <property name="text">
            <string>All packages</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Installed runtimes</string>
           </property>
          </item>
          <item>

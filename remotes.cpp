@@ -14,6 +14,7 @@ ManageRemotes::ManageRemotes(QWidget *parent, const QStringList& items) :
     setWindowTitle(tr("Manage Flatpak Remotes"));
     changed = false;
     cmd = new Cmd(this);
+    user = "--system ";
 
     QGridLayout *layout = new QGridLayout();
     setLayout(layout);
@@ -71,7 +72,7 @@ void ManageRemotes::removeItem()
         return;
     }
     changed = true;
-    cmd->run(run_as_user + "flatpak remote-delete " + user_switch + box->currentText().toUtf8() + end_quote);
+    cmd->run("su $(logname) -c \"flatpak remote-delete " + user + box->currentText().toUtf8() + "\"");
     box->removeItem(box->currentIndex());
 }
 
@@ -81,7 +82,7 @@ void ManageRemotes::addItem()
     QString location = edit->text();
     QString name = edit->text().section("/", -1).section(".", 0, 0); // obtain the name before .flatpakremo
 
-    if (cmd->run(run_as_user + "flatpak remote-add --if-not-exists " + user_switch + name.toUtf8() + " " + location.toUtf8() + end_quote) != 0) {
+    if (cmd->run("su $(logname) -c \"flatpak remote-add --if-not-exists " + user + name.toUtf8() + " " + location.toUtf8() + "\"") != 0) {
         setCursor(QCursor(Qt::ArrowCursor));
         QMessageBox::critical(this, tr("Error adding remote"), tr("Could not add remote. Command returned an error, please double-check the remote address and try again"));
     } else {
@@ -96,16 +97,12 @@ void ManageRemotes::addItem()
 void ManageRemotes::userSelected(bool selected)
 {
     if (selected) {
-        run_as_user = "su $(logname) -c \"";
-        user_switch = "--user ";
-        end_quote = "\"";
+        user = "--user ";
         setCursor(QCursor(Qt::BusyCursor));
-        cmd->run(run_as_user + "flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo" + end_quote);
+        cmd->run("su $(logname) -c \"flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo\"");
         setCursor(QCursor(Qt::ArrowCursor));
     } else {
-        run_as_user.clear();
-        user_switch.clear();
-        end_quote.clear();
+        user = "--system ";
     }
     listFlatpakRemotes();
 }
@@ -116,6 +113,6 @@ void ManageRemotes::listFlatpakRemotes()
 {
     qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
     box->clear();
-    QStringList list = cmd->getOutput(run_as_user + "flatpak remote-list " +  user_switch + end_quote).split("\n");
+    QStringList list = cmd->getOutput("su $(logname) -c \"flatpak remote-list " +  user + "\"").split("\n");
     box->addItems(list);
 }

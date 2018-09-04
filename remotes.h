@@ -28,9 +28,7 @@ private:
     QComboBox *box;
     QLineEdit *edit;
     QCheckBox *cb_user;
-    QString run_as_user;
-    QString user_switch;
-    QString end_quote;
+    QString user;
 };
 
 #endif // REMOTES_H

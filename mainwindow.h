@@ -164,9 +164,7 @@ private:
     QString stable_raw;
     QString tmp_dir;
     QString ver_name;
-    QString run_as_user;
-    QString user_switch;
-    QString end_quote;
+    QString user;
     QStringList installed_packages;
     QStringList change_list;
     QMap<QString, QStringList> backports_list;
