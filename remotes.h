@@ -11,24 +11,29 @@ class ManageRemotes : public QDialog
 {
     Q_OBJECT
 public:
-    explicit ManageRemotes(QWidget *parent = 0, const QStringList &items = QStringList());
-    bool isChanged();
-    void listFlatpakRemotes();
+    explicit ManageRemotes(QWidget *parent = 0);
+    bool isChanged() const;
+    void listFlatpakRemotes() const;
+    QString getInstallRef() const;
+    QString getUser() const;
 
 signals:
 
 public slots:
     void removeItem();
     void addItem();
-    void userSelected(bool selected);
+    void setInstall();
+    void userSelected(int selected);
 
 private:
     bool changed;
     Cmd *cmd;
-    QComboBox *box;
-    QLineEdit *edit;
-    QCheckBox *cb_user;
+    QComboBox *comboRemote;
+    QComboBox *comboUser;
+    QLineEdit *editAddRemote;
+    QLineEdit *editInstallFlatpakref;
     QString user;
+    QString install_ref;
 };
 
 #endif // REMOTES_H

@@ -604,13 +604,23 @@ void MainWindow::displayFlatpaks()
     ui->comboFilterFlatpak->setCurrentIndex(0);
     ui->treeFlatpak->blockSignals(true);
     change_list.clear();
+    ui->buttonRemotes->setEnabled(false);
+    ui->buttonUpgradeFP->setEnabled(false);
 
     QStringList flatpaks = listFlatpaks(ui->comboRemote->currentText());
 
     // list installed packages
-    QStringList installed = cmd->getOutput("su $(logname) -c \"flatpak list " + user + "\"").remove(" ").split("\n");
+    QString installed = cmd->getOutput("su $(logname) -c \"flatpak list " + user + "\"").remove(" ");
+    QStringList installed_list;
+    if (!installed.isEmpty()) {
+        installed_list << installed.split("\n");
+    }
+
     // add runtimes
-    installed << cmd->getOutput("su $(logname) -c \"flatpak list --runtime " + user + "\"").remove(" ").split("\n");
+    QString runtimes = cmd->getOutput("su $(logname) -c \"flatpak list --runtime " + user + "\"").remove(" ");
+    if (!runtimes.isEmpty()) {
+        installed_list << runtimes.split("\n");
+    }
 
     int total_count = 0;
     int inst_count = 0;
@@ -621,7 +631,7 @@ void MainWindow::displayFlatpaks()
         widget_item = new QTreeWidgetItem(ui->treeFlatpak);
         widget_item->setCheckState(0, Qt::Unchecked);
         widget_item->setText(2, name);
-        if (installed.contains(name)) {
+        if (installed_list.contains(name)) {
             inst_count++;
             widget_item->setForeground(2, QBrush(Qt::gray));
             widget_item->setText(5, "installed");
@@ -641,6 +651,8 @@ void MainWindow::displayFlatpaks()
     ui->searchBoxFlatpak->clear();
     ui->searchBoxFlatpak->setFocus();
     ui->treeFlatpak->blockSignals(false);
+    ui->buttonRemotes->setEnabled(true);
+    ui->buttonUpgradeFP->setEnabled(true);
 }
 
 // Display warning for Debian Backports
@@ -684,7 +696,7 @@ void MainWindow::listFlatpakRemotes()
 {
     qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
     ui->comboRemote->clear();
-    QStringList list = cmd->getOutput("su $(logname) -c \"flatpak remote-list " +  user + "\"").split("\n");
+    QStringList list = cmd->getOutput("su $(logname) -c \"flatpak remote-list " +  user + "\"").remove(" ").split("\n");
     ui->comboRemote->addItems(list);
     //set flathub default
     ui->comboRemote->setCurrentIndex(ui->comboRemote->findText("flathub"));
@@ -1216,6 +1228,7 @@ bool MainWindow::checkUpgradable(const QStringList &name_list) const
 // Returns list of all installed packages
 QStringList MainWindow::listInstalled() const
 {
+    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
     QString str = cmd->getOutput("dpkg --get-selections | grep -v deinstall | cut -f1", QStringList() << "slowtick" << "quiet");
     str.remove(":i386");
     str.remove(":amd64");
@@ -1226,7 +1239,12 @@ QStringList MainWindow::listInstalled() const
 // Return list flatpaks from current remote
 QStringList MainWindow::listFlatpaks(const QString remote) const
 {
+    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
     QStringList list = cmd->getOutput("su $(logname) -c \"flatpak remote-ls " + user + remote + "\"").remove(" ").split("\n");
+    if (cmd->getExitCode(true) != 0) {
+        qDebug() << "Could not list packages from remote" << remote;
+        return QStringList();
+    }
     QStringList updated_list;
     foreach (QString item, list) {  // remove .Debug and .Sources
         if (!item.endsWith(".Debug") && !item.endsWith(".Sources") && !item.endsWith(".Locale")) {
@@ -1730,7 +1748,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         setCurrentTree();
         ui->comboRemote->clear();
         ui->comboFilterBP->setCurrentIndex(0);
-        ui->cb_user->setCurrentIndex(0);
+        ui->comboUser->setCurrentIndex(0);
 
         if(!checkInstalled("flatpak")) {
             int ans = QMessageBox::question(this, tr("Flatpak not installed"), tr("Flatpak is not currently installed.\nOK to go ahead and install it?"));
@@ -2034,6 +2052,7 @@ void MainWindow::on_checkHideLibsBP_clicked(bool checked)
 // on change flatpack remote
 void MainWindow::on_comboRemote_activated(int)
 {
+    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
     displayFlatpaks();
 }
 
@@ -2054,20 +2073,33 @@ void MainWindow::on_buttonUpgradeFP_clicked()
 
 void MainWindow::on_buttonRemotes_clicked()
 {
-    QStringList items;
-    for (int index = 0; index < ui->comboRemote->count(); index++) {
-        items << ui->comboRemote->itemText(index);
-    }
-
     ManageRemotes *dialog = new ManageRemotes(this);
     dialog->exec();
     if (dialog->isChanged()) {
         listFlatpakRemotes();
         displayFlatpaks();
     }
+    if (!dialog->getInstallRef().isEmpty()) {
+        showOutput();
+        setConnections();
+        setCursor(QCursor(Qt::BusyCursor));
+        if (cmd->run("su $(logname) -c \"flatpak install -y " + dialog->getUser() + "--from " + dialog->getInstallRef() + "\"") == 0) {
+            listFlatpakRemotes();
+            displayFlatpaks();
+            setCursor(QCursor(Qt::ArrowCursor));
+            QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
+            ui->tabWidget->blockSignals(true);
+            ui->tabWidget->setCurrentWidget(ui->tabFlatpak);
+            ui->tabWidget->blockSignals(false);
+        } else {
+            setCursor(QCursor(Qt::ArrowCursor));
+            QMessageBox::critical(this, tr("Error"), tr("Problem detected while installing, please inspect the console output."));
+        }
+        enableTabs(true);
+    }
 }
 
-void MainWindow::on_cb_user_activated(int index)
+void MainWindow::on_comboUser_activated(int index)
 {
     if (index == 0) {
         user = "--system ";

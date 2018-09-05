@@ -145,7 +145,7 @@ private slots:
     void on_comboRemote_activated(int);
     void on_buttonUpgradeFP_clicked();
     void on_buttonRemotes_clicked();
-    void on_cb_user_activated(int index);
+    void on_comboUser_activated(int index);
 
 private:
     bool updated_once;

@@ -1339,7 +1339,7 @@
           <item row="2" column="7">
            <widget class="QPushButton" name="buttonRemotes">
             <property name="text">
-             <string>Manage Remotes</string>
+             <string>Advanced</string>
             </property>
             <property name="icon">
              <iconset theme="configure">
@@ -1354,7 +1354,7 @@
         </widget>
        </item>
        <item row="1" column="0">
-        <widget class="QComboBox" name="cb_user">
+        <widget class="QComboBox" name="comboUser">
          <property name="currentText">
           <string>For all users</string>
          </property>
@@ -1384,7 +1384,14 @@
         </widget>
        </item>
        <item row="1" column="8">
-        <widget class="QComboBox" name="comboRemote"/>
+        <widget class="QComboBox" name="comboRemote">
+         <property name="minimumSize">
+          <size>
+           <width>150</width>
+           <height>0</height>
+          </size>
+         </property>
+        </widget>
        </item>
        <item row="1" column="7">
         <widget class="QLabel" name="label_9">
