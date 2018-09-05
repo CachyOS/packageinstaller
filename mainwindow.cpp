@@ -1784,7 +1784,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
             listFlatpakRemotes();
             displayFlatpaks();
             setCursor(QCursor(Qt::ArrowCursor));
-            QMessageBox::warning(this, tr("Needs reboot"), tr("You might need to reboot to see installed items in the menu"));
+            QMessageBox::warning(this, tr("Needs re-login"), tr("You might need to logout/login to see installed items in the menu"));
             ui->tabWidget->blockSignals(true);
             ui->tabWidget->setCurrentWidget(ui->tabFlatpak);
             ui->tabWidget->blockSignals(false);

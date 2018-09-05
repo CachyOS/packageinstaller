@@ -541,7 +541,12 @@
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1787"/>
-        <source>You might need to reboot to see installed items in the menu</source>
+        <source>Needs re-login</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.cpp" line="1787"/>
+        <source>You might need to logout/login to see installed items in the menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -559,11 +564,6 @@
         <location filename="../mainwindow.cpp" line="1754"/>
         <source>Flatpak is not currently installed.
 OK to go ahead and install it?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.cpp" line="1787"/>
-        <source>Needs reboot</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
