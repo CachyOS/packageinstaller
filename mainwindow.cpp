@@ -1757,6 +1757,8 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         ui->comboRemote->clear();
         ui->comboFilterBP->setCurrentIndex(0);
         ui->comboUser->setCurrentIndex(0);
+        ui->buttonRemotes->setDisabled(true);
+        ui->buttonUpgradeFP->setDisabled(true);
 
         if(!checkInstalled("flatpak")) {
             int ans = QMessageBox::question(this, tr("Flatpak not installed"), tr("Flatpak is not currently installed.\nOK to go ahead and install it?"));
@@ -1789,6 +1791,12 @@ void MainWindow::on_tabWidget_currentChanged(int index)
                 }
             }
             cmd->run("su $(logname) -c \"flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo\"");
+            if (cmd->getExitCode(true) != 0) {
+                QMessageBox::critical(this, tr("Flathub remote failed"), tr("Flathub remote could not be added"));
+                ui->tabWidget->setCurrentIndex(0);
+                setCursor(QCursor(Qt::ArrowCursor));
+                break;
+            }
             listFlatpakRemotes();
             displayFlatpaks();
             setCursor(QCursor(Qt::ArrowCursor));
@@ -1801,6 +1809,12 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         }
         setCursor(QCursor(Qt::BusyCursor));
         cmd->run("su $(logname) -c \"flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo\"");
+        if (cmd->getExitCode(true) != 0) {
+            QMessageBox::critical(this, tr("Flathub remote failed"), tr("Flathub remote could not be added"));
+            ui->tabWidget->setCurrentIndex(0);
+            setCursor(QCursor(Qt::ArrowCursor));
+            break;
+        }
         setCursor(QCursor(Qt::ArrowCursor));
         listFlatpakRemotes();
         displayFlatpaks();
