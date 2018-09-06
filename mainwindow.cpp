@@ -600,6 +600,8 @@ void MainWindow::displayPackages()
 void MainWindow::displayFlatpaks()
 {
     qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+
+    setCursor(QCursor(Qt::BusyCursor));
     ui->treeFlatpak->clear();
     ui->comboFilterFlatpak->setCurrentIndex(0);
     ui->treeFlatpak->blockSignals(true);
@@ -653,6 +655,7 @@ void MainWindow::displayFlatpaks()
     ui->treeFlatpak->blockSignals(false);
     ui->buttonRemotes->setEnabled(true);
     ui->buttonUpgradeFP->setEnabled(true);
+    setCursor(QCursor(Qt::ArrowCursor));
 }
 
 // Display warning for Debian Backports

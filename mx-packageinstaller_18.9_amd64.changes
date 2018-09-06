@@ -18,29 +18,26 @@ Changes:
  .
    * add Flatpak manager tab
 Checksums-Sha1:
- 2fa8368b81e7b21264ed318baf934203758d2802 1235 mx-packageinstaller_18.9.dsc
- c606755a0edddad4b03dade34fec4cf3cf33fbdd 83984 mx-packageinstaller_18.9.tar.xz
- fe34e3d73f70b71d5458286a83b6c95eb17d0df5 11267 mx-packageinstaller_18.9_amd64.buildinfo
- 813f73a31cfd4a2361aa15808d4961bf0db44631 150702 mx-packageinstaller_18.9_amd64.deb
+ a7c30eaf1d599d4e5b4e8d62ac28d4e9d010aa9e 1235 mx-packageinstaller_18.9.dsc
+ d254be258bb020ed7071cab1729629f9de2ba6a2 84156 mx-packageinstaller_18.9.tar.xz
+ 12f74fdc8ad8a21bacc53d5f2ff7b3128a06f0d4 150260 mx-packageinstaller_18.9_amd64.deb
 Checksums-Sha256:
- 175ad3503f2cc599610a4c85d1aed1fef687a479fa19ec575172965dc549bc1e 1235 mx-packageinstaller_18.9.dsc
- 62bc2ac7bd4df8e98e7632ca1714d8f4fdfcdf2e1212407e40816a3cd544b449 83984 mx-packageinstaller_18.9.tar.xz
- b0ea9ce6b8b9c8b7a3404e3df06fe1d6865125e40e7dee26d28e7b7900373dbf 11267 mx-packageinstaller_18.9_amd64.buildinfo
- 344b93952af14d3f27710361f586d8461093f0bbb84a05081a662736659e0210 150702 mx-packageinstaller_18.9_amd64.deb
+ 4f72c2e3d5721586f902683ad1468e466e92638b9c0ca3bcd31a43de1c682547 1235 mx-packageinstaller_18.9.dsc
+ 17d6323ccb5c2fa77a65547245c8a4ed8033a7585a81f104bc1d33fc0057c3b4 84156 mx-packageinstaller_18.9.tar.xz
+ 4e7d90a7e3a66f78c1be4e8a12da01f11fc42eacaf9d4bbcd9755ff4fe86f6a9 150260 mx-packageinstaller_18.9_amd64.deb
 Files:
- a5c919fac1db3fb872e374bfc1ad2ecd 1235 admin optional mx-packageinstaller_18.9.dsc
- 57a5b24a73d34e3b183a860891e67f59 83984 admin optional mx-packageinstaller_18.9.tar.xz
- 85c302f7ae3d7fa939a4966fa875d4f5 11267 admin optional mx-packageinstaller_18.9_amd64.buildinfo
- 41aa4e3d618e4e72c05c059c0ac42cbd 150702 admin optional mx-packageinstaller_18.9_amd64.deb
+ fee5572d7032eb4965f5e77c47c11065 1235 admin optional mx-packageinstaller_18.9.dsc
+ 989716c63aa9c0301a92676776704798 84156 admin optional mx-packageinstaller_18.9.tar.xz
+ da48df36683df56a70088358a6a88df2 150260 admin optional mx-packageinstaller_18.9_amd64.deb
 
 -----BEGIN PGP SIGNATURE-----
 
-iQFHBAEBCAAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAluRhkkTHGFkcmlhbkBt
-eGxpbnV4Lm9yZwAKCRBwk4x4BnnumMoSB/9/mZMJBG6Ghk7OwqKKVvb7KFABO4yw
-jTTcz0DbJOgTEAw68IRzS5UInV60rZN8sniTLSiWswMqcSuIWAAdRUEVWwyTnmyd
-fbyHm0x4WfIEZE0mlwLvShSDg/n2W7CF/2QJL/t/miwJ1DOQp2t0rqlEkCBuxped
-DLVxu6IUNShl1cB4WsoM8MdW18dcH8Qpm9z7pkc4SBXLCK3WGLAAjryMp/iYEcc6
-xRiBXjLKRYrOwIYKfXw+qhIZD97cpu9cxJ5o5GAinuc+0ysxMWV52bDuX4i0pJzl
-SPeApZ5W7B3G+omSWDn3wI/DlMXQH3ZSZQHZf+9aH3Xl6aituOa+lR01
-=vyYC
+iQFHBAEBCAAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAluRkSMTHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumO5aCACKd1a0Jtdl9swha4j0bhvlFSarwWUI
+ZFqG2AJXzqg+e46XvygDlEPNO3FDhQ3xNlvgEkM3UQwpRfvVahEXHeCHVtcIWBel
+mk0AGiu6MTNYTtv+DUjZRaXkUv8SRBAGbj1YjuiBNOldvP2Q8XBj5utS9ua1UiF9
+5EGuVzyvyoTG+7HqXlv+WLlJ4k4shDVMsHd1lqkfWolQ0OMopDNEqRq1SaMUBjjz
+8wKCnfYKR+YSmZFgCeC3c1AunS8qNj8LfQG/7RKrfHCxZAUmCFqvy51W6WxT/eqF
+CmGpP43c+F0UQ7N3Iy3PFn1Hm6T8tfGVOoYxIfsTtEqQfryFIV/bNGjY
+=+VUb
 -----END PGP SIGNATURE-----
