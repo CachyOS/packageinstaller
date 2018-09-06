@@ -1223,12 +1223,12 @@
          </column>
          <column>
           <property name="text">
-           <string/>
+           <string>Short Name</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string>Package Name</string>
+           <string>Full Package Name</string>
           </property>
          </column>
          <column>

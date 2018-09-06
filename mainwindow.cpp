@@ -626,9 +626,11 @@ void MainWindow::displayFlatpaks()
         total_count++;
         widget_item = new QTreeWidgetItem(ui->treeFlatpak);
         widget_item->setCheckState(0, Qt::Unchecked);
+        widget_item->setText(1, name.section(".", -1));
         widget_item->setText(2, name);
         if (installed.contains(name)) {
             inst_count++;
+            widget_item->setForeground(1, QBrush(Qt::gray));
             widget_item->setForeground(2, QBrush(Qt::gray));
             widget_item->setText(5, "installed");
         } else {
@@ -643,6 +645,8 @@ void MainWindow::displayFlatpaks()
 
     ui->labelNumAppFP->setText(QString::number(total_count));
     ui->labelNumInstFP->setText(QString::number(inst_count));
+
+    ui->treeFlatpak->sortByColumn(1, Qt::AscendingOrder);
 
     ui->searchBoxFlatpak->clear();
     ui->searchBoxFlatpak->setFocus();
@@ -1236,15 +1240,17 @@ QStringList MainWindow::listInstalled() const
 QStringList MainWindow::listFlatpaks(const QString remote) const
 {
     qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+
     QStringList list = cmd->getOutput("su $(logname) -c \"flatpak remote-ls " + user + remote + "\"").remove(" ").split("\n");
     if (cmd->getExitCode(true) != 0) {
         qDebug() << "Could not list packages from remote" << remote;
         return QStringList();
     }
+
     QStringList updated_list;
-    foreach (QString item, list) {  // remove .Debug and .Sources
-        if (!item.endsWith(".Debug") && !item.endsWith(".Sources") && !item.endsWith(".Locale")) {
-            updated_list << item;
+    foreach (QString line, list) {  // remove .Debug and .Sources
+        if (!line.endsWith(".Debug") && !line.endsWith(".Sources") && !line.endsWith(".Locale")) {
+            updated_list << line;
         }
     }
     return updated_list;
