@@ -610,16 +610,12 @@ void MainWindow::displayFlatpaks()
     QStringList flatpaks = listFlatpaks(ui->comboRemote->currentText());
 
     // list installed packages
-    QString installed = cmd->getOutput("su $(logname) -c \"flatpak list " + user + "\"").remove(" ");
-    QStringList installed_list;
-    if (!installed.isEmpty()) {
-        installed_list << installed.split("\n");
-    }
+    QStringList installed = listInstalledFlatpaks("--app");
 
-    // add runtimes
-    QString runtimes = cmd->getOutput("su $(logname) -c \"flatpak list --runtime " + user + "\"").remove(" ");
+    // add runtimes (needed for older flatpak versions)
+    QStringList runtimes = listInstalledFlatpaks("--runtime");
     if (!runtimes.isEmpty()) {
-        installed_list << runtimes.split("\n");
+        installed << runtimes;
     }
 
     int total_count = 0;
@@ -631,7 +627,7 @@ void MainWindow::displayFlatpaks()
         widget_item = new QTreeWidgetItem(ui->treeFlatpak);
         widget_item->setCheckState(0, Qt::Unchecked);
         widget_item->setText(2, name);
-        if (installed_list.contains(name)) {
+        if (installed.contains(name)) {
             inst_count++;
             widget_item->setForeground(2, QBrush(Qt::gray));
             widget_item->setText(5, "installed");
@@ -1254,6 +1250,12 @@ QStringList MainWindow::listFlatpaks(const QString remote) const
     return updated_list;
 }
 
+// list installed flatpaks by type: apps, runtimes, or all (if no type is provided)
+QStringList MainWindow::listInstalledFlatpaks(const QString type) const
+{
+    return cmd->getOutput("su $(logname) -c \"flatpak list " + user + type + "|cut -f1|cut -d/ -f1" + "\"").remove(" ").split("\n");
+}
+
 
 // return the visible tree
 void MainWindow::setCurrentTree()
@@ -1644,10 +1646,16 @@ void MainWindow::on_buttonUninstall_clicked()
         QString cmd_str = "";
         bool success = true;
 
+        // new version of flatpak takes a "-y" confirmation
+        QString conf = "-y ";
+        if (VersionNumber(getVersion("flatpak")) < VersionNumber("1.0.1")) {
+            conf = "";
+        }
+
         setCursor(QCursor(Qt::BusyCursor));
         foreach (QString app, change_list) {
             setConnections();
-            if (cmd->run("su $(logname) -c \"flatpak uninstall " + user + app + "\"") != 0) { // success if all processed successfuly, failure if one failed
+            if (cmd->run("su $(logname) -c \"flatpak uninstall " + conf + user + app + "\"") != 0) { // success if all processed successfuly, failure if one failed
                 success = false;
             }
         }
@@ -1837,11 +1845,11 @@ void MainWindow::filterChanged(const QString &arg1)
 
     if (tree == ui->treeFlatpak) {
         if (arg1 == tr("Installed runtimes")) {
-            QStringList runtimes = cmd->getOutput("su $(logname) -c \"flatpak list --runtime " + user + "\"").remove(" ").split("\n");
+            QStringList runtimes = listInstalledFlatpaks("--runtime");
             displayFiltered(runtimes);
             return;
         } else if (arg1 == tr("Installed packages")) {
-            QStringList apps = cmd->getOutput("su $(logname) -c \"flatpak list " + user + "\"").remove(" ").split("\n");
+            QStringList apps = listInstalledFlatpaks("--app");
             displayFiltered(apps);
             return;
         }
@@ -1919,6 +1927,7 @@ void MainWindow::buildChangeList(QTreeWidgetItem *item)
             ui->buttonInstall->setText(tr("Install"));
         }
     } else { // for Flatpaks allow selection only of installed or not installed items so one clicks on an installed item only installed items should be displayed and the other way round
+        ui->buttonInstall->setText(tr("Install"));
         if (item->text(5) == "installed") {
             ui->comboFilterFlatpak->setCurrentText(tr("Installed"));
             ui->buttonUninstall->setEnabled(true);
@@ -2061,11 +2070,17 @@ void MainWindow::on_buttonUpgradeFP_clicked()
     qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
     showOutput();
     setConnections();
+    setCursor(QCursor(Qt::BusyCursor));
 
     if(cmd->run("su $(logname) -c \"flatpak update " + user + "\"") == 0) {
+        displayFlatpaks();
+        setCursor(QCursor(Qt::ArrowCursor));
         QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
+        ui->tabWidget->blockSignals(true);
         ui->tabWidget->setCurrentWidget(ui->tabFlatpak);
+        ui->tabWidget->blockSignals(false);
     } else {
+        setCursor(QCursor(Qt::ArrowCursor));
         QMessageBox::critical(this, tr("Error"), tr("Problem detected while installing, please inspect the console output."));
     }
     enableTabs(true);

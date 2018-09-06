@@ -97,6 +97,7 @@ public:
     QString getVersion(const QString name) const;
     QStringList listInstalled() const;
     QStringList listFlatpaks(const QString remote) const;
+    QStringList listInstalledFlatpaks(const QString type = "") const;
 
 
 public slots:

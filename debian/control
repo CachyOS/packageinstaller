@@ -12,7 +12,7 @@ Vcs-Git: git://github.com/AdrianTM/mx-packageinstaller
 
 Package: mx-packageinstaller
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}, xdg-utils|mx-viewer, mx-packageinstaller-pkglist (>= 17.4), menu, wget, libcmd
+Depends: ${misc:Depends}, ${shlibs:Depends}, xdg-utils|mx-viewer, mx-packageinstaller-pkglist (>= 17.4), menu, wget, libcmd, flatpak
 Replaces: mx-test-repo-installer, mx-debian-backports-installer, mx-package-manager, mx-package-manager-pkglist
 Provides: mx-test-repo-installer, mx-debian-backports-installer
 Conflicts: mx-test-repo-installer, mx-debian-backports-installer
