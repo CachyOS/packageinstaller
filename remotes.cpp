@@ -32,7 +32,7 @@ ManageRemotes::ManageRemotes(QWidget *parent) :
     editInstallFlatpakref = new QLineEdit(this);
     editInstallFlatpakref->setPlaceholderText(tr("enter Flatpakref remote URL to install app"));
 
-    QLabel *label = new QLabel(tr("Add or remove Flatpak remotes, or install apps using flatpakref URL"));
+    QLabel *label = new QLabel(tr("Add or remove Flatpak remotes (repos), or install apps using flatpakref URL"));
     layout->addWidget(label, 0, 0, 1, 5);
     label->setAlignment(Qt::AlignCenter);
 

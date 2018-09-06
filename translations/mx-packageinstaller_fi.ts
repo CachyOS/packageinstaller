@@ -82,7 +82,7 @@
         <location filename="../mainwindow.ui" line="584"/>
         <location filename="../mainwindow.ui" line="916"/>
         <location filename="../mainwindow.cpp" line="1863"/>
-        <location filename="../mainwindow.cpp" line="1955"/>
+        <location filename="../mainwindow.cpp" line="1957"/>
         <source>Installed</source>
         <translation>Asennettu</translation>
     </message>
@@ -100,7 +100,7 @@
         <location filename="../mainwindow.ui" line="926"/>
         <location filename="../mainwindow.ui" line="1187"/>
         <location filename="../mainwindow.cpp" line="1865"/>
-        <location filename="../mainwindow.cpp" line="1959"/>
+        <location filename="../mainwindow.cpp" line="1961"/>
         <source>Not installed</source>
         <translation>Ei asennettu</translation>
     </message>
@@ -193,7 +193,7 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1177"/>
-        <location filename="../mainwindow.cpp" line="1874"/>
+        <location filename="../mainwindow.cpp" line="1875"/>
         <source>Installed packages</source>
         <translation type="unfinished"></translation>
     </message>
@@ -231,7 +231,7 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1399"/>
-        <source>Remote:</source>
+        <source>Remote (repo):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -294,8 +294,8 @@
     <message>
         <location filename="../mainwindow.ui" line="1591"/>
         <location filename="../mainwindow.cpp" line="1616"/>
-        <location filename="../mainwindow.cpp" line="1950"/>
-        <location filename="../mainwindow.cpp" line="1953"/>
+        <location filename="../mainwindow.cpp" line="1952"/>
+        <location filename="../mainwindow.cpp" line="1955"/>
         <source>Install</source>
         <translation>Asenna</translation>
     </message>
@@ -339,9 +339,9 @@
         <location filename="../mainwindow.cpp" line="1519"/>
         <location filename="../mainwindow.cpp" line="1680"/>
         <location filename="../mainwindow.cpp" line="1700"/>
-        <location filename="../mainwindow.cpp" line="2035"/>
-        <location filename="../mainwindow.cpp" line="2107"/>
-        <location filename="../mainwindow.cpp" line="2134"/>
+        <location filename="../mainwindow.cpp" line="2037"/>
+        <location filename="../mainwindow.cpp" line="2109"/>
+        <location filename="../mainwindow.cpp" line="2136"/>
         <source>Error</source>
         <translation>Virhe</translation>
     </message>
@@ -461,9 +461,9 @@
         <location filename="../mainwindow.cpp" line="1503"/>
         <location filename="../mainwindow.cpp" line="1516"/>
         <location filename="../mainwindow.cpp" line="1675"/>
-        <location filename="../mainwindow.cpp" line="2031"/>
-        <location filename="../mainwindow.cpp" line="2101"/>
-        <location filename="../mainwindow.cpp" line="2128"/>
+        <location filename="../mainwindow.cpp" line="2033"/>
+        <location filename="../mainwindow.cpp" line="2103"/>
+        <location filename="../mainwindow.cpp" line="2130"/>
         <source>Done</source>
         <translation>Valmis</translation>
     </message>
@@ -473,9 +473,9 @@
         <location filename="../mainwindow.cpp" line="1516"/>
         <location filename="../mainwindow.cpp" line="1675"/>
         <location filename="../mainwindow.cpp" line="1693"/>
-        <location filename="../mainwindow.cpp" line="2031"/>
-        <location filename="../mainwindow.cpp" line="2101"/>
-        <location filename="../mainwindow.cpp" line="2128"/>
+        <location filename="../mainwindow.cpp" line="2033"/>
+        <location filename="../mainwindow.cpp" line="2103"/>
+        <location filename="../mainwindow.cpp" line="2130"/>
         <source>Processing finished successfully.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -483,9 +483,9 @@
         <location filename="../mainwindow.cpp" line="1495"/>
         <location filename="../mainwindow.cpp" line="1509"/>
         <location filename="../mainwindow.cpp" line="1519"/>
-        <location filename="../mainwindow.cpp" line="2035"/>
-        <location filename="../mainwindow.cpp" line="2107"/>
-        <location filename="../mainwindow.cpp" line="2134"/>
+        <location filename="../mainwindow.cpp" line="2037"/>
+        <location filename="../mainwindow.cpp" line="2109"/>
+        <location filename="../mainwindow.cpp" line="2136"/>
         <source>Problem detected while installing, please inspect the console output.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -585,27 +585,27 @@ OK to go ahead and install it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1948"/>
+        <location filename="../mainwindow.cpp" line="1950"/>
         <source>Upgrade</source>
         <translation>Päivitä</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2061"/>
+        <location filename="../mainwindow.cpp" line="2063"/>
         <source>Quit?</source>
         <translation>Lopeta?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2062"/>
+        <location filename="../mainwindow.cpp" line="2064"/>
         <source>Process still running, quiting might leave the system in an instable state.&lt;p&gt;&lt;b&gt;Are you sure you want to exit MX Package Installer?&lt;/b&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2063"/>
+        <location filename="../mainwindow.cpp" line="2065"/>
         <source>Yes</source>
         <translation>Kyllä</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2063"/>
+        <location filename="../mainwindow.cpp" line="2065"/>
         <source>No</source>
         <translation>Ei</translation>
     </message>
@@ -639,7 +639,7 @@ OK to go ahead and install it?</source>
     </message>
     <message>
         <location filename="../remotes.cpp" line="35"/>
-        <source>Add or remove Flatpak remotes, or install apps using flatpakref URL</source>
+        <source>Add or remove Flatpak remotes (repos), or install apps using flatpakref URL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

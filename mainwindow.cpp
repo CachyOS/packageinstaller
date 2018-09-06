@@ -1870,10 +1870,12 @@ void MainWindow::filterChanged(const QString &arg1)
         if (arg1 == tr("Installed runtimes")) {
             QStringList runtimes = listInstalledFlatpaks("--runtime");
             displayFiltered(runtimes);
+            tree->blockSignals(false);
             return;
         } else if (arg1 == tr("Installed packages")) {
             QStringList apps = listInstalledFlatpaks("--app");
             displayFiltered(apps);
+            tree->blockSignals(false);
             return;
         }
     }
