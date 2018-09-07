@@ -724,7 +724,7 @@ void MainWindow::listFlatpakRemotes()
 {
     qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
     ui->comboRemote->clear();
-    QStringList list = cmd->getOutput("su $(logname) -c \"flatpak remote-list " +  user + "\"").remove(" ").split("\n");
+    QStringList list = cmd->getOutput("su $(logname) -c \"flatpak remote-list " +  user + "| cut -f1\"").remove(" ").split("\n");
     ui->comboRemote->addItems(list);
     //set flathub default
     ui->comboRemote->setCurrentIndex(ui->comboRemote->findText("flathub"));
