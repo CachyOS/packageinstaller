@@ -96,7 +96,7 @@ public:
     QString getTranslation(const QString item);
     QString getVersion(const QString name) const;
     QStringList listInstalled() const;
-    QStringList listFlatpaks(const QString remote) const;
+    QStringList listFlatpaks(const QString remote, const QString type = "") const;
     QStringList listInstalledFlatpaks(const QString type = "") const;
 
 

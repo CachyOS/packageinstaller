@@ -603,7 +603,6 @@ void MainWindow::displayFlatpaks()
 
     setCursor(QCursor(Qt::BusyCursor));
     ui->treeFlatpak->clear();
-    ui->comboFilterFlatpak->setCurrentIndex(0);
     ui->treeFlatpak->blockSignals(true);
     change_list.clear();
     ui->buttonRemotes->setEnabled(false);
@@ -1265,11 +1264,11 @@ QStringList MainWindow::listInstalled() const
 
 
 // Return list flatpaks from current remote
-QStringList MainWindow::listFlatpaks(const QString remote) const
+QStringList MainWindow::listFlatpaks(const QString remote, const QString type) const
 {
     qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
 
-    QStringList list = cmd->getOutput("su $(logname) -c \"flatpak remote-ls " + user + remote + "\"").remove(" ").split("\n");
+    QStringList list = cmd->getOutput("su $(logname) -c \"flatpak remote-ls " + user + remote + " " + type + "\"").remove(" ").split("\n");
     if (cmd->getExitCode(true) != 0) {
         qDebug() << "Could not list packages from remote" << remote;
         return QStringList();
@@ -1788,11 +1787,14 @@ void MainWindow::on_tabWidget_currentChanged(int index)
     case 4: // Flatpak
         enableTabs(true);
         setCurrentTree();
+
+        blockSignals(true);
         ui->comboRemote->clear();
-        ui->comboFilterBP->setCurrentIndex(0);
+        ui->comboFilterFlatpak->setCurrentIndex(0);
         ui->comboUser->setCurrentIndex(0);
         ui->buttonRemotes->setDisabled(true);
         ui->buttonUpgradeFP->setDisabled(true);
+        blockSignals(true);
 
         if(!checkInstalled("flatpak")) {
             int ans = QMessageBox::question(this, tr("Flatpak not installed"), tr("Flatpak is not currently installed.\nOK to go ahead and install it?"));
@@ -1871,6 +1873,42 @@ void MainWindow::filterChanged(const QString &arg1)
     QTreeWidgetItemIterator it(tree);
     tree->blockSignals(true);
 
+    // filter for Flatpak
+    if (tree == ui->treeFlatpak) {
+        if (arg1 == tr("Installed runtimes")) {
+            displayFiltered(listInstalledFlatpaks("--runtime"));
+        } else if (arg1 == tr("Installed apps")) {
+            displayFiltered(listInstalledFlatpaks("--app"));
+        } else if (arg1 == tr("All apps")) {
+            displayFiltered(listFlatpaks(ui->comboRemote->currentText(), "--app"));
+        } else if (arg1 == tr("All runtimes")) {
+            displayFiltered(listFlatpaks(ui->comboRemote->currentText(), "--runtime"));
+        } else if (arg1 == tr("All available")) {
+            while (*it) {
+                (*it)->setText(6, "true"); // Displayed flag
+                (*it)->setHidden(false);
+                ++it;
+            }
+        } else if (arg1 == tr("Not installed")) {
+             found_items = tree->findItems("not installed", Qt::MatchExactly, 5);
+             while (*it) {
+                 if (found_items.contains(*it) ) {
+                     (*it)->setHidden(false);
+                     (*it)->setText(6, "true"); // Displayed flag
+                 } else {
+                     (*it)->setHidden(true);
+                     (*it)->setText(6, "false");
+                     (*it)->setCheckState(0, Qt::Unchecked); // uncheck hidden items
+                 }
+                 ++it;
+             }
+        }
+        tree->blockSignals(false);
+        setSearchFocus();
+        findPackageOther();
+        return;
+    }
+
     if (arg1 == tr("All packages")) {
         while (*it) {
             (*it)->setText(6, "true"); // Displayed flag
@@ -1889,20 +1927,6 @@ void MainWindow::filterChanged(const QString &arg1)
         found_items = tree->findItems("installed", Qt::MatchExactly, 5);
     } else if (arg1 == tr("Not installed")) {
         found_items = tree->findItems("not installed", Qt::MatchExactly, 5);
-    }
-
-    if (tree == ui->treeFlatpak) {
-        if (arg1 == tr("Installed runtimes")) {
-            QStringList runtimes = listInstalledFlatpaks("--runtime");
-            displayFiltered(runtimes);
-            tree->blockSignals(false);
-            return;
-        } else if (arg1 == tr("Installed packages")) {
-            QStringList apps = listInstalledFlatpaks("--app");
-            displayFiltered(apps);
-            tree->blockSignals(false);
-            return;
-        }
     }
 
     while (*it) {

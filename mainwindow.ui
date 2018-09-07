@@ -1165,16 +1165,26 @@
           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filter packages according to their status.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
          </property>
          <property name="currentText">
-          <string>All packages</string>
+          <string>All apps</string>
          </property>
          <item>
           <property name="text">
-           <string>All packages</string>
+           <string>All apps</string>
           </property>
          </item>
          <item>
           <property name="text">
-           <string>Installed packages</string>
+           <string>All runtimes</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>All available</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Installed apps</string>
           </property>
          </item>
          <item>
