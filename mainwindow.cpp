@@ -650,6 +650,31 @@ void MainWindow::displayFlatpaks()
 
     ui->treeFlatpak->sortByColumn(1, Qt::AscendingOrder);
 
+
+    // find and mark duplicates
+    QTreeWidgetItemIterator it(ui->treeFlatpak);
+    QString current, next;
+    while (*it) {
+        current = ((*it))->text(1);\
+        if (*(++it)) {
+            next = ((*it))->text(1);
+            if (next == current) {
+                --it;
+                (*(it))->setText(4, "Duplicate");
+                ++it;
+                (*it)->setText(4, "Duplicate");
+            }
+        }
+    }
+    // rename duplicate to use more context
+    QTreeWidgetItemIterator it2(ui->treeFlatpak);
+    while (*it2) {
+        if ((*(it2))->text(4) == "Duplicate") {
+            (*it2)->setText(1, (*it2)->text(2).section(".", -2));
+        }
+        ++it2;
+    }
+
     ui->searchBoxFlatpak->clear();
     ui->searchBoxFlatpak->setFocus();
     ui->treeFlatpak->blockSignals(false);
