@@ -1298,7 +1298,7 @@
           <item row="2" column="0">
            <widget class="QLabel" name="labelTotalApps_4">
             <property name="text">
-             <string>Total packages:</string>
+             <string>Total items displayed:</string>
             </property>
            </widget>
           </item>
@@ -1312,7 +1312,7 @@
           <item row="2" column="3">
            <widget class="QLabel" name="labelInstalled_4">
             <property name="text">
-             <string>Installed:</string>
+             <string>Installed apps:</string>
             </property>
            </widget>
           </item>

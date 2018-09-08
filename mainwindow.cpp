@@ -563,9 +563,11 @@ void MainWindow::displayFiltered(const QStringList &list) const
         new_list << item.section("\t", 0, 0);
     }
 
+    int total = 0;
     QTreeWidgetItemIterator it(tree);
     while (*it) {
         if (new_list.contains((*it)->text(8))) {
+            ++total;
             (*it)->setHidden(false);
             (*it)->setText(6, "true"); // Displayed flag
         } else {
@@ -575,6 +577,7 @@ void MainWindow::displayFiltered(const QStringList &list) const
         }
         ++it;
     }
+    ui->labelNumAppFP->setText(QString::number(total));
 }
 
 
@@ -702,13 +705,11 @@ void MainWindow::displayFlatpaks(bool force_update)
 
         // add runtimes (needed for older flatpak versions)
         installed_runtimes_fp = listInstalledFlatpaks("--runtime");
-        if (!installed_runtimes_fp.isEmpty()) {
-            installed_apps_fp << installed_runtimes_fp;
-        }
     }
 
+    QStringList installed_all = QStringList() << installed_apps_fp << installed_runtimes_fp;
+
     int total_count = 0;
-    int inst_count = 0;
     QTreeWidgetItem *widget_item;
 
     QString short_name, full_name, arch, version, size;
@@ -721,7 +722,7 @@ void MainWindow::displayFlatpaks(bool force_update)
         if (short_name == "Locale" || short_name == "Sources" || short_name == "Debug") { // skip Locale, Sources, Debug
             continue;
         }
-        total_count++;
+        ++total_count;
         widget_item = new QTreeWidgetItem(ui->treeFlatpak);
         widget_item->setCheckState(0, Qt::Unchecked);
         widget_item->setText(1, short_name);
@@ -729,8 +730,7 @@ void MainWindow::displayFlatpaks(bool force_update)
         widget_item->setText(3, version);
         widget_item->setText(4, size);
         widget_item->setText(8, item); // Full string
-        if (installed_apps_fp.contains(item)) {
-            inst_count++;
+        if (installed_all.contains(item)) {
             widget_item->setForeground(1, QBrush(Qt::gray));
             widget_item->setForeground(2, QBrush(Qt::gray));
             widget_item->setText(5, "installed");
@@ -746,7 +746,7 @@ void MainWindow::displayFlatpaks(bool force_update)
     }
 
     ui->labelNumAppFP->setText(QString::number(total_count));
-    ui->labelNumInstFP->setText(QString::number(inst_count));
+    ui->labelNumInstFP->setText(QString::number(installed_apps_fp.count()));
 
     ui->treeFlatpak->sortByColumn(1, Qt::AscendingOrder);
 
@@ -1644,7 +1644,6 @@ void MainWindow::on_buttonInstall_clicked()
 // About button clicked
 void MainWindow::on_buttonAbout_clicked()
 {
-    this->hide();
     QMessageBox msgBox(QMessageBox::NoIcon,
                        tr("About MX Package Installer"), "<p align=\"center\"><b><h2>" +
                        tr("MX Package Installer") + "</h2></b></p><p align=\"center\">" + tr("Version: ") + version + "</p><p align=\"center\"><h3>" +
@@ -1684,7 +1683,6 @@ void MainWindow::on_buttonAbout_clicked()
         changelog->setLayout(layout);
         changelog->exec();
     }
-    this->show();
 }
 // Help button clicked
 void MainWindow::on_buttonHelp_clicked()
@@ -1980,13 +1978,17 @@ void MainWindow::filterChanged(const QString &arg1)
             }
             displayFiltered(flatpaks_runtimes);
         } else if (arg1 == tr("All available")) {
+            int total = 0;
             while (*it) {
+                ++total;
                 (*it)->setText(6, "true"); // Displayed flag
                 (*it)->setHidden(false);
                 ++it;
             }
+            ui->labelNumAppFP->setText(QString::number(total));
         } else if (arg1 == tr("Not installed")) {
              found_items = tree->findItems("not installed", Qt::MatchExactly, 5);
+             ui->labelNumAppFP->setText(QString::number(found_items.count()));
              while (*it) {
                  if (found_items.contains(*it) ) {
                      (*it)->setHidden(false);
