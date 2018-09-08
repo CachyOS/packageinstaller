@@ -90,10 +90,10 @@ void MainWindow::setup()
     ui->treeMXtest->hideColumn(6); // Displayed status true/false
     ui->treeBackports->hideColumn(5); // Status of the package: installed, upgradable, etc
     ui->treeBackports->hideColumn(6); // Displayed status true/false
-    ui->treeFlatpak->hideColumn(3);
-    ui->treeFlatpak->hideColumn(4);
-    ui->treeFlatpak->hideColumn(5);
-    ui->treeFlatpak->hideColumn(6);
+    ui->treeFlatpak->hideColumn(5); // Status
+    ui->treeFlatpak->hideColumn(6); // Displayed
+    ui->treeFlatpak->hideColumn(7); // Duplication
+    ui->treeFlatpak->hideColumn(8); // Full string
     ui->icon->setIcon(QIcon::fromTheme("software-update-available", QIcon(":/icons/software-update-available.png")));
     ui->icon_2->setIcon(QIcon::fromTheme("software-update-available", QIcon(":/icons/software-update-available.png")));
     ui->icon_3->setIcon(QIcon::fromTheme("software-update-available", QIcon(":/icons/software-update-available.png")));
@@ -161,6 +161,52 @@ bool MainWindow::update()
     QMessageBox::critical(this, tr("Error"), tr("There was a problem updating sources. Some sources may not have provided updates. For more info check: ") +
                           "<a href=\"/var/log/mxpi.log\">/var/log/mxpi.log</a>");
     return false;
+}
+
+
+// Add sizes for the installed packages for older flatpak that doesn't list size for all the packages
+void MainWindow::addInstalledSizesFP() const
+{
+    // list installed packages with sizes
+    QStringList list = cmd->getOutput("su $(logname) -c \"flatpak -d list --app " + user + "|tr -s ' ' |cut -f1,5,6 -d' '\"").split("\n");
+    QStringList runtimes = cmd->getOutput("su $(logname) -c \"flatpak -d list --runtime " + user + "|tr -s ' ' |cut -f1,5,6 -d' '\"").split("\n");
+    if (!runtimes.isEmpty()) {
+        list << runtimes;
+    }
+
+    QString name, size;
+    QTreeWidgetItemIterator it(ui->treeFlatpak);
+    while (*it) {
+        foreach (QString item, list) {
+            name = item.section(" ", 0, 0);
+            size = item.section(" ", 1);
+            if (name == (*it)->text(8)) {
+                (*it)->setText(4, size);
+            }
+        }
+        ++it;
+    }
+}
+
+// Block interface while updateing Flatpak list
+void MainWindow::blockInterfaceFP(bool block)
+{
+    for (int tab = 0; tab < 4; ++tab) {
+        ui->tabWidget->setTabEnabled(tab, !block);
+    }
+    ui->comboRemote->setDisabled(block);
+    ui->comboFilterFlatpak->setDisabled(block);
+    ui->comboUser->setDisabled(block);
+    ui->searchBoxFlatpak->setDisabled(block);
+    ui->treeFlatpak->setDisabled(block);
+    ui->frameFP->setDisabled(block);
+    ui->labelFP->setDisabled(block);
+    ui->labelRepo->setDisabled(block);
+    if (block) {
+        setCursor(QCursor(Qt::BusyCursor));
+    } else {
+        setCursor(QCursor(Qt::ArrowCursor));
+    }
 }
 
 // Update interface when done loading info
@@ -381,6 +427,34 @@ void MainWindow::refreshPopularApps()
     displayPopularApps();
 }
 
+// In case of duplicates add extra name to disambiguate
+void MainWindow::removeDuplicatesFP()
+{
+    // find and mark duplicates
+    QTreeWidgetItemIterator it(ui->treeFlatpak);
+    QString current, next;
+    while (*it) {
+        current = ((*it))->text(1);\
+        if (*(++it)) {
+            next = ((*it))->text(1);
+            if (next == current) {
+                --it;
+                (*(it))->setText(7, "Duplicate");
+                ++it;
+                (*it)->setText(7, "Duplicate");
+            }
+        }
+    }
+    // rename duplicate to use more context
+    QTreeWidgetItemIterator it2(ui->treeFlatpak);
+    while (*it2) {
+        if ((*(it2))->text(7) == "Duplicate") {
+            (*it2)->setText(1, (*it2)->text(2).section(".", -2));
+        }
+        ++it2;
+    }
+}
+
 // Setup progress dialog
 void MainWindow::setProgressDialog()
 {
@@ -482,9 +556,16 @@ void MainWindow::displayPopularApps() const
 // Display only the listed apps
 void MainWindow::displayFiltered(const QStringList &list) const
 {
+    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+
+    QStringList new_list;
+    foreach (QString item, list) {
+        new_list << item.section("\t", 0, 0);
+    }
+
     QTreeWidgetItemIterator it(tree);
     while (*it) {
-        if (list.contains((*it)->text(2))) {
+        if (new_list.contains((*it)->text(8))) {
             (*it)->setHidden(false);
             (*it)->setText(6, "true"); // Displayed flag
         } else {
@@ -528,9 +609,13 @@ void MainWindow::displayPackages()
 
     QTreeWidgetItem *widget_item;
 
+
+
     // create a list of apps, create a hash with app_name, app_info
     QMap<QString, QStringList>::iterator i;
     for (i = list.begin(); i != list.end(); ++i) {
+        // get size for newer flatpak versions
+
         app_name = i.key();
         app_ver = i.value().at(0);
         app_desc = i.value().at(1);
@@ -597,7 +682,7 @@ void MainWindow::displayPackages()
     newtree->blockSignals(false);
 }
 
-void MainWindow::displayFlatpaks()
+void MainWindow::displayFlatpaks(bool force_update)
 {
     qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
 
@@ -605,31 +690,46 @@ void MainWindow::displayFlatpaks()
     ui->treeFlatpak->clear();
     ui->treeFlatpak->blockSignals(true);
     change_list.clear();
-    ui->buttonRemotes->setEnabled(false);
-    ui->buttonUpgradeFP->setEnabled(false);
 
-    QStringList flatpaks = listFlatpaks(ui->comboRemote->currentText());
+    if (flatpaks.isEmpty() || force_update) {
+        blockInterfaceFP(true);
+        flatpaks = listFlatpaks(ui->comboRemote->currentText());
+        flatpaks_apps.clear();
+        flatpaks_runtimes.clear();
 
-    // list installed packages
-    QStringList installed = listInstalledFlatpaks("--app");
+        // list installed packages
+        installed_apps_fp = listInstalledFlatpaks("--app");
 
-    // add runtimes (needed for older flatpak versions)
-    QStringList runtimes = listInstalledFlatpaks("--runtime");
-    if (!runtimes.isEmpty()) {
-        installed << runtimes;
+        // add runtimes (needed for older flatpak versions)
+        installed_runtimes_fp = listInstalledFlatpaks("--runtime");
+        if (!installed_runtimes_fp.isEmpty()) {
+            installed_apps_fp << installed_runtimes_fp;
+        }
     }
 
     int total_count = 0;
     int inst_count = 0;
     QTreeWidgetItem *widget_item;
 
-    foreach (QString name, flatpaks) {
+    QString short_name, full_name, arch, version, size;
+    foreach (QString item, flatpaks) {
+        size = item.section("\t", 1);
+        item = item.section("\t", 0, 0); // strip size
+        full_name = item.section("/", 0, 0); // return first part of the name before slash
+        short_name = full_name.section(".", -1);
+        version = item.section("/", -1);
+        if (short_name == "Locale" || short_name == "Sources" || short_name == "Debug") { // skip Locale, Sources, Debug
+            continue;
+        }
         total_count++;
         widget_item = new QTreeWidgetItem(ui->treeFlatpak);
         widget_item->setCheckState(0, Qt::Unchecked);
-        widget_item->setText(1, name.section(".", -1));
-        widget_item->setText(2, name);
-        if (installed.contains(name)) {
+        widget_item->setText(1, short_name);
+        widget_item->setText(2, full_name);
+        widget_item->setText(3, version);
+        widget_item->setText(4, size);
+        widget_item->setText(8, item); // Full string
+        if (installed_apps_fp.contains(item)) {
             inst_count++;
             widget_item->setForeground(1, QBrush(Qt::gray));
             widget_item->setForeground(2, QBrush(Qt::gray));
@@ -640,8 +740,9 @@ void MainWindow::displayFlatpaks()
         widget_item->setText(6, "true"); // all items are displayed till filtered
     }
 
-    for (int i = 0; i < ui->treeFlatpak->columnCount(); ++i) {
-        ui->treeFlatpak->resizeColumnToContents(i);
+    // add sizes for the installed packages for older flatpak that doesn't list size for all the packages
+    if (VersionNumber(getVersion("flatpak")) < VersionNumber("1.0.1")) {
+        addInstalledSizesFP();
     }
 
     ui->labelNumAppFP->setText(QString::number(total_count));
@@ -649,37 +750,16 @@ void MainWindow::displayFlatpaks()
 
     ui->treeFlatpak->sortByColumn(1, Qt::AscendingOrder);
 
+    removeDuplicatesFP();
 
-    // find and mark duplicates
-    QTreeWidgetItemIterator it(ui->treeFlatpak);
-    QString current, next;
-    while (*it) {
-        current = ((*it))->text(1);\
-        if (*(++it)) {
-            next = ((*it))->text(1);
-            if (next == current) {
-                --it;
-                (*(it))->setText(4, "Duplicate");
-                ++it;
-                (*it)->setText(4, "Duplicate");
-            }
-        }
-    }
-    // rename duplicate to use more context
-    QTreeWidgetItemIterator it2(ui->treeFlatpak);
-    while (*it2) {
-        if ((*(it2))->text(4) == "Duplicate") {
-            (*it2)->setText(1, (*it2)->text(2).section(".", -2));
-        }
-        ++it2;
+    for (int i = 0; i < ui->treeFlatpak->columnCount(); ++i) {
+        ui->treeFlatpak->resizeColumnToContents(i);
     }
 
-    ui->searchBoxFlatpak->clear();
     ui->searchBoxFlatpak->setFocus();
     ui->treeFlatpak->blockSignals(false);
-    ui->buttonRemotes->setEnabled(true);
-    ui->buttonUpgradeFP->setEnabled(true);
-    setCursor(QCursor(Qt::ArrowCursor));
+    filterChanged(ui->comboFilterFlatpak->currentText());
+    blockInterfaceFP(false);
 }
 
 // Display warning for Debian Backports
@@ -722,11 +802,13 @@ void MainWindow::ifDownloadFailed()
 void MainWindow::listFlatpakRemotes()
 {
     qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    ui->comboRemote->blockSignals(true);
     ui->comboRemote->clear();
     QStringList list = cmd->getOutput("su $(logname) -c \"flatpak remote-list " +  user + "| cut -f1\"").remove(" ").split("\n");
     ui->comboRemote->addItems(list);
     //set flathub default
     ui->comboRemote->setCurrentIndex(ui->comboRemote->findText("flathub"));
+    ui->comboRemote->blockSignals(false);
 }
 
 // Install the list of apps
@@ -1264,29 +1346,40 @@ QStringList MainWindow::listInstalled() const
 
 
 // Return list flatpaks from current remote
-QStringList MainWindow::listFlatpaks(const QString remote, const QString type) const
+QStringList MainWindow::listFlatpaks(const QString remote, const QString type)
 {
     qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
 
-    QStringList list = cmd->getOutput("su $(logname) -c \"flatpak remote-ls " + user + remote + " " + type + "\"").remove(" ").split("\n");
+    QStringList list;
+    // need to specify arch for older version
+    QString arch = "";
+    if (VersionNumber(getVersion("flatpak")) < VersionNumber("1.0.1")) {
+        arch = "--arch=" + cmd->getOutput("arch") + " ";
+        // list packages, strip first part remote/ or app/ no size for old flatpak
+        list = cmd->getOutput("su $(logname) -c \"flatpak -d remote-ls " + user + remote + " " + arch + type + "| cut -f1 | tr -s ' ' | cut -f1 -d' '|sed 's/^[^\\/]*\\///g' \"").split("\n");
+    } else {
+        // list size too
+        list = cmd->getOutput("su $(logname) -c \"flatpak -d remote-ls " + user + remote + " " + arch + type + "| cut -f1,3 |tr -s ' ' | sed 's/^[^\\/]*\\///g' \"").split("\n");
+    }
+
     if (cmd->getExitCode(true) != 0) {
         qDebug() << "Could not list packages from remote" << remote;
         return QStringList();
     }
 
-    QStringList updated_list;
-    foreach (QString line, list) {  // remove .Debug and .Sources
-        if (!line.endsWith(".Debug") && !line.endsWith(".Sources") && !line.endsWith(".Locale")) {
-            updated_list << line;
-        }
+    // build cache lists
+    if (type == "--app") {
+        flatpaks_apps = list;
+    } else if (type == "--runtime") {
+        flatpaks_runtimes = list;
     }
-    return updated_list;
+    return list;
 }
 
 // list installed flatpaks by type: apps, runtimes, or all (if no type is provided)
 QStringList MainWindow::listInstalledFlatpaks(const QString type) const
 {
-    return cmd->getOutput("su $(logname) -c \"flatpak list " + user + type + "|cut -f1|cut -d/ -f1" + "\"").remove(" ").split("\n");
+    return cmd->getOutput("su $(logname) -c \"flatpak -d list " + user + type + "|cut -f1|cut -f1 -d' '\"").remove(" ").split("\n");
 }
 
 
@@ -1473,7 +1566,9 @@ void MainWindow::findPackageOther()
     }
 
     QList<QTreeWidgetItem *> found_items = tree->findItems(word, Qt::MatchContains, 2);
-    found_items << tree->findItems(word, Qt::MatchContains, 4);
+    if (tree != ui->treeFlatpak) { // treeFlatpak has a different column structure
+        found_items << tree->findItems(word, Qt::MatchContains, 4);
+    }
     QTreeWidgetItemIterator it(tree);
     while (*it) {
       if ((*it)->text(6) == "true" && found_items.contains(*it)) {
@@ -1522,7 +1617,7 @@ void MainWindow::on_buttonInstall_clicked()
         setConnections();
         setCursor(QCursor(Qt::BusyCursor));
         if (cmd->run("su $(logname) -c \"flatpak install -y " + user + ui->comboRemote->currentText() + " " + change_list.join(" ") + "\"") == 0) {
-            displayFlatpaks();
+            displayFlatpaks(true);
             setCursor(QCursor(Qt::ArrowCursor));
             QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
             ui->tabWidget->blockSignals(true);
@@ -1695,7 +1790,7 @@ void MainWindow::on_buttonUninstall_clicked()
         setCursor(QCursor(Qt::ArrowCursor));
 
         if (success) { // success if all processed successfuly, failure if one failed
-            displayFlatpaks();
+            displayFlatpaks(true);
             QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
             ui->tabWidget->blockSignals(true);
             ui->tabWidget->setCurrentWidget(ui->tabFlatpak);
@@ -1787,14 +1882,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
     case 4: // Flatpak
         enableTabs(true);
         setCurrentTree();
-
-        blockSignals(true);
-        ui->comboRemote->clear();
-        ui->comboFilterFlatpak->setCurrentIndex(0);
-        ui->comboUser->setCurrentIndex(0);
-        ui->buttonRemotes->setDisabled(true);
-        ui->buttonUpgradeFP->setDisabled(true);
-        blockSignals(true);
+        blockInterfaceFP(true);
 
         if(!checkInstalled("flatpak")) {
             int ans = QMessageBox::question(this, tr("Flatpak not installed"), tr("Flatpak is not currently installed.\nOK to go ahead and install it?"));
@@ -1834,7 +1922,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
                 break;
             }
             listFlatpakRemotes();
-            displayFlatpaks();
+            displayFlatpaks(false);
             setCursor(QCursor(Qt::ArrowCursor));
             QMessageBox::warning(this, tr("Needs re-login"), tr("You might need to logout/login to see installed items in the menu"));
             ui->tabWidget->blockSignals(true);
@@ -1852,8 +1940,10 @@ void MainWindow::on_tabWidget_currentChanged(int index)
             break;
         }
         setCursor(QCursor(Qt::ArrowCursor));
-        listFlatpakRemotes();
-        displayFlatpaks();
+        if (ui->comboRemote->currentText().isEmpty()) {
+            listFlatpakRemotes();
+        }
+        displayFlatpaks(false);
         break;
     case 5: // Output
         ui->buttonInstall->setDisabled(true);
@@ -1876,13 +1966,19 @@ void MainWindow::filterChanged(const QString &arg1)
     // filter for Flatpak
     if (tree == ui->treeFlatpak) {
         if (arg1 == tr("Installed runtimes")) {
-            displayFiltered(listInstalledFlatpaks("--runtime"));
+            displayFiltered(installed_runtimes_fp);
         } else if (arg1 == tr("Installed apps")) {
-            displayFiltered(listInstalledFlatpaks("--app"));
+            displayFiltered(installed_apps_fp);
         } else if (arg1 == tr("All apps")) {
-            displayFiltered(listFlatpaks(ui->comboRemote->currentText(), "--app"));
+            if(flatpaks_apps.isEmpty()) {
+                listFlatpaks(ui->comboRemote->currentText(), "--app");
+            }
+            displayFiltered(flatpaks_apps);
         } else if (arg1 == tr("All runtimes")) {
-            displayFiltered(listFlatpaks(ui->comboRemote->currentText(), "--runtime"));
+            if(flatpaks_runtimes.isEmpty()) {
+                listFlatpaks(ui->comboRemote->currentText(), "--runtime");
+            }
+            displayFiltered(flatpaks_runtimes);
         } else if (arg1 == tr("All available")) {
             while (*it) {
                 (*it)->setText(6, "true"); // Displayed flag
@@ -1903,9 +1999,9 @@ void MainWindow::filterChanged(const QString &arg1)
                  ++it;
              }
         }
-        tree->blockSignals(false);
         setSearchFocus();
         findPackageOther();
+        tree->blockSignals(false);
         return;
     }
 
@@ -2136,7 +2232,7 @@ void MainWindow::on_checkHideLibsBP_clicked(bool checked)
 void MainWindow::on_comboRemote_activated(int)
 {
     qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
-    displayFlatpaks();
+    displayFlatpaks(true);
 }
 
 void MainWindow::on_buttonUpgradeFP_clicked()
@@ -2147,7 +2243,7 @@ void MainWindow::on_buttonUpgradeFP_clicked()
     setCursor(QCursor(Qt::BusyCursor));
 
     if(cmd->run("su $(logname) -c \"flatpak update " + user + "\"") == 0) {
-        displayFlatpaks();
+        displayFlatpaks(true);
         setCursor(QCursor(Qt::ArrowCursor));
         QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
         ui->tabWidget->blockSignals(true);
@@ -2166,7 +2262,7 @@ void MainWindow::on_buttonRemotes_clicked()
     dialog->exec();
     if (dialog->isChanged()) {
         listFlatpakRemotes();
-        displayFlatpaks();
+        displayFlatpaks(true);
     }
     if (!dialog->getInstallRef().isEmpty()) {
         showOutput();
@@ -2174,7 +2270,7 @@ void MainWindow::on_buttonRemotes_clicked()
         setCursor(QCursor(Qt::BusyCursor));
         if (cmd->run("su $(logname) -c \"flatpak install -y " + dialog->getUser() + "--from " + dialog->getInstallRef() + "\"") == 0) {
             listFlatpakRemotes();
-            displayFlatpaks();
+            displayFlatpaks(true);
             setCursor(QCursor(Qt::ArrowCursor));
             QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
             ui->tabWidget->blockSignals(true);
@@ -2199,5 +2295,6 @@ void MainWindow::on_comboUser_activated(int index)
         setCursor(QCursor(Qt::ArrowCursor));
     }
     listFlatpakRemotes();
-    displayFlatpaks();
+    displayFlatpaks(true);
 }
+

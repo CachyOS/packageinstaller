@@ -1221,8 +1221,14 @@
          </property>
         </widget>
        </item>
-       <item row="3" column="0" colspan="10">
+       <item row="4" column="0" colspan="10">
         <widget class="QTreeWidget" name="treeFlatpak">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
          <property name="sortingEnabled">
           <bool>false</bool>
          </property>
@@ -1243,12 +1249,12 @@
          </column>
          <column>
           <property name="text">
-           <string notr="true"/>
+           <string>Version</string>
           </property>
          </column>
          <column>
           <property name="text">
-           <string notr="true"/>
+           <string>Size</string>
           </property>
          </column>
          <column>
@@ -1261,10 +1267,20 @@
            <string notr="true">Displayed</string>
           </property>
          </column>
+         <column>
+          <property name="text">
+           <string notr="true">Duplication</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string notr="true">Full string</string>
+          </property>
+         </column>
         </widget>
        </item>
-       <item row="4" column="0" colspan="10">
-        <widget class="QFrame" name="frame_4">
+       <item row="6" column="0" colspan="10">
+        <widget class="QFrame" name="frameFP">
          <property name="frameShape">
           <enum>QFrame::StyledPanel</enum>
          </property>
@@ -1381,7 +1397,7 @@
         </widget>
        </item>
        <item row="2" column="0" colspan="2">
-        <widget class="QLabel" name="label_8">
+        <widget class="QLabel" name="labelFP">
          <property name="text">
           <string>Greyed out items have already been installed.</string>
          </property>
@@ -1403,8 +1419,8 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="7">
-        <widget class="QLabel" name="label_9">
+       <item row="1" column="7" alignment="Qt::AlignRight">
+        <widget class="QLabel" name="labelRepo">
          <property name="text">
           <string>Remote (repo):</string>
          </property>
@@ -1422,6 +1438,22 @@
           <size>
            <width>40</width>
            <height>26</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="3" column="0">
+        <spacer name="verticalSpacerFP">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeType">
+          <enum>QSizePolicy::Preferred</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>0</height>
           </size>
          </property>
         </spacer>

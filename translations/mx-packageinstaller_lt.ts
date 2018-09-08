@@ -6,8 +6,8 @@
     <message>
         <location filename="../mainwindow.ui" line="20"/>
         <location filename="../mainwindow.cpp" line="82"/>
-        <location filename="../mainwindow.cpp" line="1556"/>
-        <location filename="../mainwindow.cpp" line="1571"/>
+        <location filename="../mainwindow.cpp" line="1650"/>
+        <location filename="../mainwindow.cpp" line="1665"/>
         <source>MX Package Installer</source>
         <translation>MX paketų diegimo programa</translation>
     </message>
@@ -42,7 +42,7 @@
         <location filename="../mainwindow.ui" line="210"/>
         <location filename="../mainwindow.ui" line="627"/>
         <location filename="../mainwindow.ui" line="959"/>
-        <location filename="../mainwindow.ui" line="1207"/>
+        <location filename="../mainwindow.ui" line="1217"/>
         <source>search</source>
         <translation>ieškoti</translation>
     </message>
@@ -71,9 +71,7 @@
         <location filename="../mainwindow.ui" line="579"/>
         <location filename="../mainwindow.ui" line="907"/>
         <location filename="../mainwindow.ui" line="911"/>
-        <location filename="../mainwindow.ui" line="1168"/>
-        <location filename="../mainwindow.ui" line="1172"/>
-        <location filename="../mainwindow.cpp" line="1874"/>
+        <location filename="../mainwindow.cpp" line="2008"/>
         <source>All packages</source>
         <translation>Visi paketai</translation>
     </message>
@@ -81,8 +79,8 @@
         <location filename="../mainwindow.ui" line="180"/>
         <location filename="../mainwindow.ui" line="584"/>
         <location filename="../mainwindow.ui" line="916"/>
-        <location filename="../mainwindow.cpp" line="1888"/>
-        <location filename="../mainwindow.cpp" line="1982"/>
+        <location filename="../mainwindow.cpp" line="2022"/>
+        <location filename="../mainwindow.cpp" line="2102"/>
         <source>Installed</source>
         <translation>Įdiegti</translation>
     </message>
@@ -90,7 +88,7 @@
         <location filename="../mainwindow.ui" line="185"/>
         <location filename="../mainwindow.ui" line="589"/>
         <location filename="../mainwindow.ui" line="921"/>
-        <location filename="../mainwindow.cpp" line="1886"/>
+        <location filename="../mainwindow.cpp" line="2020"/>
         <source>Upgradable</source>
         <translation>Naujintini</translation>
     </message>
@@ -98,9 +96,10 @@
         <location filename="../mainwindow.ui" line="190"/>
         <location filename="../mainwindow.ui" line="594"/>
         <location filename="../mainwindow.ui" line="926"/>
-        <location filename="../mainwindow.ui" line="1187"/>
-        <location filename="../mainwindow.cpp" line="1890"/>
-        <location filename="../mainwindow.cpp" line="1986"/>
+        <location filename="../mainwindow.ui" line="1197"/>
+        <location filename="../mainwindow.cpp" line="1988"/>
+        <location filename="../mainwindow.cpp" line="2024"/>
+        <location filename="../mainwindow.cpp" line="2106"/>
         <source>Not installed</source>
         <translation>Neįdiegti</translation>
     </message>
@@ -115,6 +114,7 @@
         <location filename="../mainwindow.ui" line="239"/>
         <location filename="../mainwindow.ui" line="656"/>
         <location filename="../mainwindow.ui" line="985"/>
+        <location filename="../mainwindow.ui" line="1252"/>
         <source>Version</source>
         <translation>Versija</translation>
     </message>
@@ -122,7 +122,7 @@
         <location filename="../mainwindow.ui" line="271"/>
         <location filename="../mainwindow.ui" line="688"/>
         <location filename="../mainwindow.ui" line="1017"/>
-        <location filename="../mainwindow.ui" line="1275"/>
+        <location filename="../mainwindow.ui" line="1301"/>
         <source>Total packages:</source>
         <translation>Viso paketų:</translation>
     </message>
@@ -130,7 +130,7 @@
         <location filename="../mainwindow.ui" line="301"/>
         <location filename="../mainwindow.ui" line="718"/>
         <location filename="../mainwindow.ui" line="1047"/>
-        <location filename="../mainwindow.ui" line="1289"/>
+        <location filename="../mainwindow.ui" line="1315"/>
         <source>Installed:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -143,7 +143,7 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="345"/>
-        <location filename="../mainwindow.ui" line="1296"/>
+        <location filename="../mainwindow.ui" line="1322"/>
         <source>Upgrade All</source>
         <translation>Naujinti visus</translation>
     </message>
@@ -165,7 +165,7 @@
         <location filename="../mainwindow.ui" line="411"/>
         <location filename="../mainwindow.ui" line="602"/>
         <location filename="../mainwindow.ui" line="934"/>
-        <location filename="../mainwindow.ui" line="1376"/>
+        <location filename="../mainwindow.ui" line="1402"/>
         <source>Greyed out items have already been installed.</source>
         <translation>Pilka spalva pažymėti elementai jau yra įdiegti.</translation>
     </message>
@@ -192,130 +192,154 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../mainwindow.ui" line="1168"/>
+        <location filename="../mainwindow.ui" line="1172"/>
+        <location filename="../mainwindow.cpp" line="1972"/>
+        <source>All apps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../mainwindow.ui" line="1177"/>
-        <location filename="../mainwindow.cpp" line="1900"/>
-        <source>Installed packages</source>
+        <location filename="../mainwindow.cpp" line="1977"/>
+        <source>All runtimes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1182"/>
-        <location filename="../mainwindow.cpp" line="1895"/>
+        <location filename="../mainwindow.cpp" line="1982"/>
+        <source>All available</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1187"/>
+        <location filename="../mainwindow.cpp" line="1970"/>
+        <source>Installed apps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1192"/>
+        <location filename="../mainwindow.cpp" line="1968"/>
         <source>Installed runtimes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1226"/>
+        <location filename="../mainwindow.ui" line="1242"/>
         <source>Short Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1231"/>
+        <location filename="../mainwindow.ui" line="1247"/>
         <source>Full Package Name</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1342"/>
-        <source>Advanced</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../mainwindow.ui" line="1359"/>
-        <location filename="../mainwindow.ui" line="1363"/>
-        <source>For all users</source>
+        <location filename="../mainwindow.ui" line="1257"/>
+        <source>Size</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1368"/>
+        <source>Advanced</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1385"/>
+        <location filename="../mainwindow.ui" line="1389"/>
+        <source>For all users</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mainwindow.ui" line="1394"/>
         <source>For current user</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1399"/>
+        <location filename="../mainwindow.ui" line="1425"/>
         <source>Remote (repo):</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1423"/>
-        <location filename="../mainwindow.cpp" line="1734"/>
-        <location filename="../mainwindow.cpp" line="1841"/>
+        <location filename="../mainwindow.ui" line="1465"/>
+        <location filename="../mainwindow.cpp" line="1828"/>
+        <location filename="../mainwindow.cpp" line="1931"/>
         <source>Console Output</source>
         <translation>Pulto išvestis</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1429"/>
+        <location filename="../mainwindow.ui" line="1471"/>
         <source>Enter</source>
         <translation>Enter (Įvedimas)</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1440"/>
+        <location filename="../mainwindow.ui" line="1482"/>
         <source>Respond here, or just press Enter</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1484"/>
+        <location filename="../mainwindow.ui" line="1526"/>
         <source>Uninstall</source>
         <translation>Šalinti</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1491"/>
+        <location filename="../mainwindow.ui" line="1533"/>
         <source>Alt+U</source>
         <translation>Alt+U</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1507"/>
+        <location filename="../mainwindow.ui" line="1549"/>
         <source>About this application</source>
         <translation>Apie šią programą</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1510"/>
+        <location filename="../mainwindow.ui" line="1552"/>
         <source>About...</source>
         <translation>Apie...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1517"/>
+        <location filename="../mainwindow.ui" line="1559"/>
         <source>Alt+B</source>
         <translation>Alt+B</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1565"/>
+        <location filename="../mainwindow.ui" line="1607"/>
         <source>Display help </source>
         <translation>Rodyti žinyną</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1568"/>
+        <location filename="../mainwindow.ui" line="1610"/>
         <source>Help</source>
         <translation>Žinynas</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1575"/>
+        <location filename="../mainwindow.ui" line="1617"/>
         <source>Alt+H</source>
         <translation>Alt+H</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1591"/>
-        <location filename="../mainwindow.cpp" line="1641"/>
-        <location filename="../mainwindow.cpp" line="1977"/>
-        <location filename="../mainwindow.cpp" line="1980"/>
+        <location filename="../mainwindow.ui" line="1633"/>
+        <location filename="../mainwindow.cpp" line="1735"/>
+        <location filename="../mainwindow.cpp" line="2097"/>
+        <location filename="../mainwindow.cpp" line="2100"/>
         <source>Install</source>
         <translation>Įdiegti</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1598"/>
+        <location filename="../mainwindow.ui" line="1640"/>
         <source>Alt+I</source>
         <translation>Alt+I</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1617"/>
+        <location filename="../mainwindow.ui" line="1659"/>
         <source>Quit application</source>
         <translation>Išeiti iš programos</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1620"/>
+        <location filename="../mainwindow.ui" line="1662"/>
         <source>Close</source>
         <translation>Užverti</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1627"/>
+        <location filename="../mainwindow.ui" line="1669"/>
         <source>Alt+C</source>
         <translation>Alt+C</translation>
     </message>
@@ -331,17 +355,17 @@
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="161"/>
-        <location filename="../mainwindow.cpp" line="740"/>
-        <location filename="../mainwindow.cpp" line="855"/>
-        <location filename="../mainwindow.cpp" line="974"/>
-        <location filename="../mainwindow.cpp" line="1520"/>
-        <location filename="../mainwindow.cpp" line="1534"/>
-        <location filename="../mainwindow.cpp" line="1544"/>
-        <location filename="../mainwindow.cpp" line="1705"/>
-        <location filename="../mainwindow.cpp" line="1725"/>
-        <location filename="../mainwindow.cpp" line="2062"/>
-        <location filename="../mainwindow.cpp" line="2134"/>
-        <location filename="../mainwindow.cpp" line="2161"/>
+        <location filename="../mainwindow.cpp" line="821"/>
+        <location filename="../mainwindow.cpp" line="936"/>
+        <location filename="../mainwindow.cpp" line="1055"/>
+        <location filename="../mainwindow.cpp" line="1614"/>
+        <location filename="../mainwindow.cpp" line="1628"/>
+        <location filename="../mainwindow.cpp" line="1638"/>
+        <location filename="../mainwindow.cpp" line="1799"/>
+        <location filename="../mainwindow.cpp" line="1819"/>
+        <location filename="../mainwindow.cpp" line="2182"/>
+        <location filename="../mainwindow.cpp" line="2254"/>
+        <location filename="../mainwindow.cpp" line="2281"/>
         <source>Error</source>
         <translation>Klaida</translation>
     </message>
@@ -351,261 +375,261 @@
         <translation>Atnaujinant šaltinius, atsirado problemų. Gali būti, kad kai kurie šaltiniai nėra pateikę atnaujinimų. Išsamesnei informacijai, žiūrėkite: </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="390"/>
-        <location filename="../mainwindow.cpp" line="1562"/>
+        <location filename="../mainwindow.cpp" line="464"/>
+        <location filename="../mainwindow.cpp" line="1656"/>
         <source>Cancel</source>
         <translation>Atsisakyti</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="396"/>
+        <location filename="../mainwindow.cpp" line="470"/>
         <source>Please wait...</source>
         <translation>Prašome palaukti...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="569"/>
-        <location filename="../mainwindow.cpp" line="587"/>
+        <location filename="../mainwindow.cpp" line="654"/>
+        <location filename="../mainwindow.cpp" line="672"/>
         <source>Version </source>
         <translation>Versija </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="569"/>
+        <location filename="../mainwindow.cpp" line="654"/>
         <source> in stable repo</source>
         <translation> stabilioje saugykloje</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="571"/>
+        <location filename="../mainwindow.cpp" line="656"/>
         <source>Not available in stable repo</source>
         <translation>Neprieinama stabilioje saugykloje</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="581"/>
-        <location filename="../mainwindow.cpp" line="1822"/>
+        <location filename="../mainwindow.cpp" line="666"/>
+        <location filename="../mainwindow.cpp" line="1912"/>
         <source>Latest version </source>
         <translation>Naujausia versija </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="581"/>
-        <location filename="../mainwindow.cpp" line="1822"/>
+        <location filename="../mainwindow.cpp" line="666"/>
+        <location filename="../mainwindow.cpp" line="1912"/>
         <source> already installed</source>
         <translation> jau įdiegta</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="587"/>
+        <location filename="../mainwindow.cpp" line="672"/>
         <source> installed</source>
         <translation> įdiegta</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="698"/>
+        <location filename="../mainwindow.cpp" line="777"/>
         <source>Warning</source>
         <translation>Įspėjimas</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="699"/>
+        <location filename="../mainwindow.cpp" line="778"/>
         <source>You are about to use Debian Backports, which contains packages taken from the next Debian release (called &apos;testing&apos;), adjusted and recompiled for usage on Debian stable. They cannot be tested as extensively as in the stable releases of Debian and MX Linux, and are provided on an as-is basis, with risk of incompatibilities with other components in Debian stable. Use with care!</source>
         <translation>Jūs ketinate naudoti Debian naujų versijų paketus, kurie yra paimti iš kitos Debian laidos (pavadinimu &quot;testing&quot;), suderinti ir iš naujo sukompiliuoti naudojimui Debian stabiliose sistemose. Šie paketai negali būti taip plačiai išbandyti kaip stabiliose Debian ir MX Linux laidose, ir yra pateikiami esamu pavidalu, su nesuderinamumo su kitais Debian &quot;stable&quot; komponentais rizika. Naudokite atsargiai!</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="707"/>
+        <location filename="../mainwindow.cpp" line="786"/>
         <source>Do not show this message again</source>
         <translation>Daugiau neberodyti šio pranešimo</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="740"/>
-        <location filename="../mainwindow.cpp" line="855"/>
-        <location filename="../mainwindow.cpp" line="974"/>
+        <location filename="../mainwindow.cpp" line="821"/>
+        <location filename="../mainwindow.cpp" line="936"/>
+        <location filename="../mainwindow.cpp" line="1055"/>
         <source>Internet is not available, won&apos;t be able to download the list of packages</source>
         <translation>Internetas neprieinamas, nepavyks atsisiųsti paketų sąrašo</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="745"/>
+        <location filename="../mainwindow.cpp" line="826"/>
         <source>Installing packages...</source>
         <translation>Įdiegiami paketai...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="783"/>
+        <location filename="../mainwindow.cpp" line="864"/>
         <source>Post-processing...</source>
         <translation>Po-apdorojimas...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="815"/>
+        <location filename="../mainwindow.cpp" line="896"/>
         <source>Pre-processing for </source>
         <translation>Prieš-apdorojimas, skirtas </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="829"/>
+        <location filename="../mainwindow.cpp" line="910"/>
         <source>Installing </source>
         <translation>Įdiegiama </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="837"/>
+        <location filename="../mainwindow.cpp" line="918"/>
         <source>Post-processing for </source>
         <translation>Po-apdorojimas, skirtas </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="984"/>
+        <location filename="../mainwindow.cpp" line="1065"/>
         <source>Downloading package info...</source>
         <translation>Atsiunčiama paketo informacija...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1363"/>
+        <location filename="../mainwindow.cpp" line="1455"/>
         <source>Packages to be installed: </source>
         <translation>Paketai, kurie bus įdiegti: </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1400"/>
+        <location filename="../mainwindow.cpp" line="1492"/>
         <source>Package info</source>
         <translation>Paketo informacija</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1516"/>
-        <location filename="../mainwindow.cpp" line="1528"/>
-        <location filename="../mainwindow.cpp" line="1541"/>
-        <location filename="../mainwindow.cpp" line="1700"/>
-        <location filename="../mainwindow.cpp" line="2058"/>
-        <location filename="../mainwindow.cpp" line="2128"/>
-        <location filename="../mainwindow.cpp" line="2155"/>
+        <location filename="../mainwindow.cpp" line="1610"/>
+        <location filename="../mainwindow.cpp" line="1622"/>
+        <location filename="../mainwindow.cpp" line="1635"/>
+        <location filename="../mainwindow.cpp" line="1794"/>
+        <location filename="../mainwindow.cpp" line="2178"/>
+        <location filename="../mainwindow.cpp" line="2248"/>
+        <location filename="../mainwindow.cpp" line="2275"/>
         <source>Done</source>
         <translation>Atlikta</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1516"/>
-        <location filename="../mainwindow.cpp" line="1528"/>
-        <location filename="../mainwindow.cpp" line="1541"/>
-        <location filename="../mainwindow.cpp" line="1700"/>
-        <location filename="../mainwindow.cpp" line="1718"/>
-        <location filename="../mainwindow.cpp" line="2058"/>
-        <location filename="../mainwindow.cpp" line="2128"/>
-        <location filename="../mainwindow.cpp" line="2155"/>
+        <location filename="../mainwindow.cpp" line="1610"/>
+        <location filename="../mainwindow.cpp" line="1622"/>
+        <location filename="../mainwindow.cpp" line="1635"/>
+        <location filename="../mainwindow.cpp" line="1794"/>
+        <location filename="../mainwindow.cpp" line="1812"/>
+        <location filename="../mainwindow.cpp" line="2178"/>
+        <location filename="../mainwindow.cpp" line="2248"/>
+        <location filename="../mainwindow.cpp" line="2275"/>
         <source>Processing finished successfully.</source>
         <translation>Apdorojimas sėkmingai užbaigtas.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1520"/>
-        <location filename="../mainwindow.cpp" line="1534"/>
-        <location filename="../mainwindow.cpp" line="1544"/>
-        <location filename="../mainwindow.cpp" line="2062"/>
-        <location filename="../mainwindow.cpp" line="2134"/>
-        <location filename="../mainwindow.cpp" line="2161"/>
+        <location filename="../mainwindow.cpp" line="1614"/>
+        <location filename="../mainwindow.cpp" line="1628"/>
+        <location filename="../mainwindow.cpp" line="1638"/>
+        <location filename="../mainwindow.cpp" line="2182"/>
+        <location filename="../mainwindow.cpp" line="2254"/>
+        <location filename="../mainwindow.cpp" line="2281"/>
         <source>Problem detected while installing, please inspect the console output.</source>
         <translation>Įdiegiant, aptikta problema, prašome panagrinėti pulto išvestį.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1555"/>
+        <location filename="../mainwindow.cpp" line="1649"/>
         <source>About MX Package Installer</source>
         <translation>Apie MX paketų diegimo programa</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1556"/>
+        <location filename="../mainwindow.cpp" line="1650"/>
         <source>Version: </source>
         <translation>Versija: </translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1557"/>
+        <location filename="../mainwindow.cpp" line="1651"/>
         <source>Package Installer for MX Linux</source>
         <translation>Paketų diegimo programa, skirta MX Linux</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1559"/>
+        <location filename="../mainwindow.cpp" line="1653"/>
         <source>Copyright (c) MX Linux</source>
         <translation>Autorių teisės (c) MX Linux</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1560"/>
-        <location filename="../mainwindow.cpp" line="1571"/>
+        <location filename="../mainwindow.cpp" line="1654"/>
+        <location filename="../mainwindow.cpp" line="1665"/>
         <source>License</source>
         <translation>Licencija</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1561"/>
+        <location filename="../mainwindow.cpp" line="1655"/>
         <source>Changelog</source>
         <translation>Keitinių žurnalas</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1583"/>
+        <location filename="../mainwindow.cpp" line="1677"/>
         <source>&amp;Close</source>
         <translation>&amp;Užverti</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1639"/>
+        <location filename="../mainwindow.cpp" line="1733"/>
         <source>Reinstall</source>
         <translation>Įdiegti iš naujo</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1705"/>
+        <location filename="../mainwindow.cpp" line="1799"/>
         <source>We encountered a problem uninstalling, please check output</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1718"/>
+        <location filename="../mainwindow.cpp" line="1812"/>
         <source>Success</source>
         <translation>Pavyko</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1809"/>
+        <location filename="../mainwindow.cpp" line="1899"/>
         <source>Flatpak was not installed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1829"/>
-        <location filename="../mainwindow.cpp" line="1847"/>
+        <location filename="../mainwindow.cpp" line="1919"/>
+        <location filename="../mainwindow.cpp" line="1937"/>
         <source>Flathub remote failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1829"/>
-        <location filename="../mainwindow.cpp" line="1847"/>
+        <location filename="../mainwindow.cpp" line="1919"/>
+        <location filename="../mainwindow.cpp" line="1937"/>
         <source>Flathub remote could not be added</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1837"/>
+        <location filename="../mainwindow.cpp" line="1927"/>
         <source>Needs re-login</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1837"/>
+        <location filename="../mainwindow.cpp" line="1927"/>
         <source>You might need to logout/login to see installed items in the menu</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1725"/>
+        <location filename="../mainwindow.cpp" line="1819"/>
         <source>We encountered a problem uninstalling the program</source>
         <translation>Šalinant programą, susidurta su problema</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1798"/>
-        <location filename="../mainwindow.cpp" line="1809"/>
+        <location filename="../mainwindow.cpp" line="1888"/>
+        <location filename="../mainwindow.cpp" line="1899"/>
         <source>Flatpak not installed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1798"/>
+        <location filename="../mainwindow.cpp" line="1888"/>
         <source>Flatpak is not currently installed.
 OK to go ahead and install it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1975"/>
+        <location filename="../mainwindow.cpp" line="2095"/>
         <source>Upgrade</source>
         <translation>Naujinti</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2088"/>
+        <location filename="../mainwindow.cpp" line="2208"/>
         <source>Quit?</source>
         <translation>Išeiti?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2089"/>
+        <location filename="../mainwindow.cpp" line="2209"/>
         <source>Process still running, quiting might leave the system in an instable state.&lt;p&gt;&lt;b&gt;Are you sure you want to exit MX Package Installer?&lt;/b&gt;</source>
         <translation>Procesas yra vis dar vykdomas. Išėjus, sistema gali būti palikta nestabilioje būsenoje.&lt;p&gt;&lt;b&gt;Ar tikrai norite išeiti iš MX paketų diegimo programos?&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2090"/>
+        <location filename="../mainwindow.cpp" line="2210"/>
         <source>Yes</source>
         <translation>Taip</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2090"/>
+        <location filename="../mainwindow.cpp" line="2210"/>
         <source>No</source>
         <translation>Ne</translation>
     </message>

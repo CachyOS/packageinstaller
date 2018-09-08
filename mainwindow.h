@@ -70,13 +70,15 @@ public:
     bool uninstall(const QString &names);
     bool update();
 
+    void addInstalledSizesFP() const;
+    void blockInterfaceFP(bool block);
     void buildChangeList(QTreeWidgetItem *item);
     void cancelDownload();
     void clearUi();
     void copyTree(QTreeWidget *, QTreeWidget *) const;
     void displayPopularApps() const;
     void displayFiltered(const QStringList &list) const;
-    void displayFlatpaks();
+    void displayFlatpaks(bool force_update = false);
     void displayPackages();
     void displayWarning();
     void enableTabs(bool enable);
@@ -85,6 +87,7 @@ public:
     void loadPmFiles();
     void processDoc(const QDomDocument &doc);
     void refreshPopularApps();
+    void removeDuplicatesFP();
     void setCurrentTree();
     void setProgressDialog();
     void setSearchFocus();
@@ -96,7 +99,7 @@ public:
     QString getTranslation(const QString item);
     QString getVersion(const QString name) const;
     QStringList listInstalled() const;
-    QStringList listFlatpaks(const QString remote, const QString type = "") const;
+    QStringList listFlatpaks(const QString remote, const QString type = "");
     QStringList listInstalledFlatpaks(const QString type = "") const;
 
 
@@ -168,6 +171,11 @@ private:
     QString user;
     QStringList installed_packages;
     QStringList change_list;
+    QStringList flatpaks;
+    QStringList flatpaks_apps;
+    QStringList flatpaks_runtimes;
+    QStringList installed_apps_fp;
+    QStringList installed_runtimes_fp;
     QMap<QString, QStringList> backports_list;
     QMap<QString, QStringList> mx_list;
     QMap<QString, QStringList> stable_list;
