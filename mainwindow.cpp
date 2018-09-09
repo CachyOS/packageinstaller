@@ -1918,7 +1918,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
                     item->setText(5, "installed");
                 }
             }
-            cmd->run("su $(logname) -c \"socat SYSTEM:'flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo',stderr STDIO\"");
+            cmd->run("su $(logname) -c \"flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo\"");
             if (cmd->getExitCode(true) != 0) {
                 QMessageBox::critical(this, tr("Flathub remote failed"), tr("Flathub remote could not be added"));
                 ui->tabWidget->setCurrentIndex(0);
@@ -1936,7 +1936,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
             break;
         }
         setCursor(QCursor(Qt::BusyCursor));
-        cmd->run("su $(logname) -c \"socat SYSTEM:'flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo',stderr STDIO\"");
+        cmd->run("su $(logname) -c \"flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo\"");
         if (cmd->getExitCode(true) != 0) {
             QMessageBox::critical(this, tr("Flathub remote failed"), tr("Flathub remote could not be added"));
             ui->tabWidget->setCurrentIndex(0);
