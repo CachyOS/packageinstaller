@@ -2136,7 +2136,7 @@ void MainWindow::buildChangeList(QTreeWidgetItem *item)
         indexFilterFP = ui->comboFilterFlatpak->currentText();
     }
 
-    QString newapp = QString(item->text(2));
+    QString newapp = QString(item->text(8));
     if (item->checkState(0) == Qt::Checked) {
         ui->buttonInstall->setEnabled(true);
         change_list.append(newapp);
