@@ -2335,7 +2335,7 @@ void MainWindow::on_buttonRemotes_clicked()
         showOutput();
         setConnections();
         setCursor(QCursor(Qt::BusyCursor));
-        if (cmd->run("su $(logname) -c \"socat SYSTEM:'flatpak install -y " + dialog->getUser() + "--from " + dialog->getInstallRef() + "',stderr STDIO\"") == 0) {
+        if (cmd->run("su $(logname) -c \"socat SYSTEM:'flatpak install -y " + dialog->getUser() + "--from " + dialog->getInstallRef().replace(":", "\\:") + "',stderr STDIO\"") == 0) {
             listFlatpakRemotes();
             displayFlatpaks(true);
             setCursor(QCursor(Qt::ArrowCursor));
