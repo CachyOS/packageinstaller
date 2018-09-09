@@ -1412,7 +1412,7 @@ QStringList MainWindow::listFlatpaks(const QString remote, const QString type)
     QString arch = "";
     if (VersionNumber(getVersion("flatpak")) < VersionNumber("1.0.1")) {
         if (system("arch | grep -q x86_64") == 0) {
-            arch = "--arch=x86_64";
+            arch = "--arch=x86_64 ";
         } else {
             arch = "--arch=i386 ";
         }
