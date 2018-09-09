@@ -167,6 +167,7 @@ bool MainWindow::update()
 // Add sizes for the installed packages for older flatpak that doesn't list size for all the packages
 void MainWindow::addInstalledSizesFP() const
 {
+    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
     // list installed packages with sizes
     QStringList list = cmd->getOutput("su $(logname) -c \"flatpak -d list --app " + user + "|tr -s ' ' |cut -f1,5,6 -d' '\"").split("\n");
     QStringList runtimes = cmd->getOutput("su $(logname) -c \"flatpak -d list --runtime " + user + "|tr -s ' ' |cut -f1,5,6 -d' '\"").split("\n");
@@ -1623,6 +1624,7 @@ void MainWindow::on_buttonInstall_clicked()
         setCursor(QCursor(Qt::BusyCursor));
         if (cmd->run("su $(logname) -c \"socat SYSTEM:'flatpak install -y " + user + ui->comboRemote->currentText() + " " + change_list.join(" ") + "',stderr STDIO\"") == 0) {
             displayFlatpaks(true);
+            indexFilterFP.clear();
             ui->comboFilterFlatpak->setCurrentIndex(0);
             QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
             ui->tabWidget->blockSignals(true);
@@ -1790,10 +1792,9 @@ void MainWindow::on_buttonUninstall_clicked()
                 success = false;
             }
         }
-        setCursor(QCursor(Qt::ArrowCursor));
-
         if (success) { // success if all processed successfuly, failure if one failed
             displayFlatpaks(true);
+            indexFilterFP.clear();
             ui->comboFilterFlatpak->setCurrentIndex(0);
             QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
             ui->tabWidget->blockSignals(true);

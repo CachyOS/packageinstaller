@@ -6,8 +6,8 @@
     <message>
         <location filename="../mainwindow.ui" line="20"/>
         <location filename="../mainwindow.cpp" line="82"/>
-        <location filename="../mainwindow.cpp" line="1654"/>
-        <location filename="../mainwindow.cpp" line="1669"/>
+        <location filename="../mainwindow.cpp" line="1655"/>
+        <location filename="../mainwindow.cpp" line="1670"/>
         <source>MX Package Installer</source>
         <translation>MX 軟體安裝工具</translation>
     </message>
@@ -329,7 +329,7 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1633"/>
-        <location filename="../mainwindow.cpp" line="1738"/>
+        <location filename="../mainwindow.cpp" line="1739"/>
         <location filename="../mainwindow.cpp" line="2105"/>
         <location filename="../mainwindow.cpp" line="2108"/>
         <source>Install</source>
@@ -371,8 +371,8 @@
         <location filename="../mainwindow.cpp" line="941"/>
         <location filename="../mainwindow.cpp" line="1060"/>
         <location filename="../mainwindow.cpp" line="1619"/>
-        <location filename="../mainwindow.cpp" line="1633"/>
-        <location filename="../mainwindow.cpp" line="1643"/>
+        <location filename="../mainwindow.cpp" line="1634"/>
+        <location filename="../mainwindow.cpp" line="1644"/>
         <location filename="../mainwindow.cpp" line="1803"/>
         <location filename="../mainwindow.cpp" line="1823"/>
         <location filename="../mainwindow.cpp" line="2192"/>
@@ -388,7 +388,7 @@
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="464"/>
-        <location filename="../mainwindow.cpp" line="1660"/>
+        <location filename="../mainwindow.cpp" line="1661"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
@@ -494,8 +494,8 @@
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1615"/>
-        <location filename="../mainwindow.cpp" line="1627"/>
-        <location filename="../mainwindow.cpp" line="1640"/>
+        <location filename="../mainwindow.cpp" line="1628"/>
+        <location filename="../mainwindow.cpp" line="1641"/>
         <location filename="../mainwindow.cpp" line="1798"/>
         <location filename="../mainwindow.cpp" line="2188"/>
         <location filename="../mainwindow.cpp" line="2258"/>
@@ -505,8 +505,8 @@
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1615"/>
-        <location filename="../mainwindow.cpp" line="1627"/>
-        <location filename="../mainwindow.cpp" line="1640"/>
+        <location filename="../mainwindow.cpp" line="1628"/>
+        <location filename="../mainwindow.cpp" line="1641"/>
         <location filename="../mainwindow.cpp" line="1798"/>
         <location filename="../mainwindow.cpp" line="1816"/>
         <location filename="../mainwindow.cpp" line="2188"/>
@@ -517,8 +517,8 @@
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1619"/>
-        <location filename="../mainwindow.cpp" line="1633"/>
-        <location filename="../mainwindow.cpp" line="1643"/>
+        <location filename="../mainwindow.cpp" line="1634"/>
+        <location filename="../mainwindow.cpp" line="1644"/>
         <location filename="../mainwindow.cpp" line="2192"/>
         <location filename="../mainwindow.cpp" line="2264"/>
         <location filename="../mainwindow.cpp" line="2291"/>
@@ -526,43 +526,43 @@
         <translation>安裝軟體時發現問題，請參考終端機輸出的訊息。</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1653"/>
+        <location filename="../mainwindow.cpp" line="1654"/>
         <source>About MX Package Installer</source>
         <translation>關於 MX 軟體安裝工具</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1654"/>
+        <location filename="../mainwindow.cpp" line="1655"/>
         <source>Version: </source>
         <translation>版本：</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1655"/>
+        <location filename="../mainwindow.cpp" line="1656"/>
         <source>Package Installer for MX Linux</source>
         <translation>MX Linux 軟體安裝工具</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1657"/>
+        <location filename="../mainwindow.cpp" line="1658"/>
         <source>Copyright (c) MX Linux</source>
         <translation>版權所有 (c) MX Linux</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1658"/>
-        <location filename="../mainwindow.cpp" line="1669"/>
+        <location filename="../mainwindow.cpp" line="1659"/>
+        <location filename="../mainwindow.cpp" line="1670"/>
         <source>License</source>
         <translation>授權條款</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1659"/>
+        <location filename="../mainwindow.cpp" line="1660"/>
         <source>Changelog</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1681"/>
+        <location filename="../mainwindow.cpp" line="1682"/>
         <source>&amp;Close</source>
         <translation>關閉（&amp;C）</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="1736"/>
+        <location filename="../mainwindow.cpp" line="1737"/>
         <source>Reinstall</source>
         <translation>重新安裝</translation>
     </message>
