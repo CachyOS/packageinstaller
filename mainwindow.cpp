@@ -2132,11 +2132,16 @@ void MainWindow::buildChangeList(QTreeWidgetItem *item)
      * if all apps are upgradable -> change Install label to Upgrade;
      */
 
-    if (change_list.isEmpty() && indexFilterFP.isEmpty()) { // remember the Flatpak combo location first time this is called
-        indexFilterFP = ui->comboFilterFlatpak->currentText();
+    QString newapp;
+    if (tree == ui->treeFlatpak) {
+        if (change_list.isEmpty() && indexFilterFP.isEmpty()) { // remember the Flatpak combo location first time this is called
+            indexFilterFP = ui->comboFilterFlatpak->currentText();
+        }
+        newapp = QString(item->text(8)); // full name in column 8
+    } else {
+        newapp = QString(item->text(2)); // name in column 2
     }
 
-    QString newapp = QString(item->text(8));
     if (item->checkState(0) == Qt::Checked) {
         ui->buttonInstall->setEnabled(true);
         change_list.append(newapp);
