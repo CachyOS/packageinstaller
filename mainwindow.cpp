@@ -1411,7 +1411,11 @@ QStringList MainWindow::listFlatpaks(const QString remote, const QString type)
     // need to specify arch for older version
     QString arch = "";
     if (VersionNumber(getVersion("flatpak")) < VersionNumber("1.0.1")) {
-        arch = "--arch=" + cmd->getOutput("arch") + " ";
+        if (system("arch | grep -q x86_64") == 0) {
+            arch = "--arch=x86_64";
+        } else {
+            arch = "--arch=i386 ";
+        }
         // list packages, strip first part remote/ or app/ no size for old flatpak
         list = cmd->getOutput("su $(logname) -c \"flatpak -d remote-ls " + user + remote + " " + arch + type + "| cut -f1 | tr -s ' ' | cut -f1 -d' '|sed 's/^[^\\/]*\\///g' \"").split("\n");
     } else {
