@@ -1298,7 +1298,7 @@
           <item row="2" column="0">
            <widget class="QLabel" name="labelTotalApps_4">
             <property name="text">
-             <string>Total items displayed:</string>
+             <string>Items displayed:</string>
             </property>
            </widget>
           </item>
@@ -1316,7 +1316,7 @@
             </property>
            </widget>
           </item>
-          <item row="2" column="8">
+          <item row="2" column="11">
            <widget class="QPushButton" name="buttonUpgradeFP">
             <property name="text">
              <string>Upgrade All</string>
@@ -1346,7 +1346,7 @@
             </property>
            </spacer>
           </item>
-          <item row="2" column="5">
+          <item row="2" column="8">
            <spacer name="horizontalSpacer_16">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
@@ -1362,7 +1362,7 @@
             </property>
            </spacer>
           </item>
-          <item row="2" column="7">
+          <item row="2" column="10">
            <widget class="QPushButton" name="buttonRemotes">
             <property name="text">
              <string>Advanced</string>
@@ -1373,6 +1373,36 @@
             </property>
             <property name="autoDefault">
              <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="5">
+           <spacer name="horizontalSpacer_17">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Preferred</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="2" column="6">
+           <widget class="QLabel" name="labelTotalSize">
+            <property name="text">
+             <string>Total installed size:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="7">
+           <widget class="QLabel" name="labelNumSize">
+            <property name="text">
+             <string/>
             </property>
            </widget>
           </item>

@@ -164,29 +164,55 @@ bool MainWindow::update()
 }
 
 
+// convert number, unit to bytes
+double MainWindow::convert(const double &number, const QString &unit) const
+{
+    if (unit == "KB") { // assuming KiB not KB
+        return number * 1024;
+    } else if (unit == "MB") {
+        return number * 1024 * 1024;
+    } else if (unit == "GB") {
+        return number * 1024 * 1024 * 1024;
+    } else { // for "bytes"
+        return number;
+    }
+}
+
+
 // Add sizes for the installed packages for older flatpak that doesn't list size for all the packages
-void MainWindow::addInstalledSizesFP() const
+void MainWindow::listSizeInstalledFP()
 {
     qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
-    // list installed packages with sizes
-    QStringList list = cmd->getOutput("su $(logname) -c \"flatpak -d list --app " + user + "|tr -s ' ' |cut -f1,5,6 -d' '\"").split("\n");
-    QStringList runtimes = cmd->getOutput("su $(logname) -c \"flatpak -d list --runtime " + user + "|tr -s ' ' |cut -f1,5,6 -d' '\"").split("\n");
-    if (!runtimes.isEmpty()) {
-        list << runtimes;
-    }
 
     QString name, size;
     QTreeWidgetItemIterator it(ui->treeFlatpak);
-    while (*it) {
-        foreach (QString item, list) {
-            name = item.section(" ", 0, 0);
-            size = item.section(" ", 1);
-            if (name == (*it)->text(8)) {
-                (*it)->setText(4, size);
-            }
+    QString total = "0 bytes";
+    QStringList list, runtimes;
+    if (VersionNumber(getVersion("flatpak")) < VersionNumber("1.0.1")) { // older version doesn't display all apps and runtimes without specifying them
+        list = cmd->getOutput("su $(logname) -c \"flatpak -d list --app " + user + "|tr -s ' ' |cut -f1,5,6 -d' '\"").split("\n");
+        runtimes = cmd->getOutput("su $(logname) -c \"flatpak -d list --runtime " + user + "|tr -s ' '|cut -f1,5,6 -d' '\"").split("\n");
+        if (!runtimes.isEmpty()) {
+            list << runtimes;
         }
-        ++it;
+        while (*it) {
+            foreach (QString item, list) {
+                name = item.section(" ", 0, 0);
+                size = item.section(" ", 1);
+                if (name == (*it)->text(8)) {
+                    total = addSizes(total, size);
+                    (*it)->setText(4, size);
+                }
+            }
+            ++it;
+        }
+    } else {
+        list = cmd->getOutput("su $(logname) -c \"flatpak -d list " + user + "|tr -s ' '|cut -f1,5\"").split("\n");
+        foreach (QString item, list) {
+            total = addSizes(total, item.section("\t", 1));
+        }
     }
+
+    ui->labelNumSize->setText(total);
 }
 
 // Block interface while updateing Flatpak list
@@ -241,6 +267,31 @@ void MainWindow::updateInterface()
 
     QApplication::setOverrideCursor(QCursor(Qt::ArrowCursor));
     progress->hide();
+}
+
+
+// add two string "00 KB" and "00 GB", return similar string
+QString MainWindow::addSizes(QString arg1, QString arg2)
+{
+    QString number1 = arg1.section(" ", 0, 0);
+    QString number2 = arg2.section(" ", 0, 0);
+    QString unit1 = arg1.section(" ", 1);
+    QString unit2 = arg2.section(" ", 1);
+
+    double bytes = 0;
+    // calculate
+    bytes = convert(number1.toDouble(), unit1) + convert(number2.toDouble(), unit2);
+
+    // presentation
+    if (bytes < 1024) {
+        return QString::number(bytes) + " bytes";
+    } else if (bytes < 1024 * 1024) {
+        return QString::number(bytes/1024) + " KB";
+    } else if (bytes < 1024 * 1024 * 1024) {
+        return QString::number(bytes/(1024 * 1024), 'f', 1) + " MB";
+    } else {
+        return QString::number(bytes/(1024 * 1024 * 1024), 'f', 2) + " GB";
+    }
 }
 
 // Returns Debian main version number
@@ -742,9 +793,9 @@ void MainWindow::displayFlatpaks(bool force_update)
     }
 
     // add sizes for the installed packages for older flatpak that doesn't list size for all the packages
-    if (VersionNumber(getVersion("flatpak")) < VersionNumber("1.0.1")) {
-        addInstalledSizesFP();
-    }
+//    if (VersionNumber(getVersion("flatpak")) < VersionNumber("1.0.1")) {
+        listSizeInstalledFP();
+//    }
 
     ui->labelNumAppFP->setText(QString::number(total_count));
 

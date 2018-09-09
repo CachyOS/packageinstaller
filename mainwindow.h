@@ -70,7 +70,8 @@ public:
     bool uninstall(const QString &names);
     bool update();
 
-    void addInstalledSizesFP() const;
+    double convert(const double &number, const QString &unit) const;
+
     void blockInterfaceFP(bool block);
     void buildChangeList(QTreeWidgetItem *item);
     void cancelDownload();
@@ -84,6 +85,7 @@ public:
     void enableTabs(bool enable);
     void ifDownloadFailed();
     void listFlatpakRemotes();
+    void listSizeInstalledFP();
     void loadPmFiles();
     void processDoc(const QDomDocument &doc);
     void refreshPopularApps();
@@ -94,6 +96,7 @@ public:
     void setup();
     void updateInterface();
 
+    QString addSizes(QString arg1, QString arg2);
     QString getDebianVersion() const;
     QString getLocalizedName(const QDomElement element) const;
     QString getTranslation(const QString item);
