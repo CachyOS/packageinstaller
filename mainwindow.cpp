@@ -746,7 +746,12 @@ void MainWindow::displayFlatpaks(bool force_update)
     }
 
     ui->labelNumAppFP->setText(QString::number(total_count));
-    ui->labelNumInstFP->setText(QString::number(installed_apps_fp.count()));
+
+    int total = 0;
+    if (installed_apps_fp != QStringList("")) {
+        total = installed_apps_fp.count();
+    }
+    ui->labelNumInstFP->setText(QString::number(total));
 
     ui->treeFlatpak->sortByColumn(1, Qt::AscendingOrder);
 
@@ -1616,9 +1621,9 @@ void MainWindow::on_buttonInstall_clicked()
     } else if (tree == ui->treeFlatpak) {
         setConnections();
         setCursor(QCursor(Qt::BusyCursor));
-        if (cmd->run("su $(logname) -c \"flatpak install -y " + user + ui->comboRemote->currentText() + " " + change_list.join(" ") + "\"") == 0) {
+        if (cmd->run("su $(logname) -c \"socat SYSTEM:'flatpak install -y " + user + ui->comboRemote->currentText() + " " + change_list.join(" ") + "',stderr STDIO\"") == 0) {
             displayFlatpaks(true);
-            setCursor(QCursor(Qt::ArrowCursor));
+            ui->comboFilterFlatpak->setCurrentIndex(0);
             QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
             ui->tabWidget->blockSignals(true);
             ui->tabWidget->setCurrentWidget(ui->tabFlatpak);
@@ -1781,7 +1786,7 @@ void MainWindow::on_buttonUninstall_clicked()
         setCursor(QCursor(Qt::BusyCursor));
         foreach (QString app, change_list) {
             setConnections();
-            if (cmd->run("su $(logname) -c \"flatpak uninstall " + conf + user + app + "\"") != 0) { // success if all processed successfuly, failure if one failed
+            if (cmd->run("su $(logname) -c \"socat SYSTEM:'flatpak uninstall " + conf + user + app + "',stderr STDIO\"") != 0) { // success if all processed successfuly, failure if one failed
                 success = false;
             }
         }
@@ -1789,6 +1794,7 @@ void MainWindow::on_buttonUninstall_clicked()
 
         if (success) { // success if all processed successfuly, failure if one failed
             displayFlatpaks(true);
+            ui->comboFilterFlatpak->setCurrentIndex(0);
             QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
             ui->tabWidget->blockSignals(true);
             ui->tabWidget->setCurrentWidget(ui->tabFlatpak);
@@ -1912,7 +1918,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
                     item->setText(5, "installed");
                 }
             }
-            cmd->run("su $(logname) -c \"flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo\"");
+            cmd->run("su $(logname) -c \"socat SYSTEM:'flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo',stderr STDIO\"");
             if (cmd->getExitCode(true) != 0) {
                 QMessageBox::critical(this, tr("Flathub remote failed"), tr("Flathub remote could not be added"));
                 ui->tabWidget->setCurrentIndex(0);
@@ -1930,7 +1936,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
             break;
         }
         setCursor(QCursor(Qt::BusyCursor));
-        cmd->run("su $(logname) -c \"flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo\"");
+        cmd->run("su $(logname) -c \"socat SYSTEM:'flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo',stderr STDIO\"");
         if (cmd->getExitCode(true) != 0) {
             QMessageBox::critical(this, tr("Flathub remote failed"), tr("Flathub remote could not be added"));
             ui->tabWidget->setCurrentIndex(0);
@@ -2101,7 +2107,9 @@ void MainWindow::buildChangeList(QTreeWidgetItem *item)
     } else { // for Flatpaks allow selection only of installed or not installed items so one clicks on an installed item only installed items should be displayed and the other way round
         ui->buttonInstall->setText(tr("Install"));
         if (item->text(5) == "installed") {
-            ui->comboFilterFlatpak->setCurrentText(tr("Installed"));
+            if (indexFilterFP == "All apps") { // if "all apps" is selected
+                ui->comboFilterFlatpak->setCurrentText(tr("Installed apps"));
+            }
             ui->buttonUninstall->setEnabled(true);
             ui->buttonInstall->setEnabled(false);
         } else {
@@ -2244,7 +2252,7 @@ void MainWindow::on_buttonUpgradeFP_clicked()
     setConnections();
     setCursor(QCursor(Qt::BusyCursor));
 
-    if(cmd->run("su $(logname) -c \"flatpak update " + user + "\"") == 0) {
+    if(cmd->run("su $(logname) -c \"socat SYSTEM:'flatpak update " + user.trimmed() + "',stderr STDIO\"") == 0) {
         displayFlatpaks(true);
         setCursor(QCursor(Qt::ArrowCursor));
         QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
@@ -2270,7 +2278,7 @@ void MainWindow::on_buttonRemotes_clicked()
         showOutput();
         setConnections();
         setCursor(QCursor(Qt::BusyCursor));
-        if (cmd->run("su $(logname) -c \"flatpak install -y " + dialog->getUser() + "--from " + dialog->getInstallRef() + "\"") == 0) {
+        if (cmd->run("su $(logname) -c \"socat SYSTEM:'flatpak install -y " + dialog->getUser() + "--from " + dialog->getInstallRef() + "',stderr STDIO\"") == 0) {
             listFlatpakRemotes();
             displayFlatpaks(true);
             setCursor(QCursor(Qt::ArrowCursor));

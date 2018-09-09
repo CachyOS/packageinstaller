@@ -92,7 +92,7 @@ void ManageRemotes::addItem()
     QString location = editAddRemote->text();
     QString name = editAddRemote->text().section("/", -1).section(".", 0, 0); // obtain the name before .flatpakremo
 
-    if (cmd->run("su $(logname) -c \"flatpak remote-add --if-not-exists " + user + name.toUtf8() + " " + location.toUtf8() + "\"") != 0) {
+    if (cmd->run("su $(logname) -c \"socat SYSTEM:'flatpak remote-add --if-not-exists " + user + name.toUtf8() + " " + location.toUtf8() + "',stderr STDIO\"") != 0) {
         setCursor(QCursor(Qt::ArrowCursor));
         QMessageBox::critical(this, tr("Error adding remote"), tr("Could not add remote. Command returned an error, please double-check the remote address and try again"));
     } else {
@@ -117,7 +117,7 @@ void ManageRemotes::userSelected(int index)
     } else {
         user = "--user ";
         setCursor(QCursor(Qt::BusyCursor));
-        cmd->run("su $(logname) -c \"flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo\"");
+        cmd->run("su $(logname) -c \"socat SYSTEM:'flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo',stderr STDIO\"");
         setCursor(QCursor(Qt::ArrowCursor));
     }
     listFlatpakRemotes();
