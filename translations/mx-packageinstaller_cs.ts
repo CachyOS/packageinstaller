@@ -241,7 +241,7 @@
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1301"/>
-        <source>Items displayed:</source>
+        <source>Total items </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -675,12 +675,12 @@ OK to go ahead and install it?</source>
     </message>
     <message>
         <location filename="../remotes.cpp" line="33"/>
-        <source>enter Flatpakref remote URL to install app</source>
+        <source>enter Flatpakref location to install app</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../remotes.cpp" line="35"/>
-        <source>Add or remove Flatpak remotes (repos), or install apps using flatpakref URL</source>
+        <source>Add or remove Flatpak remotes (repos), or install apps using flatpakref URL or path</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

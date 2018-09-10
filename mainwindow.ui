@@ -1298,7 +1298,7 @@
           <item row="2" column="0">
            <widget class="QLabel" name="labelTotalApps_4">
             <property name="text">
-             <string>Items displayed:</string>
+             <string>Total items </string>
             </property>
            </widget>
           </item>
