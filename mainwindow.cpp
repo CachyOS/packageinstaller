@@ -1417,10 +1417,10 @@ QStringList MainWindow::listFlatpaks(const QString remote, const QString type)
             arch = "--arch=i386 ";
         }
         // list packages, strip first part remote/ or app/ no size for old flatpak
-        list = cmd->getOutput("su $(logname) -c \"flatpak -d remote-ls " + user + remote + " " + arch + type + "| cut -f1 | tr -s ' ' | cut -f1 -d' '|sed 's/^[^\\/]*\\///g' \"").split("\n");
+        list = cmd->getOutput("su $(logname) -c \"set -o pipefail; flatpak -d remote-ls " + user + remote + " " + arch + type + "| cut -f1 | tr -s ' ' | cut -f1 -d' '|sed 's/^[^\\/]*\\///g' \"").split("\n");
     } else {
         // list size too
-        list = cmd->getOutput("su $(logname) -c \"flatpak -d remote-ls " + user + remote + " " + arch + type + "| cut -f1,3 |tr -s ' ' | sed 's/^[^\\/]*\\///g' \"").split("\n");
+        list = cmd->getOutput("su $(logname) -c \"set -o pipefail; flatpak -d remote-ls " + user + remote + " " + arch + type + "| cut -f1,3 |tr -s ' ' | sed 's/^[^\\/]*\\///g' \"").split("\n");
     }
 
     if (cmd->getExitCode(true) != 0) {
