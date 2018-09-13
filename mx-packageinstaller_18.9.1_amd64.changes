@@ -1,0 +1,46 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Format: 1.8
+Date: Thu, 13 Sep 2018 12:42:08 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 18.9.1
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (18.9.1) mx; urgency=medium
+ .
+   * add xdg-desktop-portal-gtk dependency
+Checksums-Sha1:
+ b48ffe3890e0523e07a0ad1fe26521eaed52a838 1243 mx-packageinstaller_18.9.1.dsc
+ 931ce30762f2c4f0ee7012d2ddd4cd46cba031c1 86052 mx-packageinstaller_18.9.1.tar.xz
+ 3fb12df66e38518aae65eca71ee5cf66ff643da1 11283 mx-packageinstaller_18.9.1_amd64.buildinfo
+ f677255e9baaefa5f3db625c7379bd07889f7701 157254 mx-packageinstaller_18.9.1_amd64.deb
+Checksums-Sha256:
+ a2ea16166588eda344517967785f0019b4177bd3c31893805813e350d0279416 1243 mx-packageinstaller_18.9.1.dsc
+ 09303396a9430f75967c06888d26d43a4a0fad723f967aee1c5cbbb3da195c50 86052 mx-packageinstaller_18.9.1.tar.xz
+ d6ae2278f2963c1847a1a4de4e98dd45b4fade9d71e32027e2c20cc856328249 11283 mx-packageinstaller_18.9.1_amd64.buildinfo
+ c70494401c0babb22c6a21bf9935ed7c646049c8473e6332b52b05b433f3b12b 157254 mx-packageinstaller_18.9.1_amd64.deb
+Files:
+ 68d7d21b97a1f7752981b9c80927fc76 1243 admin optional mx-packageinstaller_18.9.1.dsc
+ d05ac4c347194273c0fb858e227156db 86052 admin optional mx-packageinstaller_18.9.1.tar.xz
+ 6f19c3bdc13d09c889d1c28df9d1dd2f 11283 admin optional mx-packageinstaller_18.9.1_amd64.buildinfo
+ bf7a651dacc3895c66cc5e13500f3abb 157254 admin optional mx-packageinstaller_18.9.1_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCAAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAlualWQTHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumND6CACfL9aQvgBZIr+Z4GER2KFUyLAbxeO+
+MQrHn72RA372T5NWH7Vm6PTCaiRyF+l17oJLviwAqJAUgGgnHmsYFBIDnQIyqaAc
+J7BNVhfRSnHrta4PRm1vsiwCpQWjSyieflIP8jCte0PAW4rQR+gB2BVTQeHUXSpU
+0c2F1QL85lyY+ZBPo3bHnnO+FchVBK+mZ5ZAiIoGWjHCpmlTckGn16b1S6azRU+S
+rVFPucI19cQmh/kVS8Pacgw2Miibv/KHbcWm6+vexaqm1q1matW+E68cfkN4vHQ1
+VjzdOWNh5FcqMUUCJWeRj0es9gOu4Ikd3prARNRFwLN6NYXeW7Q7CORH
+=lTbl
+-----END PGP SIGNATURE-----
