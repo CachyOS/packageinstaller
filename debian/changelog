@@ -1,3 +1,9 @@
+mx-packageinstaller (18.9.2) mx; urgency=medium
+
+  * fix version check for other locales
+
+ -- Adrian <adrian@mxlinux.org>  Fri, 14 Sep 2018 08:25:42 -0400
+
 mx-packageinstaller (18.9.1) mx; urgency=medium
 
   * add xdg-desktop-portal-gtk dependency

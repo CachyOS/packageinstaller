@@ -1,0 +1,46 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Format: 1.8
+Date: Fri, 14 Sep 2018 08:25:42 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 18.9.2
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (18.9.2) mx; urgency=medium
+ .
+   * fix version check for other locales
+Checksums-Sha1:
+ b142b6197d8de77f21077feb763e7e92c066ebb4 1243 mx-packageinstaller_18.9.2.dsc
+ 5e6d2e2f3ca6a587f140eb6c6ae277d6fddee498 86048 mx-packageinstaller_18.9.2.tar.xz
+ 8904a72c7f3106668ca3ad27971e7880d214ab98 11283 mx-packageinstaller_18.9.2_amd64.buildinfo
+ f9543ce361f1f28c8bfb0773d4bf94523b377443 156526 mx-packageinstaller_18.9.2_amd64.deb
+Checksums-Sha256:
+ bc83c12a2246e39c02e96a4c509b45cc0f3b95a18db0b88299fb4ae5c4fd2d1d 1243 mx-packageinstaller_18.9.2.dsc
+ 010080a91507e3bc7c64e86d5b76657ea1bd22cbcd727c8bb78fd954f41ec2b4 86048 mx-packageinstaller_18.9.2.tar.xz
+ 19d6494e7a76739991ee63f051b93dc2ad91d749a14b258ffa95a6510d86dffa 11283 mx-packageinstaller_18.9.2_amd64.buildinfo
+ 1354bea05ad4fdd5d736804f7642683474b5276c7b5eb30e00adbbc7b7264a14 156526 mx-packageinstaller_18.9.2_amd64.deb
+Files:
+ ae58a57bacadec2a8e79174af5952e43 1243 admin optional mx-packageinstaller_18.9.2.dsc
+ 2c662a5d8b8a852948b0fdc743818d94 86048 admin optional mx-packageinstaller_18.9.2.tar.xz
+ eee73c562395d5ccdc423932ad114db4 11283 admin optional mx-packageinstaller_18.9.2_amd64.buildinfo
+ c5158b7ed5864d98d0ac9c682f3a4414 156526 admin optional mx-packageinstaller_18.9.2_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCAAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAlubqycTHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumO0SCACtEgf2e/a+isRoFaafB5LUPMUfFkrs
+7TtvuhDDq0LjhtBRDDcxQtgKEJNMRcsSzmEDObVYmLPX1HcxrSSOlGlLsz4KGTpD
+lRvVZPn/YPWfE196LuVFWpyu23xeWC3bEp7IDhYmj4Q6Or5skobuD9KfXfa4J/l+
+kDRXc9NCn6pI2JWYQ9rJb0zFNsynvhZWMcp2YIqclfL7D5RmpSAZDisTrVRgNUIL
+tzhw4fqkba4V3wLIAUip40oixiII008AThriBtAP0yYF2jkNRPD+9XMuGwMZzT3X
+2tWXF6ArGI0VRqM8n6CGd+hiBTK9ZxWpiY/6CFAuBLSlKEfJml9MV14z
+=CCIy
+-----END PGP SIGNATURE-----

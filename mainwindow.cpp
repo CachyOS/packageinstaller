@@ -793,9 +793,7 @@ void MainWindow::displayFlatpaks(bool force_update)
     }
 
     // add sizes for the installed packages for older flatpak that doesn't list size for all the packages
-//    if (VersionNumber(getVersion("flatpak")) < VersionNumber("1.0.1")) {
-        listSizeInstalledFP();
-//    }
+    listSizeInstalledFP();
 
     ui->labelNumAppFP->setText(QString::number(total_count));
 
@@ -1338,7 +1336,7 @@ void MainWindow::cleanup() const
 // Get version of the program
 QString MainWindow::getVersion(const QString name) const
 {
-    return cmd->getOutput("dpkg -l "+ name + "| awk 'NR==6 {print $3}'", QStringList() << "quiet");
+    return cmd->getOutput("dpkg-query -f '${Version}' -W " + name);
 }
 
 // Return true if all the packages listed are installed
