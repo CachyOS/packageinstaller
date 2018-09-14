@@ -32,7 +32,7 @@ ManageRemotes::ManageRemotes(QWidget *parent) :
     editInstallFlatpakref = new QLineEdit(this);
     editInstallFlatpakref->setPlaceholderText(tr("enter Flatpakref location to install app"));
 
-    QLabel *label = new QLabel(tr("Add or remove Flatpak remotes (repos), or install apps using flatpakref URL or path"));
+    QLabel *label = new QLabel(tr("Add or remove flatpak remotes (repos), or install apps using flatpakref URL or path"));
     layout->addWidget(label, 0, 0, 1, 5);
     label->setAlignment(Qt::AlignCenter);
 
@@ -94,7 +94,7 @@ void ManageRemotes::addItem()
 
     if (cmd->run("su $(logname) -c \"flatpak remote-add --if-not-exists " + user + name.toUtf8() + " " + location.toUtf8() + "\"") != 0) {
         setCursor(QCursor(Qt::ArrowCursor));
-        QMessageBox::critical(this, tr("Error adding remote"), tr("Could not add remote. Command returned an error, please double-check the remote address and try again"));
+        QMessageBox::critical(this, tr("Error adding remote"), tr("Could not add remote - command returned an error. Please double-check the remote address and try again"));
     } else {
         changed = true;
         setCursor(QCursor(Qt::ArrowCursor));
