@@ -811,10 +811,10 @@ void MainWindow::displayFlatpaks(bool force_update)
         ui->treeFlatpak->resizeColumnToContents(i);
     }
 
-    ui->searchBoxFlatpak->setFocus();
     ui->treeFlatpak->blockSignals(false);
     filterChanged(ui->comboFilterFlatpak->currentText());
     blockInterfaceFP(false);
+    ui->searchBoxFlatpak->setFocus();
 }
 
 // Display warning for Debian Backports
