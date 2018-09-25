@@ -1,3 +1,9 @@
+mx-packageinstaller (18.9.3) mx; urgency=medium
+
+  * new translations
+
+ -- Adrian <adrian@mxlinux.org>  Mon, 24 Sep 2018 22:08:20 -0400
+
 mx-packageinstaller (18.9.2) mx; urgency=medium
 
   * fix version check for other locales
