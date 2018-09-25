@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="hi" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="da" version="2.1">
 <context>
     <name>MainWindow</name>
     <message>
@@ -7,24 +7,24 @@
         <location filename="mainwindow.cpp" line="1709"/>
         <location filename="mainwindow.cpp" line="1724"/>
         <source>MX Package Installer</source>
-        <translation type="unfinished"/>
+        <translation>MX-pakkeinstallationsprogram</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="51"/>
         <source>Popular Applications</source>
-        <translation type="unfinished"/>
+        <translation>Populære programmer</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="77"/>
         <location filename="mainwindow.cpp" line="85"/>
         <source>Package</source>
-        <translation type="unfinished"/>
+        <translation>Pakke</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="82"/>
         <location filename="mainwindow.cpp" line="85"/>
         <source>Info</source>
-        <translation type="unfinished"/>
+        <translation>Info</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="87"/>
@@ -33,7 +33,7 @@
         <location filename="mainwindow.ui" line="990"/>
         <location filename="mainwindow.cpp" line="85"/>
         <source>Description</source>
-        <translation>विवरण</translation>
+        <translation>Beskrivelse</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="107"/>
@@ -42,17 +42,17 @@
         <location filename="mainwindow.ui" line="959"/>
         <location filename="mainwindow.ui" line="1217"/>
         <source>search</source>
-        <translation>ढूँढ़ें</translation>
+        <translation>søg</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="117"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Manage popular packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Håndter populære pakker&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Grå punkter er allerede installeret.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="147"/>
         <source>Stable Repo</source>
-        <translation type="unfinished"/>
+        <translation>Stable-softwarekilde</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="168"/>
@@ -60,7 +60,7 @@
         <location filename="mainwindow.ui" line="904"/>
         <location filename="mainwindow.ui" line="1165"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filter packages according to their status.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filtrer pakker efter deres status.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="171"/>
@@ -71,7 +71,7 @@
         <location filename="mainwindow.ui" line="911"/>
         <location filename="mainwindow.cpp" line="2072"/>
         <source>All packages</source>
-        <translation type="unfinished"/>
+        <translation>Alle pakker</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="180"/>
@@ -79,7 +79,7 @@
         <location filename="mainwindow.ui" line="916"/>
         <location filename="mainwindow.cpp" line="2086"/>
         <source>Installed</source>
-        <translation type="unfinished"/>
+        <translation>Installeret</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="185"/>
@@ -87,7 +87,7 @@
         <location filename="mainwindow.ui" line="921"/>
         <location filename="mainwindow.cpp" line="2084"/>
         <source>Upgradable</source>
-        <translation type="unfinished"/>
+        <translation>Kan opgraderes</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="190"/>
@@ -98,14 +98,14 @@
         <location filename="mainwindow.cpp" line="2088"/>
         <location filename="mainwindow.cpp" line="2177"/>
         <source>Not installed</source>
-        <translation type="unfinished"/>
+        <translation>Ikke installeret</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="234"/>
         <location filename="mainwindow.ui" line="651"/>
         <location filename="mainwindow.ui" line="980"/>
         <source>Package Name</source>
-        <translation type="unfinished"/>
+        <translation>Pakkenavn</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="239"/>
@@ -113,48 +113,48 @@
         <location filename="mainwindow.ui" line="985"/>
         <location filename="mainwindow.ui" line="1252"/>
         <source>Version</source>
-        <translation type="unfinished"/>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="271"/>
         <location filename="mainwindow.ui" line="688"/>
         <location filename="mainwindow.ui" line="1017"/>
         <source>Total packages:</source>
-        <translation type="unfinished"/>
+        <translation>Samlet pakker:</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="301"/>
         <location filename="mainwindow.ui" line="718"/>
         <location filename="mainwindow.ui" line="1047"/>
         <source>Installed:</source>
-        <translation type="unfinished"/>
+        <translation>Installeret:</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="331"/>
         <location filename="mainwindow.ui" line="748"/>
         <location filename="mainwindow.ui" line="1077"/>
         <source>Upgradable:</source>
-        <translation type="unfinished"/>
+        <translation>Kan opgraderes:</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="345"/>
         <location filename="mainwindow.ui" line="1322"/>
         <source>Upgrade All</source>
-        <translation type="unfinished"/>
+        <translation>Opgrader alle</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="372"/>
         <location filename="mainwindow.ui" line="775"/>
         <location filename="mainwindow.ui" line="1104"/>
         <source>Hide library and developer packages</source>
-        <translation type="unfinished"/>
+        <translation>Skjul biblioteks- og udviklerpakker</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="394"/>
         <location filename="mainwindow.ui" line="797"/>
         <location filename="mainwindow.ui" line="1126"/>
         <source>Refresh list</source>
-        <translation type="unfinished"/>
+        <translation>Genopfrisk liste</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="411"/>
@@ -162,7 +162,7 @@
         <location filename="mainwindow.ui" line="934"/>
         <location filename="mainwindow.ui" line="1432"/>
         <source>Greyed out items have already been installed.</source>
-        <translation type="unfinished"/>
+        <translation>Grå punkter er allerede installeret.</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="474"/>
@@ -174,12 +174,12 @@
     <message>
         <location filename="mainwindow.ui" line="488"/>
         <source>MX Test Repo</source>
-        <translation type="unfinished"/>
+        <translation>MX test-softwarekilde</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="815"/>
         <source>Debian Backports</source>
-        <translation type="unfinished"/>
+        <translation>Debian-backports</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1144"/>
@@ -246,7 +246,7 @@
     <message>
         <location filename="mainwindow.ui" line="1368"/>
         <source>Advanced</source>
-        <translation type="unfinished"/>
+        <translation>Avanceret</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1398"/>
@@ -274,52 +274,52 @@
         <location filename="mainwindow.cpp" line="1888"/>
         <location filename="mainwindow.cpp" line="1991"/>
         <source>Console Output</source>
-        <translation type="unfinished"/>
+        <translation>Konsoloutput</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1501"/>
         <source>Enter</source>
-        <translation type="unfinished"/>
+        <translation>Enter</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1512"/>
         <source>Respond here, or just press Enter</source>
-        <translation type="unfinished"/>
+        <translation>Svar her, eller tryk blot på Enter</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1556"/>
         <source>Uninstall</source>
-        <translation type="unfinished"/>
+        <translation>Afinstaller</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1563"/>
         <source>Alt+U</source>
-        <translation type="unfinished"/>
+        <translation>Alt+A</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1579"/>
         <source>About this application</source>
-        <translation>इस अनुप्रयोग के बारे में</translation>
+        <translation>Om programmet</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1582"/>
         <source>About...</source>
-        <translation>बारे में...</translation>
+        <translation>Om...</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1589"/>
         <source>Alt+B</source>
-        <translation>Alt+B</translation>
+        <translation>Alt+O</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1637"/>
         <source>Display help </source>
-        <translation>मदद देखें</translation>
+        <translation>Vis hjælp</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1640"/>
         <source>Help</source>
-        <translation>सहायता</translation>
+        <translation>Hjælp</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1647"/>
@@ -332,32 +332,32 @@
         <location filename="mainwindow.cpp" line="2166"/>
         <location filename="mainwindow.cpp" line="2169"/>
         <source>Install</source>
-        <translation type="unfinished"/>
+        <translation>Installer</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1670"/>
         <source>Alt+I</source>
-        <translation type="unfinished"/>
+        <translation>Alt+I</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1689"/>
         <source>Quit application</source>
-        <translation>अनुप्रयोग बंद करें</translation>
+        <translation>Afslut programmet</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1692"/>
         <source>Close</source>
-        <translation>बंद करें</translation>
+        <translation>Luk</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1699"/>
         <source>Alt+C</source>
-        <translation type="unfinished"/>
+        <translation>Alt+L</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="131"/>
         <source>Uninstalling packages...</source>
-        <translation type="unfinished"/>
+        <translation>Afinstallerer pakker...</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="148"/>
@@ -378,7 +378,7 @@
         <location filename="mainwindow.cpp" line="2325"/>
         <location filename="mainwindow.cpp" line="2352"/>
         <source>Error</source>
-        <translation>त्रुटि</translation>
+        <translation>Fejl</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="161"/>
@@ -389,50 +389,50 @@
         <location filename="mainwindow.cpp" line="516"/>
         <location filename="mainwindow.cpp" line="1715"/>
         <source>Cancel</source>
-        <translation>रद्द</translation>
+        <translation>Annuller</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="522"/>
         <source>Please wait...</source>
-        <translation type="unfinished"/>
+        <translation>Vent venligst...</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="709"/>
         <location filename="mainwindow.cpp" line="727"/>
         <source>Version </source>
-        <translation type="unfinished"/>
+        <translation>Version </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="709"/>
         <source> in stable repo</source>
-        <translation type="unfinished"/>
+        <translation> i stable-softwarekilde</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="711"/>
         <source>Not available in stable repo</source>
-        <translation type="unfinished"/>
+        <translation>Ikke tilgængelig i stable-softwarekilde</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="721"/>
         <location filename="mainwindow.cpp" line="1972"/>
         <source>Latest version </source>
-        <translation type="unfinished"/>
+        <translation>Seneste version</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="721"/>
         <location filename="mainwindow.cpp" line="1972"/>
         <source> already installed</source>
-        <translation type="unfinished"/>
+        <translation>allerede installeret</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="727"/>
         <source> installed</source>
-        <translation type="unfinished"/>
+        <translation>installeret</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="832"/>
         <source>Warning</source>
-        <translation>चेतावनी</translation>
+        <translation>Advarsel</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="833"/>
@@ -442,7 +442,7 @@
     <message>
         <location filename="mainwindow.cpp" line="841"/>
         <source>Do not show this message again</source>
-        <translation type="unfinished"/>
+        <translation>Vis ikke meddelelsen igen</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="876"/>
@@ -454,42 +454,42 @@
     <message>
         <location filename="mainwindow.cpp" line="881"/>
         <source>Installing packages...</source>
-        <translation type="unfinished"/>
+        <translation>Installerer pakker...</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="919"/>
         <source>Post-processing...</source>
-        <translation type="unfinished"/>
+        <translation>Efterbehandling...</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="951"/>
         <source>Pre-processing for </source>
-        <translation type="unfinished"/>
+        <translation>Præbehandling til </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="965"/>
         <source>Installing </source>
-        <translation type="unfinished"/>
+        <translation>Installerer</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="973"/>
         <source>Post-processing for </source>
-        <translation type="unfinished"/>
+        <translation>Efterbehandling til </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1120"/>
         <source>Downloading package info...</source>
-        <translation type="unfinished"/>
+        <translation>Downloader pakkeinfo...</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1514"/>
         <source>Packages to be installed: </source>
-        <translation type="unfinished"/>
+        <translation>Pakker som skal installeres: </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1551"/>
         <source>Package info</source>
-        <translation type="unfinished"/>
+        <translation>Pakkeinfo</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1669"/>
@@ -500,7 +500,7 @@
         <location filename="mainwindow.cpp" line="2319"/>
         <location filename="mainwindow.cpp" line="2346"/>
         <source>Done</source>
-        <translation type="unfinished"/>
+        <translation>Færdig</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1669"/>
@@ -527,43 +527,43 @@
     <message>
         <location filename="mainwindow.cpp" line="1708"/>
         <source>About MX Package Installer</source>
-        <translation type="unfinished"/>
+        <translation>Om MX-pakkeinstallationsprogram</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1709"/>
         <source>Version: </source>
-        <translation>संस्करण :</translation>
+        <translation>Version: </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1710"/>
         <source>Package Installer for MX Linux</source>
-        <translation type="unfinished"/>
+        <translation>Pakkeinstallationsprogram til MX Linux</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1712"/>
         <source>Copyright (c) MX Linux</source>
-        <translation>प्रतिलिप्याधिकार (c) MX Linux</translation>
+        <translation>Ophavsret (c) MX Linux</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1713"/>
         <location filename="mainwindow.cpp" line="1724"/>
         <source>License</source>
-        <translation>लाइसेंस</translation>
+        <translation>Licens</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1714"/>
         <source>Changelog</source>
-        <translation type="unfinished"/>
+        <translation>Ændringslog</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1736"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Luk</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1791"/>
         <source>Reinstall</source>
-        <translation type="unfinished"/>
+        <translation>Geninstaller</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1859"/>
@@ -573,7 +573,7 @@
     <message>
         <location filename="mainwindow.cpp" line="1872"/>
         <source>Success</source>
-        <translation>सफलता</translation>
+        <translation>Det lykkedes</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1879"/>
@@ -622,12 +622,12 @@ OK to go ahead and install it?</source>
     <message>
         <location filename="mainwindow.cpp" line="2164"/>
         <source>Upgrade</source>
-        <translation type="unfinished"/>
+        <translation>Opgrader</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2279"/>
         <source>Quit?</source>
-        <translation type="unfinished"/>
+        <translation>Afslut?</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2280"/>
@@ -637,12 +637,12 @@ OK to go ahead and install it?</source>
     <message>
         <location filename="mainwindow.cpp" line="2281"/>
         <source>Yes</source>
-        <translation>हाँ</translation>
+        <translation>Ja</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2281"/>
         <source>No</source>
-        <translation>नहीं</translation>
+        <translation>Nej</translation>
     </message>
 </context>
 <context>
@@ -695,7 +695,7 @@ OK to go ahead and install it?</source>
     <message>
         <location filename="remotes.cpp" line="59"/>
         <source>Close</source>
-        <translation>बंद करें</translation>
+        <translation>Luk</translation>
     </message>
     <message>
         <location filename="remotes.cpp" line="81"/>
@@ -720,7 +720,7 @@ OK to go ahead and install it?</source>
     <message>
         <location filename="remotes.cpp" line="101"/>
         <source>Success</source>
-        <translation>सफलता</translation>
+        <translation>Det lykkedes</translation>
     </message>
     <message>
         <location filename="remotes.cpp" line="101"/>
@@ -733,7 +733,7 @@ OK to go ahead and install it?</source>
     <message>
         <location filename="main.cpp" line="58"/>
         <source>Unable to get exclusive lock</source>
-        <translation type="unfinished"/>
+        <translation>Kan ikke få eksklusiv lås</translation>
     </message>
     <message>
         <location filename="main.cpp" line="59"/>
@@ -743,7 +743,7 @@ OK to go ahead and install it?</source>
     <message>
         <location filename="main.cpp" line="77"/>
         <source>You must run this program as root.</source>
-        <translation>इस प्रोग्राम को चलाने हेतु आपका रुट होना आवश्यक है।</translation>
+        <translation>Du skal køre programmet som root.</translation>
     </message>
 </context>
 </TS>

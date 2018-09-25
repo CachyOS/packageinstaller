@@ -49,6 +49,7 @@ FORMS    += \
 TRANSLATIONS += translations/mx-packageinstaller_am.ts \
                 translations/mx-packageinstaller_ca.ts \
                 translations/mx-packageinstaller_cs.ts \
+                translations/mx-packageinstaller_da.ts \
                 translations/mx-packageinstaller_de.ts \
                 translations/mx-packageinstaller_el.ts \
                 translations/mx-packageinstaller_es.ts \
