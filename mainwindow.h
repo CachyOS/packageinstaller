@@ -105,11 +105,11 @@ public:
     QStringList listFlatpaks(const QString remote, const QString type = "");
     QStringList listInstalledFlatpaks(const QString type = "") const;
 
-
-public slots:
+protected:
+    void keyPressEvent(QKeyEvent* event);
 
 private slots:
-    void cleanup() const;
+    void cleanup();
     void cmdStart();
     void cmdDone();
     void disableWarning(bool checked);
@@ -155,6 +155,7 @@ private slots:
     void on_comboUser_activated(int index);
 
 private:
+    bool test_initially_enabled;
     bool updated_once;
     bool warning_displayed;
     int height_app;

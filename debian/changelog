@@ -1,3 +1,9 @@
+mx-packageinstaller (18.10) mx; urgency=medium
+
+  * make sure test and backports don't remain enabled if exiting before done
+
+ -- Adrian <adrian@mxlinux.org>  Tue, 02 Oct 2018 11:09:48 -0400
+
 mx-packageinstaller (18.9.3) mx; urgency=medium
 
   * new translations

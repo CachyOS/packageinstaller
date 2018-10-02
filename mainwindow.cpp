@@ -59,7 +59,7 @@ MainWindow::~MainWindow()
 // Setup versious items first time program runs
 void MainWindow::setup()
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     ui->tabWidget->blockSignals(true);
     cmd = new Cmd(this);
     user = "--system ";
@@ -77,7 +77,8 @@ void MainWindow::setup()
     }
     setProgressDialog();
     lock_file = new LockFile("/var/lib/dpkg/lock");
-    connect(qApp, &QApplication::aboutToQuit, this, &MainWindow::cleanup);
+    connect(qApp, &QApplication::aboutToQuit, this, &MainWindow::cleanup, Qt::QueuedConnection);
+    test_initially_enabled = (cmd->run("grep -q '^deb.* test' /etc/apt/sources.list.d/mx.list") == 0);
     version = getVersion("mx-packageinstaller");
     this->setWindowTitle(tr("MX Package Installer"));
     ui->tabWidget->setCurrentIndex(0);
@@ -124,7 +125,7 @@ void MainWindow::setup()
 // Uninstall listed packages
 bool MainWindow::uninstall(const QString &names)
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     ui->tabWidget->setCurrentWidget(ui->tabOutput);
 
     lock_file->unlock();
@@ -139,7 +140,7 @@ bool MainWindow::uninstall(const QString &names)
 // Run apt-get update
 bool MainWindow::update()
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     QString msg;
     lock_file->unlock();
     if (!ui->tabOutput->isVisible()) { // don't display in output if calling to refresh from tabs
@@ -182,7 +183,7 @@ double MainWindow::convert(const double &number, const QString &unit) const
 // Add sizes for the installed packages for older flatpak that doesn't list size for all the packages
 void MainWindow::listSizeInstalledFP()
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
 
     QString name, size;
     QTreeWidgetItemIterator it(ui->treeFlatpak);
@@ -239,7 +240,7 @@ void MainWindow::blockInterfaceFP(bool block)
 // Update interface when done loading info
 void MainWindow::updateInterface()
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
 
     QList<QTreeWidgetItem *> upgr_list = tree->findItems("upgradable", Qt::MatchExactly, 5);
     QList<QTreeWidgetItem *> inst_list = tree->findItems("installed", Qt::MatchExactly, 5);
@@ -357,7 +358,7 @@ QString MainWindow::getTranslation(const QString item)
 // Set proc and timer connections
 void MainWindow::setConnections() const
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     connect(cmd, &Cmd::runTime, this, &MainWindow::updateBar, Qt::UniqueConnection);  // processes runtime emited by Cmd to be used by a progress bar
     connect(cmd, &Cmd::outputAvailable, this, &MainWindow::updateOutput, Qt::UniqueConnection);
     connect(cmd, &Cmd::errorAvailable, this, &MainWindow::updateOutput, Qt::UniqueConnection);
@@ -385,7 +386,7 @@ void MainWindow::updateOutput(const QString out) const
 // Load info from the .pm files
 void MainWindow::loadPmFiles()
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     QDomDocument doc;
 
     QStringList filter("*.pm");
@@ -470,7 +471,7 @@ void MainWindow::processDoc(const QDomDocument &doc)
 // Reload and refresh interface
 void MainWindow::refreshPopularApps()
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     ui->treePopularApps->clear();
     ui->searchPopular->clear();
     ui->buttonInstall->setEnabled(false);
@@ -542,7 +543,7 @@ void MainWindow::setSearchFocus()
 // Display Popular Apps in the treePopularApps
 void MainWindow::displayPopularApps() const
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     QTreeWidgetItem *topLevelItem = 0L;
     QTreeWidgetItem *childItem;
 
@@ -608,7 +609,7 @@ void MainWindow::displayPopularApps() const
 // Display only the listed apps
 void MainWindow::displayFiltered(const QStringList &list) const
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
 
     QStringList new_list;
     foreach (QString item, list) {
@@ -636,7 +637,7 @@ void MainWindow::displayFiltered(const QStringList &list) const
 // Display available packages
 void MainWindow::displayPackages()
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
 
     QTreeWidget *newtree; // use this to not overwrite current "tree"
 
@@ -739,7 +740,7 @@ void MainWindow::displayPackages()
 
 void MainWindow::displayFlatpaks(bool force_update)
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
 
     setCursor(QCursor(Qt::BusyCursor));
     ui->treeFlatpak->clear();
@@ -820,7 +821,7 @@ void MainWindow::displayFlatpaks(bool force_update)
 // Display warning for Debian Backports
 void MainWindow::displayWarning()
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     if (warning_displayed) {
         return;
     }
@@ -847,7 +848,7 @@ void MainWindow::displayWarning()
 // If dowload fails hide progress bar and show first tab
 void MainWindow::ifDownloadFailed()
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     progress->hide();
     ui->tabWidget->setCurrentWidget(ui->tabPopular);
 }
@@ -856,7 +857,7 @@ void MainWindow::ifDownloadFailed()
 // List the flatpak remote and loade them into combobox
 void MainWindow::listFlatpakRemotes()
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     ui->comboRemote->blockSignals(true);
     ui->comboRemote->clear();
     QStringList list = cmd->getOutput("su $(logname) -c \"flatpak remote-list " +  user + "| cut -f1\"").remove(" ").split("\n");
@@ -869,7 +870,7 @@ void MainWindow::listFlatpakRemotes()
 // Install the list of apps
 bool MainWindow::install(const QString &names)
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
 
     setConnections();
     if (!checkOnline()) {
@@ -893,7 +894,7 @@ bool MainWindow::install(const QString &names)
 // install a list of application and run postprocess for each of them.
 bool MainWindow::installBatch(const QStringList &name_list)
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     QString postinstall;
     QString install_names;
     bool result = true;
@@ -929,7 +930,7 @@ bool MainWindow::installBatch(const QStringList &name_list)
 // install named app
 bool MainWindow::installPopularApp(const QString &name)
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     int result = true;
     QString preinstall;
     QString postinstall;
@@ -982,7 +983,7 @@ bool MainWindow::installPopularApp(const QString &name)
 // Process checked items to install
 bool MainWindow::installPopularApps()
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
 
     QStringList batch_names;
     bool result = true;
@@ -1033,16 +1034,13 @@ bool MainWindow::installPopularApps()
 // Install selected items
 bool MainWindow::installSelected()
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     ui->tabWidget->setTabEnabled(ui->tabWidget->indexOf(ui->tabOutput), true);
-    bool initiallyEnabled = false;
     QString names = change_list.join(" ");
 
     // change sources as needed
     if(tree == ui->treeMXtest) {
-        if (cmd->run("grep -q '^deb.* test' /etc/apt/sources.list.d/mx.list") == 0) {  // enabled
-            initiallyEnabled = true;
-        } else if (cmd->run("grep -q '^#\\s*deb.* test' /etc/apt/sources.list.d/mx.list") == 0) { // commented out line
+        if (cmd->run("grep -q '^#\\s*deb.* test' /etc/apt/sources.list.d/mx.list") == 0) { // commented out line
             cmd->run("sed -i '/^#*\\s*deb.* test/s/^#*//' /etc/apt/sources.list.d/mx.list"); // uncomment
         } else { // doesn't exist, add
             if (ver_name == "jessie") { // use 'mx15' for Stretch based MX, user version name for newer versions
@@ -1061,7 +1059,7 @@ bool MainWindow::installSelected()
     if (tree == ui->treeBackports) {
         cmd->run("rm -f /etc/apt/sources.list.d/mxpm-temp.list");
         update();
-    } else if (tree == ui->treeMXtest && !initiallyEnabled) {
+    } else if (tree == ui->treeMXtest && !test_initially_enabled) {
         cmd->run("sed -i 's/.* test/#&/'  /etc/apt/sources.list.d/mx.list");  // comment out the line
         update();
     }
@@ -1086,7 +1084,7 @@ bool MainWindow::checkOnline() const
 // Build the list of available packages from various source
 bool MainWindow::buildPackageLists(bool force_download)
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     clearUi();
     if (!downloadPackageList(force_download)) {
         ifDownloadFailed();
@@ -1103,7 +1101,7 @@ bool MainWindow::buildPackageLists(bool force_download)
 // Download the Packages.gz from sources
 bool MainWindow::downloadPackageList(bool force_download)
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     QString repo_name;
 
     if (!checkOnline()) {
@@ -1200,7 +1198,7 @@ void MainWindow::enableTabs(bool enable)
 // Process downloaded *Packages.gz files
 bool MainWindow::readPackageList(bool force_download)
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     progCancel->setDisabled(true);
     // don't process if the lists are already populated
     if (!((tree == ui->treeStable && stable_list.isEmpty()) || (tree == ui->treeMXtest && mx_list.isEmpty())||
@@ -1259,14 +1257,14 @@ bool MainWindow::readPackageList(bool force_download)
 // Cancel download
 void MainWindow::cancelDownload()
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     cmd->terminate();
 }
 
 // Clear UI when building package list
 void MainWindow::clearUi()
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
 
     blockSignals(true);
     ui->comboFilterStable->setCurrentIndex(0);
@@ -1304,7 +1302,7 @@ void MainWindow::clearUi()
 // Copy QTreeWidgets
 void MainWindow::copyTree(QTreeWidget *from, QTreeWidget *to) const
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     to->clear();
     QTreeWidgetItem *item;
     QTreeWidgetItemIterator it(from);
@@ -1317,18 +1315,31 @@ void MainWindow::copyTree(QTreeWidget *from, QTreeWidget *to) const
 }
 
 // Cleanup environment when window is closed
-void MainWindow::cleanup() const
+void MainWindow::cleanup()
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
-    cmd->disconnect();
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
+
     if(!cmd->terminate()) {
         cmd->kill();
     }
-    qDebug() << "removing lock";
+
+    bool changed = false;
+    if (QFile::exists("/etc/apt/sources.list.d/mxpm-temp.list")) {
+        system("rm -f /etc/apt/sources.list.d/mxpm-temp.list");
+        changed = true;
+    }
+    if (!test_initially_enabled && (system("grep -q '^\\s*deb.* test' /etc/apt/sources.list.d/mx.list") == 0)) {
+        system("sed -i 's/.* test/#&/'  /etc/apt/sources.list.d/mx.list");  // comment out the line
+        changed = true;
+    }
+    if (changed) {
+        update();
+    }
+
     lock_file->unlock();
+
     QDir::setCurrent("/");
-    if (tmp_dir.startsWith("/tmp/mxpm-")) {
-        qDebug() << "removing tmp folder";
+    if (tmp_dir.startsWith("/tmp/mxpm-") && QFile::exists(tmp_dir)) {
         system("rm -r " + tmp_dir.toUtf8());
     }
 }
@@ -1356,7 +1367,7 @@ bool MainWindow::checkInstalled(const QString &names) const
 // Return true if all the packages in the list are installed
 bool MainWindow::checkInstalled(const QStringList &name_list) const
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     if (name_list.size() == 0) {
         return false;
     }
@@ -1371,7 +1382,7 @@ bool MainWindow::checkInstalled(const QStringList &name_list) const
 // return true if all the items in the list are upgradable
 bool MainWindow::checkUpgradable(const QStringList &name_list) const
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     if (name_list.size() == 0) {
         return false;
     }
@@ -1392,7 +1403,7 @@ bool MainWindow::checkUpgradable(const QStringList &name_list) const
 // Returns list of all installed packages
 QStringList MainWindow::listInstalled() const
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     QString str = cmd->getOutput("dpkg --get-selections | grep -v deinstall | cut -f1", QStringList() << "slowtick" << "quiet");
     str.remove(":i386");
     str.remove(":amd64");
@@ -1403,7 +1414,7 @@ QStringList MainWindow::listInstalled() const
 // Return list flatpaks from current remote
 QStringList MainWindow::listFlatpaks(const QString remote, const QString type)
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
 
     QStringList list;
     // need to specify arch for older version
@@ -1445,7 +1456,7 @@ QStringList MainWindow::listInstalledFlatpaks(const QString type) const
 // return the visible tree
 void MainWindow::setCurrentTree()
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     QList<QTreeWidget *> list;
     list << ui->treePopularApps << ui->treeStable << ui->treeMXtest << ui->treeBackports << ui->treeFlatpak;
 
@@ -1459,7 +1470,7 @@ void MainWindow::setCurrentTree()
 
 QHash<QString, VersionNumber> MainWindow::listInstalledVersions()
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     QString out = cmd->getOutput("dpkg -l | grep '^ii'", QStringList() << "quiet");
     QStringList list = out.split("\n");
 
@@ -1495,7 +1506,7 @@ void MainWindow::cmdDone()
 // Disable Backports warning
 void MainWindow::disableWarning(bool checked)
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     if (checked) {
         system("touch " + QDir::homePath().toUtf8() + "/.config/mx-debian-backports-installer");
     }
@@ -1504,7 +1515,7 @@ void MainWindow::disableWarning(bool checked)
 // Display info when clicking the "info" icon of the package
 void MainWindow::displayInfo(const QTreeWidgetItem *item, int column)
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     if (column == 3 && item->childCount() == 0) {
         QString desc = item->text(4);
         QString install_names = item->text(5);
@@ -1655,7 +1666,7 @@ void MainWindow::showOutput()
 // Install button clicked
 void MainWindow::on_buttonInstall_clicked()
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
 
     showOutput();
 
@@ -1814,7 +1825,7 @@ void MainWindow::on_treePopularApps_itemCollapsed(QTreeWidgetItem *item)
 // Uninstall clicked
 void MainWindow::on_buttonUninstall_clicked()
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
 
     showOutput();
 
@@ -1884,7 +1895,7 @@ void MainWindow::on_buttonUninstall_clicked()
 // Actions on switching the tabs
 void MainWindow::on_tabWidget_currentChanged(int index)
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     ui->tabWidget->setTabText(ui->tabWidget->indexOf(ui->tabOutput), tr("Console Output"));
     ui->buttonInstall->setEnabled(false);
     ui->buttonUninstall->setEnabled(false);
@@ -2018,7 +2029,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 // Filter items according to selected filter
 void MainWindow::filterChanged(const QString &arg1)
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     QList<QTreeWidgetItem *> found_items;
     QTreeWidgetItemIterator it(tree);
     tree->blockSignals(true);
@@ -2130,7 +2141,7 @@ void MainWindow::on_treeFlatpak_itemChanged(QTreeWidgetItem *item)
 // Build the change_list when selecting on item in the tree
 void MainWindow::buildChangeList(QTreeWidgetItem *item)
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     /* if all apps are uninstalled (or some installed) -> enable Install, disable Uinstall
      * if all apps are installed or upgradable -> enable Uninstall, enable Install
      * if all apps are upgradable -> change Install label to Upgrade;
@@ -2229,7 +2240,7 @@ void MainWindow::on_checkHideLibs_toggled(bool checked)
 // Upgrade all packages (from Stable repo only)
 void MainWindow::on_buttonUpgradeAll_clicked()
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     showOutput();
 
     QString names;
@@ -2266,7 +2277,7 @@ void MainWindow::on_buttonEnter_clicked()
 // Send the response to terminal process
 void MainWindow::on_lineEdit_returnPressed()
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     cmd->writeToProc(ui->lineEdit->text());
     cmd->writeToProc("\n");
     ui->lineEdit->clear();
@@ -2275,6 +2286,7 @@ void MainWindow::on_lineEdit_returnPressed()
 
 void MainWindow::on_buttonCancel_clicked()
 {
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     if (cmd->isRunning()) {
         if (QMessageBox::warning(this, tr("Quit?"),
                                      tr("Process still running, quitting might leave the system in an unstable state.<p><b>Are you sure you want to exit MX Package Installer?</b>"),
@@ -2282,7 +2294,8 @@ void MainWindow::on_buttonCancel_clicked()
             return;
         }
     }
-    return qApp->quit();
+    cleanup();
+    qApp->quit();
 }
 
 
@@ -2302,13 +2315,13 @@ void MainWindow::on_checkHideLibsBP_clicked(bool checked)
 // on change flatpack remote
 void MainWindow::on_comboRemote_activated(int)
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     displayFlatpaks(true);
 }
 
 void MainWindow::on_buttonUpgradeFP_clicked()
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     showOutput();
     setConnections();
     setCursor(QCursor(Qt::BusyCursor));
@@ -2369,3 +2382,10 @@ void MainWindow::on_comboUser_activated(int index)
     displayFlatpaks(true);
 }
 
+
+// process keystrokes
+void MainWindow::keyPressEvent(QKeyEvent *event) {
+    if (event->key() == Qt::Key_Escape) {
+        on_buttonCancel_clicked();
+    }
+}
