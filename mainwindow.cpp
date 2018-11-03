@@ -1275,10 +1275,6 @@ void MainWindow::clearUi()
     ui->buttonInstall->setEnabled(false);
     ui->buttonUninstall->setEnabled(false);
 
-    ui->searchBoxStable->clear();
-    ui->searchBoxMX->clear();
-    ui->searchBoxBP->clear();
-
     if (tree == ui->treeStable || tree == ui->treePopularApps) {
         ui->labelNumApps->clear();
         ui->labelNumInst->clear();
@@ -1912,34 +1908,53 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         tree->blockSignals(false);
     }
 
+    // save the search text
+    QString search_str;
+    if (tree == ui->treePopularApps) {
+        search_str = ui->searchPopular->text();
+    } else if (tree == ui->treeStable) {
+        search_str = ui->searchBoxStable->text();
+    } else if (tree == ui->treeMXtest) {
+        search_str = ui->searchBoxMX->text();
+    } else if (tree == ui->treeBackports) {
+        search_str = ui->searchBoxBP->text();
+    } else if (tree == ui->treeFlatpak) {
+        search_str = ui->searchBoxFlatpak->text();
+    }
+
     switch (index) {
     case 0:  // Popular
+        ui->searchPopular->setText(search_str);
         enableTabs(true);
         setCurrentTree();
-        ui->searchPopular->clear();
+        findPopular();
         ui->searchPopular->setFocus();
         break;
     case 1:  // Stable
+        qDebug() << "=========================================SEARCH STR"  << search_str;
+        ui->searchBoxStable->setText(search_str);
         enableTabs(true);
         setCurrentTree();
         change_list.clear();
         if (tree->topLevelItemCount() == 0) {
             buildPackageLists();
         }
-        ui->searchBoxStable->clear();
+        findPackageOther();
         ui->searchBoxStable->setFocus();
         break;
     case 2:  // Test
+        ui->searchBoxMX->setText(search_str);
         enableTabs(true);
         setCurrentTree();
         change_list.clear();
         if (tree->topLevelItemCount() == 0) {
             buildPackageLists();
         }
-        ui->searchBoxMX->clear();
+        findPackageOther();
         ui->searchBoxMX->setFocus();
         break;
     case 3:  // Backports
+        ui->searchBoxBP->setText(search_str);
         enableTabs(true);
         setCurrentTree();
         displayWarning();
@@ -1947,10 +1962,11 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         if (tree->topLevelItemCount() == 0) {
             buildPackageLists();
         }
-        ui->searchBoxBP->clear();
+        findPackageOther();
         ui->searchBoxBP->setFocus();
         break;
     case 4: // Flatpak
+        ui->searchBoxFlatpak->setText(search_str);
         enableTabs(true);
         setCurrentTree();
         blockInterfaceFP(true);
@@ -2015,8 +2031,13 @@ void MainWindow::on_tabWidget_currentChanged(int index)
             listFlatpakRemotes();
         }
         displayFlatpaks(false);
+        ui->searchBoxBP->setText(search_str);
         break;
     case 5: // Output
+        ui->searchPopular->clear();
+        ui->searchBoxStable->clear();
+        ui->searchBoxMX->clear();
+        ui->searchBoxBP->clear();
         ui->buttonInstall->setDisabled(true);
         ui->buttonUninstall->setDisabled(true);
         break;
@@ -2205,16 +2226,19 @@ void MainWindow::buildChangeList(QTreeWidgetItem *item)
 // Force repo upgrade
 void MainWindow::on_buttonForceUpdateStable_clicked()
 {
+    ui->searchBoxStable->clear();
     buildPackageLists(true);
 }
 
 void MainWindow::on_buttonForceUpdateMX_clicked()
 {
+    ui->searchBoxMX->clear();
     buildPackageLists(true);
 }
 
 void MainWindow::on_buttonForceUpdateBP_clicked()
 {
+    ui->searchBoxBP->clear();
     buildPackageLists(true);
 }
 
