@@ -58,6 +58,7 @@ TRANSLATIONS += translations/mx-packageinstaller_am.ts \
                 translations/mx-packageinstaller_hi.ts \
                 translations/mx-packageinstaller_hr.ts \
                 translations/mx-packageinstaller_hu.ts \
+                translations/mx-packageinstaller_is.ts \
                 translations/mx-packageinstaller_it.ts \
                 translations/mx-packageinstaller_ja.ts \
                 translations/mx-packageinstaller_kk.ts \
@@ -69,6 +70,7 @@ TRANSLATIONS += translations/mx-packageinstaller_am.ts \
                 translations/mx-packageinstaller_ro.ts \
                 translations/mx-packageinstaller_ru.ts \
                 translations/mx-packageinstaller_sk.ts \
+                translations/mx-packageinstaller_sq.ts \
                 translations/mx-packageinstaller_sv.ts \
                 translations/mx-packageinstaller_tr.ts \
                 translations/mx-packageinstaller_uk.ts \
