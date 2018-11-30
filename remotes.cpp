@@ -127,7 +127,7 @@ void ManageRemotes::userSelected(int index)
 // List the flatpak remote and loade them into combobox
 void ManageRemotes::listFlatpakRemotes() const
 {
-    qDebug() << "+++ Enter Function:" << __PRETTY_FUNCTION__ << "+++";
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     comboRemote->clear();
     QStringList list = cmd->getOutput("su $(logname) -c \"flatpak remote-list " +  user + "\"").split("\n");
     comboRemote->addItems(list);

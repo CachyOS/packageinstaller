@@ -1,3 +1,9 @@
+mx-packageinstaller (18.11.1) mx; urgency=medium
+
+  * updated translations
+
+ -- Adrian <adrian@mxlinux.org>  Fri, 30 Nov 2018 14:01:09 -0500
+
 mx-packageinstaller (18.11) mx; urgency=medium
 
   * preserve search text when switching tabs

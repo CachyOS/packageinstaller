@@ -1,0 +1,46 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Format: 1.8
+Date: Fri, 30 Nov 2018 14:01:09 -0500
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 18.11.1
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (18.11.1) mx; urgency=medium
+ .
+   * updated translations
+Checksums-Sha1:
+ d7f8fe4c7217fd8390d00cd9ed8d3ee961c5c1e7 1247 mx-packageinstaller_18.11.1.dsc
+ 1cdb6c6fe3a55a5392486cfe06db9207ea908620 95620 mx-packageinstaller_18.11.1.tar.xz
+ 3b3eb59bce41e0c8ae7f57f4be57df86165dabe8 11291 mx-packageinstaller_18.11.1_amd64.buildinfo
+ f1383e0364069a253e65233fdb41f5671bbd96af 169640 mx-packageinstaller_18.11.1_amd64.deb
+Checksums-Sha256:
+ dc023a6cf8ec0c6a774ad6ed983344ffa29b1b8c9c5c21a6af5e9211fc4911c2 1247 mx-packageinstaller_18.11.1.dsc
+ bb0f7bfa837429e92b517d3de94b51bceecce5016e4697df3fcd0f7fa9fbd37e 95620 mx-packageinstaller_18.11.1.tar.xz
+ 54e8951a99e39b317fd43e671f827bdb27f1e8b5e081b86628ce248040e66e01 11291 mx-packageinstaller_18.11.1_amd64.buildinfo
+ 62eb322b3a7ed52b983d3bf9acdc9ee490034d153b3c3fb6b11644b5e7d8d124 169640 mx-packageinstaller_18.11.1_amd64.deb
+Files:
+ a1650c3b75bec380e8af057b6ba8a19c 1247 admin optional mx-packageinstaller_18.11.1.dsc
+ 5e84781961a05ce6d3defbdf91e24436 95620 admin optional mx-packageinstaller_18.11.1.tar.xz
+ b6a3d1270e07c3d649101a9e1285b547 11291 admin optional mx-packageinstaller_18.11.1_amd64.buildinfo
+ d66c86a6651e2d57fc8da6f120e4900f 169640 admin optional mx-packageinstaller_18.11.1_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCAAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAlwBicETHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumAsWCACr7oqbC1D8UuH+X37c7wcWHxP55jng
+UgWfDRauWvmVYXqnIEOFLJeUh85aZI++jsT4JdpmeG8/g0WqCcXdOo97PHs7A8Tl
+WX7gwiplr+Ajn2qDMPthmBiYnpWYuCZvh2I5U5XzlB1vYDh3p3U3RCjjneEbu5vy
+2J6LPch0vIObOoXpWbRw/yqqfvRISEJwFNjxH2uft1Gmf5UpRniUu+h7r/dibTO5
+IURbfvXv77RLE/3e3qdo4LRDDu+8NbaI0I6+6CGD/h4tmSkJKnSX2aPpnLB9xnvJ
+JmU7i6UE/a1l75xu7FMzO0kFfTk6G781VOQN+TBvjxjZpe/aV85/n8iq
+=viDl
+-----END PGP SIGNATURE-----
