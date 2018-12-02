@@ -23,6 +23,8 @@
 
 QT       += core gui xml network
 
+CONFIG   += c++11
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = mx-packageinstaller

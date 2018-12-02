@@ -1,3 +1,9 @@
+mx-packageinstaller (18.11.2) mx; urgency=medium
+
+  * add a warning for MX Test repo
+
+ -- Adrian <adrian@mxlinux.org>  Sun, 02 Dec 2018 16:50:37 -0500
+
 mx-packageinstaller (18.11.1) mx; urgency=medium
 
   * updated translations

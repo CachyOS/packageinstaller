@@ -830,10 +830,12 @@ void MainWindow::displayWarning(QString repo)
     if (repo == "test") {
         displayed = &warning_test;
         file = QDir::homePath() + "/.config/mx-test-installer";
-        msg = tr("Warning: You are about to use MX Test repository; packages in this repo are "\
-                 "provided only for testing purposes and they might break your system. "\
-                 "Please backup your system and install or update only one package a time. "\
-                 "Please provide feedback in the forum.");
+        msg = tr("You are about to use the MX Test repository, whose packages are provided for "\
+                 "testing purposes only. It is possible that they might break your system, so it "\
+                 "is suggested that you back up your system and install or update only one package "\
+                 "a time. Please provide feedback in the Forum so the package can be evaluated "\
+                 "before moving up to Main.");
+
     } else if (repo == "backports") {
         displayed = &warning_backports;
         file = QDir::homePath() + "/.config/mx-debian-backports-installer";
