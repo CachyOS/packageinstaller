@@ -116,7 +116,8 @@ void MainWindow::setup()
 
     ui->searchPopular->setFocus();
     updated_once = false;
-    warning_displayed = false;
+    warning_test = false;
+    warning_backports = false;
     tree = ui->treePopularApps;
     ui->tabWidget->setTabEnabled(ui->tabWidget->indexOf(ui->tabOutput), false);
     ui->tabWidget->blockSignals(false);
@@ -819,30 +820,42 @@ void MainWindow::displayFlatpaks(bool force_update)
 }
 
 // Display warning for Debian Backports
-void MainWindow::displayWarning()
+void MainWindow::displayWarning(QString repo)
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
-    if (warning_displayed) {
+
+    bool *displayed = 0;
+    QString msg, file;
+
+    if (repo == "test") {
+        displayed = &warning_test;
+        file = QDir::homePath() + "/.config/mx-test-installer";
+        msg = tr("Warning: You are about to use MX Test repository; packages in this repo are "\
+                 "provided only for testing purposes and they might break your system. "\
+                 "Please backup your system and install or update only one package a time. "\
+                 "Please provide feedback in the forum.");
+    } else if (repo == "backports") {
+        displayed = &warning_backports;
+        file = QDir::homePath() + "/.config/mx-debian-backports-installer";
+        msg = tr("You are about to use Debian Backports, which contains packages taken from the next "\
+           "Debian release (called 'testing'), adjusted and recompiled for usage on Debian stable. "\
+           "They cannot be tested as extensively as in the stable releases of Debian and MX Linux, "\
+           "and are provided on an as-is basis, with risk of incompatibilities with other components "\
+           "in Debian stable. Use with care!");
+    }
+
+    if (*displayed || QFileInfo::exists(file)) {
         return;
     }
-    QFileInfo checkfile(QDir::homePath() + "/.config/mx-debian-backports-installer");
-    if (checkfile.exists()) {
-        return;
-    }
-    QMessageBox msgBox(QMessageBox::Warning,
-                       tr("Warning"),
-                       tr("You are about to use Debian Backports, which contains packages taken from the next "\
-                          "Debian release (called 'testing'), adjusted and recompiled for usage on Debian stable. "\
-                          "They cannot be tested as extensively as in the stable releases of Debian and MX Linux, "\
-                          "and are provided on an as-is basis, with risk of incompatibilities with other components "\
-                          "in Debian stable. Use with care!"), 0, 0);
+
+    QMessageBox msgBox(QMessageBox::Warning, tr("Warning"), msg , 0, 0);
     msgBox.addButton(QMessageBox::Close);
     QCheckBox *cb = new QCheckBox();
     msgBox.setCheckBox(cb);
     cb->setText(tr("Do not show this message again"));
-    connect(cb, &QCheckBox::clicked, this, &MainWindow::disableWarning);
+    connect(cb, &QCheckBox::clicked, [this, &file, &cb] () {disableWarning(cb->isChecked(), file);});
     msgBox.exec();
-    warning_displayed = true;
+    *displayed = true;
 }
 
 // If dowload fails hide progress bar and show first tab
@@ -1500,11 +1513,13 @@ void MainWindow::cmdDone()
 }
 
 // Disable Backports warning
-void MainWindow::disableWarning(bool checked)
+void MainWindow::disableWarning(bool checked, QString file)
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     if (checked) {
-        system("touch " + QDir::homePath().toUtf8() + "/.config/mx-debian-backports-installer");
+        system("touch " + file.toUtf8());
+    } else {
+        system("rm " + file.toUtf8());
     }
 }
 
@@ -1946,6 +1961,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         ui->searchBoxMX->setText(search_str);
         enableTabs(true);
         setCurrentTree();
+        displayWarning("test");
         change_list.clear();
         if (tree->topLevelItemCount() == 0) {
             buildPackageLists();
@@ -1957,7 +1973,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         ui->searchBoxBP->setText(search_str);
         enableTabs(true);
         setCurrentTree();
-        displayWarning();
+        displayWarning("backports");
         change_list.clear();
         if (tree->topLevelItemCount() == 0) {
             buildPackageLists();

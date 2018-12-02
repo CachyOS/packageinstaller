@@ -81,7 +81,7 @@ public:
     void displayFiltered(const QStringList &list) const;
     void displayFlatpaks(bool force_update = false);
     void displayPackages();
-    void displayWarning();
+    void displayWarning(QString repo);
     void enableTabs(bool enable);
     void ifDownloadFailed();
     void listFlatpakRemotes();
@@ -112,7 +112,7 @@ private slots:
     void cleanup();
     void cmdStart();
     void cmdDone();
-    void disableWarning(bool checked);
+    void disableWarning(bool checked, QString file);
     void displayInfo(const QTreeWidgetItem *item, int column);
     void filterChanged(const QString &arg1);
     void findPopular() const;
@@ -157,7 +157,8 @@ private slots:
 private:
     bool test_initially_enabled;
     bool updated_once;
-    bool warning_displayed;
+    bool warning_test;
+    bool warning_backports;
     int height_app;
     QString indexFilterFP;
 
