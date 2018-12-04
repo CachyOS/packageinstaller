@@ -833,7 +833,7 @@ void MainWindow::displayWarning(QString repo)
         msg = tr("You are about to use the MX Test repository, whose packages are provided for "\
                  "testing purposes only. It is possible that they might break your system, so it "\
                  "is suggested that you back up your system and install or update only one package "\
-                 "a time. Please provide feedback in the Forum so the package can be evaluated "\
+                 "at a time. Please provide feedback in the Forum so the package can be evaluated "\
                  "before moving up to Main.");
 
     } else if (repo == "backports") {
