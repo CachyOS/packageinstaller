@@ -1948,7 +1948,6 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         ui->searchPopular->setFocus();
         break;
     case 1:  // Stable
-        qDebug() << "=========================================SEARCH STR"  << search_str;
         ui->searchBoxStable->setText(search_str);
         enableTabs(true);
         setCurrentTree();
