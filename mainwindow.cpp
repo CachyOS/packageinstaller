@@ -1486,13 +1486,16 @@ QHash<QString, VersionNumber> MainWindow::listInstalledVersions()
     QStringList list = out.split("\n");
 
     QString name;
+    QString ver_str;
     QStringList item;
     QHash<QString, VersionNumber> result;
     foreach (QString line, list) {
         item = line.split(QRegularExpression("\\s{2,}"));
         name = item.at(1);
         name.remove(":i386").remove(":amd64");
-        result.insert(name, VersionNumber(item.at(2)));
+        ver_str = item.at(2);
+        ver_str.remove(" amd64");
+        result.insert(name, VersionNumber(ver_str));
     }
     return result;
 }
