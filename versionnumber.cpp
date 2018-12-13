@@ -187,9 +187,9 @@ int VersionNumber::compare(const QStringList &first, const QStringList &second) 
                 return res;
             }
             // one char (not-number) vs. multiple (digits)
-        } else if (first.at(i).length() > 1 && second.at(i).length() == 1 && !second.at(i).at(0).isNumber()) {
+        } else if (first.at(i).length() > 1 && second.at(i).length() == 1 && !second.at(i).at(0).isDigit()) {
             return 1;
-        } else if (first.at(i).length() == 1 && !first.at(i).at(0).isNumber() && second.at(i).length() > 1) {
+        } else if (first.at(i).length() == 1 && !first.at(i).at(0).isDigit() && second.at(i).length() > 1) {
             return -1;
         }
 
