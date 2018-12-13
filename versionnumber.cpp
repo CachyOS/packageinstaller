@@ -1,403 +1,244 @@
-/*
-    Copyright (C) 2008  Tim Fechtner < urwald at users dot sourceforge dot net >
-
-    This program is free software; you can redistribute it and/or
-    modify it under the terms of the GNU General Public License as
-    published by the Free Software Foundation; either version 2 of
-    the License or (at your option) version 3 or any later version
-    accepted by the membership of KDE e.V. (or its successor approved
-    by the membership of KDE e.V.), which shall act as a proxy
-    defined in Section 14 of version 3 of the license.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
+/**********************************************************************
+ *  versionnumber.cpp
+ **********************************************************************
+ * Copyright (C) 2018 MX Authors
+ *
+ * Authors: Adrian
+ *          MX Linux <http://mxlinux.org>
+ *
+ * This file is part of mx-packageinstaller.
+ *
+ * mx-packageinstaller is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * mx-packageinstaller is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with mx-packageinstaller.  If not, see <http://www.gnu.org/licenses/>.
+ **********************************************************************/
 
 #include "versionnumber.h"
+//#include <QDebug>
 
 VersionNumber::VersionNumber()
 {
 }
 
-VersionNumber::VersionNumber(const QString & value)
+
+VersionNumber::VersionNumber(const QString& value)
 {
-  helper_setValue(value);
+    setStrings(value);
 }
 
-VersionNumber::VersionNumber(const VersionNumber & value)
+VersionNumber::VersionNumber(const VersionNumber& value)
 {
-  helper_copyFromHere(value);
-}
-
-VersionNumber::VersionNumber(const qint64 value)
-{
-  helper_setValue(QString::number(value));
+    str = value.str;
+    epoch = value.epoch;
+    upstream_version = value.upstream_version;
+    debian_revision = value.debian_revision;
 }
 
 VersionNumber::~VersionNumber()
 {
 }
 
+
 QString VersionNumber::toString() const
 {
-  return theString;
+    return str;
 }
 
-VersionNumber VersionNumber::operator=(const VersionNumber & value)
-{
-  helper_copyFromHere(value);
-  return *this;
-}
 
-VersionNumber VersionNumber::operator=(const QString & value)
+void VersionNumber::setStrings(const QString& value)
 {
-  helper_setValue(value);
-  return *this;
-}
+    str = value;
+    QString upstream_str, debian_str;
 
-VersionNumber VersionNumber::operator=(qint64 value)
-{
-  helper_setValue(QString::number(value));
-  return *this;
-}
-
-bool VersionNumber::operator<(const VersionNumber & value) const
-{
-  return (whichIsBigger(*this, value) == second_one);
-}
-
-bool VersionNumber::operator<=(const VersionNumber & value) const
-{
-  return (! (whichIsBigger(*this, value) == first_one));
-}
-
-bool VersionNumber::operator>(const VersionNumber & value) const
-{
-  return (whichIsBigger(*this, value) == first_one);
-}
-
-bool VersionNumber::operator>=(const VersionNumber & value) const
-{
-  return (!(whichIsBigger(*this, value) == second_one));
-}
-
-bool VersionNumber::operator==(const VersionNumber & value) const
-{
-  return (whichIsBigger(*this, value) == both_are_equal);
-}
-
-bool VersionNumber::operator!=(const VersionNumber & value) const
-{
-  return (!(whichIsBigger(*this, value) == both_are_equal));
-}
-
-void VersionNumber::helper_setValue(const QString & value)
-{
-  theString = value;
-  if (value.contains(':')) {
-    // part before the first ':'...
-    epoch = helper_createNumberWithPointsAndDashes(value.section(':', 0, 0));
-    // part after the first ':'...
-    version_and_release = helper_createNumberWithPointsAndDashes(value.section(':', 1));
-  } else {
-    epoch = helper_createNumberWithPointsAndDashes(QChar('0'));
-    version_and_release = helper_createNumberWithPointsAndDashes(value);
-  };
-}
-
-VersionNumber::characterType VersionNumber::helper_characterType(const QChar & value)
-{
-  // variables
-  characterType returnValue;
-
-  // code
-  if (value.isLetter()) {
-    returnValue = letter;
-  } else {
-    if (value.isDigit()) {
-      returnValue = digit;
+    if (value.contains(':')) {
+        epoch = value.section(':', 0, 0).toInt();
+        upstream_str = value.section(':', 1);
     } else {
-      returnValue = other;
-    };
-  };
-  return returnValue;
+        epoch = 0;
+        upstream_str = value;
+    }
+    if (upstream_str.contains("-")) {
+        debian_str = upstream_str.section("-", -1);
+        upstream_str = upstream_str.remove("-" + debian_str);
+    }
+    upstream_version = groupDigits(upstream_str);
+    debian_revision = groupDigits(debian_str);
 }
 
-VersionNumber::simpleNumber VersionNumber::helper_createSimpleNumber(const QString & value)
+VersionNumber VersionNumber::operator=(const VersionNumber& value)
 {
-  // variables
-  simpleNumber returnValue;
-  int i;
-  characterType oldCharacterType;
-  characterType newCharacterType;
-  QString stack;
-
-  // code
-  if (value.size() > 0) {
-    oldCharacterType = helper_characterType(value.at(0)); // works only if the
-    // string isn't empty!
-    for (i=0; i<value.size(); ++i) {
-      newCharacterType = helper_characterType(value.at(i));
-      if (newCharacterType == oldCharacterType) {
-        stack += value.at(i);
-      } else {
-        returnValue.append(stack);
-        stack.clear();
-        stack += value.at(i);
-        oldCharacterType = newCharacterType;
-      };
-    };
-    returnValue.append(stack);
-  };
-  return returnValue;
+    str = value.str;
+    epoch = value.epoch;
+    upstream_version = value.upstream_version;
+    debian_revision = value.debian_revision;
+    return *this;
 }
 
-VersionNumber::numberWithPoints VersionNumber::helper_createNumberWithPoints(
-  const QString & value)
+VersionNumber VersionNumber::operator=(const QString& value)
 {
-  // variables
-  numberWithPoints returnValue;
-  QStringList m_list;
-  int i;
-
-  // code
-  m_list = value.split('-');
-  for (i=0; i<m_list.size(); i++) {
-    returnValue.append(helper_createSimpleNumber(m_list.at(i)));
-  };
-  return returnValue;
+    setStrings(value);
+    return *this;
 }
 
-VersionNumber::numberWithPointsAndDashes VersionNumber::helper_createNumberWithPointsAndDashes(
-  const QString & value)
+bool VersionNumber::operator<(const VersionNumber& value) const
 {
-  // variables
-  numberWithPointsAndDashes returnValue;
-  QStringList m_list;
-  int i;
-
-  // code
-  m_list = value.split('-');
-  for (i=0; i<m_list.size(); i++) {
-    returnValue.append(helper_createNumberWithPoints(m_list.at(i)));
-  };
-  return returnValue;
+    return (compare(*this, value) == 1);
 }
 
-void VersionNumber::helper_copyFromHere(const VersionNumber & value)
+bool VersionNumber::operator<=(const VersionNumber& value) const
 {
-  theString = value.theString;
-  epoch = value.epoch;
-  version_and_release = value.version_and_release;
+    return !(*this > value);
 }
 
-VersionNumber::type_whichIsBigger VersionNumber::whichIsBigger(const VersionNumber & firstValue,
-                                                                const VersionNumber & secondValue)
+bool VersionNumber::operator>(const VersionNumber& value) const
 {
-  // variables
-  type_whichIsBigger temp;
-  type_whichIsBigger returnValue;
-
-  // code
-  temp = whichIsBigger(firstValue.epoch, secondValue.epoch);
-  if (temp != both_are_equal) {
-    returnValue = temp;
-  } else {
-    returnValue = whichIsBigger(firstValue.version_and_release, secondValue.version_and_release);
-  };
-  return returnValue;
+    return (compare(*this, value) == -1);
 }
 
-VersionNumber::type_whichIsBigger VersionNumber::whichIsBigger(
-  const numberWithPointsAndDashes & firstValue,
-  const numberWithPointsAndDashes & secondValue)
+bool VersionNumber::operator>=(const VersionNumber& value) const
 {
-  // variables
-  type_whichIsBigger temp;
-  bool abort;
-  int i;
+    return !(*this < value);
+}
 
-  // code
-  i = 0;
-  abort = false;
-  while (abort == false) {
-    if (firstValue.size() > i) {
+bool VersionNumber::operator==(const VersionNumber& value) const
+{
+    return (this->str == value.str);
+}
 
-        if (secondValue.size() > i) {
-          temp = whichIsBigger(firstValue.at(i), secondValue.at(i));
-          if (temp != both_are_equal) {
-            abort = true;
-          };
+bool VersionNumber::operator!=(const VersionNumber& value) const
+{
+    return !(*this == value);
+}
+
+// transform QString into QStringList with digits grouped together
+QStringList VersionNumber::groupDigits(QString value)
+{
+    QStringList result = QStringList();
+    QString cache = "";
+
+    for (int i = 0; i < value.length(); ++i) {
+        if (value.at(i).isDigit()) {
+            cache.append(value.at(i));
+            if (value.length() - 1 == i) {
+                result.append(cache);
+            }
         } else {
-          temp = first_one;
-          abort = true;
-        };
+            if (!cache.isEmpty()) { // add accumulated digits
+                result.append(cache);
+                cache.clear();
+            }
+            result.append(value.at(i));
+        }
+    }
 
-    } else {
-
-        if (secondValue.size() > i) {
-          temp = second_one;
-          abort = true;
-        } else {
-          temp = both_are_equal;
-          abort = true;
-        };
-
-    };
-    i = i+1;
-  };
-  return temp;
+    return result;
 }
 
-VersionNumber::type_whichIsBigger VersionNumber::whichIsBigger(
-  const numberWithPoints & firstValue,
-  const numberWithPoints & secondValue)
+// return 1 if second > first, -1 if second < first, 0 if equal
+int VersionNumber::compare(const VersionNumber& first, const VersionNumber& second) const
 {
-// same code as the function above!!!
-  // variables
-  type_whichIsBigger temp;
-  bool abort;
-  int i;
-
-  // code
-  i = 0;
-  abort = false;
-  while (abort == false) {
-    if (firstValue.size() > i) {
-
-        if (secondValue.size() > i) {
-          temp = whichIsBigger(firstValue.at(i), secondValue.at(i));
-          if (temp != both_are_equal) {
-            abort = true;
-          };
-        } else {
-          temp = first_one;
-          abort = true;
-        };
-
-    } else {
-
-        if (secondValue.size() > i)  {
-          temp = second_one;
-          abort = true;
-        } else {
-          temp = both_are_equal;
-          abort = true;
-        };
-
-    };
-    i = i+1;
-  };
-  return temp;
+    if (second.epoch > first.epoch) {
+        return 1;
+    } else if (second.epoch < first.epoch) {
+        return -1;
+    }
+    int res = compare(first.upstream_version, second.upstream_version);
+    if (res == 1) {
+        return 1;
+    } else if (res == -1)  {
+        return -1;
+    } else if (!debian_revision.isEmpty()) {
+        return compare(first.debian_revision, second.debian_revision);
+    }
+    return 0;
 }
 
-VersionNumber::type_whichIsBigger VersionNumber::whichIsBigger(const simpleNumber & firstValue,
-                                                                const simpleNumber & secondValue)
+// return 1 if second > first, -1 if second < first, 0 if equal
+int VersionNumber::compare(const QStringList &first, const QStringList &second) const
 {
-// same code as the function above
-  // variables
-  type_whichIsBigger temp;
-  bool abort;
-  int i;
+    for (int i = 0; i < first.length() && i < second.length(); ++i) {
+        // check if equal
+        if (first.at(i) == second.at(i)) {
+            continue; // continue till it finds difference
+        }
 
-  // code
-  i = 0;
-  abort = false;
-  while (abort == false) {
-    if (firstValue.size() > i) {
+        // ~ sorts lowest
+        if (first.at(i).at(0) == '~' && second.at(i).at(0) != '~') {
+            return 1;
+        } else if (second.at(i).at(0) == '~' && first.at(i).at(0) != '~') {
+            return -1;
+        }
 
-        if (secondValue.size() > i) {
-          temp = whichIsBigger(firstValue.at(i), secondValue.at(i));
-          if (temp != both_are_equal) {
-            abort = true;
-          };
+        // if one char length check which one is larger
+        if (first.at(i).length() == 1 && second.at(i).length() == 1) {
+            int res = compare(first.at(i).at(0), second.at(i).at(0));
+            if (res == 0) {
+                continue;
+            } else {
+                return res;
+            }
+            // one char (not-number) vs. multiple (digits)
+        } else if (first.at(i).length() > 1 && second.at(i).length() == 1 && !second.at(i).at(0).isNumber()) {
+            return 1;
+        } else if (first.at(i).length() == 1 && !first.at(i).at(0).isNumber() && second.at(i).length() > 1) {
+            return -1;
+        }
+
+        // compare remaining digits
+        if (second.at(i).toInt() > first.at(i).toInt()) {
+            return 1;
         } else {
-          temp = first_one;
-          abort = true;
-        };
+            return -1;
+        }
+    }
 
-    } else {
-
-        if (secondValue.size() > i) {
-          temp = second_one;
-          abort = true;
+    // if equal till the end of one of the lists, compare list size
+    // if the larger list doesn't have "~" it's the bigger version
+    if (second.length() > first.length()) {
+        if (second.at(first.length()) != "~") {
+            return 1;
         } else {
-          temp = both_are_equal;
-          abort = true;
-        };
-
-    };
-    i = i+1;
-  };
-  return temp;
+            return -1;
+        }
+    } else if (second.length() < first.length()) {
+        if (first.at(second.length()) != "~") {
+            return -1;
+        } else {
+            return 1;
+        }
+    }
+    return 0;
 }
 
-VersionNumber::type_whichIsBigger VersionNumber::helper_whichNumberIsBigger(
-  const QString & firstValue,
-  const QString & secondValue)
+// return 1 if second > first, -1 if second < first, 0 if equal
+// letters and number sort before special chars
+int VersionNumber::compare(const QChar& first, const QChar& second) const
 {
-  // variables
-  quint64 m_firstNumber;
-  quint64 m_secondNumber;
-  quint64 m_firstStringSize;
-  quint64 m_secondStringSize;
-  type_whichIsBigger returnValue;
+    if (first == second) {
+        return 0;
+    }
 
-  // code
-  m_firstNumber = firstValue.toULongLong();
-  m_secondNumber = secondValue.toULongLong();
-  if (m_firstNumber > m_secondNumber) {
-    returnValue = first_one;
-  } else if (m_firstNumber < m_secondNumber) {
-    returnValue = second_one;
-  } else { // both are numericly equal
-    m_firstStringSize = firstValue.size();
-    m_secondStringSize = secondValue.size();
-    if (m_firstStringSize > m_secondStringSize) {
-      returnValue = first_one;
-    } else if (m_firstStringSize < m_secondStringSize) {
-      returnValue = second_one;
-    } else {
-      returnValue = both_are_equal;
-    };
-  };
-  return returnValue;
-}
+    // sort letters and numbers before special char
+    if (first.isLetterOrNumber() && !second.isLetterOrNumber()) {
+        return 1;
+    } else if (!first.isLetterOrNumber() && second.isLetterOrNumber()) {
+        return -1;
+    }
 
-VersionNumber::type_whichIsBigger VersionNumber::helper_whichStringIsBigger(
-  const QString & firstValue,
-  const QString & secondValue)
-{
-  // variables
-  type_whichIsBigger returnValue;
+    if (first < second) {
+        return 1;
+    } else if (first > second) {
+        return -1;
+    }
 
-  // code
-  if (firstValue > secondValue) {
-    returnValue = first_one;
-  } else if (firstValue < secondValue) {
-    returnValue = second_one;
-  } else {
-    returnValue = both_are_equal;
-  };
-  return returnValue;
-}
-
-VersionNumber::type_whichIsBigger VersionNumber::whichIsBigger(const QString & firstValue,
-                                                                const QString & secondValue)
-{
-  // variables
-  type_whichIsBigger returnValue;
-
-  // code
-  if (firstValue.at(0).isDigit() && secondValue.at(0).isDigit()) {
-    returnValue = helper_whichNumberIsBigger(firstValue, secondValue);
-  } else {
-    returnValue = helper_whichStringIsBigger(firstValue, secondValue);
-  };
-  return returnValue;
+    return 0;
 }

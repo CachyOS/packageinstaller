@@ -1,3 +1,9 @@
+mx-packageinstaller (18.12.1) mx; urgency=medium
+
+  * fix Debian version numbers using ~
+
+ -- Adrian <adrian@mxlinux.org>  Thu, 13 Dec 2018 15:34:52 -0500
+
 mx-packageinstaller (18.12) mx; urgency=medium
 
   * updated translations
