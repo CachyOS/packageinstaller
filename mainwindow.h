@@ -157,8 +157,9 @@ private slots:
 private:
     bool test_initially_enabled;
     bool updated_once;
-    bool warning_test;
     bool warning_backports;
+    bool warning_flatpaks;
+    bool warning_test;
     int height_app;
     QString indexFilterFP;
 

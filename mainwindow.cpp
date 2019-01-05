@@ -116,8 +116,9 @@ void MainWindow::setup()
 
     ui->searchPopular->setFocus();
     updated_once = false;
-    warning_test = false;
     warning_backports = false;
+    warning_flatpaks = false;
+    warning_test = false;
     tree = ui->treePopularApps;
     ui->tabWidget->setTabEnabled(ui->tabWidget->indexOf(ui->tabOutput), false);
     ui->tabWidget->blockSignals(false);
@@ -412,16 +413,16 @@ void MainWindow::loadPmFiles()
 // Process dom documents (from .pm files)
 void MainWindow::processDoc(const QDomDocument &doc)
 {
-    /*  Order items in list:
-        0 "category"
-        1 "name"
-        2 "description"
-        3 "installable"
-        4 "screenshot"
-        5 "preinstall"
-        6 "install_package_names"
-        7 "postinstall"
-        8 "uninstall_package_names"
+    /*  Items order in list:
+            0 "category"
+            1 "name"
+            2 "description"
+            3 "installable"
+            4 "screenshot"
+            5 "preinstall"
+            6 "install_package_names"
+            7 "postinstall"
+            8 "uninstall_package_names"
     */
 
     QString category;
@@ -840,10 +841,16 @@ void MainWindow::displayWarning(QString repo)
         displayed = &warning_backports;
         file = QDir::homePath() + "/.config/mx-debian-backports-installer";
         msg = tr("You are about to use Debian Backports, which contains packages taken from the next "\
-           "Debian release (called 'testing'), adjusted and recompiled for usage on Debian stable. "\
-           "They cannot be tested as extensively as in the stable releases of Debian and MX Linux, "\
-           "and are provided on an as-is basis, with risk of incompatibilities with other components "\
-           "in Debian stable. Use with care!");
+                 "Debian release (called 'testing'), adjusted and recompiled for usage on Debian stable. "\
+                 "They cannot be tested as extensively as in the stable releases of Debian and MX Linux, "\
+                 "and are provided on an as-is basis, with risk of incompatibilities with other components "\
+                 "in Debian stable. Use with care!");
+    } else if (repo == "flatpaks") {
+        displayed = &warning_flatpaks;
+        file = QDir::homePath() + "/.config/mxpi_nowarning_flatpaks";
+        msg = tr("MX Linux includes this repository of flatpaks for the users convenience only, and "\
+                 "is not responsible for the functionality of the individual flatpaks themselves. "\
+                 "For more, consult flatpaks in the Wiki.");
     }
 
     if (*displayed || QFileInfo::exists(file)) {
@@ -1161,7 +1168,7 @@ bool MainWindow::downloadPackageList(bool force_download)
             }
 
             if (cmd->run("wget --append-output=/var/log/mxpi.log http://mxrepo.com/mx/testrepo/dists/" + repo_name + "/test/binary-" + arch +
-                             "/Packages.gz -O mxPackages.gz && gzip -df mxPackages.gz") != 0) {
+                         "/Packages.gz -O mxPackages.gz && gzip -df mxPackages.gz") != 0) {
                 QFile::remove(tmp_dir + "/mxPackages.gz");
                 QFile::remove(tmp_dir + "/mxPackages");
                 return false;
@@ -1607,7 +1614,7 @@ void MainWindow::findPopular() const
         if ((*it)->childCount() == 0) { // if child
             if (found_items.contains(*it)) {
                 (*it)->setHidden(false);
-          } else {
+            } else {
                 (*it)->parent()->setHidden(true);
                 (*it)->setHidden(true);
             }
@@ -1657,17 +1664,17 @@ void MainWindow::findPackageOther()
     }
     QTreeWidgetItemIterator it(tree);
     while (*it) {
-      if ((*it)->text(6) == "true" && found_items.contains(*it)) {
-          (*it)->setHidden(false);
-      } else {
-          (*it)->setHidden(true);
-      }
-      // hide libs
-      QString app_name = (*it)->text(2);
-      if (isFilteredName(app_name) && ui->checkHideLibs->isChecked()) {
-          (*it)->setHidden(true);
-      }
-      ++it;
+        if ((*it)->text(6) == "true" && found_items.contains(*it)) {
+            (*it)->setHidden(false);
+        } else {
+            (*it)->setHidden(true);
+        }
+        // hide libs
+        QString app_name = (*it)->text(2);
+        if (isFilteredName(app_name) && ui->checkHideLibs->isChecked()) {
+            (*it)->setHidden(true);
+        }
+        ++it;
     }
 }
 
@@ -1922,7 +1929,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         tree->clearSelection();
         QTreeWidgetItemIterator it(tree);
         while (*it) {
-             (*it)->setCheckState(0, Qt::Unchecked);
+            (*it)->setCheckState(0, Qt::Unchecked);
             ++it;
         }
         tree->blockSignals(false);
@@ -1989,6 +1996,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         ui->searchBoxFlatpak->setText(search_str);
         enableTabs(true);
         setCurrentTree();
+        displayWarning("flatpaks");
         blockInterfaceFP(true);
 
         if(!checkInstalled("flatpak")) {
@@ -2101,19 +2109,19 @@ void MainWindow::filterChanged(const QString &arg1)
             }
             ui->labelNumAppFP->setText(QString::number(total));
         } else if (arg1 == tr("Not installed")) {
-             found_items = tree->findItems("not installed", Qt::MatchExactly, 5);
-             ui->labelNumAppFP->setText(QString::number(found_items.count()));
-             while (*it) {
-                 if (found_items.contains(*it) ) {
-                     (*it)->setHidden(false);
-                     (*it)->setText(6, "true"); // Displayed flag
-                 } else {
-                     (*it)->setHidden(true);
-                     (*it)->setText(6, "false");
-                     (*it)->setCheckState(0, Qt::Unchecked); // uncheck hidden items
-                 }
-                 ++it;
-             }
+            found_items = tree->findItems("not installed", Qt::MatchExactly, 5);
+            ui->labelNumAppFP->setText(QString::number(found_items.count()));
+            while (*it) {
+                if (found_items.contains(*it) ) {
+                    (*it)->setHidden(false);
+                    (*it)->setText(6, "true"); // Displayed flag
+                } else {
+                    (*it)->setHidden(true);
+                    (*it)->setText(6, "false");
+                    (*it)->setCheckState(0, Qt::Unchecked); // uncheck hidden items
+                }
+                ++it;
+            }
         }
         setSearchFocus();
         findPackageOther();
@@ -2184,9 +2192,9 @@ void MainWindow::buildChangeList(QTreeWidgetItem *item)
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     /* if all apps are uninstalled (or some installed) -> enable Install, disable Uinstall
-     * if all apps are installed or upgradable -> enable Uninstall, enable Install
-     * if all apps are upgradable -> change Install label to Upgrade;
-     */
+         * if all apps are installed or upgradable -> enable Uninstall, enable Install
+         * if all apps are upgradable -> change Install label to Upgrade;
+         */
 
     QString newapp;
     if (tree == ui->treeFlatpak) {
@@ -2333,8 +2341,8 @@ void MainWindow::on_buttonCancel_clicked()
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     if (cmd->isRunning()) {
         if (QMessageBox::warning(this, tr("Quit?"),
-                                     tr("Process still running, quitting might leave the system in an unstable state.<p><b>Are you sure you want to exit MX Package Installer?</b>"),
-                                     tr("Yes"), tr("No")) == 1){
+                                 tr("Process still running, quitting might leave the system in an unstable state.<p><b>Are you sure you want to exit MX Package Installer?</b>"),
+                                 tr("Yes"), tr("No")) == 1){
             return;
         }
     }
