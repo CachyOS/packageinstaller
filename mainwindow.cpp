@@ -848,7 +848,7 @@ void MainWindow::displayWarning(QString repo)
     } else if (repo == "flatpaks") {
         displayed = &warning_flatpaks;
         file = QDir::homePath() + "/.config/mxpi_nowarning_flatpaks";
-        msg = tr("MX Linux includes this repository of flatpaks for the users convenience only, and "\
+        msg = tr("MX Linux includes this repository of flatpaks for the users' convenience only, and "\
                  "is not responsible for the functionality of the individual flatpaks themselves. "\
                  "For more, consult flatpaks in the Wiki.");
     }
