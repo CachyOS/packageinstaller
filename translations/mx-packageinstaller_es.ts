@@ -12,90 +12,90 @@
         <translation>MX Instalar Paquetes</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="51"/>
+        <location filename="../mainwindow.ui" line="57"/>
         <source>Popular Applications</source>
         <translation>Aplicaciones populares</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="77"/>
+        <location filename="../mainwindow.ui" line="83"/>
         <location filename="../mainwindow.cpp" line="86"/>
         <source>Package</source>
         <translation>Paquete</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="82"/>
+        <location filename="../mainwindow.ui" line="88"/>
         <location filename="../mainwindow.cpp" line="86"/>
         <source>Info</source>
         <translation>Info</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="87"/>
-        <location filename="../mainwindow.ui" line="244"/>
-        <location filename="../mainwindow.ui" line="661"/>
-        <location filename="../mainwindow.ui" line="990"/>
+        <location filename="../mainwindow.ui" line="93"/>
+        <location filename="../mainwindow.ui" line="250"/>
+        <location filename="../mainwindow.ui" line="673"/>
+        <location filename="../mainwindow.ui" line="1008"/>
         <location filename="../mainwindow.cpp" line="86"/>
         <source>Description</source>
         <translation>Descripción</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="107"/>
-        <location filename="../mainwindow.ui" line="210"/>
-        <location filename="../mainwindow.ui" line="627"/>
-        <location filename="../mainwindow.ui" line="959"/>
-        <location filename="../mainwindow.ui" line="1217"/>
+        <location filename="../mainwindow.ui" line="113"/>
+        <location filename="../mainwindow.ui" line="216"/>
+        <location filename="../mainwindow.ui" line="639"/>
+        <location filename="../mainwindow.ui" line="977"/>
+        <location filename="../mainwindow.ui" line="1241"/>
         <source>search</source>
         <translation>buscar</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="117"/>
+        <location filename="../mainwindow.ui" line="123"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Manage popular packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Gestionar paquetes populares&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Ítems en gris ya están instalados.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="147"/>
+        <location filename="../mainwindow.ui" line="153"/>
         <source>Stable Repo</source>
         <translation>Repo estable</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="168"/>
-        <location filename="../mainwindow.ui" line="572"/>
-        <location filename="../mainwindow.ui" line="904"/>
-        <location filename="../mainwindow.ui" line="1165"/>
+        <location filename="../mainwindow.ui" line="174"/>
+        <location filename="../mainwindow.ui" line="584"/>
+        <location filename="../mainwindow.ui" line="922"/>
+        <location filename="../mainwindow.ui" line="1189"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filter packages according to their status.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filtrar paquetes según su estado.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="171"/>
-        <location filename="../mainwindow.ui" line="175"/>
-        <location filename="../mainwindow.ui" line="575"/>
-        <location filename="../mainwindow.ui" line="579"/>
-        <location filename="../mainwindow.ui" line="907"/>
-        <location filename="../mainwindow.ui" line="911"/>
+        <location filename="../mainwindow.ui" line="177"/>
+        <location filename="../mainwindow.ui" line="181"/>
+        <location filename="../mainwindow.ui" line="587"/>
+        <location filename="../mainwindow.ui" line="591"/>
+        <location filename="../mainwindow.ui" line="925"/>
+        <location filename="../mainwindow.ui" line="929"/>
         <location filename="../mainwindow.cpp" line="2132"/>
         <source>All packages</source>
         <translation>Todos los paquetes</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="180"/>
-        <location filename="../mainwindow.ui" line="584"/>
-        <location filename="../mainwindow.ui" line="916"/>
+        <location filename="../mainwindow.ui" line="186"/>
+        <location filename="../mainwindow.ui" line="596"/>
+        <location filename="../mainwindow.ui" line="934"/>
         <location filename="../mainwindow.cpp" line="2146"/>
         <source>Installed</source>
         <translation>Instalado</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="185"/>
-        <location filename="../mainwindow.ui" line="589"/>
-        <location filename="../mainwindow.ui" line="921"/>
+        <location filename="../mainwindow.ui" line="191"/>
+        <location filename="../mainwindow.ui" line="601"/>
+        <location filename="../mainwindow.ui" line="939"/>
         <location filename="../mainwindow.cpp" line="2144"/>
         <source>Upgradable</source>
         <translation>Actualizable</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="190"/>
-        <location filename="../mainwindow.ui" line="594"/>
-        <location filename="../mainwindow.ui" line="926"/>
-        <location filename="../mainwindow.ui" line="1197"/>
+        <location filename="../mainwindow.ui" line="196"/>
+        <location filename="../mainwindow.ui" line="606"/>
+        <location filename="../mainwindow.ui" line="944"/>
+        <location filename="../mainwindow.ui" line="1221"/>
         <location filename="../mainwindow.cpp" line="2111"/>
         <location filename="../mainwindow.cpp" line="2148"/>
         <location filename="../mainwindow.cpp" line="2237"/>
@@ -103,233 +103,233 @@
         <translation>No instalado</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="234"/>
-        <location filename="../mainwindow.ui" line="651"/>
-        <location filename="../mainwindow.ui" line="980"/>
+        <location filename="../mainwindow.ui" line="240"/>
+        <location filename="../mainwindow.ui" line="663"/>
+        <location filename="../mainwindow.ui" line="998"/>
         <source>Package Name</source>
         <translation>Nombre del paquete</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="239"/>
-        <location filename="../mainwindow.ui" line="656"/>
-        <location filename="../mainwindow.ui" line="985"/>
-        <location filename="../mainwindow.ui" line="1252"/>
+        <location filename="../mainwindow.ui" line="245"/>
+        <location filename="../mainwindow.ui" line="668"/>
+        <location filename="../mainwindow.ui" line="1003"/>
+        <location filename="../mainwindow.ui" line="1276"/>
         <source>Version</source>
         <translation>Versión</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="271"/>
-        <location filename="../mainwindow.ui" line="688"/>
-        <location filename="../mainwindow.ui" line="1017"/>
+        <location filename="../mainwindow.ui" line="277"/>
+        <location filename="../mainwindow.ui" line="700"/>
+        <location filename="../mainwindow.ui" line="1035"/>
         <source>Total packages:</source>
         <translation>Paquetes totales:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="301"/>
-        <location filename="../mainwindow.ui" line="718"/>
-        <location filename="../mainwindow.ui" line="1047"/>
+        <location filename="../mainwindow.ui" line="307"/>
+        <location filename="../mainwindow.ui" line="730"/>
+        <location filename="../mainwindow.ui" line="1065"/>
         <source>Installed:</source>
         <translation>Instalado:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="331"/>
-        <location filename="../mainwindow.ui" line="748"/>
-        <location filename="../mainwindow.ui" line="1077"/>
+        <location filename="../mainwindow.ui" line="337"/>
+        <location filename="../mainwindow.ui" line="760"/>
+        <location filename="../mainwindow.ui" line="1095"/>
         <source>Upgradable:</source>
         <translation>Actualizable:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="345"/>
-        <location filename="../mainwindow.ui" line="1322"/>
+        <location filename="../mainwindow.ui" line="351"/>
+        <location filename="../mainwindow.ui" line="1346"/>
         <source>Upgrade All</source>
         <translation>Actualizar Todos:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="372"/>
-        <location filename="../mainwindow.ui" line="775"/>
-        <location filename="../mainwindow.ui" line="1104"/>
+        <location filename="../mainwindow.ui" line="378"/>
+        <location filename="../mainwindow.ui" line="787"/>
+        <location filename="../mainwindow.ui" line="1122"/>
         <source>Hide library and developer packages</source>
         <translation>Ocultar paquetes de bibliotecas y desarrolladores</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="394"/>
-        <location filename="../mainwindow.ui" line="797"/>
-        <location filename="../mainwindow.ui" line="1126"/>
+        <location filename="../mainwindow.ui" line="400"/>
+        <location filename="../mainwindow.ui" line="809"/>
+        <location filename="../mainwindow.ui" line="1144"/>
         <source>Refresh list</source>
         <translation>Recargar lista</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="411"/>
-        <location filename="../mainwindow.ui" line="602"/>
-        <location filename="../mainwindow.ui" line="934"/>
-        <location filename="../mainwindow.ui" line="1432"/>
+        <location filename="../mainwindow.ui" line="417"/>
+        <location filename="../mainwindow.ui" line="614"/>
+        <location filename="../mainwindow.ui" line="952"/>
+        <location filename="../mainwindow.ui" line="1456"/>
         <source>Greyed out items have already been installed.</source>
         <translation>Los ítemes en gris ya se instalaron.</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="474"/>
-        <location filename="../mainwindow.ui" line="531"/>
-        <location filename="../mainwindow.ui" line="858"/>
+        <location filename="../mainwindow.ui" line="480"/>
+        <location filename="../mainwindow.ui" line="543"/>
+        <location filename="../mainwindow.ui" line="876"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;= Upgradable package. Newer version available in selected repository.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;= Paquete actualizable. Versión más nueva disponible en repositorio seleccionado.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="488"/>
+        <location filename="../mainwindow.ui" line="500"/>
         <source>MX Test Repo</source>
         <translation>MX Repo de Test</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="815"/>
+        <location filename="../mainwindow.ui" line="833"/>
         <source>Debian Backports</source>
         <translation>Backports de Debian</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1144"/>
+        <location filename="../mainwindow.ui" line="1168"/>
         <source>Flatpaks</source>
         <translation>Flatpaks</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1168"/>
-        <location filename="../mainwindow.ui" line="1172"/>
+        <location filename="../mainwindow.ui" line="1192"/>
+        <location filename="../mainwindow.ui" line="1196"/>
         <location filename="../mainwindow.cpp" line="2092"/>
         <source>All apps</source>
         <translation>Todas las apps</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1177"/>
+        <location filename="../mainwindow.ui" line="1201"/>
         <location filename="../mainwindow.cpp" line="2097"/>
         <source>All runtimes</source>
         <translation>Todos los binarios de ejecución</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1182"/>
+        <location filename="../mainwindow.ui" line="1206"/>
         <location filename="../mainwindow.cpp" line="2102"/>
         <source>All available</source>
         <translation>Todos disponibles</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1187"/>
+        <location filename="../mainwindow.ui" line="1211"/>
         <location filename="../mainwindow.cpp" line="2090"/>
         <location filename="../mainwindow.cpp" line="2232"/>
         <source>Installed apps</source>
         <translation>Apps instaladas</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1192"/>
+        <location filename="../mainwindow.ui" line="1216"/>
         <location filename="../mainwindow.cpp" line="2088"/>
         <source>Installed runtimes</source>
         <translation>Binarios de ejecución instalados</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1242"/>
+        <location filename="../mainwindow.ui" line="1266"/>
         <source>Short Name</source>
         <translation>Nombre corto</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1247"/>
+        <location filename="../mainwindow.ui" line="1271"/>
         <source>Full Package Name</source>
         <translation>Nombre completo del Paquete</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1257"/>
+        <location filename="../mainwindow.ui" line="1281"/>
         <source>Size</source>
         <translation>Tamaño</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1301"/>
+        <location filename="../mainwindow.ui" line="1325"/>
         <source>Total items </source>
         <translation>Total de ítems</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1315"/>
+        <location filename="../mainwindow.ui" line="1339"/>
         <source>Installed apps:</source>
         <translation>Apps instaladas:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1368"/>
+        <location filename="../mainwindow.ui" line="1392"/>
         <source>Advanced</source>
         <translation>Avanzado</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1398"/>
+        <location filename="../mainwindow.ui" line="1422"/>
         <source>Total installed size:</source>
         <translation>Tamaño total instalado:</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1415"/>
-        <location filename="../mainwindow.ui" line="1419"/>
+        <location filename="../mainwindow.ui" line="1439"/>
+        <location filename="../mainwindow.ui" line="1443"/>
         <source>For all users</source>
         <translation>Para todos los usuarios</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1424"/>
+        <location filename="../mainwindow.ui" line="1448"/>
         <source>For current user</source>
         <translation>Para el usuario actual</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1455"/>
+        <location filename="../mainwindow.ui" line="1479"/>
         <source>Remote (repo):</source>
         <translation>Remoto (repo):</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1495"/>
+        <location filename="../mainwindow.ui" line="1525"/>
         <location filename="../mainwindow.cpp" line="1922"/>
         <location filename="../mainwindow.cpp" line="2046"/>
         <source>Console Output</source>
         <translation>Salida en consola</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1501"/>
+        <location filename="../mainwindow.ui" line="1531"/>
         <source>Enter</source>
         <translation>Entrada</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1512"/>
+        <location filename="../mainwindow.ui" line="1542"/>
         <source>Respond here, or just press Enter</source>
         <translation>Respuesta aquí, o solo oprimir Entrada</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1556"/>
+        <location filename="../mainwindow.ui" line="1586"/>
         <source>Uninstall</source>
         <translation>Desinstalar</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1563"/>
+        <location filename="../mainwindow.ui" line="1593"/>
         <source>Alt+U</source>
         <translation>Alt+U</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1579"/>
+        <location filename="../mainwindow.ui" line="1609"/>
         <source>About this application</source>
         <translation>Acerca de esta aplicación</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1582"/>
+        <location filename="../mainwindow.ui" line="1612"/>
         <source>About...</source>
         <translation>Acerca de...</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1589"/>
+        <location filename="../mainwindow.ui" line="1619"/>
         <source>Alt+B</source>
         <translation>Alt+B</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1637"/>
+        <location filename="../mainwindow.ui" line="1667"/>
         <source>Display help </source>
         <translation>Mostrar la ayuda</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1640"/>
+        <location filename="../mainwindow.ui" line="1670"/>
         <source>Help</source>
         <translation>Ayuda</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1647"/>
+        <location filename="../mainwindow.ui" line="1677"/>
         <source>Alt+H</source>
         <translation>Alt+H</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1663"/>
+        <location filename="../mainwindow.ui" line="1693"/>
         <location filename="../mainwindow.cpp" line="1827"/>
         <location filename="../mainwindow.cpp" line="2226"/>
         <location filename="../mainwindow.cpp" line="2229"/>
@@ -337,22 +337,22 @@
         <translation>Instalar</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1670"/>
+        <location filename="../mainwindow.ui" line="1700"/>
         <source>Alt+I</source>
         <translation>Alt+I</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1689"/>
+        <location filename="../mainwindow.ui" line="1719"/>
         <source>Quit application</source>
         <translation>Terminar aplicación</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1692"/>
+        <location filename="../mainwindow.ui" line="1722"/>
         <source>Close</source>
         <translation>Cerrar</translation>
     </message>
     <message>
-        <location filename="../mainwindow.ui" line="1699"/>
+        <location filename="../mainwindow.ui" line="1729"/>
         <source>Alt+C</source>
         <translation>Alt+C</translation>
     </message>
