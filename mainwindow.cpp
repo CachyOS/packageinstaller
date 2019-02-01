@@ -28,6 +28,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QProgressBar>
+#include <QSettings>
 #include <QScrollBar>
 #include <QTextStream>
 #include <QtXml/QtXml>
@@ -122,6 +123,9 @@ void MainWindow::setup()
     tree = ui->treePopularApps;
     ui->tabWidget->setTabEnabled(ui->tabWidget->indexOf(ui->tabOutput), false);
     ui->tabWidget->blockSignals(false);
+
+    QSettings settings("MX-Linux", "mx-packageinstaller");
+    restoreGeometry(settings.value("geometry").toByteArray());
 }
 
 // Uninstall listed packages
@@ -1360,6 +1364,9 @@ void MainWindow::cleanup()
     if (tmp_dir.startsWith("/tmp/mxpm-") && QFile::exists(tmp_dir)) {
         system("rm -r " + tmp_dir.toUtf8());
     }
+
+    QSettings settings("MX-Linux", "mx-packageinstaller");
+    settings.setValue("geometry", saveGeometry());
 }
 
 // Get version of the program

@@ -1,6 +1,7 @@
 mx-packageinstaller (19.1.2) mx; urgency=medium
 
   * make it resizeble (smaller size for small monitors)
+  * preserve window geometry
 
  -- Adrian <adrian@mxlinux.org>  Thu, 31 Jan 2019 18:54:30 -0500
 
