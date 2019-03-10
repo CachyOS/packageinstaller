@@ -14,7 +14,7 @@ void AptCache::loadCacheFiles()
     QDir dir(dir_name);
     QString filter = "*binary-" + getArch() + "_Packages";
     QStringList files = dir.entryList(QStringList() << filter, QDir::Files, QDir::Unsorted);
-    foreach (const QString &file_name, files) {
+    for (const QString &file_name : files) {
         if(!readFile(file_name)) {
             qDebug() << "error reading a cache file";
         }
@@ -43,7 +43,7 @@ void AptCache::parseContent()
     QStringList description_list;
     QStringList list = files_content.split("\n");
 
-    foreach(QString line, list) {
+    for (QString line : list) {
         if (line.startsWith("Package: ")) {
             package_list << line.remove("Package: ");
         } else if (line.startsWith("Version: ")) {
