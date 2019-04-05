@@ -1,0 +1,46 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Format: 1.8
+Date: Fri, 05 Apr 2019 11:45:47 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 19.4
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (19.4) mx; urgency=medium
+ .
+   * updated translations
+Checksums-Sha1:
+ 3605f5262c8cd388c7ba20f777098277594848f7 1238 mx-packageinstaller_19.4.dsc
+ ea531dd424c5747b8e8577549403e45dcacd964f 103692 mx-packageinstaller_19.4.tar.xz
+ cc00a1375d52b0fef72fac5f52e150b0e96dfa5c 11427 mx-packageinstaller_19.4_amd64.buildinfo
+ 0d26c90f31acd32c9810ea582cca7d9ea07969ed 171924 mx-packageinstaller_19.4_amd64.deb
+Checksums-Sha256:
+ cf4946701536693ea1e2aa64be6646d7174849f3a860d9ff64a95757efd63c94 1238 mx-packageinstaller_19.4.dsc
+ 96f2963ef904a9146015e9b7723501dce20935a3347320a69ad819d0e04287c9 103692 mx-packageinstaller_19.4.tar.xz
+ 91f59cfe43eee46ad51b9a16b5f25ab78c71c411f53e9f4f891bc852f9909c24 11427 mx-packageinstaller_19.4_amd64.buildinfo
+ 1246886e885239104fb8bd58e3e844eb5b8227a0c530e59f2f8ae34e771a1017 171924 mx-packageinstaller_19.4_amd64.deb
+Files:
+ 257b95d364051d661b8554ad4ecdfafe 1238 admin optional mx-packageinstaller_19.4.dsc
+ 46d0204c880b463648cea87e5fe82a98 103692 admin optional mx-packageinstaller_19.4.tar.xz
+ 1590cc3be89355979ed19749dea4c4df 11427 admin optional mx-packageinstaller_19.4_amd64.buildinfo
+ 7152c0c26d717bd50a0baa86b4dffa88 171924 admin optional mx-packageinstaller_19.4_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCAAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAlyneIsTHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumB02B/9nF5t2fkIFHj+eGpz7iokkDKR/MIzx
+mKlm21u3Yi8Ayz2zflIOQTIwwPDxDNzWNpUbgaxooWKa1J3H/eEUR+loRSE7iOJI
+QpOIokheRdXwLoEqpvJ0lx5+RFOa8tEypAYAwYghqfsSMq308R1n+l/UBKBaG3ku
+Y9KhxImz23IDMDZLu+KeJBCnS180x5Y3X3gfmhSZz0FfrxrBkJ+nt1DRbF0NBVuq
+k22zT4Qsh1j/S72lVdkhAF5wyNVw3RHjtmwKULCo8lN/eWWMgyOzh9ryyvbrc8US
+BgHK5aJodkWEGDScMQw+Jl+3cQmdsjfHz+b8YM58cPUyeIbkc9Q2tkzg
+=4b/o
+-----END PGP SIGNATURE-----
