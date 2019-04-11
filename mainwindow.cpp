@@ -202,7 +202,7 @@ void MainWindow::listSizeInstalledFP()
             list << runtimes;
         }
         while (*it) {
-            for (const QString &item : list) {
+            for (const QString &item : qAsConst(list)) {
                 name = item.section(" ", 0, 0);
                 size = item.section(" ", 1);
                 if (name == (*it)->text(8)) {
@@ -214,7 +214,7 @@ void MainWindow::listSizeInstalledFP()
         }
     } else {
         list = cmd->getOutput("su $(logname) -c \"flatpak -d list " + user + "|tr -s ' '|cut -f1,5\"").split("\n");
-        for (const QString &item : list) {
+        for (const QString &item : qAsConst(list)) {
             total = addSizes(total, item.section("\t", 1));
         }
     }
@@ -397,7 +397,7 @@ void MainWindow::loadPmFiles()
 
     QStringList filter("*.pm");
     QDir dir("/usr/share/mx-packageinstaller-pkglist");
-    QStringList pmfilelist = dir.entryList(filter);
+    const QStringList pmfilelist = dir.entryList(filter);
 
     for (const QString &file_name : pmfilelist) {
         QFile file(dir.absolutePath() + "/" + file_name);
@@ -553,7 +553,7 @@ void MainWindow::displayPopularApps() const
     QTreeWidgetItem *topLevelItem = 0L;
     QTreeWidgetItem *childItem;
 
-    for (const QStringList &list : popular_apps) {
+    for (const QStringList &list : qAsConst(popular_apps)) {
         QString category = list.at(0);
         QString name = list.at(1);
         QString description = list.at(2);
@@ -772,7 +772,7 @@ void MainWindow::displayFlatpaks(bool force_update)
     QTreeWidgetItem *widget_item;
 
     QString short_name, full_name, arch, version, size;
-    for (QString item : flatpaks) {
+    for (QString item : qAsConst(flatpaks)) {
         size = item.section("\t", 1);
         item = item.section("\t", 0, 0); // strip size
         full_name = item.section("/", 0, 0); // return first part of the name before slash
@@ -927,7 +927,7 @@ bool MainWindow::installBatch(const QStringList &name_list)
 
     // load all the
     for (const QString &name : name_list) {
-        for (const QStringList &list : popular_apps) {
+        for (const QStringList &list : qAsConst(popular_apps)) {
             if (list.at(1) == name) {
                 postinstall += list.at(6) + "\n";
                 install_names += list.at(7) + " ";
@@ -963,7 +963,7 @@ bool MainWindow::installPopularApp(const QString &name)
     QString install_names;
 
     // get all the app info
-    for (const QStringList &list : popular_apps) {
+    for (const QStringList &list : qAsConst(popular_apps)) {
         if (list.at(1) == name) {
             preinstall = list.at(5);
             postinstall = list.at(6);
@@ -1027,7 +1027,7 @@ bool MainWindow::installPopularApps()
     while (*it) {
         if ((*it)->checkState(1) == Qt::Checked) {
             QString name = (*it)->text(2);
-            for (const QStringList &list : popular_apps) {
+            for (const QStringList &list : qAsConst(popular_apps)) {
                 if (list.at(1) == name) {
                     QString preinstall = list.at(5);
                     if (preinstall.isEmpty()) {  // add to batch processing if there is not preinstall command
@@ -1250,12 +1250,12 @@ bool MainWindow::readPackageList(bool force_download)
     QString file_content = file.readAll();
     file.close();
 
-    QStringList list = file_content.split("\n");
-
     QMap<QString, QStringList> map;
     QStringList package_list;
     QStringList version_list;
     QStringList description_list;
+
+    const QStringList list = file_content.split("\n");
 
     for (QString line : list) {
         if (line.startsWith("Package: ")) {
@@ -1482,8 +1482,7 @@ QStringList MainWindow::listInstalledFlatpaks(const QString type) const
 void MainWindow::setCurrentTree()
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
-    QList<QTreeWidget *> list;
-    list << ui->treePopularApps << ui->treeStable << ui->treeMXtest << ui->treeBackports << ui->treeFlatpak;
+    const QList<QTreeWidget *> list({ui->treePopularApps, ui->treeStable, ui->treeMXtest, ui->treeBackports, ui->treeFlatpak});
 
     for (QTreeWidget *item : list) {
         if (item->isVisible()) {
@@ -1497,12 +1496,13 @@ QHash<QString, VersionNumber> MainWindow::listInstalledVersions()
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     QString out = cmd->getOutput("dpkg -l | grep '^ii'", QStringList() << "quiet");
-    QStringList list = out.split("\n");
 
     QString name;
     QString ver_str;
     QStringList item;
     QHash<QString, VersionNumber> result;
+
+    const QStringList list = out.split("\n");
     for (const QString &line : list) {
         item = line.split(QRegularExpression("\\s{2,}"));
         name = item.at(1);
@@ -1630,7 +1630,7 @@ void MainWindow::findPopular() const
     }
 
     // process found items
-    for (QTreeWidgetItem* item : found_items) {
+    for (QTreeWidgetItem* item : qAsConst(found_items)) {
         if (item->childCount() == 0) { // if child, expand parent
             item->parent()->setExpanded(true);
             item->parent()->setHidden(false);
@@ -1880,7 +1880,7 @@ void MainWindow::on_buttonUninstall_clicked()
         }
 
         setCursor(QCursor(Qt::BusyCursor));
-        for (const QString &app : change_list) {
+        for (const QString &app : qAsConst(change_list)) {
             setConnections();
             if (cmd->run("su $(logname) -c \"socat SYSTEM:'flatpak uninstall " + conf + user + app + "',stderr STDIO\"") != 0) { // success if all processed successfuly, failure if one failed
                 success = false;
@@ -2026,7 +2026,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
             if (ui->treeStable) { // mark flatpak installed in stable tree
                 QHash<QString, VersionNumber> hashInstalled = listInstalledVersions();
                 VersionNumber installed = hashInstalled.value("flatpak");
-                QList<QTreeWidgetItem *> found_items  = ui->treeStable->findItems("flatpak", Qt::MatchExactly, 2);
+                const QList<QTreeWidgetItem *> found_items  = ui->treeStable->findItems("flatpak", Qt::MatchExactly, 2);
                 for (QTreeWidgetItem *item : found_items) {
                     for (int i = 0; i < ui->treeStable->columnCount(); ++i) {
                         item->setForeground(2, QBrush(Qt::gray));
