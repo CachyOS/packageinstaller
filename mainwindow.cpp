@@ -202,7 +202,7 @@ void MainWindow::listSizeInstalledFP()
             list << runtimes;
         }
         while (*it) {
-            for (const QString &item : qAsConst(list)) {
+            for (const QString &item : list) {
                 name = item.section(" ", 0, 0);
                 size = item.section(" ", 1);
                 if (name == (*it)->text(8)) {
@@ -214,7 +214,7 @@ void MainWindow::listSizeInstalledFP()
         }
     } else {
         list = cmd->getOutput("su $(logname) -c \"flatpak -d list " + user + "|tr -s ' '|cut -f1,5\"").split("\n");
-        for (const QString &item : qAsConst(list)) {
+        for (const QString &item : list) {
             total = addSizes(total, item.section("\t", 1));
         }
     }
@@ -553,7 +553,7 @@ void MainWindow::displayPopularApps() const
     QTreeWidgetItem *topLevelItem = 0L;
     QTreeWidgetItem *childItem;
 
-    for (const QStringList &list : qAsConst(popular_apps)) {
+    for (const QStringList &list : popular_apps) {
         QString category = list.at(0);
         QString name = list.at(1);
         QString description = list.at(2);
@@ -772,7 +772,7 @@ void MainWindow::displayFlatpaks(bool force_update)
     QTreeWidgetItem *widget_item;
 
     QString short_name, full_name, arch, version, size;
-    for (QString item : qAsConst(flatpaks)) {
+    for (QString item : flatpaks) {
         size = item.section("\t", 1);
         item = item.section("\t", 0, 0); // strip size
         full_name = item.section("/", 0, 0); // return first part of the name before slash
@@ -927,7 +927,7 @@ bool MainWindow::installBatch(const QStringList &name_list)
 
     // load all the
     for (const QString &name : name_list) {
-        for (const QStringList &list : qAsConst(popular_apps)) {
+        for (const QStringList &list : popular_apps) {
             if (list.at(1) == name) {
                 postinstall += list.at(6) + "\n";
                 install_names += list.at(7) + " ";
@@ -963,7 +963,7 @@ bool MainWindow::installPopularApp(const QString &name)
     QString install_names;
 
     // get all the app info
-    for (const QStringList &list : qAsConst(popular_apps)) {
+    for (const QStringList &list : popular_apps) {
         if (list.at(1) == name) {
             preinstall = list.at(5);
             postinstall = list.at(6);
@@ -1027,7 +1027,7 @@ bool MainWindow::installPopularApps()
     while (*it) {
         if ((*it)->checkState(1) == Qt::Checked) {
             QString name = (*it)->text(2);
-            for (const QStringList &list : qAsConst(popular_apps)) {
+            for (const QStringList &list : popular_apps) {
                 if (list.at(1) == name) {
                     QString preinstall = list.at(5);
                     if (preinstall.isEmpty()) {  // add to batch processing if there is not preinstall command
@@ -1630,7 +1630,7 @@ void MainWindow::findPopular() const
     }
 
     // process found items
-    for (QTreeWidgetItem* item : qAsConst(found_items)) {
+    for (QTreeWidgetItem* item : found_items) {
         if (item->childCount() == 0) { // if child, expand parent
             item->parent()->setExpanded(true);
             item->parent()->setHidden(false);
@@ -1880,7 +1880,7 @@ void MainWindow::on_buttonUninstall_clicked()
         }
 
         setCursor(QCursor(Qt::BusyCursor));
-        for (const QString &app : qAsConst(change_list)) {
+        for (const QString &app : change_list) {
             setConnections();
             if (cmd->run("su $(logname) -c \"socat SYSTEM:'flatpak uninstall " + conf + user + app + "',stderr STDIO\"") != 0) { // success if all processed successfuly, failure if one failed
                 success = false;
