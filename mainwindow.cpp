@@ -2349,7 +2349,7 @@ void MainWindow::on_buttonCancel_clicked()
     if (cmd->isRunning()) {
         if (QMessageBox::warning(this, tr("Quit?"),
                                  tr("Process still running, quitting might leave the system in an unstable state.<p><b>Are you sure you want to exit MX Package Installer?</b>"),
-                                 tr("Yes"), tr("No")) == 1){
+                                 QMessageBox::Yes, QMessageBox::No)) {
             return;
         }
     }

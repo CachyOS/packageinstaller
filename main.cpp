@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
             QMessageBox::critical(0, QApplication::tr("Unable to get exclusive lock"),
                                   QApplication::tr("Another package management application (like Synaptic or apt-get), "\
                                                    "is already running. Please close that application first"));
-            return 1;
+            return EXIT_FAILURE;
         } else {
             lock_file.lock();
         }
@@ -75,6 +75,6 @@ int main(int argc, char *argv[])
         QApplication::beep();
         QMessageBox::critical(0, QString::null,
                               QApplication::tr("You must run this program as root."));
-        return 1;
+        return EXIT_FAILURE;
     }
 }
