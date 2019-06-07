@@ -2,20 +2,32 @@ Source: mx-packageinstaller
 Section: admin
 Priority: optional
 Maintainer: Adrian <adrian@mxlinux.org>
-Build-Depends: qt5-qmake,
-	qt5-default,
-	qttools5-dev-tools,
-	debhelper (>=9),
-	libcmd
+Build-Depends: debhelper (>=9),
+               libcmd,
+               qt5-default,
+               qt5-qmake,
+               qttools5-dev-tools
 Standards-Version: 3.9.8
 Vcs-Git: git://github.com/AdrianTM/mx-packageinstaller
 
 Package: mx-packageinstaller
 Architecture: any
-Depends: ${misc:Depends}, ${shlibs:Depends}, xdg-utils|mx-viewer, mx-packageinstaller-pkglist (>= 17.4), menu, wget, libcmd, flatpak (>= 0.8.9), socat, flatpak (<< 1.0) | xdg-desktop-portal-gtk
-Replaces: mx-test-repo-installer, mx-debian-backports-installer, mx-package-manager, mx-package-manager-pkglist
-Provides: mx-test-repo-installer, mx-debian-backports-installer
-Conflicts: mx-test-repo-installer, mx-debian-backports-installer
+Depends: flatpak (<< 1.0) | xdg-desktop-portal-gtk,
+         flatpak (>= 0.8.9),
+         libcmd,
+         menu,
+         mx-packageinstaller-pkglist (>= 17.4),
+         socat,
+         wget,
+         xdg-utils | mx-viewer,
+         ${misc:Depends},
+         ${shlibs:Depends}
+Replaces: mx-debian-backports-installer,
+          mx-package-manager,
+          mx-package-manager-pkglist,
+          mx-test-repo-installer
+Provides: mx-debian-backports-installer, mx-test-repo-installer
+Conflicts: mx-debian-backports-installer, mx-test-repo-installer
 Description: MX Package Installer
  MX Package Installer is a tool used for managing packages on MX Linux
  - installs popular programs from different sources
