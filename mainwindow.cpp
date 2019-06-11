@@ -40,7 +40,7 @@
 
 #include "aptcache.h"
 #include "versionnumber.h"
-
+#include "version.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -48,6 +48,7 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow),
     dictionary("/usr/share/mx-packageinstaller-pkglist/category.dict", QSettings::IniFormat)
 {
+    qDebug() << "Program Version:" << VERSION;
     ui->setupUi(this);
     setup();
 }
@@ -80,7 +81,6 @@ void MainWindow::setup()
     lock_file = new LockFile("/var/lib/dpkg/lock");
     connect(qApp, &QApplication::aboutToQuit, this, &MainWindow::cleanup, Qt::QueuedConnection);
     test_initially_enabled = (cmd->run("grep -q '^deb.* test' /etc/apt/sources.list.d/mx.list") == 0);
-    version = getVersion("mx-packageinstaller");
     this->setWindowTitle(tr("MX Package Installer"));
     ui->tabWidget->setCurrentIndex(0);
     QStringList column_names;
@@ -1747,7 +1747,7 @@ void MainWindow::on_buttonAbout_clicked()
 {
     QMessageBox msgBox(QMessageBox::NoIcon,
                        tr("About MX Package Installer"), "<p align=\"center\"><b><h2>" +
-                       tr("MX Package Installer") + "</h2></b></p><p align=\"center\">" + tr("Version: ") + version + "</p><p align=\"center\"><h3>" +
+                       tr("MX Package Installer") + "</h2></b></p><p align=\"center\">" + tr("Version: ") + VERSION + "</p><p align=\"center\"><h3>" +
                        tr("Package Installer for MX Linux") +
                        "</h3></p><p align=\"center\"><a href=\"http://mxlinux.org\">http://mxlinux.org</a><br /></p><p align=\"center\">" +
                        tr("Copyright (c) MX Linux") + "<br /><br /></p>");

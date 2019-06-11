@@ -43,7 +43,8 @@ HEADERS  += \
     lockfile.h \
     versionnumber.h \
     aptcache.h \
-    remotes.h
+    remotes.h \
+    version.h
 
 FORMS    += \
     mainwindow.ui
