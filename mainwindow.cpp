@@ -76,6 +76,8 @@ void MainWindow::setup()
         ver_name = "jessie";
     } else if (ver_num == "9") {
         ver_name = "stretch";
+    } else if (ver_num == "10") {
+        ver_name = "buster";
     }
     setProgressDialog();
     lock_file = new LockFile("/var/lib/dpkg/lock");
@@ -909,6 +911,8 @@ bool MainWindow::install(const QString &names)
 
     if (tree == ui->treeBackports) {
         cmd->run("DEBIAN_FRONTEND=gnome apt-get install -t " + ver_name + "-backports --reinstall " + names + "| tee -a /var/log/mxpi.log");
+    } else if (tree == ui->treeMXtest) {
+        cmd->run("DEBIAN_FRONTEND=gnome apt-get install -t 'a=mx,c=test'" + names + "| tee -a /var/log/mxpi.log");
     } else {
         cmd->run("DEBIAN_FRONTEND=gnome apt-get install --reinstall " + names + "| tee -a /var/log/mxpi.log");
     }
