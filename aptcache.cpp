@@ -48,8 +48,8 @@ void AptCache::parseContent()
             package_list << line.remove("Package: ");
         } else if (line.startsWith("Version: ")) {
             version_list << line.remove("Version: ");
-        } else if (line.startsWith("Description: ")) {
-            description_list << line.remove("Description: ");
+        } else if (line.startsWith("Description:")) { // not "Description: " because some people don't add description to their packages
+            description_list << line.remove("Description:").trimmed();
         }
     }
     for (int i = 0; i < package_list.size(); ++i) {
