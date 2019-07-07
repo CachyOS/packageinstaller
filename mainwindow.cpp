@@ -65,6 +65,10 @@ void MainWindow::setup()
     ui->tabWidget->blockSignals(true);
     cmd = new Cmd(this);
 
+    QFont font("monospace");
+    font.setStyleHint(QFont::Monospace);
+    ui->outputBox->setFont(font);
+
     fp_ver = getVersion("flatpak");
     user = "--system ";
 
@@ -783,16 +787,14 @@ void MainWindow::displayFlatpaks(bool force_update)
     QString short_name, full_name, arch, version, size;
     for (QString item : flatpaks) {
         if (fp_ver < VersionNumber("1.2.4")) {
-            size = item.section("\t", 1);
-            item = item.section("\t", 0, 0); // strip size
-            full_name = item.section("\t", 0);
-            version = item.section("/", -1);
-        } else { // Buster ver and above
-            full_name = item.section("\t", 0, 0);
+            version = item.section("\t", 0, 0).section("/", -1);
+            size = item.section("\t", 1, 1);
+        } else { // Buster version and above
             version = item.section("\t", 1, 1);
             size = item.section("\t", 2, 2);
-            item = item.section("\t", 0, 0); // strip size
         }
+        item = item.section("\t", 0, 0); // strip size
+        full_name = item.section("/", 0, 0);
         short_name = full_name.section(".", -1);
         if (short_name == "Locale" || short_name == "Sources" || short_name == "Debug") { // skip Locale, Sources, Debug
             continue;
