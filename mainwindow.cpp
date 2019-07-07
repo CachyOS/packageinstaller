@@ -623,13 +623,23 @@ void MainWindow::displayPopularApps() const
 
 
 // Display only the listed apps
-void MainWindow::displayFiltered(const QStringList &list) const
+void MainWindow::displayFiltered(const QStringList &list, bool raw) const
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
 
     QStringList new_list;
-    for (const QString &item : list) {
-        new_list << item.section("\t", 0, 0);
+    if (raw) { // raw format that needs to be edited
+        if (fp_ver < VersionNumber("1.2.4")) {
+            for (const QString &item : list) {
+                new_list << item.section("\t", 0, 0); // remove size
+            }
+        } else {
+            for (const QString &item : list) {
+                new_list << item.section("\t", 1, 1).section("/", 1); // remove version and size
+            }
+        }
+    } else {
+        new_list = list;
     }
 
     int total = 0;
@@ -784,13 +794,14 @@ void MainWindow::displayFlatpaks(bool force_update)
     QString short_name, full_name, arch, version, size;
     for (QString item : flatpaks) {
         if (fp_ver < VersionNumber("1.2.4")) {
-            version = item.section("\t", 0, 0).section("/", -1);
             size = item.section("\t", 1, 1);
-        } else { // Buster version and above
-            version = item.section("\t", 1, 1);
-            size = item.section("\t", 2, 2);
+            item = item.section("\t", 0, 0); // strip size
+            version = item.section("/", -1);
+        } else { // Buster and higher versions
+            size = item.section("\t", -1);
+            version = item.section("\t", 0, 0);
+            item = item.section("\t", 1, 1).section("/", 1);
         }
-        item = item.section("\t", 0, 0); // strip size
         full_name = item.section("/", 0, 0);
         short_name = full_name.section(".", -1);
         if (short_name == "Locale" || short_name == "Sources" || short_name == "Debug") { // skip Locale, Sources, Debug
@@ -1460,29 +1471,25 @@ QStringList MainWindow::listFlatpaks(const QString remote, const QString type)
 
     QStringList list;
     // need to specify arch for older version
-    QString arch = "";
+    QString arch_fp;
     if (fp_ver < VersionNumber("1.0.1")) {
-        if (system("arch | grep -q x86_64") == 0) {
-            arch = "--arch=x86_64 ";
-        } else {
-            arch = "--arch=i386 ";
-        }
+        arch_fp = (arch == "amd64") ? arch_fp = "--arch=x86_64 " : arch_fp = "--arch=i386 ";
         // list packages, strip first part remote/ or app/ no size for old flatpak
-        list = cmd->getOutput("su $(logname) -c \"set -o pipefail; flatpak -d remote-ls " + user + remote + " " + arch + type + "| cut -f1 | tr -s ' ' | cut -f1 -d' '|sed 's/^[^\\/]*\\///g' \"").split("\n");
+        list = cmd->getOutput("su $(logname) -c \"set -o pipefail; flatpak -d remote-ls " + user + remote + " " + arch_fp + type + "| cut -f1 | tr -s ' ' | cut -f1 -d' '|sed 's/^[^\\/]*\\///g' \"").split("\n");
     } else if (fp_ver < VersionNumber("1.2.4")) { // lower than Buster version
         // list size too
-        list = cmd->getOutput("su $(logname) -c \"set -o pipefail; flatpak -d remote-ls " + user + remote + " " + arch + type + "| cut -f1,3 |tr -s ' ' | sed 's/^[^\\/]*\\///g' \"").split("\n");
+        list = cmd->getOutput("su $(logname) -c \"set -o pipefail; flatpak -d remote-ls " + user + remote + " " + arch_fp + type + "| cut -f1,3 |tr -s ' ' | sed 's/^[^\\/]*\\///g' \"").split("\n");
     } else { // Buster version and above
         // list version too
         QString process_string; // unfortunatelly the resulting string structure is different depending on type option
-        if (type == "--app") {
-            process_string = "| cut -f2,8,9 | sed 's/\\t.*\\//\\t/g'";
-        } else if (type == "--runtime") {
-            process_string = "| cut -f2,4,9";
-        } else { // for all items
-            process_string = "| cut -f2,6,9 | sed 's/\\t.*\\//\\t/g'";
+        if (type == "--app" || type.isEmpty()) {
+            process_string = "| cut -f3,6,9";
+            list = cmd->getOutput("su $(logname) -c \"set -o pipefail; flatpak -d remote-ls " + user + remote + " " + arch_fp + "--app" + process_string + " \"").split("\n");
         }
-        list = cmd->getOutput("su $(logname) -c \"set -o pipefail; flatpak -d remote-ls " + user + remote + " " + arch + type + process_string + " \"").split("\n");
+        if (type == "--runtime" || type.isEmpty()) {
+            process_string = "| cut -f4,6,9";
+            list += cmd->getOutput("su $(logname) -c \"set -o pipefail; flatpak -d remote-ls " + user + remote + " " + arch_fp + "--runtime" + process_string + " \"").split("\n");
+        }
     }
 
     if (cmd->getExitCode(true) != 0) {
@@ -1490,12 +1497,6 @@ QStringList MainWindow::listFlatpaks(const QString remote, const QString type)
         return QStringList();
     }
 
-    // build cache lists
-    if (type == "--app") {
-        flatpaks_apps = list;
-    } else if (type == "--runtime") {
-        flatpaks_runtimes = list;
-    }
     return list;
 }
 
@@ -1505,7 +1506,7 @@ QStringList MainWindow::listInstalledFlatpaks(const QString type) const
     if (fp_ver < VersionNumber("1.2.4")) {
         return cmd->getOutput("su $(logname) -c \"flatpak -d list " + user + type + "|cut -f1|cut -f1 -d' '\"").remove(" ").split("\n");
     } else {
-        return cmd->getOutput("su $(logname) -c \"flatpak -d list " + user + type + "|cut -f2\"").remove(" ").split("\n");
+        return cmd->getOutput("su $(logname) -c \"flatpak -d list " + user + type + "|cut -f8\"").remove(" ").split("\n");
     }
 }
 
@@ -2131,14 +2132,14 @@ void MainWindow::filterChanged(const QString &arg1)
             displayFiltered(installed_apps_fp);
         } else if (arg1 == tr("All apps")) {
             if(flatpaks_apps.isEmpty()) {
-                listFlatpaks(ui->comboRemote->currentText(), "--app");
+                flatpaks_apps = listFlatpaks(ui->comboRemote->currentText(), "--app");
             }
-            displayFiltered(flatpaks_apps);
+            displayFiltered(flatpaks_apps, true);
         } else if (arg1 == tr("All runtimes")) {
             if(flatpaks_runtimes.isEmpty()) {
-                listFlatpaks(ui->comboRemote->currentText(), "--runtime");
+                flatpaks_runtimes = listFlatpaks(ui->comboRemote->currentText(), "--runtime");
             }
-            displayFiltered(flatpaks_runtimes);
+            displayFiltered(flatpaks_runtimes, true);
         } else if (arg1 == tr("All available")) {
             int total = 0;
             while (*it) {

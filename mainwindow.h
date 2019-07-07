@@ -78,7 +78,7 @@ public:
     void clearUi();
     void copyTree(QTreeWidget *, QTreeWidget *) const;
     void displayPopularApps() const;
-    void displayFiltered(const QStringList &list) const;
+    void displayFiltered(const QStringList &list, bool raw = false) const;
     void displayFlatpaks(bool force_update = false);
     void displayPackages();
     void displayWarning(QString repo);
