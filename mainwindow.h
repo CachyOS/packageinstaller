@@ -187,6 +187,7 @@ private:
     QMap<QString, QStringList> stable_list;
     QTimer *timer;
     QTreeWidget *tree; // current/calling tree
+    VersionNumber fp_ver;
     Ui::MainWindow *ui;
     QSettings dictionary;
     QHash<QString, VersionNumber> listInstalledVersions();

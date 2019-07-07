@@ -64,6 +64,8 @@ void MainWindow::setup()
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     ui->tabWidget->blockSignals(true);
     cmd = new Cmd(this);
+
+    fp_ver = getVersion("flatpak");
     user = "--system ";
 
     if (system("arch | grep -q x86_64") == 0) {
@@ -197,7 +199,7 @@ void MainWindow::listSizeInstalledFP()
     QTreeWidgetItemIterator it(ui->treeFlatpak);
     QString total = "0 bytes";
     QStringList list, runtimes;
-    if (VersionNumber(getVersion("flatpak")) < VersionNumber("1.0.1")) { // older version doesn't display all apps and runtimes without specifying them
+    if (fp_ver < VersionNumber("1.0.1")) { // older version doesn't display all apps and runtimes without specifying them
         list = cmd->getOutput("su $(logname) -c \"flatpak -d list --app " + user + "|tr -s ' ' |cut -f1,5,6 -d' '\"").split("\n");
         runtimes = cmd->getOutput("su $(logname) -c \"flatpak -d list --runtime " + user + "|tr -s ' '|cut -f1,5,6 -d' '\"").split("\n");
         if (!runtimes.isEmpty()) {
@@ -214,8 +216,13 @@ void MainWindow::listSizeInstalledFP()
             }
             ++it;
         }
-    } else {
+    } else if (fp_ver < VersionNumber("1.2.4")) {
         list = cmd->getOutput("su $(logname) -c \"flatpak -d list " + user + "|tr -s ' '|cut -f1,5\"").split("\n");
+        for (const QString &item : list) {
+            total = addSizes(total, item.section("\t", 1));
+        }
+    } else {
+        list = cmd->getOutput("su $(logname) -c \"flatpak -d list " + user + "|tr -s ' '|cut -f2,11\"").split("\n");
         for (const QString &item : list) {
             total = addSizes(total, item.section("\t", 1));
         }
@@ -775,11 +782,18 @@ void MainWindow::displayFlatpaks(bool force_update)
 
     QString short_name, full_name, arch, version, size;
     for (QString item : flatpaks) {
-        size = item.section("\t", 1);
-        item = item.section("\t", 0, 0); // strip size
-        full_name = item.section("/", 0, 0); // return first part of the name before slash
+        if (fp_ver < VersionNumber("1.2.4")) {
+            size = item.section("\t", 1);
+            item = item.section("\t", 0, 0); // strip size
+            full_name = item.section("\t", 0);
+            version = item.section("/", -1);
+        } else { // Buster ver and above
+            full_name = item.section("\t", 0, 0);
+            version = item.section("\t", 1, 1);
+            size = item.section("\t", 2, 2);
+            item = item.section("\t", 0, 0); // strip size
+        }
         short_name = full_name.section(".", -1);
-        version = item.section("/", -1);
         if (short_name == "Locale" || short_name == "Sources" || short_name == "Debug") { // skip Locale, Sources, Debug
             continue;
         }
@@ -1448,7 +1462,7 @@ QStringList MainWindow::listFlatpaks(const QString remote, const QString type)
     QStringList list;
     // need to specify arch for older version
     QString arch = "";
-    if (VersionNumber(getVersion("flatpak")) < VersionNumber("1.0.1")) {
+    if (fp_ver < VersionNumber("1.0.1")) {
         if (system("arch | grep -q x86_64") == 0) {
             arch = "--arch=x86_64 ";
         } else {
@@ -1456,9 +1470,20 @@ QStringList MainWindow::listFlatpaks(const QString remote, const QString type)
         }
         // list packages, strip first part remote/ or app/ no size for old flatpak
         list = cmd->getOutput("su $(logname) -c \"set -o pipefail; flatpak -d remote-ls " + user + remote + " " + arch + type + "| cut -f1 | tr -s ' ' | cut -f1 -d' '|sed 's/^[^\\/]*\\///g' \"").split("\n");
-    } else {
+    } else if (fp_ver < VersionNumber("1.2.4")) { // lower than Buster version
         // list size too
         list = cmd->getOutput("su $(logname) -c \"set -o pipefail; flatpak -d remote-ls " + user + remote + " " + arch + type + "| cut -f1,3 |tr -s ' ' | sed 's/^[^\\/]*\\///g' \"").split("\n");
+    } else { // Buster version and above
+        // list version too
+        QString process_string; // unfortunatelly the resulting string structure is different depending on type option
+        if (type == "--app") {
+            process_string = "| cut -f2,8,9 | sed 's/\\t.*\\//\\t/g'";
+        } else if (type == "--runtime") {
+            process_string = "| cut -f2,4,9";
+        } else { // for all items
+            process_string = "| cut -f2,6,9 | sed 's/\\t.*\\//\\t/g'";
+        }
+        list = cmd->getOutput("su $(logname) -c \"set -o pipefail; flatpak -d remote-ls " + user + remote + " " + arch + type + process_string + " \"").split("\n");
     }
 
     if (cmd->getExitCode(true) != 0) {
@@ -1478,7 +1503,11 @@ QStringList MainWindow::listFlatpaks(const QString remote, const QString type)
 // list installed flatpaks by type: apps, runtimes, or all (if no type is provided)
 QStringList MainWindow::listInstalledFlatpaks(const QString type) const
 {
-    return cmd->getOutput("su $(logname) -c \"flatpak -d list " + user + type + "|cut -f1|cut -f1 -d' '\"").remove(" ").split("\n");
+    if (fp_ver < VersionNumber("1.2.4")) {
+        return cmd->getOutput("su $(logname) -c \"flatpak -d list " + user + type + "|cut -f1|cut -f1 -d' '\"").remove(" ").split("\n");
+    } else {
+        return cmd->getOutput("su $(logname) -c \"flatpak -d list " + user + type + "|cut -f2\"").remove(" ").split("\n");
+    }
 }
 
 
@@ -1879,7 +1908,7 @@ void MainWindow::on_buttonUninstall_clicked()
 
         // new version of flatpak takes a "-y" confirmation
         QString conf = "-y ";
-        if (VersionNumber(getVersion("flatpak")) < VersionNumber("1.0.1")) {
+        if (fp_ver  < VersionNumber("1.0.1")) {
             conf = "";
         }
 
