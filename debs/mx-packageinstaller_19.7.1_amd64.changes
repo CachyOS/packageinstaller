@@ -1,0 +1,43 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Format: 1.8
+Date: Sun, 07 Jul 2019 13:01:05 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 19.7.1
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (19.7.1) mx; urgency=medium
+ .
+   * fix: added windows buttons
+Checksums-Sha1:
+ f869ebdce7dfc127f4c8936d7d9c141eefaf1f1b 1246 mx-packageinstaller_19.7.1.dsc
+ 165da5b48086de29794f4ad94f875604ee6a012b 105936 mx-packageinstaller_19.7.1.tar.xz
+ 7885ed707b9271aa7339c5e3286529f17be89590 172992 mx-packageinstaller_19.7.1_amd64.deb
+Checksums-Sha256:
+ 3f8f129a6633dd26edce846d2a2f975eb212416cd7c566f6542c7fe6f1bc2a89 1246 mx-packageinstaller_19.7.1.dsc
+ e2c321f9d0a142a181cd58d1bd0ad1887a51de3eb263e0832c89a5685b47830a 105936 mx-packageinstaller_19.7.1.tar.xz
+ 53666eedbd6bf742b8b73499c046ace20b3eea1b3311bdac8dbdacf9e794f50d 172992 mx-packageinstaller_19.7.1_amd64.deb
+Files:
+ e313f9e9c02262744e7eb6d981ffd354 1246 admin optional mx-packageinstaller_19.7.1.dsc
+ 193e4851bda7d6bca3b4037537bb562f 105936 admin optional mx-packageinstaller_19.7.1.tar.xz
+ f0bea829c875e7fad9605fc2689b37f3 172992 admin optional mx-packageinstaller_19.7.1_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCAAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAl0iJfQTHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumLUnB/9g0ApzKE01jgrqqnkmxOFLKBxwzxBv
+arIMBUYkN82NlmUp6ORyA17lO6uUjAqy50RCVnX+Mqvpe7+KOdfM7jEQwicrXHg3
+oGTKxlH1OZ+IWW1Rr8RhYSf8FNfAaEVoIY+QDVJSSN1p0Zg54UfZkookr8Gq6qBq
+8Wmn4aBOLVA3k+mtUWf+O6YZWXvZq7psdPzo3iKqKWOTy/dZhn57UYTKHYoUucfk
+1ZewQx6LI0stZZofIW/U/54p4sKdLaiMAlpsSvWwCzfsJDNry2R68a2eiV6GBhze
+Lonh8EkMOPSvk8dkhQFsnVdzfn3Clyn+5vdu705gKMhT7/zh+jBeB6Y1
+=M+sz
+-----END PGP SIGNATURE-----

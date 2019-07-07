@@ -1,3 +1,9 @@
+mx-packageinstaller (19.7.1) mx; urgency=medium
+
+  * fix: added windows buttons
+
+ -- Adrian <adrian@mxlinux.org>  Sun, 07 Jul 2019 13:01:05 -0400
+
 mx-packageinstaller (19.7) mx; urgency=medium
 
   * use monospace font for output window
