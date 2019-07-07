@@ -222,14 +222,11 @@ void MainWindow::listSizeInstalledFP()
         }
     } else if (fp_ver < VersionNumber("1.2.4")) {
         list = cmd->getOutput("su $(logname) -c \"flatpak -d list " + user + "|tr -s ' '|cut -f1,5\"").split("\n");
-        for (const QString &item : list) {
-            total = addSizes(total, item.section("\t", 1));
-        }
     } else {
         list = cmd->getOutput("su $(logname) -c \"flatpak -d list " + user + "|tr -s ' '|cut -f2,11\"").split("\n");
-        for (const QString &item : list) {
-            total = addSizes(total, item.section("\t", 1));
-        }
+    }
+    for (const QString &item : list) {
+        total = addSizes(total, item.section("\t", 1));
     }
 
     ui->labelNumSize->setText(total);
