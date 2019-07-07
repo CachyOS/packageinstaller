@@ -1927,6 +1927,7 @@ void MainWindow::on_buttonUninstall_clicked()
             listFlatpakRemotes();
             ui->comboRemote->setCurrentIndex(0);
             on_comboRemote_activated(ui->comboRemote->currentIndex());
+            ui->comboFilterFlatpak->setCurrentIndex(0);
             QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
             ui->tabWidget->blockSignals(true);
             ui->tabWidget->setCurrentWidget(ui->tabFlatpak);
