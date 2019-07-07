@@ -1,0 +1,45 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Format: 1.8
+Date: Sat, 06 Jul 2019 21:21:13 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 19.7
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (19.7) mx; urgency=medium
+ .
+   * use monospace font for output window
+   * reset flatpak combobox after uninstalling item
+   * fix flatpak listing for Buster
+Checksums-Sha1:
+ 031d58944e126b8b752bef1e6922ae64bfba4cf9 1238 mx-packageinstaller_19.7.dsc
+ 275fc3b1aeae28a75d878a82968c098cf39b024f 105868 mx-packageinstaller_19.7.tar.xz
+ dfec13efa9b5b79dd91fc51ef7be04d740ab5eac 172520 mx-packageinstaller_19.7_amd64.deb
+Checksums-Sha256:
+ e3c179298f132944fe65f8983e3e01c9b8f87c1335d4937848422ea484747682 1238 mx-packageinstaller_19.7.dsc
+ 7719989826700e3b29f9e58ae40a0effc0787d765938cfd72e61879f8b40cb5a 105868 mx-packageinstaller_19.7.tar.xz
+ fbf35b5d0db100d20b6a97414c3ad2c31188b88dd10b131bf3e5e774c361b794 172520 mx-packageinstaller_19.7_amd64.deb
+Files:
+ f9b99dcbf62a1862d3f3305fe030f0d7 1238 admin optional mx-packageinstaller_19.7.dsc
+ bffdad9c52203b4718c925ac7c2f46f2 105868 admin optional mx-packageinstaller_19.7.tar.xz
+ e765a3e24137c8e99702a708110c2aad 172520 admin optional mx-packageinstaller_19.7_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCAAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAl0hSf0THGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumFzqB/0YmalsrxSzph1vmlr8fdZ7FLm0z0mB
+8hBylGgBBrWwg5WcPwRZHufp0lRLOeP8BRVRnl+GJVF5Zd8Ios5b6SljCqT0GuLg
+JY0q1ZU9Vj31DASWJTVkGdamJwknrAX/LMJ8bKBi++Bmgod3CgKgPVOgSF6/ji75
+MAMCgp6XtSrYi3wUWWyIrJXC7AodGJE37peyAAMu4/lj3EgdmvA9Qk8mMrDovpvI
+g1m3ZDCzNeenhT38liqfZkVJnbJ9rnlndQmEKUbL6vyodPZShIn007yGmt13VBKC
+uGEIy0qZefhyksusM5/z2qWsTHer6E9AWpyPEn4vqCxdPwPTlnesM00A
+=8m3B
+-----END PGP SIGNATURE-----
