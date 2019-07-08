@@ -1,3 +1,9 @@
+mx-packageinstaller (19.7.2) mx; urgency=medium
+
+  * new icon
+
+ -- Adrian <adrian@mxlinux.org>  Mon, 08 Jul 2019 13:50:55 -0400
+
 mx-packageinstaller (19.7.1) mx; urgency=medium
 
   * fix: added windows buttons
