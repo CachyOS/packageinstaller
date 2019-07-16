@@ -1,3 +1,10 @@
+mx-packageinstaller (19.7.3) mx; urgency=medium
+
+  * fix: run flatpak update --appstream before listing versions
+  * fix: remove empty strings
+
+ -- Adrian <adrian@mxlinux.org>  Tue, 16 Jul 2019 00:19:53 -0400
+
 mx-packageinstaller (19.7.2) mx; urgency=medium
 
   * new icon

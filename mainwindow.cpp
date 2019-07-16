@@ -1469,6 +1469,7 @@ QStringList MainWindow::listInstalled() const
 QStringList MainWindow::listFlatpaks(const QString remote, const QString type)
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
+    static bool updated = false;
 
     QStringList list;
     // need to specify arch for older version
@@ -1481,11 +1482,16 @@ QStringList MainWindow::listFlatpaks(const QString remote, const QString type)
         // list size too
         list = cmd->getOutput("su $(logname) -c \"set -o pipefail; flatpak -d remote-ls " + user + remote + " " + arch_fp + type + "| cut -f1,3 |tr -s ' ' | sed 's/^[^\\/]*\\///g' \"").split("\n");
     } else { // Buster version and above
+        if (!updated) {
+            cmd->run("su $(logname) -c \"flatpak update --appstream\"");
+            updated = true;
+        }
         // list version too
         QString process_string; // unfortunatelly the resulting string structure is different depending on type option
         if (type == "--app" || type.isEmpty()) {
             process_string = "| cut -f3,6,9";
             list = cmd->getOutput("su $(logname) -c \"set -o pipefail; flatpak -d remote-ls " + user + remote + " " + arch_fp + "--app" + process_string + " \"").split("\n");
+            if (list == QStringList("")) list = QStringList();
         }
         if (type == "--runtime" || type.isEmpty()) {
             process_string = "| cut -f4,6,9";
@@ -1493,8 +1499,8 @@ QStringList MainWindow::listFlatpaks(const QString remote, const QString type)
         }
     }
 
-    if (cmd->getExitCode(true) != 0) {
-        qDebug() << "Could not list packages from remote" << remote;
+    if (cmd->getExitCode(true) != 0 || list == QStringList("")) {
+        qDebug() << QString("Could not list packages from %1 remote, or remote doesn't contain packages").arg(remote);
         return QStringList();
     }
 
@@ -1504,11 +1510,14 @@ QStringList MainWindow::listFlatpaks(const QString remote, const QString type)
 // list installed flatpaks by type: apps, runtimes, or all (if no type is provided)
 QStringList MainWindow::listInstalledFlatpaks(const QString type) const
 {
+    QStringList list;
     if (fp_ver < VersionNumber("1.2.4")) {
-        return cmd->getOutput("su $(logname) -c \"flatpak -d list " + user + type + "|cut -f1|cut -f1 -d' '\"").remove(" ").split("\n");
+        list << cmd->getOutput("su $(logname) -c \"flatpak -d list " + user + type + "|cut -f1|cut -f1 -d' '\"").remove(" ").split("\n");
     } else {
-        return cmd->getOutput("su $(logname) -c \"flatpak -d list " + user + type + "|cut -f8\"").remove(" ").split("\n");
+        list << cmd->getOutput("su $(logname) -c \"flatpak -d list " + user + type + "|cut -f8\"").remove(" ").split("\n");
     }
+    if (list == QStringList("")) list == QStringList();
+    return list;
 }
 
 
@@ -2464,13 +2473,20 @@ void MainWindow::on_buttonRemotes_clicked()
 
 void MainWindow::on_comboUser_activated(int index)
 {
+    static bool updated = false;
     if (index == 0) {
         user = "--system ";
     } else {
         user = "--user ";
-        setCursor(QCursor(Qt::BusyCursor));
-        cmd->run("su $(logname) -c \"flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo\"");
-        setCursor(QCursor(Qt::ArrowCursor));
+        if (!updated) {
+            setCursor(QCursor(Qt::BusyCursor));
+            cmd->run("su $(logname) -c \"flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo\"");
+            if (fp_ver >= VersionNumber("1.2.4")) {
+                cmd->run("su $(logname) -c \"flatpak update --appstream\"");
+            }
+            setCursor(QCursor(Qt::ArrowCursor));
+            updated = true;
+        }
     }
     listFlatpakRemotes();
     displayFlatpaks(true);
