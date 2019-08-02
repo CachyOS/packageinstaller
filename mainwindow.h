@@ -67,7 +67,7 @@ public:
     bool installSelected();
     bool isFilteredName(const QString &name) const;
     bool readPackageList(bool force_download = false);
-    bool uninstall(const QString &names);
+    bool uninstall(const QString &names, const QString &postuninstall = "");
     bool update();
 
     double convert(const double &number, const QString &unit) const;

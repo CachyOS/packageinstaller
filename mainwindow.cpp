@@ -138,7 +138,7 @@ void MainWindow::setup()
 }
 
 // Uninstall listed packages
-bool MainWindow::uninstall(const QString &names)
+bool MainWindow::uninstall(const QString &names, const QString &postuninstall)
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     ui->tabWidget->setCurrentWidget(ui->tabOutput);
@@ -147,6 +147,12 @@ bool MainWindow::uninstall(const QString &names)
     ui->tabWidget->setTabText(ui->tabWidget->indexOf(ui->tabOutput), tr("Uninstalling packages..."));
     setConnections();
     cmd->run("DEBIAN_FRONTEND=gnome apt-get remove " + names + "| tee -a /var/log/mxpi.log");
+    if (!postuninstall.isEmpty()) {
+        qDebug() << "Post-uninstall";
+        setConnections();
+        ui->tabWidget->setTabText(ui->tabWidget->indexOf(ui->tabOutput), tr("Running post-uninstall operations..."));
+        cmd->run(postuninstall);
+    }
     lock_file->lock();
 
     return (cmd->getExitCode(true) == 0);
@@ -438,6 +444,7 @@ void MainWindow::processDoc(const QDomDocument &doc)
             6 "install_package_names"
             7 "postinstall"
             8 "uninstall_package_names"
+            9 "postuninstall"
     */
 
     QString category;
@@ -447,6 +454,7 @@ void MainWindow::processDoc(const QDomDocument &doc)
     QString screenshot;
     QString preinstall;
     QString postinstall;
+    QString postuninstall;
     QString install_names;
     QString uninstall_names;
     QStringList list;
@@ -474,6 +482,8 @@ void MainWindow::processDoc(const QDomDocument &doc)
             postinstall = element.text().trimmed();
         } else if (element.tagName() == "uninstall_package_names") {
             uninstall_names = element.text().trimmed();
+        } else if (element.tagName() == "postuninstall") {
+            postuninstall = element.text().trimmed();
         }
     }
     // skip non-installable packages
@@ -481,7 +491,7 @@ void MainWindow::processDoc(const QDomDocument &doc)
         return;
     }
     list << category << name << description << installable << screenshot << preinstall
-         << postinstall << install_names << uninstall_names;
+         << postinstall << install_names << uninstall_names << postuninstall;
     popular_apps << list;
 }
 
@@ -568,12 +578,13 @@ void MainWindow::displayPopularApps() const
         QString category = list.at(0);
         QString name = list.at(1);
         QString description = list.at(2);
-        QString installable = list.at(3);
+        //QString installable = list.at(3);
         QString screenshot = list.at(4);
-        QString preinstall = list.at(5);
-        QString postinstall = list.at(6);
+        //QString preinstall = list.at(5);
+        //QString postinstall = list.at(6);
         QString install_names = list.at(7);
         QString uninstall_names = list.at(8);
+        QString postuninstall = list.at(9);
 
         // add package category if treePopularApps doesn't already have it
         if (ui->treePopularApps->findItems(category, Qt::MatchFixedString, 2).isEmpty()) {
@@ -608,6 +619,9 @@ void MainWindow::displayPopularApps() const
 
         // add screenshot url (not displayed)
         childItem->setText(7, screenshot);
+
+        // add postuinstall script (not displayed)
+        childItem->setText(8, postuninstall);
 
         // gray out installed items
         if (checkInstalled(uninstall_names)) {
@@ -1902,13 +1916,14 @@ void MainWindow::on_buttonUninstall_clicked()
 
     showOutput();
 
-    QString names;
+    QString names, postuninstall;
 
     if (tree == ui->treePopularApps) {
         QTreeWidgetItemIterator it(ui->treePopularApps);
         while (*it) {
             if ((*it)->checkState(1) == Qt::Checked) {
                 names += (*it)->text(6).replace("\n", " ") + " ";
+                postuninstall += (*it)->text(8) + "\n";
             }
             ++it;
         }
@@ -1949,7 +1964,7 @@ void MainWindow::on_buttonUninstall_clicked()
         names = change_list.join(" ");
     }
 
-    if (uninstall(names)) {
+    if (uninstall(names, postuninstall)) {
         if(stable_list.size() > 0) { // update list if it already exists
             buildPackageLists();
         }

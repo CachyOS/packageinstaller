@@ -1,3 +1,9 @@
+mx-packageinstaller (19.8) mx; urgency=medium
+
+  * add postuinstall support
+
+ -- Adrian <adrian@mxlinux.org>  Fri, 02 Aug 2019 14:17:32 -0400
+
 mx-packageinstaller (19.7.3) mx; urgency=medium
 
   * fix: run flatpak update --appstream before listing versions
