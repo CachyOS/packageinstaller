@@ -1,6 +1,5 @@
 license.html			usr/share/doc/mx-packageinstaller
 mx-packageinstaller		usr/bin
 mx-packageinstaller.desktop	usr/share/applications
-icons/mx-packageinstaller.png	usr/share/icons/hicolor/128x128/apps
-icons/mx-packageinstaller.svg	usr/share/icons/hicolor/scalable/apps
+icons/mx-packageinstaller.png	usr/share/icons/hicolor/256x256/apps
 translations/*.qm		usr/share/mx-packageinstaller/locale

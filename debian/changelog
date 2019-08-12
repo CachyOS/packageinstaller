@@ -1,3 +1,9 @@
+mx-packageinstaller (19.8.1) mx; urgency=medium
+
+  * fix icon
+
+ -- Adrian <adrian@mxlinux.org>  Mon, 12 Aug 2019 12:05:54 -0400
+
 mx-packageinstaller (19.8) mx; urgency=medium
 
   * add postuinstall support
