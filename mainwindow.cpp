@@ -133,7 +133,7 @@ void MainWindow::setup()
     ui->tabWidget->setTabEnabled(ui->tabWidget->indexOf(ui->tabOutput), false);
     ui->tabWidget->blockSignals(false);
 
-    QSettings settings("MX-Linux", "mx-packageinstaller");
+    QSettings settings("mx-packageinstaller");
     restoreGeometry(settings.value("geometry").toByteArray());
 }
 
@@ -1408,7 +1408,7 @@ void MainWindow::cleanup()
         system("rm -r " + tmp_dir.toUtf8());
     }
 
-    QSettings settings("MX-Linux", "mx-packageinstaller");
+    QSettings settings("mx-packageinstaller");
     settings.setValue("geometry", saveGeometry());
 }
 
