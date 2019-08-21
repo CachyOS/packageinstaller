@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<title>HELP: MX Package Installer</title>
+</head>
+<body>
+<h1>HELP: MX Package Installer</h1>
+<p>This help is for the MX15/16/17 version of MX Package Installer.  The MX14 version maintains a version of &#8220;Popular Applications&#8221; tab as a standalone app.</p>
+
+<p>It is listed in the Favorites of Whisker menu by default; but if that has been removed, click Start menu ≻ System ≻ MX Package installer and provide the root password.</p>
+
+<img src="
+1.jpg" alt="Manage popular packages" />
+
+<h2>Popular Applications</h2>
+
+	<ul>
+		<li>Expand the categories with the little arrow to see the packages available; more information (including screenshots where possible) is available by clicking on the small information icon.</li>
+		<li> The Search box will parse application names and display matches in the tree.</li><li> Check those that you want, and click Install.</li>
+		<li> The terminal output will be displayed as first the repos are updated and then your packages are installed.</li>
+		<li> If a package is already installed, you will have the option to uninstall or reinstall.</li>
+		<li> If there are problems, there is a log at /var/log/mxpi.log and mxpi.log.old for you to post in the forum.</li>
+	</ul>
+
+<h2>Stable Repo</h2>
+
+<img src="2.jpg" alt="stable repo" />
+
+<p>This tab gives you access to the full catalog of apps available for MX Linux. It has a limited feature set and is not a replacement for a full package manager like the default Synaptic.  Consider the MX PackageInstaller supplementary to Synaptic. </p>
+
+	<ul>
+		<li>Packages then can be manipulated in similar fashion to the Popular Applications Tab.</li>
+	</ul>
+
+<h2>MX Test Repo</h2>
+
+	<ul>
+		<li>This tab allows the user to browse packages available in the MX Test repo without needing to change any apt sources manually.</li>
+		<li> If the user chooses to install a Test repo package via the MX PackageInstaller, the Test repo sources will be automatically added for the duration of the application install process.  The Test repo sources will be disabled after the installation is complete.</li>
+	</ul>
+
+<h2>Debian Backports</h2>
+
+	<ul>
+		<li>Similar to the MX Test Repo tab, this tab allows the user to browse packages available in the Debian Backports repository maintained by Debian, without needing to change any apt sources manually.</li>
+		<li> If the user chooses to install a Debian Backports package via the MX PackageInstaller, the Debian Backports repo sources will be automatically added for the duration of the application install process.  The Debian Backports repo sources will be disabled after the installation is complete.</li>
+	</ul>
+
+<h2>Flatpaks</h2>
+
+<img src="3.jpg" alt="flatpacks" />
+
+<p><a href="https://flatpak.org/" target="_blank" rel="noreferrer noopener" aria-label="Flatpaks (opens in a new tab)">Flatpaks</a> are a type of package that has all the dependencies included that&#8217;s supposed to work on multiple Linux distributions.</p>
+
+	<ul>
+		<li>They are not perfect: some might not work well, might not follow your theme, etc.</li>
+		<li> The first flatpak that you install will probably pull a huge runtime, so it will take a long time to download and will take a lot of space on your harddrive (probably around 2GB), but the next flatpak will most likely be able to use that runtime, so it gets a bit better after you install a couple of flatpaks.</li>
+		<li> By default, the &#8220;flathub&#8221; remote &#8220;repo&#8221; is used by default.  Others can be added via the Advanced dialog.</li>
+		<li> You can also install flatpaks via ref files via the Advanced dialog</li>
+	</ul>
+
+<img src="4.jpg" alt="" />
+
+<p>Development history: Dolphin_Oracle, Adrian</p>
+
+<p>License: <a href="https://mxlinux.org/wiki/licenses/license-mx-package-installer">here</a>.</p>
+
+<p>v. 20180913</p>
+</body>
+</html>

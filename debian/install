@@ -1,3 +1,4 @@
+help				usr/share/doc/mx-packageinstaller
 license.html			usr/share/doc/mx-packageinstaller
 mx-packageinstaller		usr/bin
 mx-packageinstaller.desktop	usr/share/applications

@@ -1,3 +1,9 @@
+mx-packageinstaller (19.8.4) mx; urgency=medium
+
+  * added offline help file
+
+ -- Adrian <adrian@mxlinux.org>  Wed, 21 Aug 2019 14:26:09 -0400
+
 mx-packageinstaller (19.8.2) mx; urgency=medium
 
   * fix flatpak running as regular user
