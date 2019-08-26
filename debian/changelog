@@ -1,3 +1,9 @@
+mx-packageinstaller (19.8.5) mx; urgency=medium
+
+  * download .xz files from *-backports (for Buster)
+
+ -- Adrian <adrian@mxlinux.org>  Mon, 26 Aug 2019 18:44:55 -0400
+
 mx-packageinstaller (19.8.4) mx; urgency=medium
 
   * added offline help file

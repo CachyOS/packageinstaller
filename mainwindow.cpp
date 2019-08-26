@@ -1228,25 +1228,25 @@ bool MainWindow::downloadPackageList(bool force_download)
                 !QFile(tmp_dir + "/nonfreePackages").exists() || force_download) {
             progress->show();
             int err = cmd->run("wget --append-output=/var/log/mxpi.log --timeout=5 ftp://ftp.us.debian.org/debian/dists/" +
-                               ver_name + "-backports/main/binary-" + arch + "/Packages.gz -O mainPackages.gz && gzip -df mainPackages.gz");
+                               ver_name + "-backports/main/binary-" + arch + "/Packages.xz -O mainPackages.xz && unxz -f mainPackages.xz");
             if (err != 0 ) {
-                QFile::remove(tmp_dir + "/mainPackages.gz");
+                QFile::remove(tmp_dir + "/mainPackages.xz");
                 QFile::remove(tmp_dir + "/mainPackages");
                 return false;
             }
             //cmd->run("sleep 3");
             err = cmd->run("wget --append-output=/var/log/mxpi.log --timeout=5 ftp://ftp.us.debian.org/debian/dists/" +
-                           ver_name + "-backports/contrib/binary-" + arch + "/Packages.gz -O contribPackages.gz && gzip -df contribPackages.gz");
+                           ver_name + "-backports/contrib/binary-" + arch + "/Packages.xz -O contribPackages.xz && unxz -f contribPackages.xz");
             if (err != 0 ) {
-                QFile::remove(tmp_dir + "/contribPackages.gz");
+                QFile::remove(tmp_dir + "/contribPackages.xz");
                 QFile::remove(tmp_dir + "/contribPackages");
                 return false;
             }
             //cmd->run("sleep 3");
             err = cmd->run("wget --append-output=/var/log/mxpi.log --timeout=5 ftp://ftp.us.debian.org/debian/dists/" +
-                           ver_name + "-backports/non-free/binary-" + arch + "/Packages.gz -O nonfreePackages.gz && gzip -df nonfreePackages.gz");
+                           ver_name + "-backports/non-free/binary-" + arch + "/Packages.xz -O nonfreePackages.xz && unxz -f nonfreePackages.xz");
             if (err != 0 ) {
-                QFile::remove(tmp_dir + "/nonfreePackages.gz");
+                QFile::remove(tmp_dir + "/nonfreePackages.xz");
                 QFile::remove(tmp_dir + "/nonfreePackages");
                 return false;
             }
