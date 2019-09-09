@@ -1,3 +1,9 @@
+mx-packageinstaller (19.9) mx; urgency=medium
+
+  * fix updating flatpaks 
+
+ -- Adrian <adrian@mxlinux.org>  Mon, 09 Sep 2019 19:51:44 -0400
+
 mx-packageinstaller (19.8.5) mx; urgency=medium
 
   * download .xz files from *-backports (for Buster)

@@ -1,0 +1,43 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Format: 1.8
+Date: Mon, 09 Sep 2019 19:51:44 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 19.9
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (19.9) mx; urgency=medium
+ .
+   * fix updating flatpaks
+Checksums-Sha1:
+ 513119e13edca454faf695341121588babb4d2ab 1227 mx-packageinstaller_19.9.dsc
+ a3f3cc26f1b05c5d372746db1e992dbe3b527e83 262308 mx-packageinstaller_19.9.tar.xz
+ 6c6a114f143fb8c114846424c8a2b3e3bb34f3b8 330868 mx-packageinstaller_19.9_amd64.deb
+Checksums-Sha256:
+ ac1927ee48c7e5fe3ade5c60cf348b1bb946573bac2f104cf9ab48f980c5c4e2 1227 mx-packageinstaller_19.9.dsc
+ bae8c79dae548858b9e6e36a9768799ef30abeea8f6163bb47eed41ba949d706 262308 mx-packageinstaller_19.9.tar.xz
+ 3289fa5cc6331b64bc235c879515583dd8a2ee1138bd8c247ee03b0de26bd6db 330868 mx-packageinstaller_19.9_amd64.deb
+Files:
+ 8f3529a15e0e5add8d037b228fa0f22d 1227 admin optional mx-packageinstaller_19.9.dsc
+ 26fb4ed40b4d44df7a57f5e7f9eaf778 262308 admin optional mx-packageinstaller_19.9.tar.xz
+ 27055784f1d413fbad1e1a9e8ec8c42e 330868 admin optional mx-packageinstaller_19.9_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCAAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAl125jMTHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumCVBCAC2zUIyI0koYpMuiy80mQKR1vSdod0x
+Necsobc8m6ZteOcuKb++VSMdRtPrwdIazeMPe/1Z4z0MKY/mzcHuwBlCdH7/Qkak
+oLvLPsG95dPGBWU2xLWHK9qDhFVKCahwM7GZwLuG5Y9wvhD0gRq+dQ/N/zAT5kTe
+DFF6qvE4q+RODl2kbsVgEDdIc/NBVEouXS0pRxX7QEJ4WLJ/8ho3/LKbZmWroFDl
+gFYw2zKy0HbcSIGctxJyQzp8x2NvKoWOoTMWZ7bN4n0JSgSiBN7wTwYpUJ1Nb7Hq
+SCMUm8OlMGNn31xO1yDs/BRD9SW/TuMtuRU/92sbhx5j6M5ixONB2/1g
+=9h2p
+-----END PGP SIGNATURE-----

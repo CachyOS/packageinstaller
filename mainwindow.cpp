@@ -2444,7 +2444,8 @@ void MainWindow::on_buttonUpgradeFP_clicked()
     setConnections();
     setCursor(QCursor(Qt::BusyCursor));
 
-    if(cmd->run("su -l $(logname) -c \"socat SYSTEM:'flatpak update " + user.trimmed() + "',stderr STDIO\"") == 0) {
+
+    if(cmd->run("su -l $(logname) -c \"socat SYSTEM:'flatpak update " + user.trimmed() + "',pty STDIO\"") == 0) {
         displayFlatpaks(true);
         setCursor(QCursor(Qt::ArrowCursor));
         QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
