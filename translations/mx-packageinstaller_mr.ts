@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="he_IL" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="mr" version="2.1">
 <context>
     <name>MainWindow</name>
     <message>
@@ -12,19 +12,19 @@
     <message>
         <location filename="mainwindow.ui" line="57"/>
         <source>Popular Applications</source>
-        <translation>יישומים מועדפים</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="83"/>
         <location filename="mainwindow.cpp" line="96"/>
         <source>Package</source>
-        <translation>חבילה</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="88"/>
         <location filename="mainwindow.cpp" line="96"/>
         <source>Info</source>
-        <translation>מידע</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="93"/>
@@ -33,7 +33,7 @@
         <location filename="mainwindow.ui" line="975"/>
         <location filename="mainwindow.cpp" line="96"/>
         <source>Description</source>
-        <translation>תיאור</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="113"/>
@@ -42,7 +42,7 @@
         <location filename="mainwindow.ui" line="944"/>
         <location filename="mainwindow.ui" line="1208"/>
         <source>search</source>
-        <translation>חיפוש</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="123"/>
@@ -52,7 +52,7 @@
     <message>
         <location filename="mainwindow.ui" line="153"/>
         <source>Stable Repo</source>
-        <translation>מאגר יציב</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="174"/>
@@ -174,7 +174,7 @@
     <message>
         <location filename="mainwindow.ui" line="493"/>
         <source>MX Test Repo</source>
-        <translation>מאגר MX נסיוני</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="813"/>
@@ -299,32 +299,32 @@
     <message>
         <location filename="mainwindow.ui" line="1560"/>
         <source>About this application</source>
-        <translation>מידע לגבי התוכנה הזו</translation>
+        <translation>या अनुप्रयोगाबद्दल</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1563"/>
         <source>About...</source>
-        <translation>אודות...</translation>
+        <translation>विषयी</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1570"/>
         <source>Alt+B</source>
-        <translation type="unfinished"/>
+        <translation>Alt+B</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1618"/>
         <source>Display help </source>
-        <translation type="unfinished"/>
+        <translation>मदत दाखवा</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1621"/>
         <source>Help</source>
-        <translation>עזרה</translation>
+        <translation>मदत</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1628"/>
         <source>Alt+H</source>
-        <translation type="unfinished"/>
+        <translation>Alt+H</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1644"/>
@@ -342,12 +342,12 @@
     <message>
         <location filename="mainwindow.ui" line="1670"/>
         <source>Quit application</source>
-        <translation>יציאה מהתוכנה</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1673"/>
         <source>Close</source>
-        <translation>סגור</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1680"/>
@@ -383,7 +383,7 @@
         <location filename="mainwindow.cpp" line="2456"/>
         <location filename="mainwindow.cpp" line="2483"/>
         <source>Error</source>
-        <translation>תקלה</translation>
+        <translation>त्रुटी</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="183"/>
@@ -394,12 +394,12 @@
         <location filename="mainwindow.cpp" line="544"/>
         <location filename="mainwindow.cpp" line="1813"/>
         <source>Cancel</source>
-        <translation>ביטול</translation>
+        <translation>रद्द करा</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="550"/>
         <source>Please wait...</source>
-        <translation>חכה בבקשה...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="751"/>
@@ -452,7 +452,7 @@
     <message>
         <location filename="mainwindow.cpp" line="905"/>
         <source>Warning</source>
-        <translation>אזהרה</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="909"/>
@@ -547,7 +547,7 @@
     <message>
         <location filename="mainwindow.cpp" line="1807"/>
         <source>Version: </source>
-        <translation>גרסה:</translation>
+        <translation>आवृत्ती</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1808"/>
@@ -557,23 +557,23 @@
     <message>
         <location filename="mainwindow.cpp" line="1810"/>
         <source>Copyright (c) MX Linux</source>
-        <translation>זכויות שמורות MX Linux</translation>
+        <translation>कॉपीराइट (c) एमएक्स लिनक्स</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1811"/>
         <location filename="mainwindow.cpp" line="1822"/>
         <source>License</source>
-        <translation>רשיון</translation>
+        <translation>परवाना</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1812"/>
         <source>Changelog</source>
-        <translation type="unfinished"/>
+        <translation>बदल सूची</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1834"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"/>
+        <translation>बंद</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1889"/>
@@ -700,7 +700,7 @@ OK to go ahead and install it?</source>
     <message>
         <location filename="remotes.cpp" line="59"/>
         <source>Close</source>
-        <translation>סגור</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="remotes.cpp" line="81"/>
@@ -738,17 +738,18 @@ OK to go ahead and install it?</source>
     <message>
         <location filename="main.cpp" line="58"/>
         <source>Unable to get exclusive lock</source>
-        <translation type="unfinished"/>
+        <translation>अनन्य लॉक मिळविण्यात अक्षम</translation>
     </message>
     <message>
         <location filename="main.cpp" line="59"/>
         <source>Another package management application (like Synaptic or apt-get), is already running. Please close that application first</source>
-        <translation type="unfinished"/>
+        <translation> 
+दुसरा पॅकेज व्यवस्थापन अनुप्रयोग (जसे Synaptic किंवा apt-get), आधीच चालू आहे. प्रथम ते अनुप्रयोग बंद करा</translation>
     </message>
     <message>
         <location filename="main.cpp" line="77"/>
         <source>You must run this program as root.</source>
-        <translation>אתה חייב להריץ את התוכנה הזו עם הרשאות root.</translation>
+        <translation>आपण हा प्रोग्राम रूट म्हणूनच चालवावा.</translation>
     </message>
 </context>
 </TS>
