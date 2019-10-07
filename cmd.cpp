@@ -25,7 +25,7 @@ void Cmd::halt()
 bool Cmd::run(const QString &cmd, bool quiet)
 {
     out_buffer.clear();
-    QByteArray output;
+    QString output;
     return run(cmd, output, quiet);
 }
 
@@ -33,12 +33,12 @@ bool Cmd::run(const QString &cmd, bool quiet)
 QString Cmd::getCmdOut(const QString &cmd, bool quiet)
 {
     out_buffer.clear();
-    QByteArray output;
+    QString output;
     run(cmd, output, quiet);
     return output;
 }
 
-bool Cmd::run(const QString &cmd, QByteArray &output, bool quiet)
+bool Cmd::run(const QString &cmd, QString &output, bool quiet)
 {
     out_buffer.clear();
     connect(this, static_cast<void (QProcess::*)(int)>(&QProcess::finished), this, &Cmd::finished, Qt::UniqueConnection);
@@ -51,7 +51,7 @@ bool Cmd::run(const QString &cmd, QByteArray &output, bool quiet)
     connect(this, &Cmd::finished, &loop, &QEventLoop::quit, Qt::UniqueConnection);
     start("/bin/bash", QStringList() << "-c" << cmd);
     loop.exec();
-    output = out_buffer.trimmed().toUtf8();
+    output = out_buffer.trimmed();
     return (exitStatus() == QProcess::NormalExit && exitCode() == 0);
 }
 
