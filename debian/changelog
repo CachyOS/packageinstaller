@@ -1,3 +1,10 @@
+mx-packageinstaller (19.10) mx; urgency=medium
+
+  * remove libcmd dependency
+  * progress bar fix
+
+ -- Adrian <adrian@mxlinux.org>  Sun, 06 Oct 2019 22:43:04 -0400
+
 mx-packageinstaller (19.9) mx; urgency=medium
 
   * fix updating flatpaks 

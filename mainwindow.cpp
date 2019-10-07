@@ -928,7 +928,6 @@ void MainWindow::listFlatpakRemotes()
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     ui->comboRemote->blockSignals(true);
     ui->comboRemote->clear();
-    displayOutput();
     QStringList list = cmd.getCmdOut("su -l $(logname) -c \"flatpak remote-list " +  user + "| cut -f1\"").remove(" ").split("\n");
     ui->comboRemote->addItems(list);
     //set flathub default
@@ -1492,10 +1491,12 @@ QStringList MainWindow::listFlatpaks(const QString remote, const QString type)
     if (fp_ver < VersionNumber("1.0.1")) {
         arch_fp = (arch == "amd64") ? arch_fp = "--arch=x86_64 " : arch_fp = "--arch=i386 ";
         // list packages, strip first part remote/ or app/ no size for old flatpak
+        disconnect(conn);
         success = cmd.run("su -l $(logname) -c \"set -o pipefail; flatpak -d remote-ls " + user + remote + " " + arch_fp + type + "| cut -f1 | tr -s ' ' | cut -f1 -d' '|sed 's/^[^\\/]*\\///g' \"", out);
         list = QString(out).split("\n");
     } else if (fp_ver < VersionNumber("1.2.4")) { // lower than Buster version
         // list size too
+        disconnect(conn);
         success = cmd.run("su -l $(logname) -c \"set -o pipefail; flatpak -d remote-ls " + user + remote + " " + arch_fp + type + "| cut -f1,3 |tr -s ' ' | sed 's/^[^\\/]*\\///g' \"", out);
         list = QString(out).split("\n");
     } else { // Buster version and above
@@ -1518,6 +1519,7 @@ QStringList MainWindow::listFlatpaks(const QString remote, const QString type)
         }
     }
 
+    conn = connect(&cmd, &Cmd::outputAvailable, [](const QString &out) { qDebug() << out.trimmed(); });
     if (!success || list == QStringList("")) {
         qDebug() << QString("Could not list packages from %1 remote, or remote doesn't contain packages").arg(remote);
         return QStringList();
@@ -1590,7 +1592,6 @@ void MainWindow::cmdStart()
 // Things to do when the command is done
 void MainWindow::cmdDone()
 {
-    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     timer.stop();
     setCursor(QCursor(Qt::ArrowCursor));
     disableOutput();
