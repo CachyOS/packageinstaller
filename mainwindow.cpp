@@ -153,7 +153,7 @@ bool MainWindow::uninstall(const QString &names, const QString &postuninstall)
     lock_file->unlock();
     ui->tabWidget->setTabText(ui->tabWidget->indexOf(ui->tabOutput), tr("Uninstalling packages..."));
     displayOutput();
-    bool success = cmd.run("DEBIAN_FRONTEND=gnome apt-get remove " + names);
+    bool success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 remove " + names);
     if (!postuninstall.isEmpty()) {
         qDebug() << "Post-uninstall";
         ui->tabWidget->setTabText(ui->tabWidget->indexOf(ui->tabOutput), tr("Running post-uninstall operations..."));
@@ -177,7 +177,7 @@ bool MainWindow::update()
         ui->tabWidget->setTabText(ui->tabWidget->indexOf(ui->tabOutput), tr("Refreshing sources..."));
     }
     displayOutput();
-    if (cmd.run("apt-get update -o Acquire::http:Timeout=10 -o Acquire::https:Timeout=10 -o Acquire::ftp:Timeout=10")) {
+    if (cmd.run("apt-get update -o=Dpkg::Use-Pty=0 -o Acquire::http:Timeout=10 -o Acquire::https:Timeout=10 -o Acquire::ftp:Timeout=10")) {
         lock_file->lock();
         msg="echo sources updated OK >>/var/log/mxpi.log";
         system(msg.toUtf8());
@@ -953,11 +953,11 @@ bool MainWindow::install(const QString &names)
 
     displayOutput();
     if (tree == ui->treeBackports) {
-        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get install -t " + ver_name + "-backports --reinstall " + names);
+        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 install -t " + ver_name + "-backports --reinstall " + names);
     } else if (tree == ui->treeMXtest) {
-        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get install -t a=mx,c=test " + names);
+        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 install -t a=mx,c=test " + names);
     } else {
-        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get install --reinstall " + names);
+        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 install --reinstall " + names);
     }
     lock_file->lock();
     bar->setValue(bar->maximum());
@@ -2391,6 +2391,7 @@ void MainWindow::on_lineEdit_returnPressed()
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     cmd.write(ui->lineEdit->text().toUtf8() + "\n");
+    ui->outputBox->appendPlainText(ui->lineEdit->text() + "\n");
     ui->lineEdit->clear();
     ui->lineEdit->setFocus();
 }

@@ -97,7 +97,7 @@ void messageHandler(QtMsgType type, const QMessageLogContext &context, const QSt
 {
     // Write to terminal
     QTextStream term_out(stdout);
-    term_out << msg << endl;
+    term_out << msg << "\n";
 
     // Open stream file writes
     QTextStream out(logFile.data());
@@ -116,6 +116,6 @@ void messageHandler(QtMsgType type, const QMessageLogContext &context, const QSt
     }
     // Write to the output category of the message and the message itself
     out << context.category << ": "
-        << msg << endl;
+        << msg << "\n";
     out.flush();    // Clear the buffered data
 }

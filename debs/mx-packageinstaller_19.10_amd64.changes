@@ -1,0 +1,50 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Format: 1.8
+Date: Sun, 06 Oct 2019 22:43:04 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 19.10
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (19.10) mx; urgency=medium
+ .
+   * remove libcmd dependency
+   * progress bar fix
+Checksums-Sha1:
+ fdda3ddc52f32436440c1b38e64713f88e2281a1 1223 mx-packageinstaller_19.10.dsc
+ d9d23ce490c8b0220299e8c9c15d0c77b6fb298b 265196 mx-packageinstaller_19.10.tar.xz
+ 774cf438855f5ac503549bd72704c78a08d82c0d 1416338 mx-packageinstaller-dbgsym_19.10_amd64.deb
+ 7b810dc405faa72903cdf1bbd8d669522ac4e22d 11376 mx-packageinstaller_19.10_amd64.buildinfo
+ 73fba30f77a76988b112d0730cc764c00129698b 329230 mx-packageinstaller_19.10_amd64.deb
+Checksums-Sha256:
+ b4df0e41543e37813131a570c8c4d86b64c9b328c5495bb4cb88931e118b0f23 1223 mx-packageinstaller_19.10.dsc
+ 1a9737088a3a47a23a729fe2d11599748f1fb768a9e209b2ed036e2b0d100f37 265196 mx-packageinstaller_19.10.tar.xz
+ 078d3a3895ffe4e8126ee0df5fc9a4d599bd2dc5b0a3131fd6e6dadc514516f1 1416338 mx-packageinstaller-dbgsym_19.10_amd64.deb
+ ea080419062bc014a1901f8d50a3638bf0cc4533f317fc0cbee357bb97e3603d 11376 mx-packageinstaller_19.10_amd64.buildinfo
+ 0e2569e3c072a65e195ec854bbb694b90b2346feede84a6a49469fcf91f7ed4a 329230 mx-packageinstaller_19.10_amd64.deb
+Files:
+ 18e75c9af2927971f30e8a191f90fc89 1223 admin optional mx-packageinstaller_19.10.dsc
+ 1fe001488fcbda4b3a6410eed53a6314 265196 admin optional mx-packageinstaller_19.10.tar.xz
+ 9c4edbf0571d2b7f94839cfda8d410c4 1416338 debug optional mx-packageinstaller-dbgsym_19.10_amd64.deb
+ aa1354597e4ad660db3b3290a4680f3b 11376 admin optional mx-packageinstaller_19.10_amd64.buildinfo
+ 70c15c1134decec75e3fbf3807bbb685 329230 admin optional mx-packageinstaller_19.10_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCAAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAl2asuUTHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumI4HCACBXa/VCruLXvvbj6zHBbj/UysnZJA8
+SOKMeDkDqrc8X6Ml5L9bu58V/T/WGjsFNuHcHpSIqHP4aQtvI+J0smF/74D2TJLI
++Yz+T6KV2cYH3HrqncjIDVPnaobWnV78WF0EK9hY0zMtsUgJuC7Zr9WC5aTKmGbV
+u2SsozrK5kBrJ16XL6m1MkF2SCA0gQk+XuFlGos5MHm1etl6hd67WCcqVJ2ZevrH
+VQLzoCAbVWx4+LHognjl3Vwh6QptvZfkz47oXEKsrEDCysg4V6WfIBKnO09nTm7x
+kNQBEX7/++C2iX16xkovJqDa0LHWHE0UNe16MhzHy2f0SntPWsRX8hnC
+=XR29
+-----END PGP SIGNATURE-----
