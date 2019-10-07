@@ -129,7 +129,7 @@ void ManageRemotes::listFlatpakRemotes() const
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     comboRemote->clear();
-    QStringList list = cmd->getOutput("su $(logname) -c \"flatpak remote-list " +  user + "\"").split("\n");
+    QStringList list = cmd->getCmdOut("su $(logname) -c \"flatpak remote-list " +  user + "\"").split("\n");
     comboRemote->addItems(list);
 }
 

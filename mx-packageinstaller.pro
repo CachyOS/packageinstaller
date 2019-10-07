@@ -22,7 +22,6 @@
 # **********************************************************************/
 
 QT       += core gui xml network
-
 CONFIG   += c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -36,7 +35,9 @@ SOURCES += main.cpp\
     lockfile.cpp \
     versionnumber.cpp \
     aptcache.cpp \
-    remotes.cpp
+    remotes.cpp \
+    about.cpp \
+    cmd.cpp
 
 HEADERS  += \
     mainwindow.h \
@@ -44,7 +45,9 @@ HEADERS  += \
     versionnumber.h \
     aptcache.h \
     remotes.h \
-    version.h
+    version.h \
+    about.h \
+    cmd.h
 
 FORMS    += \
     mainwindow.ui
@@ -97,4 +100,3 @@ TRANSLATIONS += translations/mx-packageinstaller_am.ts \
 RESOURCES += \
     images.qrc
 
-unix:!macx: LIBS += -lcmd
