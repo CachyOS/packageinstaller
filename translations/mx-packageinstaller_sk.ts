@@ -380,8 +380,8 @@
         <location filename="../mainwindow.cpp" line="1947"/>
         <location filename="../mainwindow.cpp" line="1967"/>
         <location filename="../mainwindow.cpp" line="2373"/>
-        <location filename="../mainwindow.cpp" line="2448"/>
-        <location filename="../mainwindow.cpp" line="2475"/>
+        <location filename="../mainwindow.cpp" line="2449"/>
+        <location filename="../mainwindow.cpp" line="2476"/>
         <source>Error</source>
         <translation>Chyba</translation>
     </message>
@@ -511,8 +511,8 @@
         <location filename="../mainwindow.cpp" line="1816"/>
         <location filename="../mainwindow.cpp" line="1942"/>
         <location filename="../mainwindow.cpp" line="2369"/>
-        <location filename="../mainwindow.cpp" line="2442"/>
-        <location filename="../mainwindow.cpp" line="2469"/>
+        <location filename="../mainwindow.cpp" line="2443"/>
+        <location filename="../mainwindow.cpp" line="2470"/>
         <source>Done</source>
         <translation>Hotovo</translation>
     </message>
@@ -523,8 +523,8 @@
         <location filename="../mainwindow.cpp" line="1942"/>
         <location filename="../mainwindow.cpp" line="1960"/>
         <location filename="../mainwindow.cpp" line="2369"/>
-        <location filename="../mainwindow.cpp" line="2442"/>
-        <location filename="../mainwindow.cpp" line="2469"/>
+        <location filename="../mainwindow.cpp" line="2443"/>
+        <location filename="../mainwindow.cpp" line="2470"/>
         <source>Processing finished successfully.</source>
         <translation>Proces dokončený.</translation>
     </message>
@@ -533,8 +533,8 @@
         <location filename="../mainwindow.cpp" line="1809"/>
         <location filename="../mainwindow.cpp" line="1819"/>
         <location filename="../mainwindow.cpp" line="2373"/>
-        <location filename="../mainwindow.cpp" line="2448"/>
-        <location filename="../mainwindow.cpp" line="2475"/>
+        <location filename="../mainwindow.cpp" line="2449"/>
+        <location filename="../mainwindow.cpp" line="2476"/>
         <source>Problem detected while installing, please inspect the console output.</source>
         <translation>Počas inštalácie sa vyskytol problém, prosím preskúmajte výstup z príkazového riadku.</translation>
     </message>
@@ -650,12 +650,12 @@ Prajete si ho nainštalovať?</translation>
         <translation>Aktualizovať</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2402"/>
+        <location filename="../mainwindow.cpp" line="2403"/>
         <source>Quit?</source>
         <translation>Ukončiť?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2403"/>
+        <location filename="../mainwindow.cpp" line="2404"/>
         <source>Process still running, quitting might leave the system in an unstable state.&lt;p&gt;&lt;b&gt;Are you sure you want to exit MX Package Installer?&lt;/b&gt;</source>
         <translation>Proces nebol dokončený, jeho ukončenie môže spôsobiť nestabilitu systému.&lt;p&gt;&lt;b&gt;Ukončiť MX Inštalátor programov?&lt;/b&gt;</translation>
     </message>

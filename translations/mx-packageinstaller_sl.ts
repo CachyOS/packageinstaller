@@ -380,8 +380,8 @@
         <location filename="../mainwindow.cpp" line="1947"/>
         <location filename="../mainwindow.cpp" line="1967"/>
         <location filename="../mainwindow.cpp" line="2373"/>
-        <location filename="../mainwindow.cpp" line="2448"/>
-        <location filename="../mainwindow.cpp" line="2475"/>
+        <location filename="../mainwindow.cpp" line="2449"/>
+        <location filename="../mainwindow.cpp" line="2476"/>
         <source>Error</source>
         <translation>Napaka</translation>
     </message>
@@ -511,8 +511,8 @@
         <location filename="../mainwindow.cpp" line="1816"/>
         <location filename="../mainwindow.cpp" line="1942"/>
         <location filename="../mainwindow.cpp" line="2369"/>
-        <location filename="../mainwindow.cpp" line="2442"/>
-        <location filename="../mainwindow.cpp" line="2469"/>
+        <location filename="../mainwindow.cpp" line="2443"/>
+        <location filename="../mainwindow.cpp" line="2470"/>
         <source>Done</source>
         <translation>Zaključeno</translation>
     </message>
@@ -523,8 +523,8 @@
         <location filename="../mainwindow.cpp" line="1942"/>
         <location filename="../mainwindow.cpp" line="1960"/>
         <location filename="../mainwindow.cpp" line="2369"/>
-        <location filename="../mainwindow.cpp" line="2442"/>
-        <location filename="../mainwindow.cpp" line="2469"/>
+        <location filename="../mainwindow.cpp" line="2443"/>
+        <location filename="../mainwindow.cpp" line="2470"/>
         <source>Processing finished successfully.</source>
         <translation>Procesiranje je bilo uspešno zaključeno.</translation>
     </message>
@@ -533,8 +533,8 @@
         <location filename="../mainwindow.cpp" line="1809"/>
         <location filename="../mainwindow.cpp" line="1819"/>
         <location filename="../mainwindow.cpp" line="2373"/>
-        <location filename="../mainwindow.cpp" line="2448"/>
-        <location filename="../mainwindow.cpp" line="2475"/>
+        <location filename="../mainwindow.cpp" line="2449"/>
+        <location filename="../mainwindow.cpp" line="2476"/>
         <source>Problem detected while installing, please inspect the console output.</source>
         <translation>Ob nameščanju je bila odkrita napaka. Prosimo preverite izpis konzole.</translation>
     </message>
@@ -650,12 +650,12 @@ Ali naj ga namestim?</translation>
         <translation>Nadgradi</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2402"/>
+        <location filename="../mainwindow.cpp" line="2403"/>
         <source>Quit?</source>
         <translation>Končam?</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2403"/>
+        <location filename="../mainwindow.cpp" line="2404"/>
         <source>Process still running, quitting might leave the system in an unstable state.&lt;p&gt;&lt;b&gt;Are you sure you want to exit MX Package Installer?&lt;/b&gt;</source>
         <translation>Proces se še izvaja, dokončanje bi lahko destabiliziralo sistem.&lt;p&gt;&lt;b&gt; Ali ste prepričani, da bi radi zaustili MX namestitev paketov?&lt;/b&gt;</translation>
     </message>

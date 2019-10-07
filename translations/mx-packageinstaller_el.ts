@@ -380,8 +380,8 @@
         <location filename="../mainwindow.cpp" line="1947"/>
         <location filename="../mainwindow.cpp" line="1967"/>
         <location filename="../mainwindow.cpp" line="2373"/>
-        <location filename="../mainwindow.cpp" line="2448"/>
-        <location filename="../mainwindow.cpp" line="2475"/>
+        <location filename="../mainwindow.cpp" line="2449"/>
+        <location filename="../mainwindow.cpp" line="2476"/>
         <source>Error</source>
         <translation>Σφάλμα</translation>
     </message>
@@ -511,8 +511,8 @@
         <location filename="../mainwindow.cpp" line="1816"/>
         <location filename="../mainwindow.cpp" line="1942"/>
         <location filename="../mainwindow.cpp" line="2369"/>
-        <location filename="../mainwindow.cpp" line="2442"/>
-        <location filename="../mainwindow.cpp" line="2469"/>
+        <location filename="../mainwindow.cpp" line="2443"/>
+        <location filename="../mainwindow.cpp" line="2470"/>
         <source>Done</source>
         <translation>Ολοκληρώθηκε</translation>
     </message>
@@ -523,8 +523,8 @@
         <location filename="../mainwindow.cpp" line="1942"/>
         <location filename="../mainwindow.cpp" line="1960"/>
         <location filename="../mainwindow.cpp" line="2369"/>
-        <location filename="../mainwindow.cpp" line="2442"/>
-        <location filename="../mainwindow.cpp" line="2469"/>
+        <location filename="../mainwindow.cpp" line="2443"/>
+        <location filename="../mainwindow.cpp" line="2470"/>
         <source>Processing finished successfully.</source>
         <translation>Η επεξεργασία ολοκληρώθηκε με επιτυχία.</translation>
     </message>
@@ -533,8 +533,8 @@
         <location filename="../mainwindow.cpp" line="1809"/>
         <location filename="../mainwindow.cpp" line="1819"/>
         <location filename="../mainwindow.cpp" line="2373"/>
-        <location filename="../mainwindow.cpp" line="2448"/>
-        <location filename="../mainwindow.cpp" line="2475"/>
+        <location filename="../mainwindow.cpp" line="2449"/>
+        <location filename="../mainwindow.cpp" line="2476"/>
         <source>Problem detected while installing, please inspect the console output.</source>
         <translation>Εντοπίστηκε πρόβλημα κατά την εγκατάσταση, παρακαλώ ελέγξτε την έξοδο της κονσόλας.</translation>
     </message>
@@ -650,12 +650,12 @@ OK to go ahead and install it?</source>
         <translation>Αναβάθμιση</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2402"/>
+        <location filename="../mainwindow.cpp" line="2403"/>
         <source>Quit?</source>
         <translation>Έξοδος;</translation>
     </message>
     <message>
-        <location filename="../mainwindow.cpp" line="2403"/>
+        <location filename="../mainwindow.cpp" line="2404"/>
         <source>Process still running, quitting might leave the system in an unstable state.&lt;p&gt;&lt;b&gt;Are you sure you want to exit MX Package Installer?&lt;/b&gt;</source>
         <translation>Εκτελείται ακόμα μια διαδικασία και η διακοπή της μπορεί να αφήσει το σύστημα σε ασταθή κατάσταση. &lt;p&gt;&lt;b&gt;Είστε βέβαιοι ότι θέλετε να βγείτε από την εγκατάσταση πακέτων  του MX;&lt;/b&gt;</translation>
     </message>

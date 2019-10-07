@@ -19,32 +19,32 @@ Changes:
    * remove libcmd dependency
    * progress bar fix
 Checksums-Sha1:
- fdda3ddc52f32436440c1b38e64713f88e2281a1 1223 mx-packageinstaller_19.10.dsc
- d9d23ce490c8b0220299e8c9c15d0c77b6fb298b 265196 mx-packageinstaller_19.10.tar.xz
- 774cf438855f5ac503549bd72704c78a08d82c0d 1416338 mx-packageinstaller-dbgsym_19.10_amd64.deb
- 7b810dc405faa72903cdf1bbd8d669522ac4e22d 11376 mx-packageinstaller_19.10_amd64.buildinfo
- 73fba30f77a76988b112d0730cc764c00129698b 329230 mx-packageinstaller_19.10_amd64.deb
+ 19806377b1b1de8700e2cc7ac0f6898691f5b2ca 1223 mx-packageinstaller_19.10.dsc
+ 8fa70ecdea52fb4d7ee934f89360af2eb72f343d 265196 mx-packageinstaller_19.10.tar.xz
+ b5403c3c459c5723101aaea14db2b7edc1b42733 1417266 mx-packageinstaller-dbgsym_19.10_amd64.deb
+ 7a3315bfeeb87a5c76e6bd70dad250dae21b7b38 11376 mx-packageinstaller_19.10_amd64.buildinfo
+ 1475039f452cf15608445be26ed8f94266de152d 329190 mx-packageinstaller_19.10_amd64.deb
 Checksums-Sha256:
- b4df0e41543e37813131a570c8c4d86b64c9b328c5495bb4cb88931e118b0f23 1223 mx-packageinstaller_19.10.dsc
- 1a9737088a3a47a23a729fe2d11599748f1fb768a9e209b2ed036e2b0d100f37 265196 mx-packageinstaller_19.10.tar.xz
- 078d3a3895ffe4e8126ee0df5fc9a4d599bd2dc5b0a3131fd6e6dadc514516f1 1416338 mx-packageinstaller-dbgsym_19.10_amd64.deb
- ea080419062bc014a1901f8d50a3638bf0cc4533f317fc0cbee357bb97e3603d 11376 mx-packageinstaller_19.10_amd64.buildinfo
- 0e2569e3c072a65e195ec854bbb694b90b2346feede84a6a49469fcf91f7ed4a 329230 mx-packageinstaller_19.10_amd64.deb
+ fd9785b0dcbc6af7af02160f49a80b5b78c07fb4358d70d25e5631ec9671fea7 1223 mx-packageinstaller_19.10.dsc
+ 98ef14c7c8a1eb67c16a0dfcdf71bcaed64eb75b152ef4cea7e38cd0311f5dd6 265196 mx-packageinstaller_19.10.tar.xz
+ c28b44edcfe0a24690f7f025856f75ce1d3ba0ae82b640981be854b4fab47149 1417266 mx-packageinstaller-dbgsym_19.10_amd64.deb
+ 13927157f8831a8c8fb1093b57b0ecf04eeb802c330d5f73a4365f05067a2e82 11376 mx-packageinstaller_19.10_amd64.buildinfo
+ ed3153e20debc5dcf9101e182e42ec7d051338d7a06b859ff8eacea5483c479f 329190 mx-packageinstaller_19.10_amd64.deb
 Files:
- 18e75c9af2927971f30e8a191f90fc89 1223 admin optional mx-packageinstaller_19.10.dsc
- 1fe001488fcbda4b3a6410eed53a6314 265196 admin optional mx-packageinstaller_19.10.tar.xz
- 9c4edbf0571d2b7f94839cfda8d410c4 1416338 debug optional mx-packageinstaller-dbgsym_19.10_amd64.deb
- aa1354597e4ad660db3b3290a4680f3b 11376 admin optional mx-packageinstaller_19.10_amd64.buildinfo
- 70c15c1134decec75e3fbf3807bbb685 329230 admin optional mx-packageinstaller_19.10_amd64.deb
+ 3c2e6fb3bdc2c396bb7603feb552df39 1223 admin optional mx-packageinstaller_19.10.dsc
+ a7cc214dd2388061feadc433ffa88aef 265196 admin optional mx-packageinstaller_19.10.tar.xz
+ 1eb8de067d2ae729c88db4da49c95a42 1417266 debug optional mx-packageinstaller-dbgsym_19.10_amd64.deb
+ 803d4529be6be177c63a8988259c9610 11376 admin optional mx-packageinstaller_19.10_amd64.buildinfo
+ 88f37579b0779fe312da306455acdd31 329190 admin optional mx-packageinstaller_19.10_amd64.deb
 
 -----BEGIN PGP SIGNATURE-----
 
-iQFHBAEBCAAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAl2asuUTHGFkcmlhbkBt
-eGxpbnV4Lm9yZwAKCRBwk4x4BnnumI4HCACBXa/VCruLXvvbj6zHBbj/UysnZJA8
-SOKMeDkDqrc8X6Ml5L9bu58V/T/WGjsFNuHcHpSIqHP4aQtvI+J0smF/74D2TJLI
-+Yz+T6KV2cYH3HrqncjIDVPnaobWnV78WF0EK9hY0zMtsUgJuC7Zr9WC5aTKmGbV
-u2SsozrK5kBrJ16XL6m1MkF2SCA0gQk+XuFlGos5MHm1etl6hd67WCcqVJ2ZevrH
-VQLzoCAbVWx4+LHognjl3Vwh6QptvZfkz47oXEKsrEDCysg4V6WfIBKnO09nTm7x
-kNQBEX7/++C2iX16xkovJqDa0LHWHE0UNe16MhzHy2f0SntPWsRX8hnC
-=XR29
+iQFHBAEBCAAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAl2atVkTHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumIITB/9wJiFbvNvN+cH+LKKgISuxmi18bckW
+lyDb1n6tZuFULGCcZzcaUjmJRq+3f67R7h5tScvNjZ6rohsElZcxt8JbdaM/Ak8g
+60OeEyhHjcm4/SGIbjtfJdP2dW0g2IRO0dexoIB46Oy5iXjQIKJkcnZ2q6RKPUSP
+pkTyJptX0ZqC084PCRfEZECXHTND0uRkuS6IQTwqPHJTpEjkIWB5trAXuWVVKb9Z
+hHdbij1EhDFRh1Y6GE5HpnTbk159xfU1msWzxhqa0+p8C2tYcKGR2F/PxAEse/eC
+7Hk7l8whFsLUvUtVQvJqyK/5dFtdyb551dYavXsln/zeLKvGDWPX2a/1
+=6y/o
 -----END PGP SIGNATURE-----
