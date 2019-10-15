@@ -498,6 +498,7 @@ void MainWindow::processDoc(const QDomDocument &doc)
 void MainWindow::refreshPopularApps()
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
+    disableOutput();
     ui->treePopularApps->clear();
     ui->searchPopular->clear();
     ui->buttonInstall->setEnabled(false);
