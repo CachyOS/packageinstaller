@@ -1,3 +1,9 @@
+mx-packageinstaller (19.11) mx; urgency=medium
+
+  * added backup site for online check
+
+ -- Adrian <adrian@mxlinux.org>  Wed, 06 Nov 2019 23:36:23 -0500
+
 mx-packageinstaller (19.10.01) mx; urgency=medium
 
   * fix console spamming when installing items with preinstall commands

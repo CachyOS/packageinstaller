@@ -11,7 +11,7 @@ class ManageRemotes : public QDialog
 {
     Q_OBJECT
 public:
-    explicit ManageRemotes(QWidget *parent = 0);
+    explicit ManageRemotes(QWidget *parent = nullptr);
     bool isChanged() const;
     void listFlatpakRemotes() const;
     QString getInstallRef() const;

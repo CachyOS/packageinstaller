@@ -748,7 +748,7 @@ OK to go ahead and install it?</source>
     <message>
         <location filename="../main.cpp" line="62"/>
         <source>Another package management application (like Synaptic or apt-get), is already running. Please close that application first</source>
-        <translation> 
+        <translation>&#xa0;
 दुसरा पॅकेज व्यवस्थापन अनुप्रयोग (जसे Synaptic किंवा apt-get), आधीच चालू आहे. प्रथम ते अनुप्रयोग बंद करा</translation>
     </message>
     <message>

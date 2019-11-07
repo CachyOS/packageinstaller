@@ -1150,7 +1150,7 @@ bool MainWindow::isFilteredName(const QString &name) const
 // Check if online
 bool MainWindow::checkOnline() const
 {
-    return(system("wget -q --spider http://mxrepo.com >/dev/null 2>&1") == 0);
+    return(system("wget -q --spider http://mxrepo.com >/dev/null 2>&1 || wget -q --spider http://google.com >/dev/null 2>&1 ") == 0);
 }
 
 // Build the list of available packages from various source
