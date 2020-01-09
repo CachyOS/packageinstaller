@@ -2,11 +2,7 @@ Source: mx-packageinstaller
 Section: admin
 Priority: optional
 Maintainer: Adrian <adrian@mxlinux.org>
-Build-Depends: debhelper (>=9),
-               libcmd,
-               qt5-default,
-               qt5-qmake,
-               qttools5-dev-tools
+Build-Depends: debhelper (>=9), qtbase5-dev, qttools5-dev-tools
 Standards-Version: 3.9.8
 Vcs-Git: git://github.com/AdrianTM/mx-packageinstaller
 
@@ -14,7 +10,6 @@ Package: mx-packageinstaller
 Architecture: any
 Depends: flatpak (<< 1.0) | xdg-desktop-portal-gtk,
          flatpak (>= 0.8.9),
-         libcmd,
          menu,
          mx-packageinstaller-pkglist (>= 17.4),
          socat,

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="ar">
+<TS version="2.1" language="mr">
 <context>
     <name>MainWindow</name>
     <message>
@@ -299,32 +299,32 @@
     <message>
         <location filename="../mainwindow.ui" line="1572"/>
         <source>About this application</source>
-        <translation type="unfinished"></translation>
+        <translation>या अनुप्रयोगाबद्दल</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1575"/>
         <source>About...</source>
-        <translation type="unfinished"></translation>
+        <translation>विषयी</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1582"/>
         <source>Alt+B</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+B</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1630"/>
         <source>Display help </source>
-        <translation type="unfinished"></translation>
+        <translation>मदत दाखवा</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1633"/>
         <source>Help</source>
-        <translation>مساعدة</translation>
+        <translation>मदत</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1640"/>
         <source>Alt+H</source>
-        <translation type="unfinished"></translation>
+        <translation>Alt+H</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1656"/>
@@ -347,7 +347,7 @@
     <message>
         <location filename="../mainwindow.ui" line="1685"/>
         <source>Close</source>
-        <translation>أغلق</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="1692"/>
@@ -383,7 +383,7 @@
         <location filename="../mainwindow.cpp" line="2449"/>
         <location filename="../mainwindow.cpp" line="2476"/>
         <source>Error</source>
-        <translation>خطأ</translation>
+        <translation>त्रुटी</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="190"/>
@@ -393,7 +393,7 @@
     <message>
         <location filename="../mainwindow.cpp" line="545"/>
         <source>Cancel</source>
-        <translation>إلغاء</translation>
+        <translation>रद्द करा</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="551"/>
@@ -556,7 +556,7 @@
     <message>
         <location filename="../mainwindow.cpp" line="1830"/>
         <source>Version: </source>
-        <translation type="unfinished"></translation>
+        <translation>आवृत्ती</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1831"/>
@@ -566,7 +566,19 @@
     <message>
         <location filename="../mainwindow.cpp" line="1833"/>
         <source>Copyright (c) MX Linux</source>
-        <translation type="unfinished"></translation>
+        <translation>कॉपीराइट (c) एमएक्स लिनक्स</translation>
+    </message>
+    <message>
+        <source>License</source>
+        <translation type="vanished">परवाना</translation>
+    </message>
+    <message>
+        <source>Changelog</source>
+        <translation type="vanished">बदल सूची</translation>
+    </message>
+    <message>
+        <source>&amp;Close</source>
+        <translation type="vanished">बंद</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="1877"/>
@@ -693,7 +705,7 @@ OK to go ahead and install it?</source>
     <message>
         <location filename="../remotes.cpp" line="59"/>
         <source>Close</source>
-        <translation>إغلاق</translation>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../remotes.cpp" line="81"/>
@@ -731,38 +743,39 @@ OK to go ahead and install it?</source>
     <message>
         <location filename="../main.cpp" line="61"/>
         <source>Unable to get exclusive lock</source>
-        <translation type="unfinished"></translation>
+        <translation>अनन्य लॉक मिळविण्यात अक्षम</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="62"/>
         <source>Another package management application (like Synaptic or apt-get), is already running. Please close that application first</source>
-        <translation type="unfinished"></translation>
+        <translation>&#xa0;
+दुसरा पॅकेज व्यवस्थापन अनुप्रयोग (जसे Synaptic किंवा apt-get), आधीच चालू आहे. प्रथम ते अनुप्रयोग बंद करा</translation>
     </message>
     <message>
         <location filename="../main.cpp" line="89"/>
         <source>You must run this program as root.</source>
-        <translation type="unfinished"></translation>
+        <translation>आपण हा प्रोग्राम रूट म्हणूनच चालवावा.</translation>
     </message>
     <message>
         <location filename="../about.cpp" line="32"/>
         <source>License</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">परवाना</translation>
     </message>
     <message>
         <location filename="../about.cpp" line="33"/>
         <location filename="../about.cpp" line="43"/>
         <source>Changelog</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">बदल सूची</translation>
     </message>
     <message>
         <location filename="../about.cpp" line="34"/>
         <source>Cancel</source>
-        <translation type="unfinished">إلغاء</translation>
+        <translation type="unfinished">रद्द करा</translation>
     </message>
     <message>
         <location filename="../about.cpp" line="51"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">बंद</translation>
     </message>
 </context>
 </TS>

@@ -1,4 +1,5 @@
 #!/usr/bin/make -f
+export QT_SELECT=5
 
 QMAKE_OPTS = DEFINES+=NO_DEBUG_ON_CONSOLE
 MAKE_OPTS  = QMAKE=qmake-qt5 LRELEASE=lrelease-qt5 QMAKE_OPTS="$(QMAKE_OPTS)"
@@ -8,7 +9,7 @@ override_dh_auto_clean:
 	rm -f src/translations/*.qm
 
 override_dh_auto_build:
-	lrelease src.pro
+	lrelease *.pro
 	dh_auto_build -- $(MAKE_OPTS)
 
 override_dh_auto_install:

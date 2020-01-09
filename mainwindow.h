@@ -50,7 +50,7 @@ class MainWindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
     QString version;
@@ -97,13 +97,13 @@ public:
     void updateInterface();
 
     QString addSizes(QString arg1, QString arg2);
-    QString getDebianVersion() const;
+    QString getDebianVersion();
     QString getLocalizedName(const QDomElement element) const;
     QString getTranslation(const QString item);
-    QString getVersion(const QString name) const;
-    QStringList listInstalled() const;
+    QString getVersion(const QString name);
+    QStringList listInstalled();
     QStringList listFlatpaks(const QString remote, const QString type = "");
-    QStringList listInstalledFlatpaks(const QString type = "") const;
+    QStringList listInstalledFlatpaks(const QString type = "");
 
 protected:
     void keyPressEvent(QKeyEvent* event);
@@ -112,14 +112,16 @@ private slots:
     void cleanup();
     void cmdStart();
     void cmdDone();
+    void displayOutput();
+    void disableOutput();
     void disableWarning(bool checked, QString file);
     void displayInfo(const QTreeWidgetItem *item, int column);
     void filterChanged(const QString &arg1);
     void findPopular() const;
     void findPackageOther();
     void showOutput();
-    void updateBar(int, int); // updates progressBar when tick signal is emited
-    void updateOutput(const QString out) const;
+    void outputAvailable(const QString &output);
+    void updateBar();
 
     void on_buttonInstall_clicked();
     void on_buttonAbout_clicked();
@@ -156,14 +158,14 @@ private slots:
 
 private:
     bool test_initially_enabled;
+    QString indexFilterFP;
     bool updated_once;
     bool warning_backports;
     bool warning_flatpaks;
     bool warning_test;
     int height_app;
-    QString indexFilterFP;
 
-    Cmd *cmd;
+    Cmd cmd;
     LockFile *lock_file;
     QPushButton *progCancel;
     QList<QStringList> popular_apps;
@@ -185,14 +187,13 @@ private:
     QMap<QString, QStringList> backports_list;
     QMap<QString, QStringList> mx_list;
     QMap<QString, QStringList> stable_list;
-    QTimer *timer;
+    QTimer timer;
     QTreeWidget *tree; // current/calling tree
     VersionNumber fp_ver;
     Ui::MainWindow *ui;
     QSettings dictionary;
     QHash<QString, VersionNumber> listInstalledVersions();
-
-    void setConnections() const;
+    QMetaObject::Connection conn;
 
 };
 
