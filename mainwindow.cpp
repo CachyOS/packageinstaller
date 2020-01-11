@@ -952,13 +952,17 @@ bool MainWindow::install(const QString &names)
 
     bool success = false;
 
+    QString recommends;
     displayOutput();
     if (tree == ui->treeBackports) {
-        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 install -t " + ver_name + "-backports --reinstall " + names);
+        recommends = (ui->checkBoxInstallRecommendsMXBP->isChecked()) ? "--install-recommends " : "";
+        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 install " + recommends +  "-t " + ver_name + "-backports --reinstall " + names);
     } else if (tree == ui->treeMXtest) {
-        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 install -t a=mx,c=test " + names);
+        recommends = (ui->checkBoxInstallRecommendsMX->isChecked()) ? "--install-recommends " : "";
+        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 install " + recommends +  "-t a=mx,c=test " + names);
     } else {
-        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 install --reinstall " + names);
+        recommends = (ui->checkBoxInstallRecommends->isChecked()) ? "--install-recommends " : "";
+        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 install " + recommends +  "--reinstall " + names);
     }
     lock_file->lock();
     bar->setValue(bar->maximum());

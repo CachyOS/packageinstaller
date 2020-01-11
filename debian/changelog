@@ -1,3 +1,9 @@
+mx-packageinstaller (20.1) mx; urgency=medium
+
+  * added option to install recommended packages
+
+ -- Adrian <adrian@mxlinux.org>  Fri, 10 Jan 2020 11:26:21 -0500
+
 mx-packageinstaller (19.11) mx; urgency=medium
 
   * added backup site for online check
