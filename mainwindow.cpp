@@ -1230,7 +1230,7 @@ bool MainWindow::downloadPackageList(bool force_download)
                 !QFile(tmp_dir + "/contribPackages").exists() ||
                 !QFile(tmp_dir + "/nonfreePackages").exists() || force_download) {
             progress->show();
-            bool success = cmd.run("wget --append-output=/var/log/mxpi.log --timeout=5 ftp://ftp.us.debian.org/debian/dists/" +
+            bool success = cmd.run("wget --append-output=/var/log/mxpi.log --timeout=10 http://deb.debian.org/debian/dists/" +
                                ver_name + "-backports/main/binary-" + arch + "/Packages.xz -O mainPackages.xz && unxz -f mainPackages.xz");
             if (!success) {
                 QFile::remove(tmp_dir + "/mainPackages.xz");
@@ -1238,7 +1238,7 @@ bool MainWindow::downloadPackageList(bool force_download)
                 return false;
             }
             //cmd.run("sleep 3");
-            success = cmd.run("wget --append-output=/var/log/mxpi.log --timeout=5 ftp://ftp.us.debian.org/debian/dists/" +
+            success = cmd.run("wget --append-output=/var/log/mxpi.log --timeout=10 http://deb.debian.org/debian/dists/" +
                            ver_name + "-backports/contrib/binary-" + arch + "/Packages.xz -O contribPackages.xz && unxz -f contribPackages.xz");
             if (!success) {
                 QFile::remove(tmp_dir + "/contribPackages.xz");
@@ -1246,7 +1246,7 @@ bool MainWindow::downloadPackageList(bool force_download)
                 return false;
             }
             //cmd.run("sleep 3");
-            success = cmd.run("wget --append-output=/var/log/mxpi.log --timeout=5 ftp://ftp.us.debian.org/debian/dists/" +
+            success = cmd.run("wget --append-output=/var/log/mxpi.log --timeout=10 http://deb.debian.org/debian/dists/" +
                            ver_name + "-backports/non-free/binary-" + arch + "/Packages.xz -O nonfreePackages.xz && unxz -f nonfreePackages.xz");
             if (!success) {
                 QFile::remove(tmp_dir + "/nonfreePackages.xz");
