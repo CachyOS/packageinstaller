@@ -1,3 +1,10 @@
+mx-packageinstaller (20.2) mx; urgency=medium
+
+  * use deb redirector service instead of ftp
+  * increase timeout to 10
+
+ -- Adrian <adrian@mxlinux.org>  Mon, 10 Feb 2020 08:50:33 -0500
+
 mx-packageinstaller (20.1) mx; urgency=medium
 
   * added option to install recommended packages
