@@ -236,10 +236,8 @@ void MainWindow::listSizeInstalledFP()
         }
     } else if (fp_ver < VersionNumber("1.2.4")) {
         list = cmd.getCmdOut("su -l $(logname) -c \"flatpak -d list " + user + "|tr -s ' '|cut -f1,5\"").split("\n");
-    } else if (fp_ver < VersionNumber("1.6.2")){
-        list = cmd.getCmdOut("su -l $(logname) -c \"flatpak -d list " + user + "|tr -s ' '|cut -f2,11\"").split("\n");
     } else {
-        list = cmd.getCmdOut("su -l $(logname) -c \"flatpak -d list " + user + "|tr -s ' '|cut -f3,12\"").split("\n");
+        list = cmd.getCmdOut("su -l $(logname) -c \"flatpak list " + user + "--columns app,size\"").split("\n");
     }
     for (const QString &item : list) {
         total = addSizes(total, item.section("\t", 1));
@@ -1513,23 +1511,14 @@ QStringList MainWindow::listFlatpaks(const QString remote, const QString type)
         // list version too
         QString process_string; // unfortunatelly the resulting string structure is different depending on type option
         if (type == "--app" || type.isEmpty()) {
-            if (fp_ver < VersionNumber("1.6.2")) { // a guess, who knows when they changed the interface
-                process_string = "| cut -f3,6,9";
-            }  else {
-                process_string = "| cut -f4,7,10";
-            }
-            success = cmd.run("su -l $(logname) -c \"set -o pipefail; flatpak -d remote-ls " + user + remote + " " + arch_fp + "--app" + process_string + " \"", out);
+            success = cmd.run("su -l $(logname) -c \"set -o pipefail; flatpak remote-ls " + user + remote + " " + arch_fp + "--app --columns=ver,ref,installed-size\"", out);
             list = QString(out).split("\n");
             if (list == QStringList("")) list = QStringList();
         }
         if (type == "--runtime" || type.isEmpty()) {
-            if (fp_ver < VersionNumber("1.6.2")) { // a guess, who knows when they changed the interface
-                process_string = "| cut -f4,6,9";
-            } else {
-                process_string = "| cut -f5,7,10";
-            }
-            success = cmd.run("su -l $(logname) -c \"set -o pipefail; flatpak -d remote-ls " + user + remote + " " + arch_fp + "--runtime" + process_string + " \"", out);
+            success = cmd.run("su -l $(logname) -c \"set -o pipefail; flatpak remote-ls " + user + remote + " " + arch_fp + "--runtime --columns=branch,ref,installed-size\"", out);
             list += QString(out).split("\n");
+            if (list == QStringList("")) list = QStringList();
         }
     }
     conn = connect(&cmd, &Cmd::outputAvailable, [](const QString &out) { qDebug() << out.trimmed(); });
@@ -1547,10 +1536,8 @@ QStringList MainWindow::listInstalledFlatpaks(const QString type)
     QStringList list;
     if (fp_ver < VersionNumber("1.2.4")) {
         list << cmd.getCmdOut("su -l $(logname) -c \"flatpak -d list " + user + type + "|cut -f1|cut -f1 -d' '\"").remove(" ").split("\n");
-    } else if (fp_ver < VersionNumber("1.6.2")) {
-        list << cmd.getCmdOut("su -l $(logname) -c \"flatpak -d list " + user + type + "|cut -f8\"").remove(" ").split("\n");
     } else {
-        list << cmd.getCmdOut("su -l $(logname) -c \"flatpak -d list " + user + type + "|cut -f9\"").remove(" ").split("\n");
+        list << cmd.getCmdOut("su -l $(logname) -c \"flatpak list " + user + type + " --columns=ref\"").remove(" ").split("\n");
     }
     if (list == QStringList("")) list = QStringList();
     return list;
