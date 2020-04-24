@@ -1,0 +1,49 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Format: 1.8
+Date: Fri, 24 Apr 2020 17:40:00 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 20.4
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (20.4) mx; urgency=medium
+ .
+   * replaced su with runuser
+Checksums-Sha1:
+ 6049f54f1dd68142890624d8c4e05bc272bb647f 1219 mx-packageinstaller_20.4.dsc
+ 2725ad96c4f351a7e58390a1c3e9196a6128c1e8 265640 mx-packageinstaller_20.4.tar.xz
+ f3a79b909e130e87354cc1e5c4c605e7780f7cf7 1419082 mx-packageinstaller-dbgsym_20.4_amd64.deb
+ a1215e0175c62d990e32dc55f831f4ab1fa1a679 10784 mx-packageinstaller_20.4_amd64.buildinfo
+ 085ce7d3c5736eebcf0a467e4b640d54611c0185 329890 mx-packageinstaller_20.4_amd64.deb
+Checksums-Sha256:
+ a1a1c9676ddb130ac4f60274055d136ccda4790fd69bcdc97b6da3c00f864328 1219 mx-packageinstaller_20.4.dsc
+ bcd8154bdaa726725935e7683ab7b0e1694d8f4205c4fe72e2525581d350ef85 265640 mx-packageinstaller_20.4.tar.xz
+ 2d49990321b957597725cf2ff88e4eb3b2aa6f1c86eaed2c6e37cabd26903ac5 1419082 mx-packageinstaller-dbgsym_20.4_amd64.deb
+ 546c482f439c7db8f3c38a520b9f487716b2b88036d734c5f374225b8792cb39 10784 mx-packageinstaller_20.4_amd64.buildinfo
+ 75c1d00186523c733a1028d48cf7ae499cab4e3488120fc8645cd187ccd3b816 329890 mx-packageinstaller_20.4_amd64.deb
+Files:
+ 0bcf6dc3593382aad890ab60b5f1b680 1219 admin optional mx-packageinstaller_20.4.dsc
+ 31abbdc2b540d8a8f19e518b72ed0096 265640 admin optional mx-packageinstaller_20.4.tar.xz
+ d507c7bc0e7865a1a28c900a7e815204 1419082 debug extra mx-packageinstaller-dbgsym_20.4_amd64.deb
+ 74032bf10130225bdcd21ccec77294a8 10784 admin optional mx-packageinstaller_20.4_amd64.buildinfo
+ 5b4168a5123c290c7c73b2025698087d 329890 admin optional mx-packageinstaller_20.4_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCgAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAl6jXU8THGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumKY+CADT5ZQ6ATGTLc6ao6atgT0GB/qXChqp
+3WPsxs7jBzciFQUIj8fRKv0WC2nshJ4wNE16yIx4luADDEMbn7/PT/IBccKbnq56
+MHNE+gylp6d2s9vd7+YJWHBMGV0WMaO5UMDWODIK+EVv7ZiR6l8i16W9RU2e3MG6
+L/8lpz4NmFDfoDfFaSFRbUQQSqkE3zVonxIhAWbtw8PUy4U1q2KhAhprrU5eOuXD
+7e1sMsuaUMIRheqVLszCKMhUjsYV+x0sogHtpg8gAxocA3E8NAiU33wPNb9O4vih
+o48mGpdfWdF8iUjwRtAIhVcn0L131abt2d+gzTxRKBAeMaBnrFWo23Er
+=2p8R
+-----END PGP SIGNATURE-----

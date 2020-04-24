@@ -1,3 +1,9 @@
+mx-packageinstaller (20.4) mx; urgency=medium
+
+  * replaced su with runuser
+
+ -- Adrian <adrian@mxlinux.org>  Fri, 24 Apr 2020 17:40:00 -0400
+
 mx-packageinstaller (20.3.1) mx; urgency=medium
 
   * futureproof flatpak commands
