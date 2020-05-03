@@ -82,7 +82,7 @@ void ManageRemotes::removeItem()
         return;
     }
     changed = true;
-    cmd->run("su $(logname) -c \"flatpak remote-delete " + user + comboRemote->currentText().toUtf8() + "\"");
+    cmd->run("runuser -l $(logname) -c \"flatpak remote-delete " + user + comboRemote->currentText().toUtf8() + "\"");
     comboRemote->removeItem(comboRemote->currentIndex());
 }
 
@@ -92,7 +92,7 @@ void ManageRemotes::addItem()
     QString location = editAddRemote->text();
     QString name = editAddRemote->text().section("/", -1).section(".", 0, 0); // obtain the name before .flatpakremo
 
-    if (!cmd->run("su $(logname) -c \"flatpak remote-add --if-not-exists " + user + name.toUtf8() + " " + location.toUtf8() + "\"")) {
+    if (!cmd->run("runuser -l $(logname) -c \"flatpak remote-add --if-not-exists " + user + name.toUtf8() + " " + location.toUtf8() + "\"")) {
         setCursor(QCursor(Qt::ArrowCursor));
         QMessageBox::critical(this, tr("Error adding remote"), tr("Could not add remote - command returned an error. Please double-check the remote address and try again"));
     } else {
@@ -117,7 +117,7 @@ void ManageRemotes::userSelected(int index)
     } else {
         user = "--user ";
         setCursor(QCursor(Qt::BusyCursor));
-        cmd->run("su $(logname) -c \"flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo\"");
+        cmd->run("runuser -l $(logname) -c \"flatpak --user remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo\"");
         setCursor(QCursor(Qt::ArrowCursor));
     }
     listFlatpakRemotes();
@@ -129,7 +129,7 @@ void ManageRemotes::listFlatpakRemotes() const
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     comboRemote->clear();
-    QStringList list = cmd->getCmdOut("su $(logname) -c \"flatpak remote-list " +  user + "\"").split("\n");
+    QStringList list = cmd->getCmdOut("runuser -l $(logname) -c \"flatpak remote-list " +  user + "\"").split("\n");
     comboRemote->addItems(list);
 }
 
