@@ -74,7 +74,6 @@ TRANSLATIONS += translations/mx-packageinstaller_am.ts \
                 translations/mx-packageinstaller_is.ts \
                 translations/mx-packageinstaller_it.ts \
                 translations/mx-packageinstaller_ja.ts \
-                translations/mx-packageinstaller_ja_JP.ts \
                 translations/mx-packageinstaller_kk.ts \
                 translations/mx-packageinstaller_ko.ts \
                 translations/mx-packageinstaller_lt.ts \
