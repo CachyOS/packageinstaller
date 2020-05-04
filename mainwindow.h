@@ -96,6 +96,8 @@ public:
     void setup();
     void updateInterface();
 
+    int simulateinstall(QString names);
+
     QString addSizes(QString arg1, QString arg2);
     QString getDebianVersion();
     QString getLocalizedName(const QDomElement element) const;

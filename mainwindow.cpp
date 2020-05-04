@@ -936,6 +936,47 @@ void MainWindow::listFlatpakRemotes()
     ui->comboRemote->blockSignals(false);
 }
 
+// Display warning for Debian Backports
+int MainWindow::simulateinstall(QString names)
+{
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
+
+    QString msg;
+
+    QString detailed_installed_names;
+    QString detailed_removed_names;
+     QString recommends;
+     if (tree == ui->treeBackports) {
+         recommends = (ui->checkBoxInstallRecommendsMXBP->isChecked()) ? "--install-recommends " : "";
+         detailed_installed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 install " + recommends + "-t " + ver_name + "-backports --reinstall " + names + "|grep Inst | awk '{print $2 \" \" $3}'");
+         detailed_removed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 install " + recommends + "-t " + ver_name + "-backports --reinstall " + names + "|grep Remv | awk '{print $2 \" \" $3}'");
+     } else if (tree == ui->treeMXtest) {
+         recommends = (ui->checkBoxInstallRecommendsMX->isChecked()) ? "--install-recommends " : "";
+         detailed_installed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 install -t a=mx,c=test " + recommends +  "--reinstall " + names + "|grep Inst | awk '{print $2 \" \" $3}'");
+         detailed_removed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 install -t a=mx,c=test " + recommends +  "--reinstall " + names + "|grep Remv | awk '{print $2 \" \" $3}'");
+     } else {
+         recommends = (ui->checkBoxInstallRecommends->isChecked()) ? "--install-recommends " : "";
+         detailed_installed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 install " + recommends +  "--reinstall " + names + "|grep Inst | awk '{print $2 \" \" $3}'");
+         detailed_removed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 install " + recommends +  "--reinstall " + names + "|grep Remv | awk '{print $2 \" \" $3}'");
+     }
+
+        msg = tr("The following packages were selected.  Click Show Details for list of changes.");
+
+        QMessageBox msgBox;
+        msgBox.setText(msg);
+        msgBox.setInformativeText("\n" + names);
+        msgBox.addButton(QMessageBox::Ok);
+        msgBox.addButton(QMessageBox::Cancel);
+        msgBox.setDetailedText(tr("Install") + "\n" + detailed_installed_names + "\n" + tr("Remove") + "\n" + detailed_removed_names);
+        msgBox.setFixedWidth(700);
+        if (msgBox.exec() == QMessageBox::Ok){
+            return 0;
+        } else {
+            return 1;
+        }
+
+}
+
 // Install the list of apps
 bool MainWindow::install(const QString &names)
 {
@@ -953,6 +994,16 @@ bool MainWindow::install(const QString &names)
     bool success = false;
 
     QString recommends;
+    int simulate;
+
+    //simulate install of selections and present for confirmation
+    //if user selects cancel, break routine but return success to avoid error message
+    simulate = simulateinstall(names);
+    if (simulate != 0) {
+        success = true;
+        return success;
+    }
+
     displayOutput();
     if (tree == ui->treeBackports) {
         recommends = (ui->checkBoxInstallRecommendsMXBP->isChecked()) ? "--install-recommends " : "";
