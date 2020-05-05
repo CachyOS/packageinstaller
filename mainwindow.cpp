@@ -943,22 +943,39 @@ int MainWindow::simulateinstall(QString names)
 
     QString msg;
 
-    QString detailed_installed_names;
-    QString detailed_removed_names;
+    QString detailed_names;
+    QStringList detailed_installed_names;
+    QString detailed_to_install = tr("Install") + "\n";
+    QString detailed_removed_names = tr("Remove") + "\n";
      QString recommends;
      if (tree == ui->treeBackports) {
          recommends = (ui->checkBoxInstallRecommendsMXBP->isChecked()) ? "--install-recommends " : "";
-         detailed_installed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 install " + recommends + "-t " + ver_name + "-backports --reinstall " + names + "|grep Inst | awk '{print $2 \" \" $3}'");
-         detailed_removed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 install " + recommends + "-t " + ver_name + "-backports --reinstall " + names + "|grep Remv | awk '{print $2 \" \" $3}'");
+         detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 install " + recommends + "-t " + ver_name + "-backports --reinstall " + names + "|grep 'Inst\\|Remv' | awk '{print $1 \";\" $2 \";\" $3}'");
+         //detailed_removed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 install " + recommends + "-t " + ver_name + "-backports --reinstall " + names + "|grep Remv | awk '{print $2 \" \" $3}'");
      } else if (tree == ui->treeMXtest) {
          recommends = (ui->checkBoxInstallRecommendsMX->isChecked()) ? "--install-recommends " : "";
-         detailed_installed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 install -t a=mx,c=test " + recommends +  "--reinstall " + names + "|grep Inst | awk '{print $2 \" \" $3}'");
-         detailed_removed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 install -t a=mx,c=test " + recommends +  "--reinstall " + names + "|grep Remv | awk '{print $2 \" \" $3}'");
+         detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 install -t a=mx,c=test " + recommends +  "--reinstall " + names + "|grep 'Inst\\|Remv' | awk '{print $1 \";\" $2 \";\" $3}'");
+         //detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 install -t a=mx,c=test " + recommends +  "--reinstall " + names + "|grep Remv | awk '{print $2 \" \" $3}'");
      } else {
          recommends = (ui->checkBoxInstallRecommends->isChecked()) ? "--install-recommends " : "";
-         detailed_installed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 install " + recommends +  "--reinstall " + names + "|grep Inst | awk '{print $2 \" \" $3}'");
-         detailed_removed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 install " + recommends +  "--reinstall " + names + "|grep Remv | awk '{print $2 \" \" $3}'");
+         detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 install " + recommends +  "--reinstall " + names + "|grep 'Inst\\|Remv'| awk '{print $1 \";\" $2 \";\" $3}'");
+         //detailed_removed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 install " + recommends +  "--reinstall " + names + "|grep Remv | awk '{print $2 \" \" $3}'");
      }
+
+        detailed_installed_names=detailed_names.split("\n");
+        QStringListIterator iterator(detailed_installed_names);
+        while (iterator.hasNext()){
+            QString value = iterator.next();
+            if (value.contains("Remv")){
+                value = value.section(";",1,1) + " " + value.section(";",2,2);
+                detailed_removed_names = detailed_removed_names + value + "\n";
+            }
+            if (value.contains("Inst")){
+                value = value.section(";",1,1) + " " + value.section(";",2,2) + ")";
+                detailed_to_install = detailed_to_install + value + "\n";
+            }
+        }
+
 
         msg = tr("The following packages were selected.  Click Show Details for list of changes.");
 
@@ -967,7 +984,8 @@ int MainWindow::simulateinstall(QString names)
         msgBox.setInformativeText("\n" + names);
         msgBox.addButton(QMessageBox::Ok);
         msgBox.addButton(QMessageBox::Cancel);
-        msgBox.setDetailedText(tr("Install") + "\n" + detailed_installed_names + "\n" + tr("Remove") + "\n" + detailed_removed_names);
+        //msgBox.setDetailedText(tr("Install") + "\n" + detailed_names + "\n" + tr("Remove") + "\n" + detailed_names);
+        msgBox.setDetailedText(detailed_to_install + "\n" + detailed_removed_names);
         msgBox.setFixedWidth(700);
         if (msgBox.exec() == QMessageBox::Ok){
             return 0;
