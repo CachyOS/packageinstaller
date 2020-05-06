@@ -162,7 +162,7 @@ bool MainWindow::uninstall(const QString &names, const QString &postuninstall)
 
     ui->tabWidget->setTabText(ui->tabWidget->indexOf(ui->tabOutput), tr("Uninstalling packages..."));
     displayOutput();
-    success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 remove " + names);
+    success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 remove -y " + names); //use -y since there is a confirm dialog already
     if (!postuninstall.isEmpty()) {
         qDebug() << "Post-uninstall";
         ui->tabWidget->setTabText(ui->tabWidget->indexOf(ui->tabOutput), tr("Running post-uninstall operations..."));
@@ -991,10 +991,10 @@ int MainWindow::simulateactions(QString names, QString action)
         }
     } else {
         if ( action == "remove") {
-            detailed_removed_names = change_list.join(" ");
+            detailed_removed_names = change_list.join("\n");
             detailed_to_install.clear();        }
         if ( action == "install") {
-            detailed_to_install = change_list.join(" ");
+            detailed_to_install = change_list.join("\n");
             detailed_removed_names.clear();
         }
     }
@@ -1051,13 +1051,13 @@ bool MainWindow::install(const QString &names)
     displayOutput();
     if (tree == ui->treeBackports) {
         recommends = (ui->checkBoxInstallRecommendsMXBP->isChecked()) ? "--install-recommends " : "";
-        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 install " + recommends +  "-t " + ver_name + "-backports --reinstall " + names);
+        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 install -y " + recommends +  "-t " + ver_name + "-backports --reinstall " + names);
     } else if (tree == ui->treeMXtest) {
         recommends = (ui->checkBoxInstallRecommendsMX->isChecked()) ? "--install-recommends " : "";
-        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 install " + recommends +  "-t a=mx,c=test " + names);
+        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 install -y " + recommends +  "-t a=mx,c=test " + names);
     } else {
         recommends = (ui->checkBoxInstallRecommends->isChecked()) ? "--install-recommends " : "";
-        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 install " + recommends +  "--reinstall " + names);
+        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 install -y " + recommends +  "--reinstall " + names);
     }
     lock_file->lock();
     bar->setValue(bar->maximum());
@@ -2036,7 +2036,7 @@ void MainWindow::on_buttonUninstall_clicked()
             conf = "";
         }
         //confirmation dialog
-        int simulate=simulateactions(change_list.join(" "), "install");
+        int simulate=simulateactions(change_list.join(" "), "remove");
         if (simulate != 0) {
             displayFlatpaks(true);
             indexFilterFP.clear();
