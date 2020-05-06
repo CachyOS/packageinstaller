@@ -1,3 +1,10 @@
+mx-packageinstaller (20.4+nmu1) UNRELEASED; urgency=medium
+
+  * Non-maintainer upload.
+  * add confirmation dialog to install and remove operations
+
+ -- Dolphin Oracle <dolphinoracle@gmail.com>  Tue, 05 May 2020 21:59:39 -0400
+
 mx-packageinstaller (20.4) mx; urgency=medium
 
   * replaced su with runuser
