@@ -151,9 +151,18 @@ bool MainWindow::uninstall(const QString &names, const QString &postuninstall)
     ui->tabWidget->setCurrentWidget(ui->tabOutput);
 
     lock_file->unlock();
+    bool success;
+    //simulate install of selections and present for confirmation
+    //if user selects cancel, break routine but return success to avoid error message
+    int simulate = simulateactions(names, "remove");
+    if (simulate != 0) {
+        success = true;
+        return success;
+    }
+
     ui->tabWidget->setTabText(ui->tabWidget->indexOf(ui->tabOutput), tr("Uninstalling packages..."));
     displayOutput();
-    bool success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 remove " + names);
+    success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 remove -y " + names); //use -y since there is a confirm dialog already
     if (!postuninstall.isEmpty()) {
         qDebug() << "Post-uninstall";
         ui->tabWidget->setTabText(ui->tabWidget->indexOf(ui->tabOutput), tr("Running post-uninstall operations..."));
@@ -937,55 +946,72 @@ void MainWindow::listFlatpakRemotes()
 }
 
 // Display warning for Debian Backports
-int MainWindow::simulateinstall(QString names)
+int MainWindow::simulateactions(QString names, QString action)
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
-
+    qDebug() << "names" << names << "and" << change_list;
     QString msg;
 
     QString detailed_names;
     QStringList detailed_installed_names;
     QString detailed_to_install = tr("Install") + "\n";
     QString detailed_removed_names = tr("Remove") + "\n";
-     QString recommends;
-     if (tree == ui->treeBackports) {
-         recommends = (ui->checkBoxInstallRecommendsMXBP->isChecked()) ? "--install-recommends " : "";
-         detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 install " + recommends + "-t " + ver_name + "-backports --reinstall " + names + "|grep 'Inst\\|Remv' | awk '{print $1 \";\" $2 \";\" $3}'");
-         //detailed_removed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 install " + recommends + "-t " + ver_name + "-backports --reinstall " + names + "|grep Remv | awk '{print $2 \" \" $3}'");
-     } else if (tree == ui->treeMXtest) {
-         recommends = (ui->checkBoxInstallRecommendsMX->isChecked()) ? "--install-recommends " : "";
-         detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 install -t a=mx,c=test " + recommends +  "--reinstall " + names + "|grep 'Inst\\|Remv' | awk '{print $1 \";\" $2 \";\" $3}'");
-         //detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 install -t a=mx,c=test " + recommends +  "--reinstall " + names + "|grep Remv | awk '{print $2 \" \" $3}'");
-     } else {
-         recommends = (ui->checkBoxInstallRecommends->isChecked()) ? "--install-recommends " : "";
-         detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 install " + recommends +  "--reinstall " + names + "|grep 'Inst\\|Remv'| awk '{print $1 \";\" $2 \";\" $3}'");
-         //detailed_removed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 install " + recommends +  "--reinstall " + names + "|grep Remv | awk '{print $2 \" \" $3}'");
-     }
+    QString recommends;
+    if (tree == ui->treeFlatpak){
+        detailed_installed_names = change_list;
+    } else if (tree == ui->treeBackports) {
+        recommends = (ui->checkBoxInstallRecommendsMXBP->isChecked()) ? "--install-recommends " : "";
+        detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 " + action + " " + recommends + "-t " + ver_name + "-backports --reinstall " + names + "|grep 'Inst\\|Remv' | awk '{print $2 \";\" $3 \";\" $1}'");
+    } else if (tree == ui->treeMXtest) {
+        recommends = (ui->checkBoxInstallRecommendsMX->isChecked()) ? "--install-recommends " : "";
+        detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 " + action + " -t a=mx,c=test " + recommends +  "--reinstall " + names + "|grep 'Inst\\|Remv' | awk '{print $2 \";\" $3 \";\" $1}'");
+    } else {
+        recommends = (ui->checkBoxInstallRecommends->isChecked()) ? "--install-recommends " : "";
+        detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 " + action + " " + recommends +  "--reinstall " + names + "|grep 'Inst\\|Remv'| awk '{print $2 \";\" $3 \";\" $1}'");
+    }
 
+    if (tree != ui->treeFlatpak){
         detailed_installed_names=detailed_names.split("\n");
-        QStringListIterator iterator(detailed_installed_names);
+    }
+
+    detailed_installed_names.sort();
+    qDebug() << "detailed installed names sorted " << detailed_installed_names;
+    QStringListIterator iterator(detailed_installed_names);
+    if (tree != ui->treeFlatpak){
         while (iterator.hasNext()){
             QString value = iterator.next();
             if (value.contains("Remv")){
-                value = value.section(";",1,1) + " " + value.section(";",2,2);
+                value = value.section(";",0,0) + " " + value.section(";",1,1);
                 detailed_removed_names = detailed_removed_names + value + "\n";
             }
             if (value.contains("Inst")){
-                value = value.section(";",1,1) + " " + value.section(";",2,2) + ")";
+                value = value.section(";",0,0) + " " + value.section(";",1,1) + ")";
                 detailed_to_install = detailed_to_install + value + "\n";
             }
         }
+    } else {
+        if ( action == "remove") {
+            detailed_removed_names = change_list.join("\n");
+            detailed_to_install.clear();        }
+        if ( action == "install") {
+            detailed_to_install = change_list.join("\n");
+            detailed_removed_names.clear();
+        }
+    }
 
-
-        msg = tr("The following packages were selected.  Click Show Details for list of changes.");
+        msg = "<b>" + tr("The following packages were selected. Click \"Show Details\" for list of changes.") + "</b>";
 
         QMessageBox msgBox;
         msgBox.setText(msg);
         msgBox.setInformativeText("\n" + names);
         msgBox.addButton(QMessageBox::Ok);
         msgBox.addButton(QMessageBox::Cancel);
-        //msgBox.setDetailedText(tr("Install") + "\n" + detailed_names + "\n" + tr("Remove") + "\n" + detailed_names);
-        msgBox.setDetailedText(detailed_to_install + "\n" + detailed_removed_names);
+        if (action == "install"){
+            //msgBox.setDetailedText(tr("Install") + "\n" + detailed_names + "\n" + tr("Remove") + "\n" + detailed_names);
+            msgBox.setDetailedText(detailed_to_install + "\n" + detailed_removed_names);
+        } else {
+            msgBox.setDetailedText(detailed_removed_names + "\n" + detailed_to_install);
+        }
         msgBox.setFixedWidth(700);
         if (msgBox.exec() == QMessageBox::Ok){
             return 0;
@@ -1016,7 +1042,7 @@ bool MainWindow::install(const QString &names)
 
     //simulate install of selections and present for confirmation
     //if user selects cancel, break routine but return success to avoid error message
-    simulate = simulateinstall(names);
+    simulate = simulateactions(names, "install");
     if (simulate != 0) {
         success = true;
         return success;
@@ -1025,13 +1051,13 @@ bool MainWindow::install(const QString &names)
     displayOutput();
     if (tree == ui->treeBackports) {
         recommends = (ui->checkBoxInstallRecommendsMXBP->isChecked()) ? "--install-recommends " : "";
-        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 install " + recommends +  "-t " + ver_name + "-backports --reinstall " + names);
+        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 install -y " + recommends +  "-t " + ver_name + "-backports --reinstall " + names);
     } else if (tree == ui->treeMXtest) {
         recommends = (ui->checkBoxInstallRecommendsMX->isChecked()) ? "--install-recommends " : "";
-        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 install " + recommends +  "-t a=mx,c=test " + names);
+        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 install -y " + recommends +  "-t a=mx,c=test " + names);
     } else {
         recommends = (ui->checkBoxInstallRecommends->isChecked()) ? "--install-recommends " : "";
-        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 install " + recommends +  "--reinstall " + names);
+        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 install -y " + recommends +  "--reinstall " + names);
     }
     lock_file->lock();
     bar->setValue(bar->maximum());
@@ -1849,7 +1875,7 @@ void MainWindow::showOutput()
 void MainWindow::on_buttonInstall_clicked()
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
-
+    //qDebug() << "change list"  << .join(" ");
     showOutput();
 
     if (tree == ui->treePopularApps) {
@@ -1866,6 +1892,19 @@ void MainWindow::on_buttonInstall_clicked()
             QMessageBox::critical(this, tr("Error"), tr("Problem detected while installing, please inspect the console output."));
         }
     } else if (tree == ui->treeFlatpak) {
+        //confirmation dialog
+        int simulate=simulateactions(change_list.join(" "), "install");
+        if (simulate != 0) {
+            displayFlatpaks(true);
+            indexFilterFP.clear();
+            ui->comboFilterFlatpak->setCurrentIndex(0);
+            QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
+            ui->tabWidget->blockSignals(true);
+            ui->tabWidget->setCurrentWidget(ui->tabFlatpak);
+            ui->tabWidget->blockSignals(false);
+            enableTabs(true);
+            return;
+        }
         setCursor(QCursor(Qt::BusyCursor));
         displayOutput();
         if (cmd.run("runuser -l $(logname) -c \"socat SYSTEM:'flatpak install -y " + user + ui->comboRemote->currentText() + " " + change_list.join(" ") + "',stderr STDIO\"")) {
@@ -1995,6 +2034,22 @@ void MainWindow::on_buttonUninstall_clicked()
         QString conf = "-y ";
         if (fp_ver  < VersionNumber("1.0.1")) {
             conf = "";
+        }
+        //confirmation dialog
+        int simulate=simulateactions(change_list.join(" "), "remove");
+        if (simulate != 0) {
+            displayFlatpaks(true);
+            indexFilterFP.clear();
+            listFlatpakRemotes();
+            ui->comboRemote->setCurrentIndex(0);
+            on_comboRemote_activated(ui->comboRemote->currentIndex());
+            ui->comboFilterFlatpak->setCurrentIndex(0);
+            QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
+            ui->tabWidget->blockSignals(true);
+            ui->tabWidget->setCurrentWidget(ui->tabFlatpak);
+            ui->tabWidget->blockSignals(false);
+            enableTabs(true);
+            return;
         }
 
         setCursor(QCursor(Qt::BusyCursor));

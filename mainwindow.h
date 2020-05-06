@@ -96,7 +96,7 @@ public:
     void setup();
     void updateInterface();
 
-    int simulateinstall(QString names);
+    int simulateactions(QString names, QString action);
 
     QString addSizes(QString arg1, QString arg2);
     QString getDebianVersion();
