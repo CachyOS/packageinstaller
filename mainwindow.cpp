@@ -954,8 +954,8 @@ int MainWindow::simulateactions(QString names, QString action)
 
     QString detailed_names;
     QStringList detailed_installed_names;
-    QString detailed_to_install = tr("Install") + "\n";
-    QString detailed_removed_names = tr("Remove") + "\n";
+    QString detailed_to_install;
+    QString detailed_removed_names;
     QString recommends;
     if (tree == ui->treeFlatpak){
         detailed_installed_names = change_list;
@@ -989,6 +989,11 @@ int MainWindow::simulateactions(QString names, QString action)
                 detailed_to_install = detailed_to_install + value + "\n";
             }
         }
+        if ( !detailed_removed_names.isEmpty()){
+            detailed_removed_names.prepend(tr("Remove") + "\n");
+        }
+        if ( !detailed_to_install.isEmpty())
+            detailed_to_install.prepend(tr("Install") + "\n");
     } else {
         if ( action == "remove") {
             detailed_removed_names = change_list.join("\n");
