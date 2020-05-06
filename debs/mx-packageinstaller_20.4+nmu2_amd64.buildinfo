@@ -2,22 +2,22 @@ Format: 1.0
 Source: mx-packageinstaller
 Binary: mx-packageinstaller
 Architecture: amd64 source
-Version: 20.4+nmu1
+Version: 20.4+nmu2
 Checksums-Md5:
- a0e00ffdadfb4fc95ed0e5696676ec62 677 mx-packageinstaller_20.4+nmu1.dsc
- d865f617c6b73fb11ab9db09b5d50b59 1431130 mx-packageinstaller-dbgsym_20.4+nmu1_amd64.deb
- 4b315127a34dca9c1f2886da558fc608 334050 mx-packageinstaller_20.4+nmu1_amd64.deb
+ abda3930f7d14dc49f6d5d17fd639484 677 mx-packageinstaller_20.4+nmu2.dsc
+ 447539f95b0a05dd94c0378b3726b75d 1430910 mx-packageinstaller-dbgsym_20.4+nmu2_amd64.deb
+ 426ad2359fd88ab1f79cf804c67af7de 334066 mx-packageinstaller_20.4+nmu2_amd64.deb
 Checksums-Sha1:
- ae9a73bbbb8cee873dde0938cf2309ee612e10ad 677 mx-packageinstaller_20.4+nmu1.dsc
- 3d14ce3d4173041aec6bf174699a6dedb3034872 1431130 mx-packageinstaller-dbgsym_20.4+nmu1_amd64.deb
- ee83aa3a44667b274e059e05a70ba55d6fd75041 334050 mx-packageinstaller_20.4+nmu1_amd64.deb
+ 563da3348316fd11ac51452c2e1a1b3f1223df8d 677 mx-packageinstaller_20.4+nmu2.dsc
+ 71f96d6c3caac7d0c3d20d4ab3a10243b9f501be 1430910 mx-packageinstaller-dbgsym_20.4+nmu2_amd64.deb
+ 7a020b2a63bb2bc3f69f4d84fb161e1db346d09c 334066 mx-packageinstaller_20.4+nmu2_amd64.deb
 Checksums-Sha256:
- b0d2a3e2b10ceade4e80661bda36b0688f9b400d8e8fb369fdfcea7db2c06c23 677 mx-packageinstaller_20.4+nmu1.dsc
- 0b8b75d9b4d23ffef47348a069164171fb0ea65dcb3b3a7854db60eb5405d7f8 1431130 mx-packageinstaller-dbgsym_20.4+nmu1_amd64.deb
- 263da21601638169fd6dd57256544e9062996937aefd7c4fef650b10271f3a50 334050 mx-packageinstaller_20.4+nmu1_amd64.deb
+ 719af59bf902c882cc86eecee502f303b0730ecfd9a7b330337259ff9c3422c1 677 mx-packageinstaller_20.4+nmu2.dsc
+ f21649af3b66c79ce109c94048a03ce49dc75b98c1883ea54bbd3078f0d74e98 1430910 mx-packageinstaller-dbgsym_20.4+nmu2_amd64.deb
+ 538514b648a99c220c7d6015b15c5d2ce83fbde1d5a3dffa74abf2531d9c253a 334066 mx-packageinstaller_20.4+nmu2_amd64.deb
 Build-Origin: Debian
 Build-Architecture: amd64
-Build-Date: Tue, 05 May 2020 22:02:42 -0400
+Build-Date: Wed, 06 May 2020 19:35:45 -0400
 Installed-Build-Depends:
  autoconf (= 2.69-10),
  automake (= 1:1.15-6),
