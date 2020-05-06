@@ -1,7 +1,8 @@
-mx-packageinstaller (20.4+nmu1) UNRELEASED; urgency=medium
+mx-packageinstaller (20.4+nmu2) UNRELEASED; urgency=medium
 
   * Non-maintainer upload.
   * add confirmation dialog to install and remove operations
+  * remove "Install" and "Remove" labels from confirmation dialog details when not used
 
  -- Dolphin Oracle <dolphinoracle@gmail.com>  Tue, 05 May 2020 21:59:39 -0400
 
