@@ -54,11 +54,11 @@ public:
     ~MainWindow();
 
     QString version;
+    bool buildPackageLists(bool force_download = false);
     bool checkInstalled(const QString &names) const;
     bool checkInstalled(const QStringList &name_list) const;
-    bool checkUpgradable(const QStringList &name_list) const;
     bool checkOnline() const;
-    bool buildPackageLists(bool force_download = false);
+    bool checkUpgradable(const QStringList &name_list) const;
     bool downloadPackageList(bool force_download = false);
     bool install(const QString &names);
     bool installBatch(const QStringList &name_list);
@@ -67,6 +67,7 @@ public:
     bool installSelected();
     bool isFilteredName(const QString &name) const;
     bool readPackageList(bool force_download = false);
+    bool confirmActions(QString names, QString action);
     bool uninstall(const QString &names, const QString &postuninstall = "");
     bool update();
 
@@ -77,10 +78,10 @@ public:
     void cancelDownload();
     void clearUi();
     void copyTree(QTreeWidget *, QTreeWidget *) const;
-    void displayPopularApps() const;
     void displayFiltered(const QStringList &list, bool raw = false) const;
     void displayFlatpaks(bool force_update = false);
     void displayPackages();
+    void displayPopularApps() const;
     void displayWarning(QString repo);
     void enableTabs(bool enable);
     void ifDownloadFailed();
@@ -96,15 +97,13 @@ public:
     void setup();
     void updateInterface();
 
-    int simulateactions(QString names, QString action);
-
     QString addSizes(QString arg1, QString arg2);
     QString getDebianVersion();
     QString getLocalizedName(const QDomElement element) const;
     QString getTranslation(const QString item);
     QString getVersion(const QString name);
-    QStringList listInstalled();
     QStringList listFlatpaks(const QString remote, const QString type = "");
+    QStringList listInstalled();
     QStringList listInstalledFlatpaks(const QString type = "");
 
 protected:
