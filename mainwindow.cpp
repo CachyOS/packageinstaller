@@ -154,11 +154,7 @@ bool MainWindow::uninstall(const QString &names, const QString &postuninstall)
     bool success;
     //simulate install of selections and present for confirmation
     //if user selects cancel, break routine but return success to avoid error message
-    int simulate = simulateactions(names, "remove");
-    if (simulate != 0) {
-        success = true;
-        return success;
-    }
+    if (!confirmActions(names, "remove")) return true;
 
     ui->tabWidget->setTabText(ui->tabWidget->indexOf(ui->tabOutput), tr("Uninstalling packages..."));
     displayOutput();
@@ -345,7 +341,7 @@ QString MainWindow::getLocalizedName(const QDomElement element) const
 {
     // pass one, find fully localized string, e.g. "pt_BR"
     QDomElement child = element.firstChildElement();
-    for (; (!child.isNull()); child = child.nextSiblingElement() ) {
+    for (; (!child.isNull()); child = child.nextSiblingElement()) {
         if (child.tagName() == locale.name() && !child.text().trimmed().isEmpty()) {
             return child.text().trimmed();
         }
@@ -376,7 +372,7 @@ QString MainWindow::getLocalizedName(const QDomElement element) const
 // get translation for the category
 QString MainWindow::getTranslation(const QString item)
 {
-    if (locale.name() == "en_US" ) { // no need for translation
+    if (locale.name() == "en_US") { // no need for translation
         return item;
     }
 
@@ -946,7 +942,7 @@ void MainWindow::listFlatpakRemotes()
 }
 
 // Display warning for Debian Backports
-int MainWindow::simulateactions(QString names, QString action)
+bool MainWindow::confirmActions(QString names, QString action)
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     qDebug() << "names" << names << "and" << change_list;
@@ -989,16 +985,16 @@ int MainWindow::simulateactions(QString names, QString action)
                 detailed_to_install = detailed_to_install + value + "\n";
             }
         }
-        if ( !detailed_removed_names.isEmpty()){
+        if (!detailed_removed_names.isEmpty()){
             detailed_removed_names.prepend(tr("Remove") + "\n");
         }
-        if ( !detailed_to_install.isEmpty())
+        if (!detailed_to_install.isEmpty())
             detailed_to_install.prepend(tr("Install") + "\n");
     } else {
-        if ( action == "remove") {
+        if (action == "remove") {
             detailed_removed_names = change_list.join("\n");
             detailed_to_install.clear();        }
-        if ( action == "install") {
+        if (action == "install") {
             detailed_to_install = change_list.join("\n");
             detailed_removed_names.clear();
         }
@@ -1018,12 +1014,7 @@ int MainWindow::simulateactions(QString names, QString action)
             msgBox.setDetailedText(detailed_removed_names + "\n" + detailed_to_install);
         }
         msgBox.setFixedWidth(700);
-        if (msgBox.exec() == QMessageBox::Ok){
-            return 0;
-        } else {
-            return 1;
-        }
-
+        return msgBox.exec() == QMessageBox::Ok;
 }
 
 // Install the list of apps
@@ -1043,15 +1034,10 @@ bool MainWindow::install(const QString &names)
     bool success = false;
 
     QString recommends;
-    int simulate;
 
     //simulate install of selections and present for confirmation
     //if user selects cancel, break routine but return success to avoid error message
-    simulate = simulateactions(names, "install");
-    if (simulate != 0) {
-        success = true;
-        return success;
-    }
+    if (!confirmActions(names, "install")) return true;
 
     displayOutput();
     if (tree == ui->treeBackports) {
@@ -1458,7 +1444,7 @@ void MainWindow::clearUi()
         ui->labelNumInstMX->clear();
         ui->labelNumUpgrMX->clear();
         ui->treeMXtest->clear();
-    } else if (tree == ui->treeBackports || tree == ui->treePopularApps ) {
+    } else if (tree == ui->treeBackports || tree == ui->treePopularApps) {
         ui->labelNumApps_3->clear();
         ui->labelNumInstBP->clear();
         ui->labelNumUpgrBP->clear();
@@ -1821,7 +1807,7 @@ void MainWindow::findPopular() const
             item->setExpanded(true);
             item->setHidden(false);
             int count = item->childCount();
-            for (int i = 0; i < count; ++i ) {
+            for (int i = 0; i < count; ++i) {
                 item->child(i)->setHidden(false);
             }
         }
@@ -1898,8 +1884,7 @@ void MainWindow::on_buttonInstall_clicked()
         }
     } else if (tree == ui->treeFlatpak) {
         //confirmation dialog
-        int simulate=simulateactions(change_list.join(" "), "install");
-        if (simulate != 0) {
+        if (!confirmActions(change_list.join(" "), "install")) {
             displayFlatpaks(true);
             indexFilterFP.clear();
             ui->comboFilterFlatpak->setCurrentIndex(0);
@@ -2041,8 +2026,7 @@ void MainWindow::on_buttonUninstall_clicked()
             conf = "";
         }
         //confirmation dialog
-        int simulate=simulateactions(change_list.join(" "), "remove");
-        if (simulate != 0) {
+        if (!confirmActions(change_list.join(" "), "remove")) {
             displayFlatpaks(true);
             indexFilterFP.clear();
             listFlatpakRemotes();
@@ -2301,7 +2285,7 @@ void MainWindow::filterChanged(const QString &arg1)
             found_items = tree->findItems("not installed", Qt::MatchExactly, 5);
             ui->labelNumAppFP->setText(QString::number(found_items.count()));
             while (*it) {
-                if (found_items.contains(*it) ) {
+                if (found_items.contains(*it)) {
                     (*it)->setHidden(false);
                     (*it)->setText(6, "true"); // Displayed flag
                 } else {
@@ -2339,7 +2323,7 @@ void MainWindow::filterChanged(const QString &arg1)
     }
 
     while (*it) {
-        if (found_items.contains(*it) ) {
+        if (found_items.contains(*it)) {
             (*it)->setHidden(false);
             (*it)->setText(6, "true"); // Displayed flag
         } else {
