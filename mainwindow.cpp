@@ -1648,7 +1648,7 @@ QHash<QString, VersionNumber> MainWindow::listInstalledVersions()
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     disconnect(conn);
-    QString out = cmd.getCmdOut("dpkg -l | grep '^ii'");
+    QString out = cmd.getCmdOut("dpkg -l | grep '^ii'", true);
     conn = connect(&cmd, &Cmd::outputAvailable, [](const QString &out) { qDebug() << out.trimmed(); });
 
     QString name;
