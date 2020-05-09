@@ -2,22 +2,22 @@ Format: 1.0
 Source: mx-packageinstaller
 Binary: mx-packageinstaller
 Architecture: amd64 source
-Version: 20.4+nmu2
+Version: 20.5
 Checksums-Md5:
- abda3930f7d14dc49f6d5d17fd639484 677 mx-packageinstaller_20.4+nmu2.dsc
- 447539f95b0a05dd94c0378b3726b75d 1430910 mx-packageinstaller-dbgsym_20.4+nmu2_amd64.deb
- 426ad2359fd88ab1f79cf804c67af7de 334066 mx-packageinstaller_20.4+nmu2_amd64.deb
+ 025bcbe99ad3d0510c0f4f9f496b0c22 660 mx-packageinstaller_20.5.dsc
+ c843bb5774d999a2259f0f1d418c43ef 1431258 mx-packageinstaller-dbgsym_20.5_amd64.deb
+ 20eafb4f9ed85d7ec0adf558295b582f 336198 mx-packageinstaller_20.5_amd64.deb
 Checksums-Sha1:
- 563da3348316fd11ac51452c2e1a1b3f1223df8d 677 mx-packageinstaller_20.4+nmu2.dsc
- 71f96d6c3caac7d0c3d20d4ab3a10243b9f501be 1430910 mx-packageinstaller-dbgsym_20.4+nmu2_amd64.deb
- 7a020b2a63bb2bc3f69f4d84fb161e1db346d09c 334066 mx-packageinstaller_20.4+nmu2_amd64.deb
+ 6c063e015c0cfbaa9ff0dd9977447605c71ab56a 660 mx-packageinstaller_20.5.dsc
+ 10d6de8e37c44ec6d6a139718d82c5283f7174a0 1431258 mx-packageinstaller-dbgsym_20.5_amd64.deb
+ a28b36f369cee02929995247f0737b362b078afa 336198 mx-packageinstaller_20.5_amd64.deb
 Checksums-Sha256:
- 719af59bf902c882cc86eecee502f303b0730ecfd9a7b330337259ff9c3422c1 677 mx-packageinstaller_20.4+nmu2.dsc
- f21649af3b66c79ce109c94048a03ce49dc75b98c1883ea54bbd3078f0d74e98 1430910 mx-packageinstaller-dbgsym_20.4+nmu2_amd64.deb
- 538514b648a99c220c7d6015b15c5d2ce83fbde1d5a3dffa74abf2531d9c253a 334066 mx-packageinstaller_20.4+nmu2_amd64.deb
+ b63c8fd05aeb0203c9eefc1438b545c0a955605155c04d7aa5a9ffd58f26a8ff 660 mx-packageinstaller_20.5.dsc
+ 3ae25288a164e946cfe6cd1bf571b7bbf9a92607f0462d69c4048c720f310fdf 1431258 mx-packageinstaller-dbgsym_20.5_amd64.deb
+ f8c7c108105a01283a7a5baec5631791cd1247a8e3da57a9bb1ada55b3b6bf8e 336198 mx-packageinstaller_20.5_amd64.deb
 Build-Origin: Debian
 Build-Architecture: amd64
-Build-Date: Wed, 06 May 2020 19:35:45 -0400
+Build-Date: Fri, 08 May 2020 22:08:24 -0400
 Installed-Build-Depends:
  autoconf (= 2.69-10),
  automake (= 1:1.15-6),
@@ -343,4 +343,4 @@ Installed-Build-Depends:
 Environment:
  DEB_BUILD_OPTIONS="parallel=4"
  LANG="en_US.UTF-8"
- SOURCE_DATE_EPOCH="1588730379"
+ SOURCE_DATE_EPOCH="1588989897"
