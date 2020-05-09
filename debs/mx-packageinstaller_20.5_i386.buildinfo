@@ -2,19 +2,19 @@ Format: 1.0
 Source: mx-packageinstaller
 Binary: mx-packageinstaller
 Architecture: i386
-Version: 20.4+nmu2
+Version: 20.5
 Checksums-Md5:
- c477d0198def76199f2a87b142b21ebe 1374256 mx-packageinstaller-dbgsym_20.4+nmu2_i386.deb
- 773b17eaaced480d21cf55639d108aa7 344088 mx-packageinstaller_20.4+nmu2_i386.deb
+ 94d10ce76ac5ce2a92853ff45b37c551 1375274 mx-packageinstaller-dbgsym_20.5_i386.deb
+ 4cd9a302c9060628f9147ea859ced6fb 346224 mx-packageinstaller_20.5_i386.deb
 Checksums-Sha1:
- 5936bd1f47f20a33c94de601ec4014001443f80a 1374256 mx-packageinstaller-dbgsym_20.4+nmu2_i386.deb
- 9d96c0543e74718601633db94222c0400dcd8915 344088 mx-packageinstaller_20.4+nmu2_i386.deb
+ 2cb0ebfb8423f92574a0732591243b6e86398ada 1375274 mx-packageinstaller-dbgsym_20.5_i386.deb
+ acae227be9a331cdad63690608b65e83128ec200 346224 mx-packageinstaller_20.5_i386.deb
 Checksums-Sha256:
- a8f20142dcdcff3d121f10d382afc128aeac1cd381a87645b76495b4bb5b33b6 1374256 mx-packageinstaller-dbgsym_20.4+nmu2_i386.deb
- 60592e3724d9af7b42d7258654e1deacbe1976fe7d15ab6243e679169db66494 344088 mx-packageinstaller_20.4+nmu2_i386.deb
+ 1bc95f97f76380c2617f42d6c98b72f083bfea7ccccffa70daff3aab5aee72c5 1375274 mx-packageinstaller-dbgsym_20.5_i386.deb
+ 331c9d847a5cd397925365c7886376b110afe37e5118bad9f656e6a589b0784a 346224 mx-packageinstaller_20.5_i386.deb
 Build-Origin: Debian
 Build-Architecture: i386
-Build-Date: Wed, 06 May 2020 19:38:11 -0400
+Build-Date: Fri, 08 May 2020 22:12:01 -0400
 Installed-Build-Depends:
  autoconf (= 2.69-10),
  automake (= 1:1.15-6),
@@ -338,4 +338,4 @@ Installed-Build-Depends:
 Environment:
  DEB_BUILD_OPTIONS="parallel=4"
  LANG="en_US.UTF-8"
- SOURCE_DATE_EPOCH="1588730379"
+ SOURCE_DATE_EPOCH="1588989897"

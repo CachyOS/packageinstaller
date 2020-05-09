@@ -1,0 +1,266 @@
+ dpkg-buildpackage -rfakeroot -us -uc -B
+dpkg-buildpackage: info: source package mx-packageinstaller
+dpkg-buildpackage: info: source version 20.5
+dpkg-buildpackage: info: source distribution mx
+dpkg-buildpackage: info: source changed by Dolphin Oracle <dolphinoracle@gmail.com>
+ dpkg-source --before-build 32
+dpkg-buildpackage: info: host architecture i386
+ fakeroot debian/rules clean
+dh clean --parallel 
+   debian/rules override_dh_auto_clean
+make[1]: Entering directory '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32'
+dh_auto_clean
+rm -f src/translations/*.qm
+make[1]: Leaving directory '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32'
+   dh_clean -O--parallel
+ debian/rules build-arch
+dh build-arch --parallel 
+   dh_update_autotools_config -a -O--parallel
+   dh_auto_configure -a -O--parallel
+	qmake -makefile "QMAKE_CFLAGS_RELEASE=-g -O2 -fdebug-prefix-map=/media/demo/dataext/development/working/mx-packageinstaller-20.5/32=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2" "QMAKE_CFLAGS_DEBUG=-g -O2 -fdebug-prefix-map=/media/demo/dataext/development/working/mx-packageinstaller-20.5/32=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2" "QMAKE_CXXFLAGS_RELEASE=-g -O2 -fdebug-prefix-map=/media/demo/dataext/development/working/mx-packageinstaller-20.5/32=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2" "QMAKE_CXXFLAGS_DEBUG=-g -O2 -fdebug-prefix-map=/media/demo/dataext/development/working/mx-packageinstaller-20.5/32=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2" QMAKE_LFLAGS_RELEASE=-Wl,-z,relro QMAKE_LFLAGS_DEBUG=-Wl,-z,relro QMAKE_STRIP=: PREFIX=/usr
+Info: creating stash file /media/demo/dataext/development/working/mx-packageinstaller-20.5/32/.qmake.stash
+   debian/rules override_dh_auto_build
+make[1]: Entering directory '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32'
+lrelease *.pro
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_am.qm'...
+    Generated 60 translation(s) (57 finished and 3 unfinished)
+    Ignored 73 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_ar.qm'...
+    Generated 7 translation(s) (6 finished and 1 unfinished)
+    Ignored 126 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_bg.qm'...
+    Generated 9 translation(s) (8 finished and 1 unfinished)
+    Ignored 124 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_ca.qm'...
+    Generated 128 translation(s) (124 finished and 4 unfinished)
+    Ignored 5 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_cs.qm'...
+    Generated 81 translation(s) (78 finished and 3 unfinished)
+    Ignored 52 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_da.qm'...
+    Generated 128 translation(s) (124 finished and 4 unfinished)
+    Ignored 5 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_de.qm'...
+    Generated 127 translation(s) (123 finished and 4 unfinished)
+    Ignored 6 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_el.qm'...
+    Generated 128 translation(s) (124 finished and 4 unfinished)
+    Ignored 5 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_es.qm'...
+    Generated 128 translation(s) (124 finished and 4 unfinished)
+    Ignored 5 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_et.qm'...
+    Generated 6 translation(s) (5 finished and 1 unfinished)
+    Ignored 127 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_eu.qm'...
+    Generated 4 translation(s) (4 finished and 0 unfinished)
+    Ignored 129 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_fa.qm'...
+    Generated 4 translation(s) (4 finished and 0 unfinished)
+    Ignored 129 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_fi.qm'...
+    Generated 79 translation(s) (75 finished and 4 unfinished)
+    Ignored 54 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_fr.qm'...
+    Generated 128 translation(s) (124 finished and 4 unfinished)
+    Ignored 5 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_he_IL.qm'...
+    Generated 23 translation(s) (21 finished and 2 unfinished)
+    Ignored 110 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_hi.qm'...
+    Generated 27 translation(s) (23 finished and 4 unfinished)
+    Ignored 106 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_hr.qm'...
+    Generated 27 translation(s) (24 finished and 3 unfinished)
+    Ignored 106 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_hu.qm'...
+    Generated 22 translation(s) (18 finished and 4 unfinished)
+    Ignored 111 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_id.qm'...
+    Generated 20 translation(s) (16 finished and 4 unfinished)
+    Ignored 113 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_is.qm'...
+    Generated 21 translation(s) (17 finished and 4 unfinished)
+    Ignored 112 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_it.qm'...
+    Generated 128 translation(s) (124 finished and 4 unfinished)
+    Ignored 5 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_ja.qm'...
+    Generated 47 translation(s) (44 finished and 3 unfinished)
+    Ignored 86 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_kk.qm'...
+    Generated 17 translation(s) (15 finished and 2 unfinished)
+    Ignored 116 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_ko.qm'...
+    Generated 6 translation(s) (5 finished and 1 unfinished)
+    Ignored 127 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_lt.qm'...
+    Generated 91 translation(s) (87 finished and 4 unfinished)
+    Ignored 42 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_mk.qm'...
+    Generated 4 translation(s) (4 finished and 0 unfinished)
+    Ignored 129 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_mr.qm'...
+    Generated 18 translation(s) (14 finished and 4 unfinished)
+    Ignored 115 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_nb.qm'...
+    Generated 20 translation(s) (16 finished and 4 unfinished)
+    Ignored 113 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_nl.qm'...
+    Generated 128 translation(s) (124 finished and 4 unfinished)
+    Ignored 5 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_pl.qm'...
+    Generated 127 translation(s) (123 finished and 4 unfinished)
+    Ignored 6 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_pt.qm'...
+    Generated 128 translation(s) (124 finished and 4 unfinished)
+    Ignored 5 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_pt_BR.qm'...
+    Generated 126 translation(s) (122 finished and 4 unfinished)
+    Ignored 7 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_ro.qm'...
+    Generated 126 translation(s) (122 finished and 4 unfinished)
+    Ignored 7 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_ru.qm'...
+    Generated 127 translation(s) (123 finished and 4 unfinished)
+    Ignored 6 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_sk.qm'...
+    Generated 125 translation(s) (121 finished and 4 unfinished)
+    Ignored 8 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_sl.qm'...
+    Generated 128 translation(s) (124 finished and 4 unfinished)
+    Ignored 5 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_sq.qm'...
+    Generated 21 translation(s) (17 finished and 4 unfinished)
+    Ignored 112 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_sr.qm'...
+    Generated 9 translation(s) (8 finished and 1 unfinished)
+    Ignored 124 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_sv.qm'...
+    Generated 128 translation(s) (124 finished and 4 unfinished)
+    Ignored 5 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_tr.qm'...
+    Generated 69 translation(s) (65 finished and 4 unfinished)
+    Ignored 64 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_uk.qm'...
+    Generated 43 translation(s) (39 finished and 4 unfinished)
+    Ignored 90 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_zh_CN.qm'...
+    Generated 5 translation(s) (4 finished and 1 unfinished)
+    Ignored 128 untranslated source text(s)
+Updating '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32/translations/mx-packageinstaller_zh_TW.qm'...
+    Generated 85 translation(s) (82 finished and 3 unfinished)
+    Ignored 48 untranslated source text(s)
+dh_auto_build -- QMAKE=qmake-qt5 LRELEASE=lrelease-qt5 QMAKE_OPTS="DEFINES+=NO_DEBUG_ON_CONSOLE"
+	make -j4 QMAKE=qmake-qt5 LRELEASE=lrelease-qt5 QMAKE_OPTS=DEFINES\+=NO_DEBUG_ON_CONSOLE
+make[2]: Entering directory '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32'
+/usr/lib/i386-linux-gnu/qt5/bin/uic mainwindow.ui -o ui_mainwindow.h
+g++ -c -pipe -g -O2 -fdebug-prefix-map=/media/demo/dataext/development/working/mx-packageinstaller-20.5/32=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -std=gnu++11 -Wall -W -D_REENTRANT -fPIC -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -I. -isystem /usr/include/i386-linux-gnu/qt5 -isystem /usr/include/i386-linux-gnu/qt5/QtWidgets -isystem /usr/include/i386-linux-gnu/qt5/QtGui -isystem /usr/include/i386-linux-gnu/qt5/QtXml -isystem /usr/include/i386-linux-gnu/qt5/QtNetwork -isystem /usr/include/i386-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++ -o main.o main.cpp
+g++ -c -pipe -g -O2 -fdebug-prefix-map=/media/demo/dataext/development/working/mx-packageinstaller-20.5/32=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -std=gnu++11 -Wall -W -D_REENTRANT -fPIC -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -I. -isystem /usr/include/i386-linux-gnu/qt5 -isystem /usr/include/i386-linux-gnu/qt5/QtWidgets -isystem /usr/include/i386-linux-gnu/qt5/QtGui -isystem /usr/include/i386-linux-gnu/qt5/QtXml -isystem /usr/include/i386-linux-gnu/qt5/QtNetwork -isystem /usr/include/i386-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++ -o lockfile.o lockfile.cpp
+g++ -c -pipe -g -O2 -fdebug-prefix-map=/media/demo/dataext/development/working/mx-packageinstaller-20.5/32=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -std=gnu++11 -Wall -W -D_REENTRANT -fPIC -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -I. -isystem /usr/include/i386-linux-gnu/qt5 -isystem /usr/include/i386-linux-gnu/qt5/QtWidgets -isystem /usr/include/i386-linux-gnu/qt5/QtGui -isystem /usr/include/i386-linux-gnu/qt5/QtXml -isystem /usr/include/i386-linux-gnu/qt5/QtNetwork -isystem /usr/include/i386-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++ -o versionnumber.o versionnumber.cpp
+g++ -c -pipe -g -O2 -fdebug-prefix-map=/media/demo/dataext/development/working/mx-packageinstaller-20.5/32=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -std=gnu++11 -Wall -W -D_REENTRANT -fPIC -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -I. -isystem /usr/include/i386-linux-gnu/qt5 -isystem /usr/include/i386-linux-gnu/qt5/QtWidgets -isystem /usr/include/i386-linux-gnu/qt5/QtGui -isystem /usr/include/i386-linux-gnu/qt5/QtXml -isystem /usr/include/i386-linux-gnu/qt5/QtNetwork -isystem /usr/include/i386-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++ -o aptcache.o aptcache.cpp
+g++ -c -pipe -g -O2 -fdebug-prefix-map=/media/demo/dataext/development/working/mx-packageinstaller-20.5/32=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -std=gnu++11 -Wall -W -D_REENTRANT -fPIC -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -I. -isystem /usr/include/i386-linux-gnu/qt5 -isystem /usr/include/i386-linux-gnu/qt5/QtWidgets -isystem /usr/include/i386-linux-gnu/qt5/QtGui -isystem /usr/include/i386-linux-gnu/qt5/QtXml -isystem /usr/include/i386-linux-gnu/qt5/QtNetwork -isystem /usr/include/i386-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++ -o remotes.o remotes.cpp
+g++ -c -pipe -g -O2 -fdebug-prefix-map=/media/demo/dataext/development/working/mx-packageinstaller-20.5/32=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -std=gnu++11 -Wall -W -D_REENTRANT -fPIC -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -I. -isystem /usr/include/i386-linux-gnu/qt5 -isystem /usr/include/i386-linux-gnu/qt5/QtWidgets -isystem /usr/include/i386-linux-gnu/qt5/QtGui -isystem /usr/include/i386-linux-gnu/qt5/QtXml -isystem /usr/include/i386-linux-gnu/qt5/QtNetwork -isystem /usr/include/i386-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++ -o about.o about.cpp
+main.cpp: In function ‘int main(int, char**)’:
+main.cpp:72:117: warning: ignoring return value of ‘int system(const char*)’, declared with attribute warn_unused_result [-Wunused-result]
+                    \n-----------------------------------------------------------' >> " + log_name.toUtf8() + ".old");
+                                                                                                                     ^
+main.cpp:73:85: warning: ignoring return value of ‘int system(const char*)’, declared with attribute warn_unused_result [-Wunused-result]
+             system("cat " + log_name.toUtf8() + " >> " + log_name.toUtf8() + ".old");
+                                                                                     ^
+main.cpp:74:46: warning: ignoring return value of ‘int system(const char*)’, declared with attribute warn_unused_result [-Wunused-result]
+             system("rm " + log_name.toUtf8());
+                                              ^
+g++ -c -pipe -g -O2 -fdebug-prefix-map=/media/demo/dataext/development/working/mx-packageinstaller-20.5/32=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -std=gnu++11 -Wall -W -D_REENTRANT -fPIC -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -I. -isystem /usr/include/i386-linux-gnu/qt5 -isystem /usr/include/i386-linux-gnu/qt5/QtWidgets -isystem /usr/include/i386-linux-gnu/qt5/QtGui -isystem /usr/include/i386-linux-gnu/qt5/QtXml -isystem /usr/include/i386-linux-gnu/qt5/QtNetwork -isystem /usr/include/i386-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++ -o cmd.o cmd.cpp
+/usr/lib/i386-linux-gnu/qt5/bin/rcc -name images images.qrc -o qrc_images.cpp
+/usr/lib/i386-linux-gnu/qt5/bin/moc -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -I/usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++ -I/media/demo/dataext/development/working/mx-packageinstaller-20.5/32 -I/usr/include/i386-linux-gnu/qt5 -I/usr/include/i386-linux-gnu/qt5/QtWidgets -I/usr/include/i386-linux-gnu/qt5/QtGui -I/usr/include/i386-linux-gnu/qt5/QtXml -I/usr/include/i386-linux-gnu/qt5/QtNetwork -I/usr/include/i386-linux-gnu/qt5/QtCore -I/usr/include/c++/6 -I/usr/include/i386-linux-gnu/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/i686-linux-gnu/6/include -I/usr/local/include -I/usr/lib/gcc/i686-linux-gnu/6/include-fixed -I/usr/include/i386-linux-gnu -I/usr/include mainwindow.h -o moc_mainwindow.cpp
+/usr/lib/i386-linux-gnu/qt5/bin/moc -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -I/usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++ -I/media/demo/dataext/development/working/mx-packageinstaller-20.5/32 -I/usr/include/i386-linux-gnu/qt5 -I/usr/include/i386-linux-gnu/qt5/QtWidgets -I/usr/include/i386-linux-gnu/qt5/QtGui -I/usr/include/i386-linux-gnu/qt5/QtXml -I/usr/include/i386-linux-gnu/qt5/QtNetwork -I/usr/include/i386-linux-gnu/qt5/QtCore -I/usr/include/c++/6 -I/usr/include/i386-linux-gnu/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/i686-linux-gnu/6/include -I/usr/local/include -I/usr/lib/gcc/i686-linux-gnu/6/include-fixed -I/usr/include/i386-linux-gnu -I/usr/include remotes.h -o moc_remotes.cpp
+/usr/lib/i386-linux-gnu/qt5/bin/moc -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -I/usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++ -I/media/demo/dataext/development/working/mx-packageinstaller-20.5/32 -I/usr/include/i386-linux-gnu/qt5 -I/usr/include/i386-linux-gnu/qt5/QtWidgets -I/usr/include/i386-linux-gnu/qt5/QtGui -I/usr/include/i386-linux-gnu/qt5/QtXml -I/usr/include/i386-linux-gnu/qt5/QtNetwork -I/usr/include/i386-linux-gnu/qt5/QtCore -I/usr/include/c++/6 -I/usr/include/i386-linux-gnu/c++/6 -I/usr/include/c++/6/backward -I/usr/lib/gcc/i686-linux-gnu/6/include -I/usr/local/include -I/usr/lib/gcc/i686-linux-gnu/6/include-fixed -I/usr/include/i386-linux-gnu -I/usr/include cmd.h -o moc_cmd.cpp
+g++ -c -pipe -g -O2 -fdebug-prefix-map=/media/demo/dataext/development/working/mx-packageinstaller-20.5/32=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -std=gnu++11 -Wall -W -D_REENTRANT -fPIC -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -I. -isystem /usr/include/i386-linux-gnu/qt5 -isystem /usr/include/i386-linux-gnu/qt5/QtWidgets -isystem /usr/include/i386-linux-gnu/qt5/QtGui -isystem /usr/include/i386-linux-gnu/qt5/QtXml -isystem /usr/include/i386-linux-gnu/qt5/QtNetwork -isystem /usr/include/i386-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++ -o mainwindow.o mainwindow.cpp
+about.cpp: In function ‘void displayDoc(QString, QString, bool)’:
+about.cpp:16:77: warning: ignoring return value of ‘int system(const char*)’, declared with attribute warn_unused_result [-Wunused-result]
+         system("mx-viewer " + url.toUtf8() + " \"" + title.toUtf8() + "\"&");
+                                                                             ^
+about.cpp:19:47: warning: ignoring return value of ‘int system(const char*)’, declared with attribute warn_unused_result [-Wunused-result]
+             system("xdg-open " + url.toUtf8());
+                                               ^
+about.cpp:24:73: warning: ignoring return value of ‘int system(const char*)’, declared with attribute warn_unused_result [-Wunused-result]
+                    user.toUtf8() + ") xdg-open " + url.toUtf8() + "\"&");
+                                                                         ^
+g++ -c -pipe -g -O2 -fdebug-prefix-map=/media/demo/dataext/development/working/mx-packageinstaller-20.5/32=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -std=gnu++11 -Wall -W -D_REENTRANT -fPIC -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -I. -isystem /usr/include/i386-linux-gnu/qt5 -isystem /usr/include/i386-linux-gnu/qt5/QtWidgets -isystem /usr/include/i386-linux-gnu/qt5/QtGui -isystem /usr/include/i386-linux-gnu/qt5/QtXml -isystem /usr/include/i386-linux-gnu/qt5/QtNetwork -isystem /usr/include/i386-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++ -o qrc_images.o qrc_images.cpp
+g++ -c -pipe -g -O2 -fdebug-prefix-map=/media/demo/dataext/development/working/mx-packageinstaller-20.5/32=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -std=gnu++11 -Wall -W -D_REENTRANT -fPIC -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -I. -isystem /usr/include/i386-linux-gnu/qt5 -isystem /usr/include/i386-linux-gnu/qt5/QtWidgets -isystem /usr/include/i386-linux-gnu/qt5/QtGui -isystem /usr/include/i386-linux-gnu/qt5/QtXml -isystem /usr/include/i386-linux-gnu/qt5/QtNetwork -isystem /usr/include/i386-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++ -o moc_mainwindow.o moc_mainwindow.cpp
+g++ -c -pipe -g -O2 -fdebug-prefix-map=/media/demo/dataext/development/working/mx-packageinstaller-20.5/32=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -std=gnu++11 -Wall -W -D_REENTRANT -fPIC -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -I. -isystem /usr/include/i386-linux-gnu/qt5 -isystem /usr/include/i386-linux-gnu/qt5/QtWidgets -isystem /usr/include/i386-linux-gnu/qt5/QtGui -isystem /usr/include/i386-linux-gnu/qt5/QtXml -isystem /usr/include/i386-linux-gnu/qt5/QtNetwork -isystem /usr/include/i386-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++ -o moc_remotes.o moc_remotes.cpp
+g++ -c -pipe -g -O2 -fdebug-prefix-map=/media/demo/dataext/development/working/mx-packageinstaller-20.5/32=. -fstack-protector-strong -Wformat -Werror=format-security -Wdate-time -D_FORTIFY_SOURCE=2 -std=gnu++11 -Wall -W -D_REENTRANT -fPIC -DQT_NO_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_XML_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -I. -isystem /usr/include/i386-linux-gnu/qt5 -isystem /usr/include/i386-linux-gnu/qt5/QtWidgets -isystem /usr/include/i386-linux-gnu/qt5/QtGui -isystem /usr/include/i386-linux-gnu/qt5/QtXml -isystem /usr/include/i386-linux-gnu/qt5/QtNetwork -isystem /usr/include/i386-linux-gnu/qt5/QtCore -I. -I. -I/usr/lib/i386-linux-gnu/qt5/mkspecs/linux-g++ -o moc_cmd.o moc_cmd.cpp
+mainwindow.cpp: In member function ‘bool MainWindow::update()’:
+mainwindow.cpp:188:29: warning: ignoring return value of ‘int system(const char*)’, declared with attribute warn_unused_result [-Wunused-result]
+         system(msg.toUtf8());
+                             ^
+mainwindow.cpp:194:25: warning: ignoring return value of ‘int system(const char*)’, declared with attribute warn_unused_result [-Wunused-result]
+     system(msg.toUtf8());
+                         ^
+mainwindow.cpp: In member function ‘void MainWindow::cleanup()’:
+mainwindow.cpp:1480:63: warning: ignoring return value of ‘int system(const char*)’, declared with attribute warn_unused_result [-Wunused-result]
+         system("rm -f /etc/apt/sources.list.d/mxpm-temp.list");
+                                                               ^
+mainwindow.cpp:1484:74: warning: ignoring return value of ‘int system(const char*)’, declared with attribute warn_unused_result [-Wunused-result]
+         system("sed -i 's/.* test/#&/'  /etc/apt/sources.list.d/mx.list");  // comment out the line
+                                                                          ^
+mainwindow.cpp:1495:44: warning: ignoring return value of ‘int system(const char*)’, declared with attribute warn_unused_result [-Wunused-result]
+         system("rm -r " + tmp_dir.toUtf8());
+                                            ^
+mainwindow.cpp: In member function ‘void MainWindow::disableWarning(bool, QString)’:
+mainwindow.cpp:1707:41: warning: ignoring return value of ‘int system(const char*)’, declared with attribute warn_unused_result [-Wunused-result]
+         system("touch " + file.toUtf8());
+                                         ^
+mainwindow.cpp:1709:38: warning: ignoring return value of ‘int system(const char*)’, declared with attribute warn_unused_result [-Wunused-result]
+         system("rm " + file.toUtf8());
+                                      ^
+g++ -Wl,-z,relro -o mx-packageinstaller main.o mainwindow.o lockfile.o versionnumber.o aptcache.o remotes.o about.o cmd.o qrc_images.o moc_mainwindow.o moc_remotes.o moc_cmd.o   -lQt5Widgets -lQt5Gui -lQt5Xml -lQt5Network -lQt5Core -lGL -lpthread 
+make[2]: Leaving directory '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32'
+make[1]: Leaving directory '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32'
+   dh_auto_test -a -O--parallel
+ fakeroot debian/rules binary-arch
+dh binary-arch --parallel 
+   dh_testroot -a -O--parallel
+   dh_prep -a -O--parallel
+   debian/rules override_dh_auto_install
+make[1]: Entering directory '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32'
+dh_auto_install -- QMAKE=qmake-qt5 LRELEASE=lrelease-qt5 QMAKE_OPTS="DEFINES+=NO_DEBUG_ON_CONSOLE"
+make[1]: Leaving directory '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32'
+   dh_install -a -O--parallel
+   dh_installdocs -a -O--parallel
+   dh_installchangelogs -a -O--parallel
+   dh_installinit -a -O--parallel
+   dh_icons -a -O--parallel
+   dh_perl -a -O--parallel
+   dh_link -a -O--parallel
+   dh_strip_nondeterminism -a -O--parallel
+   dh_compress -a -O--parallel
+   dh_fixperms -a -O--parallel
+   dh_missing -a -O--parallel
+   dh_strip -a -O--parallel
+   dh_makeshlibs -a -O--parallel
+   debian/rules override_dh_shlibdeps
+make[1]: Entering directory '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32'
+dh_shlibdeps --dpkg-shlibdeps-params=--ignore-missing-info
+dpkg-shlibdeps: warning: package could avoid a useless dependency if debian/mx-packageinstaller/usr/bin/mx-packageinstaller was not linked against libGL.so.1 (it uses none of the library's symbols)
+make[1]: Leaving directory '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32'
+   dh_installdeb -a -O--parallel
+   dh_gencontrol -a -O--parallel
+   dh_md5sums -a -O--parallel
+   debian/rules override_dh_builddeb
+make[1]: Entering directory '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32'
+dh_builddeb -- -Z xz
+dpkg-deb: building package 'mx-packageinstaller-dbgsym' in '../mx-packageinstaller-dbgsym_20.5_i386.deb'.
+dpkg-deb: building package 'mx-packageinstaller' in '../mx-packageinstaller_20.5_i386.deb'.
+make[1]: Leaving directory '/media/demo/dataext/development/working/mx-packageinstaller-20.5/32'
+ dpkg-genbuildinfo --build=any
+ dpkg-genchanges --build=any >../mx-packageinstaller_20.5_i386.changes
+dpkg-genchanges: info: binary-only arch-specific upload (source code and arch-indep packages not included)
+ dpkg-source --after-build 32
+dpkg-buildpackage: info: binary-only upload (no source included)
+Now signing dsc file...
+ signfile dsc mx-packageinstaller_20.5.dsc Adrian <adrian@mxlinux.org>
+gpg: skipped "Adrian <adrian@mxlinux.org>": No secret key
+gpg: /tmp/debsign.qimlk03H/mx-packageinstaller_20.5.dsc: clear-sign failed: No secret key
+debsign: gpg error occurred!  Aborting....
