@@ -1004,7 +1004,7 @@ int MainWindow::simulateactions(QString names, QString action)
         }
     }
 
-        msg = "<b>" + tr("The following packages were selected. Click \"Show Details\" for list of changes.") + "</b>";
+        msg = "<b>" + tr("The following packages were selected. Click Show Details for list of changes.") + "</b>";
 
         QMessageBox msgBox;
         msgBox.setText(msg);
