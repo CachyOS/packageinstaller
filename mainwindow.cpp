@@ -158,7 +158,7 @@ bool MainWindow::uninstall(const QString &names, const QString &postuninstall)
 
     ui->tabWidget->setTabText(ui->tabWidget->indexOf(ui->tabOutput), tr("Uninstalling packages..."));
     displayOutput();
-    success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 remove -y " + names); //use -y since there is a confirm dialog already
+    success = cmd.run("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) apt-get -o=Dpkg::Use-Pty=0 remove -y " + names); //use -y since there is a confirm dialog already
     if (!postuninstall.isEmpty()) {
         qDebug() << "Post-uninstall";
         ui->tabWidget->setTabText(ui->tabWidget->indexOf(ui->tabOutput), tr("Running post-uninstall operations..."));
@@ -957,13 +957,13 @@ bool MainWindow::confirmActions(QString names, QString action)
         detailed_installed_names = change_list;
     } else if (tree == ui->treeBackports) {
         recommends = (ui->checkBoxInstallRecommendsMXBP->isChecked()) ? "--install-recommends " : "";
-        detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 " + action + " " + recommends + "-t " + ver_name + "-backports --reinstall " + names + "|grep 'Inst\\|Remv' | awk '{print $2 \";\" $3 \";\" $1}'");
+        detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 " + action + " " + recommends + "-t " + ver_name + "-backports --reinstall " + names + "|grep 'Inst\\|Remv' | awk '{print $2 \";\" $3 \";\" $1}'");
     } else if (tree == ui->treeMXtest) {
         recommends = (ui->checkBoxInstallRecommendsMX->isChecked()) ? "--install-recommends " : "";
-        detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 " + action + " -t a=mx,c=test " + recommends +  "--reinstall " + names + "|grep 'Inst\\|Remv' | awk '{print $2 \";\" $3 \";\" $1}'");
+        detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 " + action + " -t a=mx,c=test " + recommends +  "--reinstall " + names + "|grep 'Inst\\|Remv' | awk '{print $2 \";\" $3 \";\" $1}'");
     } else {
         recommends = (ui->checkBoxInstallRecommends->isChecked()) ? "--install-recommends " : "";
-        detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=gnome LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 " + action + " " + recommends +  "--reinstall " + names + "|grep 'Inst\\|Remv'| awk '{print $2 \";\" $3 \";\" $1}'");
+        detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 " + action + " " + recommends +  "--reinstall " + names + "|grep 'Inst\\|Remv'| awk '{print $2 \";\" $3 \";\" $1}'");
     }
 
     if (tree != ui->treeFlatpak){
@@ -1042,13 +1042,13 @@ bool MainWindow::install(const QString &names)
     displayOutput();
     if (tree == ui->treeBackports) {
         recommends = (ui->checkBoxInstallRecommendsMXBP->isChecked()) ? "--install-recommends " : "";
-        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 install -y " + recommends +  "-t " + ver_name + "-backports --reinstall " + names);
+        success = cmd.run("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) apt-get -o=Dpkg::Use-Pty=0 install -y " + recommends +  "-t " + ver_name + "-backports --reinstall " + names);
     } else if (tree == ui->treeMXtest) {
         recommends = (ui->checkBoxInstallRecommendsMX->isChecked()) ? "--install-recommends " : "";
-        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 install -y " + recommends +  "-t a=mx,c=test " + names);
+        success = cmd.run("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) apt-get -o=Dpkg::Use-Pty=0 install -y " + recommends +  "-t a=mx,c=test " + names);
     } else {
         recommends = (ui->checkBoxInstallRecommends->isChecked()) ? "--install-recommends " : "";
-        success = cmd.run("DEBIAN_FRONTEND=gnome apt-get -o=Dpkg::Use-Pty=0 install -y " + recommends +  "--reinstall " + names);
+        success = cmd.run("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) apt-get -o=Dpkg::Use-Pty=0 install -y " + recommends +  "--reinstall " + names);
     }
     lock_file->lock();
     bar->setValue(bar->maximum());
