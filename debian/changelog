@@ -1,3 +1,10 @@
+mx-packageinstaller (20.7.01) mx; urgency=medium
+
+  [ fehlix ]
+  * adjusted setting of DEBIAN_FRONTEND 
+
+ -- Dolphin Oracle <dolphin@littlebyte>  Wed, 15 Jul 2020 17:46:23 -0400
+
 mx-packageinstaller (20.5) mx; urgency=medium
 
   * add confirmation dialog to install and remove operations
