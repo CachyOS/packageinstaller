@@ -169,7 +169,7 @@
         <location filename="../mainwindow.ui" line="933"/>
         <location filename="../mainwindow.ui" line="1481"/>
         <source>Greyed out items have already been installed.</source>
-        <translation>Los ítemes en gris ya se instalaron.</translation>
+        <translation>Los ítems en gris ya se instalaron.</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="480"/>
