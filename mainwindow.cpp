@@ -960,7 +960,7 @@ bool MainWindow::confirmActions(QString names, QString action)
         detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 " + action + " " + recommends + "-t " + ver_name + "-backports --reinstall " + names + "|grep 'Inst\\|Remv' | awk '{print $2 \";\" $3 \";\" $1}'");
     } else if (tree == ui->treeMXtest) {
         recommends = (ui->checkBoxInstallRecommendsMX->isChecked()) ? "--install-recommends " : "";
-        detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 " + action + " -t a=mx,c=test " + recommends +  "--reinstall " + names + "|grep 'Inst\\|Remv' | awk '{print $2 \";\" $3 \";\" $1}'");
+        detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 " + action + " -t mx " + recommends +  "--reinstall " + names + "|grep 'Inst\\|Remv' | awk '{print $2 \";\" $3 \";\" $1}'");
     } else {
         recommends = (ui->checkBoxInstallRecommends->isChecked()) ? "--install-recommends " : "";
         detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 " + action + " " + recommends +  "--reinstall " + names + "|grep 'Inst\\|Remv'| awk '{print $2 \";\" $3 \";\" $1}'");
@@ -1045,7 +1045,7 @@ bool MainWindow::install(const QString &names)
         success = cmd.run("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) apt-get -o=Dpkg::Use-Pty=0 install -y " + recommends +  "-t " + ver_name + "-backports --reinstall " + names);
     } else if (tree == ui->treeMXtest) {
         recommends = (ui->checkBoxInstallRecommendsMX->isChecked()) ? "--install-recommends " : "";
-        success = cmd.run("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) apt-get -o=Dpkg::Use-Pty=0 install -y " + recommends +  "-t a=mx,c=test " + names);
+        success = cmd.run("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) apt-get -o=Dpkg::Use-Pty=0 install -y " + recommends +  " -t mx " + names);
     } else {
         recommends = (ui->checkBoxInstallRecommends->isChecked()) ? "--install-recommends " : "";
         success = cmd.run("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) apt-get -o=Dpkg::Use-Pty=0 install -y " + recommends +  "--reinstall " + names);
