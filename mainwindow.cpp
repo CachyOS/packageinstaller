@@ -145,26 +145,39 @@ void MainWindow::setup()
 }
 
 // Uninstall listed packages
-bool MainWindow::uninstall(const QString &names, const QString &postuninstall)
+bool MainWindow::uninstall(const QString &names, const QString &preuninstall, const QString &postuninstall)
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     ui->tabWidget->setCurrentWidget(ui->tabOutput);
 
     lock_file->unlock();
-    bool success;
+    bool success = true;
     //simulate install of selections and present for confirmation
     //if user selects cancel, break routine but return success to avoid error message
     if (!confirmActions(names, "remove")) return true;
 
     ui->tabWidget->setTabText(ui->tabWidget->indexOf(ui->tabOutput), tr("Uninstalling packages..."));
     displayOutput();
-    success = cmd.run("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) apt-get -o=Dpkg::Use-Pty=0 remove -y " + names); //use -y since there is a confirm dialog already
-    if (!postuninstall.isEmpty()) {
-        qDebug() << "Post-uninstall";
-        ui->tabWidget->setTabText(ui->tabWidget->indexOf(ui->tabOutput), tr("Running post-uninstall operations..."));
+    
+    if (!preuninstall.isEmpty()) {
+        qDebug() << "Pre-uninstall";
+        ui->tabWidget->setTabText(ui->tabWidget->indexOf(ui->tabOutput), tr("Running pre-uninstall operations..."));
         displayOutput();
-        success = cmd.run(postuninstall);
+        success = cmd.run(preuninstall);
     }
+    
+    if (success) {
+		success = cmd.run("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) apt-get -o=Dpkg::Use-Pty=0 remove -y " + names); //use -y since there is a confirm dialog already
+    }
+    
+    if (success) {
+		if (!postuninstall.isEmpty()) {
+	        qDebug() << "Post-uninstall";
+	        ui->tabWidget->setTabText(ui->tabWidget->indexOf(ui->tabOutput), tr("Running post-uninstall operations..."));
+	        displayOutput();
+	        success = cmd.run(postuninstall);
+	    }
+	}
     lock_file->lock();
 
     return success;
@@ -449,6 +462,7 @@ void MainWindow::processDoc(const QDomDocument &doc)
             7 "postinstall"
             8 "uninstall_package_names"
             9 "postuninstall"
+           10 "preuninstall"
     */
 
     QString category;
@@ -458,6 +472,7 @@ void MainWindow::processDoc(const QDomDocument &doc)
     QString screenshot;
     QString preinstall;
     QString postinstall;
+    QString preuninstall;
     QString postuninstall;
     QString install_names;
     QString uninstall_names;
@@ -488,6 +503,8 @@ void MainWindow::processDoc(const QDomDocument &doc)
             uninstall_names = element.text().trimmed();
         } else if (element.tagName() == "postuninstall") {
             postuninstall = element.text().trimmed();
+        } else if (element.tagName() == "preuninstall") {
+            preuninstall = element.text().trimmed();
         }
     }
     // skip non-installable packages
@@ -495,7 +512,7 @@ void MainWindow::processDoc(const QDomDocument &doc)
         return;
     }
     list << category << name << description << installable << screenshot << preinstall
-         << postinstall << install_names << uninstall_names << postuninstall;
+         << postinstall << install_names << uninstall_names << postuninstall << preuninstall;
     popular_apps << list;
 }
 
@@ -591,6 +608,7 @@ void MainWindow::displayPopularApps() const
         QString install_names = list.at(7);
         QString uninstall_names = list.at(8);
         QString postuninstall = list.at(9);
+        QString preuninstall = list.at(10);
 
         // add package category if treePopularApps doesn't already have it
         if (ui->treePopularApps->findItems(category, Qt::MatchFixedString, 2).isEmpty()) {
@@ -626,8 +644,11 @@ void MainWindow::displayPopularApps() const
         // add screenshot url (not displayed)
         childItem->setText(7, screenshot);
 
-        // add postuinstall script (not displayed)
+        // add postuninstall script (not displayed)
         childItem->setText(8, postuninstall);
+
+        // add preuninstall script (not displayed)
+        childItem->setText(9, preuninstall);
 
         // gray out installed items
         if (checkInstalled(uninstall_names)) {
@@ -2005,7 +2026,7 @@ void MainWindow::on_buttonUninstall_clicked()
 
     showOutput();
 
-    QString names, postuninstall;
+    QString names, preuninstall, postuninstall;
 
     if (tree == ui->treePopularApps) {
         QTreeWidgetItemIterator it(ui->treePopularApps);
@@ -2013,6 +2034,7 @@ void MainWindow::on_buttonUninstall_clicked()
             if ((*it)->checkState(1) == Qt::Checked) {
                 names += (*it)->text(6).replace("\n", " ") + " ";
                 postuninstall += (*it)->text(8) + "\n";
+                preuninstall += (*it)->text(9) + "\n";
             }
             ++it;
         }
@@ -2068,7 +2090,7 @@ void MainWindow::on_buttonUninstall_clicked()
         names = change_list.join(" ");
     }
 
-    if (uninstall(names, postuninstall)) {
+    if (uninstall(names, preuninstall, postuninstall)) {
         if(stable_list.size() > 0) { // update list if it already exists
             buildPackageLists();
         }
