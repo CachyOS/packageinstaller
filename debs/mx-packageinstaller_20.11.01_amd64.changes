@@ -1,0 +1,34 @@
+Format: 1.8
+Date: Mon, 09 Nov 2020 16:35:51 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 20.11.01
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: fehlix <fehlix@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (20.11.01) mx; urgency=medium
+ .
+   * add pre-uninstall handling for populare apps
+Checksums-Sha1:
+ 3233eb71b1c7156a12f432a433d3278767035859 673 mx-packageinstaller_20.11.01.dsc
+ d8a34a057478703a3a0ccdba8c88c4cdfd246c05 269328 mx-packageinstaller_20.11.01.tar.xz
+ bb33a0aaade92ff5b9fab71131529320042f30ba 1431870 mx-packageinstaller-dbgsym_20.11.01_amd64.deb
+ 2d398f673a760da5a652455172ae07e71c69cc5f 10263 mx-packageinstaller_20.11.01_amd64.buildinfo
+ f98c8536eca84083536001a55549ec4c72c9d0b6 336006 mx-packageinstaller_20.11.01_amd64.deb
+Checksums-Sha256:
+ c5f21cb9eee44e1990dab57514f6491e0660143e2d039d5b3bb62d6d75fdbc16 673 mx-packageinstaller_20.11.01.dsc
+ d986dfeeb01e8e6b12f168176a58bf2183178cf08c85eb05db3e0fe2abde301d 269328 mx-packageinstaller_20.11.01.tar.xz
+ 68a55abe10b752f8766e65c418f149f75c82180e999fe9b4c2963891657880da 1431870 mx-packageinstaller-dbgsym_20.11.01_amd64.deb
+ ec1a559ee3652c616f378400e5623a010f228a60a9d69bc844f4cb286561d029 10263 mx-packageinstaller_20.11.01_amd64.buildinfo
+ d0626e8d82261ded41f6ea316de31adf4f88e94808309aae34193df7caeee5d6 336006 mx-packageinstaller_20.11.01_amd64.deb
+Files:
+ 1d1f4ecc17fcd004c152dcf0b7613562 673 admin optional mx-packageinstaller_20.11.01.dsc
+ 0f03389f13c0b7a643286037d20dca09 269328 admin optional mx-packageinstaller_20.11.01.tar.xz
+ c9eb3fb9105b7b34e5f95818256ddaec 1431870 debug extra mx-packageinstaller-dbgsym_20.11.01_amd64.deb
+ 88ec5a95d61fd4d2f9d4587a0975cea4 10263 admin optional mx-packageinstaller_20.11.01_amd64.buildinfo
+ 2367bd1d14911b238c8607c526a3b0be 336006 admin optional mx-packageinstaller_20.11.01_amd64.deb
