@@ -1,7 +1,7 @@
 mx-packageinstaller (20.11.02) mx; urgency=medium
 
-  * addjust testrepo handling 
-  * addjust displayed version number for to be upgraded packages
+  * adjust testrepo handling 
+  * adjust displayed version number for to be upgraded packages
 
  -- fehlix <fehlix@mxlinux.org>  Wed, 18 Nov 2020 17:56:17 -0400
 

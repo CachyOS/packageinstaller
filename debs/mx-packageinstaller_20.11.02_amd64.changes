@@ -1,0 +1,35 @@
+Format: 1.8
+Date: Wed, 18 Nov 2020 17:56:17 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 20.11.02
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: fehlix <fehlix@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (20.11.02) mx; urgency=medium
+ .
+   * adjust testrepo handling
+   * adjust displayed version number for to be upgraded packages
+Checksums-Sha1:
+ 06dc6f99bccf973c295154a05c28443514823695 673 mx-packageinstaller_20.11.02.dsc
+ f44c4a45ef64ea756b04502378ef1deb18589605 269504 mx-packageinstaller_20.11.02.tar.xz
+ 6d345d4a759da35f14ebd0d3125a639daa86304c 1431958 mx-packageinstaller-dbgsym_20.11.02_amd64.deb
+ a96281bb2f55993b979003076fa57795f6893eeb 10263 mx-packageinstaller_20.11.02_amd64.buildinfo
+ 0c6927114405c964cee1fff2cf5a167bc6277538 335964 mx-packageinstaller_20.11.02_amd64.deb
+Checksums-Sha256:
+ e98d8fff8e57fd142e53dbdca3a5353be43094ba402517a0e21b97a0b9b78960 673 mx-packageinstaller_20.11.02.dsc
+ 27a8945399d12bbb5ae31639fc307f211a6d83b414b4de6aab2eaca1eb036f03 269504 mx-packageinstaller_20.11.02.tar.xz
+ e84a805c85d2a60b4ba8904349c1537f910f922010b26a7574552b70ed637393 1431958 mx-packageinstaller-dbgsym_20.11.02_amd64.deb
+ d4e8786a2d003f03ec28a9a609f8da12eea00bab2583485da24be9fb291dae5a 10263 mx-packageinstaller_20.11.02_amd64.buildinfo
+ d9b7213899769cf447713d67d16d0590ab8492f37d8e87edf52daba9701133fa 335964 mx-packageinstaller_20.11.02_amd64.deb
+Files:
+ 853e4fc18d51a0fb1ebd8daeac5eac71 673 admin optional mx-packageinstaller_20.11.02.dsc
+ cd9cb60462fafb13116fe56c271ecb5e 269504 admin optional mx-packageinstaller_20.11.02.tar.xz
+ 4547b9c894ec597fd254a860ae6bbfd3 1431958 debug extra mx-packageinstaller-dbgsym_20.11.02_amd64.deb
+ 312b2303fa825f9113d2704e1c856d16 10263 admin optional mx-packageinstaller_20.11.02_amd64.buildinfo
+ 36b1cbb73d6cb7d7c4df49c4813db785 335964 admin optional mx-packageinstaller_20.11.02_amd64.deb
