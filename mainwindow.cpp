@@ -96,7 +96,7 @@ void MainWindow::setup()
 
     lock_file = new LockFile("/var/lib/dpkg/lock");
     connect(qApp, &QApplication::aboutToQuit, this, &MainWindow::cleanup, Qt::QueuedConnection);
-    test_initially_enabled = cmd.run("grep -q '^deb.* test' /etc/apt/sources.list.d/mx.list");
+    test_initially_enabled = cmd.run("grep -q -E '^[[:space:]]*deb[[:space:]][^#]*/mx/testrepo/?[^#]*[[:space:]]+test\\b' $(ls /etc/apt/sources.list  /etc/apt/sources.list.d/*.list 2>/dev/null)");
     this->setWindowTitle(tr("MX Package Installer"));
     ui->tabWidget->setCurrentIndex(0);
     QStringList column_names;
@@ -978,13 +978,13 @@ bool MainWindow::confirmActions(QString names, QString action)
         detailed_installed_names = change_list;
     } else if (tree == ui->treeBackports) {
         recommends = (ui->checkBoxInstallRecommendsMXBP->isChecked()) ? "--install-recommends " : "";
-        detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 " + action + " " + recommends + "-t " + ver_name + "-backports --reinstall " + names + "|grep 'Inst\\|Remv' | awk '{print $2 \";\" $3 \";\" $1}'");
+        detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 " + action + " " + recommends + "-t " + ver_name + "-backports --reinstall " + names + "|grep 'Inst\\|Remv' | awk '{V=\"\"; P=\"\";}; $3 ~ /^\\[/ { V=$3 }; $3 ~ /^\\(/ { P=$3 \")\"}; $4 ~ /^\\(/ {P=\" => \" $4 \")\"};  {print $2 \";\" V  P \";\" $1}'");
     } else if (tree == ui->treeMXtest) {
         recommends = (ui->checkBoxInstallRecommendsMX->isChecked()) ? "--install-recommends " : "";
-        detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 " + action + " -t mx " + recommends +  "--reinstall " + names + "|grep 'Inst\\|Remv' | awk '{print $2 \";\" $3 \";\" $1}'");
+        detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 " + action + " -t mx " + recommends +  "--reinstall " + names + "|grep 'Inst\\|Remv' | awk '{V=\"\"; P=\"\";}; $3 ~ /^\\[/ { V=$3 }; $3 ~ /^\\(/ { P=$3 \")\"}; $4 ~ /^\\(/ {P=\" => \" $4 \")\"};  {print $2 \";\" V  P \";\" $1}'");
     } else {
         recommends = (ui->checkBoxInstallRecommends->isChecked()) ? "--install-recommends " : "";
-        detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 " + action + " " + recommends +  "--reinstall " + names + "|grep 'Inst\\|Remv'| awk '{print $2 \";\" $3 \";\" $1}'");
+        detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 " + action + " " + recommends +  "--reinstall " + names + "|grep 'Inst\\|Remv'| awk '{V=\"\"; P=\"\";}; $3 ~ /^\\[/ { V=$3 }; $3 ~ /^\\(/ { P=$3 \")\"}; $4 ~ /^\\(/ {P=\" => \" $4 \")\"};  {print $2 \";\" V  P \";\" $1}'");
     }
 
     if (tree != ui->treeFlatpak){
@@ -1002,7 +1002,7 @@ bool MainWindow::confirmActions(QString names, QString action)
                 detailed_removed_names = detailed_removed_names + value + "\n";
             }
             if (value.contains("Inst")){
-                value = value.section(";",0,0) + " " + value.section(";",1,1) + ")";
+                value = value.section(";",0,0) + " " + value.section(";",1,1);
                 detailed_to_install = detailed_to_install + value + "\n";
             }
         }
@@ -1223,14 +1223,19 @@ bool MainWindow::installSelected()
 
     // change sources as needed
     if(tree == ui->treeMXtest) {
-        if (cmd.run("grep -q '^#\\s*deb.* test' /etc/apt/sources.list.d/mx.list")) { // commented out line
-            cmd.run("sed -i '/^#*\\s*deb.* test/s/^#*//' /etc/apt/sources.list.d/mx.list"); // uncomment
-        } else { // doesn't exist, add
-            if (ver_name == "jessie") { // use 'mx15' for Stretch based MX, user version name for newer versions
-                cmd.run("echo -e '\ndeb http://mxrepo.com/mx/testrepo/ mx15 test' >> /etc/apt/sources.list.d/mx.list");
-            } else {
-                cmd.run("echo -e '\ndeb http://mxrepo.com/mx/testrepo/ " + ver_name + " test' >> /etc/apt/sources.list.d/mx.list");
-            }
+        // add testrepo unless already enabled
+        if (!test_initially_enabled) {
+	        // commented out line
+	        if (cmd.run("grep -q -E  '^[[:space:]]*#[#[:space:]]*deb[[:space:]][^#]*/mx/testrepo/?[^#]*[[:space:]]+test\\b' /etc/apt/sources.list.d/mx.list")) { 
+	            // uncomment
+	            cmd.run("sed -i -r '0,\\|^[[:space:]]*#[#[:space:]]*(deb[[:space:]][^#]*/mx/testrepo/?[^#]*[[:space:]]+test\\b.*)|s||\\1|' /etc/apt/sources.list.d/mx.list");
+	        } else { // doesn't exist, add
+	            if (ver_name == "jessie") { // use 'mx15' for Stretch based MX, user version name for newer versions
+	                cmd.run("echo -e '\ndeb http://mxrepo.com/mx/testrepo/ mx15 test' >> /etc/apt/sources.list.d/mx.list");
+	            } else {
+	                cmd.run("echo -e '\ndeb http://mxrepo.com/mx/testrepo/ " + ver_name + " test' >> /etc/apt/sources.list.d/mx.list");
+	            }
+	        }
         }
         update();
     } else if (tree == ui->treeBackports) {
@@ -1243,7 +1248,8 @@ bool MainWindow::installSelected()
         cmd.run("rm -f /etc/apt/sources.list.d/mxpm-temp.list");
         update();
     } else if (tree == ui->treeMXtest && !test_initially_enabled) {
-        cmd.run("sed -i 's/.* test/#&/'  /etc/apt/sources.list.d/mx.list");  // comment out the line
+        // comment out the line
+        cmd.run("sed  -i -r '\\|^[[:space:]]*(deb[[:space:]][^#]*/mx/testrepo/?[^#]*[[:space:]]+test\\b.*)|s||#\\1|' /etc/apt/sources.list.d/mx.list");
         update();
     }
     change_list.clear();
