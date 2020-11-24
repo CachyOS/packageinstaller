@@ -92,6 +92,8 @@ void MainWindow::setup()
         ver_name = "stretch";
     } else if (ver_num == "10") {
         ver_name = "buster";
+    } else if (ver_num == "11") {
+        ver_name = "bullseye";
     }
 
     lock_file = new LockFile("/var/lib/dpkg/lock");
@@ -158,26 +160,26 @@ bool MainWindow::uninstall(const QString &names, const QString &preuninstall, co
 
     ui->tabWidget->setTabText(ui->tabWidget->indexOf(ui->tabOutput), tr("Uninstalling packages..."));
     displayOutput();
-    
+
     if (!preuninstall.isEmpty()) {
         qDebug() << "Pre-uninstall";
         ui->tabWidget->setTabText(ui->tabWidget->indexOf(ui->tabOutput), tr("Running pre-uninstall operations..."));
         displayOutput();
         success = cmd.run(preuninstall);
     }
-    
+
     if (success) {
-		success = cmd.run("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) apt-get -o=Dpkg::Use-Pty=0 remove -y " + names); //use -y since there is a confirm dialog already
+        success = cmd.run("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) apt-get -o=Dpkg::Use-Pty=0 remove -y " + names); //use -y since there is a confirm dialog already
     }
-    
+
     if (success) {
-		if (!postuninstall.isEmpty()) {
-	        qDebug() << "Post-uninstall";
-	        ui->tabWidget->setTabText(ui->tabWidget->indexOf(ui->tabOutput), tr("Running post-uninstall operations..."));
-	        displayOutput();
-	        success = cmd.run(postuninstall);
-	    }
-	}
+        if (!postuninstall.isEmpty()) {
+            qDebug() << "Post-uninstall";
+            ui->tabWidget->setTabText(ui->tabWidget->indexOf(ui->tabOutput), tr("Running post-uninstall operations..."));
+            displayOutput();
+            success = cmd.run(postuninstall);
+        }
+    }
     lock_file->lock();
 
     return success;
@@ -1225,17 +1227,17 @@ bool MainWindow::installSelected()
     if(tree == ui->treeMXtest) {
         // add testrepo unless already enabled
         if (!test_initially_enabled) {
-	        // commented out line
-	        if (cmd.run("grep -q -E  '^[[:space:]]*#[#[:space:]]*deb[[:space:]][^#]*/mx/testrepo/?[^#]*[[:space:]]+test\\b' /etc/apt/sources.list.d/mx.list")) { 
-	            // uncomment
-	            cmd.run("sed -i -r '0,\\|^[[:space:]]*#[#[:space:]]*(deb[[:space:]][^#]*/mx/testrepo/?[^#]*[[:space:]]+test\\b.*)|s||\\1|' /etc/apt/sources.list.d/mx.list");
-	        } else { // doesn't exist, add
-	            if (ver_name == "jessie") { // use 'mx15' for Stretch based MX, user version name for newer versions
-	                cmd.run("echo -e '\ndeb http://mxrepo.com/mx/testrepo/ mx15 test' >> /etc/apt/sources.list.d/mx.list");
-	            } else {
-	                cmd.run("echo -e '\ndeb http://mxrepo.com/mx/testrepo/ " + ver_name + " test' >> /etc/apt/sources.list.d/mx.list");
-	            }
-	        }
+            // commented out line
+            if (cmd.run("grep -q -E  '^[[:space:]]*#[#[:space:]]*deb[[:space:]][^#]*/mx/testrepo/?[^#]*[[:space:]]+test\\b' /etc/apt/sources.list.d/mx.list")) {
+                // uncomment
+                cmd.run("sed -i -r '0,\\|^[[:space:]]*#[#[:space:]]*(deb[[:space:]][^#]*/mx/testrepo/?[^#]*[[:space:]]+test\\b.*)|s||\\1|' /etc/apt/sources.list.d/mx.list");
+            } else { // doesn't exist, add
+                if (ver_name == "jessie") { // use 'mx15' for Stretch based MX, user version name for newer versions
+                    cmd.run("echo -e '\ndeb http://mxrepo.com/mx/testrepo/ mx15 test' >> /etc/apt/sources.list.d/mx.list");
+                } else {
+                    cmd.run("echo -e '\ndeb http://mxrepo.com/mx/testrepo/ " + ver_name + " test' >> /etc/apt/sources.list.d/mx.list");
+                }
+            }
         }
         update();
     } else if (tree == ui->treeBackports) {
