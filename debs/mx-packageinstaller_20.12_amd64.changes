@@ -18,32 +18,32 @@ Changes:
  .
    * fix: display output when uninstalling packages
 Checksums-Sha1:
- dd047acd68bb6706bfd744675d697f8a54608e3c 1223 mx-packageinstaller_20.12.dsc
- 8d6ab22b07c535cfa33a09eb866a3d62ccdd130c 269560 mx-packageinstaller_20.12.tar.xz
- 746fa470077d0e7f93f66dc4806028066dde5c34 1434552 mx-packageinstaller-dbgsym_20.12_amd64.deb
- 90022ba2639bb728d29169e5699fed1b35db7748 10795 mx-packageinstaller_20.12_amd64.buildinfo
- 592d32fbd9f07a700190e75778820082ab86133e 336884 mx-packageinstaller_20.12_amd64.deb
+ e3047f6384eb8b9c9ac3ca23a2b4727f2923af86 1223 mx-packageinstaller_20.12.dsc
+ 5b48fba1c1721bcf696fb2f4fe0d03fb54b5b6e8 269588 mx-packageinstaller_20.12.tar.xz
+ 9bbb44d9dee6fb10b154be7adced8e7f4389f893 1434480 mx-packageinstaller-dbgsym_20.12_amd64.deb
+ 7eabc9c7ef77ef5545ce8003e71753fde47cb76a 10795 mx-packageinstaller_20.12_amd64.buildinfo
+ 5c155744194cffb0387352b564ea2c8f1e3970ff 336442 mx-packageinstaller_20.12_amd64.deb
 Checksums-Sha256:
- a44d13b54a9a838d8c2097b0f5a492a0a610fb7b9ccd74a0a58064f4deae174c 1223 mx-packageinstaller_20.12.dsc
- 11e39b560c431d570222f66ac480e6fd195ea0f6f199679ffc5b546c9ba6b240 269560 mx-packageinstaller_20.12.tar.xz
- 388428765631c10d8801ca2b12d50a8a685604291890b00132ca3c36181f57c5 1434552 mx-packageinstaller-dbgsym_20.12_amd64.deb
- 119b4e643090626a8004fd79051a1512706539ff0aa0043913771b2cb9f22731 10795 mx-packageinstaller_20.12_amd64.buildinfo
- 10ac4146144573b5a2ce9d53e220de20a3b062f443dcd91fa8b83961e881643c 336884 mx-packageinstaller_20.12_amd64.deb
+ 69424339f7636113edb839015cdd41e7d1dae5f2941c27a321d156e17650c68d 1223 mx-packageinstaller_20.12.dsc
+ 2eadd878a14347fae9dcae921cd3e74831ef66eefab9e8889cb11523e167fe5e 269588 mx-packageinstaller_20.12.tar.xz
+ 593b3e677924788871753fad8eb0e17abd0b4429b134311ef64eca6d9c6438c8 1434480 mx-packageinstaller-dbgsym_20.12_amd64.deb
+ b5322600382ce8ee1a27055f38c7073f77d165db5712d2c2f03cac8a0d48296f 10795 mx-packageinstaller_20.12_amd64.buildinfo
+ efcca9602733c32498f2933921fec2bc80b9e459e660780adcab86dea61c6ca7 336442 mx-packageinstaller_20.12_amd64.deb
 Files:
- 576f59d976a5559770b2d370ce6f466a 1223 admin optional mx-packageinstaller_20.12.dsc
- 52fcfbb4a6000a120becc6a0a7b3229f 269560 admin optional mx-packageinstaller_20.12.tar.xz
- cf6f7df1a53d60c9e258b222cd040930 1434552 debug extra mx-packageinstaller-dbgsym_20.12_amd64.deb
- 4d1cfcc1dbc6b6f744e9945e486fadcf 10795 admin optional mx-packageinstaller_20.12_amd64.buildinfo
- d9a00613539521b0f813d666f88c50b9 336884 admin optional mx-packageinstaller_20.12_amd64.deb
+ 4d6a2475b21118c4cb6d2d82a557ce10 1223 admin optional mx-packageinstaller_20.12.dsc
+ 2d7216b7a58a1237b859c7a51bef52b1 269588 admin optional mx-packageinstaller_20.12.tar.xz
+ 4fe98d9ef86403fec2d91969ea9d36f1 1434480 debug extra mx-packageinstaller-dbgsym_20.12_amd64.deb
+ 7c705840c97aaefcf6711e2688c94f23 10795 admin optional mx-packageinstaller_20.12_amd64.buildinfo
+ 6f0c53b0264b6e09eb2ea14e0876f7a8 336442 admin optional mx-packageinstaller_20.12_amd64.deb
 
 -----BEGIN PGP SIGNATURE-----
 
-iQFHBAEBCgAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAl/gUjoTHGFkcmlhbkBt
-eGxpbnV4Lm9yZwAKCRBwk4x4BnnumGvjB/4qZ0cFxscaLkCOzQbhpQ00z+9P/gVK
-MRtpi9WuvMkVzQx5shpzEVZ0QFdzdCALQ1FF40koDjge7MnFahXCEGx3zy/ow/OS
-PmQkSekFPOjI6S1t5Jq/jdoJOTKaIMJiLDevZhNvK8WOjZQd/ZQmuyaM1vlOH09b
-QhGc1aqXyyhfgITlCiyeY1S+lVjoSDe73rI+5wo6cn2p/oAHLokS9zAQLBIy3ObD
-9tHtnv7xe0UgzpftGJjXLjXEaP4xp64MEuREhSs2pIb8GPB+6pZ+4RDQDWWpyXyh
-4siVKf6glL6yo3Tt/tLMxUUjABg1ci828Pxpz5Md0LprGkn1lVRyRub8
-=26r8
+iQFHBAEBCgAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAl/gVjgTHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumAwDB/0eEN1br1KjUjdRtZ6CSqKGuzU29ddw
+KNBoRbA9D5qmLt99dqK6oyazzrmeaOhpk8koDB99b5owq5hWn5t9axliIzqTi5hs
+mvq2tArCQwabKO1ShmUj+eknsSe3uemBZnoeAQqrfNAphz87TeZ4NPZr4GOVQk6t
+ogx58bh/QX1j6og+IId2xpLhbdJ8i+vnKfy4ZZnjJzxDhxwhvq5QpL+Bibl82MRA
+oDDXrsC+Gb/FKcC5X0LJJN+8ieoYKLy8NdRjNI93gRvSP3gT+u9hqZQIhKMfLpT3
+m+IuNvWR5BBfMUg8xYcxgI5VCVR9b9o8pVSHYdOuWOKkGDE7MrMAdOlz
+=FGjA
 -----END PGP SIGNATURE-----

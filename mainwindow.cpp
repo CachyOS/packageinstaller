@@ -727,7 +727,7 @@ void MainWindow::displayPackages()
 
 
     // create a list of apps, create a hash with app_name, app_info
-    for (auto i = list.begin(); i != list.end(); ++i) {
+    for (auto i = list.constBegin(); i != list.constEnd(); ++i) {
         // get size for newer flatpak versions
 
         app_name = i.key();
