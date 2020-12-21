@@ -169,6 +169,7 @@ bool MainWindow::uninstall(const QString &names, const QString &preuninstall, co
     }
 
     if (success) {
+        displayOutput();
         success = cmd.run("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) apt-get -o=Dpkg::Use-Pty=0 remove -y " + names); //use -y since there is a confirm dialog already
     }
 
@@ -299,7 +300,7 @@ void MainWindow::updateInterface()
         ui->labelNumApps->setText(QString::number(tree->topLevelItemCount()));
         ui->labelNumUpgr->setText(QString::number(upgr_list.count()));
         ui->labelNumInst->setText(QString::number(inst_list.count() + upgr_list.count()));
-        ui->buttonUpgradeAll->setVisible(upgr_list.count() > 0);
+        ui->buttonUpgradeAll->setVisible(!upgr_list.isEmpty());
         ui->buttonForceUpdateStable->setEnabled(true);
         ui->searchBoxStable->setFocus();
     } else if (tree == ui->treeMXtest) {
@@ -726,8 +727,7 @@ void MainWindow::displayPackages()
 
 
     // create a list of apps, create a hash with app_name, app_info
-    QMap<QString, QStringList>::iterator i;
-    for (i = list.begin(); i != list.end(); ++i) {
+    for (auto i = list.begin(); i != list.end(); ++i) {
         // get size for newer flatpak versions
 
         app_name = i.key();
@@ -1388,12 +1388,14 @@ bool MainWindow::readPackageList(bool force_download)
             qDebug() << "Could not open file: " << file.fileName();
             return false;
         }
-    } else if (tree == ui->treeBackports) {  // read Backports lsit
+    } else if (tree == ui->treeBackports) {  // read Backports list
         file.setFileName(tmp_dir + "/allPackages");
         if(!file.open(QFile::ReadOnly)) {
             qDebug() << "Could not open file: " << file.fileName();
             return false;
         }
+    } else if (tree == ui->treeStable) { // treeStable is updated at downloadPackageList
+          return true;
     }
 
     QString file_content = file.readAll();
@@ -1540,7 +1542,7 @@ bool MainWindow::checkInstalled(const QString &names) const
 bool MainWindow::checkInstalled(const QStringList &name_list) const
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
-    if (name_list.size() == 0) {
+    if (name_list.isEmpty()) {
         return false;
     }
     for (const QString &name : name_list) {
@@ -1555,7 +1557,7 @@ bool MainWindow::checkInstalled(const QStringList &name_list) const
 bool MainWindow::checkUpgradable(const QStringList &name_list) const
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
-    if (name_list.size() == 0) {
+    if (name_list.isEmpty()) {
         return false;
     }
     QList<QTreeWidgetItem *> item_list;
@@ -1888,7 +1890,7 @@ void MainWindow::on_buttonInstall_clicked()
 
     if (tree == ui->treePopularApps) {
         bool success = installPopularApps();
-        if(stable_list.size() > 0) { // clear cache to update list if it already exists
+        if(!stable_list.isEmpty()) { // clear cache to update list if it already exists
             buildPackageLists();
         }
         if (success) {
@@ -2087,14 +2089,14 @@ void MainWindow::on_buttonUninstall_clicked()
     }
 
     if (uninstall(names, preuninstall, postuninstall)) {
-        if(stable_list.size() > 0) { // update list if it already exists
+        if(!stable_list.isEmpty()) { // update list if it already exists
             buildPackageLists();
         }
         refreshPopularApps();
         QMessageBox::information(this, tr("Success"), tr("Processing finished successfully."));
         ui->tabWidget->setCurrentWidget(tree->parentWidget());
     } else {
-        if(stable_list.size() > 0) { // update list if it already exists
+        if(!stable_list.isEmpty()) { // update list if it already exists
             buildPackageLists();
         }
         refreshPopularApps();

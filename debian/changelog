@@ -1,3 +1,9 @@
+mx-packageinstaller (20.12) mx; urgency=medium
+
+  * fix: display output when uninstalling packages
+
+ -- Adrian <adrian@mxlinux.org>  Mon, 21 Dec 2020 02:39:48 -0500
+
 mx-packageinstaller (20.11.02) mx; urgency=medium
 
   * adjust testrepo handling 
