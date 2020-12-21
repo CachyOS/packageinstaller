@@ -266,7 +266,7 @@ void MainWindow::listSizeInstalledFP()
     ui->labelNumSize->setText(total);
 }
 
-// Block interface while updateing Flatpak list
+// Block interface while updating Flatpak list
 void MainWindow::blockInterfaceFP(bool block)
 {
     for (int tab = 0; tab < 4; ++tab) {
@@ -355,33 +355,25 @@ QString MainWindow::getDebianVersion()
 QString MainWindow::getLocalizedName(const QDomElement element) const
 {
     // pass one, find fully localized string, e.g. "pt_BR"
-    QDomElement child = element.firstChildElement();
-    for (; (!child.isNull()); child = child.nextSiblingElement()) {
-        if (child.tagName() == locale.name() && !child.text().trimmed().isEmpty()) {
+    for (auto child = element.firstChildElement(); !child.isNull(); child = child.nextSiblingElement())
+        if (child.tagName() == locale.name() && !child.text().trimmed().isEmpty())
             return child.text().trimmed();
-        }
-    }
-    // pass two, find language, e.g. "pt"
-    child = element.firstChildElement();
-    for (; (!child.isNull()); child = child.nextSiblingElement()) {
-        if (child.tagName() == locale.name().section("_", 0, 0) && !child.text().trimmed().isEmpty()) {
-            return child.text().trimmed();
-        }
-    }
-    // pass three, return "en" or "en_US"
-    child = element.firstChildElement();
-    for (; (!child.isNull()); child = child.nextSiblingElement()) {
-        if ((child.tagName() == "en" || child.tagName() == "en_US") && !child.text().trimmed().isEmpty()) {
-            return child.text().trimmed();
-        }
-    }
 
-    child = element.firstChildElement();
-    if (child.isNull()) {
+    // pass two, find language, e.g. "pt"
+    for (auto child = element.firstChildElement(); !child.isNull(); child = child.nextSiblingElement())
+        if (child.tagName() == locale.name().section("_", 0, 0) && !child.text().trimmed().isEmpty())
+            return child.text().trimmed();
+
+    // pass three, return "en" or "en_US"
+    for (auto child = element.firstChildElement(); !child.isNull(); child = child.nextSiblingElement())
+        if ((child.tagName() == "en" || child.tagName() == "en_US") && !child.text().trimmed().isEmpty())
+            return child.text().trimmed();
+
+    auto child = element.firstChildElement();
+    if (child.isNull())
         return element.text().trimmed(); // if no language tags are present
-    } else {
+    else
         return child.text().trimmed(); // return first language tag if neither the specified locale nor "en" is found.
-    }
 }
 
 // get translation for the category
@@ -667,28 +659,24 @@ void MainWindow::displayPopularApps() const
 
 
 // Display only the listed apps
-void MainWindow::displayFiltered(const QStringList &list, bool raw) const
+void MainWindow::displayFiltered(QStringList list, bool raw) const
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
 
-    QStringList new_list;
+    QMutableStringListIterator i(list);
     if (raw) { // raw format that needs to be edited
-        if (fp_ver < VersionNumber("1.2.4")) {
-            for (const QString &item : list) {
-                new_list << item.section("\t", 0, 0); // remove size
-            }
-        } else {
-            for (const QString &item : list) {
-                new_list << item.section("\t", 1, 1).section("/", 1); // remove version and size
-            }
-        }
-    } else {
-        new_list = list;
+        if (fp_ver < VersionNumber("1.2.4"))
+            while (i.hasNext())
+                i.setValue(i.next().section("\t", 0, 0)); // remove size
+        else
+            while (i.hasNext())
+                i.setValue(i.next().section("\t", 1, 1).section("/", 1)); // remove version and size
     }
+
     int total = 0;
     QTreeWidgetItemIterator it(tree);
     while (*it) {
-        if (new_list.contains((*it)->text(8))) {
+        if (list.contains((*it)->text(8))) {
             ++total;
             (*it)->setHidden(false);
             (*it)->setText(6, "true"); // Displayed flag
@@ -1377,7 +1365,7 @@ bool MainWindow::downloadPackageList(bool force_download)
 
 void MainWindow::enableTabs(bool enable)
 {
-    for (int tab = 0; tab < 5; ++tab) {
+    for (int tab = 0; tab < ui->tabWidget->count() - 1; ++tab) {  //enable all except last (Console)
         ui->tabWidget->setTabEnabled(tab, enable);
     }
 }
@@ -1806,7 +1794,7 @@ void MainWindow::findPopular() const
             ++it;
         }
         ui->treePopularApps->reset();
-        for (int i = 0; i < 5; ++i) {
+        for (int i = 0; i < ui->treePopularApps->columnCount(); ++i) {
             ui->treePopularApps->resizeColumnToContents(i);
         }
         return;
@@ -1841,7 +1829,7 @@ void MainWindow::findPopular() const
             }
         }
     }
-    for (int i = 0; i < 5; ++i) {
+    for (int i = 0; i < ui->treePopularApps->columnCount(); ++i) {
         ui->treePopularApps->resizeColumnToContents(i);
     }
 }
