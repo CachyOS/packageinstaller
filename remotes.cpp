@@ -65,14 +65,9 @@ ManageRemotes::ManageRemotes(QWidget *parent) :
     connect(remove, &QPushButton::clicked, this, &ManageRemotes::removeItem);
     connect(add, &QPushButton::clicked, this, &ManageRemotes::addItem);
     connect(install, &QPushButton::clicked, this, &ManageRemotes::setInstall);
-    connect(comboUser, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ManageRemotes::userSelected);
+    connect(comboUser, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &ManageRemotes::userSelected);
 
     listFlatpakRemotes();
-}
-
-bool ManageRemotes::isChanged() const
-{
-    return changed;
 }
 
 void ManageRemotes::removeItem()
@@ -131,14 +126,4 @@ void ManageRemotes::listFlatpakRemotes() const
     comboRemote->clear();
     QStringList list = cmd->getCmdOut("runuser -s /bin/bash -l $(logname) -c \"flatpak remote-list " +  user + "\"").split("\n");
     comboRemote->addItems(list);
-}
-
-QString ManageRemotes::getInstallRef() const
-{
-    return install_ref;
-}
-
-QString ManageRemotes::getUser() const
-{
-    return user;
 }

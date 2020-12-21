@@ -27,6 +27,7 @@
 #include <QDate>
 #include <QDebug>
 #include <QIcon>
+#include <QLibraryInfo>
 #include <QLocale>
 #include <QScopedPointer>
 #include <QTranslator>
@@ -36,22 +37,26 @@
 #include <unistd.h>
 
 
-QScopedPointer<QFile> logFile;
+static QScopedPointer<QFile> logFile;
 
 void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);
 
 int main(int argc, char *argv[])
 {
-    QApplication a(argc, argv);
-    a.setWindowIcon(QIcon::fromTheme("mx-packageinstaller"));
+    QApplication app(argc, argv);
+    app.setWindowIcon(QIcon::fromTheme(app.applicationName()));
 
     QTranslator qtTran;
-    qtTran.load(QString("qt_") + QLocale::system().name());
-    a.installTranslator(&qtTran);
+    if (qtTran.load(QLocale::system(), "qt", "_", QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
+        app.installTranslator(&qtTran);
+
+    QTranslator qtBaseTran;
+    if (qtBaseTran.load("qtbase_" + QLocale::system().name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
+        app.installTranslator(&qtBaseTran);
 
     QTranslator appTran;
-    appTran.load(QString("mx-packageinstaller_") + QLocale::system().name(), "/usr/share/mx-packageinstaller/locale");
-    a.installTranslator(&appTran);
+    if (appTran.load(app.applicationName() + "_" + QLocale::system().name(), "/usr/share/" + app.applicationName() + "/locale"))
+        app.installTranslator(&appTran);
 
     if (getuid() == 0) {
         // Don't start app if Synaptic/apt-get is running, lock dpkg otherwise while the program runs
@@ -67,7 +72,7 @@ int main(int argc, char *argv[])
         }
 
         QString log_name = "/var/log/mxpi.log";
-        if (QFile(log_name).exists()) {
+        if (QFile::exists(log_name)) {
             system("echo '-----------------------------------------------------------\nMXPI SESSION\
                    \n-----------------------------------------------------------' >> " + log_name.toUtf8() + ".old");
             system("cat " + log_name.toUtf8() + " >> " + log_name.toUtf8() + ".old");
@@ -82,13 +87,9 @@ int main(int argc, char *argv[])
 
         MainWindow w;
         w.show();
-        return a.exec();
+        return app.exec();
     } else {
-        system("su-to-root -X -c " + QCoreApplication::applicationFilePath().toUtf8() + "&");
-//        QApplication::beep();
-//        QMessageBox::critical(nullptr, QString::null,
-//                              QApplication::tr("You must run this program as root."));
-//        return EXIT_FAILURE;
+        system("su-to-root -X -c " + QApplication::applicationFilePath().toUtf8() + "&");
     }
 }
 
@@ -113,10 +114,7 @@ void messageHandler(QtMsgType type, const QMessageLogContext &context, const QSt
     case QtWarningMsg:  out << "WRN "; break;
     case QtCriticalMsg: out << "CRT "; break;
     case QtFatalMsg:    out << "FTL "; break;
-    default:            out << "OTH"; break;
     }
     // Write to the output category of the message and the message itself
-    out << context.category << ": "
-        << msg << "\n";
-    out.flush();    // Clear the buffered data
+    out << context.category << ": " << msg << endl;
 }

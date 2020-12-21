@@ -46,7 +46,7 @@ void displayAboutMsgBox(QString title, QString message, QString licence_url, QSt
         QTextEdit *text = new QTextEdit;
         text->setReadOnly(true);
         Cmd cmd;
-        text->setText(cmd.getCmdOut("zless /usr/share/doc/" + QFileInfo(QCoreApplication::applicationFilePath()).fileName()  + "/changelog.gz"));
+        text->setText(cmd.getCmdOut("zless /usr/share/doc/" + QFileInfo(QApplication::applicationFilePath()).fileName()  + "/changelog.gz"));
 
         QPushButton *btnClose = new QPushButton(QApplication::tr("&Close"));
         btnClose->setIcon(QIcon::fromTheme("window-close"));
