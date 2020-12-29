@@ -702,7 +702,6 @@ void MainWindow::displayFiltered(QStringList list, bool raw) const
 void MainWindow::displayPackages()
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
-    bar->setValue(0);
 
     QTreeWidget *newtree; // use this to not overwrite current "tree"
 
@@ -729,8 +728,6 @@ void MainWindow::displayPackages()
     VersionNumber candidate;
 
     QTreeWidgetItem *widget_item;
-
-
 
     // create a list of apps, create a hash with app_name, app_info
     for (auto i = list.constBegin(); i != list.constEnd(); ++i) {
@@ -798,7 +795,6 @@ void MainWindow::displayPackages()
         }
         ++it;
     }
-    bar->setValue(bar->maximum());
     updateInterface();
     newtree->blockSignals(false);
 }
@@ -813,6 +809,7 @@ void MainWindow::displayFlatpaks(bool force_update)
     change_list.clear();
 
     if (flatpaks.isEmpty() || force_update) {
+        progress->show();
         blockInterfaceFP(true);
         flatpaks = listFlatpaks(ui->comboRemote->currentText());
         flatpaks_apps.clear();
@@ -887,6 +884,7 @@ void MainWindow::displayFlatpaks(bool force_update)
     filterChanged(ui->comboFilterFlatpak->currentText());
     blockInterfaceFP(false);
     ui->searchBoxFlatpak->setFocus();
+    progress->hide();
 }
 
 // Display warning for Debian Backports
@@ -1238,7 +1236,7 @@ bool MainWindow::installSelected()
         cmd.run("echo deb http://ftp.debian.org/debian " + ver_name + "-backports main contrib non-free>/etc/apt/sources.list.d/mxpm-temp.list");
         update();
     }
-    progress->hide();
+    getDebianVerNum();
     bool result = install(names);
     if (tree == ui->treeBackports) {
         cmd.run("rm -f /etc/apt/sources.list.d/mxpm-temp.list");
