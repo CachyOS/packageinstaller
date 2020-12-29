@@ -66,9 +66,9 @@ void VersionNumber::setStrings(const QString& value)
         epoch = 0;
         upstream_str = value;
     }
-    if (upstream_str.contains("-")) {
-        debian_str = upstream_str.section("-", -1);
-        upstream_str = upstream_str.remove("-" + debian_str);
+    if (upstream_str.contains('-')) {
+        debian_str = upstream_str.section('-', -1);
+        upstream_str = upstream_str.remove('-' + debian_str);
     }
     upstream_version = groupDigits(upstream_str);
     debian_revision = groupDigits(debian_str);
@@ -204,13 +204,13 @@ int VersionNumber::compare(const QStringList &first, const QStringList &second) 
     // if equal till the end of one of the lists, compare list size
     // if the larger list doesn't have "~" it's the bigger version
     if (second.length() > first.length()) {
-        if (second.at(first.length()) != "~") {
+        if (second.at(first.length()) != '~') {
             return 1;
         } else {
             return -1;
         }
     } else if (second.length() < first.length()) {
-        if (first.at(second.length()) != "~") {
+        if (first.at(second.length()) != '~') {
             return -1;
         } else {
             return 1;

@@ -29,11 +29,7 @@ const QMap<QString, QStringList> AptCache::getCandidates()
 
 QString AptCache::getArch()
 {
-    if (system("arch | grep -q x86_64") == 0) {
-        return "amd64";
-    } else {
-        return "i386";
-    }
+    return (system("arch | grep -q x86_64") == 0) ? "amd64" : "i386";
 }
 
 void AptCache::parseContent()
@@ -44,12 +40,12 @@ void AptCache::parseContent()
     const QStringList list = files_content.split("\n");
 
     for (QString line : list) {
-        if (line.startsWith("Package: ")) {
-            package_list << line.remove("Package: ");
-        } else if (line.startsWith("Version: ")) {
-            version_list << line.remove("Version: ");
-        } else if (line.startsWith("Description:")) { // not "Description: " because some people don't add description to their packages
-            description_list << line.remove("Description:").trimmed();
+        if (line.startsWith(QStringLiteral("Package: "))) {
+            package_list << line.remove(QStringLiteral("Package: "));
+        } else if (line.startsWith(QStringLiteral("Version: "))) {
+            version_list << line.remove(QStringLiteral("Version: "));
+        } else if (line.startsWith(QStringLiteral("Description:"))) { // not "Description: " because some people don't add description to their packages
+            description_list << line.remove(QStringLiteral("Description:")).trimmed();
         }
     }
     for (int i = 0; i < package_list.size(); ++i) {

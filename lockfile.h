@@ -26,8 +26,6 @@
 #define LOCKFILE_H
 
 #include <QString>
-#include <QFile>
-
 
 class LockFile
 {

@@ -48,7 +48,7 @@ bool Cmd::run(const QString &cmd, QString &output, bool quiet)
     }
     if (!quiet) qDebug().noquote() << cmd;
     QEventLoop loop;
-    connect(this, &Cmd::finished, &loop, &QEventLoop::quit, Qt::UniqueConnection);
+    connect(this, &Cmd::finished, &loop, &QEventLoop::quit);
     start("/bin/bash", QStringList() << "-c" << cmd);
     loop.exec();
     output = out_buffer.trimmed();

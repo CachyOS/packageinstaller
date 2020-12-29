@@ -27,18 +27,17 @@
 #include <unistd.h>
 #include <sys/file.h>
 
-#include <QDebug>
-
 LockFile::LockFile(QString file_name)
+    : file_name(file_name)
 {
-    this->file_name = file_name;
+
 }
 
 //checks if file is locked by another process (if locked by the same process returns false)
 bool LockFile::isLocked()
 {
     fd = open(file_name.toUtf8(), O_RDONLY);
-    if(fd < -1) {
+    if (fd < -1) {
         perror("open");
         return false;
     }
@@ -48,7 +47,7 @@ bool LockFile::isLocked()
 bool LockFile::lock()
 {
     fd = open(file_name.toUtf8(), O_WRONLY);
-    if(fd < -1) {
+    if (fd < -1) {
         perror("open");
         return false;
     }

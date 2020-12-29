@@ -63,8 +63,8 @@ int main(int argc, char *argv[])
         LockFile lock_file("/var/lib/dpkg/lock");
         if (lock_file.isLocked()) {
             QApplication::beep();
-            QMessageBox::critical(nullptr, QApplication::tr("Unable to get exclusive lock"),
-                                  QApplication::tr("Another package management application (like Synaptic or apt-get), "\
+            QMessageBox::critical(nullptr, QObject::tr("Unable to get exclusive lock"),
+                                  QObject::tr("Another package management application (like Synaptic or apt-get), "\
                                                    "is already running. Please close that application first"));
             return EXIT_FAILURE;
         } else {
@@ -78,11 +78,8 @@ int main(int argc, char *argv[])
             system("cat " + log_name.toUtf8() + " >> " + log_name.toUtf8() + ".old");
             system("rm " + log_name.toUtf8());
         }
-        // Set the logging files
         logFile.reset(new QFile(log_name));
-        // Open the file logging
         logFile.data()->open(QFile::Append | QFile::Text);
-        // Set handler
         qInstallMessageHandler(messageHandler);
 
         MainWindow w;
