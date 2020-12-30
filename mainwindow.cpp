@@ -101,9 +101,11 @@ void MainWindow::setup()
     ui->treeFlatpak->hideColumn(6); // Displayed
     ui->treeFlatpak->hideColumn(7); // Duplication
     ui->treeFlatpak->hideColumn(8); // Full string
-    ui->icon->setIcon(QIcon::fromTheme("software-update-available", QIcon(":/icons/software-update-available.png")));
-    ui->icon_2->setIcon(QIcon::fromTheme("software-update-available", QIcon(":/icons/software-update-available.png")));
-    ui->icon_3->setIcon(QIcon::fromTheme("software-update-available", QIcon(":/icons/software-update-available.png")));
+    QString icon = "software-update-available-symbolic";
+    QIcon backup_icon = QIcon(":/icons/software-update-available.png");
+    ui->icon->setIcon(QIcon::fromTheme(icon, backup_icon));
+    ui->icon_2->setIcon(QIcon::fromTheme(icon, backup_icon));
+    ui->icon_3->setIcon(QIcon::fromTheme(icon, backup_icon));
     loadPmFiles();
     refreshPopularApps();
 
@@ -781,7 +783,7 @@ void MainWindow::displayPackages()
                 }
                 (*it)->setText(5, QStringLiteral("installed"));
             } else {
-                (*it)->setIcon(1, QIcon::fromTheme("software-update-available", QIcon(":/icons/software-update-available.png")));
+                (*it)->setIcon(1, QIcon::fromTheme("software-update-available-symbolic", QIcon(":/icons/software-update-available.png")));
                 for (int i = 0; i < newtree->columnCount(); ++i) {
                     (*it)->setToolTip(i, tr("Version ") + installed.toString() + tr(" installed"));
                 }
