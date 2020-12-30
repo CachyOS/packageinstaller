@@ -23,7 +23,6 @@
  **********************************************************************/
 
 #include "versionnumber.h"
-//#include <QDebug>
 
 VersionNumber::VersionNumber()
 {
@@ -173,9 +172,9 @@ int VersionNumber::compare(const QStringList &first, const QStringList &second) 
         }
 
         // ~ sorts lowest
-        if (first.at(i).at(0) == '~' && second.at(i).at(0) != '~') {
+        if (first.at(i).at(0) == QStringLiteral("~") && second.at(i).at(0) != QStringLiteral("~")) {
             return 1;
-        } else if (second.at(i).at(0) == '~' && first.at(i).at(0) != '~') {
+        } else if (second.at(i).at(0) == QStringLiteral("~") && first.at(i).at(0) != QStringLiteral("~")) {
             return -1;
         }
 
@@ -205,13 +204,13 @@ int VersionNumber::compare(const QStringList &first, const QStringList &second) 
     // if equal till the end of one of the lists, compare list size
     // if the larger list doesn't have "~" it's the bigger version
     if (second.length() > first.length()) {
-        if (second.at(first.length()) != '~') {
+        if (second.at(first.length()) != QStringLiteral("~")) {
             return 1;
         } else {
             return -1;
         }
     } else if (second.length() < first.length()) {
-        if (first.at(second.length()) != '~') {
+        if (first.at(second.length()) != QStringLiteral("~")) {
             return -1;
         } else {
             return 1;
