@@ -131,8 +131,8 @@ void MainWindow::setup()
     ui->tabWidget->setTabEnabled(ui->tabWidget->indexOf(ui->tabOutput), false);
     ui->tabWidget->blockSignals(false);
 
-    int width = 800;
-    int height = 600;
+    int width = this->width();
+    int height = this->height();
     this->resize(width, height);
     QSettings settings(qApp->applicationName());
     if (settings.contains("geometry")) {
