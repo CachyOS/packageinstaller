@@ -40,12 +40,12 @@ void AptCache::parseContent()
     const QStringList list = files_content.split("\n");
 
     for (QString line : list) {
-        if (line.startsWith(QStringLiteral("Package: "))) {
-            package_list << line.remove(QStringLiteral("Package: "));
-        } else if (line.startsWith(QStringLiteral("Version: "))) {
-            version_list << line.remove(QStringLiteral("Version: "));
-        } else if (line.startsWith(QStringLiteral("Description:"))) { // not "Description: " because some people don't add description to their packages
-            description_list << line.remove(QStringLiteral("Description:")).trimmed();
+        if (line.startsWith(QLatin1String("Package: "))) {
+            package_list << line.remove(QLatin1String("Package: "));
+        } else if (line.startsWith(QLatin1String("Version: "))) {
+            version_list << line.remove(QLatin1String("Version: "));
+        } else if (line.startsWith(QLatin1String("Description:"))) { // not "Description: " because some people don't add description to their packages
+            description_list << line.remove(QLatin1String("Description:")).trimmed();
         }
     }
     for (int i = 0; i < package_list.size(); ++i) {

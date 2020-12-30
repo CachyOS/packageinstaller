@@ -94,24 +94,18 @@ int main(int argc, char *argv[])
 // The implementation of the handler
 void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
-    // Write to terminal
     QTextStream term_out(stdout);
-    term_out << msg << "\n";
+    term_out << msg << QStringLiteral("\n");
 
-    // Open stream file writes
     QTextStream out(logFile.data());
-
-    // Write the date of recording
     out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz ");
-    // By type determine to what level belongs message
     switch (type)
     {
-    case QtInfoMsg:     out << "INF "; break;
-    case QtDebugMsg:    out << "DBG "; break;
-    case QtWarningMsg:  out << "WRN "; break;
-    case QtCriticalMsg: out << "CRT "; break;
-    case QtFatalMsg:    out << "FTL "; break;
+    case QtInfoMsg:     out << QStringLiteral("INF "); break;
+    case QtDebugMsg:    out << QStringLiteral("DBG "); break;
+    case QtWarningMsg:  out << QStringLiteral("WRN "); break;
+    case QtCriticalMsg: out << QStringLiteral("CRT "); break;
+    case QtFatalMsg:    out << QStringLiteral("FTL "); break;
     }
-    // Write to the output category of the message and the message itself
-    out << context.category << ": " << msg << endl;
+    out << context.category << QStringLiteral(": ") << msg << endl;
 }

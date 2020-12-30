@@ -213,11 +213,11 @@ bool MainWindow::update()
 // convert number, unit to bytes
 double MainWindow::convert(const double &number, const QString &unit) const
 {
-    if (unit == "KB") { // assuming KiB not KB
+    if (unit == QLatin1String("KB")) { // assuming KiB not KB
         return number * 1024;
-    } else if (unit == "MB") {
+    } else if (unit == QLatin1String("MB")) {
         return number * 1024 * 1024;
-    } else if (unit == "GB") {
+    } else if (unit == QLatin1String("GB")) {
         return number * 1024 * 1024 * 1024;
     } else { // for "bytes"
         return number;
@@ -285,8 +285,8 @@ void MainWindow::updateInterface()
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
 
-    QList<QTreeWidgetItem *> upgr_list = tree->findItems("upgradable", Qt::MatchExactly, 5);
-    QList<QTreeWidgetItem *> inst_list = tree->findItems("installed", Qt::MatchExactly, 5);
+    QList<QTreeWidgetItem *> upgr_list = tree->findItems(QLatin1String("upgradable"), Qt::MatchExactly, 5);
+    QList<QTreeWidgetItem *> inst_list = tree->findItems(QLatin1String("installed"), Qt::MatchExactly, 5);
 
     if (tree == ui->treeStable) {
         ui->labelNumApps->setText(QString::number(tree->topLevelItemCount()));
@@ -345,15 +345,12 @@ int MainWindow::getDebianVerNum()
 
 QString MainWindow::getDebianVerName()
 {
-    switch (getDebianVerNum()) {
-    case 8:
-        return "jessie";
-    case 9:
-        return "stretch";
-    case 10:
-        return "buster";
-    case 11:
-        return "bullseye";
+    switch (getDebianVerNum())
+    {
+    case 8:  return "jessie";
+    case 9:  return "stretch";
+    case 10: return "buster";
+    case 11: return "bullseye";
     default:
         qDebug() << "Could not detect Debian version";
         exit(EXIT_FAILURE);
@@ -388,7 +385,7 @@ QString MainWindow::getLocalizedName(const QDomElement element) const
 // get translation for the category
 QString MainWindow::getTranslation(const QString item)
 {
-    if (locale.name() == "en_US") { // no need for translation
+    if (locale.name() == QLatin1String("en_US")) { // no need for translation
         return item;
     }
 
@@ -482,33 +479,33 @@ void MainWindow::processDoc(const QDomDocument &doc)
     QDomElement element = root.firstChildElement();
 
     for (; !element.isNull(); element = element.nextSiblingElement()) {
-        if (element.tagName() == "category") {
+        if (element.tagName() == QLatin1String("category")) {
             category = getTranslation(element.text().trimmed());
-        } else if (element.tagName() == "name") {
+        } else if (element.tagName() == QLatin1String("name")) {
             name = element.text().trimmed();
-        } else if (element.tagName() == "description") {
+        } else if (element.tagName() == QLatin1String("description")) {
             description = getLocalizedName(element);
-        } else if (element.tagName() == "installable") {
+        } else if (element.tagName() == QLatin1String("installable")) {
             installable = element.text().trimmed();
-        } else if (element.tagName() == "screenshot") {
+        } else if (element.tagName() == QLatin1String("screenshot")) {
             screenshot = element.text().trimmed();
-        } else if (element.tagName() == "preinstall") {
+        } else if (element.tagName() == QLatin1String("preinstall")) {
             preinstall = element.text().trimmed();
-        } else if (element.tagName() == "install_package_names") {
+        } else if (element.tagName() == QLatin1String("install_package_names")) {
             install_names = element.text().trimmed();
             install_names.replace("\n", " ");
-        } else if (element.tagName() == "postinstall") {
+        } else if (element.tagName() == QLatin1String("postinstall")) {
             postinstall = element.text().trimmed();
-        } else if (element.tagName() == "uninstall_package_names") {
+        } else if (element.tagName() == QLatin1String("uninstall_package_names")) {
             uninstall_names = element.text().trimmed();
-        } else if (element.tagName() == "postuninstall") {
+        } else if (element.tagName() == QLatin1String("postuninstall")) {
             postuninstall = element.text().trimmed();
-        } else if (element.tagName() == "preuninstall") {
+        } else if (element.tagName() == QLatin1String("preuninstall")) {
             preuninstall = element.text().trimmed();
         }
     }
     // skip non-installable packages
-    if ((installable == "64" && arch != "amd64") || (installable == "32" && arch != "i386")) {
+    if ((installable == QLatin1String("64") && arch != QLatin1String("amd64")) || (installable == QLatin1String("32") && arch != QLatin1String("i386"))) {
         return;
     }
     list << category << name << description << installable << screenshot << preinstall
@@ -541,9 +538,9 @@ void MainWindow::removeDuplicatesFP()
             next = ((*it))->text(1);
             if (next == current) {
                 --it;
-                (*(it))->setText(7, "Duplicate");
+                (*(it))->setText(7, QLatin1String("Duplicate"));
                 ++it;
-                (*it)->setText(7, "Duplicate");
+                (*it)->setText(7, QLatin1String("Duplicate"));
             }
         }
     }
@@ -551,7 +548,7 @@ void MainWindow::removeDuplicatesFP()
 
     QTreeWidgetItemIterator it2(ui->treeFlatpak);
     while (*it2) {
-        if ((*(it2))->text(7) == "Duplicate") {
+        if ((*(it2))->text(7) == QLatin1String("Duplicate")) {
             (*it2)->setText(1, (*it2)->text(2).section(".", -2));
         }
         ++it2;
@@ -686,10 +683,10 @@ void MainWindow::displayFiltered(QStringList list, bool raw) const
         if (list.contains((*it)->text(8))) {
             ++total;
             (*it)->setHidden(false);
-            (*it)->setText(6, "true"); // Displayed flag
+            (*it)->setText(6, QStringLiteral("true")); // Displayed flag
         } else {
             (*it)->setHidden(true);
-            (*it)->setText(6, "false");
+            (*it)->setText(6, QStringLiteral("false"));
             (*it)->setCheckState(0, Qt::Unchecked); // uncheck hidden items
         }
         ++it;
@@ -742,7 +739,7 @@ void MainWindow::displayPackages()
         widget_item->setText(2, app_name);
         widget_item->setText(3, app_ver);
         widget_item->setText(4, app_desc);
-        widget_item->setText(6, "true"); // all items are displayed till filtered
+        widget_item->setText(6, QStringLiteral("true")); // all items are displayed till filtered
     }
     for (int i = 0; i < newtree->columnCount(); ++i) {
         newtree->resizeColumnToContents(i);
@@ -773,7 +770,7 @@ void MainWindow::displayPackages()
                     (*it)->setToolTip(i, tr("Not available in stable repo"));
                 }
             }
-            (*it)->setText(5, "not installed");
+            (*it)->setText(5, QStringLiteral("not installed"));
         } else {
             inst_count++;
             if (installed >= repo_candidate) {
@@ -782,14 +779,14 @@ void MainWindow::displayPackages()
                     (*it)->setForeground(4, QBrush(Qt::gray));
                     (*it)->setToolTip(i, tr("Latest version ") + installed.toString() + tr(" already installed"));
                 }
-                (*it)->setText(5, "installed");
+                (*it)->setText(5, QStringLiteral("installed"));
             } else {
                 (*it)->setIcon(1, QIcon::fromTheme("software-update-available", QIcon(":/icons/software-update-available.png")));
                 for (int i = 0; i < newtree->columnCount(); ++i) {
                     (*it)->setToolTip(i, tr("Version ") + installed.toString() + tr(" installed"));
                 }
                 upgr_count++;
-                (*it)->setText(5, "upgradable");
+                (*it)->setText(5, QStringLiteral("upgradable"));
             }
 
         }
@@ -840,7 +837,7 @@ void MainWindow::displayFlatpaks(bool force_update)
         }
         full_name = item.section("/", 0, 0);
         short_name = full_name.section(".", -1);
-        if (short_name == "Locale" || short_name == "Sources" || short_name == "Debug") { // skip Locale, Sources, Debug
+        if (short_name == QLatin1String("Locale") || short_name == QLatin1String("Sources") || short_name == QLatin1String("Debug")) { // skip Locale, Sources, Debug
             continue;
         }
         ++total_count;
@@ -854,11 +851,11 @@ void MainWindow::displayFlatpaks(bool force_update)
         if (installed_all.contains(item)) {
             widget_item->setForeground(1, QBrush(Qt::gray));
             widget_item->setForeground(2, QBrush(Qt::gray));
-            widget_item->setText(5, "installed");
+            widget_item->setText(5, QStringLiteral("installed"));
         } else {
-            widget_item->setText(5, "not installed");
+            widget_item->setText(5, QStringLiteral("not installed"));
         }
-        widget_item->setText(6, "true"); // all items are displayed till filtered
+        widget_item->setText(6, QStringLiteral("true")); // all items are displayed till filtered
     }
 
     // add sizes for the installed packages for older flatpak that doesn't list size for all the packages
@@ -993,11 +990,11 @@ bool MainWindow::confirmActions(QString names, QString action)
     if (tree != ui->treeFlatpak) {
         while (iterator.hasNext()) {
             value = iterator.next();
-            if (value.contains(QStringLiteral("Remv"))) {
+            if (value.contains(QLatin1String("Remv"))) {
                 value = value.section(";",0,0) + " " + value.section(";",1,1);
                 detailed_removed_names = detailed_removed_names + value + "\n";
             }
-            if (value.contains(QStringLiteral("Inst"))) {
+            if (value.contains(QLatin1String("Inst"))) {
                 value = value.section(";",0,0) + " " + value.section(";",1,1);
                 detailed_to_install = detailed_to_install + value + "\n";
             }
@@ -1024,7 +1021,7 @@ bool MainWindow::confirmActions(QString names, QString action)
     msgBox.setInformativeText("\n" + names);
     msgBox.addButton(QMessageBox::Ok);
     msgBox.addButton(QMessageBox::Cancel);
-    if (action == "install"){
+    if (action == "install") {
         //msgBox.setDetailedText(tr("Install") + "\n" + detailed_names + "\n" + tr("Remove") + "\n" + detailed_names);
         msgBox.setDetailedText(detailed_to_install + "\n" + detailed_removed_names);
     } else {
@@ -1083,8 +1080,8 @@ bool MainWindow::installBatch(const QStringList &name_list)
     for (const QString &name : name_list) {
         for (const QStringList &list : popular_apps) {
             if (list.at(1) == name) {
-                postinstall += list.at(6) + "\n";
-                install_names += list.at(7) + " ";
+                postinstall += list.at(6) + QStringLiteral("\n");
+                install_names += list.at(7) + QStringLiteral(" ");
             }
         }
     }
@@ -1255,8 +1252,8 @@ bool MainWindow::installSelected()
 // check if the name is filtered (lib, dev, dbg, etc.)
 bool MainWindow::isFilteredName(const QString &name) const
 {
-    return ((name.startsWith(QStringLiteral("lib")) && !name.startsWith(QStringLiteral("libreoffice")))
-            || name.endsWith(QStringLiteral("-dev")) || name.endsWith(QStringLiteral("-dbg")) || name.endsWith(QStringLiteral("-dbgsym")));
+    return ((name.startsWith(QLatin1String("lib")) && !name.startsWith(QLatin1String("libreoffice")))
+            || name.endsWith(QLatin1String("-dev")) || name.endsWith(QLatin1String("-dbg")) || name.endsWith(QLatin1String("-dbgsym")));
 }
 
 // Check if online
@@ -1414,12 +1411,12 @@ bool MainWindow::readPackageList(bool force_download)
     const QStringList list = file_content.split("\n");
 
     for (QString line : list) {
-        if (line.startsWith("Package: ")) {
-            package_list << line.remove("Package: ");
-        } else if (line.startsWith("Version: ")) {
-            version_list << line.remove("Version: ");
-        } else if (line.startsWith("Description: ")) {
-            description_list << line.remove("Description: ");
+        if (line.startsWith(QLatin1String("Package: "))) {
+            package_list << line.remove(QLatin1String("Package: "));
+        } else if (line.startsWith(QLatin1String("Version: "))) {
+            version_list << line.remove(QLatin1String("Version: "));
+        } else if (line.startsWith(QLatin1String("Description: "))) {
+            description_list << line.remove(QLatin1String("Description: "));
         }
     }
 
@@ -1579,7 +1576,7 @@ bool MainWindow::checkUpgradable(const QStringList &name_list) const
         if (item_list.isEmpty()) {
             return false;
         }
-        if (item_list.at(0)->text(5) != "upgradable") {
+        if (item_list.at(0)->text(5) != QLatin1String("upgradable")) {
             return false;
         }
     }
@@ -1692,9 +1689,9 @@ QHash<QString, VersionNumber> MainWindow::listInstalledVersions()
     for (const QString &line : list) {
         item = line.split(QRegularExpression("\\s{2,}"));
         name = item.at(1);
-        name.remove(":i386").remove(":amd64");
+        name.remove(QLatin1String(":i386")).remove(QLatin1String(":amd64"));
         ver_str = item.at(2);
-        ver_str.remove(" amd64");
+        ver_str.remove(QLatin1String(" amd64"));
         result.insert(name, VersionNumber(ver_str));
     }
     return result;
@@ -1827,7 +1824,7 @@ void MainWindow::findPopular() const
     }
 
     // process found items
-    for (QTreeWidgetItem* item : found_items) {
+    for (auto item : found_items) {
         if (item->childCount() == 0) { // if child, expand parent
             item->parent()->setExpanded(true);
             item->parent()->setHidden(false);
@@ -2305,7 +2302,7 @@ void MainWindow::filterChanged(const QString &arg1)
             int total = 0;
             while (*it) {
                 ++total;
-                (*it)->setText(6, "true"); // Displayed flag
+                (*it)->setText(6, QStringLiteral("true")); // Displayed flag
                 (*it)->setHidden(false);
                 ++it;
             }
@@ -2316,10 +2313,10 @@ void MainWindow::filterChanged(const QString &arg1)
             while (*it) {
                 if (found_items.contains(*it)) {
                     (*it)->setHidden(false);
-                    (*it)->setText(6, "true"); // Displayed flag
+                    (*it)->setText(6, QStringLiteral("true")); // Displayed flag
                 } else {
                     (*it)->setHidden(true);
-                    (*it)->setText(6, "false");
+                    (*it)->setText(6, QStringLiteral("false"));
                     (*it)->setCheckState(0, Qt::Unchecked); // uncheck hidden items
                 }
                 ++it;
@@ -2333,7 +2330,7 @@ void MainWindow::filterChanged(const QString &arg1)
 
     if (arg1 == tr("All packages")) {
         while (*it) {
-            (*it)->setText(6, "true"); // Displayed flag
+            (*it)->setText(6, QStringLiteral("true")); // Displayed flag
             (*it)->setHidden(false);
             ++it;
         }
@@ -2344,20 +2341,20 @@ void MainWindow::filterChanged(const QString &arg1)
     }
 
     if (arg1 == tr("Upgradable")) {
-        found_items = tree->findItems("upgradable", Qt::MatchExactly, 5);
+        found_items = tree->findItems(QLatin1String("upgradable"), Qt::MatchExactly, 5);
     } else if (arg1 == tr("Installed")) {
-        found_items = tree->findItems("installed", Qt::MatchExactly, 5);
+        found_items = tree->findItems(QLatin1String("installed"), Qt::MatchExactly, 5);
     } else if (arg1 == tr("Not installed")) {
-        found_items = tree->findItems("not installed", Qt::MatchExactly, 5);
+        found_items = tree->findItems(QLatin1String("not installed"), Qt::MatchExactly, 5);
     }
 
     while (*it) {
         if (found_items.contains(*it)) {
             (*it)->setHidden(false);
-            (*it)->setText(6, "true"); // Displayed flag
+            (*it)->setText(6, QStringLiteral("true")); // Displayed flag
         } else {
             (*it)->setHidden(true);
-            (*it)->setText(6, "false");
+            (*it)->setText(6, QStringLiteral("false"));
             (*it)->setCheckState(0, Qt::Unchecked); // uncheck hidden items
         }
         ++it;
@@ -2429,8 +2426,8 @@ void MainWindow::buildChangeList(QTreeWidgetItem *item)
         }
     } else { // for Flatpaks allow selection only of installed or not installed items so one clicks on an installed item only installed items should be displayed and the other way round
         ui->buttonInstall->setText(tr("Install"));
-        if (item->text(5) == "installed") {
-            if (indexFilterFP == "All apps") { // if "all apps" is selected
+        if (item->text(5) == QLatin1String("installed")) {
+            if (indexFilterFP == QLatin1String("All apps")) { // if "all apps" is selected
                 ui->comboFilterFlatpak->setCurrentText(tr("Installed apps"));
             }
             ui->buttonUninstall->setEnabled(true);
@@ -2500,7 +2497,7 @@ void MainWindow::on_buttonUpgradeAll_clicked()
     QString names;
     QTreeWidgetItemIterator it(ui->treeStable);
     QList<QTreeWidgetItem *> found_items;
-    found_items = ui->treeStable->findItems("upgradable", Qt::MatchExactly, 5);
+    found_items = ui->treeStable->findItems(QLatin1String("upgradable"), Qt::MatchExactly, 5);
 
     while (*it) {
         if (found_items.contains(*it)) {
