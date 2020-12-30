@@ -34,6 +34,7 @@
 #include <QFile>
 #include <QDomDocument>
 #include <QProgressDialog>
+#include <QTemporaryDir>
 #include <QTreeWidgetItem>
 
 #include <cmd.h>
@@ -186,7 +187,6 @@ private:
     QSettings dictionary;
     QString arch;
     QString stable_raw;
-    QString tmp_dir;
     QString user;
     QString ver_name;
     QStringList change_list;
@@ -196,6 +196,7 @@ private:
     QStringList installed_apps_fp;
     QStringList installed_packages;
     QStringList installed_runtimes_fp;
+    QTemporaryDir tmp_dir;
     QTimer timer;
     QTreeWidget *tree; // current/calling tree
     VersionNumber fp_ver;

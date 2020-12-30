@@ -1291,10 +1291,11 @@ bool MainWindow::downloadPackageList(bool force_download)
         QMessageBox::critical(this, tr("Error"), tr("Internet is not available, won't be able to download the list of packages"));
         return false;
     }
-    if (tmp_dir.isEmpty()) {
-        tmp_dir = cmd.getCmdOut("mktemp -d /tmp/mxpm-XXXXXXXX");
+    if (!tmp_dir.isValid()) {
+        qDebug() << "Can't create temp folder";
+        return false;
     }
-    QDir::setCurrent(tmp_dir);
+    QDir::setCurrent(tmp_dir.path());
     progress->setLabelText(tr("Downloading package info..."));
     progCancel->setEnabled(true);
 
@@ -1316,7 +1317,7 @@ bool MainWindow::downloadPackageList(bool force_download)
     }
 
     if (tree == ui->treeMXtest)  {
-        if (!QFile(tmp_dir + "/mxPackages").exists() || force_download) {
+        if (!QFile(tmp_dir.path() + "/mxPackages").exists() || force_download) {
             progress->show();
 
             if (ver_name == "jessie") { // repo name is 'mx15' for Strech, use Debian version name for later versions
@@ -1326,38 +1327,38 @@ bool MainWindow::downloadPackageList(bool force_download)
             }
             if (!cmd.run("wget --append-output=/var/log/mxpi.log http://mxrepo.com/mx/testrepo/dists/" + repo_name + "/test/binary-" + arch +
                          "/Packages.gz -O mxPackages.gz && gzip -df mxPackages.gz")) {
-                QFile::remove(tmp_dir + "/mxPackages.gz");
-                QFile::remove(tmp_dir + "/mxPackages");
+                QFile::remove(tmp_dir.path() + "/mxPackages.gz");
+                QFile::remove(tmp_dir.path() + "/mxPackages");
                 return false;
             }
         }
 
     } else if (tree == ui->treeBackports) {
-        if (!QFile(tmp_dir + "/mainPackages").exists() ||
-                !QFile(tmp_dir + "/contribPackages").exists() ||
-                !QFile(tmp_dir + "/nonfreePackages").exists() || force_download) {
+        if (!QFile(tmp_dir.path() + "/mainPackages").exists() ||
+                !QFile(tmp_dir.path() + "/contribPackages").exists() ||
+                !QFile(tmp_dir.path() + "/nonfreePackages").exists() || force_download) {
             progress->show();
             bool success = cmd.run("wget --append-output=/var/log/mxpi.log --timeout=10 http://deb.debian.org/debian/dists/" +
                                ver_name + "-backports/main/binary-" + arch + "/Packages.xz -O mainPackages.xz && unxz -f mainPackages.xz");
             if (!success) {
-                QFile::remove(tmp_dir + "/mainPackages.xz");
-                QFile::remove(tmp_dir + "/mainPackages");
+                QFile::remove(tmp_dir.path() + "/mainPackages.xz");
+                QFile::remove(tmp_dir.path() + "/mainPackages");
                 return false;
             }
             //cmd.run("sleep 3");
             success = cmd.run("wget --append-output=/var/log/mxpi.log --timeout=10 http://deb.debian.org/debian/dists/" +
                            ver_name + "-backports/contrib/binary-" + arch + "/Packages.xz -O contribPackages.xz && unxz -f contribPackages.xz");
             if (!success) {
-                QFile::remove(tmp_dir + "/contribPackages.xz");
-                QFile::remove(tmp_dir + "/contribPackages");
+                QFile::remove(tmp_dir.path() + "/contribPackages.xz");
+                QFile::remove(tmp_dir.path() + "/contribPackages");
                 return false;
             }
             //cmd.run("sleep 3");
             success = cmd.run("wget --append-output=/var/log/mxpi.log --timeout=10 http://deb.debian.org/debian/dists/" +
                            ver_name + "-backports/non-free/binary-" + arch + "/Packages.xz -O nonfreePackages.xz && unxz -f nonfreePackages.xz");
             if (!success) {
-                QFile::remove(tmp_dir + "/nonfreePackages.xz");
-                QFile::remove(tmp_dir + "/nonfreePackages");
+                QFile::remove(tmp_dir.path() + "/nonfreePackages.xz");
+                QFile::remove(tmp_dir.path() + "/nonfreePackages");
                 return false;
             }
             progCancel->setDisabled(true);
@@ -1387,13 +1388,13 @@ bool MainWindow::readPackageList(bool force_download)
 
     QFile file;
     if (tree == ui->treeMXtest)  { // read MX Test list
-        file.setFileName(tmp_dir + "/mxPackages");
+        file.setFileName(tmp_dir.path() + "/mxPackages");
         if (!file.open(QFile::ReadOnly)) {
             qDebug() << "Could not open file: " << file.fileName();
             return false;
         }
     } else if (tree == ui->treeBackports) {  // read Backports list
-        file.setFileName(tmp_dir + "/allPackages");
+        file.setFileName(tmp_dir.path() + "/allPackages");
         if (!file.open(QFile::ReadOnly)) {
             qDebug() << "Could not open file: " << file.fileName();
             return false;
@@ -1520,11 +1521,6 @@ void MainWindow::cleanup()
     }
 
     lock_file->unlock();
-
-    QDir::setCurrent("/");
-    if (tmp_dir.startsWith("/tmp/mxpm-") && QFile::exists(tmp_dir)) {
-        system("rm -r " + tmp_dir.toUtf8());
-    }
 
     QSettings settings("mx-packageinstaller");
     settings.setValue("geometry", saveGeometry());
