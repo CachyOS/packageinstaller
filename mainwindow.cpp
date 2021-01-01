@@ -535,7 +535,7 @@ void MainWindow::removeDuplicatesFP()
     QTreeWidgetItemIterator it(ui->treeFlatpak);
     QString current, next;
     while (*it) {
-        current = ((*it))->text(1);\
+        current = ((*it))->text(1);
         if (*(++it)) {
             next = ((*it))->text(1);
             if (next == current) {
@@ -967,7 +967,7 @@ bool MainWindow::confirmActions(QString names, QString action)
     QString detailed_to_install;
     QString detailed_removed_names;
     QString recommends;
-    if (tree == ui->treeFlatpak){
+    if (tree == ui->treeFlatpak) {
         detailed_installed_names = change_list;
     } else if (tree == ui->treeBackports) {
         recommends = (ui->checkBoxInstallRecommendsMXBP->isChecked()) ? "--install-recommends " : "";
@@ -1610,11 +1610,11 @@ QStringList MainWindow::listFlatpaks(const QString remote, const QString type)
     if (fp_ver < VersionNumber("1.0.1")) {
         arch_fp = (arch == "amd64") ? arch_fp = "--arch=x86_64 " : arch_fp = "--arch=i386 ";
         // list packages, strip first part remote/ or app/ no size for old flatpak
-        success = cmd.run("runuser -s /bin/bash -l $(logname) -c \"set -o pipefail; flatpak -d remote-ls " + user + remote + " " + arch_fp + type + "| cut -f1 | tr -s ' ' | cut -f1 -d' '|sed 's/^[^\\/]*\\///g' \"", out);
+        success = cmd.run("runuser -s /bin/bash -l $(logname) -c \"set -o pipefail; flatpak -d remote-ls " + user + remote + " " + arch_fp + type + "2>/dev/null| cut -f1 | tr -s ' ' | cut -f1 -d' '|sed 's/^[^\\/]*\\///g' \"", out);
         list = QString(out).split("\n");
     } else if (fp_ver < VersionNumber("1.2.4")) { // lower than Buster version
         // list size too
-        success = cmd.run("runuser -s /bin/bash -l $(logname) -c \"set -o pipefail; flatpak -d remote-ls " + user + remote + " " + arch_fp + type + "| cut -f1,3 |tr -s ' ' | sed 's/^[^\\/]*\\///g' \"", out);
+        success = cmd.run("runuser -s /bin/bash -l $(logname) -c \"set -o pipefail; flatpak -d remote-ls " + user + remote + " " + arch_fp + type + "2>/dev/null| cut -f1,3 |tr -s ' ' | sed 's/^[^\\/]*\\///g' \"", out);
         list = QString(out).split("\n");
     } else { // Buster version and above
         if (!updated) {
@@ -1624,12 +1624,12 @@ QStringList MainWindow::listFlatpaks(const QString remote, const QString type)
         // list version too
         QString process_string; // unfortunatelly the resulting string structure is different depending on type option
         if (type == "--app" || type.isEmpty()) {
-            success = cmd.run("runuser -s /bin/bash -l $(logname) -c \"set -o pipefail; flatpak remote-ls " + user + remote + " " + arch_fp + "--app --columns=ver,ref,installed-size\"", out);
+            success = cmd.run("runuser -s /bin/bash -l $(logname) -c \"set -o pipefail; flatpak remote-ls " + user + remote + " " + arch_fp + "--app --columns=ver,ref,installed-size 2>/dev/null\"", out);
             list = QString(out).split("\n");
             if (list == QStringList("")) list = QStringList();
         }
         if (type == "--runtime" || type.isEmpty()) {
-            success = cmd.run("runuser -s /bin/bash -l $(logname) -c \"set -o pipefail; flatpak remote-ls " + user + remote + " " + arch_fp + "--runtime --columns=branch,ref,installed-size\"", out);
+            success = cmd.run("runuser -s /bin/bash -l $(logname) -c \"set -o pipefail; flatpak remote-ls " + user + remote + " " + arch_fp + "--runtime --columns=branch,ref,installed-size 2>/dev/null\"", out);
             list += QString(out).split("\n");
             if (list == QStringList("")) list = QStringList();
         }
@@ -1648,9 +1648,9 @@ QStringList MainWindow::listInstalledFlatpaks(const QString type)
 {
     QStringList list;
     if (fp_ver < VersionNumber("1.2.4")) {
-        list << cmd.getCmdOut("runuser -s /bin/bash -l $(logname) -c \"flatpak -d list " + user + type + "|cut -f1|cut -f1 -d' '\"").remove(" ").split("\n");
+        list << cmd.getCmdOut("runuser -s /bin/bash -l $(logname) -c \"flatpak -d list 2>/dev/null " + user + type + "|cut -f1|cut -f1 -d' '\"").remove(" ").split("\n");
     } else {
-        list << cmd.getCmdOut("runuser -s /bin/bash -l $(logname) -c \"flatpak list " + user + type + " --columns=ref\"").remove(" ").split("\n");
+        list << cmd.getCmdOut("runuser -s /bin/bash -l $(logname) -c \"flatpak list 2>/dev/null " + user + type + " --columns=ref\"").remove(" ").split("\n");
     }
     if (list == QStringList("")) list = QStringList();
     return list;
