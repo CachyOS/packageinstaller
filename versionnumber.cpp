@@ -1,5 +1,6 @@
 /*
     Copyright (C) 2008  Tim Fechtner < urwald at users dot sourceforge dot net >
+    Modfied by Adrian @MXLinux
 
     This program is free software; you can redistribute it and/or
     modify it under the terms of the GNU General Public License as
