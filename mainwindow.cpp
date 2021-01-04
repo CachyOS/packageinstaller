@@ -1964,7 +1964,7 @@ void MainWindow::on_buttonHelp_clicked()
     QLocale locale;
     QString lang = locale.bcp47Name();
 
-    QString url = "/usr/share/doc/mx-packageinstaller/help/mx-package-installer.html";
+    QString url = "/usr/share/doc/mx-packageinstaller/mx-package-installer.html";
 
     if (lang.startsWith("fr")) {
         url = "https://mxlinux.org/wiki/help-files/help-mx-installateur-de-paquets";
