@@ -46,7 +46,8 @@
 MainWindow::MainWindow(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::MainWindow),
-    dictionary("/usr/share/mx-packageinstaller-pkglist/category.dict", QSettings::IniFormat)
+    dictionary("/usr/share/mx-packageinstaller-pkglist/category.dict", QSettings::IniFormat),
+    reply(nullptr)
 {
     qDebug().noquote() << QCoreApplication::applicationName() << "version:" << VERSION;
 
@@ -1259,10 +1260,86 @@ bool MainWindow::isFilteredName(const QString &name) const
 }
 
 // Check if online
-bool MainWindow::checkOnline() const
+bool MainWindow::checkOnline()
 {
-    return (system("wget -q --spider http://mxrepo.com >/dev/null 2>&1 || wget -q --spider http://google.com >/dev/null 2>&1 ") == 0);
+    QNetworkReply::NetworkError error = QNetworkReply::NoError;
+    QEventLoop loop;
+
+    QNetworkRequest request;
+    request.setRawHeader("User-Agent", qApp->applicationName().toUtf8() + "/" + qApp->applicationVersion().toUtf8() + " (linux-gnu)");
+
+    QStringList addresses{"http://mxrepo.com", "http://google.com"}; // list of addresses to try
+    for (const QString &address : addresses) {
+        error = QNetworkReply::NoError;
+        request.setUrl(QUrl(address));
+        reply = manager.get(request);
+        connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+        connect(reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error), [&error](const QNetworkReply::NetworkError &err) {error = err;} ); // errorOccured only in Qt >= 5.15
+        connect(reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error), &loop, &QEventLoop::quit);
+        loop.exec();
+        reply->disconnect();
+        if (error == QNetworkReply::NoError) {
+            return true;
+        }
+    }
+    qDebug() << "No network detected:" << reply->url() << error;
+    return false;
 }
+
+bool MainWindow::downloadFile(const QString &url, QFile &file)
+{
+    if (!file.open(QIODevice::WriteOnly)) {
+        qDebug() << "Could not open file:" << file.fileName();
+        return false;
+    }
+
+    QNetworkRequest request;
+    request.setUrl(QUrl(url));
+    request.setRawHeader("User-Agent", qApp->applicationName().toUtf8() + "/" + qApp->applicationVersion().toUtf8() + " (linux-gnu)");
+
+    reply = manager.get(request);
+    QEventLoop loop;
+
+    bool success = true;
+    connect(reply, &QNetworkReply::readyRead, [this, &file, &success]() { success = file.write(reply->readAll()); });
+    connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+    loop.exec();
+    reply->disconnect();
+
+    if (!success) {
+        QMessageBox::warning(this, tr("Error"), tr("There was an error writing file: %1. Please check if you have enough free space on your drive").arg(file.fileName()));
+        exit(EXIT_FAILURE);
+    }
+
+    file.close();
+    if (reply->error() != QNetworkReply::NoError) {
+        qDebug() << "There was an error downloading the file:" << url;
+        return false;
+    }
+    return true;
+}
+
+bool MainWindow::downloadAndUnzip(const QString &url, QFile &file)
+{
+    if (!downloadFile(url, file)) {
+        file.remove();
+        QFile::remove(QFileInfo(file.fileName()).path() + "/" + QFileInfo(file.fileName()).baseName()); // rm unzipped file
+        return false;
+    } else {
+        QString unzip = (file.fileName().endsWith(".gz")) ? "gzip -df " : "unxz -f ";
+        if (!cmd.run(unzip + file.fileName())) {
+            qDebug() << "Could not unzip file:" << file.fileName();
+            return false;
+        }
+    }
+    return true;
+}
+
+bool MainWindow::downloadAndUnzip(const QString &url, const QString &repo_name, const QString &branch, const QString &format, QFile &file)
+{
+    return downloadAndUnzip(url + repo_name + branch + "/binary-" + arch + "/Packages." + format, file);
+}
+
 
 // Build the list of available packages from various source
 bool MainWindow::buildPackageLists(bool force_download)
@@ -1320,45 +1397,36 @@ bool MainWindow::downloadPackageList(bool force_download)
         if (!QFile(tmp_dir.path() + "/mxPackages").exists() || force_download) {
             progress->show();
 
-            if (ver_name == "jessie") { // repo name is 'mx15' for Strech, use Debian version name for later versions
-                repo_name = "mx15";
-            } else {
-                repo_name = ver_name;
-            }
-            if (!cmd.run("wget --append-output=/var/log/mxpi.log http://mxrepo.com/mx/testrepo/dists/" + repo_name + "/test/binary-" + arch +
-                         "/Packages.gz -O mxPackages.gz && gzip -df mxPackages.gz")) {
-                QFile::remove(tmp_dir.path() + "/mxPackages.gz");
-                QFile::remove(tmp_dir.path() + "/mxPackages");
+            repo_name = (ver_name == "jessie") ? "mx15" : ver_name;  // repo name is 'mx15' for Strech, use Debian version name for later versions
+            QFile file(tmp_dir.path() + "/mxPackages.gz");
+            QString url = "http://mxrepo.com/mx/testrepo/dists/";
+            QString branch = "/test";
+            QString format = "gz";
+            if (!downloadAndUnzip(url, repo_name, branch, format, file)) {
                 return false;
             }
         }
-
     } else if (tree == ui->treeBackports) {
         if (!QFile(tmp_dir.path() + "/mainPackages").exists() ||
                 !QFile(tmp_dir.path() + "/contribPackages").exists() ||
                 !QFile(tmp_dir.path() + "/nonfreePackages").exists() || force_download) {
             progress->show();
-            bool success = cmd.run("wget --append-output=/var/log/mxpi.log --timeout=10 http://deb.debian.org/debian/dists/" +
-                               ver_name + "-backports/main/binary-" + arch + "/Packages.xz -O mainPackages.xz && unxz -f mainPackages.xz");
-            if (!success) {
-                QFile::remove(tmp_dir.path() + "/mainPackages.xz");
-                QFile::remove(tmp_dir.path() + "/mainPackages");
+
+            QFile file(tmp_dir.path() + "/mainPackages.xz");
+            QString url = "http://deb.debian.org/debian/dists/";
+            QString branch = "-backports/main";
+            QString format = "xz";
+            if (!downloadAndUnzip(url, ver_name, branch, format, file)) {
                 return false;
             }
-            //cmd.run("sleep 3");
-            success = cmd.run("wget --append-output=/var/log/mxpi.log --timeout=10 http://deb.debian.org/debian/dists/" +
-                           ver_name + "-backports/contrib/binary-" + arch + "/Packages.xz -O contribPackages.xz && unxz -f contribPackages.xz");
-            if (!success) {
-                QFile::remove(tmp_dir.path() + "/contribPackages.xz");
-                QFile::remove(tmp_dir.path() + "/contribPackages");
+            file.setFileName(tmp_dir.path() + "/contribPackages.xz");
+            branch = "-backports/contrib";
+            if (!downloadAndUnzip(url, ver_name, branch, format, file)) {
                 return false;
             }
-            //cmd.run("sleep 3");
-            success = cmd.run("wget --append-output=/var/log/mxpi.log --timeout=10 http://deb.debian.org/debian/dists/" +
-                           ver_name + "-backports/non-free/binary-" + arch + "/Packages.xz -O nonfreePackages.xz && unxz -f nonfreePackages.xz");
-            if (!success) {
-                QFile::remove(tmp_dir.path() + "/nonfreePackages.xz");
-                QFile::remove(tmp_dir.path() + "/nonfreePackages");
+            file.setFileName(tmp_dir.path() + "/nonfreePackages.xz");
+            branch = "-backports/non-free";
+            if (!downloadAndUnzip(url, ver_name, branch, format, file)) {
                 return false;
             }
             progCancel->setDisabled(true);

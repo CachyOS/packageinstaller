@@ -27,17 +27,19 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMessageBox>
-#include <QProcess>
-#include <QTimer>
-#include <QSettings>
-#include <QFile>
 #include <QDomDocument>
+#include <QFile>
+#include <QMessageBox>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QProcess>
 #include <QProgressDialog>
+#include <QSettings>
 #include <QTemporaryDir>
+#include <QTimer>
 #include <QTreeWidgetItem>
 
-#include <cmd.h>
+#include "cmd.h"
 #include "remotes.h"
 #include "lockfile.h"
 #include "versionnumber.h"
@@ -58,7 +60,6 @@ public:
     bool buildPackageLists(bool force_download = false);
     bool checkInstalled(const QString &names) const;
     bool checkInstalled(const QStringList &name_list) const;
-    bool checkOnline() const;
     bool checkUpgradable(const QStringList &name_list) const;
     bool confirmActions(QString names, QString action);
     bool downloadPackageList(bool force_download = false);
@@ -200,6 +201,14 @@ private:
     QTimer timer;
     QTreeWidget *tree; // current/calling tree
     VersionNumber fp_ver;
+
+    QNetworkAccessManager manager;
+    QNetworkReply* reply;
+    bool checkOnline();
+    bool downloadFile(const QString &url, QFile &file);
+    bool downloadAndUnzip(const QString &url, QFile &file);
+    bool downloadAndUnzip(const QString &url, const QString &repo_name, const QString &branch, const QString &format, QFile &file);
+
 
 };
 

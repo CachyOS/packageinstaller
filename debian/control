@@ -13,7 +13,6 @@ Depends: flatpak (<< 1.0) | xdg-desktop-portal-gtk,
          menu,
          mx-packageinstaller-pkglist (>= 17.4),
          socat,
-         wget,
          xdg-utils | mx-viewer,
          ${misc:Depends},
          ${shlibs:Depends}
