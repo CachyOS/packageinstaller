@@ -1326,7 +1326,7 @@ bool MainWindow::downloadAndUnzip(const QString &url, QFile &file)
         QFile::remove(QFileInfo(file.fileName()).path() + "/" + QFileInfo(file.fileName()).baseName()); // rm unzipped file
         return false;
     } else {
-        QString unzip = (file.fileName().endsWith(".gz")) ? "gzip -df " : "unxz -f ";
+        QString unzip = (file.fileName().endsWith(".gz")) ? "gunzip -f " : "unxz -f ";
         if (!cmd.run(unzip + file.fileName())) {
             qDebug() << "Could not unzip file:" << file.fileName();
             return false;
@@ -1394,7 +1394,7 @@ bool MainWindow::downloadPackageList(bool force_download)
     }
 
     if (tree == ui->treeMXtest)  {
-        if (!QFile(tmp_dir.path() + "/mxPackages").exists() || force_download) {
+        if (!QFile::exists(tmp_dir.path() + "/mxPackages") || force_download) {
             progress->show();
 
             repo_name = (ver_name == "jessie") ? "mx15" : ver_name;  // repo name is 'mx15' for Strech, use Debian version name for later versions
@@ -1407,9 +1407,9 @@ bool MainWindow::downloadPackageList(bool force_download)
             }
         }
     } else if (tree == ui->treeBackports) {
-        if (!QFile(tmp_dir.path() + "/mainPackages").exists() ||
-                !QFile(tmp_dir.path() + "/contribPackages").exists() ||
-                !QFile(tmp_dir.path() + "/nonfreePackages").exists() || force_download) {
+        if (!QFile::exists(tmp_dir.path() + "/mainPackages") ||
+                !QFile::exists(tmp_dir.path() + "/contribPackages") ||
+                !QFile::exists(tmp_dir.path() + "/nonfreePackages") || force_download) {
             progress->show();
 
             QFile file(tmp_dir.path() + "/mainPackages.xz");
@@ -1419,11 +1419,13 @@ bool MainWindow::downloadPackageList(bool force_download)
             if (!downloadAndUnzip(url, ver_name, branch, format, file)) {
                 return false;
             }
+
             file.setFileName(tmp_dir.path() + "/contribPackages.xz");
             branch = "-backports/contrib";
             if (!downloadAndUnzip(url, ver_name, branch, format, file)) {
                 return false;
             }
+
             file.setFileName(tmp_dir.path() + "/nonfreePackages.xz");
             branch = "-backports/non-free";
             if (!downloadAndUnzip(url, ver_name, branch, format, file)) {
