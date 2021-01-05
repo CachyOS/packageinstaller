@@ -1578,17 +1578,14 @@ void MainWindow::cleanup()
     cmd.halt();
 
     bool changed = false;
-    if (QFile::exists("/etc/apt/sources.list.d/mxpm-temp.list")) {
-        system("rm -f /etc/apt/sources.list.d/mxpm-temp.list");
+    if (QFile::remove("/etc/apt/sources.list.d/mxpm-temp.list")) {
         changed = true;
     }
     if (!test_initially_enabled && (system("grep -q '^\\s*deb.* test' /etc/apt/sources.list.d/mx.list") == 0)) {
         system("sed -i 's/.* test/#&/'  /etc/apt/sources.list.d/mx.list");  // comment out the line
         changed = true;
     }
-    if (changed) {
-        update();
-    }
+    if (changed) system("apt-get update& disown");
 
     lock_file->unlock();
 
