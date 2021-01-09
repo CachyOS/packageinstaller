@@ -1,3 +1,10 @@
+mx-packageinstaller (21.1.01) mx; urgency=medium
+
+  * adjust handling of mx testrepo and debian-backports
+  * adjust flat repository format handling
+
+ -- fehlix <fehlix@mxlinux.org>  Fri, 08 Jan 2021 21:21:10 -0400
+
 mx-packageinstaller (21.1) mx; urgency=medium
 
   * filter out stderr when loading flatpaks
