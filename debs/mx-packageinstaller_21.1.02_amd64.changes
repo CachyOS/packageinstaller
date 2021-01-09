@@ -1,0 +1,50 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Format: 1.8
+Date: Fri, 08 Jan 2021 23:53:06 -0500
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 21.1.02
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (21.1.02) mx; urgency=medium
+ .
+   * adjust handling of mx testrepo and debian-backports
+   * adjust flat repository format handling
+Checksums-Sha1:
+ 3e35dd32055e6e24361a2d2296a06b0bdc4a2dfe 1231 mx-packageinstaller_21.1.02.dsc
+ 2614870f6a8b5fba7adf50d6171110b841d7830b 274916 mx-packageinstaller_21.1.02.tar.xz
+ 2e1c1b1d163bc59d39b943ebb082665397acc3f5 1450466 mx-packageinstaller-dbgsym_21.1.02_amd64.deb
+ ac2a04fad5e5b073ac6298886183499afa7609d3 10817 mx-packageinstaller_21.1.02_amd64.buildinfo
+ 11cf63521b0a4fb07934c9a2df990a28c9323b71 341210 mx-packageinstaller_21.1.02_amd64.deb
+Checksums-Sha256:
+ 5f07ebf379145a949e07f0e3fc6103bdcab4f986bc4ad9feed103bc1ad1e18a1 1231 mx-packageinstaller_21.1.02.dsc
+ b268bcef09da230b8d32de2ad7f9c3dcf9460c79ff8315d866504f442783cf31 274916 mx-packageinstaller_21.1.02.tar.xz
+ 41ec5518341047c14f4c6fccd4eb6cc84ab42aa49087cd32def94cbbe9ae9217 1450466 mx-packageinstaller-dbgsym_21.1.02_amd64.deb
+ fe330b08cc19936de4cd6a4dc4fcdbfd12e997b7202ea74135190fdbe16897dc 10817 mx-packageinstaller_21.1.02_amd64.buildinfo
+ c794b08e717da6f8cad033d57c9555ca2d1893d7f4a55b2c3590115d20209dc2 341210 mx-packageinstaller_21.1.02_amd64.deb
+Files:
+ 7c8bee43de5d7d9418dec2a00313fdcf 1231 admin optional mx-packageinstaller_21.1.02.dsc
+ 4140ea4ebacaefb317927449c3719c4c 274916 admin optional mx-packageinstaller_21.1.02.tar.xz
+ 134e4bfb5af71ec61a10b3b3fe8b861e 1450466 debug extra mx-packageinstaller-dbgsym_21.1.02_amd64.deb
+ 484205a4f484912888877e0f4880ff29 10817 admin optional mx-packageinstaller_21.1.02_amd64.buildinfo
+ 085a062d364c1421271044b0729bb884 341210 admin optional mx-packageinstaller_21.1.02_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCgAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAl/5N7sTHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumPBYB/4pJYJjUX8ukAltRmesk2z37T5eTb1a
+pT2wHYPGJ9quAYMA2D2d3enTxDQQ5Bu3a+yLPFeY8jAClZjClSLnn7gf14KZRqjg
+xXDIIGF3gspso/fKQPzDgSxREk9NGMemaYcoLcMP0afW+wDGTN7WV8/kqvqjHYUr
+7dqmEzTTQEInRegqVPRXKCHPmu6lS63b29Dx3MXT82mbAQIMuY6lkoLzqxiiLV7E
+CLK9eWK1Y0Q/EFy+O5N2gmstGmtn5zjAbLBUe6ZhIIrcXpOmjIBvy4t5dbmReOsg
+1Lp7MQi6WYuvTgTulTWfmLa58bxPLhln2RdAzJSmZipbpIS4ZLbCdA3p
+=avxM
+-----END PGP SIGNATURE-----

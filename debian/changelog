@@ -1,3 +1,10 @@
+mx-packageinstaller (21.1.02) mx; urgency=medium
+
+  * adjust handling of mx testrepo and debian-backports
+  * adjust flat repository format handling
+
+ -- Adrian <adrian@mxlinux.org>  Fri, 08 Jan 2021 23:53:06 -0500
+
 mx-packageinstaller (21.1.01) mx; urgency=medium
 
   * adjust handling of mx testrepo and debian-backports

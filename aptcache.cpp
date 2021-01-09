@@ -12,7 +12,7 @@ AptCache::AptCache()
 void AptCache::loadCacheFiles()
 {
     QDir dir(dir_name);
-    // inclide all _Packages list files
+    // include all _Packages list files
     QString packages_filter = "*_Packages";
 
     // some regexp's
@@ -81,7 +81,7 @@ void AptCache::parseContent()
     bool add_package = false;
 
     // FIXME: add deb822-format handling
-    // assumption for now is made "Description:" line is always the last 
+    // assumption for now is made "Description:" line is always the last
     for (QString line : list) {
         if (line.startsWith(QLatin1String("Package: "))) {
             package = line.remove(QLatin1String("Package: "));
