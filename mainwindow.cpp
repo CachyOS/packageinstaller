@@ -1585,7 +1585,7 @@ void MainWindow::cleanup()
         system("sed -i 's/.* test/#&/'  /etc/apt/sources.list.d/mx.list");  // comment out the line
         changed = true;
     }
-    if (changed) system("apt-get update& disown");
+    if (changed) system("nohup apt-get update&");
 
     lock_file->unlock();
 
