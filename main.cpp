@@ -58,6 +58,13 @@ int main(int argc, char *argv[])
     if (appTran.load(app.applicationName() + "_" + QLocale::system().name(), "/usr/share/" + app.applicationName() + "/locale"))
         app.installTranslator(&appTran);
 
+    // root guard
+    if (system("logname |grep -q ^root$") == 0) {
+        QMessageBox::critical(nullptr, QObject::tr("Error"),
+                              QObject::tr("You seem to be logged in as root, please log out and log in as normal user to use this program."));
+        exit(EXIT_FAILURE);
+    }
+
     if (getuid() == 0) {
         // Don't start app if Synaptic/apt-get is running, lock dpkg otherwise while the program runs
         LockFile lock_file("/var/lib/dpkg/lock");
