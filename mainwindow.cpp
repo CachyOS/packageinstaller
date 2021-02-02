@@ -1536,10 +1536,6 @@ void MainWindow::clearUi()
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
 
     blockSignals(true);
-    ui->comboFilterStable->setCurrentIndex(0);
-    ui->comboFilterMX->setCurrentIndex(0);
-    ui->comboFilterBP->setCurrentIndex(0);
-
     ui->buttonCancel->setEnabled(true);
     ui->buttonInstall->setEnabled(false);
     ui->buttonUninstall->setEnabled(false);
@@ -1939,7 +1935,7 @@ void MainWindow::findPackageOther()
     }
     QTreeWidgetItemIterator it(tree);
     while (*it) {
-        if ((*it)->text(6) == "true" && found_items.contains(*it)) {
+        if ((*it)->text(6) == QLatin1String("true") && found_items.contains(*it)) {
             (*it)->setHidden(false);
         } else {
             (*it)->setHidden(true);
@@ -2207,14 +2203,18 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 
     // save the search text
     QString search_str;
+    int filter_idx = 0;
     if (tree == ui->treePopularApps) {
         search_str = ui->searchPopular->text();
     } else if (tree == ui->treeStable) {
         search_str = ui->searchBoxStable->text();
+        filter_idx = ui->comboFilterStable->currentIndex();
     } else if (tree == ui->treeMXtest) {
         search_str = ui->searchBoxMX->text();
+        filter_idx = ui->comboFilterMX->currentIndex();
     } else if (tree == ui->treeBackports) {
         search_str = ui->searchBoxBP->text();
+        filter_idx = ui->comboFilterBP->currentIndex();
     } else if (tree == ui->treeFlatpak) {
         search_str = ui->searchBoxFlatpak->text();
     }
@@ -2236,6 +2236,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         if (tree->topLevelItemCount() == 0) {
             buildPackageLists();
         }
+        ui->comboFilterStable->setCurrentIndex(filter_idx);
         findPackageOther();
         ui->searchBoxStable->setFocus();
         break;
@@ -2248,6 +2249,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         if (tree->topLevelItemCount() == 0) {
             buildPackageLists();
         }
+        ui->comboFilterMX->setCurrentIndex(filter_idx);
         findPackageOther();
         ui->searchBoxMX->setFocus();
         break;
@@ -2260,6 +2262,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         if (tree->topLevelItemCount() == 0) {
             buildPackageLists();
         }
+        ui->comboFilterBP->setCurrentIndex(filter_idx);
         findPackageOther();
         ui->searchBoxBP->setFocus();
         break;
@@ -2352,6 +2355,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
 void MainWindow::filterChanged(const QString &arg1)
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
+
     QList<QTreeWidgetItem *> found_items;
     QTreeWidgetItemIterator it(tree);
     tree->blockSignals(true);
@@ -2425,10 +2429,10 @@ void MainWindow::filterChanged(const QString &arg1)
     while (*it) {
         if (found_items.contains(*it)) {
             (*it)->setHidden(false);
-            (*it)->setText(6, QStringLiteral("true")); // Displayed flag
+            (*it)->setText(6, QLatin1String("true")); // Displayed flag
         } else {
             (*it)->setHidden(true);
-            (*it)->setText(6, QStringLiteral("false"));
+            (*it)->setText(6, QLatin1String("false"));
             (*it)->setCheckState(0, Qt::Unchecked); // uncheck hidden items
         }
         ++it;

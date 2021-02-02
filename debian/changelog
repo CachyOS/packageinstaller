@@ -1,3 +1,10 @@
+mx-packageinstaller (21.2) mx; urgency=medium
+
+  * use spacebar to select items in list
+  * remember filter selection when changing tabs
+
+ -- Adrian <adrian@mxlinux.org>  Tue, 02 Feb 2021 14:12:26 -0500
+
 mx-packageinstaller (21.1.02) mx; urgency=medium
 
   * adjust handling of mx testrepo and debian-backports
