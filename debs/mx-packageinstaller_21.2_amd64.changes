@@ -1,0 +1,35 @@
+Format: 1.8
+Date: Tue, 02 Feb 2021 14:12:26 -0500
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 21.2
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (21.2) mx; urgency=medium
+ .
+   * use spacebar to select items in list
+   * remember filter selection when changing tabs
+Checksums-Sha1:
+ 2823e42f17608f0cb312928bb308bf11c3e07036 657 mx-packageinstaller_21.2.dsc
+ 4b73f9e71331cdfbc6a053e0fb7e8bf88437c94d 273696 mx-packageinstaller_21.2.tar.xz
+ 49e232af62c3945d16c03dc3aa2c05f9ed9493c4 1452488 mx-packageinstaller-dbgsym_21.2_amd64.deb
+ 8d7aef724176d8e69ea400837964c63f2da704d3 10219 mx-packageinstaller_21.2_amd64.buildinfo
+ 431d3ef9e26bc77f3c2db8d559afea4f54a7c905 341816 mx-packageinstaller_21.2_amd64.deb
+Checksums-Sha256:
+ 90cd6d1419bb584fe05b3276f076d225a1f5a63ed1a890e25ecf9f752b9e0adc 657 mx-packageinstaller_21.2.dsc
+ cba88059e0ff8ae220bada1233de4712dbc9c1f95916b862a03e9f3fceab6ddf 273696 mx-packageinstaller_21.2.tar.xz
+ a6956a99433f269ae3706e63c1b29e5cad01aff0dc09fc323f36537890d887e3 1452488 mx-packageinstaller-dbgsym_21.2_amd64.deb
+ 070ecbf92732966a12016990421ab88e076123cd8609b85af8a427367aa6ab4b 10219 mx-packageinstaller_21.2_amd64.buildinfo
+ 59167c19ff8eb8aa1da092172324302510e0b5d9b5f06ec50fe395a4f43cc6e9 341816 mx-packageinstaller_21.2_amd64.deb
+Files:
+ 5f6f2006b98b1b4b6468a08c3023d428 657 admin optional mx-packageinstaller_21.2.dsc
+ f52da3c22f6a09f703757922d8578fc3 273696 admin optional mx-packageinstaller_21.2.tar.xz
+ 5334ab4feba85a19dd1c35052bbdb86c 1452488 debug extra mx-packageinstaller-dbgsym_21.2_amd64.deb
+ ce4dd3bb3e6eaa7a49a15b294bed8f64 10219 admin optional mx-packageinstaller_21.2_amd64.buildinfo
+ ddc02e496302c66d653a77ffaf1cbd47 341816 admin optional mx-packageinstaller_21.2_amd64.deb
