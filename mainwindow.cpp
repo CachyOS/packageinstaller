@@ -32,6 +32,7 @@
 #include <QProgressBar>
 #include <QScrollBar>
 #include <QSettings>
+#include <QShortcut>
 #include <QTextStream>
 #include <QtXml/QtXml>
 
@@ -131,6 +132,16 @@ void MainWindow::setup()
     tree = ui->treePopularApps;
     ui->tabWidget->setTabEnabled(ui->tabWidget->indexOf(ui->tabOutput), false);
     ui->tabWidget->blockSignals(false);
+
+    QShortcut *shortcut = new QShortcut(Qt::Key_Space, this);
+    connect(shortcut, &QShortcut::activated, [this] {
+        if (QTreeWidget *t_widget = qobject_cast<QTreeWidget*>(focusWidget())) {
+            if (t_widget->currentItem()->childCount() > 0) return;
+            int col = (t_widget == ui->treePopularApps) ? 1 : 0;
+            Qt::CheckState new_state = (t_widget->currentItem()->checkState(col)) ? Qt::Unchecked : Qt::Checked;
+            t_widget->currentItem()->setCheckState(col, new_state);
+        }
+    });
 
     QSize size = this->size();
     QSettings settings(qApp->applicationName());
