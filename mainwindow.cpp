@@ -54,9 +54,9 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
     setProgressDialog();
 
-    connect(&timer, &QTimer::timeout, this, &MainWindow::updateBar, Qt::UniqueConnection);
-    connect(&cmd, &Cmd::started, this, &MainWindow::cmdStart, Qt::UniqueConnection);
-    connect(&cmd, &Cmd::finished, this, &MainWindow::cmdDone, Qt::UniqueConnection);
+    connect(&timer, &QTimer::timeout, this, &MainWindow::updateBar);
+    connect(&cmd, &Cmd::started, this, &MainWindow::cmdStart);
+    connect(&cmd, &Cmd::finished, this, &MainWindow::cmdDone);
     conn = connect(&cmd, &Cmd::outputAvailable, [](const QString &out) { qDebug() << out.trimmed(); });
     connect(&cmd, &Cmd::errorAvailable, [](const QString &out) { qWarning() << out.trimmed(); });
     setWindowFlags(Qt::Window); // for the close, min and max buttons
@@ -132,14 +132,12 @@ void MainWindow::setup()
     ui->tabWidget->setTabEnabled(ui->tabWidget->indexOf(ui->tabOutput), false);
     ui->tabWidget->blockSignals(false);
 
-    int width = this->width();
-    int height = this->height();
-    this->resize(width, height);
+    QSize size = this->size();
     QSettings settings(qApp->applicationName());
     if (settings.contains("geometry")) {
         restoreGeometry(settings.value("geometry").toByteArray());
         if (this->isMaximized()) { // add option to resize if maximized
-            this->resize(width, height);
+            this->resize(size);
             centerWindow();
         }
     }
