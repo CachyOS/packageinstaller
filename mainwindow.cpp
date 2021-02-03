@@ -134,9 +134,6 @@ void MainWindow::setup()
     ui->tabWidget->setTabEnabled(ui->tabWidget->indexOf(ui->tabOutput), false);
     ui->tabWidget->blockSignals(false);
 
-    QShortcut *shortcut = new QShortcut(Qt::Key_Space, this);
-    connect(shortcut, &QShortcut::activated, this, &MainWindow::checkUnckeckItem);
-
     QSize size = this->size();
     QSettings settings(qApp->applicationName());
     if (settings.contains("geometry")) {
@@ -146,6 +143,11 @@ void MainWindow::setup()
             centerWindow();
         }
     }
+
+    // check/uncheck tree items spacebar press or double-click
+    QShortcut *shortcut = new QShortcut(Qt::Key_Space, this);
+    connect(shortcut, &QShortcut::activated, this, &MainWindow::checkUnckeckItem);
+
     QList<QTreeWidget *> list_tree {ui->treePopularApps, ui->treeStable, ui->treeMXtest, ui->treeBackports, ui->treeFlatpak};
     for (auto tree : list_tree)
         connect(tree, &QTreeWidget::itemDoubleClicked, this, &MainWindow::checkUnckeckItem);
@@ -2496,21 +2498,17 @@ void MainWindow::buildChangeList(QTreeWidgetItem *item)
     }
 
     if (tree != ui->treeFlatpak) {
-        if (!checkInstalled(change_list)) {
-            ui->buttonUninstall->setEnabled(false);
-        } else {
-            ui->buttonUninstall->setEnabled(true);
-        }
+        ui->buttonUninstall->setEnabled(checkInstalled(change_list));
 
-        if (checkUpgradable(change_list)) {
+        if (checkUpgradable(change_list))
             ui->buttonInstall->setText(tr("Upgrade"));
-        } else {
+        else
             ui->buttonInstall->setText(tr("Install"));
-        }
+
     } else { // for Flatpaks allow selection only of installed or not installed items so one clicks on an installed item only installed items should be displayed and the other way round
         ui->buttonInstall->setText(tr("Install"));
         if (item->text(5) == QLatin1String("installed")) {
-            if (indexFilterFP == QLatin1String("All apps")) { // if "all apps" is selected
+            if (indexFilterFP == tr("All apps")) {
                 ui->comboFilterFlatpak->setCurrentText(tr("Installed apps"));
             }
             ui->buttonUninstall->setEnabled(true);
