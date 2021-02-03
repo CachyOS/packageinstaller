@@ -1809,53 +1809,54 @@ void MainWindow::disableWarning(bool checked, QString file)
 void MainWindow::displayInfo(const QTreeWidgetItem *item, int column)
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
-    if (column == 3 && item->childCount() == 0) {
-        QString desc = item->text(4);
-        QString install_names = item->text(5);
-        QString title = item->text(2);
-        QString msg = "<b>" + title + "</b><p>" + desc + "<p>" ;
-        if (install_names != "") {
-            msg += tr("Packages to be installed: ") + install_names;
-        }
-        QUrl url = item->text(7); // screenshot url
 
-        if (!url.isValid() || url.isEmpty() || url.url() == "none") {
-            qDebug() << "no screenshot for: " << title;
+    if (column != 3 || item->childCount() > 0) return;
+
+    QString desc = item->text(4);
+    QString install_names = item->text(5);
+    QString title = item->text(2);
+    QString msg = "<b>" + title + "</b><p>" + desc + "<p>" ;
+    if (!install_names.isEmpty()) {
+        msg += tr("Packages to be installed: ") + install_names;
+    }
+    QUrl url = item->text(7); // screenshot url
+
+    if (!url.isValid() || url.isEmpty() || url.url() == "none") {
+        qDebug() << "no screenshot for: " << title;
+    } else {
+        QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+        QNetworkReply *reply = manager->get(QNetworkRequest(url));
+
+        QEventLoop loop;
+        connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+        QTimer timer;
+        timer.start(5000);
+        connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+        ui->treePopularApps->blockSignals(true);
+        loop.exec();
+        timer.stop();
+        ui->treePopularApps->blockSignals(false);
+
+        if (reply->error())
+        {
+            qDebug() << "Download of " << url.url() << " failed: " << qPrintable(reply->errorString());
         } else {
-            QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-            QNetworkReply *reply = manager->get(QNetworkRequest(url));
-
-            QEventLoop loop;
-            connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-            QTimer timer;
-            timer.start(5000);
-            connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
-            ui->treePopularApps->blockSignals(true);
-            loop.exec();
-            timer.stop();
-            ui->treePopularApps->blockSignals(false);
-
-            if (reply->error())
-            {
-                qDebug() << "Download of " << url.url() << " failed: " << qPrintable(reply->errorString());
+            QImage image;
+            QByteArray data;
+            QBuffer buffer(&data);
+            QImageReader imageReader(reply);
+            image = imageReader.read();
+            if (imageReader.error()) {
+                qDebug() << "loading screenshot: " << imageReader.errorString();
             } else {
-                QImage image;
-                QByteArray data;
-                QBuffer buffer(&data);
-                QImageReader imageReader(reply);
-                image = imageReader.read();
-                if (imageReader.error()) {
-                    qDebug() << "loading screenshot: " << imageReader.errorString();
-                } else {
-                    image = image.scaled(QSize(200,300), Qt::KeepAspectRatioByExpanding);
-                    image.save(&buffer, "PNG");
-                    msg += QString("<p><img src='data:image/png;base64, %0'>").arg(QString(data.toBase64()));
-                }
+                image = image.scaled(QSize(200,300), Qt::KeepAspectRatioByExpanding);
+                image.save(&buffer, "PNG");
+                msg += QString("<p><img src='data:image/png;base64, %0'>").arg(QString(data.toBase64()));
             }
         }
-        QMessageBox info(QMessageBox::NoIcon, tr("Package info") , msg, QMessageBox::Close, this);
-        info.exec();
     }
+    QMessageBox info(QMessageBox::NoIcon, tr("Package info") , msg, QMessageBox::Close, this);
+    info.exec();
 }
 
 // Find package in view
