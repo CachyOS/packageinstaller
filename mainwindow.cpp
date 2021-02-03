@@ -1829,12 +1829,9 @@ void MainWindow::displayInfo(const QTreeWidgetItem *item, int column)
 
         QEventLoop loop;
         connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-        QTimer timer;
-        timer.start(5000);
-        connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
+        QTimer::singleShot(5000, &loop, &QEventLoop::quit);
         ui->treePopularApps->blockSignals(true);
         loop.exec();
-        timer.stop();
         ui->treePopularApps->blockSignals(false);
 
         if (reply->error())
