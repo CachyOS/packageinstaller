@@ -130,18 +130,12 @@ void MainWindow::setup()
     warning_flatpaks = false;
     warning_test = false;
     tree = ui->treePopularApps;
+
     ui->tabWidget->setTabEnabled(ui->tabWidget->indexOf(ui->tabOutput), false);
     ui->tabWidget->blockSignals(false);
 
     QShortcut *shortcut = new QShortcut(Qt::Key_Space, this);
-    connect(shortcut, &QShortcut::activated, [this] {
-        if (QTreeWidget *t_widget = qobject_cast<QTreeWidget*>(focusWidget())) {
-            if (t_widget->currentItem()->childCount() > 0) return;
-            int col = (t_widget == ui->treePopularApps) ? 1 : 0;
-            Qt::CheckState new_state = (t_widget->currentItem()->checkState(col)) ? Qt::Unchecked : Qt::Checked;
-            t_widget->currentItem()->setCheckState(col, new_state);
-        }
-    });
+    connect(shortcut, &QShortcut::activated, this, &MainWindow::checkUnckeckItem);
 
     QSize size = this->size();
     QSettings settings(qApp->applicationName());
@@ -152,6 +146,9 @@ void MainWindow::setup()
             centerWindow();
         }
     }
+    QList<QTreeWidget *> list_tree {ui->treePopularApps, ui->treeStable, ui->treeMXtest, ui->treeBackports, ui->treeFlatpak};
+    for (auto tree : list_tree)
+        connect(tree, &QTreeWidget::itemDoubleClicked, this, &MainWindow::checkUnckeckItem);
 }
 
 // Uninstall listed packages
@@ -419,6 +416,16 @@ void MainWindow::updateBar()
 {
     qApp->processEvents();
     bar->setValue((bar->value() + 1) % 100);
+}
+
+void MainWindow::checkUnckeckItem()
+{
+    if (QTreeWidget *t_widget = qobject_cast<QTreeWidget*>(focusWidget())) {
+        if (t_widget->currentItem()->childCount() > 0) return;
+        int col = (t_widget == ui->treePopularApps) ? 1 : 0;
+        Qt::CheckState new_state = (t_widget->currentItem()->checkState(col)) ? Qt::Unchecked : Qt::Checked;
+        t_widget->currentItem()->setCheckState(col, new_state);
+    };
 }
 
 void MainWindow::outputAvailable(const QString &output)

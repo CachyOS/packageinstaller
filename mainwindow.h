@@ -128,6 +128,7 @@ private slots:
     void outputAvailable(const QString &output);
     void showOutput();
     void updateBar();
+    void checkUnckeckItem();
 
     void on_buttonAbout_clicked();
     void on_buttonHelp_clicked();
@@ -203,7 +204,7 @@ private:
     VersionNumber fp_ver;
 
     QNetworkAccessManager manager;
-    QNetworkReply* reply;
+    QNetworkReply *reply;
     bool checkOnline();
     bool downloadFile(const QString &url, QFile &file);
     bool downloadAndUnzip(const QString &url, QFile &file);
