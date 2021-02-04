@@ -27,6 +27,7 @@
 #include <QDesktopWidget>
 #include <QFileDialog>
 #include <QImageReader>
+#include <QMenu>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QProgressBar>
@@ -145,12 +146,14 @@ void MainWindow::setup()
     }
 
     // check/uncheck tree items spacebar press or double-click
-    QShortcut *shortcut = new QShortcut(Qt::Key_Space, this);
-    connect(shortcut, &QShortcut::activated, this, &MainWindow::checkUnckeckItem);
+    QShortcut *shortcutToggle = new QShortcut(Qt::Key_Space, this);
+    connect(shortcutToggle, &QShortcut::activated, this, &MainWindow::checkUnckeckItem);
 
     QList<QTreeWidget *> list_tree {ui->treePopularApps, ui->treeStable, ui->treeMXtest, ui->treeBackports, ui->treeFlatpak};
-    for (auto tree : list_tree)
+    for (auto tree : list_tree) {
+        if (tree == ui->treePopularApps || tree == ui->treeStable) tree->setContextMenuPolicy(Qt::CustomContextMenu);
         connect(tree, &QTreeWidget::itemDoubleClicked, this, &MainWindow::checkUnckeckItem);
+    }
 }
 
 // Uninstall listed packages
@@ -1861,7 +1864,21 @@ void MainWindow::displayInfo(const QTreeWidgetItem *item, int column)
             }
         }
     }
-    QMessageBox info(QMessageBox::NoIcon, tr("Package info") , msg, QMessageBox::Close, this);
+    QMessageBox info(QMessageBox::NoIcon, tr("Package info") , msg, QMessageBox::Close, nullptr);
+    info.exec();
+}
+
+void MainWindow::displayPackageInfo(const QTreeWidgetItem *item)
+{
+    QString msg = cmd.getCmdOut("aptitude show " + item->text(2)) + "\n";
+    QString details = cmd.getCmdOut("aptitude install -sy " + item->text(2));
+    details.remove("Reading package lists...\n");
+    details.remove("Building dependency tree...\n");
+    details.remove("Reading state information...\n");
+    details.remove("Initializing package states...\n");
+    details.remove("Building tag database...\n");
+    QMessageBox info(QMessageBox::NoIcon, tr("Package info") , Qt::convertFromPlainText(msg), QMessageBox::Close, nullptr);
+    info.setDetailedText(details);
     info.exec();
 }
 
@@ -2522,6 +2539,7 @@ void MainWindow::buildChangeList(QTreeWidgetItem *item)
             ui->comboFilterFlatpak->setCurrentText(indexFilterFP);
             indexFilterFP.clear();
         }
+        ui->treeFlatpak->setFocus();
     }
 
     if (change_list.isEmpty()) {
@@ -2723,6 +2741,29 @@ void MainWindow::on_comboUser_activated(int index)
     }
     listFlatpakRemotes();
     displayFlatpaks(true);
+}
+
+void MainWindow::on_treePopularApps_customContextMenuRequested(const QPoint &pos)
+{
+    QTreeWidget *t_widget = qobject_cast<QTreeWidget*>(focusWidget());
+    if (t_widget->currentItem()->childCount() > 0) return;
+    QAction *action = new QAction(QIcon::fromTheme("dialog-information"), tr("More &info..."), this);
+    QMenu menu(this);
+    menu.addAction(action);
+    connect(action, &QAction::triggered, [this, t_widget] { displayInfo(t_widget->currentItem(), 3); });
+    menu.exec(ui->treePopularApps->mapToGlobal(pos));
+    action->deleteLater();
+}
+
+void MainWindow::on_treeStable_customContextMenuRequested(const QPoint &pos)
+{
+    QTreeWidget *t_widget = qobject_cast<QTreeWidget*>(focusWidget());
+    QAction *action = new QAction(QIcon::fromTheme("dialog-information"), tr("More &info..."), this);
+    QMenu menu(this);
+    menu.addAction(action);
+    connect(action, &QAction::triggered, [this, t_widget] { displayPackageInfo(t_widget->currentItem()); });
+    menu.exec(ui->treePopularApps->mapToGlobal(pos));
+    action->deleteLater();
 }
 
 

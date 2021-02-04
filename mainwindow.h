@@ -112,9 +112,10 @@ public:
     QStringList listInstalledFlatpaks(const QString type = "");
 
 protected:
-    void keyPressEvent(QKeyEvent* event);
+    void keyPressEvent(QKeyEvent *event);
 
 private slots:
+    void checkUnckeckItem();
     void cleanup();
     void cmdDone();
     void cmdStart();
@@ -122,13 +123,13 @@ private slots:
     void disableWarning(bool checked, QString file);
     void displayInfo(const QTreeWidgetItem *item, int column);
     void displayOutput();
+    void displayPackageInfo(const QTreeWidgetItem *item);
     void filterChanged(const QString &arg1);
     void findPackageOther();
     void findPopular() const;
     void outputAvailable(const QString &output);
     void showOutput();
     void updateBar();
-    void checkUnckeckItem();
 
     void on_buttonAbout_clicked();
     void on_buttonHelp_clicked();
@@ -162,6 +163,9 @@ private slots:
     void on_buttonUpgradeFP_clicked();
     void on_buttonRemotes_clicked();
     void on_comboUser_activated(int index);
+
+    void on_treePopularApps_customContextMenuRequested(const QPoint &pos);
+    void on_treeStable_customContextMenuRequested(const QPoint &pos);
 
 private:
     Ui::MainWindow *ui;
