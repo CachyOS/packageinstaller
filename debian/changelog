@@ -1,3 +1,10 @@
+mx-packageinstaller (21.2.01) mx; urgency=medium
+
+  * add 'more info' context menu for programs in Popular and Stable
+  * use double-click to check/uncheck programs in the list
+
+ -- Adrian <adrian@mxlinux.org>  Thu, 04 Feb 2021 00:07:51 -0500
+
 mx-packageinstaller (21.2) mx; urgency=medium
 
   * use spacebar to select items in list

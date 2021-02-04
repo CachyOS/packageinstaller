@@ -1,0 +1,35 @@
+Format: 1.8
+Date: Thu, 04 Feb 2021 00:07:51 -0500
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 21.2.01
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (21.2.01) mx; urgency=medium
+ .
+   * add 'more info' context menu for programs in Popular and Stable
+   * use double-click to check/uncheck programs in the list
+Checksums-Sha1:
+ 5e6a0b2ff4db1f74cdb3fbaff56322130577d892 669 mx-packageinstaller_21.2.01.dsc
+ 1da316d8150b3e538f3e8e799bdc37e66d8180f5 274372 mx-packageinstaller_21.2.01.tar.xz
+ c512bc6ac3076972ba3a24e4926b597d25ef6f8b 1459498 mx-packageinstaller-dbgsym_21.2.01_amd64.deb
+ 233e7b31e98dc76e58a2399b7428193280a11a58 10252 mx-packageinstaller_21.2.01_amd64.buildinfo
+ 7177c591c27bbe9138f10f458b597a66ac79854e 343948 mx-packageinstaller_21.2.01_amd64.deb
+Checksums-Sha256:
+ 82cc8bcc7e45838a368ac85915c616da361817823ec58917478ee6b6add31a84 669 mx-packageinstaller_21.2.01.dsc
+ 9620b5b16657b1a2f6f570023e04f1a035ef8da6b0df078bd02fb454b2089247 274372 mx-packageinstaller_21.2.01.tar.xz
+ 91c1c6f0f2a042288fd92a63652f50c7afcde063c53a39b060a46cb50ba16ea2 1459498 mx-packageinstaller-dbgsym_21.2.01_amd64.deb
+ e0e838198a2d025c699a04385150df3a1f90986a1a176d4affbcdb7e27aa8094 10252 mx-packageinstaller_21.2.01_amd64.buildinfo
+ 0e4040bcb87444a494f1046b0d5d80cd44106e56e2260748636284260b81a243 343948 mx-packageinstaller_21.2.01_amd64.deb
+Files:
+ d67f940f144438590212006573d9c9e5 669 admin optional mx-packageinstaller_21.2.01.dsc
+ d17d3ad84d242974ef1d9fe92cf07563 274372 admin optional mx-packageinstaller_21.2.01.tar.xz
+ c69e34752762e8c7e918991b0ca018e0 1459498 debug extra mx-packageinstaller-dbgsym_21.2.01_amd64.deb
+ 578d494f95d4d3e6896673328517d382 10252 admin optional mx-packageinstaller_21.2.01_amd64.buildinfo
+ 824c2bf6119a8620dbb2a464a4598b1e 343948 admin optional mx-packageinstaller_21.2.01_amd64.deb

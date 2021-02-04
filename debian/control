@@ -8,12 +8,13 @@ Vcs-Git: git://github.com/AdrianTM/mx-packageinstaller
 
 Package: mx-packageinstaller
 Architecture: any
-Depends: flatpak (<< 1.0) | xdg-desktop-portal-gtk,
+Depends: aptitude,
+         flatpak (<< 1.0) | xdg-desktop-portal-gtk,
          flatpak (>= 0.8.9),
          menu,
          mx-packageinstaller-pkglist (>= 17.4),
          socat,
-         xdg-utils | mx-viewer,
+         xdg-utils | mx-viewer,         
          ${misc:Depends},
          ${shlibs:Depends}
 Replaces: mx-debian-backports-installer,
