@@ -1,0 +1,49 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Format: 1.8
+Date: Fri, 05 Feb 2021 16:51:04 -0500
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 21.2.02
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (21.2.02) mx; urgency=medium
+ .
+   * fix: 'more info' dialog in case of localization
+Checksums-Sha1:
+ e272f1a7235050d92e77aabd5c99c468fe4193af 1231 mx-packageinstaller_21.2.02.dsc
+ ab1edb0347235da4f72bbb2b803c5888ffdc85b1 276348 mx-packageinstaller_21.2.02.tar.xz
+ 76448d15fb9eea08bacfa368b559e958bd004cc3 1460692 mx-packageinstaller-dbgsym_21.2.02_amd64.deb
+ bd839ead4061f7fc9dc2b1e2b2d1a11e1f4fb363 10817 mx-packageinstaller_21.2.02_amd64.buildinfo
+ 574b6fd5200102e0a080822703033eb91298d3de 344118 mx-packageinstaller_21.2.02_amd64.deb
+Checksums-Sha256:
+ eef591bc0800bc617aeef5d8dd48c1c4b5c87d4d5231b84b6885654a3660a43d 1231 mx-packageinstaller_21.2.02.dsc
+ 33edb87b6585b3c63a50d9133ee282feaafaafb532d897b9277364fff99bbca2 276348 mx-packageinstaller_21.2.02.tar.xz
+ fc043f5ebc4ce852a1799dd44a3fe28e1a7ea525c92c4e0d6c1c37363cb940b3 1460692 mx-packageinstaller-dbgsym_21.2.02_amd64.deb
+ 29ccb32a138eec602cdbe19f24e2a96445e0cc29c4f459637af8c352d804cfca 10817 mx-packageinstaller_21.2.02_amd64.buildinfo
+ 6bb67bf0b494e3f22e2e1d3fc60498ecfeae0bc77790bdd877ba20c20d151114 344118 mx-packageinstaller_21.2.02_amd64.deb
+Files:
+ 595ceba37d4fbfc1d69d9d669b5521a2 1231 admin optional mx-packageinstaller_21.2.02.dsc
+ 7f8b552956a614c0fc4974412b25df7f 276348 admin optional mx-packageinstaller_21.2.02.tar.xz
+ 7cf284773f9ffc3be857fb253b55f02e 1460692 debug extra mx-packageinstaller-dbgsym_21.2.02_amd64.deb
+ 608c1f98b9173627c90f841bc030e5dc 10817 admin optional mx-packageinstaller_21.2.02_amd64.buildinfo
+ 5119293dd9b4c19c7b6361e98d5a8c50 344118 admin optional mx-packageinstaller_21.2.02_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCgAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAmAdymsTHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumNfvB/sGKZTHE8TvrPnI/BCaMGUjktx/vD+S
+30Q1+pv9j+CTGUcgLqAp4ED/g7eMinHc3ScGr53ufUvEWefujt2TO390EWAjjGLG
+eDbwHugGOWZvekxwWqCEjnys3FVY8W2OvC3YO84SP2fJJjb7YxIwF+2W0jNqyWdL
+Ez5GwZvsX0Y6UAyz1HN0KkiVoZGsUQqd9gicMLjdWmQ963exa8rMx7N30L1zbfJ/
+QLaxPRMIOGaZ4MIDDsyAs50UbF2zQzGbdHWW0GdPkHPs1/rlos7hRVDm1LQqlX7l
+WrGb7T7xn3R8wPzUau/lo0O/ARThXNCxwCVFzP1waL/24NqAAGSBCIjJ
+=qoDo
+-----END PGP SIGNATURE-----
