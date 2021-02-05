@@ -1,3 +1,9 @@
+mx-packageinstaller (21.2.02) mx; urgency=medium
+
+  * fix: 'more info' dialog in case of localization
+
+ -- Adrian <adrian@mxlinux.org>  Fri, 05 Feb 2021 16:51:04 -0500
+
 mx-packageinstaller (21.2.01) mx; urgency=medium
 
   * add 'more info' context menu for programs in Popular and Stable

@@ -110,9 +110,8 @@ void AptCache::parseContent()
         }
     }
     for (int i = 0; i < package_list.size(); ++i) {
-        if (candidates.contains(package_list.at(i)) && (VersionNumber(version_list.at(i)) <= VersionNumber(candidates.value(package_list.at(i)).at(0)))) {
+        if (candidates.contains(package_list.at(i)) && (VersionNumber(version_list.at(i)) <= VersionNumber(candidates.value(package_list.at(i)).at(0))))
             continue;
-        }
         candidates.insert(package_list.at(i), QStringList() << version_list.at(i) << description_list.at(i));
     }
 }

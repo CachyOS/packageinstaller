@@ -125,9 +125,8 @@ QStringList VersionNumber::groupDigits(QString value)
     for (int i = 0; i < value.length(); ++i) {
         if (value.at(i).isDigit()) {
             cache.append(value.at(i));
-            if (value.length() - 1 == i) {
+            if (value.length() - 1 == i)
                 result.append(cache);
-            }
         } else {
             if (!cache.isEmpty()) { // add accumulated digits
                 result.append(cache);
@@ -143,19 +142,18 @@ QStringList VersionNumber::groupDigits(QString value)
 // return 1 if second > first, -1 if second < first, 0 if equal
 int VersionNumber::compare(const VersionNumber& first, const VersionNumber& second) const
 {
-    if (second.epoch > first.epoch) {
+    if (second.epoch > first.epoch)
         return 1;
-    } else if (second.epoch < first.epoch) {
+    else if (second.epoch < first.epoch)
         return -1;
-    }
+
     int res = compare(first.upstream_version, second.upstream_version);
-    if (res == 1) {
+    if (res == 1)
         return 1;
-    } else if (res == -1)  {
+    else if (res == -1)
         return -1;
-    } else if (!debian_revision.isEmpty()) {
+    else if (!debian_revision.isEmpty())
         return compare(first.debian_revision, second.debian_revision);
-    }
     return 0;
 }
 
@@ -164,25 +162,22 @@ int VersionNumber::compare(const QStringList &first, const QStringList &second) 
 {
     for (int i = 0; i < first.length() && i < second.length(); ++i) {
         // check if equal
-        if (first.at(i) == second.at(i)) {
+        if (first.at(i) == second.at(i))
             continue; // continue till it finds difference
-        }
 
         // ~ sorts lowest
-        if (first.at(i).at(0) == '~' && second.at(i).at(0) != '~') {
+        if (first.at(i).at(0) == '~' && second.at(i).at(0) != '~')
             return 1;
-        } else if (second.at(i).at(0) == '~' && first.at(i).at(0) != '~') {
+        else if (second.at(i).at(0) == '~' && first.at(i).at(0) != '~')
             return -1;
-        }
 
         // if one char length check which one is larger
         if (first.at(i).length() == 1 && second.at(i).length() == 1) {
             int res = compare(first.at(i).at(0), second.at(i).at(0));
-            if (res == 0) {
+            if (res == 0)
                 continue;
-            } else {
+            else
                 return res;
-            }
             // one char (not-number) vs. multiple (digits)
         } else if (first.at(i).length() > 1 && second.at(i).length() == 1 && !second.at(i).at(0).isDigit()) {
             return 1;
@@ -191,27 +186,24 @@ int VersionNumber::compare(const QStringList &first, const QStringList &second) 
         }
 
         // compare remaining digits
-        if (second.at(i).toInt() > first.at(i).toInt()) {
+        if (second.at(i).toInt() > first.at(i).toInt())
             return 1;
-        } else {
+        else
             return -1;
-        }
     }
 
     // if equal till the end of one of the lists, compare list size
     // if the larger list doesn't have "~" it's the bigger version
     if (second.length() > first.length()) {
-        if (second.at(first.length()) != "~") {
+        if (second.at(first.length()) != "~")
             return 1;
-        } else {
+        else
             return -1;
-        }
     } else if (second.length() < first.length()) {
-        if (first.at(second.length()) != "~") {
+        if (first.at(second.length()) != "~")
             return -1;
-        } else {
+        else
             return 1;
-        }
     }
     return 0;
 }
@@ -220,22 +212,19 @@ int VersionNumber::compare(const QStringList &first, const QStringList &second) 
 // letters and number sort before special chars
 int VersionNumber::compare(const QChar& first, const QChar& second) const
 {
-    if (first == second) {
+    if (first == second)
         return 0;
-    }
 
     // sort letters and numbers before special char
-    if (first.isLetterOrNumber() && !second.isLetterOrNumber()) {
+    if (first.isLetterOrNumber() && !second.isLetterOrNumber())
         return 1;
-    } else if (!first.isLetterOrNumber() && second.isLetterOrNumber()) {
+    else if (!first.isLetterOrNumber() && second.isLetterOrNumber())
         return -1;
-    }
 
-    if (first < second) {
+    if (first < second)
         return 1;
-    } else if (first > second) {
+    else if (first > second)
         return -1;
-    }
 
     return 0;
 }
