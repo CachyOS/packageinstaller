@@ -146,7 +146,6 @@ int VersionNumber::compare(const VersionNumber& first, const VersionNumber& seco
         return 1;
     else if (second.epoch < first.epoch)
         return -1;
-
     int res = compare(first.upstream_version, second.upstream_version);
     if (res == 1)
         return 1;
@@ -225,6 +224,5 @@ int VersionNumber::compare(const QChar& first, const QChar& second) const
         return 1;
     else if (first > second)
         return -1;
-
     return 0;
 }
