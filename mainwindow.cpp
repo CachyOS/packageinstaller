@@ -1044,14 +1044,12 @@ bool MainWindow::confirmActions(QString names, QString action)
 
     QMessageBox msgBox;
     msgBox.setText(msg);
+    msgBox.setInformativeText("\n" + names + "\n\n" + aptitude_info);
 
-    if (action == "install") {
-        msgBox.setInformativeText("\n" + names + "\n\n" + aptitude_info);
+    if (action == "install")
         msgBox.setDetailedText(detailed_to_install + "\n" + detailed_removed_names);
-    } else {
-        msgBox.setInformativeText("\n" + names);
+    else
         msgBox.setDetailedText(detailed_removed_names + "\n" + detailed_to_install);
-   }
 
     msgBox.addButton(QMessageBox::Ok);
     msgBox.addButton(QMessageBox::Cancel);
