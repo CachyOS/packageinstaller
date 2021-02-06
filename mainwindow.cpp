@@ -975,23 +975,34 @@ bool MainWindow::confirmActions(QString names, QString action)
     QString detailed_to_install;
     QString detailed_removed_names;
     QString recommends;
+    QString recommends_aptitude;
+    QString aptitude_info;
     if (tree == ui->treeFlatpak) {
         detailed_installed_names = change_list;
     } else if (tree == ui->treeBackports) {
         recommends = (ui->checkBoxInstallRecommendsMXBP->isChecked()) ? "--install-recommends " : "";
+        recommends_aptitude = (ui->checkBoxInstallRecommendsMXBP->isChecked()) ? "--with-recommends " : "--without-recommends ";
         detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 "
                                        + action + " " + recommends + "-t " + ver_name + "-backports --reinstall " + names
                                        + "|grep 'Inst\\|Remv' | awk '{V=\"\"; P=\"\";}; $3 ~ /^\\[/ { V=$3 }; $3 ~ /^\\(/ { P=$3 \")\"}; $4 ~ /^\\(/ {P=\" => \" $4 \")\"};  {print $2 \";\" V  P \";\" $1}'");
+        aptitude_info = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C aptitude -sy -V -o=Dpkg::Use-Pty=0 "
+                                      + action + " " + recommends_aptitude + "-t " + ver_name + "-backports " + names + " |tail -2 |head -1");
     } else if (tree == ui->treeMXtest) {
         recommends = (ui->checkBoxInstallRecommendsMX->isChecked()) ? "--install-recommends " : "";
+        recommends_aptitude = (ui->checkBoxInstallRecommendsMX->isChecked()) ? "--with-recommends " : "--without-recommends ";
         detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 "
                                        + action + " -t mx " + recommends +  "--reinstall " + names
                                        + "|grep 'Inst\\|Remv' | awk '{V=\"\"; P=\"\";}; $3 ~ /^\\[/ { V=$3 }; $3 ~ /^\\(/ { P=$3 \")\"}; $4 ~ /^\\(/ {P=\" => \" $4 \")\"};  {print $2 \";\" V  P \";\" $1}'");
+        aptitude_info = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C aptitude -sy -V -o=Dpkg::Use-Pty=0 "
+                                     + action + " -t mx " + recommends_aptitude + names + " |tail -2 |head -1");
     } else {
         recommends = (ui->checkBoxInstallRecommends->isChecked()) ? "--install-recommends " : "";
+        recommends_aptitude = (ui->checkBoxInstallRecommends->isChecked()) ? "--with-recommends " : "--without-recommends ";
         detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 "
                                        + action + " " + recommends +  "--reinstall " + names
                                        + "|grep 'Inst\\|Remv'| awk '{V=\"\"; P=\"\";}; $3 ~ /^\\[/ { V=$3 }; $3 ~ /^\\(/ { P=$3 \")\"}; $4 ~ /^\\(/ {P=\" => \" $4 \")\"};  {print $2 \";\" V  P \";\" $1}'");
+        aptitude_info = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C aptitude -sy -V -o=Dpkg::Use-Pty=0 "
+                                      + action + " " + recommends_aptitude + names + " |tail -2 |head -1");
     }
 
     if (tree != ui->treeFlatpak)
@@ -1033,13 +1044,17 @@ bool MainWindow::confirmActions(QString names, QString action)
 
     QMessageBox msgBox;
     msgBox.setText(msg);
-    msgBox.setInformativeText("\n" + names);
+
+    if (action == "install") {
+        msgBox.setInformativeText("\n" + names + "\n\n" + aptitude_info);
+        msgBox.setDetailedText(detailed_to_install + "\n" + detailed_removed_names);
+    } else {
+        msgBox.setInformativeText("\n" + names);
+        msgBox.setDetailedText(detailed_removed_names + "\n" + detailed_to_install);
+   }
+
     msgBox.addButton(QMessageBox::Ok);
     msgBox.addButton(QMessageBox::Cancel);
-    if (action == "install")
-        msgBox.setDetailedText(detailed_to_install + "\n" + detailed_removed_names);
-    else
-        msgBox.setDetailedText(detailed_removed_names + "\n" + detailed_to_install);
 
     // make it wider
     QSpacerItem* horizontalSpacer = new QSpacerItem(600, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);

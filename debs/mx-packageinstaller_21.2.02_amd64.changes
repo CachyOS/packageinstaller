@@ -18,32 +18,32 @@ Changes:
  .
    * fix: 'more info' dialog in case of localization
 Checksums-Sha1:
- e272f1a7235050d92e77aabd5c99c468fe4193af 1231 mx-packageinstaller_21.2.02.dsc
- ab1edb0347235da4f72bbb2b803c5888ffdc85b1 276348 mx-packageinstaller_21.2.02.tar.xz
- 76448d15fb9eea08bacfa368b559e958bd004cc3 1460692 mx-packageinstaller-dbgsym_21.2.02_amd64.deb
- bd839ead4061f7fc9dc2b1e2b2d1a11e1f4fb363 10817 mx-packageinstaller_21.2.02_amd64.buildinfo
- 574b6fd5200102e0a080822703033eb91298d3de 344118 mx-packageinstaller_21.2.02_amd64.deb
+ 9c4295340e53f72fb6aeb9bfb19a05fcd0e679d8 1231 mx-packageinstaller_21.2.02.dsc
+ 5ff65a09ece68a03e6f21e90999e824cf291b064 276488 mx-packageinstaller_21.2.02.tar.xz
+ c25c89be6f77fa0e2f12dd2c1c40f1988ac76d08 1461994 mx-packageinstaller-dbgsym_21.2.02_amd64.deb
+ 727462ceda5557a77bcd5fc12247d7f6cc4c1a10 10817 mx-packageinstaller_21.2.02_amd64.buildinfo
+ 1d447756c9876559942c6a20a195ab35379d9838 344680 mx-packageinstaller_21.2.02_amd64.deb
 Checksums-Sha256:
- eef591bc0800bc617aeef5d8dd48c1c4b5c87d4d5231b84b6885654a3660a43d 1231 mx-packageinstaller_21.2.02.dsc
- 33edb87b6585b3c63a50d9133ee282feaafaafb532d897b9277364fff99bbca2 276348 mx-packageinstaller_21.2.02.tar.xz
- fc043f5ebc4ce852a1799dd44a3fe28e1a7ea525c92c4e0d6c1c37363cb940b3 1460692 mx-packageinstaller-dbgsym_21.2.02_amd64.deb
- 29ccb32a138eec602cdbe19f24e2a96445e0cc29c4f459637af8c352d804cfca 10817 mx-packageinstaller_21.2.02_amd64.buildinfo
- 6bb67bf0b494e3f22e2e1d3fc60498ecfeae0bc77790bdd877ba20c20d151114 344118 mx-packageinstaller_21.2.02_amd64.deb
+ dc74afe9a2ef3b03fcfd90ef50a6a997dfce7b44fc6aa7645dd4cfdb36861cfc 1231 mx-packageinstaller_21.2.02.dsc
+ cbd968874b953c57a40503364580110e37b6c9ee0f85716ce2169990b7fc972e 276488 mx-packageinstaller_21.2.02.tar.xz
+ 5ed3c29503bfbbaffd8577e18c8a1b94f10340954d3c1c83bb10b224d4e50f66 1461994 mx-packageinstaller-dbgsym_21.2.02_amd64.deb
+ fa5a4066926dffe91bb894fc64b4efc2b1ede805936b78b15b895d2e597006ad 10817 mx-packageinstaller_21.2.02_amd64.buildinfo
+ a70a3898098bcd4be7d6196a960c390579080a31d12a732e15d2c1e41bb0739a 344680 mx-packageinstaller_21.2.02_amd64.deb
 Files:
- 595ceba37d4fbfc1d69d9d669b5521a2 1231 admin optional mx-packageinstaller_21.2.02.dsc
- 7f8b552956a614c0fc4974412b25df7f 276348 admin optional mx-packageinstaller_21.2.02.tar.xz
- 7cf284773f9ffc3be857fb253b55f02e 1460692 debug extra mx-packageinstaller-dbgsym_21.2.02_amd64.deb
- 608c1f98b9173627c90f841bc030e5dc 10817 admin optional mx-packageinstaller_21.2.02_amd64.buildinfo
- 5119293dd9b4c19c7b6361e98d5a8c50 344118 admin optional mx-packageinstaller_21.2.02_amd64.deb
+ 299691f26452777f897abc5256c2d8c7 1231 admin optional mx-packageinstaller_21.2.02.dsc
+ 234ada40eb944f663e0224fe2d05b808 276488 admin optional mx-packageinstaller_21.2.02.tar.xz
+ 901366b833c782a7ea2ee0cadd4a6ddf 1461994 debug extra mx-packageinstaller-dbgsym_21.2.02_amd64.deb
+ a1e9a9c854c5d934221e55e92399461e 10817 admin optional mx-packageinstaller_21.2.02_amd64.buildinfo
+ ec820fa56a7c6a6bb4b096159b451b81 344680 admin optional mx-packageinstaller_21.2.02_amd64.deb
 
 -----BEGIN PGP SIGNATURE-----
 
-iQFHBAEBCgAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAmAdymsTHGFkcmlhbkBt
-eGxpbnV4Lm9yZwAKCRBwk4x4BnnumNfvB/sGKZTHE8TvrPnI/BCaMGUjktx/vD+S
-30Q1+pv9j+CTGUcgLqAp4ED/g7eMinHc3ScGr53ufUvEWefujt2TO390EWAjjGLG
-eDbwHugGOWZvekxwWqCEjnys3FVY8W2OvC3YO84SP2fJJjb7YxIwF+2W0jNqyWdL
-Ez5GwZvsX0Y6UAyz1HN0KkiVoZGsUQqd9gicMLjdWmQ963exa8rMx7N30L1zbfJ/
-QLaxPRMIOGaZ4MIDDsyAs50UbF2zQzGbdHWW0GdPkHPs1/rlos7hRVDm1LQqlX7l
-WrGb7T7xn3R8wPzUau/lo0O/ARThXNCxwCVFzP1waL/24NqAAGSBCIjJ
-=qoDo
+iQFHBAEBCgAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAmAd3bITHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumPY+CACBYuAaMoCWTG7i5aTASRcMagzRhaZR
+N5ojv+NiIaQGRZ/iIJ9ZQOr8TGuPdzcTvXOyAjo1cTorIcRDso7KAyZuSh9lB7ZA
+g9DpXTuIxZ/cNxOOTYHzGS1FWKDzJqeVdPvGFRB5NqErDhUgAtBdAsgpfOjDsrb0
+0MXS869sfinCo9f/YD5x505qz+YkUetFWgwtZEbWWzcGWV65Ishbuaxsvrjs0ftr
+rzkSwSQsg0H5CNcyR82SW9drPfL7XpkbORvNNYXknVUW4hOTxQAivQz3VvK2HpmT
+g9JsYGEZ/eTaeEl3FiQHBdXc71cw4lAbSEaF3TDP7PAJRLBYu9qOUMyi
+=HKtJ
 -----END PGP SIGNATURE-----
