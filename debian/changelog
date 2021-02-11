@@ -1,3 +1,10 @@
+mx-packageinstaller (21.2.03) mx; urgency=medium
+
+  * fix: select popular apps with keyboard
+  * fix: more consistent behavior when double-clicking inside the checkbox
+
+ -- Adrian <adrian@mxlinux.org>  Thu, 11 Feb 2021 14:34:35 -0500
+
 mx-packageinstaller (21.2.02) mx; urgency=medium
 
   * fix: 'more info' dialog in case of localization

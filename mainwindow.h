@@ -137,7 +137,6 @@ private slots:
     void on_buttonUninstall_clicked();
     void on_tabWidget_currentChanged(int index);
     void on_treePopularApps_expanded();
-    void on_treePopularApps_itemClicked();
     void on_treePopularApps_itemCollapsed(QTreeWidgetItem *item);
     void on_treePopularApps_itemExpanded(QTreeWidgetItem *item);
 
@@ -145,6 +144,7 @@ private slots:
     void on_treeMXtest_itemChanged(QTreeWidgetItem *item);
     void on_treeBackports_itemChanged(QTreeWidgetItem *item);
     void on_treeFlatpak_itemChanged(QTreeWidgetItem *item);
+    void on_treePopularApps_itemChanged(QTreeWidgetItem *item);
 
     void on_buttonForceUpdateStable_clicked();
     void on_buttonForceUpdateMX_clicked();

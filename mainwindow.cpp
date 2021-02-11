@@ -152,6 +152,7 @@ void MainWindow::setup()
     QList<QTreeWidget *> list_tree {ui->treePopularApps, ui->treeStable, ui->treeMXtest, ui->treeBackports, ui->treeFlatpak};
     for (auto tree : list_tree) {
         if (tree == ui->treePopularApps || tree == ui->treeStable) tree->setContextMenuPolicy(Qt::CustomContextMenu);
+        connect(tree, &QTreeWidget::itemDoubleClicked, [tree] (QTreeWidgetItem *item) { tree->setCurrentItem(item); });
         connect(tree, &QTreeWidget::itemDoubleClicked, this, &MainWindow::checkUnckeckItem);
     }
 }
@@ -2054,29 +2055,6 @@ void MainWindow::on_treePopularApps_expanded()
     ui->treePopularApps->resizeColumnToContents(4);
 }
 
-// Tree item clicked
-void MainWindow::on_treePopularApps_itemClicked()
-{
-    bool checked = false;
-    bool installed = true;
-
-    QTreeWidgetItemIterator it(ui->treePopularApps);
-    while (*it) {
-        if ((*it)->checkState(1) == Qt::Checked) {
-            checked = true;
-            if ((*it)->foreground(2) != Qt::gray)
-                installed = false;
-        }
-        ++it;
-    }
-    ui->buttonInstall->setEnabled(checked);
-    ui->buttonUninstall->setEnabled(checked && installed);
-    if (checked && installed)
-        ui->buttonInstall->setText(tr("Reinstall"));
-    else
-        ui->buttonInstall->setText(tr("Install"));
-}
-
 // Tree item expanded
 void MainWindow::on_treePopularApps_itemExpanded(QTreeWidgetItem *item)
 {
@@ -2439,22 +2417,30 @@ void MainWindow::filterChanged(const QString &arg1)
 // When selecting on item in the list
 void MainWindow::on_treeStable_itemChanged(QTreeWidgetItem *item)
 {
+    if (item->checkState(0) == Qt::Checked)
+        ui->treeStable->setCurrentItem(item);
     buildChangeList(item);
 }
 
 
 void MainWindow::on_treeMXtest_itemChanged(QTreeWidgetItem *item)
 {
+    if (item->checkState(0) == Qt::Checked)
+        ui->treeMXtest->setCurrentItem(item);
     buildChangeList(item);
 }
 
 void MainWindow::on_treeBackports_itemChanged(QTreeWidgetItem *item)
 {
+    if (item->checkState(0) == Qt::Checked)
+        ui->treeBackports->setCurrentItem(item);
     buildChangeList(item);
 }
 
 void MainWindow::on_treeFlatpak_itemChanged(QTreeWidgetItem *item)
 {
+    if (item->checkState(0) == Qt::Checked)
+        ui->treeFlatpak->setCurrentItem(item);
     buildChangeList(item);
 }
 
@@ -2737,4 +2723,28 @@ void MainWindow::on_treeStable_customContextMenuRequested(const QPoint &pos)
 void MainWindow::keyPressEvent(QKeyEvent *event) {
     if (event->key() == Qt::Key_Escape)
         on_buttonCancel_clicked();
+}
+
+void MainWindow::on_treePopularApps_itemChanged(QTreeWidgetItem *item)
+{
+    if (item->checkState(1) == Qt::Checked)
+        ui->treePopularApps->setCurrentItem(item);
+    bool checked = false;
+    bool installed = true;
+
+    QTreeWidgetItemIterator it(ui->treePopularApps);
+    while (*it) {
+        if ((*it)->checkState(1) == Qt::Checked) {
+            checked = true;
+            if ((*it)->foreground(2) != Qt::gray)
+                installed = false;
+        }
+        ++it;
+    }
+    ui->buttonInstall->setEnabled(checked);
+    ui->buttonUninstall->setEnabled(checked && installed);
+    if (checked && installed)
+        ui->buttonInstall->setText(tr("Reinstall"));
+    else
+        ui->buttonInstall->setText(tr("Install"));
 }

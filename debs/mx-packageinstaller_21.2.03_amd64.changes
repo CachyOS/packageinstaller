@@ -1,0 +1,50 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Format: 1.8
+Date: Thu, 11 Feb 2021 14:34:35 -0500
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 21.2.03
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (21.2.03) mx; urgency=medium
+ .
+   * fix: select popular apps with keyboard
+   * fix: more consistent behavior when double-clicking inside the checkbox
+Checksums-Sha1:
+ 31e006049808ff04f87eb2c8be854ca67358d2f4 1231 mx-packageinstaller_21.2.03.dsc
+ 4b048357dd7ea8901993abc2e46c9e8d418222a3 274608 mx-packageinstaller_21.2.03.tar.xz
+ 45b3af2fa1194c5fd3ed300c95dedecb25a52e20 1463110 mx-packageinstaller-dbgsym_21.2.03_amd64.deb
+ 91512516720e7c029cb8cbaef3de3711e0d9fb34 10817 mx-packageinstaller_21.2.03_amd64.buildinfo
+ f36817187ab98aa6abafe400cd09fadd8d5a0bd5 344994 mx-packageinstaller_21.2.03_amd64.deb
+Checksums-Sha256:
+ 0ea258e638ec7b6749937eaaa2fa58de9201a2c77191e6f2e3faf9bd1e381fb0 1231 mx-packageinstaller_21.2.03.dsc
+ 708bb5bd9053b8b681cf3a9e13522ae0ba7504028f4909af3a10461e585cab3d 274608 mx-packageinstaller_21.2.03.tar.xz
+ 904de0aaad0f7b88de127a44fe4a58d63550b2556cccddad25bdacde60d977aa 1463110 mx-packageinstaller-dbgsym_21.2.03_amd64.deb
+ 7f59e308027af3b38a7ea123e1495155a1ac3e7c5f37054374cd1912e1cd7c2d 10817 mx-packageinstaller_21.2.03_amd64.buildinfo
+ 33d397e12c5e8846cb06c02d932e3afbccaaa8d0d60b49b8db643cba31fca1f3 344994 mx-packageinstaller_21.2.03_amd64.deb
+Files:
+ 7c0ea7cc36865a9d24aba3ac89382761 1231 admin optional mx-packageinstaller_21.2.03.dsc
+ 21f767ded1bf0eedc2e599474e79f202 274608 admin optional mx-packageinstaller_21.2.03.tar.xz
+ e059a188117b369155da84bd542ca210 1463110 debug extra mx-packageinstaller-dbgsym_21.2.03_amd64.deb
+ 0087c6868da48078daaad377def6670d 10817 admin optional mx-packageinstaller_21.2.03_amd64.buildinfo
+ 860d778a0bfea88f01297c72ad83ba03 344994 admin optional mx-packageinstaller_21.2.03_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCgAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAmAlh2ATHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumLqVB/0V2nxyC1P6k9s8TQa7S83ezT3V/w5l
+WbJf9nVfahuJD31z0yS+i8hx9CmwMMApXJODFpXVBnd1JjoG8pno5Jvn/0BmEJKY
+w6PjyRxU6oZAlRWLBpWbUjOjlEz5A4/b+4cue01d4rL39zlQwxWSjFcyFd5EhMtR
+Z8gxa5Cq2ooigbm7bkZeJ/6ySM1iHAtSmmC/mGktFFnTiXdRL4LCSKbt0CxVlXAL
+LmJXPgFDCbdJcLublfmCEg9bnRnxMt0Q/hKig0oXHATvambATgtzXzczei6GCDfy
+dm6tdNJVslDoEKqLEUq6tonj7ZBsXA/uYtArCmlJlGCUdkHVNA4Sa1hN
+=Yu8P
+-----END PGP SIGNATURE-----
