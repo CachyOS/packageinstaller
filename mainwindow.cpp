@@ -351,7 +351,18 @@ QString MainWindow::addSizes(QString arg1, QString arg2)
 // Returns Debian main version number
 int MainWindow::getDebianVerNum()
 {
-    return cmd.getCmdOut("cat /etc/debian_version | cut -f1 -d'.'").toInt();
+    QString out = cmd.getCmdOut("cat /etc/debian_version");
+    QStringList list = out.split(".");
+    bool ok;
+    int ver = list.at(0).toInt(&ok);
+    if (ok)
+      return ver;
+    else if (list.at(0).split("/").at(0) == "bullseye")
+      return 11;
+    else if (list.at(0).split("/").at(0) == "bookworm")
+      return 12;
+    else
+      return 0; // unknown
 }
 
 QString MainWindow::getDebianVerName()
@@ -362,6 +373,7 @@ QString MainWindow::getDebianVerName()
     case 9:  return "stretch";
     case 10: return "buster";
     case 11: return "bullseye";
+    case 12: return "bookworm";
     default:
         qDebug() << "Could not detect Debian version";
         exit(EXIT_FAILURE);
