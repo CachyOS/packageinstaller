@@ -1,3 +1,9 @@
+mx-packageinstaller (21.3) mx; urgency=medium
+
+  * fix for Debian Bullseye
+
+ -- Adrian <adrian@mxlinux.org>  Mon, 01 Mar 2021 20:47:35 -0500
+
 mx-packageinstaller (21.2.03) mx; urgency=medium
 
   * fix: select popular apps with keyboard

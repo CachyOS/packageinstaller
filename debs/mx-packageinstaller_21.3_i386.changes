@@ -1,0 +1,40 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Format: 1.8
+Date: Mon, 01 Mar 2021 20:47:35 -0500
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: i386
+Version: 21.3
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (21.3) mx; urgency=medium
+ .
+   * fix for Debian Bullseye
+Checksums-Sha1:
+ acf4b962625b1fe0a326717f28c35a7c4ec81a07 10174 mx-packageinstaller_21.3_i386.buildinfo
+ b1cadc4faceec8b52c7df617de2a8fff4deeaaac 355744 mx-packageinstaller_21.3_i386.deb
+Checksums-Sha256:
+ 0662223caec17eb55172864de205d9cf626be1055e69d1f08ccd03fbfebd5277 10174 mx-packageinstaller_21.3_i386.buildinfo
+ f68c5a2d4df46009b175cec403373aadca14c3dfd5807866bf4ed2c68f32fae9 355744 mx-packageinstaller_21.3_i386.deb
+Files:
+ 514623fa9e2793955a914cd27a37c840 10174 admin optional mx-packageinstaller_21.3_i386.buildinfo
+ 0014b500d0ddc2d1000c3915d4603c9d 355744 admin optional mx-packageinstaller_21.3_i386.deb
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCgAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAmA9mnsTHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumKJFB/48HNNzo5k5eUupMCZ40OQG1vYmkDhm
+du8msWrlb8x43d33iZaFGPL2X4E5Jv1liyI7RlXFQGDzFz7PIqogp7urnt2NQDex
+lMmh+ALLHdqs/etrzLtNcL9nBvrebG53oN0V1/Lre8KNvjUJyt30XnnkXF6YC4RH
+bu2wsCDlAgEZRWLUP9Pi3T2JLaIVwt14w3KAWyG/h8XeDMnYPSjLkdHABgKtA3F0
+X9bnguURmxMoo+wdrrLHCZuTxBBPJ/vTmoYM11UzMY+lEk/YC7ZWsJiujQIjdDtu
+VjLoQChcNrvNGT+NBoS5UiZjszN9Yuj/0tP4K/GfGNLvu+FyOI8CWMTU
+=3ruE
+-----END PGP SIGNATURE-----
