@@ -537,10 +537,19 @@ void MainWindow::processDoc(const QDomDocument &doc)
         }
         element = element.nextSiblingElement();
     }
+
+    QString mod_arch; // modified arch to match .pm files format
+    if (arch == QLatin1String("amd64"))
+        mod_arch = QLatin1String("64");
+    else if (arch == QLatin1String("i386"))
+        mod_arch = QLatin1String("32");
+    else if (arch == QLatin1String("armhf"))
+        mod_arch = QLatin1String("armhf");
+    else
+       return;
+
     // skip non-installable packages
-    if ((installable == QLatin1String("64") and arch != QLatin1String("amd64")) or
-            (installable == QLatin1String("32") and arch != QLatin1String("i386")) or
-            (installable == QLatin1String("armhf") and arch != QLatin1String("armhf")))
+    if (!installable.contains(mod_arch) && installable != QLatin1String("all"))
         return;
 
     list << category << name << description << installable << screenshot << preinstall
@@ -1687,13 +1696,15 @@ QStringList MainWindow::listFlatpaks(const QString remote, const QString type)
     QStringList list;
 
     // need to specify arch for older version (flatpak takes different format than dpkg)
-    QString arch_fp = "--arch=x86_64 ";
+    QString arch_fp;
     if (arch == "amd64")
         arch_fp = "--arch=x86_64 ";
     else if (arch == "i386")
         arch_fp = "--arch=i386 ";
     else if (arch == "armhf")
         arch_fp = "--arch=arm ";
+    else
+        return QStringList();
 
     disconnect(conn);
     if (fp_ver < VersionNumber("1.0.1")) {
