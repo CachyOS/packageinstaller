@@ -1,0 +1,46 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Format: 1.8
+Date: Sat, 06 Mar 2021 23:52:29 -0500
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 21.3.01
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (21.3.01) mx; urgency=medium
+ .
+   * add partial armhf support
+Checksums-Sha1:
+ 1b106ac1a0ad3188dfc189a38688429694b59f1c 1231 mx-packageinstaller_21.3.01.dsc
+ 77998d4aa872509756c22c9b2e7c7fdce836b315 274868 mx-packageinstaller_21.3.01.tar.xz
+ 0f487e0d6852167e87b1c98c6be09383c9091d30 10516 mx-packageinstaller_21.3.01_amd64.buildinfo
+ c05d184f1f62bb3e205a96d84e84cf3d85de43d0 345694 mx-packageinstaller_21.3.01_amd64.deb
+Checksums-Sha256:
+ 0b827fd88ab0aceab8d2d1d7127166a8d55770a324be248d1838c68a3c4c3c01 1231 mx-packageinstaller_21.3.01.dsc
+ eed3369730f27d0400fc18be79b0b285b1fce4a5a76958a422ebeeada25f936d 274868 mx-packageinstaller_21.3.01.tar.xz
+ 36e52e873d1bcbb28e64df5bc3b7ceb0c7e9c77343d7a90f92546f1dfba60a81 10516 mx-packageinstaller_21.3.01_amd64.buildinfo
+ 7a8deb2b4b132a42a5f2c99a8625f20108a34205744e8fd5bb22c94de4995421 345694 mx-packageinstaller_21.3.01_amd64.deb
+Files:
+ 33a18e83da3c5b6c0b3e47ddf4356286 1231 admin optional mx-packageinstaller_21.3.01.dsc
+ 6b77b31232e26affb14e15b405880c55 274868 admin optional mx-packageinstaller_21.3.01.tar.xz
+ c7956f00995d98788d1445745fdac5af 10516 admin optional mx-packageinstaller_21.3.01_amd64.buildinfo
+ da132665af6d39cb33a5c3f9a40a7c08 345694 admin optional mx-packageinstaller_21.3.01_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCgAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAmBEXHkTHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumCcSCADSD0WgRRICA4J63qgR4wQrVCl7JUn0
+KC/nUy1rZIfw+1cpW8wuFrXQpsbbY9o2a13qgpcbC7RdeFIT23N1vJun4dCTJupF
+gRkweF7WM+xjb8+Nkz+e1/NMHSyE0zIP9/4tEP/EpRa6m4MqvQtNu6imUmWNEE0O
+S/MJlOOa7TzZ22JKw/uXXU0CTBqF0hWj4B2IRTzLmosyIYyto7NGVa570fhbohLr
+Beu4wzh9KLMiEvN/5juDY4zsM0K3H/COKpwstYB2C/71dJedpRbcZpuUvbP6Tsts
+zGMyd8UA6m1hreHQoWETjzTOBdk1ZMZjo60Rl1gptA+kZogEEnqrevC4
+=TqAY
+-----END PGP SIGNATURE-----

@@ -1,0 +1,40 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Format: 1.8
+Date: Sat, 06 Mar 2021 23:52:29 -0500
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: i386
+Version: 21.3.01
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (21.3.01) mx; urgency=medium
+ .
+   * add partial armhf support
+Checksums-Sha1:
+ ac3de9f9fade6fc71d050b0385c07af14238a365 10189 mx-packageinstaller_21.3.01_i386.buildinfo
+ 05bfa082f1f07b9ba7b3bcffa0e0c75185730931 356012 mx-packageinstaller_21.3.01_i386.deb
+Checksums-Sha256:
+ f5a6533a1a694601d119f565e6f9f250f173124fe0f55faeaf23e132b37fa3e4 10189 mx-packageinstaller_21.3.01_i386.buildinfo
+ e59277823d2924791ca131a9812a2d3bc71f458c988bfdaab64eb75b4b959427 356012 mx-packageinstaller_21.3.01_i386.deb
+Files:
+ 6414c43a7aa8c2bf10687e8b29ff8088 10189 admin optional mx-packageinstaller_21.3.01_i386.buildinfo
+ 71a16f8ad219e04ebed953666eb8ecae 356012 admin optional mx-packageinstaller_21.3.01_i386.deb
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCgAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAmBEXHgTHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumKrlCADKW4cj8C/Q3qRKuvib/p6tVBtuUEP0
+Czc2ZZikMmoY+qKZDwx3KDV8wj9S9J98MIRT/MrVGU6cg6DK3Hew1Ji+M572TyE4
+wjqhjgYK10Hg3pnSsGW6Ip6hZlcZpILYOFYTto9D0h0yPXuTsa43KeLwdBCtCNAx
+AL46XMzbMDoLipy6QiHV8Ssm4NkW9BxLhVuig4Ev3lV2q6LiuMcUhdU1DL6Ph+A/
+06MU44veR/GAkLwJ3IuyRWYTcxujjXczlAJ/qJjyfiOjMiY67sdnMxjh7tJWEQ9g
+NAP7Qe2/pAhMyyp5aBd5HmsxaCbmnV9tCHeVccQSEhB4as5ZYuIq9AZ8
+=Fkal
+-----END PGP SIGNATURE-----
