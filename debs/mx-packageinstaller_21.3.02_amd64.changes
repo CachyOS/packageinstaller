@@ -1,0 +1,46 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Format: 1.8
+Date: Sun, 07 Mar 2021 12:07:06 -0500
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 21.3.02
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (21.3.02) mx; urgency=medium
+ .
+   * process multiple values in <installable> field in .pm files, e.g., "32,64,armhf"
+Checksums-Sha1:
+ 600e3e7f1f11554a7d7ef96b3c1bbdab714a82ec 1231 mx-packageinstaller_21.3.02.dsc
+ e48ff4d3842602b4834a31b66c11bf43498ac64b 275048 mx-packageinstaller_21.3.02.tar.xz
+ 1c405d551955a0af2cf5172548a3cfb6fe7c6e94 10516 mx-packageinstaller_21.3.02_amd64.buildinfo
+ b91ee02b2d256403ce4d3154c371787681a3e656 346222 mx-packageinstaller_21.3.02_amd64.deb
+Checksums-Sha256:
+ 39892066d285b6fbc4640a47d4e870693571285c563c61ba9b1e4039b762c688 1231 mx-packageinstaller_21.3.02.dsc
+ 6924ca750377d9d3c1334cb73b9e1237898b13ef7431d6ffabc88ccb974570c7 275048 mx-packageinstaller_21.3.02.tar.xz
+ 4b6ce801ab06e7510996a7b4a1c25accf837bb3fb7e27bc35f39b2bb3e9828f7 10516 mx-packageinstaller_21.3.02_amd64.buildinfo
+ ba2ee78cb360f0dbda17dd5e707ea913a26faf22a9bb3aeee122ccfa5413fb25 346222 mx-packageinstaller_21.3.02_amd64.deb
+Files:
+ 0b7f5919c69c4a129bc517a614e5f616 1231 admin optional mx-packageinstaller_21.3.02.dsc
+ b96c84daa96185ebc815c6467db6ce38 275048 admin optional mx-packageinstaller_21.3.02.tar.xz
+ 619b901a1eac041cf9f26fcdfa90a317 10516 admin optional mx-packageinstaller_21.3.02_amd64.buildinfo
+ 1a426c71670e0fd603e07825a5185048 346222 admin optional mx-packageinstaller_21.3.02_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCgAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAmBFCRMTHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumPP8B/97svNTy5bexJ6jGV08OqnDdwbeVbKi
+SQPPnRBBV24BxrsF+Zc5Mqbu9/Qms6U1mu48JWZUrza9bWphNr27anMTM7ubAIej
+jjbhEMDPVC0jYJLZ+2nCTxSoJU05wu6wKYcXtlOIeh4y640Lnk5pfdnY+5JCCq2L
+xZfMuPi+muH8BAJfCLmNO/wr/4yWJJGF4DY2H0uFqJLJZE8hwT57ZWFC6eoKS/Gf
+lKO42n+88NfelRKULgW6iVjh++A5367Mdxiv5upBPHV1jtt88yl56yObhXc/eEtx
+GmxwERxdYUWnorwVLOxzyQPZ+gnF2sn5aIBGI5JbUsEyUo13B5rRlGgB
+=AZdw
+-----END PGP SIGNATURE-----
