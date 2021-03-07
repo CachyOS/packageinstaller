@@ -691,7 +691,7 @@ void MainWindow::displayPopularApps() const
         ui->treePopularApps->resizeColumnToContents(i);
 
     ui->treePopularApps->sortItems(2, Qt::AscendingOrder);
-    connect(ui->treePopularApps, &QTreeWidget::itemClicked, this, &MainWindow::displayInfo);
+    connect(ui->treePopularApps, &QTreeWidget::itemClicked, this, &MainWindow::displayInfo, Qt::UniqueConnection);
 }
 
 
