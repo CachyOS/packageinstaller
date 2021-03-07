@@ -13,8 +13,7 @@ public:
 
     void loadCacheFiles();
     const QMap<QString, QStringList> getCandidates();
-
-    QString getArch();
+    static const QString getArch();
 
 private:
     QMap<QString, QStringList> candidates;

@@ -1,7 +1,9 @@
 #include <QDir>
 #include <QDebug>
 #include <QRegularExpression>
+
 #include "aptcache.h"
+#include "cmd.h"
 
 AptCache::AptCache()
 {
@@ -57,9 +59,18 @@ const QMap<QString, QStringList> AptCache::getCandidates()
     return candidates;
 }
 
-QString AptCache::getArch()
+// return DEB_BUILD_ARCH format which differs from what 'arch' returns
+const QString AptCache::getArch()
 {
-    return (system("arch | grep -q x86_64") == 0) ? "amd64" : "i386";
+    Cmd cmd;
+    QString out = cmd.getCmdOut("arch");
+    if (out == "x86_64")
+        return "amd64";
+    if (out == "i686")
+        return "i386";
+    if (out == "armv7l")
+        return "armhf";
+    return QString();
 }
 
 void AptCache::parseContent()
@@ -116,7 +127,7 @@ void AptCache::parseContent()
 bool AptCache::readFile(const QString &file_name)
 {
     QFile file(dir_name + file_name);
-    if(!file.open(QFile::ReadOnly)) {
+    if(not file.open(QFile::ReadOnly)) {
         qDebug() << "Could not open file: " << file.fileName();
         return false;
     }

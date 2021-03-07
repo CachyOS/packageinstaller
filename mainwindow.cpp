@@ -83,15 +83,7 @@ void MainWindow::setup()
     fp_ver = getVersion("flatpak");
     user = "--system ";
 
-    arch = "x64_64";
-    QString out = cmd.getCmdOut("arch"); // DEB_BUILD_ARCH format differ from what arch returns
-    if (out == "x64_64")
-        arch = out;
-    if (out == "i686")
-        arch = "i386";
-    else if (out == "armv7l")
-        arch = "armhf";
-
+    arch = AptCache::getArch();
     ver_name = getDebianVerName();
 
     lock_file = new LockFile("/var/lib/dpkg/lock");
