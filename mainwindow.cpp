@@ -83,7 +83,15 @@ void MainWindow::setup()
     fp_ver = getVersion("flatpak");
     user = "--system ";
 
-    arch = (system("arch | grep -q x86_64") == 0) ? "amd64" :  "i386";
+    arch = "x64_64";
+    QString out = cmd.getCmdOut("arch"); // DEB_BUILD_ARCH format differ from what arch returns
+    if (out == "x64_64")
+        arch = out;
+    if (out == "i686")
+        arch = "i386";
+    else if (out == "armv7l")
+        arch = "armhf";
+
     ver_name = getDebianVerName();
 
     lock_file = new LockFile("/var/lib/dpkg/lock");
@@ -1685,11 +1693,18 @@ QStringList MainWindow::listFlatpaks(const QString remote, const QString type)
     bool success = false;
     QString out;
     QStringList list;
-    // need to specify arch for older version
-    QString arch_fp;
+
+    // need to specify arch for older version (flatpak takes different format than dpkg)
+    QString arch_fp = "--arch=x86_64 ";
+    if (arch == "amd64")
+        arch_fp = "--arch=x86_64 ";
+    else if (arch == "i386")
+        arch_fp = "--arch=i386 ";
+    else if (arch == "armhf")
+        arch_fp = "--arch=arm ";
+
     disconnect(conn);
     if (fp_ver < VersionNumber("1.0.1")) {
-        arch_fp = (arch == "amd64") ? arch_fp = "--arch=x86_64 " : arch_fp = "--arch=i386 ";
         // list packages, strip first part remote/ or app/ no size for old flatpak
         success = cmd.run("runuser -s /bin/bash -l $(logname) -c \"set -o pipefail; flatpak -d remote-ls " + user + remote + " " + arch_fp + type + "2>/dev/null| cut -f1 | tr -s ' ' | cut -f1 -d' '|sed 's/^[^\\/]*\\///g' \"", out);
         list = QString(out).split("\n");
