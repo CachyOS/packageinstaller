@@ -510,7 +510,7 @@ void MainWindow::processDoc(const QDomDocument &doc)
     QDomElement root = doc.firstChildElement("app");
     QDomElement element = root.firstChildElement();
 
-    for (; !element.isNull(); element = element.nextSiblingElement()) {
+    while (not element.isNull()) {
         if (element.tagName() == QLatin1String("category")) {
             category = getTranslation(element.text().trimmed());
         } else if (element.tagName() == QLatin1String("name")) {
@@ -535,9 +535,12 @@ void MainWindow::processDoc(const QDomDocument &doc)
         } else if (element.tagName() == QLatin1String("preuninstall")) {
             preuninstall = element.text().trimmed();
         }
+        element = element.nextSiblingElement();
     }
     // skip non-installable packages
-    if ((installable == QLatin1String("64") && arch != QLatin1String("amd64")) || (installable == QLatin1String("32") && arch != QLatin1String("i386")))
+    if ((installable == QLatin1String("64") and arch != QLatin1String("amd64")) or
+            (installable == QLatin1String("32") and arch != QLatin1String("i386")) or
+            (installable == QLatin1String("armhf") and arch != QLatin1String("armhf")))
         return;
 
     list << category << name << description << installable << screenshot << preinstall

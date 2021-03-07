@@ -35,22 +35,20 @@ void AptCache::loadCacheFiles()
             re_temprepo.match(file_name).hasMatch()) {
             continue;
         }
-        if ( re_binary_arch.match(file_name).hasMatch()) {
+        if (re_binary_arch.match(file_name).hasMatch()) {
             files << file_name;
             continue;
         }
-        if ( not re_binary_other.match(file_name).hasMatch()) {
+        if (not re_binary_other.match(file_name).hasMatch()) {
             files << file_name;
             continue;
         }
     }
 
 
-    for (const QString &file_name : files) {
-        if(!readFile(file_name)) {
+    for (const QString &file_name : files)
+        if(!readFile(file_name))
             qDebug() << "error reading a cache file";
-        }
-    }
     parseContent();
 }
 
@@ -92,9 +90,8 @@ void AptCache::parseContent()
             version = line.remove(QLatin1String("Version: "));
         } else if (line.startsWith(QLatin1String("Description:"))) { // not "Description: " because some people don't add description to their packages
             description = line.remove(QLatin1String("Description:")).trimmed();
-            if (match_arch) {
+            if (match_arch)
                 add_package = true;
-            }
         }
         // add only packages with correct architecure
         if (add_package and match_arch) {
