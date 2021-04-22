@@ -2130,7 +2130,7 @@ void MainWindow::on_buttonUninstall_clicked()
 
         // new version of flatpak takes a "-y" confirmation
         QString conf = "-y ";
-        if (fp_ver  < VersionNumber("1.0.1"))
+        if (fp_ver < VersionNumber("1.0.1"))
             conf = QString();
         //confirmation dialog
         if (!confirmActions(change_list.join(" "), "remove")) {
@@ -2780,4 +2780,28 @@ void MainWindow::on_treePopularApps_itemChanged(QTreeWidgetItem *item)
         ui->buttonInstall->setText(tr("Reinstall"));
     else
         ui->buttonInstall->setText(tr("Install"));
+}
+
+void MainWindow::on_buttonRemoveUnused_clicked()
+{
+    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
+    showOutput();
+    setCursor(QCursor(Qt::BusyCursor));
+    displayOutput();
+    // new version of flatpak takes a "-y" confirmation
+    QString conf = "-y ";
+    if (fp_ver < VersionNumber("1.0.1"))
+        conf = QString();
+    if (cmd.run("runuser -s /bin/bash -l $(logname) -c \"socat SYSTEM:'flatpak uninstall --unused " + conf + user + "',pty STDIO\"")) {
+        displayFlatpaks(true);
+        setCursor(QCursor(Qt::ArrowCursor));
+        QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
+        ui->tabWidget->blockSignals(true);
+        ui->tabWidget->setCurrentWidget(ui->tabFlatpak);
+        ui->tabWidget->blockSignals(false);
+    } else {
+        setCursor(QCursor(Qt::ArrowCursor));
+        QMessageBox::critical(this, tr("Error"), tr("Problem detected during last operation, please inspect the console output."));
+    }
+    enableTabs(true);
 }

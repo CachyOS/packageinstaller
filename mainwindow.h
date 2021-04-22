@@ -167,6 +167,8 @@ private slots:
     void on_treePopularApps_customContextMenuRequested(const QPoint &pos);
     void on_treeStable_customContextMenuRequested(const QPoint &pos);
 
+    void on_buttonRemoveUnused_clicked();
+
 private:
     Ui::MainWindow *ui;
 
