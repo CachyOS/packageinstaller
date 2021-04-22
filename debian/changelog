@@ -1,3 +1,9 @@
+mx-packageinstaller (21.4) mx; urgency=medium
+
+  * add "remove unused runtimes" button in Flatpak tab
+
+ -- Adrian <adrian@mxlinux.org>  Thu, 22 Apr 2021 18:56:17 -0400
+
 mx-packageinstaller (21.3.02) mx; urgency=medium
 
   * process multiple values in <installable> field in .pm files, e.g., "32,64,armhf" 

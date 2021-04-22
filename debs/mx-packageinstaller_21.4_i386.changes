@@ -1,0 +1,40 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Format: 1.8
+Date: Thu, 22 Apr 2021 18:56:17 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: i386
+Version: 21.4
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (21.4) mx; urgency=medium
+ .
+   * add "remove unused runtimes" button in Flatpak tab
+Checksums-Sha1:
+ cd36a763847a3a190938c599d48a21f83a771e37 10174 mx-packageinstaller_21.4_i386.buildinfo
+ 3f8781a6f7e039de6d8e044fadc2d1cadc3f69a2 357146 mx-packageinstaller_21.4_i386.deb
+Checksums-Sha256:
+ b7a49bd269be72b8e9e722df39463d527a18b0f4c575b1d9de8435a680f2c088 10174 mx-packageinstaller_21.4_i386.buildinfo
+ 0fdad41ad298a276bfaa497956765d422d3e1baa76412b597afd4526ca97f4b4 357146 mx-packageinstaller_21.4_i386.deb
+Files:
+ 13c7a707c4294432ffd1b7269703980a 10174 admin optional mx-packageinstaller_21.4_i386.buildinfo
+ f47c46d8b8f0caac29ed3792645cbf95 357146 admin optional mx-packageinstaller_21.4_i386.deb
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCgAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAmCCAo4THGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumNIsCACn/HLhjoyHYFSYnQJneSEn3Whg9dWS
+/jz2Sg6fWtz0dTzYW/ILcCLaPNfHbHQIlJKwomTXsvYINrkHnM2mqKj1hUe5lUR6
+yE5hMMjUZObPyGxP8xDMhOjMhPGslL+gQnBcEkJpNsoizIgLOqPT6+n9UtDSsDdN
+s18NsJATuR0HjPkSxc5EclEQO5kjxggjXCf1oFfMpoM3eNKTc2NCgPDrhoS7SgMF
+5H7ODdk4Fvfqg2CTJPyfzdhrskM2Y+XkiS9k99NDt4aAhnwEx/bfvufAch8iGok1
+MeXudCFzY6LLERGALJfMZpeC5HYFJWWErvM+YYZ2EuHFCRDu42TEK+Dm
+=Y+Ft
+-----END PGP SIGNATURE-----

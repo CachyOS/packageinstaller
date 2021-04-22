@@ -1,0 +1,46 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Format: 1.8
+Date: Thu, 22 Apr 2021 18:56:17 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 21.4
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (21.4) mx; urgency=medium
+ .
+   * add "remove unused runtimes" button in Flatpak tab
+Checksums-Sha1:
+ a500b29f0456387ccafc6a259edf627830f1b903 1220 mx-packageinstaller_21.4.dsc
+ 4cf337df30fd0916a24ed923b21fd254ab86ac75 275124 mx-packageinstaller_21.4.tar.xz
+ 193446cbba94244b4a5d21bf13845887ed621f86 10492 mx-packageinstaller_21.4_amd64.buildinfo
+ 635fbf927a7fd8f012619dd3feb2a6048a4cfd43 346906 mx-packageinstaller_21.4_amd64.deb
+Checksums-Sha256:
+ 6d6ceaa77feeaf5b3635e088480ccba74c515a54e7dbc5b236ce64533a506b29 1220 mx-packageinstaller_21.4.dsc
+ 62a4d130b1038eaea4cafef97713a713ec9ebab401a58606d859c45d8354b05a 275124 mx-packageinstaller_21.4.tar.xz
+ e46627f01b64fb491bf84607630d8d8bf222efbfc61bc882a5a7272a57bbe3ec 10492 mx-packageinstaller_21.4_amd64.buildinfo
+ 8954ede2bb7084662e6bc5bb8ea0415bcb59e7098272adc36938530d2846e3e4 346906 mx-packageinstaller_21.4_amd64.deb
+Files:
+ a8ec4514c573b2b70affc08c2a0c2df0 1220 admin optional mx-packageinstaller_21.4.dsc
+ 4778530ace493a448969eab8e47f766b 275124 admin optional mx-packageinstaller_21.4.tar.xz
+ 21df10e26d551d6f567f9a899cffa87c 10492 admin optional mx-packageinstaller_21.4_amd64.buildinfo
+ 743b7e6448b8da1072af0bbbe165eea7 346906 admin optional mx-packageinstaller_21.4_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCgAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAmCCAo4THGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumFA5B/0eH/w9B32QwWTeyGrvmws3efeLDLsn
+hJFSdWkEhmcVn+akMznDOcqLfkf2lsBOdRUNjdER97C5Qk4NvlkCk7uklIc+J6Wr
+jR2eUvezrR+nHcs90L1NvPf/S7AWXggjwv53FjdgVaFqO/ttkBW4Sr6TC1LZJlp0
+RJrxWEVT30zrs7IbzABz4C4L9x5alK/wPsemnOe38ZJLUgt9eISat7aM3nV10cOO
+oYe8YNAmvDsGGJ5mwnMTQSuoI2TAPjMAH78ok5TOHe/yLMA4Uj2nbMohTEAsl/EB
+U+phsjekllr1rFTxRUmrZ3FA0fAQHqmVcUGgqkd685COQ89ueK/9XvcF
+=NKef
+-----END PGP SIGNATURE-----
