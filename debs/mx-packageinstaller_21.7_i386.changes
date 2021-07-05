@@ -1,0 +1,40 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Format: 1.8
+Date: Sun, 04 Jul 2021 21:13:20 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: i386
+Version: 21.7
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (21.7) mx; urgency=medium
+ .
+   * Updated .desktop file with new comment and translations
+Checksums-Sha1:
+ c5d5dd623608f1c485dab92fd38cefdd98d797be 10174 mx-packageinstaller_21.7_i386.buildinfo
+ c294d39c737cd2e7f2515083454cd54099be0949 358120 mx-packageinstaller_21.7_i386.deb
+Checksums-Sha256:
+ ab6ffe1028d4324160d74618217d5cf3bc01c7970338c7861acf5bb8a02a8f7c 10174 mx-packageinstaller_21.7_i386.buildinfo
+ 79190b939951f63facdfc4a2e304d7d32b926ebef22ad49b7b9c9f425c7095f4 358120 mx-packageinstaller_21.7_i386.deb
+Files:
+ 6b5da8867d658da825e9207ea582c8ee 10174 admin optional mx-packageinstaller_21.7_i386.buildinfo
+ 4fb8937a350e36eccf12ec7ee4c2042a 358120 admin optional mx-packageinstaller_21.7_i386.deb
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCgAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAmDiXaATHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumKG6B/sHsZxOcvf66vNFpBi+E65wWVbLZ8py
+mQKlYrdpsCECsq9+9vmsKNzVqVra79WWl0hgQFOLlgE3fq2M/7OQ07b4B5xe9kgC
+tquzFzHbJXEnhHQFah6A8fOXmhy14qkZXBT92lmEPVakrgdMCSoaJzFGbsG5xo3M
+p9RmuMF/V27V5Zwsw758FJoq8zRaD6/qZnKym1hwfI7zbNRI4hY+bC6DYztBGzy3
+ail4Nzhv3DCQZ4KxVmtSRsevcD7VHu21pmk1MWEJHq+6xhsptDrGF0LHkBmhR/ab
+BpsHqzKq1iUHIUc6w4bedzACeLnQvEafxzh0t/mTynRJ77drVElmNv6i
+=YQ5L
+-----END PGP SIGNATURE-----

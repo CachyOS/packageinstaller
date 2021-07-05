@@ -1,3 +1,9 @@
+mx-packageinstaller (21.7) mx; urgency=medium
+
+  * Updated .desktop file with new comment and translations
+
+ -- Adrian <adrian@mxlinux.org>  Sun, 04 Jul 2021 21:13:20 -0400
+
 mx-packageinstaller (21.4) mx; urgency=medium
 
   * add "remove unused runtimes" button in Flatpak tab
