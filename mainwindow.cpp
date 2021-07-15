@@ -1308,8 +1308,7 @@ bool MainWindow::checkOnline()
     request.setRawHeader("User-Agent", qApp->applicationName().toUtf8() + "/" + qApp->applicationVersion().toUtf8() + " (linux-gnu)");
 
     QNetworkReply::NetworkError error = QNetworkReply::NoError;
-    QStringList addresses{"http://mxrepo.com", "http://google.com"}; // list of addresses to try
-    for (const QString &address : addresses) {
+    for (const QString &address : {"http://mxrepo.com", "http://google.com"}) {
         error = QNetworkReply::NoError; // reset for each tried address
         request.setUrl(QUrl(address));
         reply = manager.head(request);

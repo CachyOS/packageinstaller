@@ -1,3 +1,10 @@
+mx-packageinstaller (21.7.01) mx; urgency=medium
+
+  * Download only header not the entire page for network check
+  * Use shorter timeout for network check than the default
+
+ -- Adrian <adrian@mxlinux.org>  Thu, 15 Jul 2021 14:19:02 -0400
+
 mx-packageinstaller (21.7) mx; urgency=medium
 
   * Updated .desktop file with new comment and translations
