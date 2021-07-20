@@ -136,7 +136,7 @@ void MainWindow::setup()
     ui->tabWidget->blockSignals(false);
 
     QSize size = this->size();
-    QSettings settings(qApp->applicationName());
+    QSettings settings(qApp->organizationName(), qApp->applicationName());
     if (settings.contains("geometry")) {
         restoreGeometry(settings.value("geometry").toByteArray());
         if (this->isMaximized()) { // add option to resize if maximized
@@ -1307,7 +1307,7 @@ bool MainWindow::checkOnline()
     QNetworkRequest request;
     request.setRawHeader("User-Agent", qApp->applicationName().toUtf8() + "/" + qApp->applicationVersion().toUtf8() + " (linux-gnu)");
 
-    QNetworkReply::NetworkError error = QNetworkReply::NoError;
+    auto error = QNetworkReply::NoError;
     for (const QString &address : {"http://mxrepo.com", "http://google.com"}) {
         error = QNetworkReply::NoError; // reset for each tried address
         request.setUrl(QUrl(address));
@@ -1617,7 +1617,7 @@ void MainWindow::cleanup()
 
     lock_file->unlock();
 
-    QSettings settings("mx-packageinstaller");
+    QSettings settings(qApp->organizationName(), qApp->applicationName());
     settings.setValue("geometry", saveGeometry());
 }
 
