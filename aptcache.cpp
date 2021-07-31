@@ -15,33 +15,33 @@ void AptCache::loadCacheFiles()
 {
     QDir dir(dir_name);
     // include all _Packages list files
-    QString packages_filter = "*_Packages";
+    const QString packages_filter = "*_Packages";
 
     // some regexp's
     // to include those which match architecure in filename
-    QRegularExpression re_binary_arch(".*binary-" + getArch() + "_Packages");
+    const QRegularExpression re_binary_arch(".*binary-" + getArch() + "_Packages");
     // to include those flat-repos's which do not have 'binary' within the name
-    QRegularExpression re_binary_other(".*binary-.*_Packages");
+    const QRegularExpression re_binary_other(".*binary-.*_Packages");
     // to exclude debian backports
-    QRegularExpression re_backports(".*debian_.*-backports_.*_Packages");
+    const QRegularExpression re_backports(".*debian_.*-backports_.*_Packages");
     // to exclude mx testrepo
-    QRegularExpression re_testrepo(".*mx_testrepo.*_test_.*_Packages");
+    const QRegularExpression re_testrepo(".*mx_testrepo.*_test_.*_Packages");
     // to exclude devoloper's mx temp repo
-    QRegularExpression re_temprepo(".*mx_repo.*_temp_.*_Packages");
+    const QRegularExpression re_temprepo(".*mx_repo.*_temp_.*_Packages");
 
     const QStringList packages_files = dir.entryList(QStringList() << packages_filter, QDir::Files, QDir::Unsorted);
     QStringList files;
     for (const QString &file_name : packages_files)  {
-        if (re_backports.match(file_name).hasMatch() or
-            re_testrepo.match(file_name).hasMatch()  or
-            re_temprepo.match(file_name).hasMatch()) {
+        if (re_backports.match(file_name).hasMatch()
+            || re_testrepo.match(file_name).hasMatch()
+            || re_temprepo.match(file_name).hasMatch()) {
             continue;
         }
         if (re_binary_arch.match(file_name).hasMatch()) {
             files << file_name;
             continue;
         }
-        if (not re_binary_other.match(file_name).hasMatch()) {
+        if (!re_binary_other.match(file_name).hasMatch()) {
             files << file_name;
             continue;
         }
@@ -63,14 +63,7 @@ const QMap<QString, QStringList> AptCache::getCandidates()
 const QString AptCache::getArch()
 {
     Cmd cmd;
-    QString out = cmd.getCmdOut("arch");
-    if (out == "x86_64")
-        return "amd64";
-    if (out == "i686")
-        return "i386";
-    if (out == "armv7l")
-        return "armhf";
-    return QString();
+    return arch_names.value(cmd.getCmdOut("arch", true));
 }
 
 void AptCache::parseContent()
@@ -85,7 +78,7 @@ void AptCache::parseContent()
     QString description;
     QString architecture;
 
-    QRegularExpression re_arch(".*(" + getArch() + "|all).*");
+    const QRegularExpression re_arch(".*(" + getArch() + "|all).*");
     bool match_arch  = false;
     bool add_package = false;
 
@@ -105,7 +98,7 @@ void AptCache::parseContent()
                 add_package = true;
         }
         // add only packages with correct architecure
-        if (add_package and match_arch) {
+        if (add_package && match_arch) {
             package_list     << package;
             version_list     << version;
             description_list << description;
@@ -127,7 +120,7 @@ void AptCache::parseContent()
 bool AptCache::readFile(const QString &file_name)
 {
     QFile file(dir_name + file_name);
-    if(not file.open(QFile::ReadOnly)) {
+    if(!file.open(QFile::ReadOnly)) {
         qDebug() << "Could not open file: " << file.fileName();
         return false;
     }

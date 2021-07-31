@@ -33,7 +33,7 @@ LockFile::LockFile(QString file_name)
 
 }
 
-//checks if file is locked by another process (if locked by the same process returns false)
+// Checks if file is locked by another process (if locked by the same process returns false)
 bool LockFile::isLocked()
 {
     fd = open(file_name.toUtf8(), O_RDONLY);
@@ -51,7 +51,7 @@ bool LockFile::lock()
         perror("open");
         return false;
     }
-    // create a file lock
+    // Create a file lock
     return(lockf(fd, F_LOCK, 0) == 0);
 }
 
