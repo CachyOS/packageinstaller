@@ -136,7 +136,6 @@ void MainWindow::setup()
     ui->tabWidget->blockSignals(false);
 
     QSize size = this->size();
-    QSettings settings(qApp->organizationName(), qApp->applicationName());
     if (settings.contains("geometry")) {
         restoreGeometry(settings.value("geometry").toByteArray());
         if (this->isMaximized()) { // add option to resize if maximized
@@ -1601,8 +1600,6 @@ void MainWindow::cleanup()
     if (changed) system("nohup apt-get update&");
 
     lock_file->unlock();
-
-    QSettings settings(qApp->organizationName(), qApp->applicationName());
     settings.setValue("geometry", saveGeometry());
 }
 

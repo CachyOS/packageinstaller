@@ -193,6 +193,7 @@ private:
     QProgressDialog *progress;
     QPushButton *progCancel;
     QSettings dictionary;
+    QSettings settings;
     QString arch;
     QString stable_raw;
     QString user;
