@@ -32,7 +32,6 @@
 #include <QNetworkReply>
 #include <QProgressBar>
 #include <QScrollBar>
-#include <QSettings>
 #include <QShortcut>
 #include <QTextStream>
 #include <QtXml/QtXml>

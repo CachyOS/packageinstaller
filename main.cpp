@@ -29,7 +29,6 @@
 #include <QIcon>
 #include <QLibraryInfo>
 #include <QLocale>
-#include <QScopedPointer>
 #include <QTranslator>
 
 #include "mainwindow.h"
@@ -37,7 +36,7 @@
 #include <unistd.h>
 
 
-static QScopedPointer<QFile> logFile;
+static QFile logFile;
 
 void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg);
 
@@ -78,16 +77,15 @@ int main(int argc, char *argv[])
         } else {
             lock_file.lock();
         }
-
         QString log_name = "/var/log/mxpi.log";
         if (QFile::exists(log_name)) {
             system("echo '-----------------------------------------------------------\nMXPI SESSION\
                    \n-----------------------------------------------------------' >> " + log_name.toUtf8() + ".old");
             system("cat " + log_name.toUtf8() + " >> " + log_name.toUtf8() + ".old");
-            system("rm " + log_name.toUtf8());
+            QFile::remove(log_name);
         }
-        logFile.reset(new QFile(log_name));
-        logFile.data()->open(QFile::Append | QFile::Text);
+        logFile.setFileName(log_name);
+        logFile.open(QFile::Append | QFile::Text);
         qInstallMessageHandler(messageHandler);
 
         MainWindow w;
@@ -105,7 +103,7 @@ void messageHandler(QtMsgType type, const QMessageLogContext &context, const QSt
     QTextStream term_out(stdout);
     term_out << msg << QStringLiteral("\n");
 
-    QTextStream out(logFile.data());
+    QTextStream out(&logFile);
     out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz ");
     switch (type)
     {
