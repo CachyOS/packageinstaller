@@ -83,7 +83,7 @@ public:
     void centerWindow();
     void clearUi();
     void copyTree(QTreeWidget *, QTreeWidget *) const;
-    void displayFiltered(QStringList list, bool raw = false) const;
+    void displayFilteredFP(QStringList list, bool raw = false);
     void displayFlatpaks(bool force_update = false);
     void displayPackages();
     void displayPopularApps() const;

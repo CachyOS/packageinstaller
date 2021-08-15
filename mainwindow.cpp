@@ -691,10 +691,11 @@ void MainWindow::displayPopularApps() const
 }
 
 
-// Display only the listed apps
-void MainWindow::displayFiltered(QStringList list, bool raw) const
+// Display only the listed apps (Flatpak only)
+void MainWindow::displayFilteredFP(QStringList list, bool raw)
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
+    ui->treeFlatpak->blockSignals(true);
 
     QMutableStringListIterator i(list);
     if (raw) { // raw format that needs to be edited
@@ -707,19 +708,33 @@ void MainWindow::displayFiltered(QStringList list, bool raw) const
     }
 
     int total = 0;
-
     for (QTreeWidgetItemIterator it(tree); *it; ++it) {
         if (list.contains((*it)->text(8))) {
             ++total;
             (*it)->setHidden(false);
             (*it)->setText(6, QStringLiteral("true")); // Displayed flag
+            if ((*it)->checkState(0) == Qt::Checked && (*it)->text(5) == QLatin1String("installed")) {
+                ui->buttonUninstall->setEnabled(true);
+                ui->buttonInstall->setEnabled(false);
+            } else {
+                ui->buttonUninstall->setEnabled(false);
+                ui->buttonInstall->setEnabled(true);
+            }
         } else {
             (*it)->setHidden(true);
             (*it)->setText(6, QStringLiteral("false"));
-            (*it)->setCheckState(0, Qt::Unchecked); // uncheck hidden items
+            if ((*it)->checkState(0) == Qt::Checked) {
+                (*it)->setCheckState(0, Qt::Unchecked); // uncheck hidden item
+                change_list.removeOne((*it)->text(8));
+            }
+        }
+        if (change_list.isEmpty()) {// reset comboFilterFlatpak if nothing is selected
+            ui->buttonUninstall->setEnabled(false);
+            ui->buttonInstall->setEnabled(false);
         }
     }
     ui->labelNumAppFP->setText(QString::number(total));
+    ui->treeFlatpak->blockSignals(false);
 }
 
 
@@ -840,9 +855,6 @@ void MainWindow::displayFlatpaks(bool force_update)
         // add runtimes (needed for older flatpak versions)
         installed_runtimes_fp = listInstalledFlatpaks("--runtime");
     }
-
-    QStringList installed_all = QStringList() << installed_apps_fp << installed_runtimes_fp;
-
     int total_count = 0;
     QTreeWidgetItem *widget_item;
 
@@ -870,6 +882,7 @@ void MainWindow::displayFlatpaks(bool force_update)
         widget_item->setText(3, version);
         widget_item->setText(4, size);
         widget_item->setText(8, item); // Full string
+        QStringList installed_all {installed_apps_fp + installed_runtimes_fp};
         if (installed_all.contains(item)) {
             widget_item->setForeground(1, QBrush(Qt::gray));
             widget_item->setForeground(2, QBrush(Qt::gray));
@@ -2342,17 +2355,17 @@ void MainWindow::filterChanged(const QString &arg1)
     // filter for Flatpak
     if (tree == ui->treeFlatpak) {
         if (arg1 == tr("Installed runtimes")) {
-            displayFiltered(installed_runtimes_fp);
+            displayFilteredFP(installed_runtimes_fp);
         } else if (arg1 == tr("Installed apps")) {
-            displayFiltered(installed_apps_fp);
+            displayFilteredFP(installed_apps_fp);
         } else if (arg1 == tr("All apps")) {
             if (flatpaks_apps.isEmpty())
                 flatpaks_apps = listFlatpaks(ui->comboRemote->currentText(), "--app");
-            displayFiltered(flatpaks_apps, true);
+            displayFilteredFP(flatpaks_apps, true);
         } else if (arg1 == tr("All runtimes")) {
             if (flatpaks_runtimes.isEmpty())
                 flatpaks_runtimes = listFlatpaks(ui->comboRemote->currentText(), "--runtime");
-            displayFiltered(flatpaks_runtimes, true);
+            displayFilteredFP(flatpaks_runtimes, true);
         } else if (arg1 == tr("All available")) {
             int total = 0;
             while (*it) {
@@ -2362,20 +2375,17 @@ void MainWindow::filterChanged(const QString &arg1)
                 ++it;
             }
             ui->labelNumAppFP->setText(QString::number(total));
+        } else if (arg1 == tr("All installed")) {
+            displayFilteredFP(installed_apps_fp + installed_runtimes_fp);
         } else if (arg1 == tr("Not installed")) {
             found_items = tree->findItems("not installed", Qt::MatchExactly, 5);
-            ui->labelNumAppFP->setText(QString::number(found_items.count()));
+            QStringList new_list;
             while (*it) {
-                if (found_items.contains(*it)) {
-                    (*it)->setHidden(false);
-                    (*it)->setText(6, QStringLiteral("true")); // Displayed flag
-                } else {
-                    (*it)->setHidden(true);
-                    (*it)->setText(6, QStringLiteral("false"));
-                    (*it)->setCheckState(0, Qt::Unchecked); // uncheck hidden items
-                }
+                if (found_items.contains(*it))
+                    new_list << (*it)->text(8);
                 ++it;
             }
+            displayFilteredFP(new_list);
         }
         setSearchFocus();
         findPackageOther();
@@ -2402,14 +2412,19 @@ void MainWindow::filterChanged(const QString &arg1)
     else if (arg1 == tr("Not installed"))
         found_items = tree->findItems(QLatin1String("not installed"), Qt::MatchExactly, 5);
 
+
+    change_list.clear();
+    ui->buttonUninstall->setEnabled(false);
+    ui->buttonInstall->setEnabled(false);
+
     while (*it) {
+        (*it)->setCheckState(0, Qt::Unchecked); // uncheck all items
         if (found_items.contains(*it)) {
             (*it)->setHidden(false);
             (*it)->setText(6, QLatin1String("true")); // Displayed flag
         } else {
             (*it)->setHidden(true);
             (*it)->setText(6, QLatin1String("false"));
-            (*it)->setCheckState(0, Qt::Unchecked); // uncheck hidden items
         }
         ++it;
     }
@@ -2476,16 +2491,16 @@ void MainWindow::buildChangeList(QTreeWidgetItem *item)
     if (tree != ui->treeFlatpak) {
         ui->buttonUninstall->setEnabled(checkInstalled(change_list));
         ui->buttonInstall->setText(checkUpgradable(change_list) ? tr("Upgrade") : tr("Install"));
-
     } else { // for Flatpaks allow selection only of installed or not installed items so one clicks on an installed item only installed items should be displayed and the other way round
         ui->buttonInstall->setText(tr("Install"));
         if (item->text(5) == QLatin1String("installed")) {
-            if (indexFilterFP == tr("All apps"))
-                ui->comboFilterFlatpak->setCurrentText(tr("Installed apps"));
+            if (item->checkState(0) == Qt::Checked && ui->comboFilterFlatpak->currentText() != tr("All installed"))
+                ui->comboFilterFlatpak->setCurrentText(tr("All installed"));
             ui->buttonUninstall->setEnabled(true);
             ui->buttonInstall->setEnabled(false);
         } else {
-            ui->comboFilterFlatpak->setCurrentText(tr("Not installed"));
+            if (item->checkState(0) == Qt::Checked && ui->comboFilterFlatpak->currentText() != tr("Not installed"))
+                ui->comboFilterFlatpak->setCurrentText(tr("Not installed"));
             ui->buttonUninstall->setEnabled(false);
             ui->buttonInstall->setEnabled(true);
         }
@@ -2501,7 +2516,6 @@ void MainWindow::buildChangeList(QTreeWidgetItem *item)
         ui->buttonUninstall->setEnabled(false);
     }
 }
-
 
 // Force repo upgrade
 void MainWindow::on_buttonForceUpdateStable_clicked()

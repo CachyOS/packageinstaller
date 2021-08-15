@@ -1210,6 +1210,11 @@
          </item>
          <item>
           <property name="text">
+           <string>All installed</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
            <string>Not installed</string>
           </property>
          </item>
@@ -1428,7 +1433,8 @@
              <string>Remove unused runtimes</string>
             </property>
             <property name="icon">
-             <iconset theme="sweeper"/>
+             <iconset theme="sweeper">
+              <normaloff>.</normaloff>.</iconset>
             </property>
             <property name="autoDefault">
              <bool>false</bool>
