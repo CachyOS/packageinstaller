@@ -171,6 +171,7 @@ private slots:
 
 private:
     Ui::MainWindow *ui;
+    enum Tab {Popular, Stable, Test, Backports, Flatpak, Output};
 
     QString indexFilterFP;
     bool test_initially_enabled;
@@ -212,6 +213,7 @@ private:
 
     QNetworkAccessManager manager;
     QNetworkReply *reply;
+
     bool checkOnline();
     bool downloadFile(const QString &url, QFile &file);
     bool downloadAndUnzip(const QString &url, QFile &file);

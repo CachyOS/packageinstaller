@@ -1,6 +1,3 @@
------BEGIN PGP SIGNED MESSAGE-----
-Hash: SHA512
-
 Format: 1.8
 Date: Sat, 31 Jul 2021 19:05:35 -0400
 Source: mx-packageinstaller
@@ -18,29 +15,17 @@ Changes:
  .
    * Save config file under ~/.config/MX-Linux
 Checksums-Sha1:
- 5e649d98d2d1ab6a9669a5ed8d83e850fdefeaf4 1232 mx-packageinstaller_21.7.02.dsc
- c75e41b8006b2657cb757618e6a899cec4a01ed0 276116 mx-packageinstaller_21.7.02.tar.xz
- 40c3f8442767b98c46dbf46fb8e71f318a8f956d 10516 mx-packageinstaller_21.7.02_amd64.buildinfo
- 223bcdd060efbaac3423b16d2a03d344e3840b69 348334 mx-packageinstaller_21.7.02_amd64.deb
+ 623403e7b4d0e4c6ec8857ef9795465cfd4f3378 670 mx-packageinstaller_21.7.02.dsc
+ a23dbe65ff3e797e89b089e55160247b51d5bbec 276112 mx-packageinstaller_21.7.02.tar.xz
+ 460d206280b89958f1a188935a8b344bac59c39b 9951 mx-packageinstaller_21.7.02_amd64.buildinfo
+ 5a4e7a5d0c56c89cd07fbbf61643be259dc5985f 348092 mx-packageinstaller_21.7.02_amd64.deb
 Checksums-Sha256:
- 29d6c9073c927a9d317c82f5a67691f829c3ecebcc38610b6f5e9fbfde48bddf 1232 mx-packageinstaller_21.7.02.dsc
- 26f49449845aab2dd73ba332e46ef2501d6c5290037f38b3f31e90fa78f35650 276116 mx-packageinstaller_21.7.02.tar.xz
- b79f2c0cb253055556f08991380fafad178bb142c25970bb6183db03d1b90957 10516 mx-packageinstaller_21.7.02_amd64.buildinfo
- 8249568b15587f5295655fd3fda96048e63eaa19bffcde0071606a638f709c7c 348334 mx-packageinstaller_21.7.02_amd64.deb
+ 1459648a2556dc4103be4dde47f7e51f4b3ae84ecad8a5eb6ac9192c9e314387 670 mx-packageinstaller_21.7.02.dsc
+ 66167b514d9321f4e899ff68419354ca9c13d71e85546b795a516db97c9ef82e 276112 mx-packageinstaller_21.7.02.tar.xz
+ 6bddfda1316f78b300809e91b60f323516900796c946a967a9b280ede23bfabb 9951 mx-packageinstaller_21.7.02_amd64.buildinfo
+ 6daa8424517d57e097878d2927cd1de671f19cc5759ce96f6fdaedf0f1faf838 348092 mx-packageinstaller_21.7.02_amd64.deb
 Files:
- 213b5b8badd08272f76334a58f090353 1232 admin optional mx-packageinstaller_21.7.02.dsc
- 04ae947eb5124fd57abfd8f57ea43cec 276116 admin optional mx-packageinstaller_21.7.02.tar.xz
- 9e67fbce88af6fe0ea260265bbeff8e1 10516 admin optional mx-packageinstaller_21.7.02_amd64.buildinfo
- 68680a9ead31cea6a23a3188741e168e 348334 admin optional mx-packageinstaller_21.7.02_amd64.deb
-
------BEGIN PGP SIGNATURE-----
-
-iQFHBAEBCgAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAmEF16sTHGFkcmlhbkBt
-eGxpbnV4Lm9yZwAKCRBwk4x4BnnumEDOB/9KALRvc7ELoBF1PrepNZ1mCP0EfMqg
-plRBmso6s5I1SIM/+2SeKrBPILc3bhNFN/BAqhmZ0Ie/z9QMLw2E//TvWtxejZm0
-7jrb5iGWDackzDCZD5hR+qnfcZTK/FZScZlS3Cat97YtIK6nKznXqEEpcKqwvStk
-yaE2ODgzjRTZDphV7rrr2dDIX6I0JJNWxsaCQgVLQRCOSJU796KquLPX3cyXsLFi
-GPKxcl2XH3OUMAPoav3vM4kJtTR+PTh1AfFi9KV0Qzg9D8/rLeju5LOwVT/+d2iq
-AVef0ZRERjZgnP5AhzPc1/oW+WBwuFE7dsc8vjr+QRHyAL8RakdOvxpk
-=D9tf
------END PGP SIGNATURE-----
+ 6f2b9d76f32b8b95bf9f1fcaefdd18cd 670 admin optional mx-packageinstaller_21.7.02.dsc
+ 822fd3ae542d5df26bdbb036389cdfa4 276112 admin optional mx-packageinstaller_21.7.02.tar.xz
+ bd013717a796a6c1211eead77e232a10 9951 admin optional mx-packageinstaller_21.7.02_amd64.buildinfo
+ 3cf866b99e3ce7e51b0d5973a7a38073 348092 admin optional mx-packageinstaller_21.7.02_amd64.deb
