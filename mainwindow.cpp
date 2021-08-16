@@ -746,29 +746,14 @@ void MainWindow::displayPackages()
 
     newtree->blockSignals(true);
 
-    QHash<QString, VersionNumber> hashInstalled = listInstalledVersions();
-    QString app_name;
-    QString app_info;
-    QString app_ver;
-    QString app_desc;
-    VersionNumber installed;
-    VersionNumber candidate;
-
-    QTreeWidgetItem *widget_item;
-
+    auto hashInstalled = listInstalledVersions();
     // create a list of apps, create a hash with app_name, app_info
     for (auto i = list.constBegin(); i != list.constEnd(); ++i) {
-        // get size for newer flatpak versions
-
-        app_name = i.key();
-        app_ver = i.value().at(0);
-        app_desc = i.value().at(1);
-
-        widget_item = new QTreeWidgetItem(tree);
+        auto widget_item = new QTreeWidgetItem(newtree);
         widget_item->setCheckState(TreeCol::Check, Qt::Unchecked);
-        widget_item->setText(TreeCol::Name, app_name);
-        widget_item->setText(TreeCol::Version, app_ver);
-        widget_item->setText(TreeCol::Description, app_desc);
+        widget_item->setText(TreeCol::Name, i.key());
+        widget_item->setText(TreeCol::Version, i.value().at(0));
+        widget_item->setText(TreeCol::Description, i.value().at(1));
         widget_item->setText(TreeCol::Displayed, QStringLiteral("true")); // all items are displayed till filtered
     }
     for (int i = 0; i < newtree->columnCount(); ++i)
@@ -778,6 +763,11 @@ void MainWindow::displayPackages()
     int upgr_count = 0;
     int inst_count = 0;
 
+
+    QString app_name;
+    QString app_ver;
+    VersionNumber installed;
+    VersionNumber candidate;
     // update tree
     for (QTreeWidgetItemIterator it(newtree); *it; ++it) {
         app_name = (*it)->text(TreeCol::Name);
