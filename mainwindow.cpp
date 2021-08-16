@@ -74,6 +74,7 @@ void MainWindow::setup()
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     ui->tabWidget->blockSignals(true);
+    ui->pushRemoveOrphan->setHidden(true);
 
     QFont font("monospace");
     font.setStyleHint(QFont::Monospace);
@@ -987,32 +988,32 @@ bool MainWindow::confirmActions(QString names, QString action)
     QString recommends;
     QString recommends_aptitude;
     QString aptitude_info;
+
+    QString frontend = "DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C ";
+    QString aptget = "apt-get -s -V -o=Dpkg::Use-Pty=0 ";
+    QString aptitude = "aptitude -sy -V -o=Dpkg::Use-Pty=0 ";
     if (tree == ui->treeFlatpak) {
         detailed_installed_names = change_list;
     } else if (tree == ui->treeBackports) {
         recommends = (ui->checkBoxInstallRecommendsMXBP->isChecked()) ? "--install-recommends " : "";
         recommends_aptitude = (ui->checkBoxInstallRecommendsMXBP->isChecked()) ? "--with-recommends " : "--without-recommends ";
-        detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 "
-                                       + action + " " + recommends + "-t " + ver_name + "-backports --reinstall " + names
+        detailed_names = cmd.getCmdOut(frontend + aptget + action + " " + recommends
+                                       + "-t " + ver_name + "-backports --reinstall " + names
                                        + "|grep 'Inst\\|Remv' | awk '{V=\"\"; P=\"\";}; $3 ~ /^\\[/ { V=$3 }; $3 ~ /^\\(/ { P=$3 \")\"}; $4 ~ /^\\(/ {P=\" => \" $4 \")\"};  {print $2 \";\" V  P \";\" $1}'");
-        aptitude_info = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C aptitude -sy -V -o=Dpkg::Use-Pty=0 "
-                                      + action + " " + recommends_aptitude + "-t " + ver_name + "-backports " + names + " |tail -2 |head -1");
+        aptitude_info = cmd.getCmdOut(frontend + aptitude + action + " " + recommends_aptitude + "-t " + ver_name
+                                      + "-backports " + names + " |tail -2 |head -1");
     } else if (tree == ui->treeMXtest) {
         recommends = (ui->checkBoxInstallRecommendsMX->isChecked()) ? "--install-recommends " : "";
         recommends_aptitude = (ui->checkBoxInstallRecommendsMX->isChecked()) ? "--with-recommends " : "--without-recommends ";
-        detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 "
-                                       + action + " -t mx " + recommends +  "--reinstall " + names
-                                       + "|grep 'Inst\\|Remv' | awk '{V=\"\"; P=\"\";}; $3 ~ /^\\[/ { V=$3 }; $3 ~ /^\\(/ { P=$3 \")\"}; $4 ~ /^\\(/ {P=\" => \" $4 \")\"};  {print $2 \";\" V  P \";\" $1}'");
-        aptitude_info = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C aptitude -sy -V -o=Dpkg::Use-Pty=0 "
-                                     + action + " -t mx " + recommends_aptitude + names + " |tail -2 |head -1");
+        detailed_names = cmd.getCmdOut(frontend + aptget + action + " -t mx " + recommends
+                                       +  "--reinstall " + names + "|grep 'Inst\\|Remv' | awk '{V=\"\"; P=\"\";}; $3 ~ /^\\[/ { V=$3 }; $3 ~ /^\\(/ { P=$3 \")\"}; $4 ~ /^\\(/ {P=\" => \" $4 \")\"};  {print $2 \";\" V  P \";\" $1}'");
+        aptitude_info = cmd.getCmdOut(frontend + aptitude + action + " -t mx " + recommends_aptitude + names + " |tail -2 |head -1");
     } else {
         recommends = (ui->checkBoxInstallRecommends->isChecked()) ? "--install-recommends " : "";
         recommends_aptitude = (ui->checkBoxInstallRecommends->isChecked()) ? "--with-recommends " : "--without-recommends ";
-        detailed_names = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C apt-get -s -V -o=Dpkg::Use-Pty=0 "
-                                       + action + " " + recommends +  "--reinstall " + names
+        detailed_names = cmd.getCmdOut(frontend + aptget + action + " " + recommends +  "--reinstall " + names
                                        + "|grep 'Inst\\|Remv'| awk '{V=\"\"; P=\"\";}; $3 ~ /^\\[/ { V=$3 }; $3 ~ /^\\(/ { P=$3 \")\"}; $4 ~ /^\\(/ {P=\" => \" $4 \")\"};  {print $2 \";\" V  P \";\" $1}'");
-        aptitude_info = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C aptitude -sy -V -o=Dpkg::Use-Pty=0 "
-                                      + action + " " + recommends_aptitude + names + " |tail -2 |head -1");
+        aptitude_info = cmd.getCmdOut(frontend + aptitude + action + " " + recommends_aptitude + names + " |tail -2 |head -1");
     }
 
     if (tree != ui->treeFlatpak)
@@ -1093,18 +1094,17 @@ bool MainWindow::install(const QString &names)
     if (!confirmActions(names, "install")) return true;
 
     displayOutput();
+    QString frontend = "DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) ";
+    QString aptget = "apt-get -o=Dpkg::Use-Pty=0 install -y ";
     if (tree == ui->treeBackports) {
         recommends = (ui->checkBoxInstallRecommendsMXBP->isChecked()) ? "--install-recommends " : "";
-        success = cmd.run("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) apt-get -o=Dpkg::Use-Pty=0 install -y "
-                    + recommends +  "-t " + ver_name + "-backports --reinstall " + names);
+        success = cmd.run(frontend + aptget + recommends +  "-t " + ver_name + "-backports --reinstall " + names);
     } else if (tree == ui->treeMXtest) {
         recommends = (ui->checkBoxInstallRecommendsMX->isChecked()) ? "--install-recommends " : "";
-        success = cmd.run("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) apt-get -o=Dpkg::Use-Pty=0 install -y "
-                    + recommends +  " -t mx " + names);
+        success = cmd.run(frontend + aptget + recommends +  " -t mx " + names);
     } else {
         recommends = (ui->checkBoxInstallRecommends->isChecked()) ? "--install-recommends " : "";
-        success = cmd.run("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) apt-get -o=Dpkg::Use-Pty=0 install -y "
-                    + recommends +  "--reinstall " + names);
+        success = cmd.run(frontend + aptget + recommends +  "--reinstall " + names);
     }
     lock_file->lock();
 
@@ -2211,6 +2211,7 @@ void MainWindow::on_tabWidget_currentChanged(int index)
         break;
     case Tab::Stable:
         ui->searchBoxStable->setText(search_str);
+        ui->pushRemoveOrphan->setVisible(system("test -n \"$(apt-get --dry-run autoremove |grep -Po '^Remv \\K[^ ]+' )\"") == 0);
         enableTabs(true);
         setCurrentTree();
         change_list.clear();
@@ -2750,4 +2751,25 @@ void MainWindow::on_pushRemoveUnused_clicked()
         QMessageBox::critical(this, tr("Error"), tr("Problem detected during last operation, please inspect the console output."));
     }
     enableTabs(true);
+}
+
+void MainWindow::on_pushRemoveOrphan_clicked()
+{
+    QString names = cmd.getCmdOut("apt-get --dry-run autoremove |grep -Po '^Remv \\K[^ ]+' |tr '\n' ' '");
+    QMessageBox::warning(this, tr("Warning"), tr("Potentially dangerous operation.\nPlease make sure you check carefully the list of packages to be removed."));
+    showOutput();
+    if (uninstall(names)) {
+        if (!stable_list.isEmpty()) // update list if it already exists
+            buildPackageLists();
+        refreshPopularApps();
+        QMessageBox::information(this, tr("Success"), tr("Processing finished successfully."));
+        ui->tabWidget->setCurrentWidget(tree->parentWidget());
+    } else {
+        if (!stable_list.isEmpty()) // update list if it already exists
+            buildPackageLists();
+        refreshPopularApps();
+        QMessageBox::critical(this, tr("Error"), tr("We encountered a problem uninstalling the program"));
+    }
+    enableTabs(true);
+    ui->tabWidget->setCurrentIndex(Tab::Stable);
 }

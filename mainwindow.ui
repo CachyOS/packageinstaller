@@ -35,7 +35,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>4</number>
+      <number>1</number>
      </property>
      <property name="documentMode">
       <bool>false</bool>
@@ -388,7 +388,17 @@
             </property>
            </widget>
           </item>
-          <item row="1" column="7">
+          <item row="0" column="6" colspan="2">
+           <widget class="QPushButton" name="pushRemoveOrphan">
+            <property name="text">
+             <string>Remove orphan packages</string>
+            </property>
+            <property name="icon">
+             <iconset theme="remove"/>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="6" colspan="2">
            <widget class="QPushButton" name="pushUpgradeAll">
             <property name="text">
              <string>Upgrade All</string>

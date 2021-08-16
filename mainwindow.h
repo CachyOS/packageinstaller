@@ -186,6 +186,8 @@ private slots:
 
     void on_pushRemoveUnused_clicked();
 
+    void on_pushRemoveOrphan_clicked();
+
 private:
     Ui::MainWindow *ui;
 
