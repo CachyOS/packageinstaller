@@ -1,3 +1,12 @@
+mx-packageinstaller (21.8) mx; urgency=medium
+
+  * Fix: lockup when switching between Popular and Stable tabs
+  * Added button for autoremove 'remove orphan packages' button
+  *  - this pops up only if apt autoremove lists packages to remove
+  * Reset checked boxes when changing filters (more consistent behavior)
+
+ -- Adrian <adrian@mxlinux.org>  Mon, 16 Aug 2021 00:49:25 -0400
+
 mx-packageinstaller (21.7.02) mx; urgency=medium
 
   * Save config file under ~/.config/MX-Linux

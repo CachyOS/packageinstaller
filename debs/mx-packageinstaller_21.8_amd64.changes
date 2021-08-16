@@ -1,0 +1,49 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Format: 1.8
+Date: Mon, 16 Aug 2021 00:49:25 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 21.8
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (21.8) mx; urgency=medium
+ .
+   * Fix: lockup when switching between Popular and Stable tabs
+   * Added button for autoremove 'remove orphan packages' button
+   *  - this pops up only if apt autoremove lists packages to remove
+   * Reset checked boxes when changing filters (more consistent behavior)
+Checksums-Sha1:
+ 49d0a168c3ab2417f3abb04399d7fb9b44a1dc25 1220 mx-packageinstaller_21.8.dsc
+ 528d9ca57c8bf72d88a5dacd485b7e6f46d8aa9f 276772 mx-packageinstaller_21.8.tar.xz
+ 38fa6ca6b00de6f26541e5392773303c8520c30d 10492 mx-packageinstaller_21.8_amd64.buildinfo
+ 1b5f3639da8f1d5fae088fb2e8b615f52f2d723e 349612 mx-packageinstaller_21.8_amd64.deb
+Checksums-Sha256:
+ c53f2fbe9d47993025c34481535da383458202801f10669c47c9b95969006759 1220 mx-packageinstaller_21.8.dsc
+ c770e8c5caa6e0d42bf4953e8eb052d155e1a3fa0f4c7f997d5ce19d8dd5b0a7 276772 mx-packageinstaller_21.8.tar.xz
+ 6e630d37bae78aea424b1a75b99fa477f65d81db1df214df58a649c36eaf79fd 10492 mx-packageinstaller_21.8_amd64.buildinfo
+ 6fdd7291a9a3a0145d9002ad1f7ceb450648b7dda73edcc836aae80004d7db70 349612 mx-packageinstaller_21.8_amd64.deb
+Files:
+ 264f995cf1c43fed509013c6dfe90a07 1220 admin optional mx-packageinstaller_21.8.dsc
+ 90192f5996648382f726a75f78a18726 276772 admin optional mx-packageinstaller_21.8.tar.xz
+ a00312b56bad5c4732a63110aae0c6f1 10492 admin optional mx-packageinstaller_21.8_amd64.buildinfo
+ 78d1f909c237483fb1e6777c018946e1 349612 admin optional mx-packageinstaller_21.8_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCgAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAmEZ77wTHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumM80CACNS7r+aZkFZOAqaYLhmpzrlmlflRAr
+AjFnf+vN6QViMLdu20xZKtkmQsljqNHJ6OKIc7cXVyZjEdC62V1jXPOvBU6gYMOK
+EU91RDRKwM0IgTXMBGjzFcGNNKNMhYjyFn52/8124XN2OaclMuivVklr8tTxo7mB
+Nl1jXqT7YPw32FQhj3iJNxqohBEydUo3TazUnwpSryXeONbuiGKz1J4X9XC+QOTX
+FCpVh69pLDrFUq1G6XjMHPwmdOzh8YptEcYJ/Dyz90A8FMxW7thJv+LH7DriW9u3
+14+YS/6l1W2u8RT+sv/tP2cxBw4RfvWg5DB7Xm+fQjbiUviCGm+EKSPW
+=g0Qu
+-----END PGP SIGNATURE-----

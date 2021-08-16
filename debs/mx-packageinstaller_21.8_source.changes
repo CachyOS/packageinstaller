@@ -1,0 +1,46 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Format: 1.8
+Date: Mon, 16 Aug 2021 00:49:25 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source
+Version: 21.8
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (21.8) mx; urgency=medium
+ .
+   * Fix: lockup when switching between Popular and Stable tabs
+   * Added button for autoremove 'remove orphan packages' button
+   *  - this pops up only if apt autoremove lists packages to remove
+   * Reset checked boxes when changing filters (more consistent behavior)
+Checksums-Sha1:
+ 2cd1a916ff8db1e2302fa18b4788f6ed56df8f9e 658 mx-packageinstaller_21.8.dsc
+ e25f89da83a2665794a8f8431d0d1a3bc0536eda 276868 mx-packageinstaller_21.8.tar.xz
+ eafff49c2eb74b901058abf77297f2c006cafb86 10174 mx-packageinstaller_21.8_i386.buildinfo
+Checksums-Sha256:
+ 7648f91468e97442ea93111c093d0d19032d113f0449f7756860fe14c5b87e3e 658 mx-packageinstaller_21.8.dsc
+ 2fd182376ea0936f572956c3cb71edfaacc26be06a94a647b2ab4dca4e0be4ab 276868 mx-packageinstaller_21.8.tar.xz
+ 74f87dc9a47e8c1fe7e94e0ee2ec487a8331dc07c3d698c5089c730dc134cc1d 10174 mx-packageinstaller_21.8_i386.buildinfo
+Files:
+ 3adb654dff747977265f8b442775db07 658 admin optional mx-packageinstaller_21.8.dsc
+ 3cb4b2816fd972ee498d0d0c2df94f21 276868 admin optional mx-packageinstaller_21.8.tar.xz
+ 753e2a2748f1db71daf31c2f030fdb53 10174 admin optional mx-packageinstaller_21.8_i386.buildinfo
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCgAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAmEZ774THGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumMEBCACyy+VTAar8VVBg2RMl4j1TaAWBA6Gd
+qo6y9sqQV4+9H04Bt+N6HdUCM8EcKxR7MeE1cOLL+qyE9z+Gz7RgCqz0RQgA0NBH
+kIrRRPzB1cQ1yZwaJcr90NV7nds3TpLTBf5f7rnbgWuJQW3n9NQDDTDJ+0WCJJBr
+8IeN7FAcSv9zKdqUUqdNBZ8YwuyeMcIJFcGuaRW5Pe+O3qphBAri2MGheD0s69RR
+ZbH9lHF+YA3MP7qP+5yIW1MRkledzpTy1ziOZ/vjy0KFL17CNBkQYJ5OQnlBiOjf
+GVsRYda5y6nvNfmiBq1F25ssjEm72ysoY6HQBmsEwTh12NUB6R96D4ph
+=L4pl
+-----END PGP SIGNATURE-----
