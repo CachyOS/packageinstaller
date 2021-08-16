@@ -285,33 +285,6 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="6" rowspan="2">
-           <widget class="QPushButton" name="buttonUpgradeAll">
-            <property name="text">
-             <string>Upgrade All</string>
-            </property>
-            <property name="icon">
-             <iconset theme="system-upgrade">
-              <normaloff>.</normaloff>.</iconset>
-            </property>
-            <property name="autoDefault">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="7">
-           <spacer name="horizontalSpacer_5">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
-            </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>72</width>
-              <height>20</height>
-             </size>
-            </property>
-           </spacer>
-          </item>
           <item row="0" column="8">
            <widget class="QCheckBox" name="checkHideLibs">
             <property name="text">
@@ -323,7 +296,7 @@
            </widget>
           </item>
           <item row="0" column="9">
-           <widget class="QPushButton" name="buttonForceUpdateStable">
+           <widget class="QPushButton" name="pushForceUpdateStable">
             <property name="minimumSize">
              <size>
               <width>150</width>
@@ -412,6 +385,20 @@
            <widget class="QCheckBox" name="checkBoxInstallRecommends">
             <property name="text">
              <string>Also Install &quot;Recommended&quot; Packages</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="7">
+           <widget class="QPushButton" name="pushUpgradeAll">
+            <property name="text">
+             <string>Upgrade All</string>
+            </property>
+            <property name="icon">
+             <iconset theme="system-upgrade">
+              <normaloff>.</normaloff>.</iconset>
+            </property>
+            <property name="autoDefault">
+             <bool>false</bool>
             </property>
            </widget>
           </item>
@@ -706,7 +693,7 @@
            </widget>
           </item>
           <item row="0" column="8" rowspan="2">
-           <widget class="QPushButton" name="buttonForceUpdateMX">
+           <widget class="QPushButton" name="pushForceUpdateMX">
             <property name="minimumSize">
              <size>
               <width>150</width>
@@ -1088,7 +1075,7 @@
              </widget>
             </item>
             <item row="0" column="8">
-             <widget class="QPushButton" name="buttonForceUpdateBP">
+             <widget class="QPushButton" name="pushForceUpdateBP">
               <property name="minimumSize">
                <size>
                 <width>150</width>
@@ -1338,7 +1325,7 @@
            </widget>
           </item>
           <item row="2" column="11">
-           <widget class="QPushButton" name="buttonUpgradeFP">
+           <widget class="QPushButton" name="pushUpgradeFP">
             <property name="text">
              <string>Upgrade All</string>
             </property>
@@ -1384,7 +1371,7 @@
            </spacer>
           </item>
           <item row="2" column="10">
-           <widget class="QPushButton" name="buttonRemotes">
+           <widget class="QPushButton" name="pushRemotes">
             <property name="text">
              <string>Advanced</string>
             </property>
@@ -1428,7 +1415,7 @@
            </widget>
           </item>
           <item row="3" column="10" colspan="2">
-           <widget class="QPushButton" name="buttonRemoveUnused">
+           <widget class="QPushButton" name="pushRemoveUnused">
             <property name="text">
              <string>Remove unused runtimes</string>
             </property>
@@ -1521,7 +1508,7 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="1" column="1">
-        <widget class="QPushButton" name="buttonEnter">
+        <widget class="QPushButton" name="pushEnter">
          <property name="text">
           <string>Enter</string>
          </property>
@@ -1582,7 +1569,7 @@
       <number>5</number>
      </property>
      <item row="0" column="6">
-      <widget class="QPushButton" name="buttonUninstall">
+      <widget class="QPushButton" name="pushUninstall">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -1605,7 +1592,7 @@
       </widget>
      </item>
      <item row="0" column="0">
-      <widget class="QPushButton" name="buttonAbout">
+      <widget class="QPushButton" name="pushAbout">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -1663,7 +1650,7 @@
       </spacer>
      </item>
      <item row="0" column="1">
-      <widget class="QPushButton" name="buttonHelp">
+      <widget class="QPushButton" name="pushHelp">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -1689,7 +1676,7 @@
       </widget>
      </item>
      <item row="0" column="7">
-      <widget class="QPushButton" name="buttonInstall">
+      <widget class="QPushButton" name="pushInstall">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -1715,7 +1702,7 @@
       </widget>
      </item>
      <item row="0" column="9">
-      <widget class="QPushButton" name="buttonCancel">
+      <widget class="QPushButton" name="pushCancel">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Minimum" vsizetype="Preferred">
          <horstretch>0</horstretch>
@@ -1770,10 +1757,10 @@
   <tabstop>tabWidget</tabstop>
   <tabstop>searchPopular</tabstop>
   <tabstop>treePopularApps</tabstop>
-  <tabstop>buttonAbout</tabstop>
-  <tabstop>buttonHelp</tabstop>
-  <tabstop>buttonInstall</tabstop>
-  <tabstop>buttonCancel</tabstop>
+  <tabstop>pushAbout</tabstop>
+  <tabstop>pushHelp</tabstop>
+  <tabstop>pushInstall</tabstop>
+  <tabstop>pushCancel</tabstop>
  </tabstops>
  <resources>
   <include location="images.qrc"/>

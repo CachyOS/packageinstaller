@@ -48,6 +48,23 @@ namespace Ui {
 class MainWindow;
 }
 
+namespace Tab {
+enum {Popular, Stable, Test, Backports, Flatpak, Output};
+}
+namespace PopCol {
+enum {Icon, Check, Name, Info, Description, InstallNames, UninstallNames, Screenshot, PostUninstall, PreUninstall};
+}
+namespace TreeCol {
+enum {Check, UpdateIcon, Name, Version, Description, Status, Displayed};
+}
+namespace FlatCol {
+enum {Check, ShortName, LongName, Version, Size, Status, Displayed, Duplicate, FullName};
+}
+namespace Popular {
+enum {Category, Name, Description, Installable, Screenshot, Preinstall, Postinstall, InstallNames, UninstallNames,
+      PostUninstall, PreUninstall};
+}
+
 class MainWindow : public QDialog
 {
     Q_OBJECT
@@ -131,47 +148,46 @@ private slots:
     void showOutput();
     void updateBar();
 
-    void on_buttonAbout_clicked();
-    void on_buttonHelp_clicked();
-    void on_buttonInstall_clicked();
-    void on_buttonUninstall_clicked();
+    void on_pushAbout_clicked();
+    void on_pushHelp_clicked();
+    void on_pushInstall_clicked();
+    void on_pushUninstall_clicked();
     void on_tabWidget_currentChanged(int index);
     void on_treePopularApps_expanded();
     void on_treePopularApps_itemCollapsed(QTreeWidgetItem *item);
     void on_treePopularApps_itemExpanded(QTreeWidgetItem *item);
 
-    void on_treeStable_itemChanged(QTreeWidgetItem *item);
-    void on_treeMXtest_itemChanged(QTreeWidgetItem *item);
     void on_treeBackports_itemChanged(QTreeWidgetItem *item);
     void on_treeFlatpak_itemChanged(QTreeWidgetItem *item);
+    void on_treeMXtest_itemChanged(QTreeWidgetItem *item);
     void on_treePopularApps_itemChanged(QTreeWidgetItem *item);
+    void on_treeStable_itemChanged(QTreeWidgetItem *item);
 
-    void on_buttonForceUpdateStable_clicked();
-    void on_buttonForceUpdateMX_clicked();
-    void on_buttonForceUpdateBP_clicked();
+    void on_pushForceUpdateBP_clicked();
+    void on_pushForceUpdateMX_clicked();
+    void on_pushForceUpdateStable_clicked();
 
-    void on_checkHideLibs_toggled(bool checked);
-    void on_checkHideLibsMX_clicked(bool checked);
     void on_checkHideLibsBP_clicked(bool checked);
+    void on_checkHideLibsMX_clicked(bool checked);
+    void on_checkHideLibs_toggled(bool checked);
 
-    void on_buttonUpgradeAll_clicked();
-    void on_buttonEnter_clicked();
     void on_lineEdit_returnPressed();
-    void on_buttonCancel_clicked();
+    void on_pushCancel_clicked();
+    void on_pushEnter_clicked();
+    void on_pushUpgradeAll_clicked();
 
     void on_comboRemote_activated(int);
-    void on_buttonUpgradeFP_clicked();
-    void on_buttonRemotes_clicked();
     void on_comboUser_activated(int index);
+    void on_pushRemotes_clicked();
+    void on_pushUpgradeFP_clicked();
 
     void on_treePopularApps_customContextMenuRequested(const QPoint &pos);
     void on_treeStable_customContextMenuRequested(const QPoint &pos);
 
-    void on_buttonRemoveUnused_clicked();
+    void on_pushRemoveUnused_clicked();
 
 private:
     Ui::MainWindow *ui;
-    enum Tab {Popular, Stable, Test, Backports, Flatpak, Output};
 
     QString indexFilterFP;
     bool test_initially_enabled;
@@ -192,7 +208,7 @@ private:
     QMetaObject::Connection conn;
     QProgressBar *bar;
     QProgressDialog *progress;
-    QPushButton *progCancel;
+    QPushButton *pushCancel;
     QSettings dictionary;
     QSettings settings;
     QString arch;
@@ -215,9 +231,9 @@ private:
     QNetworkReply *reply;
 
     bool checkOnline();
-    bool downloadFile(const QString &url, QFile &file);
     bool downloadAndUnzip(const QString &url, QFile &file);
     bool downloadAndUnzip(const QString &url, const QString &repo_name, const QString &branch, const QString &format, QFile &file);
+    bool downloadFile(const QString &url, QFile &file);
 
 
 };
