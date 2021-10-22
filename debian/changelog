@@ -1,3 +1,9 @@
+mx-packageinstaller (21.10) mx; urgency=medium
+
+  * Fix: reset filter combo box when refreshing sources
+
+ -- Adrian <adrian@mxlinux.org>  Fri, 22 Oct 2021 10:31:42 -0400
+
 mx-packageinstaller (21.8) mx; urgency=medium
 
   * Fix: lockup when switching between Popular and Stable tabs
