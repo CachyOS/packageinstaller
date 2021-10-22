@@ -2488,18 +2488,21 @@ void MainWindow::buildChangeList(QTreeWidgetItem *item)
 void MainWindow::on_pushForceUpdateStable_clicked()
 {
     ui->searchBoxStable->clear();
+    ui->comboFilterStable->setCurrentIndex(0);
     buildPackageLists(true);
 }
 
 void MainWindow::on_pushForceUpdateMX_clicked()
 {
     ui->searchBoxMX->clear();
+    ui->comboFilterMX->setCurrentIndex(0);
     buildPackageLists(true);
 }
 
 void MainWindow::on_pushForceUpdateBP_clicked()
 {
     ui->searchBoxBP->clear();
+    ui->comboFilterBP->setCurrentIndex(0);
     buildPackageLists(true);
 }
 
