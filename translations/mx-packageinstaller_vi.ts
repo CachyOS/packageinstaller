@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="kk" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="vi" version="2.1">
 <context>
     <name>MainWindow</name>
     <message>
@@ -40,7 +40,7 @@
         <location filename="mainwindow.ui" line="955"/>
         <location filename="mainwindow.ui" line="1235"/>
         <source>search</source>
-        <translation>іздеу</translation>
+        <translation>tìm kiếm</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="123"/>
@@ -112,7 +112,7 @@
         <location filename="mainwindow.ui" line="981"/>
         <location filename="mainwindow.ui" line="1270"/>
         <source>Version</source>
-        <translation type="unfinished"/>
+        <translation>Phiên bản</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="277"/>
@@ -264,7 +264,7 @@
     <message>
         <location filename="mainwindow.ui" line="1386"/>
         <source>Advanced</source>
-        <translation type="unfinished"/>
+        <translation>Nâng cao</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1416"/>
@@ -322,12 +322,12 @@
     <message>
         <location filename="mainwindow.ui" line="1613"/>
         <source>About this application</source>
-        <translation>Бұл қолданба жөнінде</translation>
+        <translation>Về ứng dụng này</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1616"/>
         <source>About...</source>
-        <translation>Осы туралы...</translation>
+        <translation>Về ứng dụng này...</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1623"/>
@@ -337,12 +337,12 @@
     <message>
         <location filename="mainwindow.ui" line="1671"/>
         <source>Display help </source>
-        <translation>Көмекті көрсету</translation>
+        <translation>Hiển thị bản trợ giúp</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1674"/>
         <source>Help</source>
-        <translation>Көмек</translation>
+        <translation>Trợ giúp</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1681"/>
@@ -366,12 +366,12 @@
     <message>
         <location filename="mainwindow.ui" line="1723"/>
         <source>Quit application</source>
-        <translation>Қолданба жұмысын аяқтау</translation>
+        <translation>Thoát ứng dụng</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1726"/>
         <source>Close</source>
-        <translation>Жабу</translation>
+        <translation>Đóng</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1733"/>
@@ -415,7 +415,7 @@
         <location filename="mainwindow.cpp" line="2744"/>
         <location filename="mainwindow.cpp" line="2764"/>
         <source>Error</source>
-        <translation>Қате</translation>
+        <translation>Lỗi</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="220"/>
@@ -425,7 +425,7 @@
     <message>
         <location filename="mainwindow.cpp" line="599"/>
         <source>Cancel</source>
-        <translation>Бас тарту</translation>
+        <translation>Hủy bỏ</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="606"/>
@@ -494,7 +494,7 @@
     <message>
         <location filename="mainwindow.cpp" line="1030"/>
         <source>Remove</source>
-        <translation type="unfinished"/>
+        <translation>Xóa bỏ</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1044"/>
@@ -602,7 +602,7 @@
     <message>
         <location filename="mainwindow.cpp" line="2029"/>
         <source>Version: </source>
-        <translation>Нұсқасы:</translation>
+        <translation>Phiên bản:</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2030"/>
@@ -768,7 +768,7 @@ Please make sure you check carefully the list of packages to be removed.</source
     <message>
         <location filename="remotes.cpp" line="59"/>
         <source>Close</source>
-        <translation>Жабу</translation>
+        <translation>Đóng</translation>
     </message>
     <message>
         <location filename="remotes.cpp" line="76"/>
@@ -806,28 +806,28 @@ Please make sure you check carefully the list of packages to be removed.</source
     <message>
         <location filename="about.cpp" line="32"/>
         <source>License</source>
-        <translation>Лицензиясы</translation>
+        <translation>Giấy phép</translation>
     </message>
     <message>
         <location filename="about.cpp" line="33"/>
         <location filename="about.cpp" line="43"/>
         <source>Changelog</source>
-        <translation type="unfinished"/>
+        <translation>Nhật kí thay đổi</translation>
     </message>
     <message>
         <location filename="about.cpp" line="34"/>
         <source>Cancel</source>
-        <translation>Бас тарту</translation>
+        <translation>Hủy bỏ</translation>
     </message>
     <message>
         <location filename="about.cpp" line="51"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Đóng</translation>
     </message>
     <message>
         <location filename="main.cpp" line="63"/>
         <source>Error</source>
-        <translation>Қате</translation>
+        <translation>Lỗi</translation>
     </message>
     <message>
         <location filename="main.cpp" line="64"/>

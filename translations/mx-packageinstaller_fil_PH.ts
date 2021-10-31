@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="kk" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="fil_PH" version="2.1">
 <context>
     <name>MainWindow</name>
     <message>
@@ -40,7 +40,7 @@
         <location filename="mainwindow.ui" line="955"/>
         <location filename="mainwindow.ui" line="1235"/>
         <source>search</source>
-        <translation>іздеу</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="123"/>
@@ -112,7 +112,7 @@
         <location filename="mainwindow.ui" line="981"/>
         <location filename="mainwindow.ui" line="1270"/>
         <source>Version</source>
-        <translation type="unfinished"/>
+        <translation>Bersyon</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="277"/>
@@ -249,7 +249,7 @@
     <message>
         <location filename="mainwindow.ui" line="1275"/>
         <source>Size</source>
-        <translation type="unfinished"/>
+        <translation>Laki</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1319"/>
@@ -302,7 +302,7 @@
     <message>
         <location filename="mainwindow.ui" line="1523"/>
         <source>Enter</source>
-        <translation type="unfinished"/>
+        <translation>Enter</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1534"/>
@@ -322,12 +322,12 @@
     <message>
         <location filename="mainwindow.ui" line="1613"/>
         <source>About this application</source>
-        <translation>Бұл қолданба жөнінде</translation>
+        <translation>Patungkol sa application na ito</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1616"/>
         <source>About...</source>
-        <translation>Осы туралы...</translation>
+        <translation>Patungkol sa...</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1623"/>
@@ -337,12 +337,12 @@
     <message>
         <location filename="mainwindow.ui" line="1671"/>
         <source>Display help </source>
-        <translation>Көмекті көрсету</translation>
+        <translation>Maghanap ng tulong</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1674"/>
         <source>Help</source>
-        <translation>Көмек</translation>
+        <translation>Tulong</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1681"/>
@@ -366,17 +366,17 @@
     <message>
         <location filename="mainwindow.ui" line="1723"/>
         <source>Quit application</source>
-        <translation>Қолданба жұмысын аяқтау</translation>
+        <translation>Iwan ang application</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1726"/>
         <source>Close</source>
-        <translation>Жабу</translation>
+        <translation>Isara</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1733"/>
         <source>Alt+C</source>
-        <translation type="unfinished"/>
+        <translation>Alt+C</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="172"/>
@@ -415,7 +415,7 @@
         <location filename="mainwindow.cpp" line="2744"/>
         <location filename="mainwindow.cpp" line="2764"/>
         <source>Error</source>
-        <translation>Қате</translation>
+        <translation>May error</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="220"/>
@@ -425,7 +425,7 @@
     <message>
         <location filename="mainwindow.cpp" line="599"/>
         <source>Cancel</source>
-        <translation>Бас тарту</translation>
+        <translation>I-cancel</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="606"/>
@@ -484,7 +484,7 @@
         <location filename="mainwindow.cpp" line="934"/>
         <location filename="mainwindow.cpp" line="2752"/>
         <source>Warning</source>
-        <translation type="unfinished"/>
+        <translation>Babala</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="938"/>
@@ -494,7 +494,7 @@
     <message>
         <location filename="mainwindow.cpp" line="1030"/>
         <source>Remove</source>
-        <translation type="unfinished"/>
+        <translation>Tanggalin</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1044"/>
@@ -526,7 +526,7 @@
     <message>
         <location filename="mainwindow.cpp" line="1172"/>
         <source>Installing </source>
-        <translation type="unfinished"/>
+        <translation>Nag-iinstall</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1179"/>
@@ -597,12 +597,12 @@
     <message>
         <location filename="mainwindow.cpp" line="2027"/>
         <source>About %1</source>
-        <translation type="unfinished"/>
+        <translation>Patungkol sa %1</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2029"/>
         <source>Version: </source>
-        <translation>Нұсқасы:</translation>
+        <translation>Bersyon: </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2030"/>
@@ -612,17 +612,17 @@
     <message>
         <location filename="mainwindow.cpp" line="2032"/>
         <source>Copyright (c) MX Linux</source>
-        <translation>Copyright (c) MX Linux</translation>
+        <translation>Karapatan (c) MX Linux</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2033"/>
         <source>%1 License</source>
-        <translation type="unfinished"/>
+        <translation>%1 Pahintulot</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2046"/>
         <source>%1 Help</source>
-        <translation type="unfinished"/>
+        <translation>%1 Tulong</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2134"/>
@@ -633,7 +633,7 @@
         <location filename="mainwindow.cpp" line="2146"/>
         <location filename="mainwindow.cpp" line="2758"/>
         <source>Success</source>
-        <translation type="unfinished"/>
+        <translation>Tagumpay</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2152"/>
@@ -704,7 +704,7 @@ OK to go ahead and install it?</source>
     <message>
         <location filename="mainwindow.cpp" line="2720"/>
         <source>Reinstall</source>
-        <translation type="unfinished"/>
+        <translation>Mag-reinstall</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2744"/>
@@ -768,7 +768,7 @@ Please make sure you check carefully the list of packages to be removed.</source
     <message>
         <location filename="remotes.cpp" line="59"/>
         <source>Close</source>
-        <translation>Жабу</translation>
+        <translation>Isara</translation>
     </message>
     <message>
         <location filename="remotes.cpp" line="76"/>
@@ -793,7 +793,7 @@ Please make sure you check carefully the list of packages to be removed.</source
     <message>
         <location filename="remotes.cpp" line="96"/>
         <source>Success</source>
-        <translation type="unfinished"/>
+        <translation>Tagumpay</translation>
     </message>
     <message>
         <location filename="remotes.cpp" line="96"/>
@@ -806,28 +806,28 @@ Please make sure you check carefully the list of packages to be removed.</source
     <message>
         <location filename="about.cpp" line="32"/>
         <source>License</source>
-        <translation>Лицензиясы</translation>
+        <translation>Lisensya</translation>
     </message>
     <message>
         <location filename="about.cpp" line="33"/>
         <location filename="about.cpp" line="43"/>
         <source>Changelog</source>
-        <translation type="unfinished"/>
+        <translation>Ulat na mga pagbabago</translation>
     </message>
     <message>
         <location filename="about.cpp" line="34"/>
         <source>Cancel</source>
-        <translation>Бас тарту</translation>
+        <translation>Huwag ituloy</translation>
     </message>
     <message>
         <location filename="about.cpp" line="51"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"/>
+        <translation>&amp;Isara</translation>
     </message>
     <message>
         <location filename="main.cpp" line="63"/>
         <source>Error</source>
-        <translation>Қате</translation>
+        <translation>May error</translation>
     </message>
     <message>
         <location filename="main.cpp" line="64"/>
@@ -837,12 +837,12 @@ Please make sure you check carefully the list of packages to be removed.</source
     <message>
         <location filename="main.cpp" line="73"/>
         <source>Unable to get exclusive lock</source>
-        <translation type="unfinished"/>
+        <translation>Di maaring makakuha ng eksclusibong pansara</translation>
     </message>
     <message>
         <location filename="main.cpp" line="74"/>
         <source>Another package management application (like Synaptic or apt-get), is already running. Please close that application first</source>
-        <translation type="unfinished"/>
+        <translation>May iba pang package management application (tulad ng Synaptic o apt-get), ang kasalukuyang umaandar. Kailangan munang patayin ang mga application na yaon</translation>
     </message>
 </context>
 </TS>

@@ -1,4 +1,4 @@
-<?xml version="1.0" ?><!DOCTYPE TS><TS language="kk" version="2.1">
+<?xml version="1.0" ?><!DOCTYPE TS><TS language="bn" version="2.1">
 <context>
     <name>MainWindow</name>
     <message>
@@ -40,7 +40,7 @@
         <location filename="mainwindow.ui" line="955"/>
         <location filename="mainwindow.ui" line="1235"/>
         <source>search</source>
-        <translation>іздеу</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="123"/>
@@ -322,32 +322,32 @@
     <message>
         <location filename="mainwindow.ui" line="1613"/>
         <source>About this application</source>
-        <translation>Бұл қолданба жөнінде</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1616"/>
         <source>About...</source>
-        <translation>Осы туралы...</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1623"/>
         <source>Alt+B</source>
-        <translation>Alt+B</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1671"/>
         <source>Display help </source>
-        <translation>Көмекті көрсету</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1674"/>
         <source>Help</source>
-        <translation>Көмек</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1681"/>
         <source>Alt+H</source>
-        <translation>Alt+H</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1697"/>
@@ -366,12 +366,12 @@
     <message>
         <location filename="mainwindow.ui" line="1723"/>
         <source>Quit application</source>
-        <translation>Қолданба жұмысын аяқтау</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1726"/>
         <source>Close</source>
-        <translation>Жабу</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1733"/>
@@ -415,7 +415,7 @@
         <location filename="mainwindow.cpp" line="2744"/>
         <location filename="mainwindow.cpp" line="2764"/>
         <source>Error</source>
-        <translation>Қате</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="220"/>
@@ -425,7 +425,7 @@
     <message>
         <location filename="mainwindow.cpp" line="599"/>
         <source>Cancel</source>
-        <translation>Бас тарту</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="606"/>
@@ -602,7 +602,7 @@
     <message>
         <location filename="mainwindow.cpp" line="2029"/>
         <source>Version: </source>
-        <translation>Нұсқасы:</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2030"/>
@@ -612,7 +612,7 @@
     <message>
         <location filename="mainwindow.cpp" line="2032"/>
         <source>Copyright (c) MX Linux</source>
-        <translation>Copyright (c) MX Linux</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2033"/>
@@ -768,7 +768,7 @@ Please make sure you check carefully the list of packages to be removed.</source
     <message>
         <location filename="remotes.cpp" line="59"/>
         <source>Close</source>
-        <translation>Жабу</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="remotes.cpp" line="76"/>
@@ -806,7 +806,7 @@ Please make sure you check carefully the list of packages to be removed.</source
     <message>
         <location filename="about.cpp" line="32"/>
         <source>License</source>
-        <translation>Лицензиясы</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="about.cpp" line="33"/>
@@ -817,7 +817,7 @@ Please make sure you check carefully the list of packages to be removed.</source
     <message>
         <location filename="about.cpp" line="34"/>
         <source>Cancel</source>
-        <translation>Бас тарту</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="about.cpp" line="51"/>
@@ -827,7 +827,7 @@ Please make sure you check carefully the list of packages to be removed.</source
     <message>
         <location filename="main.cpp" line="63"/>
         <source>Error</source>
-        <translation>Қате</translation>
+        <translation type="unfinished"/>
     </message>
     <message>
         <location filename="main.cpp" line="64"/>
