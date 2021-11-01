@@ -154,12 +154,12 @@
         <location filename="mainwindow.ui" line="791"/>
         <location filename="mainwindow.ui" line="1083"/>
         <source>Also Install &quot;Recommended&quot; Packages</source>
-        <translation type="unfinished"/>
+        <translation>Installa anche i Pacchetti &quot;Raccomandati&quot;</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="394"/>
         <source>Remove orphan packages</source>
-        <translation type="unfinished"/>
+        <translation>Rimuovi i pacchetti orfani</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="404"/>
@@ -234,7 +234,7 @@
         <location filename="mainwindow.cpp" line="2464"/>
         <location filename="mainwindow.cpp" line="2465"/>
         <source>All installed</source>
-        <translation type="unfinished"/>
+        <translation>Tutti i pacchetti installati</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1260"/>
@@ -274,7 +274,7 @@
     <message>
         <location filename="mainwindow.ui" line="1430"/>
         <source>Remove unused runtimes</source>
-        <translation type="unfinished"/>
+        <translation>Rimuovi i runtime inutilizzati</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1447"/>
@@ -386,7 +386,7 @@
     <message>
         <location filename="mainwindow.cpp" line="177"/>
         <source>Running pre-uninstall operations...</source>
-        <translation type="unfinished"/>
+        <translation>Operazioni di pre-installazione in esecuzione...</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="190"/>
@@ -499,7 +499,7 @@
     <message>
         <location filename="mainwindow.cpp" line="1044"/>
         <source>The following packages were selected. Click Show Details for list of changes.</source>
-        <translation type="unfinished"/>
+        <translation>I seguenti pacchetti sono stati selezionati. Clicca su Mostra Dettagli per l&apos;elenco delle modifiche</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1071"/>
@@ -536,7 +536,7 @@
     <message>
         <location filename="mainwindow.cpp" line="1324"/>
         <source>There was an error writing file: %1. Please check if you have enough free space on your drive</source>
-        <translation type="unfinished"/>
+        <translation>Si é verificato un errore nella scrittura del file 1%.Controlla di avere abbastanza spazio su disco</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1390"/>
@@ -700,7 +700,7 @@ OK per procedere ad installarlo?</translation>
         <location filename="mainwindow.cpp" line="2677"/>
         <location filename="mainwindow.cpp" line="2688"/>
         <source>More &amp;info...</source>
-        <translation type="unfinished"/>
+        <translation>Altro &amp; info...</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2720"/>
@@ -710,13 +710,14 @@ OK per procedere ad installarlo?</translation>
     <message>
         <location filename="mainwindow.cpp" line="2744"/>
         <source>Problem detected during last operation, please inspect the console output.</source>
-        <translation type="unfinished"/>
+        <translation>Problema riscontrato durante l&apos;ultima operazine, controlla l&apos;output della console.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2752"/>
         <source>Potentially dangerous operation.
 Please make sure you check carefully the list of packages to be removed.</source>
-        <translation type="unfinished"/>
+        <translation>Operazioni potenzialmente pericolose.
+Assicurati di controllare attentamente l&apos;elenco dei pacchetti da rimuovere.</translation>
     </message>
 </context>
 <context>

@@ -119,14 +119,14 @@
         <location filename="mainwindow.ui" line="684"/>
         <location filename="mainwindow.ui" line="1043"/>
         <source>Total packages:</source>
-        <translation>Total des paquets:</translation>
+        <translation>Total des paquets :</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="291"/>
         <location filename="mainwindow.ui" line="698"/>
         <location filename="mainwindow.ui" line="1050"/>
         <source>Hide library and developer packages</source>
-        <translation>Masquer les paquets pour développeurs et de bibliothèque</translation>
+        <translation>Masquer les paquets pour développeur et la bibliothèque</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="313"/>
@@ -140,26 +140,26 @@
         <location filename="mainwindow.ui" line="734"/>
         <location filename="mainwindow.ui" line="1022"/>
         <source>Installed:</source>
-        <translation>Installés:</translation>
+        <translation>Installés :</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="357"/>
         <location filename="mainwindow.ui" line="764"/>
         <location filename="mainwindow.ui" line="1015"/>
         <source>Upgradable:</source>
-        <translation>Pouvant être mis à niveau:</translation>
+        <translation>Pouvant être mis à niveau :</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="387"/>
         <location filename="mainwindow.ui" line="791"/>
         <location filename="mainwindow.ui" line="1083"/>
         <source>Also Install &quot;Recommended&quot; Packages</source>
-        <translation type="unfinished"/>
+        <translation>Installez également les paquets &quot;recommandés&quot;</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="394"/>
         <source>Remove orphan packages</source>
-        <translation type="unfinished"/>
+        <translation>Supprimer les paquets orphelins</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="404"/>
@@ -208,7 +208,7 @@
         <location filename="mainwindow.ui" line="1190"/>
         <location filename="mainwindow.cpp" line="2337"/>
         <source>All runtimes</source>
-        <translation>Tous les environnements d&apos;exécution </translation>
+        <translation>Tous les environnements d&apos;exécution (runtimes)</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1195"/>
@@ -226,7 +226,7 @@
         <location filename="mainwindow.ui" line="1205"/>
         <location filename="mainwindow.cpp" line="2329"/>
         <source>Installed runtimes</source>
-        <translation>Environnements d&apos;exécution installés</translation>
+        <translation>Environnements d&apos;exécution (runtimes) installés</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1210"/>
@@ -234,7 +234,7 @@
         <location filename="mainwindow.cpp" line="2464"/>
         <location filename="mainwindow.cpp" line="2465"/>
         <source>All installed</source>
-        <translation type="unfinished"/>
+        <translation>Tous installés</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1260"/>
@@ -259,7 +259,7 @@
     <message>
         <location filename="mainwindow.ui" line="1333"/>
         <source>Installed apps:</source>
-        <translation>Applications installés</translation>
+        <translation>Applications installées :</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1386"/>
@@ -269,12 +269,12 @@
     <message>
         <location filename="mainwindow.ui" line="1416"/>
         <source>Total installed size:</source>
-        <translation>Taille totale installée</translation>
+        <translation>Taille totale installée :</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1430"/>
         <source>Remove unused runtimes</source>
-        <translation type="unfinished"/>
+        <translation>Suppression des runtimes (environnements d&apos;exécution) inutilisés</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1447"/>
@@ -290,14 +290,14 @@
     <message>
         <location filename="mainwindow.ui" line="1474"/>
         <source>Remote (repo):</source>
-        <translation>Dépôt à distance (repo):</translation>
+        <translation>Dépôt à distance (repo) :</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1517"/>
         <location filename="mainwindow.cpp" line="2161"/>
         <location filename="mainwindow.cpp" line="2290"/>
         <source>Console Output</source>
-        <translation>Données de sortie de la console</translation>
+        <translation>Données de la sortie de console</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1523"/>
@@ -337,7 +337,7 @@
     <message>
         <location filename="mainwindow.ui" line="1671"/>
         <source>Display help </source>
-        <translation>Afficher l&apos;aide</translation>
+        <translation>Afficher l&apos;aide </translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1674"/>
@@ -386,7 +386,7 @@
     <message>
         <location filename="mainwindow.cpp" line="177"/>
         <source>Running pre-uninstall operations...</source>
-        <translation type="unfinished"/>
+        <translation>Exécution des opérations de pré-désinstallation...</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="190"/>
@@ -420,7 +420,7 @@
     <message>
         <location filename="mainwindow.cpp" line="220"/>
         <source>There was a problem updating sources. Some sources may not have provided updates. For more info check: </source>
-        <translation>Un problème a été rencontré lors de la mise à jour des sources. Certaines sources n&apos;ont pas pu fournir de mises à jour. Pour plus d&apos;informations analysez:</translation>
+        <translation>Un problème a été rencontré lors de la mise à jour des sources. Certaines sources n&apos;ont pas pu fournir de mises à jour. Pour plus d&apos;informations, consultez : </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="599"/>
@@ -436,12 +436,12 @@
         <location filename="mainwindow.cpp" line="785"/>
         <location filename="mainwindow.cpp" line="803"/>
         <source>Version </source>
-        <translation>Version</translation>
+        <translation>Version </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="785"/>
         <source> in stable repo</source>
-        <translation>dans le dépôt stable</translation>
+        <translation> dans le dépôt stable</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="787"/>
@@ -458,12 +458,12 @@
         <location filename="mainwindow.cpp" line="796"/>
         <location filename="mainwindow.cpp" line="2270"/>
         <source> already installed</source>
-        <translation>déjà installée</translation>
+        <translation> déjà installée</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="803"/>
         <source> installed</source>
-        <translation>installé</translation>
+        <translation> installé</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="910"/>
@@ -499,7 +499,7 @@
     <message>
         <location filename="mainwindow.cpp" line="1044"/>
         <source>The following packages were selected. Click Show Details for list of changes.</source>
-        <translation type="unfinished"/>
+        <translation>Les paquets suivants ont été sélectionnés. Cliquez sur Afficher les détails pour obtenir la liste des modifications.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1071"/>
@@ -521,22 +521,22 @@
     <message>
         <location filename="mainwindow.cpp" line="1159"/>
         <source>Pre-processing for </source>
-        <translation>Pré-traitement pour</translation>
+        <translation>Pré-traitement pour </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1172"/>
         <source>Installing </source>
-        <translation>Installation</translation>
+        <translation>Installation </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1179"/>
         <source>Post-processing for </source>
-        <translation>Post-traitement pour</translation>
+        <translation>Post-traitement pour </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1324"/>
         <source>There was an error writing file: %1. Please check if you have enough free space on your drive</source>
-        <translation type="unfinished"/>
+        <translation>Il y a eu une erreur dans l&apos;écriture du fichier : %1. Veuillez vérifier si vous avez suffisamment d&apos;espace libre sur votre disque dur</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1390"/>
@@ -546,7 +546,7 @@
     <message>
         <location filename="mainwindow.cpp" line="1820"/>
         <source>Packages to be installed: </source>
-        <translation>Paquets à installer:</translation>
+        <translation>Paquets à installer : </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1854"/>
@@ -592,7 +592,7 @@
         <location filename="mainwindow.cpp" line="2615"/>
         <location filename="mainwindow.cpp" line="2643"/>
         <source>Problem detected while installing, please inspect the console output.</source>
-        <translation>Un problème a été détecté pendant l&apos;installation, veuillez examiner les données de sortie de la console </translation>
+        <translation>Un problème a été détecté pendant l&apos;installation, veuillez examiner les données de sortie de la console.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2027"/>
@@ -602,7 +602,7 @@
     <message>
         <location filename="mainwindow.cpp" line="2029"/>
         <source>Version: </source>
-        <translation>Version: </translation>
+        <translation>Version : </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2030"/>
@@ -652,7 +652,7 @@
         <source>Flatpak is not currently installed.
 OK to go ahead and install it?</source>
         <translation>Flatpak n&apos;est pas installé actuellement.
-OK pour continuer et l&apos;installer?</translation>
+OK pour continuer et l&apos;installer ?</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2257"/>
@@ -663,7 +663,7 @@ OK pour continuer et l&apos;installer?</translation>
         <location filename="mainwindow.cpp" line="2278"/>
         <location filename="mainwindow.cpp" line="2297"/>
         <source>Flathub remote failed</source>
-        <translation>Dépôt à distance Flathub échoué</translation>
+        <translation>Dépôt à distance Flathub a échoué</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2278"/>
@@ -689,7 +689,7 @@ OK pour continuer et l&apos;installer?</translation>
     <message>
         <location filename="mainwindow.cpp" line="2569"/>
         <source>Quit?</source>
-        <translation>Quitter?</translation>
+        <translation>Quitter ?</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2570"/>
@@ -700,7 +700,7 @@ OK pour continuer et l&apos;installer?</translation>
         <location filename="mainwindow.cpp" line="2677"/>
         <location filename="mainwindow.cpp" line="2688"/>
         <source>More &amp;info...</source>
-        <translation type="unfinished"/>
+        <translation>Plus &amp;info...</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2720"/>
@@ -710,13 +710,14 @@ OK pour continuer et l&apos;installer?</translation>
     <message>
         <location filename="mainwindow.cpp" line="2744"/>
         <source>Problem detected during last operation, please inspect the console output.</source>
-        <translation type="unfinished"/>
+        <translation>Problème détecté lors de la dernière opération, veuillez examiner les données de la sortie de console.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2752"/>
         <source>Potentially dangerous operation.
 Please make sure you check carefully the list of packages to be removed.</source>
-        <translation type="unfinished"/>
+        <translation>Opération potentiellement dangereuse.
+Veillez à bien vérifier la liste des paquets à supprimer.</translation>
     </message>
 </context>
 <context>
@@ -739,12 +740,12 @@ Please make sure you check carefully the list of packages to be removed.</source
     <message>
         <location filename="remotes.cpp" line="30"/>
         <source>enter Flatpak remote URL</source>
-        <translation>Entrez URL du dépôt à distance Flatpak</translation>
+        <translation>Entrez l&apos;URL du dépôt à distance Flatpak</translation>
     </message>
     <message>
         <location filename="remotes.cpp" line="33"/>
         <source>enter Flatpakref location to install app</source>
-        <translation>Entrez la location Flatpakref pour installer l&apos;application</translation>
+        <translation>Entrez l&apos;emplacement Flatpakref pour installer l&apos;application</translation>
     </message>
     <message>
         <location filename="remotes.cpp" line="35"/>

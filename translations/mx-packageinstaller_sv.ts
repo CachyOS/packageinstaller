@@ -154,12 +154,12 @@
         <location filename="mainwindow.ui" line="791"/>
         <location filename="mainwindow.ui" line="1083"/>
         <source>Also Install &quot;Recommended&quot; Packages</source>
-        <translation type="unfinished"/>
+        <translation>Installera även &quot;Rekommenderade&quot; Paket</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="394"/>
         <source>Remove orphan packages</source>
-        <translation type="unfinished"/>
+        <translation>Avlägsna kvarlämnade paket</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="404"/>
@@ -234,7 +234,7 @@
         <location filename="mainwindow.cpp" line="2464"/>
         <location filename="mainwindow.cpp" line="2465"/>
         <source>All installed</source>
-        <translation type="unfinished"/>
+        <translation>Alla installerade</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1260"/>
@@ -274,7 +274,7 @@
     <message>
         <location filename="mainwindow.ui" line="1430"/>
         <source>Remove unused runtimes</source>
-        <translation type="unfinished"/>
+        <translation>Ta bort oanvända runtimes</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1447"/>
@@ -386,7 +386,7 @@
     <message>
         <location filename="mainwindow.cpp" line="177"/>
         <source>Running pre-uninstall operations...</source>
-        <translation type="unfinished"/>
+        <translation>Kör operationer före avinstallering...</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="190"/>
@@ -499,7 +499,7 @@
     <message>
         <location filename="mainwindow.cpp" line="1044"/>
         <source>The following packages were selected. Click Show Details for list of changes.</source>
-        <translation type="unfinished"/>
+        <translation>Följande paket valdes. Klicka för att se detaljer i ändringslistan.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1071"/>
@@ -536,7 +536,7 @@
     <message>
         <location filename="mainwindow.cpp" line="1324"/>
         <source>There was an error writing file: %1. Please check if you have enough free space on your drive</source>
-        <translation type="unfinished"/>
+        <translation>Ett fel uppstod vid skrivande av fil: %1. Var vänlig kontrollera att du har tillräckligt mycket ledigt utrymme på disken.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1390"/>
@@ -700,7 +700,7 @@ OK att fortsätta och installera det?</translation>
         <location filename="mainwindow.cpp" line="2677"/>
         <location filename="mainwindow.cpp" line="2688"/>
         <source>More &amp;info...</source>
-        <translation type="unfinished"/>
+        <translation>Mer &amp;info...</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2720"/>
@@ -710,13 +710,14 @@ OK att fortsätta och installera det?</translation>
     <message>
         <location filename="mainwindow.cpp" line="2744"/>
         <source>Problem detected during last operation, please inspect the console output.</source>
-        <translation type="unfinished"/>
+        <translation>Problem upptäcktes vid sista operationen, var vänlig kontrollera  konsol-output.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2752"/>
         <source>Potentially dangerous operation.
 Please make sure you check carefully the list of packages to be removed.</source>
-        <translation type="unfinished"/>
+        <translation>Potentiellt dfarlig operation.
+Var vänlig kontrollera listan över paket som ska tas bort noga.</translation>
     </message>
 </context>
 <context>

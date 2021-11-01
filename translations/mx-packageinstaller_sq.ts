@@ -5,24 +5,24 @@
         <location filename="mainwindow.ui" line="20"/>
         <location filename="mainwindow.cpp" line="93"/>
         <source>MX Package Installer</source>
-        <translation type="unfinished"/>
+        <translation>Instalues Paketash MX</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="57"/>
         <source>Popular Applications</source>
-        <translation type="unfinished"/>
+        <translation>Aplikacione Popullore</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="83"/>
         <location filename="mainwindow.cpp" line="96"/>
         <source>Package</source>
-        <translation type="unfinished"/>
+        <translation>Paketë</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="88"/>
         <location filename="mainwindow.cpp" line="96"/>
         <source>Info</source>
-        <translation type="unfinished"/>
+        <translation>Hollësi</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="93"/>
@@ -45,12 +45,12 @@
     <message>
         <location filename="mainwindow.ui" line="123"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Manage popular packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Administroni paketa popullore&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Zërat e treguar në gri janë të instaluar tashmë.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="153"/>
         <source>Stable Repo</source>
-        <translation type="unfinished"/>
+        <translation>Depo e Të qëndrueshmit</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="174"/>
@@ -58,7 +58,7 @@
         <location filename="mainwindow.ui" line="900"/>
         <location filename="mainwindow.ui" line="1178"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filter packages according to their status.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filtrojini paketat sipas gjendjes së tyre.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="177"/>
@@ -69,7 +69,7 @@
         <location filename="mainwindow.ui" line="907"/>
         <location filename="mainwindow.cpp" line="2366"/>
         <source>All packages</source>
-        <translation type="unfinished"/>
+        <translation>Krejt paketat</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="186"/>
@@ -77,7 +77,7 @@
         <location filename="mainwindow.ui" line="912"/>
         <location filename="mainwindow.cpp" line="2379"/>
         <source>Installed</source>
-        <translation type="unfinished"/>
+        <translation>Të instaluara</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="191"/>
@@ -85,7 +85,7 @@
         <location filename="mainwindow.ui" line="917"/>
         <location filename="mainwindow.cpp" line="2377"/>
         <source>Upgradable</source>
-        <translation type="unfinished"/>
+        <translation>Të përmirësueshme</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="196"/>
@@ -97,14 +97,14 @@
         <location filename="mainwindow.cpp" line="2469"/>
         <location filename="mainwindow.cpp" line="2470"/>
         <source>Not installed</source>
-        <translation type="unfinished"/>
+        <translation>Jo të instaluara</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="240"/>
         <location filename="mainwindow.ui" line="647"/>
         <location filename="mainwindow.ui" line="976"/>
         <source>Package Name</source>
-        <translation type="unfinished"/>
+        <translation>Emër Pakete</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="245"/>
@@ -112,60 +112,60 @@
         <location filename="mainwindow.ui" line="981"/>
         <location filename="mainwindow.ui" line="1270"/>
         <source>Version</source>
-        <translation type="unfinished"/>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="277"/>
         <location filename="mainwindow.ui" line="684"/>
         <location filename="mainwindow.ui" line="1043"/>
         <source>Total packages:</source>
-        <translation type="unfinished"/>
+        <translation>Paketa gjithsej:</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="291"/>
         <location filename="mainwindow.ui" line="698"/>
         <location filename="mainwindow.ui" line="1050"/>
         <source>Hide library and developer packages</source>
-        <translation type="unfinished"/>
+        <translation>Fshih bibliotekë dhe paketa zhvilluesi</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="313"/>
         <location filename="mainwindow.ui" line="720"/>
         <location filename="mainwindow.ui" line="1102"/>
         <source>Refresh list</source>
-        <translation type="unfinished"/>
+        <translation>Rifresko listën</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="327"/>
         <location filename="mainwindow.ui" line="734"/>
         <location filename="mainwindow.ui" line="1022"/>
         <source>Installed:</source>
-        <translation type="unfinished"/>
+        <translation>Të instaluara:</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="357"/>
         <location filename="mainwindow.ui" line="764"/>
         <location filename="mainwindow.ui" line="1015"/>
         <source>Upgradable:</source>
-        <translation type="unfinished"/>
+        <translation>Të përmirësueshme:</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="387"/>
         <location filename="mainwindow.ui" line="791"/>
         <location filename="mainwindow.ui" line="1083"/>
         <source>Also Install &quot;Recommended&quot; Packages</source>
-        <translation type="unfinished"/>
+        <translation>Instalo gjithashtu paketa “Të rekomanduara”</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="394"/>
         <source>Remove orphan packages</source>
-        <translation type="unfinished"/>
+        <translation>Hiqi paketat jetime</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="404"/>
         <location filename="mainwindow.ui" line="1340"/>
         <source>Upgrade All</source>
-        <translation type="unfinished"/>
+        <translation>Përmirësoji Krejt</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="421"/>
@@ -173,29 +173,29 @@
         <location filename="mainwindow.ui" line="930"/>
         <location filename="mainwindow.ui" line="1497"/>
         <source>Greyed out items have already been installed.</source>
-        <translation type="unfinished"/>
+        <translation>Zërat e treguar në gri janë të instaluar tashmë.</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="477"/>
         <location filename="mainwindow.ui" line="540"/>
         <location filename="mainwindow.ui" line="867"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;= Upgradable package. Newer version available in selected repository.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"/>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;= Paketë e përmirësueshme. Versione të gatshëm më të rinj te depoja e përzgjedhur.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="497"/>
         <source>MX Test Repo</source>
-        <translation type="unfinished"/>
+        <translation>Depo MX Test</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="824"/>
         <source>Debian Backports</source>
-        <translation type="unfinished"/>
+        <translation>Backport-a Debian</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1157"/>
         <source>Flatpaks</source>
-        <translation type="unfinished"/>
+        <translation>Paketime Flatpak</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1181"/>
@@ -208,25 +208,25 @@
         <location filename="mainwindow.ui" line="1190"/>
         <location filename="mainwindow.cpp" line="2337"/>
         <source>All runtimes</source>
-        <translation type="unfinished"/>
+        <translation>Krejt runtime-et</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1195"/>
         <location filename="mainwindow.cpp" line="2341"/>
         <source>All available</source>
-        <translation type="unfinished"/>
+        <translation>Krejt të gatshmet</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1200"/>
         <location filename="mainwindow.cpp" line="2331"/>
         <source>Installed apps</source>
-        <translation type="unfinished"/>
+        <translation>Aplikacione të instaluara</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1205"/>
         <location filename="mainwindow.cpp" line="2329"/>
         <source>Installed runtimes</source>
-        <translation type="unfinished"/>
+        <translation>Runtime-e të instaluar</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1210"/>
@@ -234,17 +234,17 @@
         <location filename="mainwindow.cpp" line="2464"/>
         <location filename="mainwindow.cpp" line="2465"/>
         <source>All installed</source>
-        <translation type="unfinished"/>
+        <translation>Krejt të instaluarat</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1260"/>
         <source>Short Name</source>
-        <translation type="unfinished"/>
+        <translation>Emër i Shkurtër</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1265"/>
         <source>Full Package Name</source>
-        <translation type="unfinished"/>
+        <translation>Emër i Plotë Pakete</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1275"/>
@@ -254,70 +254,70 @@
     <message>
         <location filename="mainwindow.ui" line="1319"/>
         <source>Total items </source>
-        <translation type="unfinished"/>
+        <translation>Objekte gjithsej </translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1333"/>
         <source>Installed apps:</source>
-        <translation type="unfinished"/>
+        <translation>Aplikacione të instaluara:</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1386"/>
         <source>Advanced</source>
-        <translation>Përparuar</translation>
+        <translation>Të mëtejshme</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1416"/>
         <source>Total installed size:</source>
-        <translation type="unfinished"/>
+        <translation>Madhësi të instaluarash gjithsej:</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1430"/>
         <source>Remove unused runtimes</source>
-        <translation type="unfinished"/>
+        <translation>Hiqi runtime-et e papërdorur</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1447"/>
         <location filename="mainwindow.ui" line="1451"/>
         <source>For all users</source>
-        <translation type="unfinished"/>
+        <translation>Për krejt përdoruesit</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1456"/>
         <source>For current user</source>
-        <translation type="unfinished"/>
+        <translation>Për përdoruesin e tanishëm</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1474"/>
         <source>Remote (repo):</source>
-        <translation type="unfinished"/>
+        <translation>E largët (depo):</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1517"/>
         <location filename="mainwindow.cpp" line="2161"/>
         <location filename="mainwindow.cpp" line="2290"/>
         <source>Console Output</source>
-        <translation type="unfinished"/>
+        <translation>Ç’jep Konsola</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1523"/>
         <source>Enter</source>
-        <translation type="unfinished"/>
+        <translation>Tasti Enter</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1534"/>
         <source>Respond here, or just press Enter</source>
-        <translation type="unfinished"/>
+        <translation>Përgjigjuni këtu, ose thjesht shtypni tastin Enter</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1590"/>
         <source>Uninstall</source>
-        <translation type="unfinished"/>
+        <translation>Çinstaloje</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1597"/>
         <source>Alt+U</source>
-        <translation type="unfinished"/>
+        <translation>Alt+Ç</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1613"/>
@@ -327,7 +327,7 @@
     <message>
         <location filename="mainwindow.ui" line="1616"/>
         <source>About...</source>
-        <translation>Rreth...</translation>
+        <translation>Rreth…</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1623"/>
@@ -337,7 +337,7 @@
     <message>
         <location filename="mainwindow.ui" line="1671"/>
         <source>Display help </source>
-        <translation>Shfaq ndihmë</translation>
+        <translation>Shfaq ndihmën </translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1674"/>
@@ -356,12 +356,12 @@
         <location filename="mainwindow.cpp" line="2462"/>
         <location filename="mainwindow.cpp" line="2722"/>
         <source>Install</source>
-        <translation type="unfinished"/>
+        <translation>Instaloje</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1704"/>
         <source>Alt+I</source>
-        <translation type="unfinished"/>
+        <translation>Alt+I</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1723"/>
@@ -371,32 +371,32 @@
     <message>
         <location filename="mainwindow.ui" line="1726"/>
         <source>Close</source>
-        <translation>Mbyll</translation>
+        <translation>Mbylle</translation>
     </message>
     <message>
         <location filename="mainwindow.ui" line="1733"/>
         <source>Alt+C</source>
-        <translation type="unfinished"/>
+        <translation>Alt+C</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="172"/>
         <source>Uninstalling packages...</source>
-        <translation type="unfinished"/>
+        <translation>Po çinstalohen paketa…</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="177"/>
         <source>Running pre-uninstall operations...</source>
-        <translation type="unfinished"/>
+        <translation>Po kryhen veprime para-çinstalimi…</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="190"/>
         <source>Running post-uninstall operations...</source>
-        <translation type="unfinished"/>
+        <translation>Po kryhen veprime pas-çinstalimi…</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="205"/>
         <source>Refreshing sources...</source>
-        <translation type="unfinished"/>
+        <translation>Po rifreskohen burime…</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="220"/>
@@ -420,65 +420,65 @@
     <message>
         <location filename="mainwindow.cpp" line="220"/>
         <source>There was a problem updating sources. Some sources may not have provided updates. For more info check: </source>
-        <translation type="unfinished"/>
+        <translation>Pati një problem me përditësimin e burimeve. Disa burime mund të mos kenë dhënë përditësime. Për më tepër hollësi, shihni: </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="599"/>
         <source>Cancel</source>
-        <translation>Anullo</translation>
+        <translation>Anuloje</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="606"/>
         <source>Please wait...</source>
-        <translation type="unfinished"/>
+        <translation>Ju lutemi, pritni…</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="785"/>
         <location filename="mainwindow.cpp" line="803"/>
         <source>Version </source>
-        <translation type="unfinished"/>
+        <translation>Version </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="785"/>
         <source> in stable repo</source>
-        <translation type="unfinished"/>
+        <translation> në depon e të qëndrueshmit</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="787"/>
         <source>Not available in stable repo</source>
-        <translation type="unfinished"/>
+        <translation>Jo i passhëm në depon e të qëndrueshmit</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="796"/>
         <location filename="mainwindow.cpp" line="2270"/>
         <source>Latest version </source>
-        <translation type="unfinished"/>
+        <translation>Versioni më i ri </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="796"/>
         <location filename="mainwindow.cpp" line="2270"/>
         <source> already installed</source>
-        <translation type="unfinished"/>
+        <translation> tashmë i instaluar</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="803"/>
         <source> installed</source>
-        <translation type="unfinished"/>
+        <translation> i instaluar</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="910"/>
         <source>You are about to use the MX Test repository, whose packages are provided for testing purposes only. It is possible that they might break your system, so it is suggested that you back up your system and install or update only one package at a time. Please provide feedback in the Forum so the package can be evaluated before moving up to Main.</source>
-        <translation type="unfinished"/>
+        <translation>Ju ndan një hap nga përdorimi i depos MX Test, paketat e së cilës jepen vetëm për qëllime testimi. Është e mundur që të dëmtojnë sistemin, ndaj sugjerohet që të kopjeruani sistemin dhe të instaloni apo përditësoni vetëm një paketë në herë. Ju lutemi, jepni përshtypjet te Forumi, që kështu paketa të mund të vlerësohet, përpara se të kalojë te Kryesori.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="919"/>
         <source>You are about to use Debian Backports, which contains packages taken from the next Debian release (called &apos;testing&apos;), adjusted and recompiled for usage on Debian stable. They cannot be tested as extensively as in the stable releases of Debian and MX Linux, and are provided on an as-is basis, with risk of incompatibilities with other components in Debian stable. Use with care!</source>
-        <translation type="unfinished"/>
+        <translation>Ju ndan një hap nga përdorimi i depos Debian Backports, që përmban paketa të marra nga hedhja e ardhshme në qarkullim e Debian-it (e quajtur “testim”), përshtatur dhe ripërpiluar për përdorim në versionin e qëndrueshëm të Debian-it. S’mund të testohen aq gjerë sa te hedhjet në qarkullim të versioneve të qëndrueshëm të Debian-it dhe të MX Linux-it dhe jepen ashtu siç janë, me rrezikun e mospërputhjes me përbërës të tjerë te versioni i qëndrueshëm i Debian-it. Përdorini me kujdes!</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="927"/>
         <source>MX Linux includes this repository of flatpaks for the users&apos; convenience only, and is not responsible for the functionality of the individual flatpaks themselves. For more, consult flatpaks in the Wiki.</source>
-        <translation type="unfinished"/>
+        <translation>MX Linux e përfshin këtë depo paketash Flatpak vetëm për leverdinë e përdoruesve dhe nuk është përgjegjës për punimin e vetë paketave Flatpak. Për më tepër, shihni rreth paketimesh Flatpak te Wiki.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="934"/>
@@ -489,7 +489,7 @@
     <message>
         <location filename="mainwindow.cpp" line="938"/>
         <source>Do not show this message again</source>
-        <translation type="unfinished"/>
+        <translation>Mos e shfaq sërish këtë mesazh</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1030"/>
@@ -499,60 +499,60 @@
     <message>
         <location filename="mainwindow.cpp" line="1044"/>
         <source>The following packages were selected. Click Show Details for list of changes.</source>
-        <translation type="unfinished"/>
+        <translation>Janë përzgjedhur paketat vijuese. Për një listë të ndryshimeve, klikoni mbi “Shfaq Hollësi”.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1071"/>
         <location filename="mainwindow.cpp" line="1197"/>
         <location filename="mainwindow.cpp" line="1382"/>
         <source>Internet is not available, won&apos;t be able to download the list of packages</source>
-        <translation type="unfinished"/>
+        <translation>S’ka Internet, s’do të jetë në gjendje të shkarkojë listën e paketave</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1076"/>
         <source>Installing packages...</source>
-        <translation type="unfinished"/>
+        <translation>Po instalohen paketa…</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1128"/>
         <source>Post-processing...</source>
-        <translation type="unfinished"/>
+        <translation>Pas-përpunim…</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1159"/>
         <source>Pre-processing for </source>
-        <translation type="unfinished"/>
+        <translation>Para-përpunim për </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1172"/>
         <source>Installing </source>
-        <translation type="unfinished"/>
+        <translation>Po instalohet </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1179"/>
         <source>Post-processing for </source>
-        <translation type="unfinished"/>
+        <translation>Pas-përpunim për </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1324"/>
         <source>There was an error writing file: %1. Please check if you have enough free space on your drive</source>
-        <translation type="unfinished"/>
+        <translation>Pati një gabim në shkrim kartele: %1. Ju lutemi, kontrolloni nëse keni hapësirë të lirë të mjaftueshme në diskun tuaj</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1390"/>
         <source>Downloading package info...</source>
-        <translation type="unfinished"/>
+        <translation>Po shkarkohen hollësi pakete…</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1820"/>
         <source>Packages to be installed: </source>
-        <translation type="unfinished"/>
+        <translation>Paketa për t’u instaluar: </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1854"/>
         <location filename="mainwindow.cpp" line="1870"/>
         <source>Package info</source>
-        <translation type="unfinished"/>
+        <translation>Hollësi pakete</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1975"/>
@@ -582,7 +582,7 @@
         <location filename="mainwindow.cpp" line="2738"/>
         <location filename="mainwindow.cpp" line="2758"/>
         <source>Processing finished successfully.</source>
-        <translation type="unfinished"/>
+        <translation>Përpunimi përfundoi me sukses.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="1979"/>
@@ -592,7 +592,7 @@
         <location filename="mainwindow.cpp" line="2615"/>
         <location filename="mainwindow.cpp" line="2643"/>
         <source>Problem detected while installing, please inspect the console output.</source>
-        <translation type="unfinished"/>
+        <translation>U pikas problem teksa instalohej, ju lutemi, vëzhgoni ç’jepet te konsola.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2027"/>
@@ -602,17 +602,17 @@
     <message>
         <location filename="mainwindow.cpp" line="2029"/>
         <source>Version: </source>
-        <translation>Versioni:</translation>
+        <translation>Versioni: </translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2030"/>
         <source>Package Installer for MX Linux</source>
-        <translation type="unfinished"/>
+        <translation>Instalues Paketash për MX Linux</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2032"/>
         <source>Copyright (c) MX Linux</source>
-        <translation>Të drejtat e rezervuara (c) MX Linux</translation>
+        <translation>Të drejta kopjimi (c) MX Linux</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2033"/>
@@ -627,7 +627,7 @@
     <message>
         <location filename="mainwindow.cpp" line="2134"/>
         <source>We encountered a problem uninstalling, please check output</source>
-        <translation type="unfinished"/>
+        <translation>Hasëm një problem me çinstalimin, ju lutemi, shihni ç’jepet</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2146"/>
@@ -639,83 +639,85 @@
         <location filename="mainwindow.cpp" line="2152"/>
         <location filename="mainwindow.cpp" line="2764"/>
         <source>We encountered a problem uninstalling the program</source>
-        <translation type="unfinished"/>
+        <translation>Hasëm një problem me çinstalimin e programit</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2246"/>
         <location filename="mainwindow.cpp" line="2257"/>
         <source>Flatpak not installed</source>
-        <translation type="unfinished"/>
+        <translation>Flatpak-u s’është i instaluar</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2246"/>
         <source>Flatpak is not currently installed.
 OK to go ahead and install it?</source>
-        <translation type="unfinished"/>
+        <translation>Flatpak-u aktualisht s’është i instaluar.
+OK të ecet më tej dhe të instalohet?</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2257"/>
         <source>Flatpak was not installed</source>
-        <translation type="unfinished"/>
+        <translation>Flatpak-u s’qe i instaluar</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2278"/>
         <location filename="mainwindow.cpp" line="2297"/>
         <source>Flathub remote failed</source>
-        <translation type="unfinished"/>
+        <translation>Dështoi lidhja me pjesën e largët Flathub</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2278"/>
         <location filename="mainwindow.cpp" line="2297"/>
         <source>Flathub remote could not be added</source>
-        <translation type="unfinished"/>
+        <translation>S’u shtua dot pjesë e largët Flathub</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2286"/>
         <source>Needs re-login</source>
-        <translation type="unfinished"/>
+        <translation>Lyp rihyrje në llogari</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2286"/>
         <source>You might need to logout/login to see installed items in the menu</source>
-        <translation type="unfinished"/>
+        <translation>Mund t’ju duhet të dilni/hyni në llogari, që të shihni te menuja zërat e instaluar</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2460"/>
         <source>Upgrade</source>
-        <translation type="unfinished"/>
+        <translation>Përmirësojeni</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2569"/>
         <source>Quit?</source>
-        <translation type="unfinished"/>
+        <translation>Të dilet?</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2570"/>
         <source>Process still running, quitting might leave the system in an unstable state.&lt;p&gt;&lt;b&gt;Are you sure you want to exit MX Package Installer?&lt;/b&gt;</source>
-        <translation type="unfinished"/>
+        <translation>Proces ende në xhirim, dalja mund ta lërë sistemin në një gjendje të paqëndrueshme.&lt;p&gt;&lt;b&gt;Jeni i sigurt se doni të dilet nga Instaluesi MX i Paketave?&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2677"/>
         <location filename="mainwindow.cpp" line="2688"/>
         <source>More &amp;info...</source>
-        <translation type="unfinished"/>
+        <translation>Më tepër &amp;hollësi…</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2720"/>
         <source>Reinstall</source>
-        <translation type="unfinished"/>
+        <translation>Riinstaloje</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2744"/>
         <source>Problem detected during last operation, please inspect the console output.</source>
-        <translation type="unfinished"/>
+        <translation>U pikas problem gjatë veprimit të fundit, ju lutemi, vëzhgoni ç’jepet te konsola.</translation>
     </message>
     <message>
         <location filename="mainwindow.cpp" line="2752"/>
         <source>Potentially dangerous operation.
 Please make sure you check carefully the list of packages to be removed.</source>
-        <translation type="unfinished"/>
+        <translation>Veprim potencialisht i rrezikshëm.
+Ju lutemi, sigurohuni se kontrolluat me kujdes listën e paketave për heqje.</translation>
     </message>
 </context>
 <context>
@@ -723,72 +725,72 @@ Please make sure you check carefully the list of packages to be removed.</source
     <message>
         <location filename="remotes.cpp" line="14"/>
         <source>Manage Flatpak Remotes</source>
-        <translation type="unfinished"/>
+        <translation>Administroni Pjesë të Largëta Flatpak</translation>
     </message>
     <message>
         <location filename="remotes.cpp" line="23"/>
         <source>For all users</source>
-        <translation type="unfinished"/>
+        <translation>Për krejt përdoruesit</translation>
     </message>
     <message>
         <location filename="remotes.cpp" line="24"/>
         <source>For current user</source>
-        <translation type="unfinished"/>
+        <translation>Për përdoruesin e tanishëm</translation>
     </message>
     <message>
         <location filename="remotes.cpp" line="30"/>
         <source>enter Flatpak remote URL</source>
-        <translation type="unfinished"/>
+        <translation>jepni URL pjese të largët Flatpak</translation>
     </message>
     <message>
         <location filename="remotes.cpp" line="33"/>
         <source>enter Flatpakref location to install app</source>
-        <translation type="unfinished"/>
+        <translation>jepni vendndodhje Flatpakref-i që të instalohet aplikacioni</translation>
     </message>
     <message>
         <location filename="remotes.cpp" line="35"/>
         <source>Add or remove flatpak remotes (repos), or install apps using flatpakref URL or path</source>
-        <translation type="unfinished"/>
+        <translation>Shtoni ose hiqni pjesë të largëta Flatpak (depo), ose instaloni aplikacione duke përdorur URL ose shteg flatpakref</translation>
     </message>
     <message>
         <location filename="remotes.cpp" line="44"/>
         <source>Remove remote</source>
-        <translation type="unfinished"/>
+        <translation>Hiqni pjesë të largët</translation>
     </message>
     <message>
         <location filename="remotes.cpp" line="49"/>
         <source>Add remote</source>
-        <translation type="unfinished"/>
+        <translation>Shtoni pjesë të largët</translation>
     </message>
     <message>
         <location filename="remotes.cpp" line="54"/>
         <source>Install app</source>
-        <translation type="unfinished"/>
+        <translation>Instaloje aplikacionin</translation>
     </message>
     <message>
         <location filename="remotes.cpp" line="59"/>
         <source>Close</source>
-        <translation>Mbyll</translation>
+        <translation>Mbylle</translation>
     </message>
     <message>
         <location filename="remotes.cpp" line="76"/>
         <source>Not removable</source>
-        <translation type="unfinished"/>
+        <translation>Jo i heqshëm</translation>
     </message>
     <message>
         <location filename="remotes.cpp" line="76"/>
         <source>Flathub is the main Flatpak remote and won&apos;t be removed</source>
-        <translation type="unfinished"/>
+        <translation>Flathub është pjesa e largët kryesore Flatpak dhe s’do të hiqet</translation>
     </message>
     <message>
         <location filename="remotes.cpp" line="92"/>
         <source>Error adding remote</source>
-        <translation type="unfinished"/>
+        <translation>Gabim shtimi pjese të largët</translation>
     </message>
     <message>
         <location filename="remotes.cpp" line="92"/>
         <source>Could not add remote - command returned an error. Please double-check the remote address and try again</source>
-        <translation type="unfinished"/>
+        <translation>S’u shtua dot pjesë e largët - urdhri u përgjigj me një gabim. Ju lutemi, rikontrollojeni adresën e pjesës së largët dhe riprovoni</translation>
     </message>
     <message>
         <location filename="remotes.cpp" line="96"/>
@@ -798,7 +800,7 @@ Please make sure you check carefully the list of packages to be removed.</source
     <message>
         <location filename="remotes.cpp" line="96"/>
         <source>Remote added successfully</source>
-        <translation type="unfinished"/>
+        <translation>Pjesa e largët u shtua me sukses</translation>
     </message>
 </context>
 <context>
@@ -812,7 +814,7 @@ Please make sure you check carefully the list of packages to be removed.</source
         <location filename="about.cpp" line="33"/>
         <location filename="about.cpp" line="43"/>
         <source>Changelog</source>
-        <translation>Regjistër ndryshimehs</translation>
+        <translation>Regjistër ndryshimesh</translation>
     </message>
     <message>
         <location filename="about.cpp" line="34"/>
