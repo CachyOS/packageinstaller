@@ -1278,6 +1278,7 @@ bool MainWindow::isFilteredName(const QString &name) const
 // Check if online
 bool MainWindow::checkOnline()
 {
+    int timeout = settings.value("timeout", 5000).toInt();
     QNetworkRequest request;
     request.setRawHeader("User-Agent", qApp->applicationName().toUtf8() + "/" + qApp->applicationVersion().toUtf8() + " (linux-gnu)");
 
@@ -1290,7 +1291,7 @@ bool MainWindow::checkOnline()
         connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
         connect(reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error), [&error](const QNetworkReply::NetworkError &err) {error = err;} ); // errorOccured only in Qt >= 5.15
         connect(reply, QOverload<QNetworkReply::NetworkError>::of(&QNetworkReply::error), &loop, &QEventLoop::quit);
-        QTimer::singleShot(5000, &loop, [&loop, &error]() {error = QNetworkReply::TimeoutError; loop.quit();} ); // manager.setTransferTimeout(time) // only in Qt >= 5.15
+        QTimer::singleShot(timeout, &loop, [&loop, &error]() {error = QNetworkReply::TimeoutError; loop.quit();} ); // manager.setTransferTimeout(time) // only in Qt >= 5.15
         loop.exec();
         reply->disconnect();
         if (error == QNetworkReply::NoError)
