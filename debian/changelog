@@ -1,3 +1,10 @@
+mx-packageinstaller (22.3) m; urgency=medium
+
+  * Add a configurable timeout for online check, e.g., "timeout=10000" (in milliseconds) in ~/.config/MX-Linux/mx-packageinstaller.conf
+  * Optional "skiponlinecheck" key in .conf file. Skip the check with "skiponlinecheck=true"
+
+ -- Adrian <adrian@mxlinux.org>  Mon, 28 Mar 2022 10:22:30 -0400
+
 mx-packageinstaller (21.10) mx; urgency=medium
 
   * Fix: reset filter combo box when refreshing sources
