@@ -1,0 +1,47 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Format: 1.8
+Date: Mon, 28 Mar 2022 10:22:30 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 22.3
+Distribution: m
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (22.3) m; urgency=medium
+ .
+   * Add a configurable timeout for online check, e.g., "timeout=10000" (in milliseconds) in ~/.config/MX-Linux/mx-packageinstaller.conf
+   * Optional "skiponlinecheck" key in .conf file. Skip the check with "skiponlinecheck=true"
+Checksums-Sha1:
+ a703a18b5d6aeaa4ba4ac6bf1b1f8385ceeaae75 1220 mx-packageinstaller_22.3.dsc
+ 19ba1046c96fbad9aefd85c564365e2f109f60a7 292456 mx-packageinstaller_22.3.tar.xz
+ ee516faac2960fb9186ca5f187cc84dfdb6d5ecd 10883 mx-packageinstaller_22.3_amd64.buildinfo
+ bfa176788a644cee6c571a4e8d1c7bddbdbbdafd 368764 mx-packageinstaller_22.3_amd64.deb
+Checksums-Sha256:
+ 182a572c90e018b8407ce8b538b869b8b62f1747eec514888bd7f3763287b19a 1220 mx-packageinstaller_22.3.dsc
+ 46f78b408ab248e04032f9fc053bae94e4fb58dc6f131c0988366852887f0137 292456 mx-packageinstaller_22.3.tar.xz
+ 60e6f6830ac724801edfdf6bc1c4e880f9445f33cc72da477b45bf52cdb4f231 10883 mx-packageinstaller_22.3_amd64.buildinfo
+ f0f1f00792fcb8351af48fffea285eff4d182bba95de6b8c60ecb8b89084f673 368764 mx-packageinstaller_22.3_amd64.deb
+Files:
+ 2bf05492ca0f824fa63efe109f4c94eb 1220 admin optional mx-packageinstaller_22.3.dsc
+ c342d3c8a17d52fbb3bf21ca7a17ff69 292456 admin optional mx-packageinstaller_22.3.tar.xz
+ 8090c62ddf7ad42aaf2e208140f80cb1 10883 admin optional mx-packageinstaller_22.3_amd64.buildinfo
+ 55f96effb1ffb9b06823e7935f419fb4 368764 admin optional mx-packageinstaller_22.3_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCgAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAmJB2KQTHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumDO8CACV8DGDLeHsmtGjDtoT5IoGxhxtvgIO
+xzqDZDRPoSuBrSOOMiCDjhbIjn8txhNOtKknyAd+4zaUtmx10W4Uzsz39G2exoey
+P3m9gLjSD4h4wsRhvyEH7FodLEGzZTrvXlCrM2N31CSizcgNJbNagpyoc2H6HdLx
+kAG5hCPCf1Kl8IB12yMM+CKYbOW+4SFIv9cnGs1O5Xe87EaP+OT0tk8HFsKmqJ/J
+QUef2UI/bbBxaVxKLR97DlyCrYBYwnq9qNO6tkaDfOBq9ZJzQopLiia2znMxGN0c
+A+AUOl5o064IHVzP6zOtGZbE3mZ3z+mfc3mX6YWzJiqxB2cX0tZmXKox
+=WFWc
+-----END PGP SIGNATURE-----

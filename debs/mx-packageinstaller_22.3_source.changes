@@ -1,0 +1,26 @@
+Format: 1.8
+Date: Mon, 28 Mar 2022 10:22:30 -0400
+Source: mx-packageinstaller
+Architecture: source
+Version: 22.3
+Distribution: m
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Changes:
+ mx-packageinstaller (22.3) m; urgency=medium
+ .
+   * Add a configurable timeout for online check, e.g., "timeout=10000" (in milliseconds) in ~/.config/MX-Linux/mx-packageinstaller.conf
+   * Optional "skiponlinecheck" key in .conf file. Skip the check with "skiponlinecheck=true"
+Checksums-Sha1:
+ 98aefa15dce629c5b7561e9d6443c909b571862d 658 mx-packageinstaller_22.3.dsc
+ fda609e3de22a7a1d9e6db3c5765d57123c24914 292456 mx-packageinstaller_22.3.tar.xz
+ c71459dd24b39447d383d830ff0874bb2bae700d 10017 mx-packageinstaller_22.3_i386.buildinfo
+Checksums-Sha256:
+ 98d04f4b269ae984136ac7fbe45c58fd5951107e2d8407d3b569ea19ffde5aff 658 mx-packageinstaller_22.3.dsc
+ aa99ea5055bc0e8e03931c74ce2d2ee0f1c6f93ecf077e5db17e32a423851766 292456 mx-packageinstaller_22.3.tar.xz
+ 87a442f2c3ebf181c6895dc95e4ff24f04adae19387bc662692309e3b8f2469b 10017 mx-packageinstaller_22.3_i386.buildinfo
+Files:
+ 1da1867d20dbe91e84e60affe39393fd 658 admin optional mx-packageinstaller_22.3.dsc
+ 3b13c080a85d7630a588183ab6907cc8 292456 admin optional mx-packageinstaller_22.3.tar.xz
+ cc82af737362bd2cd8330f8024615ce8 10017 admin optional mx-packageinstaller_22.3_i386.buildinfo
