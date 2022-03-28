@@ -4,23 +4,23 @@ Source: mx-packageinstaller
 Binary: mx-packageinstaller
 Architecture: i386
 Version: 22.3
-Distribution: m
+Distribution: mx
 Urgency: medium
 Maintainer: Adrian <adrian@mxlinux.org>
 Changed-By: Adrian <adrian@mxlinux.org>
 Description:
  mx-packageinstaller - MX Package Installer
 Changes:
- mx-packageinstaller (22.3) m; urgency=medium
+ mx-packageinstaller (22.3) mx; urgency=medium
  .
    * Add a configurable timeout for online check, e.g., "timeout=10000" (in milliseconds) in ~/.config/MX-Linux/mx-packageinstaller.conf
    * Optional "skiponlinecheck" key in .conf file. Skip the check with "skiponlinecheck=true"
 Checksums-Sha1:
- c71459dd24b39447d383d830ff0874bb2bae700d 10017 mx-packageinstaller_22.3_i386.buildinfo
- 9e0fb554d979ed2ffea9cf62f9e1b4f2355e2ea0 377732 mx-packageinstaller_22.3_i386.deb
+ 89ccdd10bd17bd55725e1c559ea834703408a21d 10017 mx-packageinstaller_22.3_i386.buildinfo
+ e6264a67cb5cc79deae30aec02c366a21285515a 377816 mx-packageinstaller_22.3_i386.deb
 Checksums-Sha256:
- 87a442f2c3ebf181c6895dc95e4ff24f04adae19387bc662692309e3b8f2469b 10017 mx-packageinstaller_22.3_i386.buildinfo
- d8322ce8643dc738a7be4f918e3797abd9f6d0f9b2de84b3f9b072101a786873 377732 mx-packageinstaller_22.3_i386.deb
+ 81436ece9ea975062e9c20e53aa5f90c196f58e5ca2d8c22346e4d7fcd695293 10017 mx-packageinstaller_22.3_i386.buildinfo
+ a3b6152420b61577694c6f0e366f67b7363949395a1fe3f6bc25f6934b824fde 377816 mx-packageinstaller_22.3_i386.deb
 Files:
- cc82af737362bd2cd8330f8024615ce8 10017 admin optional mx-packageinstaller_22.3_i386.buildinfo
- 99c923fcb76666d4b0c6576c0156b729 377732 admin optional mx-packageinstaller_22.3_i386.deb
+ abcae3ccb6ab1143b93ebafebaddc166 10017 admin optional mx-packageinstaller_22.3_i386.buildinfo
+ 7422d12c4ff401bf98344bafa06e4b19 377816 admin optional mx-packageinstaller_22.3_i386.deb
