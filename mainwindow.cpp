@@ -24,13 +24,13 @@
  **********************************************************************/
 
 #include <QDebug>
-#include <QDesktopWidget>
 #include <QFileDialog>
 #include <QImageReader>
 #include <QMenu>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QProgressBar>
+#include <QScreen>
 #include <QScrollBar>
 #include <QShortcut>
 #include <QTextStream>
@@ -1525,9 +1525,9 @@ void MainWindow::cancelDownload()
 
 void MainWindow::centerWindow()
 {
-    QRect screenGeometry = QApplication::desktop()->screenGeometry();
-    int x = (screenGeometry.width() - this->width()) / 2;
-    int y = (screenGeometry.height() - this->height()) / 2;
+    auto screenGeometry = qApp->screens().first()->geometry();
+    auto x = (screenGeometry.width() - this->width()) / 2;
+    auto y = (screenGeometry.height() - this->height()) / 2;
     this->move(x, y);
 }
 
