@@ -1862,14 +1862,11 @@ void MainWindow::displayInfo(const QTreeWidgetItem *item, int column)
 void MainWindow::displayPackageInfo(const QTreeWidgetItem *item)
 {
     QString msg = cmd.getCmdOut("aptitude show " + item->text(2));
-    QString details = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) aptitude -sy -V -o=Dpkg::Use-Pty=0 install " + item->text(2));
-
     // remove first 5 lines from aptitude output "Reading package..."
+    QString details = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root |grep -sqi kde && echo kde || echo gnome) aptitude -sy -V -o=Dpkg::Use-Pty=0 install " + item->text(2) + " |tail -5");
+
     QStringList detail_list = details.split("\n");
-    for (int i = 0; i < 5; ++i)
-        detail_list.removeFirst();
-    details = detail_list.join("\n");
-    msg += "\n\n" + detail_list.at(detail_list.size() - 2);
+    msg += "\n\n" + detail_list.at(detail_list.size() - 2); // add info about space needed/freed
 
     QMessageBox info(QMessageBox::NoIcon, tr("Package info"), msg, QMessageBox::Close);
     info.setDetailedText(details);
