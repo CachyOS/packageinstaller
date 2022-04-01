@@ -293,8 +293,8 @@ void MainWindow::updateInterface()
 {
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
 
-    QList<QTreeWidgetItem *> upgr_list = tree->findItems(QLatin1String("upgradable"), Qt::MatchExactly, 5);
-    QList<QTreeWidgetItem *> inst_list = tree->findItems(QLatin1String("installed"), Qt::MatchExactly, 5);
+    auto upgr_list = tree->findItems(QLatin1String("upgradable"), Qt::MatchExactly, 5);
+    auto inst_list = tree->findItems(QLatin1String("installed"), Qt::MatchExactly, 5);
 
     if (tree == ui->treeStable) {
         ui->labelNumApps->setText(QString::number(tree->topLevelItemCount()));
@@ -429,11 +429,11 @@ void MainWindow::updateBar()
 
 void MainWindow::checkUnckeckItem()
 {
-    if (QTreeWidget *t_widget = qobject_cast<QTreeWidget*>(focusWidget())) {
+    if (auto t_widget = qobject_cast<QTreeWidget*>(focusWidget())) {
         if (t_widget->currentItem() == nullptr || t_widget->currentItem()->childCount() > 0)
             return;
-        int col = (t_widget == ui->treePopularApps) ? PopCol::Check : TreeCol::Check;
-        Qt::CheckState new_state = (t_widget->currentItem()->checkState(col)) ? Qt::Unchecked : Qt::Checked;
+        int col = (t_widget == ui->treePopularApps) ? static_cast<int>(PopCol::Check) : static_cast<int>(TreeCol::Check);
+        auto new_state = (t_widget->currentItem()->checkState(col)) ? Qt::Unchecked : Qt::Checked;
         t_widget->currentItem()->setCheckState(col, new_state);
     }
 }
@@ -1056,8 +1056,8 @@ bool MainWindow::confirmActions(QString names, QString action)
     msgBox.addButton(QMessageBox::Cancel);
 
     // make it wider
-    QSpacerItem* horizontalSpacer = new QSpacerItem(600, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
-    QGridLayout* layout = qobject_cast<QGridLayout*>(msgBox.layout());
+    auto horizontalSpacer = new QSpacerItem(600, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    auto layout = qobject_cast<QGridLayout*>(msgBox.layout());
     layout->addItem(horizontalSpacer, 0, 1);
     return msgBox.exec() == QMessageBox::Ok;
 }
@@ -1738,7 +1738,7 @@ void MainWindow::setCurrentTree()
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     const QList<QTreeWidget *> list({ui->treePopularApps, ui->treeStable, ui->treeMXtest, ui->treeBackports, ui->treeFlatpak});
 
-    for (QTreeWidget *item : list) {
+    for (auto item : list) {
         if (item->isVisible()) {
             tree = item;
             return;
@@ -1828,8 +1828,8 @@ void MainWindow::displayInfo(const QTreeWidgetItem *item, int column)
     if (!url.isValid() || url.isEmpty() || url.url() == "none")
         qDebug() << "no screenshot for: " << title;
     else {
-        QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-        QNetworkReply *reply = manager->get(QNetworkRequest(url));
+        auto *manager = new QNetworkAccessManager(this);
+        auto *reply = manager->get(QNetworkRequest(url));
 
         QEventLoop loop;
         connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
@@ -1872,8 +1872,8 @@ void MainWindow::displayPackageInfo(const QTreeWidgetItem *item)
     info.setDetailedText(details);
 
     // make it wider
-    QSpacerItem* horizontalSpacer = new QSpacerItem(this->width(), 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
-    QGridLayout* layout = qobject_cast<QGridLayout*>(info.layout());
+    auto horizontalSpacer = new QSpacerItem(this->width(), 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+    auto layout = qobject_cast<QGridLayout*>(info.layout());
     layout->addItem(horizontalSpacer, 0, 1);
     info.exec();
 }
@@ -1893,7 +1893,7 @@ void MainWindow::findPopular() const
             ui->treePopularApps->resizeColumnToContents(i);
         return;
     }
-    QList<QTreeWidgetItem *> found_items = ui->treePopularApps->findItems(word, Qt::MatchContains|Qt::MatchRecursive, 2);
+    auto found_items = ui->treePopularApps->findItems(word, Qt::MatchContains | Qt::MatchRecursive, 2);
     found_items << ui->treePopularApps->findItems(word, Qt::MatchContains|Qt::MatchRecursive, 4);
 
     // hide/unhide items
@@ -1940,7 +1940,7 @@ void MainWindow::findPackageOther()
     if (word.length() == 1)
         return;
 
-    QList<QTreeWidgetItem *> found_items = tree->findItems(word, Qt::MatchContains, TreeCol::Name);
+    auto found_items = tree->findItems(word, Qt::MatchContains, TreeCol::Name);
     if (tree != ui->treeFlatpak) // not for treeFlatpak as it has a different column structure
         found_items << tree->findItems(word, Qt::MatchContains, TreeCol::Description);
 
@@ -2261,10 +2261,10 @@ void MainWindow::on_tabWidget_currentChanged(int index)
                 break;
             }
             if (ui->treeStable) { // mark flatpak installed in stable tree
-                QHash<QString, VersionNumber> hashInstalled = listInstalledVersions();
+                auto hashInstalled = listInstalledVersions();
                 VersionNumber installed = hashInstalled.value("flatpak");
-                const QList<QTreeWidgetItem *> found_items  = ui->treeStable->findItems("flatpak", Qt::MatchExactly, TreeCol::Name);
-                for (QTreeWidgetItem *item : found_items) {
+                const auto found_items  = ui->treeStable->findItems("flatpak", Qt::MatchExactly, TreeCol::Name);
+                for (auto item : found_items) {
                     for (int i = 0; i < ui->treeStable->columnCount(); ++i) {
                         item->setForeground(TreeCol::Name, QBrush(Qt::gray));
                         item->setForeground(TreeCol::Description, QBrush(Qt::gray));
@@ -2524,7 +2524,7 @@ void MainWindow::on_pushUpgradeAll_clicked()
     qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
     showOutput();
 
-    QList<QTreeWidgetItem *> found_items = ui->treeStable->findItems(QLatin1String("upgradable"), Qt::MatchExactly, 5);
+    auto found_items = ui->treeStable->findItems(QLatin1String("upgradable"), Qt::MatchExactly, 5);
 
     QString names;
     for (QTreeWidgetItemIterator it(ui->treeStable); *it; ++it) {
@@ -2672,10 +2672,10 @@ void MainWindow::on_comboUser_activated(int index)
 
 void MainWindow::on_treePopularApps_customContextMenuRequested(const QPoint &pos)
 {
-    QTreeWidget *t_widget = qobject_cast<QTreeWidget*>(focusWidget());
+    auto t_widget = qobject_cast<QTreeWidget*>(focusWidget());
     if (t_widget->currentItem()->childCount() > 0)
         return;
-    QAction *action = new QAction(QIcon::fromTheme("dialog-information"), tr("More &info..."), this);
+    auto action = new QAction(QIcon::fromTheme("dialog-information"), tr("More &info..."), this);
     QMenu menu(this);
     menu.addAction(action);
     connect(action, &QAction::triggered, [this, t_widget] { displayInfo(t_widget->currentItem(), 3); });
@@ -2685,8 +2685,8 @@ void MainWindow::on_treePopularApps_customContextMenuRequested(const QPoint &pos
 
 void MainWindow::on_treeStable_customContextMenuRequested(const QPoint &pos)
 {
-    QTreeWidget *t_widget = qobject_cast<QTreeWidget*>(focusWidget());
-    QAction *action = new QAction(QIcon::fromTheme("dialog-information"), tr("More &info..."), this);
+    auto t_widget = qobject_cast<QTreeWidget*>(focusWidget());
+    auto action = new QAction(QIcon::fromTheme("dialog-information"), tr("More &info..."), this);
     QMenu menu(this);
     menu.addAction(action);
     connect(action, &QAction::triggered, [this, t_widget] { displayPackageInfo(t_widget->currentItem()); });
