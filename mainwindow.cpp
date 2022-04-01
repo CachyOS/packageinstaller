@@ -1811,8 +1811,6 @@ void MainWindow::disableWarning(bool checked, QString file)
 // Display info when clicking the "info" icon of the package
 void MainWindow::displayInfo(const QTreeWidgetItem *item, int column)
 {
-    qDebug() << "+++" << __PRETTY_FUNCTION__ << "+++";
-
     if (column != PopCol::Info || item->childCount() > 0)
         return;
 
@@ -1865,11 +1863,19 @@ void MainWindow::displayPackageInfo(const QTreeWidgetItem *item)
     // remove first 5 lines from aptitude output "Reading package..."
     QString details = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root |grep -sqi kde && echo kde || echo gnome) aptitude -sy -V -o=Dpkg::Use-Pty=0 install " + item->text(2) + " |tail -5");
 
-    QStringList detail_list = details.split("\n");
+    auto detail_list = details.split("\n");
+    auto msg_list = msg.split("\n");
+    auto max_no_chars = 2000; // around 15-17 lines
+    auto max_no_lines = 17;   // cut message after these many lines
+    if (msg.size() > max_no_chars) { // split msg into details if too large
+        msg = msg_list.mid(0, max_no_lines).join("\n");
+        detail_list = msg_list.mid(max_no_lines, msg_list.length()) + QStringList{""} + detail_list;
+        details = detail_list.join("\n");
+    }
     msg += "\n\n" + detail_list.at(detail_list.size() - 2); // add info about space needed/freed
 
-    QMessageBox info(QMessageBox::NoIcon, tr("Package info"), msg, QMessageBox::Close);
-    info.setDetailedText(details);
+    QMessageBox info(QMessageBox::NoIcon, tr("Package info"), msg.trimmed(), QMessageBox::Close);
+    info.setDetailedText(details.trimmed());
 
     // make it wider
     auto horizontalSpacer = new QSpacerItem(this->width(), 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
