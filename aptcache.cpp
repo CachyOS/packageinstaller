@@ -7,7 +7,6 @@
 
 AptCache::AptCache()
 {
-    dir_name = "/var/lib/apt/lists/";
     loadCacheFiles();
 }
 
@@ -46,7 +45,6 @@ void AptCache::loadCacheFiles()
             continue;
         }
     }
-
 
     for (const QString &file_name : files)
         if(!readFile(file_name))

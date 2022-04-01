@@ -25,8 +25,8 @@ public:
 
 private:
     QMap<QString, QStringList> candidates;
-    QString dir_name;
     QString files_content;
+    const QString dir_name = "/var/lib/apt/lists/";
 
     void parseContent();
     bool readFile(const QString &file_name);
