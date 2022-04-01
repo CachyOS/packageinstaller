@@ -118,7 +118,7 @@ void AptCache::parseContent()
 bool AptCache::readFile(const QString &file_name)
 {
     QFile file(dir_name + file_name);
-    if(!file.open(QFile::ReadOnly)) {
+    if (!file.open(QFile::ReadOnly)) {
         qDebug() << "Could not open file: " << file.fileName();
         return false;
     }
