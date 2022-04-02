@@ -150,7 +150,7 @@ void MainWindow::setup()
     connect(shortcutToggle, &QShortcut::activated, this, &MainWindow::checkUnckeckItem);
 
     QList<QTreeWidget *> list_tree {ui->treePopularApps, ui->treeStable, ui->treeMXtest, ui->treeBackports, ui->treeFlatpak};
-    for (auto tree : list_tree) {
+    for (const auto &tree : list_tree) {
         if (tree == ui->treePopularApps || tree == ui->treeStable) tree->setContextMenuPolicy(Qt::CustomContextMenu);
         connect(tree, &QTreeWidget::itemDoubleClicked, [tree] (QTreeWidgetItem *item) { tree->setCurrentItem(item); });
         connect(tree, &QTreeWidget::itemDoubleClicked, this, &MainWindow::checkUnckeckItem);
@@ -2087,7 +2087,6 @@ void MainWindow::on_pushUninstall_clicked()
     QString names, preuninstall, postuninstall;
 
     if (tree == ui->treePopularApps) {
-
         for (QTreeWidgetItemIterator it(ui->treePopularApps); *it; ++it) {
             if ((*it)->checkState(PopCol::Check) == Qt::Checked) {
                 names += (*it)->text(PopCol::UninstallNames).replace("\n", " ") + " ";
