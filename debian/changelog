@@ -1,4 +1,4 @@
-mx-packageinstaller (23.4) mx; urgency=medium
+mx-packageinstaller (22.4) mx; urgency=medium
 
   * Split long package info into details (which has a scroll bar) 
 
