@@ -181,7 +181,7 @@ bool MainWindow::uninstall(const QString &names, const QString &preuninstall, co
 
     if (success) {
         displayOutput();
-        success = cmd.run("DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) "
+        success = cmd.run("DEBIAN_FRONTEND=$(dpkg -l debconf-kde-helper 2>/dev/null | grep -sq ^i && echo kde || echo gnome) "
                   "apt-get -o=Dpkg::Use-Pty=0 remove -y " + names); //use -y since there is a confirm dialog already
     }
 
@@ -979,7 +979,7 @@ bool MainWindow::confirmActions(QString names, QString action)
     QString recommends_aptitude;
     QString aptitude_info;
 
-    QString frontend = "DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) LANG=C ";
+    QString frontend = "DEBIAN_FRONTEND=$(dpkg -l debconf-kde-helper 2>/dev/null | grep -sq ^i && echo kde || echo gnome) LANG=C ";
     QString aptget = "apt-get -s -V -o=Dpkg::Use-Pty=0 ";
     QString aptitude = "aptitude -sy -V -o=Dpkg::Use-Pty=0 ";
     if (tree == ui->treeFlatpak) {
@@ -1084,7 +1084,7 @@ bool MainWindow::install(const QString &names)
     if (!confirmActions(names, "install")) return true;
 
     displayOutput();
-    QString frontend = "DEBIAN_FRONTEND=$(xprop -root | grep -sqi kde && echo kde || echo gnome) ";
+    QString frontend = "DEBIAN_FRONTEND=$(dpkg -l debconf-kde-helper 2>/dev/null | grep -sq ^i && echo kde || echo gnome) ";
     QString aptget = "apt-get -o=Dpkg::Use-Pty=0 install -y ";
     if (tree == ui->treeBackports) {
         recommends = (ui->checkBoxInstallRecommendsMXBP->isChecked()) ? "--install-recommends " : "";
@@ -1861,7 +1861,7 @@ void MainWindow::displayPackageInfo(const QTreeWidgetItem *item)
 {
     QString msg = cmd.getCmdOut("aptitude show " + item->text(2));
     // remove first 5 lines from aptitude output "Reading package..."
-    QString details = cmd.getCmdOut("DEBIAN_FRONTEND=$(xprop -root |grep -sqi kde && echo kde || echo gnome) aptitude -sy -V -o=Dpkg::Use-Pty=0 install " + item->text(2) + " |tail -5");
+    QString details = cmd.getCmdOut("DEBIAN_FRONTEND=$(dpkg -l debconf-kde-helper 2>/dev/null | grep -sq ^i && echo kde || echo gnome) aptitude -sy -V -o=Dpkg::Use-Pty=0 install " + item->text(2) + " |tail -5");
 
     auto detail_list = details.split("\n");
     auto msg_list = msg.split("\n");
