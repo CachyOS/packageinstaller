@@ -1,0 +1,25 @@
+Format: 1.8
+Date: Wed, 13 Apr 2022 17:26:38 -0400
+Source: mx-packageinstaller
+Architecture: source
+Version: 22.4.1
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: fehlix <fehlix@mxlinux.org>
+Changes:
+ mx-packageinstaller (22.4.1) mx; urgency=medium
+ .
+   * Adjust debian-frontend check
+Checksums-Sha1:
+ 31901359cfe19634c966745068c845ac33cef29a 666 mx-packageinstaller_22.4.1.dsc
+ fe61c38b75513095a4804fc6ad035f7885b843ca 292684 mx-packageinstaller_22.4.1.tar.xz
+ 75ed43d4675360eb6295c06ca438c48bf1d39a8e 10091 mx-packageinstaller_22.4.1_i386.buildinfo
+Checksums-Sha256:
+ c29b9cdc49cb70531aa39f9003013d20a13e7a9528571ffae97ce290f715939b 666 mx-packageinstaller_22.4.1.dsc
+ 67b6fb23a222912749e4200928862e8fa36069c7f5f462b545c5c565183391af 292684 mx-packageinstaller_22.4.1.tar.xz
+ 9eaaf80b13fccebbced98b154844c1148bc76246f1c7bdfd6bfbbe25d170cf6b 10091 mx-packageinstaller_22.4.1_i386.buildinfo
+Files:
+ 22f9ea0c89081270d67205aaaa10c86b 666 admin optional mx-packageinstaller_22.4.1.dsc
+ 39f451f2e0aacf2fb3404a561baf8572 292684 admin optional mx-packageinstaller_22.4.1.tar.xz
+ bb3c08de3219d901c884daf1428ac577 10091 admin optional mx-packageinstaller_22.4.1_i386.buildinfo

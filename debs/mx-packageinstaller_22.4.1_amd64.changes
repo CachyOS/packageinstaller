@@ -1,0 +1,46 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Format: 1.8
+Date: Wed, 13 Apr 2022 17:26:38 -0400
+Source: mx-packageinstaller
+Binary: mx-packageinstaller
+Architecture: source amd64
+Version: 22.4.1
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: fehlix <fehlix@mxlinux.org>
+Description:
+ mx-packageinstaller - MX Package Installer
+Changes:
+ mx-packageinstaller (22.4.1) mx; urgency=medium
+ .
+   * Adjust debian-frontend check
+Checksums-Sha1:
+ 52e8eee1165024c7dc0efdf9dceed431a8d36bcc 1228 mx-packageinstaller_22.4.1.dsc
+ d892f579872e3b7a2c9c52378d5e341e1eaedda2 292636 mx-packageinstaller_22.4.1.tar.xz
+ c5c601e4d1f697d4c8bf385b3f59fef58c4c700b 10819 mx-packageinstaller_22.4.1_amd64.buildinfo
+ a8b389770064a0e8b3ec668b9c0dc7ae953c8076 369840 mx-packageinstaller_22.4.1_amd64.deb
+Checksums-Sha256:
+ 175af73a93438e6ea1e341d12d9e54a629a69beb270accc88f2fc2319f81f6d6 1228 mx-packageinstaller_22.4.1.dsc
+ 41c1477dc2723694f14c53c1064d2506ccdb0b9b469e3def380549d734740639 292636 mx-packageinstaller_22.4.1.tar.xz
+ 10732bbd91120014377068e1ec2e4a00155f13e56e6282eb4a7196606c4decf4 10819 mx-packageinstaller_22.4.1_amd64.buildinfo
+ 2d2f93c71012e6ff2be9c55a48020aa6046c6f6c8513e5d2b287a024f7f25124 369840 mx-packageinstaller_22.4.1_amd64.deb
+Files:
+ 23f7b620387a5dd068eb8a29e4c57b66 1228 admin optional mx-packageinstaller_22.4.1.dsc
+ 41f98cbd5cbb4f5031f468b9b23d232c 292636 admin optional mx-packageinstaller_22.4.1.tar.xz
+ 4e43153a8d036d5cdc7b27f741b19d04 10819 admin optional mx-packageinstaller_22.4.1_amd64.buildinfo
+ a32455bcbdf7d3afa288f997ebd1b6bf 369840 admin optional mx-packageinstaller_22.4.1_amd64.deb
+
+-----BEGIN PGP SIGNATURE-----
+
+iQFHBAEBCgAxFiEE8ndToY6S45N+YzXncJOMeAZ57pgFAmJYHpUTHGFkcmlhbkBt
+eGxpbnV4Lm9yZwAKCRBwk4x4BnnumNspB/4vrtD+s5NdtKhjrlb/RzxQyl6r1uJZ
+N7Hm0c8g0kdp9FwPajr8b+I8KlX9PX5BHD/aA7eY09x/ZjxX5hrTvG9Bx5SZHj3L
+XWSvVGgl1hTeGwtfulrkbikbFpCm+mWocqsjxyFUTvj0VMgvix6XeJQSiuMTfvRJ
+ajcbCxoLcYiu/+wHLhJ5Opq75V7tr4BIN0yWllNcra8607m6pUy3S/CKSz3OmXCM
+2Xtbsv1QWzm2/y2El3mtZTrvnzKylyhgo92zEKEcQ8tazvPC6HMFgLlB7JOmvb+9
+6NdfWqyWDcKafpL0yR0gFuyQVqTcciutoPIL3TE6jM52PYAcUCsccDyz
+=qxF1
+-----END PGP SIGNATURE-----
