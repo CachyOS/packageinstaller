@@ -1558,6 +1558,10 @@ void MainWindow::clearUi()
         ui->labelNumUpgrBP->clear();
         ui->treeBackports->clear();
     }
+    ui->comboFilterBP->setCurrentIndex(0);
+    ui->comboFilterFlatpak->setCurrentIndex(0);
+    ui->comboFilterMX->setCurrentIndex(0);
+    ui->comboFilterStable->setCurrentIndex(0);
     blockSignals(false);
 }
 
