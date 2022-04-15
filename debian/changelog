@@ -1,3 +1,9 @@
+mx-packageinstaller (22.4.2) mx; urgency=medium
+
+  * Reset filter when clearing the UI 
+
+ -- Adrian <adrian@mxlinux.org>  Fri, 15 Apr 2022 03:09:30 -0400
+
 mx-packageinstaller (22.4.1) mx; urgency=medium
 
   * Adjust debian-frontend check

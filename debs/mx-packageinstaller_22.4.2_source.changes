@@ -1,0 +1,25 @@
+Format: 1.8
+Date: Fri, 15 Apr 2022 03:09:30 -0400
+Source: mx-packageinstaller
+Architecture: source
+Version: 22.4.2
+Distribution: mx
+Urgency: medium
+Maintainer: Adrian <adrian@mxlinux.org>
+Changed-By: Adrian <adrian@mxlinux.org>
+Changes:
+ mx-packageinstaller (22.4.2) mx; urgency=medium
+ .
+   * Reset filter when clearing the UI
+Checksums-Sha1:
+ da109c50f1aa991b54d5c48e15bdc8bface11bd4 666 mx-packageinstaller_22.4.2.dsc
+ 51bf0b4aa9ff6ea95829238da4891703bb362b9c 292708 mx-packageinstaller_22.4.2.tar.xz
+ 46d7f2b4702e724b98344630933ab9e7588d4aab 10091 mx-packageinstaller_22.4.2_i386.buildinfo
+Checksums-Sha256:
+ 5983e66275a0d49260c435c032e172462c2b764cf86afc51c661be8299ab8673 666 mx-packageinstaller_22.4.2.dsc
+ 5188f3de63a8e55eba16dd2568d527432ac64f2679b742d70d1aaf2a7bf06e5a 292708 mx-packageinstaller_22.4.2.tar.xz
+ 59774722f06614c07cfb3ccf0e8706654536281b3275d8ef6611849494b8856d 10091 mx-packageinstaller_22.4.2_i386.buildinfo
+Files:
+ e5e7aa921eb82d83de9aeedd5ba08334 666 admin optional mx-packageinstaller_22.4.2.dsc
+ 435016d72ee7286267ff15068c7337ab 292708 admin optional mx-packageinstaller_22.4.2.tar.xz
+ 824d4dbbda3087694b6d6c68a1503377 10091 admin optional mx-packageinstaller_22.4.2_i386.buildinfo
