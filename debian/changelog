@@ -1,3 +1,9 @@
+mx-packageinstaller (22.4.3) mx; urgency=medium
+
+  * Make sure text is added at end of output box (clicking inside the output box should not move cursor around)
+
+ -- Adrian <adrian@mxlinux.org>  Mon, 18 Apr 2022 11:28:54 -0400
+
 mx-packageinstaller (22.4.2) mx; urgency=medium
 
   * Reset filter when clearing the UI 
