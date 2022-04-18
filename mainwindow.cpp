@@ -440,6 +440,7 @@ void MainWindow::checkUnckeckItem()
 
 void MainWindow::outputAvailable(const QString &output)
 {
+    ui->outputBox->moveCursor(QTextCursor::End);
     if (output.contains("\r")) {
         ui->outputBox->moveCursor(QTextCursor::Up, QTextCursor::KeepAnchor);
         ui->outputBox->moveCursor(QTextCursor::EndOfLine, QTextCursor::KeepAnchor);
