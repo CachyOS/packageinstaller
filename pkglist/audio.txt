@@ -1,0 +1,13 @@
+strawberry
+lollypop
+audacious
+cantata
+elisa
+kwave
+audacity
+ardour
+lmms
+mixxx
+musescore
+rosegarden
+bitwig-studio

@@ -1,7 +1,4 @@
 <RCC>
-    <qresource prefix="/icons">
-        <file>icons/logo.png</file>
-    </qresource>
     <qresource prefix="/">
         <file>icons/software-update-available.png</file>
     </qresource>

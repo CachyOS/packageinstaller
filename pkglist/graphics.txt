@@ -1,0 +1,19 @@
+krita krita-plugin-gmic opencolorio
+gimp
+inkscape
+blender
+digikam
+darktable
+luminancehdr
+kolourpaint
+mypaint
+wings3d
+sweethome3d
+freecad
+librecad
+kicad
+pencil2d
+synfigstudio
+opentoonz
+fontforge
+birdfont

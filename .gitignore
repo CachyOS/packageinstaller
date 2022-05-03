@@ -1,38 +1,43 @@
-# Created by https://www.gitignore.io
-# place file in ~/.config/git/ignore
+*.DS_Store
+*.dump
+*.ctu-info
+.cache
+.idea
+build
+build.sh
+cmake-build-release
+cmake-build-debug
+CMakeLists.txt.user
+subprojects/fmt
+subprojects/packagecache
 
-### Qt ###
-# C++ objects and libs
+# Prerequisites
+*.d
 
+# Compiled Object files
 *.slo
 *.lo
 *.o
-*.a
-*.la
-*.lai
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
 *.so
-*.dll
 *.dylib
 
-# Qt-es
+# Fortran module files
+*.mod
+*.smod
 
-/.qmake.cache
-/.qmake.stash
-*.pro*.user
-*.pro*.user.*
-*.moc
-moc_*.cpp
-qrc_*.cpp
-ui_*.h
-Makefile*
-*-build-*
+# Compiled Static libraries
+*.lai
+*.la
+*.a
 
-# QtCreator
-
-*.autosave
-
-#QtCtreator Qml
-*.qmlproject.user
-*.qmlproject.user.*
-
-mx-packageinstaller
+# Executables
+*.exe
+*.out
+*.app

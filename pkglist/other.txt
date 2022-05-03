@@ -1,0 +1,5 @@
+guiscrcpy
+droidcam
+soundwire
+variety
+conky-lua-nv conky-manager

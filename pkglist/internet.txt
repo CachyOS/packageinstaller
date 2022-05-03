@@ -1,0 +1,11 @@
+xdman
+freedownloadmanager
+deluge-gtk
+qbittorrent
+nextcloud-client
+remmina
+filezilla
+putty
+warpinator
+nitroshare
+jdownloader2

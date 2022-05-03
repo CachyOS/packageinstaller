@@ -1,5 +1,0 @@
-help/*				usr/share/doc/mx-packageinstaller
-icons/mx-packageinstaller.png	usr/share/icons/hicolor/256x256/apps
-mx-packageinstaller		usr/bin
-mx-packageinstaller.desktop	usr/share/applications
-translations/*.qm		usr/share/mx-packageinstaller/locale

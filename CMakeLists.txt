@@ -1,0 +1,152 @@
+cmake_minimum_required(VERSION 3.16)
+
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+##
+## PROJECT
+## name and version
+##
+project(cachyos-pi
+        VERSION 0.0.1
+        LANGUAGES CXX)
+
+
+##
+## INCLUDE
+##
+include(GNUInstallDirs)
+include(StandardProjectSettings)
+include(CompilerWarnings)
+include(EnableCcache)
+include(Linker)
+include(StaticAnalyzers)
+include(Sanitizers)
+include(CPM)
+
+find_package(Threads REQUIRED)
+find_package(PkgConfig REQUIRED)
+find_package(Qt5 COMPONENTS Widgets LinguistTools REQUIRED)
+
+pkg_check_modules(
+  LIBALPM
+  REQUIRED
+  IMPORTED_TARGET
+  libalpm>=13.0.0)
+CPMAddPackage(
+  NAME fmt
+  GITHUB_REPOSITORY fmtlib/fmt
+  GIT_TAG ffb5e6a7328986706b48c3b4964ec596026f5e01
+  EXCLUDE_FROM_ALL YES
+)
+CPMAddPackage(
+  NAME spdlog
+  GITHUB_REPOSITORY gabime/spdlog
+  GIT_TAG a49456f7f21fb802c1000fd79ef05911aa2101b7
+  EXCLUDE_FROM_ALL YES
+)
+if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
+   CPMAddPackage(
+     NAME range-v3
+     GITHUB_REPOSITORY ericniebler/range-v3
+     GIT_TAG 9aa032ccd0eb4bd77f58e5b181168f1038c222c6
+     EXCLUDE_FROM_ALL YES
+   )
+endif()
+
+find_package(PolkitQt5-1 REQUIRED)
+
+##
+## CONFIGURATION
+##
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -flto")
+
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+   set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fwhole-program -fuse-linker-plugin")
+endif()
+
+# Link this 'library' to set the c++ standard / compile-time options requested
+add_library(project_options INTERFACE)
+target_compile_features(project_options INTERFACE cxx_std_20)
+
+# Files with translation sources. You should run lupdate manually when needed to regenerate them
+file(GLOB TS_FILES "${PROJECT_SOURCE_DIR}/lang/*.ts")
+file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lang)
+
+set_source_files_properties(${TS_FILES} PROPERTIES OUTPUT_LOCATION "lang") # set qm files output directory
+qt5_add_translation(QM_FILES ${TS_FILES})   # generate qm files
+
+##
+## Target
+##
+add_executable(${PROJECT_NAME}
+    ${RESOURCES} ${QM_FILES} # note that ${QM_FILES} should be included as sources to be generated.
+    images.qrc
+    src/ini.hpp
+    src/utils.hpp
+    src/lockfile.hpp src/lockfile.cpp
+    src/versionnumber.hpp
+    src/pacmancache.hpp src/pacmancache.cpp
+    src/remotes.hpp src/remotes.cpp
+    src/about.hpp src/about.cpp
+    src/cmd.hpp src/cmd.cpp
+    src/config.hpp src/config.cpp
+    src/mainwindow.hpp src/mainwindow.cpp
+    src/mainwindow.ui
+    src/main.cpp)
+
+# Link this 'library' to use the warnings specified in CompilerWarnings.cmake
+add_library(project_warnings INTERFACE)
+set_project_warnings(project_warnings)
+
+# Add linker configuration
+configure_linker(project_options)
+
+# sanitizer options if supported by compiler
+enable_sanitizers(project_options)
+
+include_directories(${CMAKE_SOURCE_DIR}/src)
+
+target_link_libraries(${PROJECT_NAME} PRIVATE project_warnings project_options Qt5::Widgets Threads::Threads spdlog::spdlog fmt::fmt PkgConfig::LIBALPM)
+
+if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
+   target_link_libraries(${PROJECT_NAME} PRIVATE range-v3::range-v3)
+endif()
+
+option(ENABLE_UNITY "Enable Unity builds of projects" OFF)
+if(ENABLE_UNITY)
+   # Add for any project you want to apply unity builds for
+   set_target_properties(${PROJECT_NAME} PROPERTIES UNITY_BUILD ON)
+endif()
+
+install(
+   TARGETS ${PROJECT_NAME}
+   RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+
+install(
+   FILES org.cachyos.cachyos-pi.pkexec.policy
+   DESTINATION "${POLKITQT-1_POLICY_FILES_INSTALL_DIR}"
+)
+
+file(GLOB PKGLIST_FILES "${PROJECT_SOURCE_DIR}/pkglist/*.txt")
+install(
+   FILES ${PKGLIST_FILES}
+   DESTINATION lib/cachyos-pi)
+
+install(
+   FILES cachyos-pi.desktop
+   DESTINATION ${CMAKE_INSTALL_DATADIR}/applications
+)
+install(
+   FILES cachyos-postinstall.desktop
+   DESTINATION ${CMAKE_INSTALL_DATADIR}/applications
+)
+install(
+   FILES icons/cachyos-pi.png
+   DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps
+)

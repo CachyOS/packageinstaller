@@ -1,0 +1,22 @@
+vim
+code
+atom
+emacs
+qtcreator
+gnome-builder
+kdevelop
+netbeans
+intellij-idea-community-edition
+pycharm-community-edition
+gitkraken
+github-desktop-bin
+cockpit cockpit-machines
+ansible
+docker docker-compose
+podman-docker podman-compose crun
+salt
+jenkins
+puppet
+prometheus
+vagrant
+terraform

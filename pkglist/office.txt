@@ -1,0 +1,14 @@
+libreoffice-fresh libmythes
+libreoffice-still libmythes
+joplin
+onlyoffice-bin
+wps-office wps-office-mime ttf-wps-fonts
+freeoffice
+yozo-office yozo-office-fonts
+calligra
+skrooge
+kmymoney
+abiword
+gnumeric
+gnucash
+homebank

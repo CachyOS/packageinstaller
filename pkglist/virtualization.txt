@@ -1,0 +1,5 @@
+virtualbox-meta
+gnome-boxes
+virt-manager-meta
+anbox-support
+genymotion virtualbox-meta

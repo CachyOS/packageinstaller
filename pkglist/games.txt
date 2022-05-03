@@ -1,0 +1,13 @@
+aisleriot
+mari0
+kapman
+knights
+kmahjongg
+supertuxkart
+supertux
+extremetuxracer
+minetest minetest-server
+0ad
+teeworlds
+xonotic
+hedgewars
