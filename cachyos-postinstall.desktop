@@ -22,7 +22,7 @@ Name[sr]=CachyOS PostInstall
 Name[uk]=CachyOS PostInstall
 Name[zh_CN]=CachyOS PostInstall
 Comment=Simple Software Application Package Installer
-Exec=pkexec cachyos-pi --setupmode
+Exec=pkexec cachyos-pi --xdg-desktop=$XDG_CURRENT_DESKTOP --setupmode
 Icon=cachyos-pi
 NoDisplay=false
 Categories=System;CachyOS-Software;

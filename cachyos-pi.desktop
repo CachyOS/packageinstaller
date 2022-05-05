@@ -89,7 +89,7 @@ Comment[tr]=Basit Yazılım Uygulama Paketi Yükleyicisi
 Comment[uk]=Простий інсталятор програмних програм
 Comment[zh_CN]=Simple Package Installer
 Comment[zh_TW]=簡單的軟體安裝工具
-Exec=pkexec cachyos-pi
+Exec=pkexec cachyos-pi --xdg-desktop=$XDG_CURRENT_DESKTOP
 Icon=cachyos-pi
 NoDisplay=false
 Categories=System;CachyOS-Software;
@@ -118,4 +118,4 @@ Name[sq]=CachyOS PostInstall
 Name[sr]=CachyOS PostInstall
 Name[uk]=CachyOS PostInstall
 Name[zh_CN]=CachyOS PostInstall
-Exec=pkexec cachyos-pi --setupmode
+Exec=pkexec cachyos-pi --xdg-desktop=$XDG_CURRENT_DESKTOP --setupmode

@@ -4,7 +4,7 @@
 <policyconfig>
 
   <vendor>cachyos-pi</vendor>
-  <vendor_url>https://github.com/CachyOS/cachyos-packageinstaller</vendor_url>
+  <vendor_url>https://github.com/CachyOS/packageinstaller</vendor_url>
 
   <action id="org.cachyos.cachyos-pi.pkexec.policy.run">
     <description>Start the program</description>

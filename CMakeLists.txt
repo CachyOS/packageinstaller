@@ -35,7 +35,7 @@ pkg_check_modules(
 CPMAddPackage(
   NAME fmt
   GITHUB_REPOSITORY fmtlib/fmt
-  GIT_TAG ffb5e6a7328986706b48c3b4964ec596026f5e01
+  GIT_TAG 7e4ad40171aa552d38cb99a5c181a0d7b150facc
   EXCLUDE_FROM_ALL YES
 )
 CPMAddPackage(
@@ -48,7 +48,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
    CPMAddPackage(
      NAME range-v3
      GITHUB_REPOSITORY ericniebler/range-v3
-     GIT_TAG 9aa032ccd0eb4bd77f58e5b181168f1038c222c6
+     GIT_TAG c7ad677c7fe7a3e94d2a44e2ebe89047c96eeb94
      EXCLUDE_FROM_ALL YES
    )
 endif()
@@ -83,7 +83,7 @@ qt5_add_translation(QM_FILES ${TS_FILES})   # generate qm files
 ##
 ## Target
 ##
-add_executable(${PROJECT_NAME}
+add_executable(${PROJECT_NAME}-bin
     ${RESOURCES} ${QM_FILES} # note that ${QM_FILES} should be included as sources to be generated.
     images.qrc
     src/ini.hpp
@@ -111,21 +111,25 @@ enable_sanitizers(project_options)
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 
-target_link_libraries(${PROJECT_NAME} PRIVATE project_warnings project_options Qt5::Widgets Threads::Threads spdlog::spdlog fmt::fmt PkgConfig::LIBALPM)
+target_link_libraries(${PROJECT_NAME}-bin PRIVATE project_warnings project_options Qt5::Widgets Threads::Threads spdlog::spdlog fmt::fmt PkgConfig::LIBALPM)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
-   target_link_libraries(${PROJECT_NAME} PRIVATE range-v3::range-v3)
+   target_link_libraries(${PROJECT_NAME}-bin PRIVATE range-v3::range-v3)
 endif()
 
 option(ENABLE_UNITY "Enable Unity builds of projects" OFF)
 if(ENABLE_UNITY)
    # Add for any project you want to apply unity builds for
-   set_target_properties(${PROJECT_NAME} PROPERTIES UNITY_BUILD ON)
+   set_target_properties(${PROJECT_NAME}-bin PROPERTIES UNITY_BUILD ON)
 endif()
 
 install(
-   TARGETS ${PROJECT_NAME}
+   TARGETS ${PROJECT_NAME}-bin
    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
+install(
+   PROGRAMS src/${PROJECT_NAME}
+   DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
 
 install(
@@ -136,7 +140,13 @@ install(
 file(GLOB PKGLIST_FILES "${PROJECT_SOURCE_DIR}/pkglist/*.txt")
 install(
    FILES ${PKGLIST_FILES}
-   DESTINATION lib/cachyos-pi)
+   DESTINATION lib/cachyos-pi
+)
+file(GLOB HELP_FILES "${PROJECT_SOURCE_DIR}/help/*")
+install(
+   FILES ${HELP_FILES}
+   DESTINATION share/doc/cachyos-packageinstaller
+)
 
 install(
    FILES cachyos-pi.desktop

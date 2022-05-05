@@ -200,8 +200,8 @@ MainWindow::MainWindow(QWidget* parent) : QDialog(parent),
     connect(&m_timer, &QTimer::timeout, this, &MainWindow::updateBar);
     connect(&m_cmd, &Cmd::started, this, &MainWindow::cmdStart);
     connect(&m_cmd, &Cmd::finished, this, &MainWindow::cmdDone);
-    m_conn = connect(&m_cmd, &Cmd::outputAvailable, [](const QString& out) { spdlog::debug("{}", out.trimmed()); });
-    connect(&m_cmd, &Cmd::errorAvailable, [](const QString& out) { spdlog::warn("{}", out.trimmed()); });
+    m_conn = connect(&m_cmd, &Cmd::outputAvailable, [](const QString& out) { spdlog::debug("{}", out.trimmed().toStdString()); });
+    connect(&m_cmd, &Cmd::errorAvailable, [](const QString& out) { spdlog::warn("{}", out.trimmed().toStdString()); });
     setWindowFlags(Qt::Window);  // for the close, min and max buttons
     setup();
 }
@@ -1008,7 +1008,7 @@ bool MainWindow::install(const QString& names) {
         return true;
 
     displayOutput();
-    bool success = m_cmd.run(fmt::format("pacman -S --noconfirm {}", names).c_str());
+    bool success = m_cmd.run(fmt::format("pacman -S --noconfirm {}", names.toStdString()).c_str());
     m_lockfile.lock();
 
     return success;
@@ -1358,7 +1358,7 @@ QStringList MainWindow::listFlatpaks(const QString& remote, const QString& type)
                 list = QStringList();
         }
     }
-    m_conn = connect(&m_cmd, &Cmd::outputAvailable, [](const QString& out) { spdlog::debug("{}", out.trimmed()); });
+    m_conn = connect(&m_cmd, &Cmd::outputAvailable, [](const QString& cmd_out) { spdlog::debug("{}", cmd_out.trimmed().toStdString()); });
 
     if (!success || list == QStringList("")) {
         spdlog::error("Could not list packages from {} remote, or remote doesn't contain packages", remote.toStdString());
@@ -1402,7 +1402,7 @@ std::unordered_map<QString, VersionNumber> MainWindow::listInstalledVersions() {
     spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
     disconnect(m_conn);
     QString out = m_cmd.getCmdOut("pacman -Q", true);
-    m_conn      = connect(&m_cmd, &Cmd::outputAvailable, [](const QString& out) { spdlog::debug("{}", out.trimmed()); });
+    m_conn      = connect(&m_cmd, &Cmd::outputAvailable, [](const QString& cmd_out) { spdlog::debug("{}", cmd_out.trimmed().toStdString()); });
 
     QString name;
     std::string ver_str;
@@ -1632,7 +1632,7 @@ void MainWindow::on_pushAbout_clicked() {
 }
 // Help button clicked
 void MainWindow::on_pushHelp_clicked() {
-    QString url = "/usr/share/doc/cachyos-packageinstaller/cachyos-package-installer.html";
+    QString url = "/usr/share/doc/cachyos-packageinstaller/cachyos-pi.html";
     displayDoc(url, true);
 }
 

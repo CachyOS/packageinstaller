@@ -5,7 +5,7 @@
 # MIT License
 # -----------
 #[[
-  Copyright (c) 2021 Lars Melchior and additional contributors
+  Copyright (c) 2019-2022 Lars Melchior and contributors
 
   Permission is hereby granted, free of charge, to any person obtaining a copy
   of this software and associated documentation files (the "Software"), to deal
@@ -251,7 +251,13 @@ function(CPMFindPackage)
     endif()
   endif()
 
-  if(CPM_DOWNLOAD_ALL)
+  set(downloadPackage ${CPM_DOWNLOAD_ALL})
+  if(DEFINED CPM_DOWNLOAD_${CPM_ARGS_NAME})
+    set(downloadPackage ${CPM_DOWNLOAD_${CPM_ARGS_NAME}})
+  elseif(DEFINED ENV{CPM_DOWNLOAD_${CPM_ARGS_NAME}})
+    set(downloadPackage $ENV{CPM_DOWNLOAD_${CPM_ARGS_NAME}})
+  endif()
+  if(downloadPackage)
     CPMAddPackage(${ARGN})
     cpm_export_variables(${CPM_ARGS_NAME})
     return()
@@ -340,7 +346,7 @@ function(cpm_parse_add_package_single_arg arg outArgs)
     endif()
   endif()
 
-  # For all packages we interpret @... as version. Only replace the last occurence. Thus URIs
+  # For all packages we interpret @... as version. Only replace the last occurrence. Thus URIs
   # containing '@' can be used
   string(REGEX REPLACE "@([^@]+)$" ";VERSION;\\1" out "${out}")
 
@@ -379,7 +385,7 @@ function(cpm_check_git_working_dir_is_clean repoPath gitTag isClean)
     return()
   endif()
 
-  # check for uncommited changes
+  # check for uncommitted changes
   execute_process(
     COMMAND ${GIT_EXECUTABLE} status --porcelain
     RESULT_VARIABLE resultGitStatus
@@ -405,7 +411,7 @@ function(cpm_check_git_working_dir_is_clean repoPath gitTag isClean)
     return()
   endif()
 
-  # check for commited changes
+  # check for committed changes
   execute_process(
     COMMAND ${GIT_EXECUTABLE} diff -s --exit-code ${gitTag}
     RESULT_VARIABLE resultGitDiff
@@ -717,7 +723,7 @@ macro(cpm_export_variables name)
 endmacro()
 
 # declares a package, so that any call to CPMAddPackage for the package name will use these
-# arguments instead. Previous declarations will not be overriden.
+# arguments instead. Previous declarations will not be overridden.
 macro(CPMDeclarePackage Name)
   if(NOT DEFINED "CPM_DECLARATION_${Name}")
     set("CPM_DECLARATION_${Name}" "${ARGN}")
@@ -937,7 +943,7 @@ function(cpm_get_version_from_git_tag GIT_TAG RESULT)
   endif()
 endfunction()
 
-# guesses if the git tag is a commit hash or an actual tag or a branch nane.
+# guesses if the git tag is a commit hash or an actual tag or a branch name.
 function(cpm_is_git_tag_commit_hash GIT_TAG RESULT)
   string(LENGTH "${GIT_TAG}" length)
   # full hash has 40 characters, and short hash has at least 7 characters.

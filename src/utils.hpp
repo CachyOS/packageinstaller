@@ -44,6 +44,7 @@
 namespace ranges = std::ranges;
 #endif
 
+#if 0
 #include <fmt/core.h>
 #include <fmt/ranges.h>
 
@@ -98,7 +99,8 @@ struct formatter<QStringList> {
         return format_to(ctx.out(), "{}", fmt::join(fm, ", "));
     }
 };
-};  // namespace fmt
+}  // namespace fmt
+#endif
 
 namespace utils {
 inline std::size_t replace_all(std::string& inout, const std::string_view& what, const std::string_view& with) {
