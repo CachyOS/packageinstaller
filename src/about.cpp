@@ -6,11 +6,14 @@
 #include <QPushButton>
 
 // display doc as normal user when run as root
-void displayDoc(const QString& url, bool runned_as_root) {
+int displayDoc(const QString& url, bool runned_as_root) {
+    int status{};
     if (!runned_as_root)
-        system("xdg-open " + url.toUtf8());
+        status = system("xdg-open " + url.toUtf8());
     else
-        system("runuser $(logname) -c \"env XDG_RUNTIME_DIR=/run/user/$(id -u $(logname)) xdg-open " + url.toUtf8() + "\"&");
+        status = system("runuser $(logname) -c \"env XDG_RUNTIME_DIR=/run/user/$(id -u $(logname)) xdg-open " + url.toUtf8() + "\"&");
+
+    return status;
 }
 
 void displayAboutMsgBox(const QString& title, const QString& message, const QString& licence_url, bool runned_as_root) {
