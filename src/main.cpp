@@ -64,7 +64,7 @@ namespace fs = std::filesystem;
 
 int main(int argc, char* argv[]) {
     QApplication app(argc, argv);
-    QApplication::setWindowIcon(QIcon::fromTheme(QApplication::applicationName()));
+    QApplication::setWindowIcon(QIcon(":/icons/cachyos-pi.png"));
     QApplication::setOrganizationName("CachyOS");
 
     QTranslator qtTran;
