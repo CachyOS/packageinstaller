@@ -316,7 +316,7 @@ bool MainWindow::uninstall(const QString& names) {
 
     if (success) {
         displayOutput();
-        success = m_cmd.run("pacman -R --noconfirm " + names);
+        success = m_cmd.run("pacman -R " + names);
     }
     m_lockfile.lock();
 
@@ -1008,7 +1008,7 @@ bool MainWindow::install(const QString& names) {
         return true;
 
     displayOutput();
-    bool success = m_cmd.run(fmt::format("pacman -S --noconfirm {}", names.toStdString()).c_str());
+    bool success = m_cmd.run(fmt::format("pacman -S {}", names.toStdString()).c_str());
     m_lockfile.lock();
 
     return success;
