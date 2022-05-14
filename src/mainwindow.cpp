@@ -66,6 +66,7 @@ static std::string _display_targets(const std::vector<pm_target_t>& targets, boo
             dlsize += alpm_pkg_download_size(target.install);
             isize += alpm_pkg_get_isize(target.install);
         }
+
         if (target.remove != nullptr) {
             /* add up size of all removed packages */
             rsize += alpm_pkg_get_isize(target.remove);
@@ -140,6 +141,29 @@ std::string display_targets(alpm_handle_t* handle, bool verbosepkglists, std::st
     return _display_targets(targets, verbosepkglists, status_text);
 }
 
+static bool check_db_local_package_conflicts(alpm_handle_t* handle, const std::vector<std::string>& vec, std::string& msg) {
+    auto* dbs = alpm_get_syncdbs(handle);
+    int ret{};
+
+    for (const auto& el : vec) {
+        for (alpm_list_t* i = dbs; i != nullptr; i = i->next) {
+            auto* db  = reinterpret_cast<alpm_db_t*>(i->data);
+            auto* pkg = alpm_db_get_pkg(db, el.c_str());
+            if (!pkg) { continue; }
+            alpm_list_t* conflicts = alpm_pkg_get_conflicts(pkg);
+            size_t conflict_list_size = alpm_list_count(conflicts);
+            if (conflict_list_size == 0) { break; }
+            for (; conflicts != nullptr; conflicts = conflicts->next) {
+                auto conflict = static_cast<alpm_depend_t *>(conflicts->data);
+                msg += fmt::format("'{}' conflicts with '{}'\n", alpm_pkg_get_name(pkg), conflict->name);
+            }
+            ++ret;
+            break;
+        }
+    }
+    return (ret == 0);
+}
+
 void add_targets_to_install(alpm_handle_t* handle, const std::vector<std::string>& vec) {
     /* Step 0: create a new transaction */
     if (alpm_trans_init(handle, ALPM_TRANS_FLAG_ALLDEPS | ALPM_TRANS_FLAG_ALLEXPLICIT) != 0) {
@@ -167,7 +191,7 @@ void add_targets_to_install(alpm_handle_t* handle, const std::vector<std::string
 
 void add_targets_to_remove(alpm_handle_t* handle, const std::vector<std::string>& vec) {
     /* Step 0: create a new transaction */
-    if (alpm_trans_init(handle, ALPM_TRANS_FLAG_DBONLY) != 0) {
+    if (alpm_trans_init(handle, ALPM_TRANS_FLAG_ALLDEPS | ALPM_TRANS_FLAG_ALLEXPLICIT) != 0) {
         spdlog::error("failed to create a new transaction ({})\n", alpm_strerror(alpm_errno(handle)));
         alpm_trans_release(handle);
         return;
@@ -292,7 +316,7 @@ void MainWindow::setup() {
     if (m_setup_assistant_mode) {
         m_ui->pushAbout->hide();
         m_ui->pushHelp->hide();
-        for (int tab = 1; tab < m_ui->tabWidget->count() - 1; ++tab) {  // enable all except last (Console)
+        for (int tab = 1; tab < m_ui->tabWidget->count() - 1; ++tab) {  // disable all except first & last (Console)
             m_ui->tabWidget->setTabEnabled(tab, false);
             m_ui->tabWidget->setTabVisible(tab, false);
         }
@@ -305,18 +329,20 @@ bool MainWindow::uninstall(const QString& names) {
     m_ui->tabWidget->setCurrentWidget(m_ui->tabOutput);
 
     m_lockfile.unlock();
-    bool success = true;
     // simulate install of selections and present for confirmation
     // if user selects cancel, break routine but return success to avoid error message
-    if (!confirmActions(names, "remove"))
+    bool is_ok{};
+    if (!confirmActions(names, "remove", is_ok))
         return true;
 
     m_ui->tabWidget->setTabText(m_ui->tabWidget->indexOf(m_ui->tabOutput), tr("Uninstalling packages..."));
     displayOutput();
 
-    if (success) {
-        displayOutput();
-        success = m_cmd.run("pacman -R " + names);
+    bool success = false;
+    if (is_ok) {
+        success = m_cmd.run(fmt::format("pacman -R --noconfirm {}", names.toStdString()).c_str());
+    } else {
+        success = m_cmd.run(fmt::format("yes | pacman -R {}", names.toStdString()).c_str());
     }
     m_lockfile.lock();
 
@@ -920,7 +946,7 @@ void MainWindow::listFlatpakRemotes() {
 }
 
 // Display warning
-bool MainWindow::confirmActions(const QString& names, const QString& action) {
+bool MainWindow::confirmActions(const QString& names, const QString& action, bool& is_ok) {
     spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
 
     std::vector<std::string> change_list(size_t(m_change_list.size()));
@@ -934,18 +960,41 @@ bool MainWindow::confirmActions(const QString& names, const QString& action) {
     QString detailed_to_install;
     QString detailed_removed_names;
     std::string summary;
+    std::string msg_ok_status;
 
     if (m_tree == m_ui->treeFlatpak) {
         detailed_installed_names = m_change_list;
     } else {
         m_lockfile.unlock();
-        const auto& name_list = utils::make_multiline(names.toStdString(), false, "\n");
+        const char* delim = (names.contains("\n")) ? "\n" : " ";
+        const auto& name_list = utils::make_multiline(names.toStdString(), false, delim);
         if (action == "install") {
             add_targets_to_install(m_handle, name_list);
         } else {
             add_targets_to_remove(m_handle, name_list);
         }
+        is_ok = check_db_local_package_conflicts(m_handle, name_list, msg_ok_status);
         detailed_names = display_targets(m_handle, true, summary).c_str();
+    }
+
+    if (!is_ok) {
+        QMessageBox msgBox;
+        msg = "<b>The following packages have conflicts.</b>";
+        msgBox.setText(msg);
+        msgBox.setInformativeText("\n" + names + "\n\n" + msg_ok_status.c_str());
+
+        msgBox.addButton("Replace", QMessageBox::ButtonRole::AcceptRole);
+        msgBox.addButton("Ignore", QMessageBox::ButtonRole::RejectRole);
+
+        // make it wider
+        auto horizontalSpacer = new QSpacerItem(600, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        auto layout           = qobject_cast<QGridLayout*>(msgBox.layout());
+        layout->addItem(horizontalSpacer, 0, 1);
+
+        if (msgBox.exec() != QMessageBox::AcceptRole) {
+            alpm_trans_release(m_handle);
+            return false;
+        }
     }
 
     if (m_tree != m_ui->treeFlatpak) {
@@ -1004,11 +1053,17 @@ bool MainWindow::install(const QString& names) {
 
     // simulate install of selections and present for confirmation
     // if user selects cancel, break routine but return success to avoid error message
-    if (!confirmActions(names, "install"))
+    bool is_ok{};
+    if (!confirmActions(names, "install", is_ok))
         return true;
 
     displayOutput();
-    bool success = m_cmd.run(fmt::format("pacman -S {}", names.toStdString()).c_str());
+    bool success = false;
+    if (is_ok) {
+        success = m_cmd.run(fmt::format("pacman -S --noconfirm {}", names.toStdString()).c_str());
+    } else {
+        success = m_cmd.run(fmt::format("yes | pacman -S {}", names.toStdString()).c_str());
+    }
     m_lockfile.lock();
 
     return success;
@@ -1585,7 +1640,8 @@ void MainWindow::on_pushInstall_clicked() {
         }
     } else if (m_tree == m_ui->treeFlatpak) {
         // confirmation dialog
-        if (!confirmActions(m_change_list.join(" "), "install")) {
+        bool is_ok{};
+        if (!confirmActions(m_change_list.join(" "), "install", is_ok)) {
             displayFlatpaks(true);
             m_indexFilterFP.clear();
             m_ui->comboFilterFlatpak->setCurrentIndex(0);
@@ -1678,7 +1734,8 @@ void MainWindow::on_pushUninstall_clicked() {
         if (m_fp_ver < VersionNumber("1.0.1"))
             conf = QString();
         // confirmation dialog
-        if (!confirmActions(m_change_list.join(" "), "remove")) {
+        bool is_ok{};
+        if (!confirmActions(m_change_list.join(" "), "remove", is_ok)) {
             displayFlatpaks(true);
             m_indexFilterFP.clear();
             listFlatpakRemotes();

@@ -34,6 +34,7 @@
 #include <range/v3/algorithm/all_of.hpp>
 #include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/algorithm/reverse.hpp>
+#include <range/v3/algorithm/sort.hpp>
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/split.hpp>
 #include <range/v3/view/transform.hpp>

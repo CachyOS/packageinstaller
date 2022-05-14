@@ -111,7 +111,7 @@ class MainWindow : public QDialog {
     [[nodiscard]] bool checkInstalled(const QString& names) const;
     [[nodiscard]] bool checkInstalled(const QStringList& name_list) const;
     [[nodiscard]] bool checkUpgradable(const QStringList& name_list) const;
-    bool confirmActions(const QString& names, const QString& action);
+    bool confirmActions(const QString& names, const QString& action, bool& is_ok);
     bool downloadPackageList(bool force_download = false);
     bool install(const QString& names);
     bool installBatch(const QStringList& name_list);

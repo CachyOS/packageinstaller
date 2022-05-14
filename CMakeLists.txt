@@ -44,6 +44,18 @@ CPMAddPackage(
   GIT_TAG a49456f7f21fb802c1000fd79ef05911aa2101b7
   EXCLUDE_FROM_ALL YES
 )
+CPMAddPackage(
+  NAME cpr
+  GITHUB_REPOSITORY libcpr/cpr
+  GIT_TAG 5e64f82c5403f4ad0b81ec391e818699feb334c4
+  EXCLUDE_FROM_ALL YES
+)
+CPMAddPackage(
+  NAME rapidyaml
+  GITHUB_REPOSITORY biojppm/rapidyaml
+  GIT_TAG v0.4.1
+  EXCLUDE_FROM_ALL YES
+)
 if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
    CPMAddPackage(
      NAME range-v3
