@@ -1,9 +1,0 @@
-thunderbird
-kmail
-evolution
-geary
-trojita
-mailspring
-claws-mail
-sylpheed
-seamonkey

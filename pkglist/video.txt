@@ -1,9 +1,0 @@
-kdenlive movit sox opus-tools frei0r-plugins opentimelineio dvgrab opencv
-dragon
-shotcut
-pitivi frei0r-plugins
-openshot
-obs-studio
-vlc
-smplayer smplayer-skins smplayer-themes
-baka-mplayer

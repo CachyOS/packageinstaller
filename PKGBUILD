@@ -1,7 +1,7 @@
 # Maintainer: Vladislav Nepogodin <nepogodin.vlad@gmail.com>
 
 pkgname=cachyos-packageinstaller
-pkgver=1.0.1
+pkgver=1.0.2
 pkgrel=1
 pkgdesc="Simple Software Application Package Installer for CachyOS which helps setting up & installing applications"
 arch=(aarch64 x86_64 x86_64_v3)

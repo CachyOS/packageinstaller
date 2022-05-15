@@ -1,9 +1,0 @@
-asian-fonts
-fcitx5-input-support fcitx5-configtool fcitx5-m17n
-fcitx5-input-support fcitx5-configtool fcitx5-chinese-addons
-fcitx5-input-support fcitx5-configtool fcitx5-rime
-fcitx5-input-support fcitx5-configtool fcitx5-mozc
-fcitx5-input-support fcitx5-configtool fcitx5-hangul
-fcitx5-input-support fcitx5-configtool fcitx5-unikey
-fcitx5-input-support fcitx5-configtool fcitx5-sayura
-fcitx5-input-support fcitx5-configtool fcitx5-libthai

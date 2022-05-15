@@ -1,8 +1,0 @@
-gnome-firmware
-appimagelauncher
-octopi
-pamac-aur
-bauh
-discover packagekit-qt5
-gnome-software gnome-software-packagekit-plugin 
-apper

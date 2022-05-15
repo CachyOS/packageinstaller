@@ -14,6 +14,26 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+#if defined(__clang__)
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wold-style-cast"
+#pragma clang diagnostic ignored "-Wshadow"
+#elif defined(__GNUC__)
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wold-style-cast"
+#pragma GCC diagnostic ignored "-Wshadow"
+#endif
+
+#include <ryml_std.hpp>
+#include <ryml.hpp>
+#include <cpr/cpr.h>
+
+#if defined(__clang__)
+#pragma clang diagnostic pop
+#elif defined(__GNUC__)
+#pragma GCC diagnostic pop
+#endif
+
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
 
@@ -508,47 +528,46 @@ void MainWindow::outputAvailable(const QString& output) {
 // Load info from the .txt files
 void MainWindow::loadTxtFiles() {
     spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
-    const QStringList filter("*.txt");
-    // cachyos-packageinstaller-pkglist
-    const QDir dir("/usr/lib/cachyos-pi");
-    const QStringList txtfilelist = dir.entryList(filter);
+    cpr::Response r = cpr::Get(cpr::Url{"https://raw.githubusercontent.com/cachyos/packageinstaller/develop/pkglist.yaml"},
+        cpr::ProgressCallback([&]([[maybe_unused]] auto&& downloadTotal, [[maybe_unused]] auto&& downloadNow, [[maybe_unused]] auto&& uploadTotal,
+                                  [[maybe_unused]] auto&& uploadNow, [[maybe_unused]] auto&& userdata) -> bool { return true; }));
 
-    static const std::unordered_map<std::string, std::string> map_categories = {
-        {"audio.txt", "Audio"},
-        {"browsers.txt", "Browsers"},
-        {"communication.txt", "Communication"},
-        {"development.txt", "Development"},
-        {"education.txt", "Education"},
-        {"games.txt", "Games"},
-        {"graphics.txt", "Graphics"},
-        {"input-method.txt", "Input Method"},
-        {"internet.txt", "Internet"},
-        {"kernels.txt", "Kernels"},
-        {"mail.txt", "Mail"},
-        {"multimedia.txt", "Multimedia"},
-        {"office.txt", "Office"},
-        {"other.txt", "Other"},
-        {"pkgmngrs.txt", "Pkgmngrs"},
-        {"video.txt", "Video"},
-        {"virtualization.txt", "Virtualization"},
-    };
-
-    for (const auto& file_name : txtfilelist) {
-        QFile file(dir.absolutePath() + "/" + file_name);
-        if (!file.open(QFile::ReadOnly | QFile::Text)) {
-            spdlog::error("Could not open: {}", file.fileName().toStdString());
-            continue;
-        }
-
-        if (!map_categories.contains(file_name.toStdString()))
-            continue;
-
-        const auto& lines = utils::make_multiline(file.readAll().toStdString(), false, "\n");
-        for (const auto& line : lines) {
-            processFile(map_categories.at(file_name.toStdString()), utils::make_multiline(line, false, " "));
-        }
-        file.close();
+    if (r.error.code == cpr::ErrorCode::OK) {
+        std::ofstream pkglistyaml{"/usr/lib/cachyos-pi/pkglist.yaml"};
+        pkglistyaml << r.text;
     }
+
+    QFile file("/usr/lib/cachyos-pi/pkglist.yaml");
+    if (!file.open(QFile::ReadOnly | QFile::Text)) {
+        spdlog::error("Could not open: {}", file.fileName().toStdString());
+        return;
+    }
+    const auto& src = file.readAll().toStdString();
+    ryml::Tree tree = ryml::parse_in_arena(ryml::to_csubstr(src));
+    ryml::NodeRef root = tree.rootref(); // get a reference to the root
+    for (const ryml::NodeRef& map : root.children()) {
+        std::string category{};
+        for (const ryml::NodeRef& map_child : map.children()) {
+            if(map_child.has_val() && !map_child.has_val_tag()) {
+                category = std::string{map_child.val().str, map_child.val().len};
+            }
+
+            if(map_child.is_container()) {
+                std::vector<std::string> lines;
+                lines.reserve(map_child.num_children());
+                for (const ryml::NodeRef& pkg_list : map_child.children()) {
+                    if(pkg_list.has_val() && !pkg_list.has_val_tag()) {
+                        lines.emplace_back(std::string{pkg_list.val().str, pkg_list.val().len});
+                    }
+                }
+                for (const auto& line : lines) {
+                    processFile(category, utils::make_multiline(line, false, " "));
+                }
+            }
+        }
+    }
+
+    file.close();
 }
 
 // Process docs
@@ -1383,13 +1402,13 @@ QStringList MainWindow::listFlatpaks(const QString& remote, const QString& type)
         success = m_cmd.run("runuser -s /bin/bash -l $(logname) -c \"set -o pipefail; flatpak -d remote-ls " + m_user
                 + remote + " " + arch_fp + type + R"( 2>/dev/null| cut -f1 | tr -s ' ' | cut -f1 -d' '|sed 's/^[^\/]*\///g' ")",
             out);
-        list    = QString(out).split("\n");
+        list    = out.split("\n");
     } else if (m_fp_ver < VersionNumber("1.2.4")) {  // lower than Buster version
         // list size too
         success = m_cmd.run("runuser -s /bin/bash -l $(logname) -c \"set -o pipefail; flatpak -d remote-ls " + m_user
                 + remote + " " + arch_fp + type + R"( 2>/dev/null| cut -f1,3 |tr -s ' ' | sed 's/^[^\/]*\///g' ")",
             out);
-        list    = QString(out).split("\n");
+        list    = out.split("\n");
     } else {  // Buster version and above
         if (!updated) {
             success = m_cmd.run("runuser -s /bin/bash -l $(logname) -c \"flatpak update --appstream\"");
@@ -1400,7 +1419,7 @@ QStringList MainWindow::listFlatpaks(const QString& remote, const QString& type)
             success = m_cmd.run("runuser -s /bin/bash -l $(logname) -c \"set -o pipefail; flatpak remote-ls " + m_user
                     + remote + " " + arch_fp + " --app --columns=ver,ref,installed-size 2>/dev/null\"",
                 out);
-            list    = QString(out).split("\n");
+            list    = out.split("\n");
             if (list == QStringList(""))
                 list = QStringList();
         }
@@ -1408,7 +1427,7 @@ QStringList MainWindow::listFlatpaks(const QString& remote, const QString& type)
             success = m_cmd.run("runuser -s /bin/bash -l $(logname) -c \"set -o pipefail; flatpak remote-ls " + m_user
                     + remote + " " + arch_fp + " --runtime --columns=branch,ref,installed-size 2>/dev/null\"",
                 out);
-            list += QString(out).split("\n");
+            list += out.split("\n");
             if (list == QStringList(""))
                 list = QStringList();
         }
@@ -2030,9 +2049,9 @@ void MainWindow::buildChangeList(QTreeWidgetItem* item) {
     if (m_tree == m_ui->treeFlatpak) {
         if (m_change_list.isEmpty() && m_indexFilterFP.isEmpty())  // remember the Flatpak combo location first time this is called
             m_indexFilterFP = m_ui->comboFilterFlatpak->currentText();
-        newapp = QString(item->text(FlatCol::FullName));
+        newapp = item->text(FlatCol::FullName);
     } else {
-        newapp = QString(item->text(TreeCol::Name));
+        newapp = item->text(TreeCol::Name);
     }
 
     if (item->checkState(0) == Qt::Checked) {

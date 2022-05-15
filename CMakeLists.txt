@@ -55,6 +55,7 @@ CPMAddPackage(
   GITHUB_REPOSITORY biojppm/rapidyaml
   GIT_TAG v0.4.1
   EXCLUDE_FROM_ALL YES
+  GIT_SHALLOW NO
 )
 if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
    CPMAddPackage(
@@ -123,7 +124,7 @@ enable_sanitizers(project_options)
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 
-target_link_libraries(${PROJECT_NAME}-bin PRIVATE project_warnings project_options Qt5::Widgets Threads::Threads spdlog::spdlog fmt::fmt PkgConfig::LIBALPM)
+target_link_libraries(${PROJECT_NAME}-bin PRIVATE project_warnings project_options Qt5::Widgets Threads::Threads spdlog::spdlog fmt::fmt ryml::ryml cpr::cpr PkgConfig::LIBALPM)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
    target_link_libraries(${PROJECT_NAME}-bin PRIVATE range-v3::range-v3)
@@ -149,9 +150,8 @@ install(
    DESTINATION "${POLKITQT-1_POLICY_FILES_INSTALL_DIR}"
 )
 
-file(GLOB PKGLIST_FILES "${PROJECT_SOURCE_DIR}/pkglist/*.txt")
 install(
-   FILES ${PKGLIST_FILES}
+   FILES "${PROJECT_SOURCE_DIR}/pkglist.yaml"
    DESTINATION lib/cachyos-pi
 )
 file(GLOB HELP_FILES "${PROJECT_SOURCE_DIR}/help/*")
