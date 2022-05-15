@@ -97,7 +97,8 @@ enum { Category,
     Name,
     Description,
     InstallNames,
-    UninstallNames };
+    UninstallNames,
+    Group };
 }
 
 class MainWindow : public QDialog {
@@ -139,7 +140,7 @@ class MainWindow : public QDialog {
     void listFlatpakRemotes();
     void listSizeInstalledFP();
     void loadTxtFiles();
-    void processFile(const std::string& category, const std::vector<std::string>& names);
+    void processFile(const std::string& group, const std::string& category, const std::vector<std::string>& names);
     void refreshPopularApps();
     void removeDuplicatesFP();
     void setCurrentTree();

@@ -174,7 +174,7 @@ static bool check_db_local_package_conflicts(alpm_handle_t* handle, const std::v
             size_t conflict_list_size = alpm_list_count(conflicts);
             if (conflict_list_size == 0) { break; }
             for (; conflicts != nullptr; conflicts = conflicts->next) {
-                auto conflict = static_cast<alpm_depend_t *>(conflicts->data);
+                auto conflict = static_cast<alpm_depend_t*>(conflicts->data);
                 msg += fmt::format("'{}' conflicts with '{}'\n", alpm_pkg_get_name(pkg), conflict->name);
             }
             ++ret;
@@ -308,6 +308,10 @@ void MainWindow::setup() {
     m_updated_once     = false;
     m_warning_flatpaks = false;
     m_tree             = m_ui->treePopularApps;
+
+    m_ui->treeRepo->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    m_ui->treePopularApps->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    m_ui->treeFlatpak->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     m_ui->tabWidget->setTabEnabled(m_ui->tabWidget->indexOf(m_ui->tabOutput), false);
     m_ui->tabWidget->blockSignals(false);
@@ -542,26 +546,66 @@ void MainWindow::loadTxtFiles() {
         spdlog::error("Could not open: {}", file.fileName().toStdString());
         return;
     }
-    const auto& src = file.readAll().toStdString();
-    ryml::Tree tree = ryml::parse_in_arena(ryml::to_csubstr(src));
-    ryml::NodeRef root = tree.rootref(); // get a reference to the root
+    const auto& src    = file.readAll().toStdString();
+    ryml::Tree tree    = ryml::parse_in_arena(ryml::to_csubstr(src));
+    ryml::NodeRef root = tree.rootref();  // get a reference to the root
+
+    const auto& get_node_key = [](auto&& node) {
+        std::string key{};
+        if (node.has_key() && !node.has_key_tag()) {
+            key = std::string{node.key().str, node.key().len};
+        }
+        return key;
+    };
+
+    const auto& process_map = [this, &get_node_key](auto&& parent_category, auto&& node) {
+        for (const ryml::NodeRef& map : node.children()) {
+            std::string category{};
+            for (const ryml::NodeRef& map_child : map.children()) {
+                if (map_child.has_val() && !map_child.has_val_tag()) {
+                    category = std::string{map_child.val().str, map_child.val().len};
+                }
+
+                const std::string key{get_node_key(map_child)};
+
+                if (map_child.is_container()) {
+                    std::vector<std::string> lines;
+                    lines.reserve(map_child.num_children());
+                    for (const ryml::NodeRef& pkg_list : map_child.children()) {
+                        if (pkg_list.has_val() && !pkg_list.has_val_tag()) {
+                            lines.emplace_back(std::string{pkg_list.val().str, pkg_list.val().len});
+                        }
+                    }
+                    for (const auto& line : lines) {
+                        processFile(parent_category, category, utils::make_multiline(line, false, " "));
+                    }
+                }
+            }
+        }
+    };
     for (const ryml::NodeRef& map : root.children()) {
         std::string category{};
         for (const ryml::NodeRef& map_child : map.children()) {
-            if(map_child.has_val() && !map_child.has_val_tag()) {
+            if (map_child.has_val() && !map_child.has_val_tag()) {
                 category = std::string{map_child.val().str, map_child.val().len};
             }
 
-            if(map_child.is_container()) {
-                std::vector<std::string> lines;
-                lines.reserve(map_child.num_children());
-                for (const ryml::NodeRef& pkg_list : map_child.children()) {
-                    if(pkg_list.has_val() && !pkg_list.has_val_tag()) {
-                        lines.emplace_back(std::string{pkg_list.val().str, pkg_list.val().len});
+            const std::string key{get_node_key(map_child)};
+
+            if (map_child.is_container()) {
+                if (key == "subgroups") {
+                    process_map(category, map_child);
+                } else {
+                    std::vector<std::string> lines;
+                    lines.reserve(map_child.num_children());
+                    for (const ryml::NodeRef& pkg_list : map_child.children()) {
+                        if (pkg_list.has_val() && !pkg_list.has_val_tag()) {
+                            lines.emplace_back(std::string{pkg_list.val().str, pkg_list.val().len});
+                        }
                     }
-                }
-                for (const auto& line : lines) {
-                    processFile(category, utils::make_multiline(line, false, " "));
+                    for (const auto& line : lines) {
+                        processFile(category, category, utils::make_multiline(line, false, " "));
+                    }
                 }
             }
         }
@@ -571,7 +615,7 @@ void MainWindow::loadTxtFiles() {
 }
 
 // Process docs
-void MainWindow::processFile(const std::string& category, const std::vector<std::string>& names) {
+void MainWindow::processFile(const std::string& group, const std::string& category, const std::vector<std::string>& names) {
     if (names.empty())
         return;
 
@@ -594,7 +638,7 @@ void MainWindow::processFile(const std::string& category, const std::vector<std:
     uninstall_names = install_names;
 
     list << QString::fromStdString(category) << QString::fromStdString(names[0])
-         << description << install_names << uninstall_names;
+         << description << install_names << uninstall_names << QString::fromStdString(group);
 
     m_popular_apps << list;
 }
@@ -668,17 +712,11 @@ void MainWindow::displayPopularApps() const {
     QTreeWidgetItem* topLevelItem = nullptr;
     QTreeWidgetItem* childItem;
 
-    for (const QStringList& list : m_popular_apps) {
-        const auto& category        = list.at(Popular::Category);
-        const auto& name            = list.at(Popular::Name);
-        const auto& description     = list.at(Popular::Description);
-        const auto& install_names   = list.at(Popular::InstallNames);
-        const auto& uninstall_names = list.at(Popular::UninstallNames);
-
-        // add package category if treePopularApps doesn't already have it
-        if (m_ui->treePopularApps->findItems(category, Qt::MatchFixedString, PopCol::Name).isEmpty()) {
+    const auto& top_level_item_emplace = [&](auto&& searchtext) {
+        // add package searchtext if treePopularApps doesn't already have it
+        if (m_ui->treePopularApps->findItems(searchtext, Qt::MatchFixedString, PopCol::Name).isEmpty()) {
             topLevelItem = new QTreeWidgetItem();
-            topLevelItem->setText(PopCol::Name, category);
+            topLevelItem->setText(PopCol::Name, searchtext);
             m_ui->treePopularApps->addTopLevelItem(topLevelItem);
             // topLevelItem look
             QFont font;
@@ -686,10 +724,53 @@ void MainWindow::displayPopularApps() const {
             topLevelItem->setFont(PopCol::Name, font);
             topLevelItem->setIcon(PopCol::Icon, QIcon::fromTheme("folder"));
         } else {
-            topLevelItem = m_ui->treePopularApps->findItems(category, Qt::MatchFixedString, PopCol::Name).at(0);  // find first match; add the child there
+            topLevelItem = m_ui->treePopularApps->findItems(searchtext, Qt::MatchFixedString, PopCol::Name).at(0);  // find first match; add the child there
         }
+    };
+
+    const auto& tree_widget_find_item = [](auto&& widget, auto&& category) -> QTreeWidgetItem* {
+        const auto& topLevelItemChildCount = widget->childCount();
+        for (int i = 0; i < topLevelItemChildCount; ++i) {
+            auto topLevelItemChild = widget->child(i);
+            auto childText         = topLevelItemChild->text(PopCol::Name);
+            if (childText == category) { return topLevelItemChild; }
+        }
+        return nullptr;
+    };
+
+    for (const QStringList& list : m_popular_apps) {
+        const auto& category        = list.at(Popular::Category);
+        const auto& name            = list.at(Popular::Name);
+        const auto& description     = list.at(Popular::Description);
+        const auto& install_names   = list.at(Popular::InstallNames);
+        const auto& uninstall_names = list.at(Popular::UninstallNames);
+        const auto& group           = list.at(Popular::Group);
+
+        QTreeWidgetItem* topLevelChildItem = nullptr;
+        if (group != category) {
+            top_level_item_emplace(group);
+
+            topLevelChildItem = tree_widget_find_item(topLevelItem, category);
+
+            if (topLevelChildItem == nullptr) {
+                topLevelChildItem = new QTreeWidgetItem(topLevelItem);
+                topLevelChildItem->setText(PopCol::Name, category);
+                topLevelItem->addChild(topLevelChildItem);
+                // childItem look
+                QFont font;
+                font.setBold(true);
+                topLevelChildItem->setFont(PopCol::Name, font);
+                topLevelChildItem->setIcon(PopCol::Icon, QIcon::fromTheme("folder"));
+            }
+        }
+
         // add package name as childItem to treePopularApps
-        childItem = new QTreeWidgetItem(topLevelItem);
+        if (group != category) {
+            childItem = new QTreeWidgetItem(topLevelChildItem);
+        } else {
+            top_level_item_emplace(category);
+            childItem = new QTreeWidgetItem(topLevelItem);
+        }
         childItem->setText(PopCol::Name, name);
         childItem->setIcon(PopCol::Info, QIcon::fromTheme("dialog-information"));
         childItem->setFlags(childItem->flags() | Qt::ItemIsUserCheckable);
@@ -985,14 +1066,14 @@ bool MainWindow::confirmActions(const QString& names, const QString& action, boo
         detailed_installed_names = m_change_list;
     } else {
         m_lockfile.unlock();
-        const char* delim = (names.contains("\n")) ? "\n" : " ";
+        const char* delim     = (names.contains("\n")) ? "\n" : " ";
         const auto& name_list = utils::make_multiline(names.toStdString(), false, delim);
         if (action == "install") {
             add_targets_to_install(m_handle, name_list);
         } else {
             add_targets_to_remove(m_handle, name_list);
         }
-        is_ok = check_db_local_package_conflicts(m_handle, name_list, msg_ok_status);
+        is_ok          = check_db_local_package_conflicts(m_handle, name_list, msg_ok_status);
         detailed_names = display_targets(m_handle, true, summary).c_str();
     }
 
