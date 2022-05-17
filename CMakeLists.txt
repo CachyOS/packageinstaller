@@ -100,9 +100,10 @@ add_executable(${PROJECT_NAME}-bin
     ${RESOURCES} ${QM_FILES} # note that ${QM_FILES} should be included as sources to be generated.
     images.qrc
     src/ini.hpp
-    src/utils.hpp
+    src/utils.hpp src/utils.cpp
     src/lockfile.hpp src/lockfile.cpp
     src/versionnumber.hpp
+    src/alpm_helper.hpp src/alpm_helper.cpp
     src/pacmancache.hpp src/pacmancache.cpp
     src/remotes.hpp src/remotes.cpp
     src/about.hpp src/about.cpp

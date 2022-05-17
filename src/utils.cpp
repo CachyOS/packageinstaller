@@ -14,10 +14,7 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-#ifndef UTILS_HPP
-#define UTILS_HPP
-
-#include "versionnumber.hpp"
+#include "utils.hpp"
 
 #include <algorithm>  // for transform
 #include <string_view>
@@ -27,10 +24,8 @@
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wold-style-cast"
 
-#include <range/v3/algorithm/all_of.hpp>
 #include <range/v3/algorithm/for_each.hpp>
 #include <range/v3/algorithm/reverse.hpp>
-#include <range/v3/algorithm/sort.hpp>
 #include <range/v3/view/filter.hpp>
 #include <range/v3/view/split.hpp>
 #include <range/v3/view/transform.hpp>
@@ -100,24 +95,43 @@ struct formatter<QStringList> {
 #endif
 
 namespace utils {
-auto make_multiline(const std::string_view& str, bool reverse, const std::string_view&& delim) noexcept -> std::vector<std::string>;
+auto make_multiline(const std::string_view& str, bool reverse, const std::string_view&& delim) noexcept -> std::vector<std::string> {
+    static constexpr auto functor = [](auto&& rng) {
+        return std::string_view(&*rng.begin(), static_cast<size_t>(ranges::distance(rng)));
+    };
+    static constexpr auto second = [](auto&& rng) { return rng != ""; };
 
-auto make_multiline(const std::vector<std::string_view>& multiline, bool reverse, const std::string_view&& delim) noexcept -> std::string;
+#if defined(__clang__)
+    const auto& splitted_view = str
+        | ranges::views::split(delim);
+    const auto& view_res = splitted_view
+        | ranges::views::transform(functor);
+#else
+    auto view_res = str
+        | ranges::views::split(delim)
+        | ranges::views::transform(functor);
+#endif
 
-template <std::input_iterator I, std::sentinel_for<I> S>
-auto make_multiline_range(I first, S last, bool reverse, const std::string_view&& delim) noexcept -> std::string {
+    std::vector<std::string> lines{};
+    ranges::for_each(view_res | ranges::views::filter(second), [&](auto&& rng) { lines.emplace_back(rng); });
+    if (reverse) {
+        ranges::reverse(lines);
+    }
+    return lines;
+}
+
+auto make_multiline(const std::vector<std::string_view>& multiline, bool reverse, const std::string_view&& delim) noexcept -> std::string {
     std::string res{};
-    for (; first != last; ++first) {
-        res += *first;
+    for (const auto& line : multiline) {
+        res += line;
         res += delim.data();
     }
 
     if (reverse) {
-        ::ranges::reverse(res);
+        ranges::reverse(res);
     }
 
     return res;
 }
-}  // namespace utils
 
-#endif  // UTILS_HPP
+}  // namespace utils

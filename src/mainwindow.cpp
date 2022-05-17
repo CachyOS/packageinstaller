@@ -43,6 +43,7 @@
 #include "utils.hpp"
 #include "version.hpp"
 #include "versionnumber.hpp"
+#include "alpm_helper.hpp"
 
 #include <alpm.h>
 #include <alpm_list.h>
@@ -63,173 +64,6 @@
 
 namespace fs = std::filesystem;
 
-typedef struct _pm_target_t {
-    alpm_pkg_t* remove;
-    alpm_pkg_t* install;
-    int is_explicit;
-} pm_target_t;
-
-/* prepare a list of pkgs to display */
-static std::string _display_targets(const std::vector<pm_target_t>& targets, bool verbose, std::string& status_text) {
-    if (targets.empty()) {
-        return {};
-    }
-
-    std::string res{};
-    off_t isize{};
-    off_t rsize{};
-    off_t dlsize{};
-
-    /* gather package info */
-    for (const auto& target : targets) {
-        if (target.install != nullptr) {
-            dlsize += alpm_pkg_download_size(target.install);
-            isize += alpm_pkg_get_isize(target.install);
-        }
-
-        if (target.remove != nullptr) {
-            /* add up size of all removed packages */
-            rsize += alpm_pkg_get_isize(target.remove);
-        }
-    }
-
-    /* form data for both verbose and non-verbose display */
-    for (const auto& target : targets) {
-        if (target.install != nullptr) {
-            res += fmt::format("{}-{}", alpm_pkg_get_name(target.install), alpm_pkg_get_version(target.install));
-        } else if (isize == 0) {
-            res += fmt::format("{}-{}", alpm_pkg_get_name(target.remove), alpm_pkg_get_version(target.remove));
-        } else {
-            res += fmt::format("{}-{} [removal]", alpm_pkg_get_name(target.remove), alpm_pkg_get_version(target.remove));
-        }
-
-        res += (verbose) ? "\n" : " ";
-    }
-
-    // presentation
-    const auto& proper_present = [](auto&& number) {
-        if (number < 1024)
-            return fmt::format("{}", number);
-        else if (number < 1024 * 1024)
-            return fmt::format("{} KB", number / 1024);
-        else if (number < 1024 * 1024 * 1024)
-            return fmt::format("{} MB", number / 1024 / 1024);
-
-        return fmt::format("{} GB", number / 1024 / 1024 / 1024);
-    };
-
-    if (dlsize > 0) {
-        status_text += fmt::format("Total Download Size: {}\n", proper_present(dlsize));
-    }
-
-    if (isize > 0) {
-        status_text += fmt::format("Total Installed Size: {}\n", proper_present(isize));
-    }
-    if (rsize > 0 && isize == 0) {
-        status_text += fmt::format("Total Removed Size: {}\n", proper_present(rsize));
-    }
-    /* only show this net value if different from raw installed size */
-    if (isize > 0 && rsize > 0) {
-        status_text += fmt::format("Net Upgrade Size: {}\n", proper_present(isize - rsize));
-    }
-
-    res += "\n";
-    return res;
-}
-
-std::string display_targets(alpm_handle_t* handle, bool verbosepkglists, std::string& status_text) {
-    std::vector<pm_target_t> targets{};
-    alpm_db_t* db_local = alpm_get_localdb(handle);
-
-    for (alpm_list_t* i = alpm_trans_get_add(handle); i; i = alpm_list_next(i)) {
-        auto* pkg = static_cast<alpm_pkg_t*>(i->data);
-        pm_target_t targ;
-        targ.install = pkg;
-        targ.remove  = alpm_db_get_pkg(db_local, alpm_pkg_get_name(pkg));
-        targets.emplace_back(targ);
-    }
-    for (alpm_list_t* i = alpm_trans_get_remove(handle); i; i = alpm_list_next(i)) {
-        auto* pkg = static_cast<alpm_pkg_t*>(i->data);
-        pm_target_t targ;
-        targ.install = nullptr;
-        targ.remove  = pkg;
-        // if(alpm_list_find(config->explicit_removes, pkg, pkg_cmp)) {
-        //     targ->is_explicit = 1;
-        // }
-        targets.emplace_back(targ);
-    }
-    return _display_targets(targets, verbosepkglists, status_text);
-}
-
-static bool check_db_local_package_conflicts(alpm_handle_t* handle, const std::vector<std::string>& vec, std::string& msg) {
-    auto* dbs = alpm_get_syncdbs(handle);
-    int ret{};
-
-    for (const auto& el : vec) {
-        for (alpm_list_t* i = dbs; i != nullptr; i = i->next) {
-            auto* db  = reinterpret_cast<alpm_db_t*>(i->data);
-            auto* pkg = alpm_db_get_pkg(db, el.c_str());
-            if (!pkg) { continue; }
-            alpm_list_t* conflicts = alpm_pkg_get_conflicts(pkg);
-            size_t conflict_list_size = alpm_list_count(conflicts);
-            if (conflict_list_size == 0) { break; }
-            for (; conflicts != nullptr; conflicts = conflicts->next) {
-                auto conflict = static_cast<alpm_depend_t*>(conflicts->data);
-                msg += fmt::format("'{}' conflicts with '{}'\n", alpm_pkg_get_name(pkg), conflict->name);
-            }
-            ++ret;
-            break;
-        }
-    }
-    return (ret == 0);
-}
-
-void add_targets_to_install(alpm_handle_t* handle, const std::vector<std::string>& vec) {
-    /* Step 0: create a new transaction */
-    if (alpm_trans_init(handle, ALPM_TRANS_FLAG_ALLDEPS | ALPM_TRANS_FLAG_ALLEXPLICIT) != 0) {
-        spdlog::error("failed to create a new transaction ({})\n", alpm_strerror(alpm_errno(handle)));
-        alpm_trans_release(handle);
-        return;
-    }
-
-    /* Step 1: add targets to the created transaction */
-    auto* dbs = alpm_get_syncdbs(handle);
-
-    for (const auto& el : vec) {
-        for (alpm_list_t* i = dbs; i != nullptr; i = i->next) {
-            auto* db  = reinterpret_cast<alpm_db_t*>(i->data);
-            auto* pkg = alpm_db_get_pkg(db, el.c_str());
-            if (pkg) {
-                if (alpm_add_pkg(handle, pkg) != 0) {
-                    spdlog::error("failed to add package to be installed ({})\n", alpm_strerror(alpm_errno(handle)));
-                }
-                break;
-            }
-        }
-    }
-}
-
-void add_targets_to_remove(alpm_handle_t* handle, const std::vector<std::string>& vec) {
-    /* Step 0: create a new transaction */
-    if (alpm_trans_init(handle, ALPM_TRANS_FLAG_ALLDEPS | ALPM_TRANS_FLAG_ALLEXPLICIT) != 0) {
-        spdlog::error("failed to create a new transaction ({})\n", alpm_strerror(alpm_errno(handle)));
-        alpm_trans_release(handle);
-        return;
-    }
-
-    /* Step 1: add targets to the created transaction */
-    auto* db_local = alpm_get_localdb(handle);
-
-    for (const auto& el : vec) {
-        auto* pkg = alpm_db_get_pkg(db_local, el.c_str());
-        if (pkg) {
-            if (alpm_remove_pkg(handle, pkg) != 0) {
-                spdlog::error("failed to add package to be removed ({})\n", alpm_strerror(alpm_errno(handle)));
-            }
-        }
-    }
-}
-
 MainWindow::MainWindow(QWidget* parent) : QDialog(parent),
                                           m_ui(new Ui::MainWindow) {
     spdlog::debug("{} version:{}", QCoreApplication::applicationName().toStdString(), VERSION);
@@ -239,7 +73,7 @@ MainWindow::MainWindow(QWidget* parent) : QDialog(parent),
     m_ui->setupUi(this);
     setProgressDialog();
 
-    update_pacman(m_handle);
+    setup_alpm(m_handle);
 
     connect(&m_timer, &QTimer::timeout, this, &MainWindow::updateBar);
     connect(&m_cmd, &Cmd::started, this, &MainWindow::cmdStart);
@@ -251,8 +85,7 @@ MainWindow::MainWindow(QWidget* parent) : QDialog(parent),
 }
 
 MainWindow::~MainWindow() {
-    alpm_unregister_all_syncdbs(m_handle);
-    alpm_release(m_handle);
+    destroy_alpm(m_handle);
     delete m_ui;
 }
 
@@ -577,7 +410,7 @@ void MainWindow::loadTxtFiles() {
                         }
                     }
                     for (const auto& line : lines) {
-                        processFile(parent_category, category, utils::make_multiline(line, false, " "));
+                        processFile(parent_category, category, ::utils::make_multiline(line, false, " "));
                     }
                 }
             }
@@ -604,7 +437,7 @@ void MainWindow::loadTxtFiles() {
                         }
                     }
                     for (const auto& line : lines) {
-                        processFile(category, category, utils::make_multiline(line, false, " "));
+                        processFile(category, category, ::utils::make_multiline(line, false, " "));
                     }
                 }
             }
@@ -634,7 +467,7 @@ void MainWindow::processFile(const std::string& group, const std::string& catego
         }
     }
 
-    install_names   = fmt::format("{} {}", names[0], utils::make_multiline(names.begin() + 1, names.end(), false, " ")).c_str();
+    install_names   = fmt::format("{} {}", names[0], utils::make_multiline_range(names.begin() + 1, names.end(), false, " ")).c_str();
     uninstall_names = install_names;
 
     list << QString::fromStdString(category) << QString::fromStdString(names[0])
@@ -1067,17 +900,26 @@ bool MainWindow::confirmActions(const QString& names, const QString& action, boo
     } else {
         m_lockfile.unlock();
         const char* delim     = (names.contains("\n")) ? "\n" : " ";
-        const auto& name_list = utils::make_multiline(names.toStdString(), false, delim);
+        const auto& name_list = ::utils::make_multiline(names.toStdString(), false, delim);
         if (action == "install") {
             add_targets_to_install(m_handle, name_list);
+            check_db_local_package_conflicts(m_handle, name_list, msg_ok_status);
         } else {
+            is_ok = true;
             add_targets_to_remove(m_handle, name_list);
         }
-        is_ok          = check_db_local_package_conflicts(m_handle, name_list, msg_ok_status);
         detailed_names = display_targets(m_handle, true, summary).c_str();
+        alpm_trans_release(m_handle);
+
+        if (action == "install") {
+            m_lockfile.unlock();
+            refresh_alpm(&m_handle, &m_alpm_err);
+            is_ok = (sync_trans(m_handle, name_list, 0) == 0);
+            if (!is_ok && msg_ok_status.empty()) { is_ok = true; }
+        }
     }
 
-    if (!is_ok) {
+    if ((m_tree != m_ui->treeFlatpak) && (!is_ok)) {
         QMessageBox msgBox;
         msg = "<b>The following packages have conflicts.</b>";
         msgBox.setText(msg);
@@ -1092,13 +934,11 @@ bool MainWindow::confirmActions(const QString& names, const QString& action, boo
         layout->addItem(horizontalSpacer, 0, 1);
 
         if (msgBox.exec() != QMessageBox::AcceptRole) {
-            alpm_trans_release(m_handle);
             return false;
         }
     }
 
     if (m_tree != m_ui->treeFlatpak) {
-        alpm_trans_release(m_handle);
         m_lockfile.lock();
     }
 
