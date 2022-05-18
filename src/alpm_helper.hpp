@@ -19,18 +19,16 @@
 
 #include <alpm.h>
 
-#include <vector>
 #include <string>
+#include <vector>
 
 void setup_alpm(alpm_handle_t* handle);
 void destroy_alpm(alpm_handle_t* handle);
 void refresh_alpm(alpm_handle_t** handle, alpm_errno_t* err);
 
-int sync_trans(alpm_handle_t* handle, const std::vector<std::string>& targets, int flags);
+int sync_trans(alpm_handle_t* handle, const std::vector<std::string>& targets, int flags, std::string& conflict_msg);
 
 std::string display_targets(alpm_handle_t* handle, bool verbosepkglists, std::string& status_text);
-
-bool check_db_local_package_conflicts(alpm_handle_t* handle, const std::vector<std::string>& vec, std::string& msg);
 
 void add_targets_to_install(alpm_handle_t* handle, const std::vector<std::string>& vec);
 

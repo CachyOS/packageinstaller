@@ -38,12 +38,12 @@
 #include "ui_mainwindow.h"
 
 #include "about.hpp"
+#include "alpm_helper.hpp"
 #include "config.hpp"
 #include "pacmancache.hpp"
 #include "utils.hpp"
 #include "version.hpp"
 #include "versionnumber.hpp"
-#include "alpm_helper.hpp"
 
 #include <alpm.h>
 #include <alpm_list.h>
@@ -903,7 +903,6 @@ bool MainWindow::confirmActions(const QString& names, const QString& action, boo
         const auto& name_list = ::utils::make_multiline(names.toStdString(), false, delim);
         if (action == "install") {
             add_targets_to_install(m_handle, name_list);
-            check_db_local_package_conflicts(m_handle, name_list, msg_ok_status);
         } else {
             is_ok = true;
             add_targets_to_remove(m_handle, name_list);
@@ -914,8 +913,7 @@ bool MainWindow::confirmActions(const QString& names, const QString& action, boo
         if (action == "install") {
             m_lockfile.unlock();
             refresh_alpm(&m_handle, &m_alpm_err);
-            is_ok = (sync_trans(m_handle, name_list, 0) == 0);
-            if (!is_ok && msg_ok_status.empty()) { is_ok = true; }
+            is_ok = (sync_trans(m_handle, name_list, 0, msg_ok_status) == 0);
         }
     }
 
