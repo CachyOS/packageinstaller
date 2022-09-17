@@ -166,10 +166,6 @@ install(
    DESTINATION ${CMAKE_INSTALL_DATADIR}/applications
 )
 install(
-   FILES cachyos-postinstall.desktop
-   DESTINATION ${CMAKE_INSTALL_DATADIR}/applications
-)
-install(
    FILES icons/cachyos-pi.png
    DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/scalable/apps
 )
