@@ -17,10 +17,12 @@
 #if defined(__clang__)
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wold-style-cast"
+#pragma clang diagnostic ignored "-Wsign-conversion"
 #pragma clang diagnostic ignored "-Wshadow"
 #elif defined(__GNUC__)
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wold-style-cast"
+#pragma GCC diagnostic ignored "-Wsign-conversion"
 #pragma GCC diagnostic ignored "-Wshadow"
 #endif
 
@@ -546,7 +548,7 @@ void MainWindow::displayPopularApps() const {
     QTreeWidgetItem* childItem;
 
     const auto& top_level_item_emplace = [&](auto&& searchtext) {
-        // add package searchtext if treePopularApps doesn't already have it
+        // add package search text if treePopularApps doesn't already have it
         if (m_ui->treePopularApps->findItems(searchtext, Qt::MatchFixedString, PopCol::Name).isEmpty()) {
             topLevelItem = new QTreeWidgetItem();
             topLevelItem->setText(PopCol::Name, searchtext);
@@ -689,62 +691,51 @@ void MainWindow::displayPackages() {
         widget_item->setText(TreeCol::Version, value.at(0));
         widget_item->setText(TreeCol::Description, value.at(1));
         widget_item->setText(TreeCol::Displayed, QStringLiteral("true"));  // all items are displayed till filtered
+
+
+        // update tree
+        if (isFilteredName(key) && m_ui->checkHideLibs->isChecked()) {
+            widget_item->setHidden(true);
+        }
+
+        const bool is_app_found = hashInstalled.contains(key);
+        VersionNumber installed;
+        if (is_app_found) {
+            installed = hashInstalled.at(key);
+        }
+        widget_item->setIcon(TreeCol::UpdateIcon, QIcon());  // reset update icon
+        if (!is_app_found) {
+            for (int i = 0; i < widget_item->columnCount(); ++i) {
+                if (m_repo_list.contains(key)) {
+                    widget_item->setToolTip(i, tr("Version ") + value.at(0) + tr(" in repo"));
+                } else {
+                    widget_item->setToolTip(i, tr("Not available in repo"));
+                }
+            }
+            widget_item->setText(TreeCol::Status, QStringLiteral("not installed"));
+        } else {
+            const auto& app_ver = value.at(0);
+            VersionNumber repo_candidate(app_ver.toStdString());  // candidate from the selected repo, might be different from the one from Stable
+            // bool is_upgrade_avail = alpm_sync_get_new_version(alpm_db_get_pkg(app_name.toStdString().c_str()), alpm_get_syncdbs(m_handle)) != nullptr;
+            if (installed >= repo_candidate) {
+                for (int i = 0; i < widget_item->columnCount(); ++i) {
+                    widget_item->setForeground(TreeCol::Name, QBrush(Qt::gray));
+                    widget_item->setForeground(TreeCol::Description, QBrush(Qt::gray));
+                    widget_item->setToolTip(i, tr("Latest version ") + installed.toQString() + tr(" already installed"));
+                }
+                widget_item->setText(TreeCol::Status, QStringLiteral("installed"));
+            } else {
+                widget_item->setIcon(TreeCol::UpdateIcon, QIcon::fromTheme("software-update-available-symbolic", QIcon(":/icons/software-update-available.png")));
+                for (int i = 0; i < widget_item->columnCount(); ++i) {
+                    widget_item->setToolTip(i, tr("Version ") + installed.toQString() + tr(" installed"));
+                }
+                widget_item->setText(TreeCol::Status, QStringLiteral("upgradable"));
+            }
+        }
     }
     for (int i = 0; i < newtree->columnCount(); ++i)
         newtree->resizeColumnToContents(i);
 
-    // process the entire list of apps and count upgradable and installable
-    int upgr_count = 0;
-    int inst_count = 0;
-
-    QString app_name;
-    QString app_ver;
-    VersionNumber installed;
-    VersionNumber candidate;
-    // update tree
-    for (QTreeWidgetItemIterator it(newtree); *it; ++it) {
-        app_name = (*it)->text(TreeCol::Name);
-        if (isFilteredName(app_name) && m_ui->checkHideLibs->isChecked())
-            (*it)->setHidden(true);
-        app_ver = (*it)->text(TreeCol::Version);
-
-        const bool is_app_found = hashInstalled.contains(app_name);
-        if (is_app_found) {
-            installed = hashInstalled.at(app_name);
-        }
-        candidate = VersionNumber(list.at(app_name).at(0).toStdString());
-        VersionNumber repo_candidate(app_ver.toStdString());  // candidate from the selected repo, might be different from the one from Stable
-
-        (*it)->setIcon(TreeCol::UpdateIcon, QIcon());  // reset update icon
-        if (!is_app_found) {
-            for (int i = 0; i < newtree->columnCount(); ++i) {
-                if (m_repo_list.contains(app_name)) {
-                    (*it)->setToolTip(i, tr("Version ") + m_repo_list.at(app_name).at(0) + tr(" in repo"));
-                } else {
-                    (*it)->setToolTip(i, tr("Not available in repo"));
-                }
-            }
-            (*it)->setText(TreeCol::Status, QStringLiteral("not installed"));
-        } else {
-            ++inst_count;
-            // bool is_upgrade_avail = alpm_sync_get_new_version(alpm_db_get_pkg(app_name.toStdString().c_str()), alpm_get_syncdbs(m_handle)) != nullptr;
-            if (installed >= repo_candidate) {
-                for (int i = 0; i < newtree->columnCount(); ++i) {
-                    (*it)->setForeground(TreeCol::Name, QBrush(Qt::gray));
-                    (*it)->setForeground(TreeCol::Description, QBrush(Qt::gray));
-                    (*it)->setToolTip(i, tr("Latest version ") + installed.toQString() + tr(" already installed"));
-                }
-                (*it)->setText(5, QStringLiteral("installed"));
-            } else {
-                (*it)->setIcon(TreeCol::UpdateIcon, QIcon::fromTheme("software-update-available-symbolic", QIcon(":/icons/software-update-available.png")));
-                for (int i = 0; i < newtree->columnCount(); ++i) {
-                    (*it)->setToolTip(i, tr("Version ") + installed.toQString() + tr(" installed"));
-                }
-                ++upgr_count;
-                (*it)->setText(TreeCol::Status, QStringLiteral("upgradable"));
-            }
-        }
-    }
     updateInterface();
     newtree->blockSignals(false);
 }
@@ -998,7 +989,7 @@ bool MainWindow::install(const QString& names) {
     displayOutput();
     bool success = false;
     if (is_ok) {
-        success = m_cmd.run(fmt::format("pacman -S --noconfirm {}", names.toStdString()).c_str());
+        success = m_cmd.run(fmt::format("pacman -S {}", names.toStdString()).c_str());
     } else {
         success = m_cmd.run(fmt::format("yes | pacman -S {}", names.toStdString()).c_str());
     }
@@ -1118,10 +1109,6 @@ bool MainWindow::buildPackageLists(bool force_download) {
         ifDownloadFailed();
         return false;
     }
-    if (!readPackageList(force_download)) {
-        ifDownloadFailed();
-        return false;
-    }
     displayPackages();
     return true;
 }
@@ -1155,45 +1142,6 @@ bool MainWindow::downloadPackageList(bool force_download) {
 void MainWindow::enableTabs(bool enable) {
     for (int tab = 0; tab < m_ui->tabWidget->count() - 1; ++tab)  // enable all except last (Console)
         m_ui->tabWidget->setTabEnabled(tab, enable);
-}
-
-// Process downloaded *Packages.gz files
-bool MainWindow::readPackageList(bool force_download) {
-    spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
-    m_pushCancel->setDisabled(true);
-    // don't process if the lists are already populated
-    if (!((m_tree == m_ui->treeRepo && m_repo_list.empty()) || force_download)) {
-        return true;
-    }
-
-    QFile file;
-    if (m_tree == m_ui->treeRepo) {  // treeRepo is updated at downloadPackageList
-        return true;
-    }
-
-    QString file_content = file.readAll();
-    file.close();
-
-    QMap<QString, QStringList> map;
-    QStringList package_list;
-    QStringList version_list;
-    QStringList description_list;
-
-    const QStringList list = file_content.split("\n");
-
-    for (QString line : list) {
-        if (line.startsWith(QLatin1String("Package: ")))
-            package_list << line.remove(QLatin1String("Package: "));
-        else if (line.startsWith(QLatin1String("Version: ")))
-            version_list << line.remove(QLatin1String("Version: "));
-        else if (line.startsWith(QLatin1String("Description: ")))
-            description_list << line.remove(QLatin1String("Description: "));
-    }
-
-    for (int i = 0; i < package_list.size(); ++i)
-        map.insert(package_list.at(i), QStringList() << version_list.at(i) << description_list.at(i));
-
-    return true;
 }
 
 // Cancel download

@@ -120,7 +120,6 @@ class MainWindow : public QDialog {
     bool installPopularApps();
     bool installSelected();
     [[nodiscard]] static bool isFilteredName(const QString& name);
-    bool readPackageList(bool force_download = false);
     bool uninstall(const QString& names);
     bool update();
 
