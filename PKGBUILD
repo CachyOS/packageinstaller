@@ -2,7 +2,7 @@
 
 pkgname=cachyos-packageinstaller
 pkgver=1.0.5
-pkgrel=1
+pkgrel=2
 pkgdesc="Simple Software Application Package Installer for CachyOS which helps setting up & installing applications"
 arch=(aarch64 x86_64 x86_64_v3)
 url="https://github.com/cachyos/packageinstaller"
