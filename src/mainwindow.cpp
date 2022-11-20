@@ -172,6 +172,10 @@ void MainWindow::setup() {
         connect(tree, &QTreeWidget::itemDoubleClicked, this, &MainWindow::checkUncheckItem);
     }
 
+    // hide flatpak
+    m_ui->tabWidget->setTabEnabled(Tab::Flatpak, false);
+    m_ui->tabWidget->setTabVisible(Tab::Flatpak, false);
+
     if (m_setup_assistant_mode) {
         m_ui->pushAbout->hide();
         m_ui->pushHelp->hide();
