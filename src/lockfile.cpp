@@ -21,7 +21,7 @@
  * You should have received a copy of the GNU General Public License
  * along with mx-packageinstaller.  If not, see <http://www.gnu.org/licenses/>.
  **********************************************************************/
-// Copyright (C) 2022 Vladislav Nepogodin
+// Copyright (C) 2022-2023 Vladislav Nepogodin
 //
 // This program is free software; you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
