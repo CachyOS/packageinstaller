@@ -991,12 +991,7 @@ bool MainWindow::install(const QString& names) {
         return true;
 
     displayOutput();
-    bool success = false;
-    if (is_ok) {
-        success = m_cmd.run(fmt::format("pacman -S {}", names.toStdString()).c_str());
-    } else {
-        success = m_cmd.run(fmt::format("yes | pacman -S {}", names.toStdString()).c_str());
-    }
+    const bool success = m_cmd.run(fmt::format("pacman -S {}", names.toStdString()).c_str());
     m_lockfile.lock();
 
     return success;
