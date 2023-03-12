@@ -26,9 +26,9 @@
 #pragma GCC diagnostic ignored "-Wshadow"
 #endif
 
-#include <ryml_std.hpp>
-#include <ryml.hpp>
 #include <cpr/cpr.h>
+#include <ryml.hpp>
+#include <ryml_std.hpp>
 
 #if defined(__clang__)
 #pragma clang diagnostic pop
@@ -695,7 +695,6 @@ void MainWindow::displayPackages() {
         widget_item->setText(TreeCol::Version, value.at(0));
         widget_item->setText(TreeCol::Description, value.at(1));
         widget_item->setText(TreeCol::Displayed, QStringLiteral("true"));  // all items are displayed till filtered
-
 
         // update tree
         if (isFilteredName(key) && m_ui->checkHideLibs->isChecked()) {
