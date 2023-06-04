@@ -398,9 +398,9 @@ void MainWindow::loadTxtFiles() {
     };
 
     const auto& process_map = [this, &get_node_key](auto&& parent_category, auto&& node) {
-        for (const ryml::NodeRef& map : node.children()) {
+        for (const auto& map : node.children()) {
             std::string category{};
-            for (const ryml::NodeRef& map_child : map.children()) {
+            for (const auto& map_child : map.children()) {
                 if (map_child.has_val() && !map_child.has_val_tag()) {
                     category = std::string{map_child.val().str, map_child.val().len};
                 }
@@ -410,7 +410,7 @@ void MainWindow::loadTxtFiles() {
                 if (map_child.is_container()) {
                     std::vector<std::string> lines;
                     lines.reserve(map_child.num_children());
-                    for (const ryml::NodeRef& pkg_list : map_child.children()) {
+                    for (const auto& pkg_list : map_child.children()) {
                         if (pkg_list.has_val() && !pkg_list.has_val_tag()) {
                             lines.emplace_back(std::string{pkg_list.val().str, pkg_list.val().len});
                         }
@@ -422,9 +422,9 @@ void MainWindow::loadTxtFiles() {
             }
         }
     };
-    for (const ryml::NodeRef& map : root.children()) {
+    for (const auto& map : root.children()) {
         std::string category{};
-        for (const ryml::NodeRef& map_child : map.children()) {
+        for (const auto& map_child : map.children()) {
             if (map_child.has_val() && !map_child.has_val_tag()) {
                 category = std::string{map_child.val().str, map_child.val().len};
             }
@@ -437,7 +437,7 @@ void MainWindow::loadTxtFiles() {
                 } else {
                     std::vector<std::string> lines;
                     lines.reserve(map_child.num_children());
-                    for (const ryml::NodeRef& pkg_list : map_child.children()) {
+                    for (const auto& pkg_list : map_child.children()) {
                         if (pkg_list.has_val() && !pkg_list.has_val_tag()) {
                             lines.emplace_back(std::string{pkg_list.val().str, pkg_list.val().len});
                         }
