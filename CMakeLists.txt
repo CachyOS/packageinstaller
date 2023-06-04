@@ -25,7 +25,7 @@ include(CPM)
 
 find_package(Threads REQUIRED)
 find_package(PkgConfig REQUIRED)
-find_package(Qt6 COMPONENTS Widgets LinguistTools REQUIRED)
+find_package(Qt5 COMPONENTS Widgets LinguistTools REQUIRED)
 
 pkg_check_modules(
   LIBALPM
@@ -91,7 +91,7 @@ file(GLOB TS_FILES "${PROJECT_SOURCE_DIR}/lang/*.ts")
 file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lang)
 
 set_source_files_properties(${TS_FILES} PROPERTIES OUTPUT_LOCATION "lang") # set qm files output directory
-qt_add_translation(QM_FILES ${TS_FILES})   # generate qm files
+qt5_add_translation(QM_FILES ${TS_FILES})   # generate qm files
 
 ##
 ## Target
@@ -125,7 +125,7 @@ enable_sanitizers(project_options)
 
 include_directories(${CMAKE_SOURCE_DIR}/src)
 
-target_link_libraries(${PROJECT_NAME}-bin PRIVATE project_warnings project_options Qt6::Widgets Threads::Threads spdlog::spdlog fmt::fmt ryml::ryml cpr::cpr PkgConfig::LIBALPM)
+target_link_libraries(${PROJECT_NAME}-bin PRIVATE project_warnings project_options Qt5::Widgets Threads::Threads spdlog::spdlog fmt::fmt ryml::ryml cpr::cpr PkgConfig::LIBALPM)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
    target_link_libraries(${PROJECT_NAME}-bin PRIVATE range-v3::range-v3)
