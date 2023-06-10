@@ -1,79 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="ru">
+<TS version="2.1" language="de">
 <context>
     <name>MainWindow</name>
     <message>
         <location filename="../src/mainwindow.ui" line="20"/>
         <location filename="../src/mainwindow.cpp" line="114"/>
         <source>CachyOS Package Installer</source>
-        <translation>Установщик пакетов CachyOS</translation>
+        <translation>CachyOS-Paket-Installationsprogramm</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="57"/>
         <source>Popular Applications</source>
-        <translation>Популярные приложения</translation>
+        <translation>Beliebte Anwendungen</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="83"/>
         <location filename="../src/mainwindow.cpp" line="119"/>
         <source>Package</source>
-        <translation>Пакет</translation>
+        <translation>Paket</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="88"/>
         <location filename="../src/mainwindow.cpp" line="119"/>
         <source>Info</source>
-        <translation>Информация</translation>
+        <translation>Infos</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="93"/>
         <location filename="../src/mainwindow.ui" line="250"/>
         <location filename="../src/mainwindow.cpp" line="119"/>
         <source>Description</source>
-        <translation>Описание</translation>
+        <translation>Beschreibung</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="113"/>
         <location filename="../src/mainwindow.ui" line="216"/>
         <location filename="../src/mainwindow.ui" line="595"/>
         <source>search</source>
-        <translation>поиск</translation>
+        <translation>Suche</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="123"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Manage popular packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Управление популярными пакетами&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Элементы, отмеченные серым, уже установлены.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Verwalten Sie beliebte Pakete&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Die ausgegrauten Elemente sind bereits installiert worden.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="153"/>
         <source>Repo</source>
-        <translation>Репозиторий</translation>
+        <translation>Repo</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="174"/>
         <location filename="../src/mainwindow.ui" line="538"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filter packages according to their status.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Фильтровать пакеты в зависимости от их статуса.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filtern Sie Pakete nach ihrem Status.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="177"/>
         <location filename="../src/mainwindow.ui" line="181"/>
         <location filename="../src/mainwindow.cpp" line="1855"/>
         <source>All packages</source>
-        <translation>Все пакеты</translation>
+        <translation>Alle Pakete</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="186"/>
         <location filename="../src/mainwindow.cpp" line="1868"/>
         <source>Installed</source>
-        <translation>Установлено</translation>
+        <translation>Installiert</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="191"/>
         <location filename="../src/mainwindow.cpp" line="1866"/>
         <source>Upgradable</source>
-        <translation>Доступно для обновления</translation>
+        <translation>Ausbaufähig</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="196"/>
@@ -83,65 +83,65 @@
         <location filename="../src/mainwindow.cpp" line="1940"/>
         <location filename="../src/mainwindow.cpp" line="1941"/>
         <source>Not installed</source>
-        <translation>Не установлено</translation>
+        <translation>Nicht installiert</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="240"/>
         <source>Package Name</source>
-        <translation>Имя пакета</translation>
+        <translation>Name des Pakets</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="245"/>
         <location filename="../src/mainwindow.ui" line="630"/>
         <source>Version</source>
-        <translation>Версия</translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="404"/>
-        <source>Total packages:</source>
-        <translation>Всего пакетов:</translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="394"/>
-        <source>Hide library and developer packages</source>
-        <translation>Скрыть библиотеки и пакеты для разработчиков</translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="373"/>
-        <source>Refresh list</source>
-        <translation>Обновить список</translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="295"/>
-        <source>Installed:</source>
-        <translation>Установлено:</translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="411"/>
-        <source>Upgradable:</source>
-        <translation>Доступно для обновления:</translation>
+        <translation>Version</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="284"/>
         <source>Remove orphan packages</source>
-        <translation>Удалить ненужные пакеты</translation>
+        <translation>Verwaiste Pakete entfernen</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="295"/>
+        <source>Installed:</source>
+        <translation>Installiert:</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="331"/>
         <location filename="../src/mainwindow.ui" line="700"/>
         <source>Upgrade All</source>
-        <translation>Обновить все</translation>
+        <translation>Alle aktualisieren</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="373"/>
+        <source>Refresh list</source>
+        <translation>Liste aktualisieren</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="394"/>
+        <source>Hide library and developer packages</source>
+        <translation>Bibliothek und Entwicklerpakete ausblenden</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="404"/>
+        <source>Total packages:</source>
+        <translation>Pakete insgesamt:</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="411"/>
+        <source>Upgradable:</source>
+        <translation>Aufrüstbar:</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="441"/>
         <location filename="../src/mainwindow.ui" line="857"/>
         <source>Greyed out items have already been installed.</source>
-        <translation>Элементы, выделенные серым цветом, уже установлены.</translation>
+        <translation>Die ausgegrauten Elemente sind bereits installiert worden.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="497"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;= Upgradable package. Newer version available in selected repository.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;= Пакет можно обновить. Более новая версия доступна в выбранном репозитории.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;= Aktualisierbares Paket. Neuere Version im ausgewählten Repository verfügbar.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="517"/>
@@ -153,31 +153,31 @@
         <location filename="../src/mainwindow.ui" line="545"/>
         <location filename="../src/mainwindow.cpp" line="1822"/>
         <source>All apps</source>
-        <translation>Все приложения</translation>
+        <translation>Alle Anwendungen</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="550"/>
         <location filename="../src/mainwindow.cpp" line="1826"/>
         <source>All runtimes</source>
-        <translation>Все среды выполнения</translation>
+        <translation>Alle Laufzeiten</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="555"/>
         <location filename="../src/mainwindow.cpp" line="1830"/>
         <source>All available</source>
-        <translation>Все доступные</translation>
+        <translation>Alle verfügbar</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="560"/>
         <location filename="../src/mainwindow.cpp" line="1820"/>
         <source>Installed apps</source>
-        <translation>Установленные приложения</translation>
+        <translation>Installierte Anwendungen</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="565"/>
         <location filename="../src/mainwindow.cpp" line="1818"/>
         <source>Installed runtimes</source>
-        <translation>Установленные среды выполнения</translation>
+        <translation>Installierte Laufzeiten</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="570"/>
@@ -185,70 +185,70 @@
         <location filename="../src/mainwindow.cpp" line="1935"/>
         <location filename="../src/mainwindow.cpp" line="1936"/>
         <source>All installed</source>
-        <translation>Все установленные</translation>
+        <translation>Alle installiert</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="620"/>
         <source>Short Name</source>
-        <translation>Короткое имя</translation>
+        <translation>Kurzer Name</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="625"/>
         <source>Full Package Name</source>
-        <translation>Полное имя пакета</translation>
+        <translation>Vollständiger Paketname</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="635"/>
         <source>Size</source>
-        <translation>Размер</translation>
+        <translation>Größe</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="679"/>
         <source>Total items </source>
-        <translation>Всего элементов </translation>
+        <translation>Gesamte Posten </translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="693"/>
         <source>Installed apps:</source>
-        <translation>Установленные приложения:</translation>
+        <translation>Installierte Anwendungen:</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="746"/>
         <source>Advanced</source>
-        <translation>Расширенный</translation>
+        <translation>Fortgeschrittene</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="776"/>
         <source>Total installed size:</source>
-        <translation>Общий размер установленного:</translation>
+        <translation>Installierte Gesamtgröße:</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="790"/>
         <source>Remove unused runtimes</source>
-        <translation>Удалить неиспользуемые среды выполнения</translation>
+        <translation>Ungenutzte Laufzeiten entfernen</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="807"/>
         <location filename="../src/mainwindow.ui" line="811"/>
         <source>For all users</source>
-        <translation>Для всех пользователей</translation>
+        <translation>Für alle Benutzer</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="816"/>
         <source>For current user</source>
-        <translation>Для текущего пользователя</translation>
+        <translation>Für aktuelle Benutzer</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="834"/>
         <source>Remote (repo):</source>
-        <translation>Удаленный (репозиторий):</translation>
+        <translation>Entfernt (Repo):</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="877"/>
         <location filename="../src/mainwindow.cpp" line="1682"/>
         <location filename="../src/mainwindow.cpp" line="1781"/>
         <source>Console Output</source>
-        <translation>Консольный вывод</translation>
+        <translation>Konsolenausgabe</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="883"/>
@@ -256,44 +256,19 @@
         <translation>Enter</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="1060"/>
-        <source>Uninstall</source>
-        <translation>Удалить</translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="1067"/>
-        <source>Alt+U</source>
-        <translation>Alt+U</translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="1083"/>
-        <source>About this application</source>
-        <translation>Об этом приложении</translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="1086"/>
-        <source>About...</source>
-        <translation>O...</translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="1093"/>
-        <source>Alt+B</source>
-        <translation>Alt+B</translation>
+        <location filename="../src/mainwindow.ui" line="894"/>
+        <source>Respond here</source>
+        <translation>Antworten Sie hier</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="950"/>
         <source>Display help </source>
-        <translation>Показать справку </translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.ui" line="894"/>
-        <source>Respond here</source>
-        <translation>Ответьте здесь</translation>
+        <translation>Hilfe anzeigen </translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="953"/>
         <source>Help</source>
-        <translation>Справка</translation>
+        <translation>Hilfe</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="960"/>
@@ -307,7 +282,7 @@
         <location filename="../src/mainwindow.cpp" line="1933"/>
         <location filename="../src/mainwindow.cpp" line="2145"/>
         <source>Install</source>
-        <translation>Установить</translation>
+        <translation>Installieren Sie</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="1015"/>
@@ -317,12 +292,12 @@
     <message>
         <location filename="../src/mainwindow.ui" line="1034"/>
         <source>Quit application</source>
-        <translation>Выйти из приложения</translation>
+        <translation>Beenden der Anwendung</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="1037"/>
         <source>Close</source>
-        <translation>Закрыть</translation>
+        <translation>Schließen</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="1044"/>
@@ -330,14 +305,44 @@
         <translation>Alt+C</translation>
     </message>
     <message>
+        <location filename="../src/mainwindow.ui" line="1060"/>
+        <source>Uninstall</source>
+        <translation>Deinstallieren Sie</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="1067"/>
+        <source>Alt+U</source>
+        <translation>Alt+U</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="1083"/>
+        <source>About this application</source>
+        <translation>Über diese Anwendung</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="1086"/>
+        <source>About...</source>
+        <translation>Über...</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="1093"/>
+        <source>Alt+B</source>
+        <translation>Alt+B</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="112"/>
+        <source>CachyOS Setup Assistant</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../src/mainwindow.cpp" line="201"/>
         <source>Uninstalling packages...</source>
-        <translation>Удаление пакетов...</translation>
+        <translation>Pakete deinstallieren...</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="220"/>
         <source>Refreshing sources...</source>
-        <translation>Обновление источников...</translation>
+        <translation>Erfrischende Quellen...</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="232"/>
@@ -352,97 +357,107 @@
         <location filename="../src/mainwindow.cpp" line="2166"/>
         <location filename="../src/mainwindow.cpp" line="2185"/>
         <source>Error</source>
-        <translation>Ошибка</translation>
+        <translation>Fehler</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="232"/>
         <source>There was a problem updating sources. Some sources may not have provided updates. For more info check: </source>
-        <translation>Возникла проблема с обновлением источников. Возможно, некоторые источники не предоставили обновлений. Для получения дополнительной информации проверьте: </translation>
+        <translation>Es gab ein Problem bei der Aktualisierung der Quellen. Einige Quellen haben möglicherweise keine Aktualisierungen bereitgestellt. Für weitere Informationen siehe: </translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="527"/>
         <source>Cancel</source>
-        <translation>Отмена</translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="534"/>
         <source>Please wait...</source>
-        <translation>Пожалуйста подождите...</translation>
+        <translation>Bitte warten Sie...</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="713"/>
         <location filename="../src/mainwindow.cpp" line="733"/>
         <source>Version </source>
-        <translation>Версия </translation>
+        <translation>Version </translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="713"/>
+        <source> in repo</source>
+        <translation> im Endlager</translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="715"/>
+        <source>Not available in repo</source>
+        <translation>Im Repository nicht verfügbar</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="727"/>
         <location filename="../src/mainwindow.cpp" line="1761"/>
         <source>Latest version </source>
-        <translation>Последняя версия </translation>
+        <translation>Letzte Version </translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="727"/>
         <location filename="../src/mainwindow.cpp" line="1761"/>
         <source> already installed</source>
-        <translation> уже установлено</translation>
+        <translation> bereits installiert</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="733"/>
         <source> installed</source>
-        <translation> установлено</translation>
+        <translation> installiert</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="839"/>
         <source>CachyOS includes this repository of flatpaks for the users&apos; convenience only, and is not responsible for the functionality of the individual flatpaks themselves. For more, consult flatpaks in the Wiki.</source>
-        <translation>CachyOS включает этот репозиторий flatpaks только для удобства пользователей и не несет ответственности за функциональность самих отдельных flatpaks. Для получения дополнительной информации обратитесь к flatpaks в Wiki.</translation>
+        <translation>CachyOS stellt diese Sammlung von Flatpaks nur für die Bequemlichkeit der Benutzer zur Verfügung und ist nicht verantwortlich für die Funktionalität der einzelnen Flatpaks selbst. Weitere Informationen finden Sie unter flatpaks im Wiki.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="846"/>
         <location filename="../src/mainwindow.cpp" line="2173"/>
         <source>Warning</source>
-        <translation>Предупреждение</translation>
+        <translation>Warnung</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="850"/>
         <source>Do not show this message again</source>
-        <translation>Больше не показывать это окно</translation>
+        <translation>Diese Meldung nicht mehr anzeigen</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="944"/>
         <source>Remove</source>
-        <translation>Удалить</translation>
+        <translation>entfernen</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="958"/>
         <source>The following packages were selected. Click Show Details for list of changes.</source>
-        <translation>Были выбраны следующие пакеты. Нажмите кнопку Показать подробности, чтобы просмотреть список изменений.</translation>
+        <translation>Die folgenden Pakete wurden ausgewählt. Klicken Sie auf Details anzeigen, um eine Liste der Änderungen anzuzeigen.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="984"/>
         <source>Installing packages...</source>
-        <translation>Установка пакетов...</translation>
+        <translation>Installieren von Paketen...</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1038"/>
         <source>Installing </source>
-        <translation>Установка </translation>
+        <translation>Installation von </translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1118"/>
         <source>Downloading package info...</source>
-        <translation>Загрузка информации о пакетах...</translation>
+        <translation>Herunterladen von Paketinformationen...</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1402"/>
         <source>Packages to be installed: </source>
-        <translation>Пакеты, которые будут установлены: </translation>
+        <translation>Zu installierende Pakete: </translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1403"/>
         <location filename="../src/mainwindow.cpp" line="1422"/>
         <source>Package info</source>
-        <translation>Информация о пакете</translation>
+        <translation>Paket-Infos</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1519"/>
@@ -456,7 +471,7 @@
         <location filename="../src/mainwindow.cpp" line="2065"/>
         <location filename="../src/mainwindow.cpp" line="2160"/>
         <source>Done</source>
-        <translation>Готово</translation>
+        <translation>Erledigt</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1519"/>
@@ -472,7 +487,7 @@
         <location filename="../src/mainwindow.cpp" line="2160"/>
         <location filename="../src/mainwindow.cpp" line="2179"/>
         <source>Processing finished successfully.</source>
-        <translation>Обработка успешно завершена.</translation>
+        <translation>Die Verarbeitung wurde erfolgreich abgeschlossen.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1523"/>
@@ -482,137 +497,122 @@
         <location filename="../src/mainwindow.cpp" line="2045"/>
         <location filename="../src/mainwindow.cpp" line="2071"/>
         <source>Problem detected while installing, please inspect the console output.</source>
-        <translation>Во время установки была обнаружена проблема, пожалуйста, проверьте вывод консоли.</translation>
+        <translation>Während der Installation wurde ein Problem festgestellt, bitte prüfen Sie die Konsolenausgabe.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1570"/>
         <source>About %1</source>
-        <translation>О %1</translation>
+        <translation>Über %1</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1570"/>
         <source>Version: </source>
-        <translation>Версия: </translation>
+        <translation>Version: </translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1570"/>
         <source>Package Installer for CachyOS</source>
-        <translation>Установщик пакетов для CachyOS</translation>
+        <translation>Paket-Installationsprogramm für CachyOS</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1570"/>
         <source>Copyright (c) CachyOS</source>
-        <translation>Авторское право (c) CachyOS</translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="713"/>
-        <source> in repo</source>
-        <translation> в репозитории</translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="112"/>
-        <source>CachyOS Setup Assistant</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../src/mainwindow.cpp" line="715"/>
-        <source>Not available in repo</source>
-        <translation>Недоступно в репозитории</translation>
+        <translation>Copyright (c) CachyOS</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1656"/>
         <source>We encountered a problem uninstalling, please check output</source>
-        <translation>Мы столкнулись с проблемой удаления, пожалуйста, проверьте выходные данные</translation>
+        <translation>Bei der Deinstallation ist ein Problem aufgetreten, bitte überprüfen Sie die Ausgabe</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1668"/>
         <location filename="../src/mainwindow.cpp" line="2179"/>
         <source>Success</source>
-        <translation>Успешно</translation>
+        <translation>Erfolg</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1674"/>
         <location filename="../src/mainwindow.cpp" line="2185"/>
         <source>We encountered a problem uninstalling the program</source>
-        <translation>Мы столкнулись с проблемой удаления программы</translation>
+        <translation>Bei der Deinstallation des Programms ist ein Problem aufgetreten</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1737"/>
         <location filename="../src/mainwindow.cpp" line="1748"/>
         <source>Flatpak not installed</source>
-        <translation>Flatpak не установлен</translation>
+        <translation>Flatpak nicht installiert</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1737"/>
         <source>Flatpak is not currently installed.
 OK to go ahead and install it?</source>
-        <translation>Flatpak в настоящее время не установлен.
-Начать его установку?</translation>
+        <translation>Flatpak ist derzeit nicht installiert.
+Ist es in Ordnung, es zu installieren?</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1748"/>
         <source>Flatpak was not installed</source>
-        <translation>Flatpak не был установлен</translation>
+        <translation>Flatpak wurde nicht installiert</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1769"/>
         <location filename="../src/mainwindow.cpp" line="1788"/>
         <source>Flathub remote failed</source>
-        <translation>Дистанционный Flathub завершился ошибкой</translation>
+        <translation>Flathub remote fehlgeschlagen</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1769"/>
         <location filename="../src/mainwindow.cpp" line="1788"/>
         <source>Flathub remote could not be added</source>
-        <translation>Не удалось добавить зеркало Flathub</translation>
+        <translation>Flathub-Fernbedienung konnte nicht hinzugefügt werden</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1777"/>
         <source>Needs re-login</source>
-        <translation>Требуется повторный вход в систему</translation>
+        <translation>Benötigt erneute Anmeldung</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1777"/>
         <source>You might need to logout/login to see installed items in the menu</source>
-        <translation>Возможно, вам потребуется выйти из системы/войти в систему, чтобы увидеть установленные элементы в меню</translation>
+        <translation>Möglicherweise müssen Sie sich abmelden/anmelden, um die installierten Elemente im Menü zu sehen</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1931"/>
         <source>Upgrade</source>
-        <translation>Обновить</translation>
+        <translation>Upgrade</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2014"/>
         <source>Quit?</source>
-        <translation>Выйти?</translation>
+        <translation>Kündigen?</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2015"/>
         <source>Process still running, quitting might leave the system in an unstable state.&lt;p&gt;&lt;b&gt;Are you sure you want to exit CachyOS Package Installer?&lt;/b&gt;</source>
-        <translation>Процесс все еще запущен, завершение работы может привести к нестабильному состоянию системы.&lt;p&gt;&lt;b&gt; Вы уверены, что хотите выйти из установщика пакетов CachyOS?&lt;/b&gt;</translation>
+        <translation>Da der Prozess noch läuft, kann das Beenden das System in einen instabilen Zustand versetzen.&lt;p&gt;&lt;b&gt;Sind Sie sicher, dass Sie den CachyOS Package Installer beenden wollen?&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2103"/>
         <location filename="../src/mainwindow.cpp" line="2113"/>
         <source>More &amp;info...</source>
-        <translation>Подробнее &amp;информация...</translation>
+        <translation>Mehr &amp;info...</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2143"/>
         <source>Reinstall</source>
-        <translation>Переустановить</translation>
+        <translation>Neu installieren</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2166"/>
         <source>Problem detected during last operation, please inspect the console output.</source>
-        <translation>Обнаружена проблема во время последней операции, пожалуйста, проверьте вывод консоли.</translation>
+        <translation>Während des letzten Vorgangs wurde ein Problem festgestellt, bitte prüfen Sie die Konsolenausgabe.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2173"/>
         <source>Potentially dangerous operation.
 Please make sure you check carefully the list of packages to be removed.</source>
-        <translation>Потенциально опасная операция.
-Пожалуйста, убедитесь, что вы внимательно ознакомились со списком пакетов, подлежащих удалению.</translation>
+        <translation>Potentiell gefährlicher Vorgang.
+Bitte überprüfen Sie sorgfältig die Liste der zu entfernenden Packstücke.</translation>
     </message>
 </context>
 <context>
@@ -620,82 +620,82 @@ Please make sure you check carefully the list of packages to be removed.</source
     <message>
         <location filename="../src/remotes.cpp" line="28"/>
         <source>Manage Flatpak Remotes</source>
-        <translation>Управлять дистанционными Flatpak</translation>
+        <translation>Flatpak-Fernbedienungen verwalten</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="37"/>
         <source>For all users</source>
-        <translation>Для всех пользователей</translation>
+        <translation>Für alle Benutzer</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="38"/>
         <source>For current user</source>
-        <translation>Для текущего пользователя</translation>
+        <translation>Für aktuelle Benutzer</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="44"/>
         <source>enter Flatpak remote URL</source>
-        <translation>введите удаленный URL для Flatpak</translation>
+        <translation>Flatpak Remote-URL eingeben</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="47"/>
         <source>enter Flatpakref location to install app</source>
-        <translation>Введите местоположение Flatpakref чтобы установить приложение</translation>
+        <translation>Flatpakref-Speicherort zur Installation der Anwendung eingeben</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="49"/>
         <source>Add or remove flatpak remotes (repos), or install apps using flatpakref URL or path</source>
-        <translation>Добавить или удалить дистанционные flatpak (репозитории), или установить приложения используя flatpakref URL или путь</translation>
+        <translation>Hinzufügen oder Entfernen von flatpak-Remotes (Repos), oder Installieren von Anwendungen mit flatpakref URL oder Pfad</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="58"/>
         <source>Remove remote</source>
-        <translation>Удалить дистанционный</translation>
+        <translation>Remote entfernen</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="63"/>
         <source>Add remote</source>
-        <translation>Добавить дистанционный</translation>
+        <translation>Remote hinzufügen</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="68"/>
         <source>Install app</source>
-        <translation>Установить приложение</translation>
+        <translation>App installieren</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="73"/>
         <source>Close</source>
-        <translation>Закрыть</translation>
+        <translation>Schließen</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="89"/>
         <source>Not removable</source>
-        <translation>Не удаляемое</translation>
+        <translation>Nicht abnehmbar</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="89"/>
         <source>Flathub is the main Flatpak remote and won&apos;t be removed</source>
-        <translation>Flathub является основным дистанционным для Flatpak и не может быть удалён</translation>
+        <translation>Flathub ist die Haupt-Flatpak-Fernbedienung und wird nicht entfernt werden</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="104"/>
         <source>Error adding remote</source>
-        <translation>Ошибка при добавлении дистанционного</translation>
+        <translation>Error adding remote</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="104"/>
         <source>Could not add remote - command returned an error. Please double-check the remote address and try again</source>
-        <translation>Не получилось добавить дистанционный - команда вернула ошибку. Перепроверьте адрес дистанционного и попробуйте заново</translation>
+        <translation>Remote kann nicht hinzugefügt werden - der Befehl hat einen Fehler zurückgegeben. Bitte überprüfen Sie die Adresse der Gegenstelle und versuchen Sie es erneut</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="108"/>
         <source>Success</source>
-        <translation>Успешно</translation>
+        <translation>Erfolg</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="108"/>
         <source>Remote added successfully</source>
-        <translation>Дистанционный успешно добавлен</translation>
+        <translation>Remote erfolgreich hinzugefügt</translation>
     </message>
 </context>
 <context>
@@ -703,42 +703,42 @@ Please make sure you check carefully the list of packages to be removed.</source
     <message>
         <location filename="../src/about.cpp" line="21"/>
         <source>License</source>
-        <translation>Лицензия</translation>
+        <translation>Lizenz</translation>
     </message>
     <message>
         <location filename="../src/about.cpp" line="22"/>
         <source>Cancel</source>
-        <translation>Отменить</translation>
+        <translation>Abbrechen</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="157"/>
         <source>Error</source>
-        <translation>Ошибка</translation>
+        <translation>Fehler</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="158"/>
         <source>You seem to be logged in as root, please log out and log in as normal user to use this program.</source>
-        <translation>Похоже, вы вошли в систему как root, пожалуйста, выйдите из системы и войдите в систему как обычный пользователь, чтобы использовать эту программу.</translation>
+        <translation>Sie scheinen als root angemeldet zu sein, bitte melden Sie sich ab und melden Sie sich als normaler Benutzer an, um dieses Programm zu benutzen.</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="184"/>
         <source>Unable to run the app</source>
-        <translation>Невозможно запустить приложение</translation>
+        <translation>Die Anwendung kann nicht ausgeführt werden</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="185"/>
         <source>Please run that application as root user!</source>
-        <translation>Пожалуйста, запустите это приложение от имени пользователя root!</translation>
+        <translation>Bitte führen Sie diese Anwendung als root-Benutzer aus!</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="194"/>
         <source>Unable to get exclusive lock</source>
-        <translation>Невозможно получить эксклюзивную блокировку</translation>
+        <translation>Keine exklusive Sperre möglich</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="195"/>
         <source>Another package management application (like pamac or pacman), is already running. Please close that application first</source>
-        <translation>Другое приложение для управления пакетами (например, pamac или pacman) уже запущено. Пожалуйста, сначала закройте это приложение</translation>
+        <translation>Eine andere Paketverwaltungsanwendung (wie pamac oder pacman) wird bereits ausgeführt. Bitte schließen Sie diese Anwendung zuerst</translation>
     </message>
 </context>
 </TS>

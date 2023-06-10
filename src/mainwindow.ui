@@ -891,7 +891,7 @@
        <item row="1" column="0">
         <widget class="QLineEdit" name="lineEdit">
          <property name="placeholderText">
-          <string>Respond here, or just press Enter</string>
+          <string>Respond here</string>
          </property>
         </widget>
        </item>
