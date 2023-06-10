@@ -88,17 +88,24 @@ target_compile_features(project_options INTERFACE cxx_std_20)
 
 # Files with translation sources. You should run lupdate manually when needed to regenerate them
 file(GLOB TS_FILES "${PROJECT_SOURCE_DIR}/lang/*.ts")
-file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lang)
+file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/lang")
 
-set_source_files_properties(${TS_FILES} PROPERTIES OUTPUT_LOCATION "lang") # set qm files output directory
+set_source_files_properties(${TS_FILES} PROPERTIES OUTPUT_LOCATION "${CMAKE_CURRENT_BINARY_DIR}/lang") # set qm files output directory
 qt5_add_translation(QM_FILES ${TS_FILES})   # generate qm files
+
+add_custom_command(
+    DEPENDS "${QM_FILES}"
+    OUTPUT "${CMAKE_BINARY_DIR}/cachyospi_locale.qrc"
+    COMMAND cp "${CMAKE_SOURCE_DIR}/cachyospi_locale.qrc" "${CMAKE_CURRENT_BINARY_DIR}"
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+)
 
 ##
 ## Target
 ##
 add_executable(${PROJECT_NAME}-bin
-    ${RESOURCES} ${QM_FILES} # note that ${QM_FILES} should be included as sources to be generated.
-    images.qrc
+    ${RESOURCES}
+    images.qrc "${CMAKE_BINARY_DIR}/cachyospi_locale.qrc"
     src/ini.hpp
     src/utils.hpp src/utils.cpp
     src/lockfile.hpp src/lockfile.cpp
@@ -123,7 +130,7 @@ configure_linker(project_options)
 # sanitizer options if supported by compiler
 enable_sanitizers(project_options)
 
-include_directories(${CMAKE_SOURCE_DIR}/src)
+include_directories(${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR})
 
 target_link_libraries(${PROJECT_NAME}-bin PRIVATE project_warnings project_options Qt5::Widgets Threads::Threads spdlog::spdlog fmt::fmt ryml::ryml cpr::cpr PkgConfig::LIBALPM)
 

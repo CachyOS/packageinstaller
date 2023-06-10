@@ -1996,8 +1996,6 @@ void MainWindow::on_pushUpgradeAll_clicked() {
 
 // Pressing Enter or buttonEnter should do the same thing
 void MainWindow::on_pushEnter_clicked() {
-    if (m_tree == m_ui->treeFlatpak && m_ui->lineEdit->text().isEmpty())
-        m_cmd.write("y");
     on_lineEdit_returnPressed();
 }
 
