@@ -1,14 +1,14 @@
 # Maintainer: Vladislav Nepogodin <nepogodin.vlad@gmail.com>
 
 pkgname=cachyos-packageinstaller
-pkgver=1.0.5
-pkgrel=2
+pkgver=1.0.6
+pkgrel=1
 pkgdesc="Simple Software Application Package Installer for CachyOS which helps setting up & installing applications"
 arch=(aarch64 x86_64 x86_64_v3)
 url="https://github.com/cachyos/packageinstaller"
 license=(GPLv3)
-depends=('qt5-base' 'polkit-qt5')
-makedepends=('cmake' 'ninja' 'git' 'qt5-tools')
+depends=('qt5-base' 'polkit')
+makedepends=('cmake' 'ninja' 'git' 'polkit-qt5' 'qt5-tools')
 groups=('cachyos')
 source=("packageinstaller-$pkgver.tar.gz::$url/archive/v$pkgver.tar.gz")
 sha256sums=('15a1acfc6ccdd0ce7ff286b6934efec3eb62897c9b0a14fa465f4d05b2e45a63')
