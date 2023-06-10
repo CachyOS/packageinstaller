@@ -32,7 +32,9 @@ FORMS    += \
     src/mainwindow.ui
 
 TRANSLATIONS += \
-                lang/cachyos-packageinstaller_ru.ts
+                lang/cachyos-packageinstaller_ru.ts \
+                lang/cachyos-packageinstaller_de.ts \
+                lang/cachyos-packageinstaller_pl.ts \
 
 RESOURCES += \
     images.qrc
