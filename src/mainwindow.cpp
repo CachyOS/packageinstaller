@@ -371,13 +371,20 @@ void MainWindow::outputAvailable(const QString& output) {
 // Load info from the .txt files
 void MainWindow::loadTxtFiles() {
     spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
-    cpr::Response r = cpr::Get(cpr::Url{"https://raw.githubusercontent.com/cachyos/packageinstaller/develop/pkglist.yaml"},
+    const auto& file_url = cpr::Url{"https://raw.githubusercontent.com/cachyos/packageinstaller/develop/pkglist.yaml"};
+    const auto& fetch_timeout = cpr::Timeout{100 * 1000}; // 100s
+    cpr::Response r = cpr::Get(file_url, fetch_timeout,
         cpr::ProgressCallback([&]([[maybe_unused]] auto&& downloadTotal, [[maybe_unused]] auto&& downloadNow, [[maybe_unused]] auto&& uploadTotal,
                                   [[maybe_unused]] auto&& uploadNow, [[maybe_unused]] auto&& userdata) -> bool { return true; }));
 
     if (r.error.code == cpr::ErrorCode::OK) {
         std::ofstream pkglistyaml{"/usr/lib/cachyos-pi/pkglist.yaml"};
         pkglistyaml << r.text;
+    } else if (r.error.code == cpr::ErrorCode::OPERATION_TIMEDOUT) {
+        spdlog::error("Unable to fetch pkglist. Timeout");
+
+        QMessageBox::warning(this, "CachyOS Package Installer", tr("Unable to fetch pkglist. Timeout!"));
+        return;
     }
 
     QFile file("/usr/lib/cachyos-pi/pkglist.yaml");
