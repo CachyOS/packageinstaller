@@ -223,9 +223,9 @@
 
 - name: "Virtualization"
   packages:
-    - virtualbox-meta
+    - virtualbox
     - gnome-boxes
-    - virt-manager-meta
+    - virt-manager
     - anbox-support
-    - genymotion virtualbox-meta
+    - genymotion
 
