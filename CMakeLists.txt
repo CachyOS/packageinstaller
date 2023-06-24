@@ -115,7 +115,6 @@ add_executable(${PROJECT_NAME}-bin
     src/remotes.hpp src/remotes.cpp
     src/about.hpp src/about.cpp
     src/cmd.hpp src/cmd.cpp
-    src/config.hpp src/config.cpp
     src/mainwindow.hpp src/mainwindow.cpp
     src/mainwindow.ui
     src/main.cpp)

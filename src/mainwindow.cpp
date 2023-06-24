@@ -41,7 +41,6 @@
 
 #include "about.hpp"
 #include "alpm_helper.hpp"
-#include "config.hpp"
 #include "pacmancache.hpp"
 #include "utils.hpp"
 #include "version.hpp"
@@ -69,8 +68,6 @@ namespace fs = std::filesystem;
 MainWindow::MainWindow(QWidget* parent) : QDialog(parent),
                                           m_ui(new Ui::MainWindow) {
     spdlog::debug("{} version:{}", QCoreApplication::applicationName().toStdString(), VERSION);
-
-    m_setup_assistant_mode = Config::instance()->data()["setupmode"];
 
     m_ui->setupUi(this);
     setProgressDialog();
@@ -108,11 +105,7 @@ void MainWindow::setup() {
     m_ver_name = "nil";
 
     connect(qApp, &QApplication::aboutToQuit, this, &MainWindow::cleanup, Qt::QueuedConnection);
-    if (m_setup_assistant_mode) {
-        this->setWindowTitle(tr("CachyOS Setup Assistant"));
-    } else {
-        this->setWindowTitle(tr("CachyOS Package Installer"));
-    }
+    this->setWindowTitle(tr("CachyOS Package Installer"));
     m_ui->tabWidget->setCurrentIndex(Tab::Popular);
     QStringList column_names;
     column_names << ""
@@ -175,15 +168,6 @@ void MainWindow::setup() {
     // hide flatpak
     m_ui->tabWidget->setTabEnabled(Tab::Flatpak, false);
     m_ui->tabWidget->setTabVisible(Tab::Flatpak, false);
-
-    if (m_setup_assistant_mode) {
-        m_ui->pushAbout->hide();
-        m_ui->pushHelp->hide();
-        for (int tab = 1; tab < m_ui->tabWidget->count() - 1; ++tab) {  // disable all except first & last (Console)
-            m_ui->tabWidget->setTabEnabled(tab, false);
-            m_ui->tabWidget->setTabVisible(tab, false);
-        }
-    }
 }
 
 // Uninstall listed packages

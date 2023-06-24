@@ -38,7 +38,6 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-#include "config.hpp"
 #include "lockfile.hpp"
 #include "mainwindow.hpp"
 
@@ -158,26 +157,6 @@ int main(int argc, char* argv[]) {
             QObject::tr("You seem to be logged in as root, please log out and log in as normal user to use this program."));
         return EXIT_FAILURE;
     }
-
-    bool setup_mode{};
-    for (int i = 0; i < argc; ++i) {
-        const char* tmp = argv[i];
-        if (!tmp) {
-            break;
-        }
-
-        std::string_view arg{tmp};
-        if (arg == "--setupmode") {
-            setup_mode = true;
-            break;
-        }
-    }
-
-    if (!Config::initialize()) {
-        return EXIT_FAILURE;
-    }
-
-    Config::instance()->data()["setupmode"] = setup_mode;
 
     if (getuid() != 0) {
         QApplication::beep();
