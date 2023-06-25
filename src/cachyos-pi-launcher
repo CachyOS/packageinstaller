@@ -5,10 +5,10 @@
 
 if [[ -z ${SWAYSOCK} && -z ${HYPRLAND_CMD} ]]; then
     if [[ -z ${QT_QPA_PLATFORMTHEME} ]]; then
-        pkexec cachyos-pi --xdg-desktop=$XDG_CURRENT_DESKTOP
+        pkexec cachyos-pi --xdg-runtime="${XDG_RUNTIME_DIR}" --xdg-desktop=$XDG_CURRENT_DESKTOP --display="${DISPLAY}"
     else
-        pkexec cachyos-pi --xdg-desktop=$XDG_CURRENT_DESKTOP --platformtheme="${QT_QPA_PLATFORMTHEME}"
+        pkexec cachyos-pi --xdg-runtime="${XDG_RUNTIME_DIR}" --xdg-desktop=$XDG_CURRENT_DESKTOP --platformtheme="${QT_QPA_PLATFORMTHEME}" --display="${DISPLAY}"
     fi
 else
-    pkexec cachyos-pi --xdg-runtime="${XDG_RUNTIME_DIR}" --platformtheme="${QT_QPA_PLATFORMTHEME}" --platform="${QT_QPA_PLATFORM}" --display="${WAYLAND_DISPLAY}"
+    pkexec cachyos-pi --xdg-runtime="${XDG_RUNTIME_DIR}" --platformtheme="${QT_QPA_PLATFORMTHEME}" --platform="${QT_QPA_PLATFORM}" --wayland-display="${WAYLAND_DISPLAY}" --display="${DISPLAY}"
 fi

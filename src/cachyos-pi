@@ -27,8 +27,12 @@ for i in "$@"; do
             export QT_QPA_PLATFORM="${i#*=}"
             shift
         ;;
-        -d=*|--display=*)
+        -wd=*|--wayland-display=*)
             export WAYLAND_DISPLAY="${i#*=}"
+            shift
+        ;;
+        -d=*|--display=*)
+            export DISPLAY="${i#*=}"
             shift
         ;;
         *)
