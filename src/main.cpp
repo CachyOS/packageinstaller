@@ -126,11 +126,6 @@ static void initTranslations(QTranslator& qtTranslatorBase, QTranslator& qtTrans
 }
 
 int main(int argc, char* argv[]) {
-    QSharedMemory sharedMemoryLock("CachyOS-PI-lock");
-    if (IsInstanceAlreadyRunning(sharedMemoryLock)) {
-        return -1;
-    }
-
     /// 1. Basic Qt initialization (not dependent on parameters or configuration)
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
     // Generate high-dpi pixmaps
@@ -150,6 +145,13 @@ int main(int argc, char* argv[]) {
     /// 3. Initialization of translations
     QTranslator qtTranslatorBase, qtTranslator, translatorBase, translator;
     initTranslations(qtTranslatorBase, qtTranslator, translatorBase, translator);
+
+    QSharedMemory sharedMemoryLock("CachyOS-PI-lock");
+    if (IsInstanceAlreadyRunning(sharedMemoryLock)) {
+        QMessageBox::critical(nullptr, QObject::tr("Error"),
+            QObject::tr("Instance of the program is already running! Please close it first"));
+        return EXIT_FAILURE;
+    }
 
     // Root guard
     if (system("logname |grep -q ^root$") == 0) {
