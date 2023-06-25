@@ -151,6 +151,10 @@ install(
    PROGRAMS src/${PROJECT_NAME}
    DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+install(
+   PROGRAMS src/${PROJECT_NAME}-launcher
+   DESTINATION ${CMAKE_INSTALL_BINDIR}
+)
 
 install(
    FILES org.cachyos.cachyos-pi.pkexec.policy

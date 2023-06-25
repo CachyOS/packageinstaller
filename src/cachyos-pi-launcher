@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# borrowed from btrfs-assistant
+# see here: https://gitlab.com/btrfs-assistant/btrfs-assistant/-/blob/main/src/btrfs-assistant-launcher
+
+if [[ -z ${SWAYSOCK} && -z ${HYPRLAND_CMD} ]]; then
+    if [[ -z ${QT_QPA_PLATFORMTHEME} ]]; then
+        pkexec cachyos-pi --xdg-desktop=$XDG_CURRENT_DESKTOP
+    else
+        pkexec cachyos-pi --xdg-desktop=$XDG_CURRENT_DESKTOP --platformtheme="${QT_QPA_PLATFORMTHEME}"
+    fi
+else
+    pkexec cachyos-pi --xdg-runtime="${XDG_RUNTIME_DIR}" --platformtheme="${QT_QPA_PLATFORMTHEME}" --platform="${QT_QPA_PLATFORM}" --display="${WAYLAND_DISPLAY}"
+fi

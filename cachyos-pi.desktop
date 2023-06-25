@@ -89,7 +89,7 @@ Comment[tr]=Basit Yazılım Uygulama Paketi Yükleyicisi
 Comment[uk]=Простий інсталятор програмних програм
 Comment[zh_CN]=Simple Package Installer
 Comment[zh_TW]=簡單的軟體安裝工具
-Exec=pkexec cachyos-pi --xdg-desktop=$XDG_CURRENT_DESKTOP
+Exec=cachyos-pi-launcher
 Icon=cachyos-pi
 NoDisplay=false
 Categories=System;CachyOS-Software;
