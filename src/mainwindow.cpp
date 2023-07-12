@@ -1396,22 +1396,22 @@ void MainWindow::displayInfo(const QTreeWidgetItem* item, int column) {
 }
 
 void MainWindow::displayPackageInfo(const QTreeWidgetItem* item) {
-    QString msg     = m_cmd.getCmdOut("pacman -Si " + item->text(2));
-    QString details = m_cmd.getCmdOut("pacman -Siv " + item->text(2));
+    const auto& item_pkgname = item->text(2).toStdString();
+    QString msg     = m_cmd.getCmdOut(QString::fromStdString(fmt::format("pacman -Si {}", item_pkgname)));
+    QString details = m_cmd.getCmdOut(QString::fromStdString(fmt::format("pacman -Siv {}", item_pkgname)));
 
     auto detail_list  = details.split("\n");
     auto msg_list     = msg.split("\n");
-    auto max_no_chars = 2000;         // around 15-17 lines
-    auto max_no_lines = 17;           // cut message after these many lines
-    if (msg.size() > max_no_chars) {  // split msg into details if too large
+    auto max_no_lines = 20;           // cut message after these many lines
+    if (msg_list.size() > max_no_lines) {  // split msg into details if too large
         msg         = msg_list.mid(0, max_no_lines).join("\n");
         detail_list = msg_list.mid(max_no_lines, msg_list.length()) + QStringList{""} + detail_list;
         details     = detail_list.join("\n");
     }
     msg += "\n\n" + detail_list.at(detail_list.size() - 2);  // add info about space needed/freed
 
-    QMessageBox info(QMessageBox::NoIcon, tr("Package info"), msg.trimmed(), QMessageBox::Close);
-    info.setDetailedText(details.trimmed());
+    QMessageBox info(QMessageBox::NoIcon, tr("Package info"), msg, QMessageBox::Close);
+    info.setDetailedText(details);
 
     // make it wider
     auto horizontalSpacer = new QSpacerItem(this->width(), 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
