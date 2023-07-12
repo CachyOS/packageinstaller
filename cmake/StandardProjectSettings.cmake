@@ -41,7 +41,8 @@ elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 endif()
 
 if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
-  add_compile_options(-nostdlib++ -stdlib=libc++ -nodefaultlibs -fexperimental-library)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
+  add_compile_options(-nostdlib++ -nodefaultlibs -fexperimental-library)
   add_link_options(-stdlib=libc++)
 
   add_compile_options(-fstrict-vtable-pointers)
