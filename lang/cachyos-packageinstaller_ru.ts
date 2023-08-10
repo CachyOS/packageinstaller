@@ -362,7 +362,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="374"/>
         <source>Unable to fetch pkglist. Timeout!</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось получить pkglist. Тайм-аут!</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="522"/>
@@ -720,14 +720,16 @@ Please make sure you check carefully the list of packages to be removed.</source
     <message>
         <location filename="../src/main.cpp" line="153"/>
         <source>Instance of the program is already running! Please close it first</source>
-        <translation type="unfinished"></translation>
+        <translation>Экземпляр программы уже запущен! Пожалуйста, сначала закройте его</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="171"/>
         <source>No db found!
 Please run `pacman -Sy` to update DB!
 This is needed for the app to work properly</source>
-        <translation type="unfinished"></translation>
+        <translation>База данных не найдена!
+Пожалуйста, запустите `pacman -Sy`, чтобы обновить базу данных!
+Это необходимо для правильной работы приложения</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="181"/>
