@@ -43,7 +43,7 @@
     <message>
         <location filename="../src/mainwindow.ui" line="123"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Manage popular packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Zarządzaj popularnymi pakietami&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Wyszarzone elementy zostały już zainstalowane.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="153"/>
@@ -54,7 +54,7 @@
         <location filename="../src/mainwindow.ui" line="174"/>
         <location filename="../src/mainwindow.ui" line="538"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filter packages according to their status.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filtruj pakiety zgodnie z ich statusem.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="177"/>
@@ -141,7 +141,7 @@
     <message>
         <location filename="../src/mainwindow.ui" line="497"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;= Upgradable package. Newer version available in selected repository.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;=Pakiet z możliwością aktualizacji. Nowsza wersja dostępna w wybranym repozytorium.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="517"/>
@@ -362,7 +362,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="374"/>
         <source>Unable to fetch pkglist. Timeout!</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie można pobrać pkglist. Przekroczono limit czasu!</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="522"/>
@@ -584,7 +584,7 @@ Czy mogę go zainstalować?</translation>
     <message>
         <location filename="../src/mainwindow.cpp" line="2011"/>
         <source>Quit?</source>
-        <translation>Odejść?</translation>
+        <translation>Opuścić?</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2012"/>
@@ -720,14 +720,16 @@ Upewnij się, że dokładnie sprawdziłeś listę pakietów do usunięcia.</tran
     <message>
         <location filename="../src/main.cpp" line="153"/>
         <source>Instance of the program is already running! Please close it first</source>
-        <translation type="unfinished"></translation>
+        <translation>Instancja programu jest już uruchomiona! Zamknij ją przed kontynuacją</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="171"/>
         <source>No db found!
 Please run `pacman -Sy` to update DB!
 This is needed for the app to work properly</source>
-        <translation type="unfinished"></translation>
+        <translation>Nie znaleziono bazy db
+Proszę wykonać `pacman -Sy` aby zaktualizować DB!
+Jest to wymagane do prawidłowego działania aplikacji</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="181"/>
