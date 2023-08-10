@@ -38,6 +38,7 @@
 // with this program; if not, write to the Free Software Foundation, Inc.,
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+#include "alpm_helper.hpp"
 #include "lockfile.hpp"
 #include "mainwindow.hpp"
 
@@ -151,6 +152,27 @@ int main(int argc, char* argv[]) {
         QMessageBox::critical(nullptr, QObject::tr("Error"),
             QObject::tr("Instance of the program is already running! Please close it first"));
         return EXIT_FAILURE;
+    }
+
+    // Check if we have valid databases
+    {
+        alpm_errno_t alpm_err{};
+        alpm_handle_t* handle = alpm_initialize("/", "/var/lib/pacman/", &alpm_err);
+        setup_alpm(handle);
+        size_t pkgcache_count{};
+        auto* dbs = alpm_get_syncdbs(handle);
+        for (alpm_list_t* i = dbs; i != nullptr; i = i->next) {
+            auto* db = reinterpret_cast<alpm_db_t*>(i->data);
+            pkgcache_count += alpm_list_count(alpm_db_get_pkgcache(db));
+        }
+
+        if (pkgcache_count == 0) {
+            QMessageBox::critical(nullptr, QObject::tr("Error"),
+                QObject::tr("No db found!\nPlease run `pacman -Sy` to update DB!\nThis is needed for the app to work properly"));
+            alpm_release(handle);
+            return EXIT_FAILURE;
+        }
+        alpm_release(handle);
     }
 
     // Root guard
