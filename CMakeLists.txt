@@ -44,18 +44,6 @@ CPMAddPackage(
   GIT_TAG 31cf79a70dfa61a4b2b7509eecca6a3b269bfc4a
   EXCLUDE_FROM_ALL YES
 )
-CPMAddPackage(
-  NAME cpr
-  GITHUB_REPOSITORY libcpr/cpr
-  GIT_TAG 1.10.4
-  EXCLUDE_FROM_ALL YES
-)
-CPMAddPackage(
-  NAME rapidyaml
-  GITHUB_REPOSITORY biojppm/rapidyaml
-  GIT_TAG 0e864cb3f047efd7b57d2e8e4f2fc4cf94e53f06
-  EXCLUDE_FROM_ALL YES
-)
 if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
    CPMAddPackage(
      NAME range-v3
@@ -131,7 +119,7 @@ enable_sanitizers(project_options)
 
 include_directories(${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR})
 
-target_link_libraries(${PROJECT_NAME}-bin PRIVATE project_warnings project_options Qt5::Widgets Threads::Threads spdlog::spdlog fmt::fmt ryml::ryml cpr::cpr PkgConfig::LIBALPM)
+target_link_libraries(${PROJECT_NAME}-bin PRIVATE project_warnings project_options Qt5::Widgets Threads::Threads spdlog::spdlog fmt::fmt PkgConfig::LIBALPM)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
    target_link_libraries(${PROJECT_NAME}-bin PRIVATE range-v3::range-v3)
