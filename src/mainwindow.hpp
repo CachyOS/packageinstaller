@@ -58,19 +58,9 @@ class MainWindow;
 }
 
 namespace Tab {
-enum { Popular,
-    Repo,
+enum { Repo,
     Flatpak,
     Output };
-}
-namespace PopCol {
-enum { Icon,
-    Check,
-    Name,
-    Info,
-    Description,
-    InstallNames,
-    UninstallNames };
 }
 namespace TreeCol {
 enum { Check,
@@ -92,14 +82,6 @@ enum { Check,
     Duplicate,
     FullName };
 }
-namespace Popular {
-enum { Category,
-    Name,
-    Description,
-    InstallNames,
-    UninstallNames,
-    Group };
-}
 
 class MainWindow : public QDialog {
     Q_OBJECT
@@ -115,9 +97,6 @@ class MainWindow : public QDialog {
     bool confirmActions(const QString& names, const QString& action, bool& is_ok);
     bool downloadPackageList(bool force_download = false);
     bool install(const QString& names);
-    bool installBatch(const QStringList& name_list);
-    bool installPopularApp(const QString& name);
-    bool installPopularApps();
     bool installSelected();
     [[nodiscard]] static bool isFilteredName(const QString& name);
     bool uninstall(const QString& names);
@@ -132,15 +111,11 @@ class MainWindow : public QDialog {
     void displayFilteredFP(QStringList list, bool raw = false);
     void displayFlatpaks(bool force_update = false);
     void displayPackages();
-    void displayPopularApps() const;
     void displayWarning(const QString& repo);
     void enableTabs(bool enable);
     void ifDownloadFailed();
     void listFlatpakRemotes();
     void listSizeInstalledFP();
-    void loadTxtFiles();
-    void processFile(const std::string& group, const std::string& category, const std::vector<std::string>& names);
-    void refreshPopularApps();
     void removeDuplicatesFP();
     void setCurrentTree();
     void setProgressDialog();
@@ -166,12 +141,10 @@ class MainWindow : public QDialog {
     void cmdStart();
     void disableOutput();
     void disableWarning(bool checked);
-    static void displayInfo(const QTreeWidgetItem* item, int column);
     void displayOutput();
     void displayPackageInfo(const QTreeWidgetItem* item);
     void filterChanged(const QString& arg1);
     void findPackageOther();
-    void findPopular() const;
     void outputAvailable(const QString& output);
     void showOutput();
     void updateBar();
@@ -181,12 +154,8 @@ class MainWindow : public QDialog {
     void on_pushInstall_clicked();
     void on_pushUninstall_clicked();
     void on_tabWidget_currentChanged(int index);
-    void on_treePopularApps_expanded();
-    void on_treePopularApps_itemCollapsed(QTreeWidgetItem* item);
-    void on_treePopularApps_itemExpanded(QTreeWidgetItem* item);
 
     void on_treeFlatpak_itemChanged(QTreeWidgetItem* item);
-    void on_treePopularApps_itemChanged(QTreeWidgetItem* item);
     void on_treeRepo_itemChanged(QTreeWidgetItem* item);
 
     void on_pushForceUpdateRepo_clicked();
@@ -203,7 +172,6 @@ class MainWindow : public QDialog {
     void on_pushRemotes_clicked();
     void on_pushUpgradeFP_clicked();
 
-    void on_treePopularApps_customContextMenuRequested(const QPoint& pos);
     void on_treeRepo_customContextMenuRequested(const QPoint& pos);
 
     void on_pushRemoveUnused_clicked();
@@ -223,7 +191,6 @@ class MainWindow : public QDialog {
 
     Cmd m_cmd{};
     LockFile m_lockfile{"/var/lib/pacman/db.lck"};
-    QList<QStringList> m_popular_apps;
     QLocale m_locale{};
     std::map<QString, QStringList> m_repo_list{};
     QMetaObject::Connection m_conn{};
