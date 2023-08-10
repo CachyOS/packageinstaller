@@ -80,6 +80,10 @@ MainWindow::MainWindow(QWidget* parent) : QDialog(parent),
     m_conn = connect(&m_cmd, &Cmd::outputAvailable, [](const QString& out) { spdlog::debug("{}", out.trimmed().toStdString()); });
     connect(&m_cmd, &Cmd::errorAvailable, [](const QString& out) { spdlog::warn("{}", out.trimmed().toStdString()); });
     setWindowFlags(Qt::Window);  // for the close, min and max buttons
+
+    // Set window title
+    this->setWindowTitle(tr("CachyOS Package Installer"));
+
     setup();
 }
 
@@ -105,8 +109,8 @@ void MainWindow::setup() {
     m_ver_name = "nil";
 
     connect(qApp, &QApplication::aboutToQuit, this, &MainWindow::cleanup, Qt::QueuedConnection);
-    this->setWindowTitle(tr("CachyOS Package Installer"));
     m_ui->tabWidget->setCurrentIndex(Tab::Popular);
+
     QStringList column_names;
     column_names << ""
                  << "" << tr("Package") << tr("Info") << tr("Description");
@@ -355,10 +359,10 @@ void MainWindow::outputAvailable(const QString& output) {
 // Load info from the .txt files
 void MainWindow::loadTxtFiles() {
     spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
-    const auto& file_url = cpr::Url{"https://raw.githubusercontent.com/cachyos/packageinstaller/develop/pkglist.yaml"};
-    const auto& fetch_timeout = cpr::Timeout{100 * 1000}; // 100s
-    cpr::Response r = cpr::Get(file_url, fetch_timeout,
-        cpr::ProgressCallback([&]([[maybe_unused]] auto&& downloadTotal, [[maybe_unused]] auto&& downloadNow, [[maybe_unused]] auto&& uploadTotal,
+    const auto& file_url      = cpr::Url{"https://raw.githubusercontent.com/cachyos/packageinstaller/develop/pkglist.yaml"};
+    const auto& fetch_timeout = cpr::Timeout{100 * 1000};  // 100s
+    cpr::Response r           = cpr::Get(file_url, fetch_timeout,
+                  cpr::ProgressCallback([&]([[maybe_unused]] auto&& downloadTotal, [[maybe_unused]] auto&& downloadNow, [[maybe_unused]] auto&& uploadTotal,
                                   [[maybe_unused]] auto&& uploadNow, [[maybe_unused]] auto&& userdata) -> bool { return true; }));
 
     if (r.error.code == cpr::ErrorCode::OK) {
@@ -563,7 +567,9 @@ void MainWindow::displayPopularApps() const {
         for (int i = 0; i < topLevelItemChildCount; ++i) {
             auto topLevelItemChild = widget->child(i);
             auto childText         = topLevelItemChild->text(PopCol::Name);
-            if (childText == category) { return topLevelItemChild; }
+            if (childText == category) {
+                return topLevelItemChild;
+            }
         }
         return nullptr;
     };
@@ -1397,12 +1403,12 @@ void MainWindow::displayInfo(const QTreeWidgetItem* item, int column) {
 
 void MainWindow::displayPackageInfo(const QTreeWidgetItem* item) {
     const auto& item_pkgname = item->text(2).toStdString();
-    QString msg     = m_cmd.getCmdOut(QString::fromStdString(fmt::format("pacman -Si {}", item_pkgname)));
-    QString details = m_cmd.getCmdOut(QString::fromStdString(fmt::format("pacman -Siv {}", item_pkgname)));
+    QString msg              = m_cmd.getCmdOut(QString::fromStdString(fmt::format("pacman -Si {}", item_pkgname)));
+    QString details          = m_cmd.getCmdOut(QString::fromStdString(fmt::format("pacman -Siv {}", item_pkgname)));
 
     auto detail_list  = details.split("\n");
     auto msg_list     = msg.split("\n");
-    auto max_no_lines = 20;           // cut message after these many lines
+    auto max_no_lines = 20;                // cut message after these many lines
     if (msg_list.size() > max_no_lines) {  // split msg into details if too large
         msg         = msg_list.mid(0, max_no_lines).join("\n");
         detail_list = msg_list.mid(max_no_lines, msg_list.length()) + QStringList{""} + detail_list;
