@@ -708,10 +708,7 @@ void MainWindow::displayPackages() {
             }
             widget_item->setText(TreeCol::Status, QStringLiteral("not installed"));
         } else {
-            const auto& app_ver = value.at(0);
-            VersionNumber repo_candidate(app_ver.toStdString());  // candidate from the selected repo, might be different from the one from Stable
-            // bool is_upgrade_avail = alpm_sync_get_new_version(alpm_db_get_pkg(app_name.toStdString().c_str()), alpm_get_syncdbs(m_handle)) != nullptr;
-            if (installed >= repo_candidate) {
+            if (!m_repo_upd_list.contains(key)) {
                 for (int i = 0; i < widget_item->columnCount(); ++i) {
                     widget_item->setForeground(TreeCol::Name, QBrush(Qt::gray));
                     widget_item->setForeground(TreeCol::Description, QBrush(Qt::gray));
@@ -1105,11 +1102,13 @@ bool MainWindow::downloadPackageList(bool force_download) {
         }
         m_progress->show();
         PacmanCache cache(m_handle);
-        m_repo_list = cache.get_candidates();
+        m_repo_list     = cache.get_candidates();
+        m_repo_upd_list = cache.get_upgrade_candidates();
         if (m_repo_list.empty()) {
             update();
             cache.refresh_list();
-            m_repo_list = cache.get_candidates();
+            m_repo_list     = cache.get_candidates();
+            m_repo_upd_list = cache.get_upgrade_candidates();
         }
     }
 

@@ -233,6 +233,7 @@ class MainWindow : public QDialog {
     QString m_repo_raw{};
     QString m_user{};
     QString m_ver_name{};
+    QStringList m_repo_upd_list{};
     QStringList m_change_list{};
     QStringList m_flatpaks{};
     QStringList m_flatpaks_apps{};

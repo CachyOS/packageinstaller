@@ -19,6 +19,27 @@
 
 #include <unordered_map>
 
+static QStringList get_upgrade_packages(alpm_handle_t* handle) {
+    if (handle == nullptr)
+        return {};
+
+    QStringList upgrade_packages;
+
+    auto* localdb = alpm_get_localdb(handle);
+    for (alpm_list_t* i = alpm_db_get_pkgcache(localdb); i != nullptr; i = i->next) {
+        auto* lpkg           = reinterpret_cast<alpm_pkg_t*>(i->data);
+        const char* pkg_name = alpm_pkg_get_name(lpkg);
+
+        if (alpm_sync_get_new_version(lpkg, alpm_get_syncdbs(handle)) == nullptr) {
+            continue;
+        }
+
+        upgrade_packages << QString::fromUtf8(pkg_name);
+    }
+
+    return upgrade_packages;
+}
+
 void PacmanCache::refresh_list() {
     QStringList package_list;
     QStringList version_list;
@@ -40,6 +61,8 @@ void PacmanCache::refresh_list() {
             description_list << pkg_desc;
         }
     }
+
+    m_upd_candidates = get_upgrade_packages(m_handle);
 
     for (int i = 0; i < package_list.size(); ++i) {
         if (m_candidates.contains(package_list.at(i)) && (VersionNumber(version_list.at(i).toStdString()) <= VersionNumber(m_candidates.at(package_list.at(i)).at(0).toStdString())))

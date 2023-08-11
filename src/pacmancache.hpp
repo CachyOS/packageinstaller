@@ -23,16 +23,23 @@
 
 #include <map>
 
+#include <QStringList>
+
 class PacmanCache {
  public:
     explicit PacmanCache(alpm_handle_t* handle) : m_handle(handle) { refresh_list(); }
 
     void refresh_list();
-    [[nodiscard]] std::map<QString, QStringList> get_candidates() const { return m_candidates; }
+
+    [[nodiscard]] const std::map<QString, QStringList>& get_candidates() const
+    { return m_candidates; }
+    [[nodiscard]] const QStringList& get_upgrade_candidates() const
+    { return m_upd_candidates; }
 
     static QString getArch();
 
  private:
+    QStringList m_upd_candidates;
     std::map<QString, QStringList> m_candidates;
     alpm_handle_t* m_handle{};
 };
