@@ -120,7 +120,6 @@ class MainWindow : public QDialog {
     bool installSelected();
     [[nodiscard]] static bool isFilteredName(const QString& name);
     bool uninstall(const QString& names);
-    bool update();
 
     void blockInterfaceFP(bool block);
     void buildChangeList(QTreeWidgetItem* item);
@@ -215,7 +214,6 @@ class MainWindow : public QDialog {
     alpm_handle_t* m_handle = alpm_initialize("/", "/var/lib/pacman/", &m_alpm_err);
 
     QString m_indexFilterFP{};
-    bool m_updated_once{};
     bool m_warning_flatpaks{};
     bool m_setup_assistant_mode{};
     int m_height_app{};

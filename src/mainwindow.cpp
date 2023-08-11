@@ -136,7 +136,6 @@ void MainWindow::setup() {
     connect(m_ui->comboFilterFlatpak, &QComboBox::currentTextChanged, this, &MainWindow::filterChanged);
 
     m_ui->searchPopular->setFocus();
-    m_updated_once     = false;
     m_warning_flatpaks = false;
     m_tree             = m_ui->treePopularApps;
 
@@ -195,24 +194,6 @@ bool MainWindow::uninstall(const QString& names) {
     }
 
     return success;
-}
-
-// Run pacman update
-bool MainWindow::update() {
-    spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
-    m_ui->tabOutput->isVisible()  // don't display in output if calling to refresh from tabs
-        ? m_ui->tabWidget->setTabText(m_ui->tabWidget->indexOf(m_ui->tabOutput), tr("Refreshing sources..."))
-        : m_progress->show();
-
-    displayOutput();
-    if (m_cmd.run("pacman -Sy")) {
-        spdlog::info("sources updated OK");
-        m_updated_once = true;
-        return true;
-    }
-    spdlog::error("problem updating sources");
-    QMessageBox::critical(this, tr("Error"), tr("There was a problem updating sources. Some sources may not have provided updates. For more info check: ") + "<a href=\"/var/log/cachyospi.log\">/var/log/cachyospi.log</a>");
-    return false;
 }
 
 // convert number, unit to bytes
@@ -1026,9 +1007,6 @@ bool MainWindow::installPopularApps() {
     QStringList batch_names;
     bool result = true;
 
-    if (!m_updated_once)
-        update();
-
     // make a list of apps to be installed together
     for (QTreeWidgetItemIterator it(m_ui->treePopularApps); *it; ++it) {
         if ((*it)->checkState(PopCol::Check) == Qt::Checked) {
@@ -1097,15 +1075,12 @@ bool MainWindow::downloadPackageList(bool force_download) {
     if (m_repo_list.empty() || force_download) {
         if (force_download) {
             m_progress->show();
-            if (!update())
-                return false;
         }
         m_progress->show();
         PacmanCache cache(m_handle);
         m_repo_list     = cache.get_candidates();
         m_repo_upd_list = cache.get_upgrade_candidates();
         if (m_repo_list.empty()) {
-            update();
             cache.refresh_list();
             m_repo_list     = cache.get_candidates();
             m_repo_upd_list = cache.get_upgrade_candidates();
@@ -1935,6 +1910,7 @@ void MainWindow::buildChangeList(QTreeWidgetItem* item) {
 void MainWindow::on_pushForceUpdateRepo_clicked() {
     m_ui->searchBoxRepo->clear();
     m_ui->comboFilterRepo->setCurrentIndex(0);
+    refresh_alpm(&m_handle, &m_alpm_err);
     buildPackageLists(true);
 }
 
