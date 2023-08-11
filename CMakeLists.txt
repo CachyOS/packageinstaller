@@ -108,7 +108,6 @@ add_executable(${PROJECT_NAME}-bin
     images.qrc "${CMAKE_BINARY_DIR}/cachyospi_locale.qrc"
     src/ini.hpp
     src/utils.hpp src/utils.cpp
-    src/lockfile.hpp src/lockfile.cpp
     src/versionnumber.hpp
     src/alpm_helper.hpp src/alpm_helper.cpp
     src/pacmancache.hpp src/pacmancache.cpp

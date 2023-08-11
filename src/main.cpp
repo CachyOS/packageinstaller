@@ -39,7 +39,6 @@
 // 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 #include "alpm_helper.hpp"
-#include "lockfile.hpp"
 #include "mainwindow.hpp"
 
 #include <unistd.h>
@@ -189,9 +188,8 @@ int main(int argc, char* argv[]) {
         return EXIT_FAILURE;
     }
 
-    // Don't start app if pacman is running, lock dpkg otherwise while the program runs
+    // Don't start app if pacman is running
     static constexpr auto lock_path = "/var/lib/pacman/db.lck";
-    LockFile lock_file(lock_path);
     if (fs::exists(lock_path)) {
         QApplication::beep();
         QMessageBox::critical(nullptr, QObject::tr("Unable to get exclusive lock"),
@@ -199,7 +197,6 @@ int main(int argc, char* argv[]) {
                         "is already running. Please close that application first"));
         return EXIT_FAILURE;
     }
-    lock_file.lock();
 
     static constexpr auto log_name = "/var/log/cachyospi.log";
     if (fs::exists(log_name)) {

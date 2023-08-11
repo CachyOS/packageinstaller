@@ -42,7 +42,6 @@
 #define MAINWINDOW_HPP
 
 #include "cmd.hpp"
-#include "lockfile.hpp"
 #include "remotes.hpp"
 #include "versionnumber.hpp"
 
@@ -222,7 +221,6 @@ class MainWindow : public QDialog {
     int m_height_app{};
 
     Cmd m_cmd{};
-    LockFile m_lockfile{"/var/lib/pacman/db.lck"};
     QList<QStringList> m_popular_apps;
     QLocale m_locale{};
     std::map<QString, QStringList> m_repo_list{};

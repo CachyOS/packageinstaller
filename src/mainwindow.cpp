@@ -52,7 +52,6 @@
 #include <algorithm>
 
 #include <QCoreApplication>
-#include <QDir>
 #include <QMenu>
 #include <QMessageBox>
 #include <QProgressBar>
@@ -179,7 +178,6 @@ bool MainWindow::uninstall(const QString& names) {
     spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
     m_ui->tabWidget->setCurrentWidget(m_ui->tabOutput);
 
-    m_lockfile.unlock();
     // simulate install of selections and present for confirmation
     // if user selects cancel, break routine but return success to avoid error message
     bool is_ok{};
@@ -195,7 +193,6 @@ bool MainWindow::uninstall(const QString& names) {
     } else {
         success = m_cmd.run(fmt::format("yes | pacman -R {}", names.toStdString()).c_str());
     }
-    m_lockfile.lock();
 
     return success;
 }
@@ -203,19 +200,16 @@ bool MainWindow::uninstall(const QString& names) {
 // Run pacman update
 bool MainWindow::update() {
     spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
-    m_lockfile.unlock();
     m_ui->tabOutput->isVisible()  // don't display in output if calling to refresh from tabs
         ? m_ui->tabWidget->setTabText(m_ui->tabWidget->indexOf(m_ui->tabOutput), tr("Refreshing sources..."))
         : m_progress->show();
 
     displayOutput();
     if (m_cmd.run("pacman -Sy")) {
-        m_lockfile.lock();
         spdlog::info("sources updated OK");
         m_updated_once = true;
         return true;
     }
-    m_lockfile.lock();
     spdlog::error("problem updating sources");
     QMessageBox::critical(this, tr("Error"), tr("There was a problem updating sources. Some sources may not have provided updates. For more info check: ") + "<a href=\"/var/log/cachyospi.log\">/var/log/cachyospi.log</a>");
     return false;
@@ -889,7 +883,6 @@ bool MainWindow::confirmActions(const QString& names, const QString& action, boo
     if (m_tree == m_ui->treeFlatpak) {
         detailed_installed_names = m_change_list;
     } else {
-        m_lockfile.unlock();
         const char* delim     = (names.contains("\n")) ? "\n" : " ";
         const auto& name_list = ::utils::make_multiline(names.toStdString(), false, delim);
         if (action == "install") {
@@ -902,7 +895,6 @@ bool MainWindow::confirmActions(const QString& names, const QString& action, boo
         alpm_trans_release(m_handle);
 
         if (action == "install") {
-            m_lockfile.unlock();
             refresh_alpm(&m_handle, &m_alpm_err);
             is_ok = (sync_trans(m_handle, name_list, 0, msg_ok_status) == 0);
         }
@@ -925,10 +917,6 @@ bool MainWindow::confirmActions(const QString& names, const QString& action, boo
         if (msgBox.exec() != QMessageBox::AcceptRole) {
             return false;
         }
-    }
-
-    if (m_tree != m_ui->treeFlatpak) {
-        m_lockfile.lock();
     }
 
     if (m_tree != m_ui->treeFlatpak) {
@@ -977,7 +965,6 @@ bool MainWindow::confirmActions(const QString& names, const QString& action, boo
 bool MainWindow::install(const QString& names) {
     spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
 
-    m_lockfile.unlock();
     m_ui->tabWidget->setTabText(m_ui->tabWidget->indexOf(m_ui->tabOutput), tr("Installing packages..."));
 
     // simulate install of selections and present for confirmation
@@ -987,10 +974,7 @@ bool MainWindow::install(const QString& names) {
         return true;
 
     displayOutput();
-    const bool success = m_cmd.run(fmt::format("pacman -S {}", names.toStdString()).c_str());
-    m_lockfile.lock();
-
-    return success;
+    return m_cmd.run(fmt::format("pacman -S {}", names.toStdString()).c_str());
 }
 
 // install a list of application and run postprocess for each of them.
@@ -1013,7 +997,6 @@ bool MainWindow::installBatch(const QStringList& name_list) {
             result = false;
 
     displayOutput();
-    m_lockfile.lock();
     return result;
 }
 
@@ -1036,7 +1019,6 @@ bool MainWindow::installPopularApp(const QString& name) {
         result = install(install_names);
     }
     displayOutput();
-    m_lockfile.lock();
     return result;
 }
 
@@ -1188,8 +1170,6 @@ void MainWindow::copyTree(QTreeWidget* from, QTreeWidget* to) const {
 // Cleanup environment when window is closed
 void MainWindow::cleanup() {
     spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
-
-    m_lockfile.unlock();
 
     m_cmd.halt();
     m_settings.setValue("geometry", saveGeometry());
