@@ -229,7 +229,7 @@ class MainWindow : public QDialog {
     QProgressDialog* m_progress{};
     QPushButton* m_pushCancel{};
     QSettings m_settings{};
-    QString m_arch{};
+    QStringView m_arch{};
     QString m_repo_raw{};
     QString m_user{};
     QString m_ver_name{};

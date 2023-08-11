@@ -36,7 +36,7 @@ class PacmanCache {
     [[nodiscard]] const QStringList& get_upgrade_candidates() const
     { return m_upd_candidates; }
 
-    static QString getArch();
+    static QStringView getArch();
 
  private:
     QStringList m_upd_candidates;

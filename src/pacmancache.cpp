@@ -71,7 +71,7 @@ void PacmanCache::refresh_list() {
     }
 }
 
-QString PacmanCache::getArch() {
+QStringView PacmanCache::getArch() {
     // Pair of arch names returned by "uname" and corresponding DEB_BUILD_ARCH formats
     static const std::unordered_map<QString, QString> arch_names{
         {"x86_64", "amd64"},

@@ -1228,11 +1228,11 @@ QStringList MainWindow::listFlatpaks(const QString& remote, const QString& type)
 
     // need to specify arch for older version (flatpak takes different format than dpkg)
     QString arch_fp;
-    if (m_arch == "amd64")
+    if (m_arch == QStringLiteral("amd64"))
         arch_fp = "--arch=x86_64 ";
-    else if (m_arch == "i386")
+    else if (m_arch == QStringLiteral("i386"))
         arch_fp = "--arch=i386 ";
-    else if (m_arch == "armhf")
+    else if (m_arch == QStringLiteral("armhf"))
         arch_fp = "--arch=arm ";
     else
         return {};
