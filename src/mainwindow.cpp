@@ -58,6 +58,7 @@
 #include <QScreen>
 #include <QScrollBar>
 #include <QShortcut>
+#include <QFile>
 
 #include <fmt/ranges.h>
 #include <spdlog/spdlog.h>

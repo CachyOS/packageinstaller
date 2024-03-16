@@ -205,7 +205,7 @@
     - octopi
     - pamac-aur
     - bauh
-    - discover packagekit-qt5
+    - discover packagekit-qt6
     - gnome-software gnome-software-packagekit-plugin
     - apper
 
