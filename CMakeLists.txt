@@ -35,7 +35,7 @@ pkg_check_modules(
 CPMAddPackage(
   NAME fmt
   GITHUB_REPOSITORY fmtlib/fmt
-  GIT_TAG 10.2.1
+  GIT_TAG c17816cb4ab6c834a8e35f9721ca05e1719d637f
   EXCLUDE_FROM_ALL YES
 )
 CPMAddPackage(

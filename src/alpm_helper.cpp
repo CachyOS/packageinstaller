@@ -654,16 +654,16 @@ static int sync_prepare_execute(alpm_handle_t* handle, std::string& conflict_msg
                 auto* conflict = static_cast<alpm_conflict_t*>(i->data);
                 /* only print reason if it contains new information */
                 if (conflict->reason->mod == ALPM_DEP_MOD_ANY) {
-                    conflict_msg += fmt::format("'{}' and '{}' are in conflict\n", conflict->package1, conflict->package2);
-                    spdlog::info("'{}' and '{}' are in conflict", conflict->package1, conflict->package2);
+                    conflict_msg += fmt::format("'{}' and '{}' are in conflict\n", alpm_pkg_get_name(conflict->package1), alpm_pkg_get_name(conflict->package2));
+                    spdlog::info("'{}' and '{}' are in conflict", alpm_pkg_get_name(conflict->package1), alpm_pkg_get_name(conflict->package2));
                 } else {
                     char* reason = alpm_dep_compute_string(conflict->reason);
                     if (reason == nullptr) {
-                        conflict_msg += fmt::format("'{}' and '{}' are in conflict (null)\n", conflict->package1, conflict->package2);
-                        spdlog::info("'{}' and '{}' are in conflict (null)", conflict->package1, conflict->package2);
+                        conflict_msg += fmt::format("'{}' and '{}' are in conflict (null)\n", alpm_pkg_get_name(conflict->package1), alpm_pkg_get_name(conflict->package2));
+                        spdlog::info("'{}' and '{}' are in conflict (null)", alpm_pkg_get_name(conflict->package1), alpm_pkg_get_name(conflict->package2));
                     } else {
-                        conflict_msg += fmt::format("'{}' and '{}' are in conflict ({})\n", conflict->package1, conflict->package2, reason);
-                        spdlog::info("'{}' and '{}' are in conflict ({})", conflict->package1, conflict->package2, reason);
+                        conflict_msg += fmt::format("'{}' and '{}' are in conflict ({})\n", alpm_pkg_get_name(conflict->package1), alpm_pkg_get_name(conflict->package2), reason);
+                        spdlog::info("'{}' and '{}' are in conflict ({})", alpm_pkg_get_name(conflict->package1), alpm_pkg_get_name(conflict->package2), reason);
                         free(reason);
                     }
                 }

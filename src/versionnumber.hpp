@@ -68,11 +68,11 @@ class VersionNumber final {
 Q_DECLARE_METATYPE(VersionNumber)
 
 // Custom formatter
-template <typename T>
-struct fmt::formatter<T, std::enable_if_t<std::is_base_of<VersionNumber, T>::value, char>> : fmt::formatter<std::string> {
+template <>
+struct fmt::formatter<VersionNumber> : public fmt::formatter<std::string_view> {
     template <typename FormatCtx>
-    auto format(const VersionNumber& vernum, FormatCtx& ctx) {
-        return fmt::formatter<std::string>::format(vernum.toString(), ctx);
+    auto format(const VersionNumber& vernum, FormatCtx& ctx) const {
+        return fmt::formatter<std::string_view>::format(vernum.toStringView(), ctx);
     }
 };
 
