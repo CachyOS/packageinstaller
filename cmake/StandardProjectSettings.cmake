@@ -18,32 +18,17 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050F00)
-
 set(BUILD_SHARED_LIBS OFF CACHE INTERNAL "" FORCE)
 set(SPDLOG_FMT_EXTERNAL ON CACHE INTERNAL "" FORCE)
 set(SPDLOG_DISABLE_DEFAULT_LOGGER ON CACHE INTERNAL "" FORCE)
+add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050F00)
 
 # Generate compile_commands.json to make it easier to work with clang based tools
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-if(CMAKE_C_COMPILER_ID MATCHES ".*Clang")
-   set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -flto=thin -fwhole-program-vtables")
-   set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} -flto=thin -fwhole-program-vtables")
-elseif(CMAKE_C_COMPILER_ID STREQUAL "GNU")
-   set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -flto -fwhole-program -fuse-linker-plugin")
-endif()
 if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
-   set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -flto=thin -fwhole-program-vtables")
-   set(CMAKE_EXE_LINKER_FLAGS_RELEASE "${CMAKE_EXE_LINKER_FLAGS_RELEASE} -flto=thin -fwhole-program-vtables")
-elseif(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-   set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -flto -fwhole-program -fuse-linker-plugin")
-endif()
-
-if(CMAKE_CXX_COMPILER_ID MATCHES ".*Clang")
-  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libc++")
-  add_compile_options(-nostdlib++ -nodefaultlibs -fexperimental-library)
-  add_link_options(-stdlib=libc++)
+  #add_compile_options(-nostdlib++ -stdlib=libc++ -nodefaultlibs -fexperimental-library)
+  #add_link_options(-stdlib=libc++)
 
   add_compile_options(-fstrict-vtable-pointers)
 
