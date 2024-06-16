@@ -731,7 +731,7 @@ Je to potřebné pro správne fungování aplikacie.</translation>
     <message>
         <location filename="../src/main.cpp" line="180"/>
         <source>You seem to be logged in as root, please log out and log in as normal user to use this program.</source>
-        <translation>Zdá sa, že jste přihlášený jako root, odhlašte se a přihlašte se jako běžný používateľ, aby jste mohli používat tento program.</translation>
+        <translation>Zdá sa, že jste přihlášený jako root, odhlašte se a přihlašte se jako běžný uživatel, aby jste mohli používat tento program.</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="186"/>
