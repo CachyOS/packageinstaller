@@ -490,13 +490,14 @@ void MainWindow::removeDuplicatesFP() noexcept {
 
     // Find and mark duplicates
     while ((*it) != nullptr) {
-        const auto& currentName = (*it)->text(FlatCol::ShortName);
+        auto currentItem        = *it;
+        const auto& currentName = currentItem->text(FlatCol::ShortName);
         if (namesSet.contains(currentName)) {
             // Mark both occurrences as duplicate
             if (prevItem) {
                 prevItem->setText(FlatCol::Duplicate, QLatin1String("true"));
             }
-            (*it)->setText(FlatCol::Duplicate, QLatin1String("true"));
+            currentItem->setText(FlatCol::Duplicate, QLatin1String("true"));
         } else {
             namesSet.insert(currentName);
         }
@@ -506,9 +507,10 @@ void MainWindow::removeDuplicatesFP() noexcept {
 
     // Rename duplicates to use more context
     for (it = QTreeWidgetItemIterator(m_ui->treeFlatpak); *it; ++it) {
-        if ((*(it))->text(FlatCol::Duplicate) == QLatin1String("true")) {
-            const auto& longName = (*it)->text(FlatCol::LongName);
-            (*it)->setText(FlatCol::ShortName, longName.section('.', -2));
+        auto currentItem = *it;
+        if (currentItem->text(FlatCol::Duplicate) == QLatin1String("true")) {
+            const auto& longName = currentItem->text(FlatCol::LongName);
+            currentItem->setText(FlatCol::ShortName, longName.section('.', -2));
         }
     }
 }
@@ -640,20 +642,23 @@ void MainWindow::displayFilteredFP(QStringList list, bool raw) noexcept {
     spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
     m_ui->treeFlatpak->blockSignals(true);
 
-    QMutableStringListIterator i(list);
-    if (raw) {  // raw format that needs to be edited
+    // raw format that needs to be edited
+    if (raw) {
+        QMutableStringListIterator i(list);
         while (i.hasNext()) {
-            i.setValue(i.next().section('\t', 1, 1).section('/', 1));  // remove version and size
+            // remove version and size
+            i.setValue(i.next().section('\t', 1, 1).section('/', 1));
         }
     }
 
     std::uint32_t total{};
     for (QTreeWidgetItemIterator it(m_tree); *it; ++it) {
-        if (list.contains((*it)->text(FlatCol::FullName))) {
+        auto currentItem = *it;
+        if (list.contains(currentItem->text(FlatCol::FullName))) {
             ++total;
-            (*it)->setHidden(false);
-            (*it)->setText(FlatCol::Displayed, QStringLiteral("true"));  // Displayed flag
-            if ((*it)->checkState(FlatCol::Check) == Qt::Checked && (*it)->text(FlatCol::Status) == QLatin1String("installed")) {
+            currentItem->setHidden(false);
+            currentItem->setText(FlatCol::Displayed, QStringLiteral("true"));  // Displayed flag
+            if (currentItem->checkState(FlatCol::Check) == Qt::Checked && currentItem->text(FlatCol::Status) == QLatin1String("installed")) {
                 m_ui->pushUninstall->setEnabled(true);
                 m_ui->pushInstall->setEnabled(false);
             } else {
@@ -661,14 +666,16 @@ void MainWindow::displayFilteredFP(QStringList list, bool raw) noexcept {
                 m_ui->pushInstall->setEnabled(true);
             }
         } else {
-            (*it)->setHidden(true);
-            (*it)->setText(FlatCol::Displayed, QStringLiteral("false"));
-            if ((*it)->checkState(FlatCol::Check) == Qt::Checked) {
-                (*it)->setCheckState(FlatCol::Check, Qt::Unchecked);  // uncheck hidden item
-                m_change_list.removeOne((*it)->text(FlatCol::FullName));
+            currentItem->setHidden(true);
+            currentItem->setText(FlatCol::Displayed, QStringLiteral("false"));
+            if (currentItem->checkState(FlatCol::Check) == Qt::Checked) {
+                // uncheck hidden item
+                currentItem->setCheckState(FlatCol::Check, Qt::Unchecked);
+                m_change_list.removeOne(currentItem->text(FlatCol::FullName));
             }
         }
-        if (m_change_list.isEmpty()) {  // reset comboFilterFlatpak if nothing is selected
+        // reset comboFilterFlatpak if nothing is selected
+        if (m_change_list.isEmpty()) {
             m_ui->pushUninstall->setEnabled(false);
             m_ui->pushInstall->setEnabled(false);
         }
@@ -1060,14 +1067,15 @@ bool MainWindow::installPopularApps() noexcept {
 
     // make a list of apps to be installed together
     for (QTreeWidgetItemIterator it(m_ui->treePopularApps); *it; ++it) {
-        if ((*it)->checkState(PopCol::Check) == Qt::Checked) {
-            const auto& name = (*it)->text(2);
+        auto currentItem = *it;
+        if (currentItem->checkState(PopCol::Check) == Qt::Checked) {
+            const auto& name = currentItem->text(2);
             for (const QStringList& popular_list : m_popular_apps) {
                 if (popular_list.at(Popular::Name) != name) {
                     continue;
                 }
                 batch_names << name;
-                (*it)->setCheckState(PopCol::Check, Qt::Unchecked);
+                currentItem->setCheckState(PopCol::Check, Qt::Unchecked);
             }
         }
     }
@@ -1078,7 +1086,8 @@ bool MainWindow::installPopularApps() noexcept {
 
     // install the rest of the apps
     for (QTreeWidgetItemIterator it(m_ui->treePopularApps); *it; ++it) {
-        if (((*it)->checkState(PopCol::Check) == Qt::Checked) && !installPopularApp((*it)->text(PopCol::Name))) {
+        auto currentItem = *it;
+        if ((currentItem->checkState(PopCol::Check) == Qt::Checked) && !installPopularApp(currentItem->text(PopCol::Name))) {
             result = false;
         }
     }
@@ -1413,7 +1422,8 @@ void MainWindow::findPopular() const {
 
     if (word.isEmpty()) {
         for (QTreeWidgetItemIterator it(m_ui->treePopularApps); *it; ++it) {
-            (*it)->setExpanded(false);
+            auto currentItem = *it;
+            currentItem->setExpanded(false);
         }
         m_ui->treePopularApps->reset();
         for (int i = 0; i < m_ui->treePopularApps->columnCount(); ++i) {
@@ -1426,22 +1436,26 @@ void MainWindow::findPopular() const {
 
     // hide/show items
     for (QTreeWidgetItemIterator it(m_ui->treePopularApps); *it; ++it) {
-        if ((*it)->childCount() == 0) {  // if child
-            if (found_items.contains(*it)) {
-                (*it)->setHidden(false);
+        auto currentItem = *it;
+        // if child
+        if (currentItem->childCount() == 0) {
+            if (found_items.contains(currentItem)) {
+                currentItem->setHidden(false);
             } else {
-                (*it)->parent()->setHidden(true);
-                (*it)->setHidden(true);
+                currentItem->parent()->setHidden(true);
+                currentItem->setHidden(true);
             }
         }
     }
 
     // process found items
     for (auto* item : found_items) {
-        if (item->childCount() == 0) {  // if child, expand parent
+        // if child, expand parent
+        if (item->childCount() == 0) {
             item->parent()->setExpanded(true);
             item->parent()->setHidden(false);
-        } else {  // if parent, expand children
+        } else {
+            // if parent, expand children
             item->setExpanded(true);
             item->setHidden(false);
             const auto count = item->childCount();
@@ -1470,15 +1484,17 @@ void MainWindow::findPackageOther() {
     }
 
     auto found_items = m_tree->findItems(word, Qt::MatchContains, TreeCol::Name);
-    if (m_tree != m_ui->treeFlatpak) {  // not for treeFlatpak as it has a different column structure
+    if (m_tree != m_ui->treeFlatpak) {
+        // not for treeFlatpak as it has a different column structure
         found_items << m_tree->findItems(word, Qt::MatchContains, TreeCol::Description);
     }
 
     for (QTreeWidgetItemIterator it(m_tree); *it; ++it) {
-        (*it)->setHidden((*it)->text(TreeCol::Displayed) != QLatin1String("true") || !found_items.contains(*it));
+        auto currentItem = *it;
+        currentItem->setHidden(currentItem->text(TreeCol::Displayed) != QLatin1String("true") || !found_items.contains(currentItem));
         // Hide libs
-        if (isFilteredName((*it)->text(TreeCol::Name)) && m_ui->checkHideLibs->isChecked()) {
-            (*it)->setHidden(true);
+        if (isFilteredName(currentItem->text(TreeCol::Name)) && m_ui->checkHideLibs->isChecked()) {
+            currentItem->setHidden(true);
         }
     }
 }
@@ -1588,8 +1604,9 @@ void MainWindow::on_push_uninstall() noexcept {
 
     if (m_tree == m_ui->treePopularApps) {
         for (QTreeWidgetItemIterator it(m_ui->treePopularApps); *it; ++it) {
-            if ((*it)->checkState(PopCol::Check) == Qt::Checked) {
-                names += (*it)->text(PopCol::UninstallNames).replace("\n", " ") + " ";
+            auto currentItem = *it;
+            if (currentItem->checkState(PopCol::Check) == Qt::Checked) {
+                names += currentItem->text(PopCol::UninstallNames).replace("\n", " ") + " ";
             }
         }
     } else if (m_tree == m_ui->treeFlatpak) {
@@ -1668,7 +1685,8 @@ void MainWindow::on_current_tab_changed(int index) noexcept {
         m_tree->clearSelection();
 
         for (QTreeWidgetItemIterator it(m_tree); *it; ++it) {
-            (*it)->setCheckState(0, Qt::Unchecked);
+            auto* currentItem = *it;
+            currentItem->setCheckState(0, Qt::Unchecked);
         }
         m_tree->blockSignals(false);
     }
@@ -1803,9 +1821,10 @@ void MainWindow::filterChanged(const QString& arg1) {
         } else if (arg1 == tr("All available")) {
             int total = 0;
             for (QTreeWidgetItemIterator it(m_tree); *it; ++it) {
+                auto currentItem = *it;
+                currentItem->setText(FlatCol::Displayed, QStringLiteral("true"));
+                currentItem->setHidden(false);
                 ++total;
-                (*it)->setText(FlatCol::Displayed, QStringLiteral("true"));
-                (*it)->setHidden(false);
             }
             m_ui->labelNumAppFP->setText(QString::number(total));
         } else if (arg1 == tr("All installed")) {
@@ -1814,8 +1833,9 @@ void MainWindow::filterChanged(const QString& arg1) {
             found_items = m_tree->findItems("not installed", Qt::MatchExactly, FlatCol::Status);
             QStringList new_list;
             for (QTreeWidgetItemIterator it(m_tree); *it; ++it) {
-                if (found_items.contains(*it)) {
-                    new_list << (*it)->text(FlatCol::FullName);
+                auto currentItem = *it;
+                if (found_items.contains(currentItem)) {
+                    new_list << currentItem->text(FlatCol::FullName);
                 }
             }
             displayFilteredFP(new_list);
@@ -1828,8 +1848,9 @@ void MainWindow::filterChanged(const QString& arg1) {
 
     if (arg1 == tr("All packages")) {
         for (QTreeWidgetItemIterator it(m_tree); *it; ++it) {
-            (*it)->setText(TreeCol::Displayed, QStringLiteral("true"));
-            (*it)->setHidden(false);
+            auto currentItem = *it;
+            currentItem->setText(TreeCol::Displayed, QStringLiteral("true"));
+            currentItem->setHidden(false);
         }
         findPackageOther();
         setSearchFocus();
@@ -1850,13 +1871,14 @@ void MainWindow::filterChanged(const QString& arg1) {
     m_ui->pushInstall->setEnabled(false);
 
     for (QTreeWidgetItemIterator it(m_tree); *it; ++it) {
-        (*it)->setCheckState(TreeCol::Check, Qt::Unchecked);  // uncheck all items
-        if (found_items.contains(*it)) {
-            (*it)->setHidden(false);
-            (*it)->setText(TreeCol::Displayed, QLatin1String("true"));
+        auto currentItem = *it;
+        currentItem->setCheckState(TreeCol::Check, Qt::Unchecked);  // uncheck all items
+        if (found_items.contains(currentItem)) {
+            currentItem->setHidden(false);
+            currentItem->setText(TreeCol::Displayed, QLatin1String("true"));
         } else {
-            (*it)->setHidden(true);
-            (*it)->setText(TreeCol::Displayed, QLatin1String("false"));
+            currentItem->setHidden(true);
+            currentItem->setText(TreeCol::Displayed, QLatin1String("false"));
         }
     }
     findPackageOther();
@@ -1948,7 +1970,8 @@ void MainWindow::on_push_force_update_repo() noexcept {
 // Hide/unhide lib/-dev packages
 void MainWindow::on_checkHideLibs_toggled(bool checked) noexcept {
     for (QTreeWidgetItemIterator it(m_ui->treeRepo); *it; ++it) {
-        (*it)->setHidden(isFilteredName((*it)->text(TreeCol::Name)) && checked);
+        auto currentItem = *it;
+        currentItem->setHidden(isFilteredName(currentItem->text(TreeCol::Name)) && checked);
     }
     filterChanged(m_ui->comboFilterRepo->currentText());
 }
@@ -1962,8 +1985,9 @@ void MainWindow::on_push_upgrade_all() noexcept {
 
     QString names;
     for (QTreeWidgetItemIterator it(m_ui->treeRepo); *it; ++it) {
-        if (found_items.contains(*it)) {
-            names += (*it)->text(TreeCol::Name) + " ";
+        auto currentItem = *it;
+        if (found_items.contains(currentItem)) {
+            names += currentItem->text(TreeCol::Name) + " ";
         }
     }
 
@@ -2119,9 +2143,10 @@ void MainWindow::on_treePopularApps_itemChanged(QTreeWidgetItem* item) noexcept 
     bool installed = true;
 
     for (QTreeWidgetItemIterator it(m_ui->treePopularApps); *it; ++it) {
-        if ((*it)->checkState(PopCol::Check) == Qt::Checked) {
+        auto currentItem = *it;
+        if (currentItem->checkState(PopCol::Check) == Qt::Checked) {
             checked = true;
-            if ((*it)->foreground(PopCol::Name) != Qt::gray) {
+            if (currentItem->foreground(PopCol::Name) != Qt::gray) {
                 installed = false;
             }
         }
