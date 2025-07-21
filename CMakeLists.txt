@@ -35,31 +35,31 @@ pkg_check_modules(
 CPMAddPackage(
   NAME fmt
   GITHUB_REPOSITORY fmtlib/fmt
-  GIT_TAG 11.1.4
+  GIT_TAG 11.2.0
   EXCLUDE_FROM_ALL YES
 )
 CPMAddPackage(
   NAME spdlog
   GITHUB_REPOSITORY gabime/spdlog
-  GIT_TAG 3335c380a08c5e0f5117a66622df6afdb3d74959
+  GIT_TAG v1.15.3
   EXCLUDE_FROM_ALL YES
 )
 CPMAddPackage(
   NAME cpr
   GITHUB_REPOSITORY libcpr/cpr
-  GIT_TAG 1.11.2
+  GIT_TAG 1.12.0
   EXCLUDE_FROM_ALL YES
 )
 CPMAddPackage(
   NAME rapidyaml
   GITHUB_REPOSITORY biojppm/rapidyaml
-  GIT_TAG 3ef11e1db3bd2ace816a8ea6386075cbe0dc0768
+  GIT_TAG v0.9.0
   EXCLUDE_FROM_ALL YES
 )
 CPMAddPackage(
   NAME Corrosion
   GITHUB_REPOSITORY corrosion-rs/corrosion
-  GIT_TAG f783ee84b4d6c0ea2bc2d77125c39e9e24546a7d
+  GIT_TAG v0.5.2
   EXCLUDE_FROM_ALL YES
 )
 
