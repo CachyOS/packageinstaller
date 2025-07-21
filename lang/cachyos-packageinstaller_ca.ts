@@ -43,7 +43,7 @@
     <message>
         <location filename="../src/mainwindow.ui" line="123"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Manage popular packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Gestioneu paquets populars&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Wyszarzone elementy zostały już zainstalowane.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Gestioneu paquets populars&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Els elements en gris ja estan instal·lats.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="153"/>
@@ -67,13 +67,13 @@
         <location filename="../src/mainwindow.ui" line="186"/>
         <location filename="../src/mainwindow.cpp" line="1841"/>
         <source>Installed</source>
-        <translation>Instal·lat</translation>
+        <translation>Instal·lats</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="191"/>
         <location filename="../src/mainwindow.cpp" line="1839"/>
         <source>Upgradable</source>
-        <translation>Actualitzable</translation>
+        <translation>Actualitzables</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="196"/>
@@ -83,7 +83,7 @@
         <location filename="../src/mainwindow.cpp" line="1920"/>
         <location filename="../src/mainwindow.cpp" line="1921"/>
         <source>Not installed</source>
-        <translation>No instal·lat</translation>
+        <translation>No instal·lats</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="240"/>
@@ -104,7 +104,7 @@
     <message>
         <location filename="../src/mainwindow.ui" line="295"/>
         <source>Installed:</source>
-        <translation>Instal·lat:</translation>
+        <translation>Instal·lats:</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="331"/>
@@ -120,7 +120,7 @@
     <message>
         <location filename="../src/mainwindow.ui" line="394"/>
         <source>Hide library and developer packages</source>
-        <translation>Amaga les biblioteques i els paquets de desenvolupament</translation>
+        <translation>Amaga les biblioteques i els paquets de desenvolupament.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="404"/>
@@ -130,13 +130,13 @@
     <message>
         <location filename="../src/mainwindow.ui" line="411"/>
         <source>Upgradable:</source>
-        <translation>Actualitzable:</translation>
+        <translation>Actualitzables:</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="441"/>
         <location filename="../src/mainwindow.ui" line="857"/>
         <source>Greyed out items have already been installed.</source>
-        <translation>Els elements en gris ja s'han instal·lat.</translation>
+        <translation>Els elements en gris ja estan instal·lats.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="497"/>
