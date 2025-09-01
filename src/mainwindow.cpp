@@ -1981,18 +1981,12 @@ void MainWindow::on_push_upgrade_all() noexcept {
     spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
     showOutput();
 
-    auto found_items = m_ui->treeRepo->findItems(QLatin1String("upgradable"), Qt::MatchExactly, 5);
+    m_ui->tabWidget->setTabText(m_ui->tabWidget->indexOf(m_ui->tabOutput), tr("Upgrading system..."));
 
-    QString names;
-    for (QTreeWidgetItemIterator it(m_ui->treeRepo); *it; ++it) {
-        auto currentItem = *it;
-        if (found_items.contains(currentItem)) {
-            names += currentItem->text(TreeCol::Name) + " ";
-        }
-    }
+    displayOutput();
 
-    buildPackageLists();
-    if (install(names)) {
+    const auto& cmd_str = QStringLiteral("pkexec pacman -Syu");
+    if (m_cmd.run(cmd_str)) {
         QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
         m_ui->tabWidget->setCurrentWidget(m_tree->parentWidget());
     } else {
