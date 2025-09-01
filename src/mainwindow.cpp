@@ -1987,6 +1987,9 @@ void MainWindow::on_push_upgrade_all() noexcept {
 
     const auto& cmd_str = QStringLiteral("pkexec pacman -Syu");
     if (m_cmd.run(cmd_str)) {
+        m_alpm_manager->refresh_alpm();
+        buildPackageLists(true);
+
         QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
         m_ui->tabWidget->setCurrentWidget(m_tree->parentWidget());
     } else {
