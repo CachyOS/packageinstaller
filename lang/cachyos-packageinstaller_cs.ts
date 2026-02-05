@@ -73,7 +73,7 @@
         <location filename="../src/mainwindow.ui" line="191"/>
         <location filename="../src/mainwindow.cpp" line="1839"/>
         <source>Upgradable</source>
-        <translation>Možnost rozšíření</translation>
+        <translation>Aktualizovatelné</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="196"/>
@@ -125,12 +125,12 @@
     <message>
         <location filename="../src/mainwindow.ui" line="404"/>
         <source>Total packages:</source>
-        <translation>Celkový počet balíčkov:</translation>
+        <translation>Celkový počet balíčků:</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="411"/>
         <source>Upgradable:</source>
-        <translation>Možnost rozšíření:</translation>
+        <translation>Aktualizovatelné:</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="441"/>
@@ -210,7 +210,7 @@
     <message>
         <location filename="../src/mainwindow.ui" line="693"/>
         <source>Installed apps:</source>
-        <translation>Nainstalované aplikácie:</translation>
+        <translation>Nainstalované aplikace:</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="746"/>
@@ -426,7 +426,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="961"/>
         <source>The following packages were selected. Click Show Details for list of changes.</source>
-        <translation>Byly vybrané nasledující balčíky. Kliknite na Zobrazit podrobnosti pro seznam změn.</translation>
+        <translation>Byly vybrány následující balíčky. Klikněte na Zobrazit podrobnosti pro seznam změn.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="988"/>
@@ -441,7 +441,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="1118"/>
         <source>Downloading package info...</source>
-        <translation>Stahování informácí o balíčcích...</translation>
+        <translation>Stahování informací o balíčcích...</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1375"/>
@@ -452,7 +452,7 @@
         <location filename="../src/mainwindow.cpp" line="1377"/>
         <location filename="../src/mainwindow.cpp" line="1396"/>
         <source>Package info</source>
-        <translation>Informácie o balíčku</translation>
+        <translation>Informace o balíčku</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1505"/>
@@ -482,7 +482,7 @@
         <location filename="../src/mainwindow.cpp" line="2147"/>
         <location filename="../src/mainwindow.cpp" line="2168"/>
         <source>Processing finished successfully.</source>
-        <translation>Spracování úspěšně dokončené.</translation>
+        <translation>Zpracování úspěšně dokončeno.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1509"/>
@@ -517,7 +517,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="1633"/>
         <source>We encountered a problem uninstalling, please check output</source>
-        <translation>Vyskytl se problém s odinstalováním, skontrolujte výstupní údaje</translation>
+        <translation>Vyskytl se problém s odinstalováním, zkontrolujte výstupní údaje</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1647"/>
@@ -567,7 +567,7 @@ Ok pro jeho instalaci?</translation>
     <message>
         <location filename="../src/mainwindow.cpp" line="1754"/>
         <source>You might need to logout/login to see installed items in the menu</source>
-        <translation>Možná sa budete muset odhlásit a znova přihlásit, aby jste viděli nainstalované položky v nabídce</translation>
+        <translation>Možná se budete muset odhlásit a znovu přihlásit, abyste viděli nainstalované položky v nabídce</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1910"/>
@@ -582,7 +582,7 @@ Ok pro jeho instalaci?</translation>
     <message>
         <location filename="../src/mainwindow.cpp" line="1998"/>
         <source>Process still running, quitting might leave the system in an unstable state.&lt;p&gt;&lt;b&gt;Are you sure you want to exit CachyOS Package Installer?&lt;/b&gt;</source>
-        <translation>Proces stále běží, ukončení může zanechat systém v nestabilním stavu.&lt;p&gt;&lt;b&gt;Opravud si přejete ukončit CachyOS Package Installer?&lt;/b&gt;</translation>
+        <translation>Proces stále běží, ukončení může zanechat systém v nestabilním stavu.&lt;p&gt;&lt;b&gt;Opravdu si přejete ukončit CachyOS Package Installer?&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2088"/>
@@ -604,8 +604,8 @@ Ok pro jeho instalaci?</translation>
         <location filename="../src/mainwindow.cpp" line="2158"/>
         <source>Potentially dangerous operation.
 Please make sure you check carefully the list of packages to be removed.</source>
-        <translation>Potenciálne nebezpečná operace.
-Ujistite se, že důkladne zkontrolujete seznam balíčků, které mají být odstráněné.</translation>
+        <translation>Potenciálně nebezpečná operace.
+Ujistěte se, že důkladně zkontrolujete seznam balíčků, které mají být odstraněny.</translation>
     </message>
 </context>
 <context>
@@ -633,12 +633,12 @@ Ujistite se, že důkladne zkontrolujete seznam balíčků, které mají být od
     <message>
         <location filename="../src/remotes.cpp" line="45"/>
         <source>enter Flatpakref location to install app</source>
-        <translation>pro instalaci aplikace zadajte umístění Flatpakref</translation>
+        <translation>pro instalaci aplikace zadejte umístění Flatpakref</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="47"/>
         <source>Add or remove flatpak remotes (repos), or install apps using flatpakref URL or path</source>
-        <translation>Přidajte nebo odstraňte vzdálené úložiště Flatpak (repozitáře), nebo nainstalujte aplikace pomocí URL nebo cesty Flatpakref</translation>
+        <translation>Přidejte nebo odstraňte vzdálená úložiště Flatpak (repozitáře), nebo nainstalujte aplikace pomocí URL nebo cesty Flatpakref</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="56"/>
@@ -673,7 +673,7 @@ Ujistite se, že důkladne zkontrolujete seznam balíčků, které mají být od
     <message>
         <location filename="../src/remotes.cpp" line="107"/>
         <source>Error adding remote</source>
-        <translation>přidávejte vzdálené uložiště</translation>
+        <translation>Chyba při přidání vzdáleného úložiště</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="108"/>
@@ -713,21 +713,21 @@ Ujistite se, že důkladne zkontrolujete seznam balíčků, které mají být od
     <message>
         <location filename="../src/main.cpp" line="160"/>
         <source>Instance of the program is already running! Please close it first</source>
-        <translation>Instalace programu již běží! Prosím, nejprve ji ukončite</translation>
+        <translation>Instance programu již běží! Prosím, nejprve ji ukončete</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="178"/>
         <source>No db found!
 Please run `pacman -Sy` to update DB!
 This is needed for the app to work properly</source>
-        <translation>Nenašla sa žádné databáze!
+        <translation>Nenalezena žádná databáze!
 Prosím, spusťte `pacman -Sy` pro aktualizaci databáze!
-Je to potřebné pro správne fungování aplikacie</translation>
+Je to potřebné pro správné fungování aplikace</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="188"/>
         <source>You seem to be logged in as root, please log out and log in as normal user to use this program.</source>
-        <translation>Zdá sa, že jste přihlášený jako root, odhlašte se a přihlašte se jako běžný uživatel, aby jste mohli používat tento program.</translation>
+        <translation>Zdá se, že jste přihlášeni jako root, odhlaste se a přihlaste se jako běžný uživatel, abyste mohli používat tento program.</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="194"/>
@@ -751,7 +751,7 @@ Je to potřebné pro správne fungování aplikacie</translation>
     <message>
         <location filename="../src/main.cpp" line="204"/>
         <source>Another package management application (like pamac or pacman), is already running. Please close that application first</source>
-        <translation>Další aplikace na správu balíčků (jako pamac nebo pacman) již běží. Prosím, nejdřív ukončite tuto aplikaci</translation>
+        <translation>Další aplikace na správu balíčků (jako pamac nebo pacman) již běží. Prosím, nejdříve ukončete tuto aplikaci</translation>
     </message>
 </context>
 </TS>
