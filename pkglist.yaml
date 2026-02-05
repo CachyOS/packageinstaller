@@ -18,10 +18,13 @@
     - librewolf-bin
     - firefox
     - firefox-esr-bin
+    - firefox-pure
     - chromium
+    - ungoogled-chromium
     - vivaldi vivaldi-ffmpeg-codecs
     - torbrowser-launcher
     - brave-bin
+    - floorp-bin
     - falkon
     - qutebrowser python-adblock
 
