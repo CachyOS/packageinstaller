@@ -354,7 +354,7 @@
     </message>
     <message>
         <source>There was a problem updating sources. Some sources may not have provided updates. For more info check: </source>
-        <translation type="vanished">Pri aktualizácii zdrojov došlo k problému. Niektoré zdroje možno neposkytli aktualizácie. Pre viac informácií skontrolujte: </translation>
+        <translation type="vanished"></translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="426"></location>
