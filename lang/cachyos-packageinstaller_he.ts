@@ -336,7 +336,7 @@
     </message>
     <message>
         <source>Refreshing sources...</source>
-        <translation type="vanished">Obnovovanie zdrojov...</translation>
+        <translation type="vanished">המקורות מתרעננים...</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1509"></location>
