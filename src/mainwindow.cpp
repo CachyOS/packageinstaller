@@ -74,6 +74,7 @@ MainWindow::MainWindow(QWidget* parent) : QDialog(parent),
     this->setWindowTitle(tr("CachyOS Package Installer"));
 
     setup();
+    buildPackageLists();
 }
 
 MainWindow::~MainWindow() {
