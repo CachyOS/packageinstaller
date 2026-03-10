@@ -35,13 +35,13 @@ pkg_check_modules(
 CPMAddPackage(
   NAME fmt
   GITHUB_REPOSITORY fmtlib/fmt
-  GIT_TAG 11.2.0
+  GIT_TAG 12.1.0
   EXCLUDE_FROM_ALL YES
 )
 CPMAddPackage(
   NAME spdlog
   GITHUB_REPOSITORY gabime/spdlog
-  GIT_TAG v1.15.3
+  GIT_TAG v1.17.0
   EXCLUDE_FROM_ALL YES
 )
 CPMAddPackage(
