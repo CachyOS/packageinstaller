@@ -138,10 +138,6 @@ install(
    DESTINATION "${POLKITQT-1_POLICY_FILES_INSTALL_DIR}"
 )
 
-install(
-   FILES "${PROJECT_SOURCE_DIR}/pkglist.yaml"
-   DESTINATION lib/cachyos-pi
-)
 file(GLOB HELP_FILES "${PROJECT_SOURCE_DIR}/help/*")
 install(
    FILES ${HELP_FILES}
