@@ -3,13 +3,13 @@ name = "backend-rustlib"
 version = "0.1.0"
 build = "build.rs"
 authors = ["Vladislav Nepogodin <nepogodin.vlad@gmail.com>"]
-edition = "2021"
+edition = "2024"
 
 [dependencies]
 anyhow = { version = "1", default-features = false, features = ["std"] }
 cxx = { version = "1", default-features = false, features = ["std"] }
-alpm = { features = ["git"], default-features = false, version = "4" }
-alpm-utils = { features = ["git", "conf"], default-features = false, version = "4" }
+alpm = { default-features = false, version = "5" }
+alpm-utils = { features = ["conf"], default-features = false, version = "5" }
 pacmanconf = "3.1"
 
 [build-dependencies]
@@ -24,7 +24,3 @@ panic = "abort"
 lto = true
 opt-level = 3
 codegen-units = 1
-
-[patch.crates-io]
-alpm = { git = "https://github.com/archlinux/alpm.rs", rev = "54b8bdcdce2b04d12a180f1fd4b304cc8cf4cc1a" }
-alpm-utils = { git = "https://github.com/archlinux/alpm.rs", rev = "54b8bdcdce2b04d12a180f1fd4b304cc8cf4cc1a" }

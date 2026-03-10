@@ -483,7 +483,7 @@ impl AlpmManager {
             log_error_msg(format!("failed to prepare transaction ({err})"));
 
             match err.data() {
-                alpm::PrepareData::PkgInvalidArch(data) => {
+                Some(alpm::PrepareData::PkgInvalidArch(data)) => {
                     for pkg in data {
                         log_info_msg(format!(
                             "package {} does not have a valid architecture",
@@ -491,12 +491,12 @@ impl AlpmManager {
                         ));
                     }
                 },
-                alpm::PrepareData::UnsatisfiedDeps(data) => {
+                Some(alpm::PrepareData::UnsatisfiedDeps(data)) => {
                     for miss in data {
                         print_broken_dep(&trans_add, &miss);
                     }
                 },
-                alpm::PrepareData::ConflictingDeps(data) => {
+                Some(alpm::PrepareData::ConflictingDeps(data)) => {
                     for conflict in data {
                         let pkg_conflict1 = conflict.package1().name();
                         let pkg_conflict2 = conflict.package2().name();
@@ -524,10 +524,8 @@ impl AlpmManager {
                         }
                     }
                 },
+                _ => log_info_msg("err data invalid".to_owned()),
             }
-
-            self.handle.trans_release().context("Failed to release transaction")?;
-            anyhow::bail!("failed to release transaction");
         }
 
         self.handle.trans_release().context("Failed to release transaction")?;
