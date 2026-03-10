@@ -10,6 +10,8 @@ cmake-build-debug
 CMakeLists.txt.user
 subprojects/fmt
 subprojects/packagecache
+backend-rustlib/target
+compile_commands.json
 
 # Prerequisites
 *.d

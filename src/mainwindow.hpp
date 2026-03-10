@@ -59,19 +59,9 @@ class MainWindow;
 }
 
 namespace Tab {
-enum { Popular,
-    Repo,
+enum { Repo,
     Flatpak,
     Output };
-}
-namespace PopCol {
-enum { Icon,
-    Check,
-    Name,
-    Info,
-    Description,
-    InstallNames,
-    UninstallNames };
 }
 namespace TreeCol {
 enum { Check,
@@ -93,14 +83,6 @@ enum { Check,
     Duplicate,
     FullName };
 }
-namespace Popular {
-enum { Category,
-    Name,
-    Description,
-    InstallNames,
-    UninstallNames,
-    Group };
-}
 
 class MainWindow : public QDialog {
     Q_OBJECT
@@ -116,9 +98,6 @@ class MainWindow : public QDialog {
     auto confirmActions(const QString& names, std::string_view action, bool& is_ok) noexcept -> bool;
     auto fetchPackageList(bool force = false) noexcept -> bool;
     auto install(const QString& names) noexcept -> bool;
-    auto installBatch(const QStringList& name_list) noexcept -> bool;
-    auto installPopularApp(const QString& name) noexcept -> bool;
-    auto installPopularApps() noexcept -> bool;
     auto installSelected() noexcept -> bool;
     [[nodiscard]] static auto isFilteredName(const QString& name) noexcept -> bool;
     bool uninstall(const QString& names) noexcept;
@@ -131,15 +110,11 @@ class MainWindow : public QDialog {
     void displayFilteredFP(QStringList list, bool raw = false) noexcept;
     void displayFlatpaks(bool force_update = false) noexcept;
     void displayPackages() noexcept;
-    void displayPopularApps() const noexcept;
     void displayWarning(std::string_view repo) noexcept;
     void enableTabs(bool enable) noexcept;
     void ifDownloadFailed() noexcept;
     void listFlatpakRemotes() noexcept;
     void listSizeInstalledFP() noexcept;
-    void fetch_net_pkglist() noexcept;
-    void processFile(const std::string& group, const std::string& category, const std::vector<std::string>& names) noexcept;
-    void refreshPopularApps() noexcept;
     void removeDuplicatesFP() noexcept;
     void setCurrentTree() noexcept;
     void setProgressDialog() noexcept;
@@ -181,17 +156,13 @@ class MainWindow : public QDialog {
     void cmdStart();
     void disableOutput();
     void disableWarning(bool checked);
-    void displayInfo(const QTreeWidgetItem* item, int column) const;  // NOLINT
     void displayOutput();
     void displayPackageInfo(const QTreeWidgetItem* item);
     void filterChanged(const QString& arg1);
     void findPackageOther();
-    void findPopular() const;
     void outputAvailable(const QString& output);
     void showOutput();
     void updateBar();
-
-    void on_treePopularApps_expanded() noexcept;
 
     void on_checkHideLibs_toggled(bool checked) noexcept;
     void on_lineEdit_returnPressed() noexcept;
@@ -199,14 +170,9 @@ class MainWindow : public QDialog {
     void on_comboRemote_activated(int) noexcept;
     void on_comboUser_activated(int index) noexcept;
 
-    void on_treePopularApps_itemCollapsed(QTreeWidgetItem* item) noexcept;
-    void on_treePopularApps_itemExpanded(QTreeWidgetItem* item) noexcept;
-    void on_treePopularApps_itemChanged(QTreeWidgetItem* item) noexcept;
-
     void on_treeFlatpak_itemChanged(QTreeWidgetItem* item) noexcept;
     void on_treeRepo_itemChanged(QTreeWidgetItem* item) noexcept;
 
-    void on_treePopularApps_customContextMenuRequested(const QPoint& pos) noexcept;
     void on_treeRepo_customContextMenuRequested(const QPoint& pos) noexcept;
 
  private:
@@ -220,7 +186,6 @@ class MainWindow : public QDialog {
     int m_height_app{};
 
     Cmd m_cmd{};
-    QList<QStringList> m_popular_apps;
     QLocale m_locale{};
     std::map<QString, QStringList> m_repo_list{};
     QMetaObject::Connection m_conn{};

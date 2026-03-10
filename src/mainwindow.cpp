@@ -16,28 +16,6 @@
 
 // NOLINTBEGIN(bugprone-unhandled-exception-at-new)
 
-#if defined(__clang__)
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wold-style-cast"
-#pragma clang diagnostic ignored "-Wsign-conversion"
-#pragma clang diagnostic ignored "-Wshadow"
-#elif defined(__GNUC__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wold-style-cast"
-#pragma GCC diagnostic ignored "-Wsign-conversion"
-#pragma GCC diagnostic ignored "-Wshadow"
-#endif
-
-#include <cpr/cpr.h>
-#include <ryml.hpp>
-#include <ryml_std.hpp>
-
-#if defined(__clang__)
-#pragma clang diagnostic pop
-#elif defined(__GNUC__)
-#pragma GCC diagnostic pop
-#endif
-
 #include "mainwindow.hpp"
 #include "ui_mainwindow.h"
 
@@ -96,6 +74,7 @@ MainWindow::MainWindow(QWidget* parent) : QDialog(parent),
     this->setWindowTitle(tr("CachyOS Package Installer"));
 
     setup();
+    buildPackageLists();
 }
 
 MainWindow::~MainWindow() {
@@ -118,12 +97,8 @@ void MainWindow::setup() noexcept {
     m_ui->comboUser->setCurrentIndex(1);
 
     connect(qApp, &QApplication::aboutToQuit, this, &MainWindow::cleanup, Qt::QueuedConnection);
-    m_ui->tabWidget->setCurrentIndex(Tab::Popular);
+    m_ui->tabWidget->setCurrentIndex(Tab::Repo);
 
-    QStringList column_names;
-    column_names << ""
-                 << "" << tr("Package") << tr("Info") << tr("Description");
-    m_ui->treePopularApps->setHeaderLabels(column_names);
     m_ui->treeRepo->hideColumn(TreeCol::Status);     // Status of the package: installed, upgradable, etc
     m_ui->treeRepo->hideColumn(TreeCol::Displayed);  // Displayed status true/false
     m_ui->treeFlatpak->hideColumn(FlatCol::Status);
@@ -133,11 +108,8 @@ void MainWindow::setup() noexcept {
     const QString icon      = "software-update-available-symbolic";
     const QIcon backup_icon = QIcon(":/icons/software-update-available.png");
     m_ui->icon->setIcon(QIcon::fromTheme(icon, backup_icon));
-    fetch_net_pkglist();
-    refreshPopularApps();
 
     // connect search boxes
-    connect(m_ui->searchPopular, &QLineEdit::textChanged, this, &MainWindow::findPopular);
     connect(m_ui->searchBoxRepo, &QLineEdit::textChanged, this, &MainWindow::findPackageOther);
     connect(m_ui->searchBoxFlatpak, &QLineEdit::textChanged, this, &MainWindow::findPackageOther);
 
@@ -148,12 +120,10 @@ void MainWindow::setup() noexcept {
     // connect tab widget
     connect(m_ui->tabWidget, &QTabWidget::currentChanged, this, &MainWindow::on_current_tab_changed);
 
-    m_ui->searchPopular->setFocus();
     m_warning_flatpaks = false;
-    m_tree             = m_ui->treePopularApps;
+    m_tree             = m_ui->treeRepo;
 
     m_ui->treeRepo->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    m_ui->treePopularApps->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
     m_ui->treeFlatpak->header()->setSectionResizeMode(QHeaderView::ResizeToContents);
 
     m_ui->tabWidget->setTabEnabled(m_ui->tabWidget->indexOf(m_ui->tabOutput), false);
@@ -171,9 +141,9 @@ void MainWindow::setup() noexcept {
     auto* shortcutToggle = new QShortcut(Qt::Key_Space, this);
     connect(shortcutToggle, &QShortcut::activated, this, &MainWindow::checkUncheckItem);
 
-    const std::array list_tree{m_ui->treePopularApps, m_ui->treeRepo, m_ui->treeFlatpak};
+    const std::array list_tree{m_ui->treeRepo, m_ui->treeFlatpak};
     for (auto&& tree : list_tree) {
-        if (tree == m_ui->treePopularApps || tree == m_ui->treeRepo) {
+        if (tree == m_ui->treeRepo) {
             tree->setContextMenuPolicy(Qt::CustomContextMenu);
         }
         connect(tree, &QTreeWidget::itemDoubleClicked, [tree](QTreeWidgetItem* item) { tree->setCurrentItem(item); });
@@ -335,9 +305,8 @@ void MainWindow::checkUncheckItem() {
         return;
     }
 
-    const auto col = (t_widget == m_ui->treePopularApps) ? static_cast<std::int32_t>(PopCol::Check) : static_cast<std::int32_t>(TreeCol::Check);
-    auto new_state = (t_widget->currentItem()->checkState(col)) ? Qt::Unchecked : Qt::Checked;
-    t_widget->currentItem()->setCheckState(col, new_state);
+    const auto new_state = (t_widget->currentItem()->checkState(TreeCol::Check)) ? Qt::Unchecked : Qt::Checked;
+    t_widget->currentItem()->setCheckState(TreeCol::Check, new_state);
 }
 
 void MainWindow::outputAvailable(const QString& output) {
@@ -348,137 +317,6 @@ void MainWindow::outputAvailable(const QString& output) {
     }
     m_ui->outputBox->insertPlainText(output);
     m_ui->outputBox->verticalScrollBar()->setValue(m_ui->outputBox->verticalScrollBar()->maximum());
-}
-
-void processMap(MainWindow& window, const std::string& parent_category, ryml::NodeRef&& root_map, std::int32_t depth) noexcept {
-    // NOTE: there shouldn't be nested subgroups of depth more than 2.
-    // let's limit recursion to 2 depth in.
-    if (depth > 2) {
-        return;
-    }
-
-    const auto& get_node_key = [](auto&& node) -> std::string {
-        if (node.has_key() && !node.has_key_tag()) {
-            return std::string{node.key().str, node.key().len};
-        }
-        return {};
-    };
-    const auto& process_lines = [&window](auto&& parent_category, auto&& category, auto&& node) {
-        std::vector<std::string> lines;
-        lines.reserve(node.num_children());
-        for (const auto& pkg_list : node.children()) {
-            if (pkg_list.has_val() && !pkg_list.has_val_tag()) {
-                lines.emplace_back(std::string{pkg_list.val().str, pkg_list.val().len});
-            }
-        }
-        for (auto&& line : lines) {
-            window.processFile(parent_category, category, ::utils::make_multiline(line, ' '));
-        }
-    };
-
-    for (auto&& map : std::move(root_map).children()) {
-        std::string category{};
-        for (auto&& map_child : map.children()) {
-            if (map_child.has_val() && !map_child.has_val_tag()) {
-                category = std::string{map_child.val().str, map_child.val().len};
-            }
-            if (!map_child.is_container()) {
-                continue;
-            }
-
-            const auto& key{get_node_key(map_child)};
-            if (key == "subgroups") {
-                processMap(window, category, std::move(map_child), depth + 1);
-            } else {
-                // if we have a depth less than 1, then there is no parent.
-                // which means parent category is equal to empty string.
-                const auto& cond_par_cat = (depth > 1) ? parent_category : category;
-                process_lines(cond_par_cat, category, std::move(map_child));
-            }
-        }
-    }
-}
-
-// Load data from Github repo
-void MainWindow::fetch_net_pkglist() noexcept {
-    spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
-
-    const auto& fetch_filepath = [this]() -> QString {
-        auto progress_callback = []([[maybe_unused]] auto&& downloadTotal, [[maybe_unused]] auto&& downloadNow, [[maybe_unused]] auto&& uploadTotal,
-                                     [[maybe_unused]] auto&& uploadNow, [[maybe_unused]] auto&& userdata) -> bool { return true; };
-
-        const auto& file_url      = cpr::Url{"https://raw.githubusercontent.com/cachyos/packageinstaller/develop/pkglist.yaml"};
-        const auto& fetch_timeout = cpr::Timeout{100 * 1000};  // 100s
-        const auto& response      = cpr::Get(file_url, fetch_timeout, cpr::ProgressCallback(std::move(progress_callback)));
-
-        if (response.error.code == cpr::ErrorCode::OK) {
-            const auto& config_path = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation).toStdString();
-            auto pkglist_path       = fmt::format("{}/pkglist.yaml", config_path);
-            if (!fs::exists(config_path)) {
-                std::error_code err{};
-                fs::create_directories(config_path, err);
-                if (err) {
-                    spdlog::error("failed to create directories: {}", err.message());
-                }
-            }
-
-            std::ofstream pkglistyaml{pkglist_path};
-            pkglistyaml << response.text;
-            return QString::fromStdString(std::move(pkglist_path));
-        } else if (response.error.code == cpr::ErrorCode::OPERATION_TIMEDOUT) {
-            spdlog::error("Unable to fetch pkglist. Timeout");
-            QMessageBox::warning(this, "CachyOS Package Installer", tr("Unable to fetch pkglist. Timeout!"));
-        }
-        return {"/usr/lib/cachyos-pi/pkglist.yaml"};
-    }();
-
-    QFile file(fetch_filepath);
-    if (!file.open(QFile::ReadOnly | QFile::Text)) {
-        spdlog::error("Could not open: {}", file.fileName().toStdString());
-        return;
-    }
-    const auto& src    = file.readAll().toStdString();
-    ryml::Tree tree    = ryml::parse_in_arena(ryml::to_csubstr(src));
-    ryml::NodeRef root = tree.rootref();  // get a reference to the root
-
-    processMap(*this, {}, std::move(root), 1);
-
-    file.close();
-}
-
-// Process docs
-void MainWindow::processFile(const std::string& group, const std::string& category, const std::vector<std::string>& names) noexcept {
-    if (names.empty()) {
-        return;
-    }
-
-    QString description;
-    QString install_names;
-    QString uninstall_names;
-
-    if (auto pkg = m_alpm_manager->get_package_view(names[0])) {
-        description = QString(pkg->desc.data());
-    }
-
-    install_names   = QString::fromStdString(fmt::format("{} {}", names[0], utils::join_range(names.begin() + 1, names.end(), ' ')));
-    uninstall_names = install_names;
-
-    QStringList templist;
-    templist << QString::fromStdString(category) << QString::fromStdString(names[0])
-             << description << install_names << uninstall_names << QString::fromStdString(group);
-    m_popular_apps << templist;
-}
-
-// Reload and refresh interface
-void MainWindow::refreshPopularApps() noexcept {
-    spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
-    disableOutput();
-    m_ui->treePopularApps->clear();
-    m_ui->searchPopular->clear();
-    m_ui->pushInstall->setEnabled(false);
-    m_ui->pushUninstall->setEnabled(false);
-    m_installed_packages = listInstalled();
-    displayPopularApps();
 }
 
 // In case of duplicates add extra name to disambiguate
@@ -546,95 +384,6 @@ void MainWindow::setSearchFocus() noexcept {
     default:
         break;
     }
-}
-
-// Display Popular Apps in the treePopularApps
-void MainWindow::displayPopularApps() const noexcept {
-    spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
-    QTreeWidgetItem* topLevelItem = nullptr;
-    QTreeWidgetItem* childItem    = nullptr;
-
-    const auto& top_level_item_emplace = [&](auto&& searchtext) {
-        // add package search text if treePopularApps doesn't already have it
-        if (m_ui->treePopularApps->findItems(searchtext, Qt::MatchFixedString, PopCol::Name).isEmpty()) {
-            topLevelItem = new QTreeWidgetItem();
-            topLevelItem->setText(PopCol::Name, searchtext);
-            m_ui->treePopularApps->addTopLevelItem(topLevelItem);
-            // topLevelItem look
-            QFont font;
-            font.setBold(true);
-            topLevelItem->setFont(PopCol::Name, font);
-            topLevelItem->setIcon(PopCol::Icon, QIcon::fromTheme("folder"));
-        } else {
-            topLevelItem = m_ui->treePopularApps->findItems(searchtext, Qt::MatchFixedString, PopCol::Name).at(0);  // find first match; add the child there
-        }
-    };
-
-    const auto& tree_widget_find_item = [](auto&& widget, auto&& category) -> QTreeWidgetItem* {
-        const auto& topLevelItemChildCount = widget->childCount();
-        for (int i = 0; i < topLevelItemChildCount; ++i) {
-            auto topLevelItemChild = widget->child(i);
-            auto childText         = topLevelItemChild->text(PopCol::Name);
-            if (childText == category) {
-                return topLevelItemChild;
-            }
-        }
-        return nullptr;
-    };
-
-    for (const QStringList& list : m_popular_apps) {
-        const auto& category        = list.at(Popular::Category);
-        const auto& name            = list.at(Popular::Name);
-        const auto& description     = list.at(Popular::Description);
-        const auto& install_names   = list.at(Popular::InstallNames);
-        const auto& uninstall_names = list.at(Popular::UninstallNames);
-        const auto& group           = list.at(Popular::Group);
-
-        QTreeWidgetItem* topLevelChildItem = nullptr;
-        if (group != category) {
-            top_level_item_emplace(group);
-
-            topLevelChildItem = tree_widget_find_item(topLevelItem, category);
-
-            if (topLevelChildItem == nullptr) {
-                topLevelChildItem = new QTreeWidgetItem(topLevelItem);
-                topLevelChildItem->setText(PopCol::Name, category);
-                topLevelItem->addChild(topLevelChildItem);
-                // childItem look
-                QFont font;
-                font.setBold(true);
-                topLevelChildItem->setFont(PopCol::Name, font);
-                topLevelChildItem->setIcon(PopCol::Icon, QIcon::fromTheme("folder"));
-            }
-        }
-
-        // add package name as childItem to treePopularApps
-        if (group != category) {
-            childItem = new QTreeWidgetItem(topLevelChildItem);
-        } else {
-            top_level_item_emplace(category);
-            childItem = new QTreeWidgetItem(topLevelItem);
-        }
-        childItem->setText(PopCol::Name, name);
-        childItem->setIcon(PopCol::Info, QIcon::fromTheme("dialog-information"));
-        childItem->setFlags(childItem->flags() | Qt::ItemIsUserCheckable);
-        childItem->setCheckState(PopCol::Check, Qt::Unchecked);
-        childItem->setText(PopCol::Description, description);
-        childItem->setText(PopCol::InstallNames, install_names);
-        childItem->setText(PopCol::UninstallNames, uninstall_names);  // not displayed
-
-        // gray out installed items
-        if (checkInstalled(name)) {
-            childItem->setForeground(PopCol::Name, QBrush(Qt::gray));
-            childItem->setForeground(PopCol::Description, QBrush(Qt::gray));
-        }
-    }
-    for (int i = 0; i < m_ui->treePopularApps->columnCount(); ++i) {
-        m_ui->treePopularApps->resizeColumnToContents(i);
-    }
-
-    m_ui->treePopularApps->sortItems(2, Qt::AscendingOrder);
-    connect(m_ui->treePopularApps, &QTreeWidget::itemClicked, this, &MainWindow::displayInfo, Qt::UniqueConnection);
 }
 
 // Display only the listed apps (Flatpak only)
@@ -868,7 +617,7 @@ void MainWindow::displayWarning(std::string_view repo) noexcept {
 void MainWindow::ifDownloadFailed() noexcept {
     spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
     m_progress->hide();
-    m_ui->tabWidget->setCurrentWidget(m_ui->tabPopular);
+    m_ui->tabWidget->setCurrentWidget(m_ui->tabRepo);
 }
 
 // List the flatpak remote and load them into combobox
@@ -1013,88 +762,6 @@ bool MainWindow::install(const QString& names) noexcept {
     return m_cmd.run(cmd_str);
 }
 
-// install a list of application and run postprocess for each of them.
-bool MainWindow::installBatch(const QStringList& name_list) noexcept {
-    spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
-    QString install_names;
-    bool result = true;
-
-    // load all the
-    for (const auto& name : name_list) {
-        for (const auto& popular_list : m_popular_apps) {
-            if (popular_list.at(Popular::Name) == name) {
-                install_names += popular_list.at(Popular::InstallNames) + ' ';
-            }
-        }
-    }
-
-    if (!install_names.isEmpty() && !install(install_names)) {
-        result = false;
-    }
-
-    displayOutput();
-    return result;
-}
-
-// install named app
-bool MainWindow::installPopularApp(const QString& name) noexcept {
-    spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
-    bool result = true;
-    QString install_names;
-
-    // get all the app info
-    for (const QStringList& list : m_popular_apps) {
-        if (list.at(Popular::Name) == name) {
-            install_names = list.at(Popular::InstallNames);
-        }
-    }
-    displayOutput();
-    // install
-    if (!install_names.isEmpty()) {
-        m_ui->tabWidget->setTabText(m_ui->tabWidget->indexOf(m_ui->tabOutput), tr("Installing ") + name);
-        result = install(install_names);
-    }
-    displayOutput();
-    return result;
-}
-
-// Process checked items to install
-bool MainWindow::installPopularApps() noexcept {
-    spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
-
-    QStringList batch_names;
-    bool result = true;
-
-    // make a list of apps to be installed together
-    for (QTreeWidgetItemIterator it(m_ui->treePopularApps); *it; ++it) {
-        auto currentItem = *it;
-        if (currentItem->checkState(PopCol::Check) == Qt::Checked) {
-            const auto& name = currentItem->text(2);
-            for (const QStringList& popular_list : m_popular_apps) {
-                if (popular_list.at(Popular::Name) != name) {
-                    continue;
-                }
-                batch_names << name;
-                currentItem->setCheckState(PopCol::Check, Qt::Unchecked);
-            }
-        }
-    }
-
-    if (!installBatch(batch_names)) {
-        result = false;
-    }
-
-    // install the rest of the apps
-    for (QTreeWidgetItemIterator it(m_ui->treePopularApps); *it; ++it) {
-        auto currentItem = *it;
-        if ((currentItem->checkState(PopCol::Check) == Qt::Checked) && !installPopularApp(currentItem->text(PopCol::Name))) {
-            result = false;
-        }
-    }
-    setCursor(QCursor(Qt::ArrowCursor));
-    return result;
-}
-
 // Install selected items
 bool MainWindow::installSelected() noexcept {
     spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
@@ -1174,7 +841,7 @@ void MainWindow::clearUi() noexcept {
     m_ui->pushInstall->setEnabled(false);
     m_ui->pushUninstall->setEnabled(false);
 
-    if (m_tree == m_ui->treeRepo || m_tree == m_ui->treePopularApps) {
+    if (m_tree == m_ui->treeRepo) {
         m_ui->labelNumApps->clear();
         m_ui->labelNumInst->clear();
         m_ui->labelNumUpgr->clear();
@@ -1308,7 +975,7 @@ QStringList MainWindow::listInstalledFlatpaks(std::string_view type) {
 // return the visible tree
 void MainWindow::setCurrentTree() noexcept {
     spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
-    const QList list({m_ui->treePopularApps, m_ui->treeRepo, m_ui->treeFlatpak});
+    const QList list({m_ui->treeRepo, m_ui->treeFlatpak});
 
     auto it = std::ranges::find_if(list, [](const auto& item) { return item->isVisible(); });
     if (it != list.end()) {
@@ -1370,24 +1037,6 @@ void MainWindow::disableWarning(bool checked) {
     m_settings.setValue("disableWarning", checked);
 }
 
-// Display info when clicking the "info" icon of the package
-// NOLINTNEXTLINE
-void MainWindow::displayInfo(const QTreeWidgetItem* item, int column) const {
-    if (column != PopCol::Info || item->childCount() > 0) {
-        return;
-    }
-
-    const auto desc          = item->text(PopCol::Description);
-    const auto install_names = item->text(PopCol::InstallNames);
-    const auto title         = item->text(PopCol::Name);
-    QString msg              = "<b>" + title + "</b><p>" + desc + "<p>";
-    if (!install_names.isEmpty()) {
-        msg += tr("Packages to be installed: ") + install_names;
-    }
-    QMessageBox info(QMessageBox::NoIcon, tr("Package info"), msg, QMessageBox::Close);
-    info.exec();
-}
-
 void MainWindow::displayPackageInfo(const QTreeWidgetItem* item) {
     const auto& item_pkgname = item->text(2).toStdString();
     QString msg              = m_cmd.getCmdOut(QString::fromStdString(fmt::format("pacman -Si {}", item_pkgname)));
@@ -1411,62 +1060,6 @@ void MainWindow::displayPackageInfo(const QTreeWidgetItem* item) {
     auto* layout           = qobject_cast<QGridLayout*>(info.layout());
     layout->addItem(horizontalSpacer, 0, 1);
     info.exec();
-}
-
-// Find package in view
-void MainWindow::findPopular() const {
-    const auto word = m_ui->searchPopular->text();
-    if (word.length() == 1) {
-        return;
-    }
-
-    if (word.isEmpty()) {
-        for (QTreeWidgetItemIterator it(m_ui->treePopularApps); *it; ++it) {
-            auto currentItem = *it;
-            currentItem->setExpanded(false);
-        }
-        m_ui->treePopularApps->reset();
-        for (int i = 0; i < m_ui->treePopularApps->columnCount(); ++i) {
-            m_ui->treePopularApps->resizeColumnToContents(i);
-        }
-        return;
-    }
-    auto found_items = m_ui->treePopularApps->findItems(word, Qt::MatchContains | Qt::MatchRecursive, 2);
-    found_items << m_ui->treePopularApps->findItems(word, Qt::MatchContains | Qt::MatchRecursive, 4);
-
-    // hide/show items
-    for (QTreeWidgetItemIterator it(m_ui->treePopularApps); *it; ++it) {
-        auto currentItem = *it;
-        // if child
-        if (currentItem->childCount() == 0) {
-            if (found_items.contains(currentItem)) {
-                currentItem->setHidden(false);
-            } else {
-                currentItem->parent()->setHidden(true);
-                currentItem->setHidden(true);
-            }
-        }
-    }
-
-    // process found items
-    for (auto* item : found_items) {
-        // if child, expand parent
-        if (item->childCount() == 0) {
-            item->parent()->setExpanded(true);
-            item->parent()->setHidden(false);
-        } else {
-            // if parent, expand children
-            item->setExpanded(true);
-            item->setHidden(false);
-            const auto count = item->childCount();
-            for (int i = 0; i < count; ++i) {
-                item->child(i)->setHidden(false);
-            }
-        }
-    }
-    for (int i = 0; i < m_ui->treePopularApps->columnCount(); ++i) {
-        m_ui->treePopularApps->resizeColumnToContents(i);
-    }
 }
 
 // Find packages in other sources
@@ -1512,20 +1105,7 @@ void MainWindow::on_push_install() noexcept {
     // qDebug() << "change list"  << .join(' ');
     showOutput();
 
-    if (m_tree == m_ui->treePopularApps) {
-        const bool success = installPopularApps();
-        if (!m_repo_list.empty()) {  // clear cache to update list if it already exists
-            buildPackageLists();
-        }
-        if (success) {
-            refreshPopularApps();
-            QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
-            m_ui->tabWidget->setCurrentWidget(m_tree->parentWidget());
-        } else {
-            refreshPopularApps();
-            QMessageBox::critical(this, tr("Error"), tr("Problem detected while installing, please inspect the console output."));
-        }
-    } else if (m_tree == m_ui->treeFlatpak) {
+    if (m_tree == m_ui->treeFlatpak) {
         // confirmation dialog
         bool is_ok{};
         if (!confirmActions(m_change_list.join(' '), "install", is_ok)) {
@@ -1555,7 +1135,6 @@ void MainWindow::on_push_install() noexcept {
     } else {
         const bool success = installSelected();
         buildPackageLists();
-        refreshPopularApps();
         if (success) {
             QMessageBox::information(this, tr("Done"), tr("Processing finished successfully."));
             m_ui->tabWidget->setCurrentWidget(m_tree->parentWidget());
@@ -1574,26 +1153,6 @@ void MainWindow::on_push_about() noexcept {
         QStringLiteral("file:///usr/share/doc/cachyos-packageinstaller/license.html"));
 }
 
-// Resize columns when expanding
-void MainWindow::on_treePopularApps_expanded() noexcept {
-    m_ui->treePopularApps->resizeColumnToContents(PopCol::Name);
-    m_ui->treePopularApps->resizeColumnToContents(PopCol::Description);
-}
-
-// Tree item expanded
-void MainWindow::on_treePopularApps_itemExpanded(QTreeWidgetItem* item) noexcept {
-    item->setIcon(PopCol::Icon, QIcon::fromTheme("folder-open"));
-    m_ui->treePopularApps->resizeColumnToContents(PopCol::Name);
-    m_ui->treePopularApps->resizeColumnToContents(PopCol::Description);
-}
-
-// Tree item collapsed
-void MainWindow::on_treePopularApps_itemCollapsed(QTreeWidgetItem* item) noexcept {
-    item->setIcon(PopCol::Icon, QIcon::fromTheme("folder"));
-    m_ui->treePopularApps->resizeColumnToContents(PopCol::Name);
-    m_ui->treePopularApps->resizeColumnToContents(PopCol::Description);
-}
-
 // Uninstall clicked
 void MainWindow::on_push_uninstall() noexcept {
     spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
@@ -1602,14 +1161,7 @@ void MainWindow::on_push_uninstall() noexcept {
 
     QString names;
 
-    if (m_tree == m_ui->treePopularApps) {
-        for (QTreeWidgetItemIterator it(m_ui->treePopularApps); *it; ++it) {
-            auto currentItem = *it;
-            if (currentItem->checkState(PopCol::Check) == Qt::Checked) {
-                names += currentItem->text(PopCol::UninstallNames).replace("\n", " ") + " ";
-            }
-        }
-    } else if (m_tree == m_ui->treeFlatpak) {
+    if (m_tree == m_ui->treeFlatpak) {
         bool success = true;
 
         // new version of flatpak takes a "-y" confirmation
@@ -1660,7 +1212,6 @@ void MainWindow::on_push_uninstall() noexcept {
     if (!m_repo_list.empty()) {  // update list if it already exists
         buildPackageLists();
     }
-    refreshPopularApps();
     if (success) {
         QMessageBox::information(this, tr("Success"), tr("Processing finished successfully."));
         m_ui->tabWidget->setCurrentWidget(m_tree->parentWidget());
@@ -1680,23 +1231,19 @@ void MainWindow::on_current_tab_changed(int index) noexcept {
     m_ui->pushUninstall->setEnabled(false);
 
     // reset checkboxes when tab changes
-    if (m_tree != m_ui->treePopularApps) {
-        m_tree->blockSignals(true);
-        m_tree->clearSelection();
+    m_tree->blockSignals(true);
+    m_tree->clearSelection();
 
-        for (QTreeWidgetItemIterator it(m_tree); *it; ++it) {
-            auto* currentItem = *it;
-            currentItem->setCheckState(0, Qt::Unchecked);
-        }
-        m_tree->blockSignals(false);
+    for (QTreeWidgetItemIterator it(m_tree); *it; ++it) {
+        auto* currentItem = *it;
+        currentItem->setCheckState(0, Qt::Unchecked);
     }
+    m_tree->blockSignals(false);
 
     // save the search text
     QString search_str;
     int filter_idx = 0;
-    if (m_tree == m_ui->treePopularApps) {
-        search_str = m_ui->searchPopular->text();
-    } else if (m_tree == m_ui->treeRepo) {
+    if (m_tree == m_ui->treeRepo) {
         search_str = m_ui->searchBoxRepo->text();
         filter_idx = m_ui->comboFilterRepo->currentIndex();
     } else if (m_tree == m_ui->treeFlatpak) {
@@ -1705,13 +1252,6 @@ void MainWindow::on_current_tab_changed(int index) noexcept {
 
     bool success = false;
     switch (index) {
-    case Tab::Popular:
-        m_ui->searchPopular->setText(search_str);
-        enableTabs(true);
-        setCurrentTree();
-        findPopular();
-        m_ui->searchPopular->setFocus();
-        break;
     case Tab::Repo:
         m_ui->searchBoxRepo->setText(search_str);
 
@@ -1737,7 +1277,7 @@ void MainWindow::on_current_tab_changed(int index) noexcept {
         if (!checkInstalled("flatpak")) {
             const auto ans = QMessageBox::question(this, tr("Flatpak not installed"), tr("Flatpak is not currently installed.\nOK to go ahead and install it?"));
             if (ans == QMessageBox::No) {
-                m_ui->tabWidget->setCurrentIndex(Tab::Popular);
+                m_ui->tabWidget->setCurrentIndex(Tab::Repo);
                 break;
             }
             m_ui->tabWidget->setTabEnabled(m_ui->tabWidget->indexOf(m_ui->tabOutput), true);
@@ -1749,7 +1289,7 @@ void MainWindow::on_current_tab_changed(int index) noexcept {
             buildPackageLists();
             if (!checkInstalled("flatpak")) {
                 QMessageBox::critical(this, tr("Flatpak not installed"), tr("Flatpak was not installed"));
-                m_ui->tabWidget->setCurrentIndex(Tab::Popular);
+                m_ui->tabWidget->setCurrentIndex(Tab::Repo);
                 setCursor(QCursor(Qt::ArrowCursor));
                 enableTabs(true);
                 m_ui->tabWidget->blockSignals(false);
@@ -1758,7 +1298,7 @@ void MainWindow::on_current_tab_changed(int index) noexcept {
             success = m_cmd.run("pkexec /bin/bash -c \"flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo && flatpak remote-add --if-not-exists --subset=verified flathub-verified https://flathub.org/repo/flathub.flatpakrepo\"");
             if (!success) {
                 QMessageBox::critical(this, tr("Flathub remote failed"), tr("Flathub remote could not be added"));
-                m_ui->tabWidget->setCurrentIndex(Tab::Popular);
+                m_ui->tabWidget->setCurrentIndex(Tab::Repo);
                 setCursor(QCursor(Qt::ArrowCursor));
                 break;
             }
@@ -1785,7 +1325,6 @@ void MainWindow::on_current_tab_changed(int index) noexcept {
         displayFlatpaks(false);
         break;
     case Tab::Output:
-        m_ui->searchPopular->clear();
         m_ui->searchBoxRepo->clear();
         m_ui->pushInstall->setDisabled(true);
         m_ui->pushUninstall->setDisabled(true);
@@ -2027,7 +1566,7 @@ void MainWindow::on_push_cancel() noexcept {
     qApp->quit();
 }
 
-// on change flatpack remote
+// on change flatpak remote
 void MainWindow::on_comboRemote_activated(int) noexcept {
     spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
     displayFlatpaks(true);
@@ -2102,26 +1641,13 @@ void MainWindow::on_comboUser_activated(int index) noexcept {
     displayFlatpaks(true);
 }
 
-void MainWindow::on_treePopularApps_customContextMenuRequested(const QPoint& pos) noexcept {
-    auto* t_widget = qobject_cast<QTreeWidget*>(focusWidget());
-    if (t_widget->currentItem()->childCount() > 0) {
-        return;
-    }
-    auto* action = new QAction(QIcon::fromTheme("dialog-information"), tr("More &info..."), this);
-    QMenu menu(this);
-    menu.addAction(action);
-    connect(action, &QAction::triggered, [this, t_widget] { displayInfo(t_widget->currentItem(), 3); });
-    menu.exec(m_ui->treePopularApps->mapToGlobal(pos));
-    action->deleteLater();
-}
-
 void MainWindow::on_treeRepo_customContextMenuRequested(const QPoint& pos) noexcept {
     auto* t_widget = qobject_cast<QTreeWidget*>(focusWidget());
     auto* action   = new QAction(QIcon::fromTheme("dialog-information"), tr("More &info..."), this);
     QMenu menu(this);
     menu.addAction(action);
     connect(action, &QAction::triggered, [this, t_widget] { displayPackageInfo(t_widget->currentItem()); });
-    menu.exec(m_ui->treePopularApps->mapToGlobal(pos));
+    menu.exec(m_ui->treeRepo->mapToGlobal(pos));
     action->deleteLater();
 }
 
@@ -2129,31 +1655,6 @@ void MainWindow::on_treeRepo_customContextMenuRequested(const QPoint& pos) noexc
 void MainWindow::keyPressEvent(QKeyEvent* event) {
     if (event->key() == Qt::Key_Escape) {
         this->on_push_cancel();
-    }
-}
-
-void MainWindow::on_treePopularApps_itemChanged(QTreeWidgetItem* item) noexcept {
-    if (item->checkState(1) == Qt::Checked) {
-        m_ui->treePopularApps->setCurrentItem(item);
-    }
-    bool checked   = false;
-    bool installed = true;
-
-    for (QTreeWidgetItemIterator it(m_ui->treePopularApps); *it; ++it) {
-        auto currentItem = *it;
-        if (currentItem->checkState(PopCol::Check) == Qt::Checked) {
-            checked = true;
-            if (currentItem->foreground(PopCol::Name) != Qt::gray) {
-                installed = false;
-            }
-        }
-    }
-    m_ui->pushInstall->setEnabled(checked);
-    m_ui->pushUninstall->setEnabled(checked && installed);
-    if (checked && installed) {
-        m_ui->pushInstall->setText(tr("Reinstall"));
-    } else {
-        m_ui->pushInstall->setText(tr("Install"));
     }
 }
 
@@ -2185,7 +1686,6 @@ void MainWindow::on_push_remove_orphan() noexcept {
     if (!m_repo_list.empty()) {  // update list if it already exists
         buildPackageLists();
     }
-    refreshPopularApps();
 
     if (success) {
         QMessageBox::information(this, tr("Success"), tr("Processing finished successfully."));

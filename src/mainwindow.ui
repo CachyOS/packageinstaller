@@ -35,7 +35,7 @@
       </sizepolicy>
      </property>
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <property name="documentMode">
       <bool>false</bool>
@@ -46,102 +46,6 @@
      <property name="movable">
       <bool>false</bool>
      </property>
-     <widget class="QWidget" name="tabPopular">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <attribute name="title">
-       <string>Popular Applications</string>
-      </attribute>
-      <layout class="QGridLayout" name="gridLayout">
-       <item row="3" column="0" colspan="5">
-        <widget class="QTreeWidget" name="treePopularApps">
-         <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
-         </property>
-         <property name="tabKeyNavigation">
-          <bool>true</bool>
-         </property>
-         <property name="selectionMode">
-          <enum>QAbstractItemView::SingleSelection</enum>
-         </property>
-         <column>
-          <property name="text">
-           <string/>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string/>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Package</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Info</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Description</string>
-          </property>
-         </column>
-        </widget>
-       </item>
-       <item row="2" column="2">
-        <widget class="QLineEdit" name="searchPopular">
-         <property name="minimumSize">
-          <size>
-           <width>150</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>200</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <property name="placeholderText">
-          <string>search</string>
-         </property>
-         <property name="clearButtonEnabled">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item row="1" column="0" rowspan="2">
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Manage popular packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-        </widget>
-       </item>
-       <item row="2" column="1">
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeType">
-          <enum>QSizePolicy::Expanding</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>350</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-      </layout>
-     </widget>
      <widget class="QWidget" name="tabRepo">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
@@ -265,10 +169,10 @@
        <item row="4" column="0" colspan="4">
         <widget class="QFrame" name="frame">
          <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
+          <enum>QFrame::Shape::StyledPanel</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
+          <enum>QFrame::Shadow::Raised</enum>
          </property>
          <layout class="QGridLayout" name="gridLayout_9">
           <item row="0" column="3">
@@ -284,8 +188,7 @@
              <string>Remove orphan packages</string>
             </property>
             <property name="icon">
-             <iconset theme="remove">
-              <normaloff>.</normaloff>.</iconset>
+             <iconset theme="remove"/>
             </property>
            </widget>
           </item>
@@ -299,7 +202,7 @@
           <item row="0" column="4">
            <spacer name="horizontalSpacer_2">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -312,10 +215,10 @@
           <item row="1" column="5">
            <spacer name="horizontalSpacer_4">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
             <property name="sizeType">
-             <enum>QSizePolicy::Preferred</enum>
+             <enum>QSizePolicy::Policy::Preferred</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -331,8 +234,7 @@
              <string>Upgrade All</string>
             </property>
             <property name="icon">
-             <iconset theme="system-upgrade">
-              <normaloff>.</normaloff>.</iconset>
+             <iconset theme="system-upgrade"/>
             </property>
             <property name="autoDefault">
              <bool>false</bool>
@@ -342,10 +244,10 @@
           <item row="1" column="2">
            <spacer name="horizontalSpacer_6">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
             <property name="sizeType">
-             <enum>QSizePolicy::Preferred</enum>
+             <enum>QSizePolicy::Policy::Preferred</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -373,8 +275,7 @@
              <string>Refresh list</string>
             </property>
             <property name="icon">
-             <iconset theme="reload">
-              <normaloff>.</normaloff>.</iconset>
+             <iconset theme="reload"/>
             </property>
             <property name="autoDefault">
              <bool>false</bool>
@@ -422,7 +323,7 @@
           <item row="0" column="5">
            <spacer name="horizontalSpacer_3">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -660,10 +561,10 @@
        <item row="6" column="0" colspan="5">
         <widget class="QFrame" name="frameFP">
          <property name="frameShape">
-          <enum>QFrame::StyledPanel</enum>
+          <enum>QFrame::Shape::StyledPanel</enum>
          </property>
          <property name="frameShadow">
-          <enum>QFrame::Raised</enum>
+          <enum>QFrame::Shadow::Raised</enum>
          </property>
          <layout class="QGridLayout" name="gridLayout_7">
           <item row="2" column="4">
@@ -700,8 +601,7 @@
              <string>Upgrade All</string>
             </property>
             <property name="icon">
-             <iconset theme="system-upgrade">
-              <normaloff>.</normaloff>.</iconset>
+             <iconset theme="system-upgrade"/>
             </property>
             <property name="autoDefault">
              <bool>false</bool>
@@ -711,10 +611,10 @@
           <item row="2" column="2">
            <spacer name="horizontalSpacer_15">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
             <property name="sizeType">
-             <enum>QSizePolicy::Preferred</enum>
+             <enum>QSizePolicy::Policy::Preferred</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -727,10 +627,10 @@
           <item row="2" column="8">
            <spacer name="horizontalSpacer_16">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
             <property name="sizeType">
-             <enum>QSizePolicy::Expanding</enum>
+             <enum>QSizePolicy::Policy::Expanding</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -746,8 +646,7 @@
              <string>Advanced</string>
             </property>
             <property name="icon">
-             <iconset theme="configure">
-              <normaloff>.</normaloff>.</iconset>
+             <iconset theme="configure"/>
             </property>
             <property name="autoDefault">
              <bool>false</bool>
@@ -757,10 +656,10 @@
           <item row="2" column="5">
            <spacer name="horizontalSpacer_17">
             <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+             <enum>Qt::Orientation::Horizontal</enum>
             </property>
             <property name="sizeType">
-             <enum>QSizePolicy::Preferred</enum>
+             <enum>QSizePolicy::Policy::Preferred</enum>
             </property>
             <property name="sizeHint" stdset="0">
              <size>
@@ -790,8 +689,7 @@
              <string>Remove unused runtimes</string>
             </property>
             <property name="icon">
-             <iconset theme="sweeper">
-              <normaloff>.</normaloff>.</iconset>
+             <iconset theme="sweeper"/>
             </property>
             <property name="autoDefault">
              <bool>false</bool>
@@ -828,7 +726,7 @@
          </property>
         </widget>
        </item>
-       <item row="1" column="2" alignment="Qt::AlignRight">
+       <item row="1" column="2" alignment="Qt::AlignmentFlag::AlignRight">
         <widget class="QLabel" name="labelRepo">
          <property name="text">
           <string>Remote (repo):</string>
@@ -838,10 +736,10 @@
        <item row="3" column="0">
         <spacer name="verticalSpacerFP">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeType">
-          <enum>QSizePolicy::Preferred</enum>
+          <enum>QSizePolicy::Policy::Preferred</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>
@@ -883,8 +781,7 @@
           <string>Enter</string>
          </property>
          <property name="icon">
-          <iconset theme="key-enter">
-           <normaloff>.</normaloff>.</iconset>
+          <iconset theme="key-enter"/>
          </property>
         </widget>
        </item>
@@ -901,7 +798,7 @@
           <bool>false</bool>
          </property>
          <property name="lineWrapMode">
-          <enum>QPlainTextEdit::WidgetWidth</enum>
+          <enum>QPlainTextEdit::LineWrapMode::WidgetWidth</enum>
          </property>
          <property name="readOnly">
           <bool>true</bool>
@@ -921,7 +818,7 @@
    <item>
     <layout class="QGridLayout" name="buttonBar" columnstretch="0,0,0,0,0,0,0,0,0">
      <property name="sizeConstraint">
-      <enum>QLayout::SetDefaultConstraint</enum>
+      <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
      </property>
      <property name="leftMargin">
       <number>0</number>
@@ -953,8 +850,7 @@
         <string>Help</string>
        </property>
        <property name="icon">
-        <iconset theme="help-contents">
-         <normaloff>.</normaloff>.</iconset>
+        <iconset theme="help-contents"/>
        </property>
        <property name="shortcut">
         <string>Alt+H</string>
@@ -967,10 +863,10 @@
      <item row="0" column="2">
       <spacer name="horizontalSpacer1">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Expanding</enum>
+        <enum>QSizePolicy::Policy::Expanding</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -983,10 +879,10 @@
      <item row="0" column="4">
       <spacer name="horizontalSpacer2">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeType">
-        <enum>QSizePolicy::Expanding</enum>
+        <enum>QSizePolicy::Policy::Expanding</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -1008,8 +904,7 @@
         <string>Install</string>
        </property>
        <property name="icon">
-        <iconset theme="run-install">
-         <normaloff>.</normaloff>.</iconset>
+        <iconset theme="run-install"/>
        </property>
        <property name="shortcut">
         <string>Alt+I</string>
@@ -1037,8 +932,7 @@
         <string>Close</string>
        </property>
        <property name="icon">
-        <iconset theme="window-close">
-         <normaloff>.</normaloff>.</iconset>
+        <iconset theme="window-close"/>
        </property>
        <property name="shortcut">
         <string>Alt+C</string>
@@ -1060,8 +954,7 @@
         <string>Uninstall</string>
        </property>
        <property name="icon">
-        <iconset theme="archive-remove">
-         <normaloff>.</normaloff>.</iconset>
+        <iconset theme="archive-remove"/>
        </property>
        <property name="shortcut">
         <string>Alt+U</string>
@@ -1086,8 +979,7 @@
         <string>About...</string>
        </property>
        <property name="icon">
-        <iconset theme="help-about">
-         <normaloff>.</normaloff>.</iconset>
+        <iconset theme="help-about"/>
        </property>
        <property name="shortcut">
         <string>Alt+B</string>
@@ -1103,8 +995,6 @@
  </widget>
  <tabstops>
   <tabstop>tabWidget</tabstop>
-  <tabstop>searchPopular</tabstop>
-  <tabstop>treePopularApps</tabstop>
   <tabstop>pushAbout</tabstop>
   <tabstop>pushHelp</tabstop>
   <tabstop>pushInstall</tabstop>
