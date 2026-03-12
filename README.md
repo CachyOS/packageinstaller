@@ -13,7 +13,7 @@ This is tested on Arch Linux, but *any* recent Arch Linux based system with late
 
 ```sh
 sudo pacman -Sy \
-    base-devel cmake pkg-config make qt6-base
+    base-devel cmake pkg-config make qt6-base qt6-tools polkit-qt6
 ```
 
 ### Cloning the source code
@@ -33,6 +33,14 @@ Second, build it:
 ./build.sh
 ```
 
+### Easy way to verify pkglist.yaml
+```bash
+for pkg in (yq -r '.[].packages[]' pkglist.yaml)
+    for split in (string split ' ' $pkg)
+        pacman -Ss split >/dev/null 2>&1; and echo "Found: $split"; or echo "NOT FOUND: $split"
+    end
+end
+```
 
 ### Libraries used in this project
 

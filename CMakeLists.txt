@@ -45,6 +45,18 @@ CPMAddPackage(
   EXCLUDE_FROM_ALL YES
 )
 CPMAddPackage(
+  NAME cpr
+  GITHUB_REPOSITORY libcpr/cpr
+  GIT_TAG 1.12.0
+  EXCLUDE_FROM_ALL YES
+)
+CPMAddPackage(
+  NAME rapidyaml
+  GITHUB_REPOSITORY biojppm/rapidyaml
+  GIT_TAG v0.9.0
+  EXCLUDE_FROM_ALL YES
+)
+CPMAddPackage(
   NAME Corrosion
   GITHUB_REPOSITORY corrosion-rs/corrosion
   GIT_TAG v0.5.2
@@ -120,7 +132,7 @@ corrosion_add_cxxbridge(backend-rustlib-cxxbridge CRATE backend_rustlib FILES li
 
 include_directories(${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR})
 
-target_link_libraries(${PROJECT_NAME} PRIVATE project_warnings project_options Qt6::Widgets Threads::Threads spdlog::spdlog fmt::fmt backend-rustlib-cxxbridge PkgConfig::LIBALPM)
+target_link_libraries(${PROJECT_NAME} PRIVATE project_warnings project_options Qt6::Widgets Threads::Threads spdlog::spdlog fmt::fmt ryml::ryml cpr::cpr backend-rustlib-cxxbridge PkgConfig::LIBALPM)
 
 option(ENABLE_UNITY "Enable Unity builds of projects" OFF)
 if(ENABLE_UNITY)
@@ -138,6 +150,10 @@ install(
    DESTINATION "${POLKITQT-1_POLICY_FILES_INSTALL_DIR}"
 )
 
+install(
+   FILES "${PROJECT_SOURCE_DIR}/pkglist.yaml"
+   DESTINATION lib/cachyos-pi
+)
 file(GLOB HELP_FILES "${PROJECT_SOURCE_DIR}/help/*")
 install(
    FILES ${HELP_FILES}
