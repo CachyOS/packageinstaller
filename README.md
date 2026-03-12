@@ -13,7 +13,7 @@ This is tested on Arch Linux, but *any* recent Arch Linux based system with late
 
 ```sh
 sudo pacman -Sy \
-    base-devel cmake pkg-config make qt6-base
+    base-devel cmake pkg-config make qt6-base qt6-tools polkit-qt6
 ```
 
 ### Cloning the source code
