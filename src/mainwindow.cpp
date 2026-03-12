@@ -74,8 +74,6 @@ MainWindow::MainWindow(QWidget* parent) : QDialog(parent),
     this->setWindowTitle(tr("CachyOS Package Installer"));
 
     setup();
-    buildPackageLists();
-    m_installed_packages = listInstalled();
 }
 
 MainWindow::~MainWindow() {
@@ -176,6 +174,8 @@ void MainWindow::setup() noexcept {
     connect(m_ui->pushUpgradeAll, &QPushButton::clicked, this, &MainWindow::on_push_upgrade_all);
     connect(m_ui->pushRemotes, &QPushButton::clicked, this, &MainWindow::on_push_remotes);
     connect(m_ui->pushUpgradeFP, &QPushButton::clicked, this, &MainWindow::on_push_upgrade_flatpak);
+
+    QMetaObject::invokeMethod(this, [this] { emit m_ui->tabWidget->currentChanged(Tab::Repo); }, Qt::QueuedConnection);
 }
 
 // Uninstall listed packages
@@ -1262,6 +1262,7 @@ void MainWindow::on_current_tab_changed(int index) noexcept {
         setCurrentTree();
         m_change_list.clear();
         if (m_tree->topLevelItemCount() == 0) {
+            m_installed_packages = listInstalled();
             buildPackageLists();
         }
         m_ui->comboFilterRepo->setCurrentIndex(filter_idx);
