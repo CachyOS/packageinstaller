@@ -57,7 +57,6 @@
     - jenkins
     - puppet
     - prometheus
-    - vagrant
     - terraform
 
 - name: "Games"
@@ -127,7 +126,6 @@
     - handbrake
     - transmageddon
     - soundconverter
-    - stremio
     - kodi kodi-platform kodi-eventclients
     - mediaelch
     - kid3
