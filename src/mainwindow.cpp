@@ -75,6 +75,7 @@ MainWindow::MainWindow(QWidget* parent) : QDialog(parent),
 
     setup();
     buildPackageLists();
+    m_installed_packages = listInstalled();
 }
 
 MainWindow::~MainWindow() {
