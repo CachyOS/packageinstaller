@@ -143,7 +143,7 @@
     - mediaelch
     - kid3
     - easytag
-    - k3b cdparanoia cdrdao dvd+rw-tools emovix transcode vcdimager cdrtools
+    - k3b cdparanoia cdrdao dvd+rw-tools emovix vcdimager cdrtools
     - brasero
     - xfburn
 
@@ -174,7 +174,6 @@
     - dragon
     - shotcut
     - pitivi frei0r-plugins
-    - openshot
     - obs-studio
     - vlc
     - smplayer smplayer-skins smplayer-themes
@@ -185,4 +184,3 @@
     - virtualbox
     - gnome-boxes
     - virt-manager
-
