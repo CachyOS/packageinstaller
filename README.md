@@ -7,16 +7,20 @@ Requirements
 Any compiler which support C++23 standard should work.
 
 ######
-## Installing from source
+## Installing from Source
 
 This is tested on Arch Linux, but *any* recent Arch Linux based system with latest C++23 compiler should do:
-
 ```sh
-sudo pacman -Sy \
+sudo pacman -S \
     base-devel cmake pkg-config make qt6-base qt6-tools polkit-qt6
 ```
+You also need Rust installed:
+```sh
+sudo pacman -S rustup
+rustup default stable
+```
 
-### Cloning the source code
+### Cloning the Source Code
 ```sh
 git clone https://github.com/cachyos/packageinstaller.git
 cd packageinstaller
@@ -31,6 +35,11 @@ might also want `--prefix=/usr`):
 Second, build it:
 ```sh
 ./build.sh
+```
+
+### Running the Binary
+```sh
+./build/RelWithDebInfo/cachyos-pi
 ```
 
 ### Easy way to verify pkglist.yaml in fish
