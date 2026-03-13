@@ -5,11 +5,13 @@
         <file alias="ca">lang/cachyos-packageinstaller_ca.qm</file>
         <file alias="cs">lang/cachyos-packageinstaller_cs.qm</file>
         <file alias="de">lang/cachyos-packageinstaller_de.qm</file>
+        <file alias="he">lang/cachyos-packageinstaller_he.qm</file>
         <file alias="ja">lang/cachyos-packageinstaller_ja.qm</file>
         <file alias="ko">lang/cachyos-packageinstaller_ko.qm</file>
         <file alias="pl">lang/cachyos-packageinstaller_pl.qm</file>
         <file alias="ru">lang/cachyos-packageinstaller_ru.qm</file>
         <file alias="sk">lang/cachyos-packageinstaller_sk.qm</file>
         <file alias="sv">lang/cachyos-packageinstaller_sv.qm</file>
+        <file alias="uk">lang/cachyos-packageinstaller_uk.qm</file>
     </qresource>
 </RCC>
