@@ -20,7 +20,7 @@
     - firefox-esr-bin
     - firefox-pure
     - chromium
-    - ungoogled-chromium
+    - ungoogled-chromium-bin
     - vivaldi vivaldi-ffmpeg-codecs
     - torbrowser-launcher
     - brave-bin
