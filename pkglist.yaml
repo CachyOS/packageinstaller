@@ -98,6 +98,8 @@
 - name: "Hardware Tools"
   packages:
     - amdgpu_top
+    - cachyos-benchmarker
+    - cpu-x
     - lact
     - occt
     - openlinkhub
