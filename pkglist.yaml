@@ -95,6 +95,14 @@
     - fontforge
     - birdfont
 
+- name: "Hardware Tools"
+  packages:
+    - amdgpu_top
+    - lact
+    - occt
+    - openlinkhub
+    - openrgb
+
 - name: "Internet"
   packages:
     - xdman
@@ -154,11 +162,6 @@
   packages:
     - scrcpy
     - variety
-
-- name: "RGB Software"
-  packages:
-    - openlinkhub
-    - openrgb
 
 - name: "Video"
   packages:
