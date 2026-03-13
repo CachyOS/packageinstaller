@@ -33,11 +33,11 @@ Second, build it:
 ./build.sh
 ```
 
-### Easy way to verify pkglist.yaml
-```bash
+### Easy way to verify pkglist.yaml in fish
+```fish
 for pkg in (yq -r '.[].packages[]' pkglist.yaml)
     for split in (string split ' ' $pkg)
-        pacman -Ss split >/dev/null 2>&1; and echo "Found: $split"; or echo "NOT FOUND: $split"
+        pacman -Si $split >/dev/null 2>&1; and echo "Found: $split"; or echo "NOT FOUND: $split"
     end
 end
 ```
