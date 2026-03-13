@@ -100,10 +100,13 @@
     - amdgpu_top
     - cachyos-benchmarker
     - cpu-x
+    - gparted
     - lact
+    - nvtop
     - occt
     - openlinkhub
     - openrgb
+    - rog-control-center
 
 - name: "Internet"
   packages:
