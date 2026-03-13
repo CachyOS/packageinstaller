@@ -152,6 +152,11 @@
 
 - name: "Other"
   packages:
+    - openlinkhub
+    - openrgb
+
+- name: "RGB Software"
+  packages:
     - scrcpy
     - variety
 
