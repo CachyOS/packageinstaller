@@ -7,7 +7,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 ## name and version
 ##
 project(cachyos-pi
-        VERSION 1.6.1
+        VERSION 1.6.2
         LANGUAGES CXX)
 
 
