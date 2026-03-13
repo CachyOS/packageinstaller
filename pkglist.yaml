@@ -152,13 +152,13 @@
 
 - name: "Other"
   packages:
-    - openlinkhub
-    - openrgb
+    - scrcpy
+    - variety
 
 - name: "RGB Software"
   packages:
-    - scrcpy
-    - variety
+    - openlinkhub
+    - openrgb
 
 - name: "Video"
   packages:
