@@ -61,6 +61,7 @@
 
 - name: "Games"
   packages:
+    - cachyos-gaming-applications cachyos-gaming-meta
     - aisleriot
     - mari0
     - kapman
