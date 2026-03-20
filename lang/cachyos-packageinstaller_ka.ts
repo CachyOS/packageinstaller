@@ -335,10 +335,6 @@
         <translation>პაკეტების წაშლა...</translation>
     </message>
     <message>
-        <source>Refreshing sources...</source>
-        <translation type="vanished">Оновлення джерел...</translation>
-    </message>
-    <message>
         <location filename="../src/mainwindow.cpp" line="1437"></location>
         <location filename="../src/mainwindow.cpp" line="1464"></location>
         <location filename="../src/mainwindow.cpp" line="1474"></location>
@@ -351,10 +347,6 @@
         <location filename="../src/mainwindow.cpp" line="2078"></location>
         <source>Error</source>
         <translation>შეცდომა</translation>
-    </message>
-    <message>
-        <source>There was a problem updating sources. Some sources may not have provided updates. For more info check: </source>
-        <translation type="vanished">Проблема з оновленням джерел. Деякі оновлення могли не завантажитись. Для отримання додаткової інформації перевірте: </translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="394"></location>
@@ -738,10 +730,6 @@ This is needed for the app to work properly</source>
         <location filename="../src/main.cpp" line="188"></location>
         <source>Please don't run that application as root user!</source>
         <translation>ნუ გაუშვებთ იმ აპლიკაციას root მომხმარებლით!</translation>
-    </message>
-    <message>
-        <source>Please run that application as root user!</source>
-        <translation type="vanished">Будь ласка, запустіть цей застосунок від імені адміністратора!</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="196"></location>
