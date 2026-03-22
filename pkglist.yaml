@@ -102,6 +102,7 @@
     - cachyos-benchmarker
     - cpu-x
     - gparted
+    - kdiskmark
     - lact
     - nvtop
     - occt
