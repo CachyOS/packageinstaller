@@ -254,7 +254,7 @@
     <message>
         <location filename="../src/mainwindow.ui" line="883"/>
         <source>Enter</source>
-        <translation>Entra</translation>
+        <translation>Invio</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="894"/>
