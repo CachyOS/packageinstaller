@@ -111,7 +111,7 @@
         <location filename="../src/mainwindow.ui" line="331"/>
         <location filename="../src/mainwindow.ui" line="700"/>
         <source>Upgrade All</source>
-        <translation>Aggiorna Tutto</translation>
+        <translation>Aggiorna Tutti</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="373"/>
@@ -191,7 +191,7 @@
     <message>
         <location filename="../src/mainwindow.ui" line="620"/>
         <source>Short Name</source>
-        <translation>Nome Abbreviato</translation>
+        <translation>Nome Breve</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="625"/>
@@ -242,7 +242,7 @@
     <message>
         <location filename="../src/mainwindow.ui" line="834"/>
         <source>Remote (repo):</source>
-        <translation>Remoto (repo):</translation>
+        <translation>Repository remoto:</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="877"/>
@@ -425,7 +425,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="1130"/>
         <source>Fetching infomation about packages...</source>
-        <translation>Recupero delle informazioni sui pacchetti...</translation>
+        <translation>Recupero delle informazioni sui pacchetti in corso...</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1385"/>
@@ -436,7 +436,7 @@
         <location filename="../src/mainwindow.cpp" line="1387"/>
         <location filename="../src/mainwindow.cpp" line="1406"/>
         <source>Package info</source>
-        <translation>Informazioni del pacchetto</translation>
+        <translation>Informazioni sul pacchetto</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1522"/>
@@ -466,7 +466,7 @@
         <location filename="../src/mainwindow.cpp" line="2170"/>
         <location filename="../src/mainwindow.cpp" line="2191"/>
         <source>Processing finished successfully.</source>
-        <translation>Il processo è terminato con successo.</translation>
+        <translation>Elaborazione terminata con successo.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1526"/>
@@ -490,7 +490,7 @@
         <location filename="../src/mainwindow.cpp" line="2050"/>
         <location filename="../src/mainwindow.cpp" line="2077"/>
         <source>Problem detected while installing, please inspect the console output.</source>
-        <translation>Problema rilevato durante l'installazione, per favore controlla l'output della console.</translation>
+        <translation>Problema rilevato durante l&apos;installazione, per favore controlla l&apos;output della console.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1571"/>
@@ -515,7 +515,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="1651"/>
         <source>We encountered a problem uninstalling, please check output</source>
-        <translation>Si è verificato un problema durante la disinstallazione, per favore controlla l'output</translation>
+        <translation>Si è verificato un problema durante la disinstallazione, per favore controlla l&apos;output</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1665"/>
@@ -540,7 +540,7 @@
         <source>Flatpak is not currently installed.
 OK to go ahead and install it?</source>
         <translation>Flatpak non è attualmente installato.
-Desideri installarlo?</translation>
+Vuoi installarlo?</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1751"/>
@@ -550,7 +550,7 @@ Desideri installarlo?</translation>
     <message>
         <location filename="../src/mainwindow.cpp" line="1760"/>
         <source>Flathub remote failed</source>
-        <translation>Errore nel repository remoto Flathub</translation>
+        <translation>Errore del repository remoto Flathub</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1760"/>
@@ -560,12 +560,12 @@ Desideri installarlo?</translation>
     <message>
         <location filename="../src/mainwindow.cpp" line="1773"/>
         <source>Needs re-login</source>
-        <translation>È necessario effettuare nuovamente l'accesso</translation>
+        <translation>È necessario effettuare nuovamente l&apos;accesso</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1773"/>
         <source>You might need to logout/login to see installed items in the menu</source>
-        <translation>Potresti dover uscire ed effettuare nuovamente l'accesso per vedere gli elementi installati nel menù</translation>
+        <translation>Potresti dover uscire ed effettuare nuovamente l&apos;accesso per vedere gli elementi installati nel menù</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1933"/>
@@ -585,7 +585,7 @@ Desideri installarlo?</translation>
     <message>
         <location filename="../src/mainwindow.cpp" line="2020"/>
         <source>Process still running, quitting might leave the system in an unstable state.&lt;p&gt;&lt;b&gt;Are you sure you want to exit CachyOS Package Installer?&lt;/b&gt;</source>
-        <translation>Il processo è ancora in esecuzione, interromperlo potrebbe rendere il sistema instabile. &lt;p&gt;&lt;b&gt;Sei sicuro di voler uscire da Installatore Pacchetti CachyOS?&lt;/b&gt;</translation>
+        <translation>Il processo è ancora in esecuzione, uscire potrebbe lasciare il sistema in una condizione instabile.&lt;p&gt;&lt;b&gt;Sei sicuro di voler uscire da Installatore Pacchetti CachyOS?&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2110"/>
@@ -596,12 +596,12 @@ Desideri installarlo?</translation>
     <message>
         <location filename="../src/mainwindow.cpp" line="2154"/>
         <source>Reinstall</source>
-        <translation>Reinstallare</translation>
+        <translation>Reinstalla</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2174"/>
         <source>Problem detected during last operation, please inspect the console output.</source>
-        <translation>È stato rilevato un problema durante l'ultima operazione, per favore controlla l'output della console.</translation>
+        <translation>È stato rilevato un problema durante l&apos;ultima operazione, per favore controlla l&apos;output della console.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2181"/>
@@ -616,7 +616,7 @@ Per favore, assicurati di controllare attentamente la lista dei pacchetti da rim
     <message>
         <location filename="../src/remotes.cpp" line="34"/>
         <source>Manage Flatpak Remotes</source>
-        <translation>Gestisci repository remoti Flatpak</translation>
+        <translation>Gestisci Repository Remoti Flatpak</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="39"/>
@@ -626,22 +626,22 @@ Per favore, assicurati di controllare attentamente la lista dei pacchetti da rim
     <message>
         <location filename="../src/remotes.cpp" line="40"/>
         <source>For current user</source>
-        <translation>Per l'utente corrente</translation>
+        <translation>Per l&apos;utente corrente</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="43"/>
         <source>enter Flatpak remote URL</source>
-        <translation>inserisci l'indirizzo del repository remoto Flatpak</translation>
+        <translation>inserisci l&apos;indirizzo del repository remoto Flatpak</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="45"/>
         <source>enter Flatpakref location to install app</source>
-        <translation>inserisci la posizione del Flatpakref per installare l'applicazione</translation>
+        <translation>inserisci la posizione del Flatpakref per installare l&apos;applicazione</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="47"/>
         <source>Add or remove flatpak remotes (repos), or install apps using flatpakref URL or path</source>
-        <translation>Aggiungi o rimuovi i repository remoti flatpak, o installa le applicazioni usando un indirizzo o un percorso di flatpakref</translation>
+        <translation>Aggiungi o rimuovi i repository remoti flatpak, o installa le applicazioni usando l&apos;indirizzo o il percorso di un file flatpakref</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="56"/>
@@ -681,7 +681,7 @@ Per favore, assicurati di controllare attentamente la lista dei pacchetti da rim
     <message>
         <location filename="../src/remotes.cpp" line="108"/>
         <source>Could not add remote - command returned an error. Please double-check the remote address and try again</source>
-        <translation>Impossibile aggiungere il repository remoto - il comando ha restituito un errore. Per favore ricontrolla l'indirizzo del repository remoto e riprova</translation>
+        <translation>Impossibile aggiungere il repository remoto - il comando ha restituito un errore. Per favore, ricontrolla l&apos;indirizzo del repository remoto e riprova</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="112"/>
@@ -716,7 +716,7 @@ Per favore, assicurati di controllare attentamente la lista dei pacchetti da rim
     <message>
         <location filename="../src/main.cpp" line="160"/>
         <source>Instance of the program is already running! Please close it first</source>
-        <translation>Un&apos;istanza del programma è già in esecuzione! Per favore chiudila prima.</translation>
+        <translation>Un&apos;istanza del programma è già in esecuzione! Per favore, chiudila prima di proseguire.</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="168"/>
@@ -724,18 +724,18 @@ Per favore, assicurati di controllare attentamente la lista dei pacchetti da rim
 Please run `pacman -Sy` to update DB!
 This is needed for the app to work properly</source>
         <translation>Nessun database trovato!
-Per favore, esegui `pacman -Sy` per aggiornare il database.
-Questo è necessario affinché l'applicazione funzioni correttamente</translation>
+Per favore, esegui `pacman -Sy` per aggiornare il database!
+Questo è necessario affinché l&apos;applicazione funzioni correttamente</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="176"/>
         <source>You seem to be logged in as root, please log out and log in as normal user to use this program.</source>
-        <translation>Sembra che tu abbia effettuato l&apos;accesso come root, per favore esci ed effettua l'accesso come utente normale per usare questo programma.</translation>
+        <translation>Sembra che tu abbia effettuato l&apos;accesso come root, per favore esci ed effettua l&apos;accesso come utente normale per usare questo programma.</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="182"/>
         <source>Unable to run the app</source>
-        <translation>Impossibile avviare l'applicazione</translation>
+        <translation>Impossibile avviare l&apos;applicazione</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="183"/>
@@ -745,12 +745,12 @@ Questo è necessario affinché l'applicazione funzioni correttamente</translatio
     <message>
         <location filename="../src/main.cpp" line="191"/>
         <source>Unable to get exclusive lock</source>
-        <translation>Impossible ottenere un blocco esclusivo</translation>
+        <translation>Impossibile ottenere un blocco esclusivo</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="192"/>
         <source>Another package management application (like pamac or pacman), is already running. Please close that application first</source>
-        <translation>Un&apos;altra applicazione di gestione dei pacchetti (come pamac o pacman) è già in esecuzione. Per favore, chiudila prima.</translation>
+        <translation>Un&apos;altra applicazione di gestione dei pacchetti (come pamac o pacman) è già in esecuzione. Per favore, chiudila prima di proseguire.</translation>
     </message>
 </context>
 </TS>
