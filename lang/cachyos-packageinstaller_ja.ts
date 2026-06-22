@@ -5,558 +5,606 @@
     <name>MainWindow</name>
     <message>
         <location filename="../src/mainwindow.ui" line="20"/>
-        <location filename="../src/mainwindow.cpp" line="59"/>
-        <location filename="../src/mainwindow.cpp" line="74"/>
+        <location filename="../src/mainwindow.cpp" line="81"/>
+        <location filename="../src/mainwindow.cpp" line="96"/>
         <source>CachyOS Package Installer</source>
         <translation>CachyOS パッケージインストーラー</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="154"/>
+        <location filename="../src/mainwindow.ui" line="57"/>
+        <source>Popular Applications</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="83"/>
+        <location filename="../src/mainwindow.cpp" line="125"/>
+        <source>Package</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="88"/>
+        <location filename="../src/mainwindow.cpp" line="125"/>
+        <source>Info</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="93"/>
+        <location filename="../src/mainwindow.ui" line="250"/>
+        <location filename="../src/mainwindow.cpp" line="125"/>
         <source>Description</source>
         <translation>説明</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="120"/>
-        <location filename="../src/mainwindow.ui" line="496"/>
+        <location filename="../src/mainwindow.ui" line="113"/>
+        <location filename="../src/mainwindow.ui" line="216"/>
+        <location filename="../src/mainwindow.ui" line="595"/>
         <source>search</source>
         <translation>検索</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="57"/>
+        <location filename="../src/mainwindow.ui" line="123"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Manage popular packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.ui" line="153"/>
         <source>Repo</source>
         <translation>リポジトリ</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="78"/>
-        <location filename="../src/mainwindow.ui" line="439"/>
+        <location filename="../src/mainwindow.ui" line="174"/>
+        <location filename="../src/mainwindow.ui" line="538"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Filter packages according to their status.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;パッケージをインストール状況でフィルタリング&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="81"/>
-        <location filename="../src/mainwindow.ui" line="85"/>
-        <location filename="../src/mainwindow.cpp" line="1388"/>
+        <location filename="../src/mainwindow.ui" line="177"/>
+        <location filename="../src/mainwindow.ui" line="181"/>
+        <location filename="../src/mainwindow.cpp" line="1849"/>
         <source>All packages</source>
         <translation>すべてのパッケージ</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="90"/>
-        <location filename="../src/mainwindow.cpp" line="1402"/>
+        <location filename="../src/mainwindow.ui" line="186"/>
+        <location filename="../src/mainwindow.cpp" line="1863"/>
         <source>Installed</source>
         <translation>インストール済み</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="95"/>
-        <location filename="../src/mainwindow.cpp" line="1400"/>
+        <location filename="../src/mainwindow.ui" line="191"/>
+        <location filename="../src/mainwindow.cpp" line="1861"/>
         <source>Upgradable</source>
         <translation>アップグレード可能</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="100"/>
-        <location filename="../src/mainwindow.ui" line="476"/>
-        <location filename="../src/mainwindow.cpp" line="1371"/>
-        <location filename="../src/mainwindow.cpp" line="1404"/>
-        <location filename="../src/mainwindow.cpp" line="1482"/>
-        <location filename="../src/mainwindow.cpp" line="1483"/>
+        <location filename="../src/mainwindow.ui" line="196"/>
+        <location filename="../src/mainwindow.ui" line="575"/>
+        <location filename="../src/mainwindow.cpp" line="1832"/>
+        <location filename="../src/mainwindow.cpp" line="1865"/>
+        <location filename="../src/mainwindow.cpp" line="1943"/>
+        <location filename="../src/mainwindow.cpp" line="1944"/>
         <source>Not installed</source>
         <translation>未インストール</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="144"/>
+        <location filename="../src/mainwindow.ui" line="240"/>
         <source>Package Name</source>
         <translation>パッケージ名</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="149"/>
-        <location filename="../src/mainwindow.ui" line="531"/>
+        <location filename="../src/mainwindow.ui" line="245"/>
+        <location filename="../src/mainwindow.ui" line="630"/>
         <source>Version</source>
         <translation>バージョン</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="188"/>
+        <location filename="../src/mainwindow.ui" line="284"/>
         <source>Remove orphan packages</source>
         <translation>孤立パッケージを削除</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="198"/>
+        <location filename="../src/mainwindow.ui" line="295"/>
         <source>Installed:</source>
         <translation>インストール済み:</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="234"/>
-        <location filename="../src/mainwindow.ui" line="601"/>
+        <location filename="../src/mainwindow.ui" line="331"/>
+        <location filename="../src/mainwindow.ui" line="700"/>
         <source>Upgrade All</source>
         <translation>すべてアップグレード</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="275"/>
+        <location filename="../src/mainwindow.ui" line="373"/>
         <source>Refresh list</source>
         <translation>リストを更新</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="295"/>
+        <location filename="../src/mainwindow.ui" line="394"/>
         <source>Hide library and developer packages</source>
         <translation>ライブラリ･開発者用パッケージを非表示</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="305"/>
+        <location filename="../src/mainwindow.ui" line="404"/>
         <source>Total packages:</source>
         <translation>合計パッケージ数:</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="312"/>
+        <location filename="../src/mainwindow.ui" line="411"/>
         <source>Upgradable:</source>
         <translation>アップグレード可能:</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="342"/>
-        <location filename="../src/mainwindow.ui" line="755"/>
+        <location filename="../src/mainwindow.ui" line="441"/>
+        <location filename="../src/mainwindow.ui" line="857"/>
         <source>Greyed out items have already been installed.</source>
         <translation>灰色の項目はインストール済みです。</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="398"/>
+        <location filename="../src/mainwindow.ui" line="497"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;= Upgradable package. Newer version available in selected repository.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;= アップグレード可能: 選択したリポジトリに新しいバージョンがあります。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="418"/>
+        <location filename="../src/mainwindow.ui" line="517"/>
         <source>Flatpaks</source>
         <translation>Flatpak</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="442"/>
-        <location filename="../src/mainwindow.ui" line="446"/>
-        <location filename="../src/mainwindow.cpp" line="1350"/>
+        <location filename="../src/mainwindow.ui" line="541"/>
+        <location filename="../src/mainwindow.ui" line="545"/>
+        <location filename="../src/mainwindow.cpp" line="1811"/>
         <source>All apps</source>
         <translation>すべてのアプリ</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="451"/>
-        <location filename="../src/mainwindow.cpp" line="1355"/>
+        <location filename="../src/mainwindow.ui" line="550"/>
+        <location filename="../src/mainwindow.cpp" line="1816"/>
         <source>All runtimes</source>
         <translation>すべてのランタイム</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="456"/>
-        <location filename="../src/mainwindow.cpp" line="1360"/>
+        <location filename="../src/mainwindow.ui" line="555"/>
+        <location filename="../src/mainwindow.cpp" line="1821"/>
         <source>All available</source>
         <translation>すべての利用可能なアプリ</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="461"/>
-        <location filename="../src/mainwindow.cpp" line="1348"/>
+        <location filename="../src/mainwindow.ui" line="560"/>
+        <location filename="../src/mainwindow.cpp" line="1809"/>
         <source>Installed apps</source>
         <translation>インストール済みアプリ</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="466"/>
-        <location filename="../src/mainwindow.cpp" line="1346"/>
+        <location filename="../src/mainwindow.ui" line="565"/>
+        <location filename="../src/mainwindow.cpp" line="1807"/>
         <source>Installed runtimes</source>
         <translation>インストール済みランタイム</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="471"/>
-        <location filename="../src/mainwindow.cpp" line="1369"/>
-        <location filename="../src/mainwindow.cpp" line="1476"/>
-        <location filename="../src/mainwindow.cpp" line="1477"/>
+        <location filename="../src/mainwindow.ui" line="570"/>
+        <location filename="../src/mainwindow.cpp" line="1830"/>
+        <location filename="../src/mainwindow.cpp" line="1937"/>
+        <location filename="../src/mainwindow.cpp" line="1938"/>
         <source>All installed</source>
         <translation>すべてのインストール済み</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="521"/>
+        <location filename="../src/mainwindow.ui" line="620"/>
         <source>Short Name</source>
         <translation>短縮名</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="526"/>
+        <location filename="../src/mainwindow.ui" line="625"/>
         <source>Full Package Name</source>
         <translation>完全パッケージ名</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="536"/>
+        <location filename="../src/mainwindow.ui" line="635"/>
         <source>Size</source>
         <translation>サイズ</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="580"/>
+        <location filename="../src/mainwindow.ui" line="679"/>
         <source>Total items </source>
         <translation>合計項目数 </translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="594"/>
+        <location filename="../src/mainwindow.ui" line="693"/>
         <source>Installed apps:</source>
         <translation>インストール済みアプリ:</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="646"/>
+        <location filename="../src/mainwindow.ui" line="746"/>
         <source>Advanced</source>
         <translation>詳細設定</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="675"/>
+        <location filename="../src/mainwindow.ui" line="776"/>
         <source>Total installed size:</source>
         <translation>合計サイズ:</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="689"/>
+        <location filename="../src/mainwindow.ui" line="790"/>
         <source>Remove unused runtimes</source>
         <translation>未使用ランタイムを削除</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="705"/>
-        <location filename="../src/mainwindow.ui" line="709"/>
+        <location filename="../src/mainwindow.ui" line="807"/>
+        <location filename="../src/mainwindow.ui" line="811"/>
         <source>For all users</source>
         <translation>すべてのユーザー</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="714"/>
+        <location filename="../src/mainwindow.ui" line="816"/>
         <source>For current user</source>
         <translation>現在のユーザー</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="732"/>
+        <location filename="../src/mainwindow.ui" line="834"/>
         <source>Remote (repo):</source>
         <translation>リモート (リポジトリ):</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="775"/>
-        <location filename="../src/mainwindow.cpp" line="1229"/>
-        <location filename="../src/mainwindow.cpp" line="1309"/>
+        <location filename="../src/mainwindow.ui" line="877"/>
+        <location filename="../src/mainwindow.cpp" line="1678"/>
+        <location filename="../src/mainwindow.cpp" line="1769"/>
         <source>Console Output</source>
         <translation>コンソール出力</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="781"/>
+        <location filename="../src/mainwindow.ui" line="883"/>
         <source>Enter</source>
         <translation>入力</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="791"/>
+        <location filename="../src/mainwindow.ui" line="894"/>
         <source>Respond here</source>
         <translation>ここに入力</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="847"/>
+        <location filename="../src/mainwindow.ui" line="950"/>
         <source>Display help </source>
         <translation>ヘルプを表示 </translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="850"/>
+        <location filename="../src/mainwindow.ui" line="953"/>
         <source>Help</source>
         <translation>ヘルプ</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="856"/>
+        <location filename="../src/mainwindow.ui" line="960"/>
         <source>Alt+H</source>
         <translation>Alt+H</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="904"/>
-        <location filename="../src/mainwindow.cpp" line="710"/>
-        <location filename="../src/mainwindow.cpp" line="1472"/>
-        <location filename="../src/mainwindow.cpp" line="1474"/>
+        <location filename="../src/mainwindow.ui" line="1008"/>
+        <location filename="../src/mainwindow.cpp" line="961"/>
+        <location filename="../src/mainwindow.cpp" line="1933"/>
+        <location filename="../src/mainwindow.cpp" line="1935"/>
+        <location filename="../src/mainwindow.cpp" line="2156"/>
         <source>Install</source>
         <translation>インストール</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="910"/>
+        <location filename="../src/mainwindow.ui" line="1015"/>
         <source>Alt+I</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="929"/>
+        <location filename="../src/mainwindow.ui" line="1034"/>
         <source>Quit application</source>
         <translation>アプリを終了</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="932"/>
+        <location filename="../src/mainwindow.ui" line="1037"/>
         <source>Close</source>
         <translation>閉じる</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="938"/>
+        <location filename="../src/mainwindow.ui" line="1044"/>
         <source>Alt+C</source>
         <translation>Alt+C</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="954"/>
+        <location filename="../src/mainwindow.ui" line="1060"/>
         <source>Uninstall</source>
         <translation>アンインストール</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="960"/>
+        <location filename="../src/mainwindow.ui" line="1067"/>
         <source>Alt+U</source>
         <translation>Alt+U</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="976"/>
+        <location filename="../src/mainwindow.ui" line="1083"/>
         <source>About this application</source>
         <translation>このアプリについて</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="979"/>
+        <location filename="../src/mainwindow.ui" line="1086"/>
         <source>About...</source>
         <translation>このアプリについて...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.ui" line="985"/>
+        <location filename="../src/mainwindow.ui" line="1093"/>
         <source>Alt+B</source>
         <translation>Alt+B</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="59"/>
+        <location filename="../src/mainwindow.cpp" line="81"/>
         <source>Cannot initialize ALPM library</source>
         <translation>ALPM ライブラリを初期化できません</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="194"/>
+        <location filename="../src/mainwindow.cpp" line="224"/>
         <source>Uninstalling packages...</source>
         <translation>パッケージをアンインストール中...</translation>
     </message>
     <message>
+        <location filename="../src/mainwindow.cpp" line="430"/>
         <source>Unable to fetch pkglist. Timeout!</source>
-        <translation type="vanished">パッケージリストを取得できません。タイムアウトしました。</translation>
+        <translation>パッケージリストを取得できません。タイムアウトしました。</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="362"/>
+        <location filename="../src/mainwindow.cpp" line="524"/>
         <source>Cancel</source>
         <translation>キャンセル</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="369"/>
+        <location filename="../src/mainwindow.cpp" line="531"/>
         <source>Please wait...</source>
         <translation>しばらくお待ちください...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="471"/>
-        <location filename="../src/mainwindow.cpp" line="488"/>
+        <location filename="../src/mainwindow.cpp" line="722"/>
+        <location filename="../src/mainwindow.cpp" line="739"/>
         <source>Version </source>
         <translation>バージョン </translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="471"/>
+        <location filename="../src/mainwindow.cpp" line="722"/>
         <source> in repo</source>
         <translation> (リポジトリ)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="473"/>
+        <location filename="../src/mainwindow.cpp" line="724"/>
         <source>Not available in repo</source>
         <translation>リポジトリで利用不可</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="482"/>
+        <location filename="../src/mainwindow.cpp" line="733"/>
         <source>Latest version </source>
         <translation>最新のバージョン </translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="482"/>
+        <location filename="../src/mainwindow.cpp" line="733"/>
         <source> already installed</source>
         <translation> はインストール済みです</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="488"/>
+        <location filename="../src/mainwindow.cpp" line="739"/>
         <source> installed</source>
         <translation> (インストール済み)</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="599"/>
+        <location filename="../src/mainwindow.cpp" line="850"/>
         <source>CachyOS includes this repository of flatpaks for the users&apos; convenience only, and is not responsible for the functionality of the individual flatpaks themselves. For more, consult flatpaks in the Wiki.</source>
         <translation>ここでは便宜上 Flatpak リポジトリを表示しますが、CachyOS は各 Flatpak アプリの動作について責任を負いません。詳細は Wiki の Flatpak の項目をご覧ください。</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="607"/>
-        <location filename="../src/mainwindow.cpp" line="1682"/>
+        <location filename="../src/mainwindow.cpp" line="858"/>
+        <location filename="../src/mainwindow.cpp" line="2181"/>
         <source>Warning</source>
         <translation>警告</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="610"/>
+        <location filename="../src/mainwindow.cpp" line="861"/>
         <source>Do not show this message again</source>
         <translation>次回から表示しない</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="707"/>
+        <location filename="../src/mainwindow.cpp" line="958"/>
         <source>Remove</source>
         <translation>削除</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="723"/>
+        <location filename="../src/mainwindow.cpp" line="974"/>
         <source>The following packages were selected. Click Show Details for list of changes.</source>
         <translation>以下のパッケージが選択されました。「詳細を表示」で変更内容を確認できます。</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="750"/>
+        <location filename="../src/mainwindow.cpp" line="1001"/>
         <source>Installing packages...</source>
         <translation>パッケージをインストール中...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="797"/>
+        <location filename="../src/mainwindow.cpp" line="1054"/>
+        <source>Installing </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="1130"/>
         <source>Fetching infomation about packages...</source>
         <translation>パッケージ情報を取得中...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1055"/>
+        <location filename="../src/mainwindow.cpp" line="1385"/>
+        <source>Packages to be installed: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="1387"/>
+        <location filename="../src/mainwindow.cpp" line="1406"/>
         <source>Package info</source>
         <translation>パッケージ情報</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1115"/>
-        <location filename="../src/mainwindow.cpp" line="1129"/>
-        <location filename="../src/mainwindow.cpp" line="1139"/>
-        <location filename="../src/mainwindow.cpp" line="1179"/>
-        <location filename="../src/mainwindow.cpp" line="1200"/>
-        <location filename="../src/mainwindow.cpp" line="1532"/>
-        <location filename="../src/mainwindow.cpp" line="1583"/>
-        <location filename="../src/mainwindow.cpp" line="1610"/>
-        <location filename="../src/mainwindow.cpp" line="1671"/>
+        <location filename="../src/mainwindow.cpp" line="1522"/>
+        <location filename="../src/mainwindow.cpp" line="1535"/>
+        <location filename="../src/mainwindow.cpp" line="1549"/>
+        <location filename="../src/mainwindow.cpp" line="1560"/>
+        <location filename="../src/mainwindow.cpp" line="1627"/>
+        <location filename="../src/mainwindow.cpp" line="1648"/>
+        <location filename="../src/mainwindow.cpp" line="1993"/>
+        <location filename="../src/mainwindow.cpp" line="2044"/>
+        <location filename="../src/mainwindow.cpp" line="2071"/>
+        <location filename="../src/mainwindow.cpp" line="2170"/>
         <source>Done</source>
         <translation>完了</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1115"/>
-        <location filename="../src/mainwindow.cpp" line="1129"/>
-        <location filename="../src/mainwindow.cpp" line="1139"/>
-        <location filename="../src/mainwindow.cpp" line="1179"/>
-        <location filename="../src/mainwindow.cpp" line="1200"/>
-        <location filename="../src/mainwindow.cpp" line="1216"/>
-        <location filename="../src/mainwindow.cpp" line="1532"/>
-        <location filename="../src/mainwindow.cpp" line="1583"/>
-        <location filename="../src/mainwindow.cpp" line="1610"/>
-        <location filename="../src/mainwindow.cpp" line="1671"/>
-        <location filename="../src/mainwindow.cpp" line="1691"/>
+        <location filename="../src/mainwindow.cpp" line="1522"/>
+        <location filename="../src/mainwindow.cpp" line="1535"/>
+        <location filename="../src/mainwindow.cpp" line="1549"/>
+        <location filename="../src/mainwindow.cpp" line="1560"/>
+        <location filename="../src/mainwindow.cpp" line="1627"/>
+        <location filename="../src/mainwindow.cpp" line="1648"/>
+        <location filename="../src/mainwindow.cpp" line="1665"/>
+        <location filename="../src/mainwindow.cpp" line="1993"/>
+        <location filename="../src/mainwindow.cpp" line="2044"/>
+        <location filename="../src/mainwindow.cpp" line="2071"/>
+        <location filename="../src/mainwindow.cpp" line="2170"/>
+        <location filename="../src/mainwindow.cpp" line="2191"/>
         <source>Processing finished successfully.</source>
         <translation>正常に処理を完了しました。</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1133"/>
-        <location filename="../src/mainwindow.cpp" line="1142"/>
-        <location filename="../src/mainwindow.cpp" line="1203"/>
-        <location filename="../src/mainwindow.cpp" line="1219"/>
-        <location filename="../src/mainwindow.cpp" line="1535"/>
-        <location filename="../src/mainwindow.cpp" line="1589"/>
-        <location filename="../src/mainwindow.cpp" line="1616"/>
-        <location filename="../src/mainwindow.cpp" line="1675"/>
-        <location filename="../src/mainwindow.cpp" line="1694"/>
+        <location filename="../src/mainwindow.cpp" line="1526"/>
+        <location filename="../src/mainwindow.cpp" line="1553"/>
+        <location filename="../src/mainwindow.cpp" line="1563"/>
+        <location filename="../src/mainwindow.cpp" line="1651"/>
+        <location filename="../src/mainwindow.cpp" line="1668"/>
+        <location filename="../src/mainwindow.cpp" line="1996"/>
+        <location filename="../src/mainwindow.cpp" line="2050"/>
+        <location filename="../src/mainwindow.cpp" line="2077"/>
+        <location filename="../src/mainwindow.cpp" line="2174"/>
+        <location filename="../src/mainwindow.cpp" line="2194"/>
         <source>Error</source>
         <translation>エラー</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1133"/>
-        <location filename="../src/mainwindow.cpp" line="1142"/>
-        <location filename="../src/mainwindow.cpp" line="1535"/>
-        <location filename="../src/mainwindow.cpp" line="1589"/>
-        <location filename="../src/mainwindow.cpp" line="1616"/>
+        <location filename="../src/mainwindow.cpp" line="1526"/>
+        <location filename="../src/mainwindow.cpp" line="1553"/>
+        <location filename="../src/mainwindow.cpp" line="1563"/>
+        <location filename="../src/mainwindow.cpp" line="1996"/>
+        <location filename="../src/mainwindow.cpp" line="2050"/>
+        <location filename="../src/mainwindow.cpp" line="2077"/>
         <source>Problem detected while installing, please inspect the console output.</source>
         <translation>インストール中に問題が発生しました。コンソール出力を確認してください。</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1150"/>
+        <location filename="../src/mainwindow.cpp" line="1571"/>
         <source>About %1</source>
         <translation>%1 について</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1151"/>
+        <location filename="../src/mainwindow.cpp" line="1572"/>
         <source>Version: </source>
         <translation>バージョン: </translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1151"/>
+        <location filename="../src/mainwindow.cpp" line="1572"/>
         <source>Package Installer for CachyOS</source>
         <translation>CachyOS 用のパッケージインストーラー</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1151"/>
+        <location filename="../src/mainwindow.cpp" line="1572"/>
         <source>Copyright (c) CachyOS</source>
         <translation>Copyright (c) CachyOS</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1203"/>
+        <location filename="../src/mainwindow.cpp" line="1651"/>
         <source>We encountered a problem uninstalling, please check output</source>
         <translation>アンインストール中に問題が発生しました。出力を確認してください</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1216"/>
-        <location filename="../src/mainwindow.cpp" line="1691"/>
+        <location filename="../src/mainwindow.cpp" line="1665"/>
+        <location filename="../src/mainwindow.cpp" line="2191"/>
         <source>Success</source>
         <translation>成功</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1219"/>
-        <location filename="../src/mainwindow.cpp" line="1694"/>
+        <location filename="../src/mainwindow.cpp" line="1668"/>
+        <location filename="../src/mainwindow.cpp" line="2194"/>
         <source>We encountered a problem uninstalling the program</source>
         <translation>プログラムのアンインストール中に問題が発生しました</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1278"/>
-        <location filename="../src/mainwindow.cpp" line="1291"/>
+        <location filename="../src/mainwindow.cpp" line="1738"/>
+        <location filename="../src/mainwindow.cpp" line="1751"/>
         <source>Flatpak not installed</source>
         <translation>Flatpak 未インストール</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1278"/>
+        <location filename="../src/mainwindow.cpp" line="1738"/>
         <source>Flatpak is not currently installed.
 OK to go ahead and install it?</source>
         <translation>Flatpak は現在インストールされていません。
 インストールしますか？</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1291"/>
+        <location filename="../src/mainwindow.cpp" line="1751"/>
         <source>Flatpak was not installed</source>
         <translation>Flatpak はインストールされませんでした</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1300"/>
+        <location filename="../src/mainwindow.cpp" line="1760"/>
         <source>Flathub remote failed</source>
         <translation>Flathub リモートの追加に失敗</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1300"/>
+        <location filename="../src/mainwindow.cpp" line="1760"/>
         <source>Flathub remote could not be added</source>
         <translation>Flathub リモートを追加できませんでした</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1313"/>
+        <location filename="../src/mainwindow.cpp" line="1773"/>
         <source>Needs re-login</source>
         <translation>再ログインが必要です</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1313"/>
+        <location filename="../src/mainwindow.cpp" line="1773"/>
         <source>You might need to logout/login to see installed items in the menu</source>
         <translation>メニューにインストール済み項目を表示するには、再ログインが必要な場合があります</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1472"/>
+        <location filename="../src/mainwindow.cpp" line="1933"/>
         <source>Upgrade</source>
         <translation>アップグレード</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1523"/>
+        <location filename="../src/mainwindow.cpp" line="1984"/>
         <source>Upgrading system...</source>
         <translation>システムをアップグレード中...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1558"/>
+        <location filename="../src/mainwindow.cpp" line="2019"/>
         <source>Quit?</source>
         <translation>終了しますか？</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1559"/>
+        <location filename="../src/mainwindow.cpp" line="2020"/>
         <source>Process still running, quitting might leave the system in an unstable state.&lt;p&gt;&lt;b&gt;Are you sure you want to exit CachyOS Package Installer?&lt;/b&gt;</source>
         <translation>プロセスが実行中です。終了するとシステムが不安定になる可能性があります。&lt;p&gt;&lt;b&gt;CachyOS パッケージインストーラーを終了しますか？&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1646"/>
+        <location filename="../src/mainwindow.cpp" line="2110"/>
+        <location filename="../src/mainwindow.cpp" line="2120"/>
         <source>More &amp;info...</source>
         <translation>詳細情報(&amp;I)...</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1675"/>
+        <location filename="../src/mainwindow.cpp" line="2154"/>
+        <source>Reinstall</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/mainwindow.cpp" line="2174"/>
         <source>Problem detected during last operation, please inspect the console output.</source>
         <translation>前回の操作中に問題が発生しました。コンソール出力を確認してください。</translation>
     </message>
     <message>
-        <location filename="../src/mainwindow.cpp" line="1682"/>
+        <location filename="../src/mainwindow.cpp" line="2181"/>
         <source>Potentially dangerous operation.
 Please make sure you check carefully the list of packages to be removed.</source>
         <translation>危険な操作である可能性があります。
