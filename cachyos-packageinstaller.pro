@@ -34,8 +34,9 @@ FORMS    += \
 TRANSLATIONS += \
                 lang/cachyos-packageinstaller_ru.ts \
                 lang/cachyos-packageinstaller_de.ts \
+                lang/cachyos-packageinstaller_ka.ts \
                 lang/cachyos-packageinstaller_es.ts \
-                lang/cachyos-packageinstaller_pl.ts \
+                lang/cachyos-packageinstaller_pl.ts
 
 RESOURCES += \
     images.qrc
