@@ -7,7 +7,7 @@
         <location filename="../src/mainwindow.ui" line="20"/>
         <location filename="../src/mainwindow.cpp" line="91"/>
         <source>CachyOS Package Installer</source>
-        <translation>CashyOS paket quraşdırıcı</translation>
+        <translation>CachyOS paket quraşdırıcı</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="57"/>
@@ -497,7 +497,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="1555"/>
         <source>Package Installer for CachyOS</source>
-        <translation>cachyOS üçün paket quraşdırıcı</translation>
+        <translation>CachyOS üçün paket quraşdırıcı</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1555"/>
