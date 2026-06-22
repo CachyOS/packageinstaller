@@ -5,6 +5,7 @@
         <file alias="ca">lang/cachyos-packageinstaller_ca.qm</file>
         <file alias="cs">lang/cachyos-packageinstaller_cs.qm</file>
         <file alias="de">lang/cachyos-packageinstaller_de.qm</file>
+        <file alias="es">lang/cachyos-packageinstaller_es.qm</file>
         <file alias="he">lang/cachyos-packageinstaller_he.qm</file>
         <file alias="ja">lang/cachyos-packageinstaller_ja.qm</file>
         <file alias="ka">lang/cachyos-packageinstaller_ka.qm</file>
