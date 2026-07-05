@@ -11,7 +11,6 @@
     - mixxx
     - musescore
     - rosegarden
-    - bitwig-studio
 
 - name: "Browsers"
   packages:
