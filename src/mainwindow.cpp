@@ -1691,14 +1691,13 @@ void MainWindow::on_current_tab_changed(int index) noexcept {
         m_tree->blockSignals(false);
     }
 
-    // save the search text
+    // save the search text and filter state
     QString search_str;
-    int filter_idx = 0;
     if (m_tree == m_ui->treePopularApps) {
         search_str = m_ui->searchPopular->text();
     } else if (m_tree == m_ui->treeRepo) {
         search_str = m_ui->searchBoxRepo->text();
-        filter_idx = m_ui->comboFilterRepo->currentIndex();
+        m_filterIndexRepo = m_ui->comboFilterRepo->currentIndex();
     } else if (m_tree == m_ui->treeFlatpak) {
         search_str = m_ui->searchBoxFlatpak->text();
     }
@@ -1723,7 +1722,7 @@ void MainWindow::on_current_tab_changed(int index) noexcept {
         if (m_tree->topLevelItemCount() == 0) {
             buildPackageLists();
         }
-        m_ui->comboFilterRepo->setCurrentIndex(filter_idx);
+        m_ui->comboFilterRepo->setCurrentIndex(m_filterIndexRepo);
         findPackageOther();
         m_ui->searchBoxRepo->setFocus();
         break;
@@ -1961,10 +1960,24 @@ void MainWindow::buildChangeList(QTreeWidgetItem* item) noexcept {
 
 // Force repo upgrade
 void MainWindow::on_push_force_update_repo() noexcept {
-    m_ui->searchBoxRepo->clear();
-    m_ui->comboFilterRepo->setCurrentIndex(0);
+    // Save filter and search state
+    const int filterIndex = m_ui->comboFilterRepo->currentIndex();
+    const QString searchText = m_ui->searchBoxRepo->text();
+    
     m_alpm_manager->refresh_alpm();
     buildPackageLists(true);
+    
+    // Restore filter and search state
+    m_ui->comboFilterRepo->setCurrentIndex(filterIndex);
+    m_ui->searchBoxRepo->setText(searchText);
+    
+    // Re-apply filter and search
+    if (filterIndex > 0) {
+        filterChanged(m_ui->comboFilterRepo->currentText());
+    }
+    if (!searchText.isEmpty()) {
+        findPackageOther();
+    }
 }
 
 // Hide/unhide lib/-dev packages
