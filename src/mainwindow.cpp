@@ -1182,7 +1182,6 @@ void MainWindow::clearUi() noexcept {
         m_ui->pushUpgradeAll->setHidden(true);
     }
     m_ui->comboFilterFlatpak->setCurrentIndex(0);
-    m_ui->comboFilterRepo->setCurrentIndex(0);
     blockSignals(false);
 }
 
