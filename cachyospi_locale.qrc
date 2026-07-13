@@ -1,6 +1,7 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
     <qresource prefix="/translations">
+        <file alias="az">lang/cachyos-packageinstaller_az.qm</file>
         <file alias="be">lang/cachyos-packageinstaller_be.qm</file>
         <file alias="ca">lang/cachyos-packageinstaller_ca.qm</file>
         <file alias="cs">lang/cachyos-packageinstaller_cs.qm</file>
