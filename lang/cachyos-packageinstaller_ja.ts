@@ -13,19 +13,19 @@
     <message>
         <location filename="../src/mainwindow.ui" line="57"/>
         <source>Popular Applications</source>
-        <translation type="unfinished"></translation>
+        <translation>人気のアプリケーション</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="83"/>
         <location filename="../src/mainwindow.cpp" line="125"/>
         <source>Package</source>
-        <translation type="unfinished"></translation>
+        <translation>パッケージ</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="88"/>
         <location filename="../src/mainwindow.cpp" line="125"/>
         <source>Info</source>
-        <translation type="unfinished"></translation>
+        <translation>情報</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="93"/>
@@ -44,7 +44,7 @@
     <message>
         <location filename="../src/mainwindow.ui" line="123"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;Manage popular packages&lt;/span&gt;&lt;/p&gt;&lt;p&gt;Greyed out items have already been installed.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:16pt;&quot;&gt;人気パッケージの管理&lt;/span&gt;&lt;/p&gt;&lt;p&gt;灰色の項目はインストール済みです。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="153"/>
@@ -420,7 +420,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="1054"/>
         <source>Installing </source>
-        <translation type="unfinished"></translation>
+        <translation>インストール中: </translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1130"/>
@@ -430,7 +430,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="1385"/>
         <source>Packages to be installed: </source>
-        <translation type="unfinished"></translation>
+        <translation>インストールするパッケージ: </translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1387"/>
@@ -596,7 +596,7 @@ OK to go ahead and install it?</source>
     <message>
         <location filename="../src/mainwindow.cpp" line="2154"/>
         <source>Reinstall</source>
-        <translation type="unfinished"></translation>
+        <translation>再インストール</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2174"/>
