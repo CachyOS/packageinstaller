@@ -350,6 +350,40 @@ void MainWindow::outputAvailable(const QString& output) {
     m_ui->outputBox->verticalScrollBar()->setValue(m_ui->outputBox->verticalScrollBar()->maximum());
 }
 
+namespace {
+
+// Category and group names are data rather than literals: they are read from
+// pkglist.yaml, which is fetched from the network at runtime. Listing the known
+// names here is what makes lupdate pick them up for the translation catalogs.
+[[maybe_unused]] constexpr std::array CATEGORY_NAMES{
+    QT_TRANSLATE_NOOP("Category", "Audio"),
+    QT_TRANSLATE_NOOP("Category", "Browsers"),
+    QT_TRANSLATE_NOOP("Category", "Communication"),
+    QT_TRANSLATE_NOOP("Category", "Development"),
+    QT_TRANSLATE_NOOP("Category", "Games"),
+    QT_TRANSLATE_NOOP("Category", "Graphics"),
+    QT_TRANSLATE_NOOP("Category", "Hardware Tools"),
+    QT_TRANSLATE_NOOP("Category", "Internet"),
+    QT_TRANSLATE_NOOP("Category", "Mail"),
+    QT_TRANSLATE_NOOP("Category", "Multimedia"),
+    QT_TRANSLATE_NOOP("Category", "Office"),
+    QT_TRANSLATE_NOOP("Category", "Other"),
+    QT_TRANSLATE_NOOP("Category", "Video"),
+    QT_TRANSLATE_NOOP("Category", "Virtualization"),
+};
+
+// Translate a category or group name read from pkglist.yaml.
+// A name without a translation, e.g. one added to the remote pkglist after this
+// release, is returned unchanged and is still displayed.
+QString translate_category(const QString& name) noexcept {
+    if (name.isEmpty()) {
+        return name;
+    }
+    return QCoreApplication::translate("Category", name.toUtf8().constData());
+}
+
+}  // namespace
+
 void processMap(MainWindow& window, const std::string& parent_category, ryml::NodeRef&& root_map, std::int32_t depth) noexcept {
     // NOTE: there shouldn't be nested subgroups of depth more than 2.
     // let's limit recursion to 2 depth in.
@@ -583,12 +617,12 @@ void MainWindow::displayPopularApps() const noexcept {
     };
 
     for (const QStringList& list : m_popular_apps) {
-        const auto& category        = list.at(Popular::Category);
+        const auto& category        = translate_category(list.at(Popular::Category));
         const auto& name            = list.at(Popular::Name);
         const auto& description     = list.at(Popular::Description);
         const auto& install_names   = list.at(Popular::InstallNames);
         const auto& uninstall_names = list.at(Popular::UninstallNames);
-        const auto& group           = list.at(Popular::Group);
+        const auto& group           = translate_category(list.at(Popular::Group));
 
         QTreeWidgetItem* topLevelChildItem = nullptr;
         if (group != category) {
