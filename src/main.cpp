@@ -138,6 +138,12 @@ auto main(int argc, char** argv) -> std::int32_t {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 
+    // Keep using Qt's own dialogs. The Plasma platform theme creates a helper QMessageBox
+    // for every native message dialog, marks it WA_DeleteOnClose and keeps a raw pointer
+    // to it. QDialog::exec() deletes that helper dialog when it closes, so the later
+    // hide() call from ~QMessageBox dereferences freed memory and can kill the app.
+    QApplication::setAttribute(Qt::AA_DontUseNativeDialogs);
+
     /// 2. Application identification
     QApplication::setOrganizationName("cachyos");
     QApplication::setOrganizationDomain("cachyos.org");
