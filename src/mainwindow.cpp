@@ -446,6 +446,179 @@ void MainWindow::fetch_net_pkglist() noexcept {
     file.close();
 }
 
+// clang-format off
+// NOTE: dead code, only exists so lupdate registers category names for translation.
+[[maybe_unused]] static constexpr const char* kCategoryNamesForTr[] = {
+    QT_TRANSLATE_NOOP("MainWindow", "Audio"),
+    QT_TRANSLATE_NOOP("MainWindow", "Browsers"),
+    QT_TRANSLATE_NOOP("MainWindow", "Communication"),
+    QT_TRANSLATE_NOOP("MainWindow", "Development"),
+    QT_TRANSLATE_NOOP("MainWindow", "Games"),
+    QT_TRANSLATE_NOOP("MainWindow", "Graphics"),
+    QT_TRANSLATE_NOOP("MainWindow", "Hardware Tools"),
+    QT_TRANSLATE_NOOP("MainWindow", "Internet"),
+    QT_TRANSLATE_NOOP("MainWindow", "Mail"),
+    QT_TRANSLATE_NOOP("MainWindow", "Multimedia"),
+    QT_TRANSLATE_NOOP("MainWindow", "Office"),
+    QT_TRANSLATE_NOOP("MainWindow", "Other"),
+    QT_TRANSLATE_NOOP("MainWindow", "Video"),
+    QT_TRANSLATE_NOOP("MainWindow", "Virtualization"),
+};
+// clang-format on
+
+// clang-format off
+// NOTE: dead code, only exists so lupdate registers package descriptions for translation.
+[[maybe_unused]] static constexpr const char* kPkgDescriptionsForTr[] = {
+    QT_TRANSLATE_NOOP("MainWindow", "Cross-platform, 3D and historically-based real-time strategy game"),
+    QT_TRANSLATE_NOOP("MainWindow", "Fully-featured word processor"),
+    QT_TRANSLATE_NOOP("MainWindow", "A collection of patience games written in guile scheme"),
+    QT_TRANSLATE_NOOP("MainWindow", "Tool that shows AMD GPU utilization"),
+    QT_TRANSLATE_NOOP("MainWindow", "Official assortment of Ansible collections"),
+    QT_TRANSLATE_NOOP("MainWindow", "Professional-grade digital audio workstation"),
+    QT_TRANSLATE_NOOP("MainWindow", "Lightweight, advanced audio player focused on audio quality"),
+    QT_TRANSLATE_NOOP("MainWindow", "A program that lets you manipulate digital audio waveforms"),
+    QT_TRANSLATE_NOOP("MainWindow", "A free and open source, cross-platform, libmpv based multimedia player. Qt5 build."),
+    QT_TRANSLATE_NOOP("MainWindow", "Font editor which can generate fonts in TTF, EOT and SVG formats"),
+    QT_TRANSLATE_NOOP("MainWindow", "A fully integrated 3D graphics creation suite"),
+    QT_TRANSLATE_NOOP("MainWindow", "CD/DVD mastering tool"),
+    QT_TRANSLATE_NOOP("MainWindow", "Web browser that blocks ads and trackers by default (binary release)"),
+    QT_TRANSLATE_NOOP("MainWindow", "A simple benchmarking script using stress-ng, perf, blender etc. (CachyOS Version)"),
+    QT_TRANSLATE_NOOP("MainWindow", "Common Applications used for Gaming"),
+    QT_TRANSLATE_NOOP("MainWindow", "A set of applications for productivity and creative usage"),
+    QT_TRANSLATE_NOOP("MainWindow", "A web browser built for speed, simplicity, and security"),
+    QT_TRANSLATE_NOOP("MainWindow", "A GTK+ based e-mail client"),
+    QT_TRANSLATE_NOOP("MainWindow", "A systemd web based user interface for Linux servers"),
+    QT_TRANSLATE_NOOP("MainWindow", "The Open Source build of Visual Studio Code (vscode) editor"),
+    QT_TRANSLATE_NOOP("MainWindow", "Batch image converter and resizer"),
+    QT_TRANSLATE_NOOP("MainWindow", "A program to monitor and control your cooling devices (official package)"),
+    QT_TRANSLATE_NOOP("MainWindow", "A Free software that gathers information on CPU, motherboard and more"),
+    QT_TRANSLATE_NOOP("MainWindow", "Utility to organize and develop raw images"),
+    QT_TRANSLATE_NOOP("MainWindow", "GTK UI for Deluge"),
+    QT_TRANSLATE_NOOP("MainWindow", "An advanced digital photo management application"),
+    QT_TRANSLATE_NOOP("MainWindow", "All-in-one voice and text chat for gamers"),
+    QT_TRANSLATE_NOOP("MainWindow", "Pack, ship and run any application as a lightweight container"),
+    QT_TRANSLATE_NOOP("MainWindow", "A multimedia player where the focus is on simplicity, instead of features"),
+    QT_TRANSLATE_NOOP("MainWindow", "Simple application for viewing and editing tags in audio files"),
+    QT_TRANSLATE_NOOP("MainWindow", "Glossy Matrix collaboration client — desktop version."),
+    QT_TRANSLATE_NOOP("MainWindow", "A simple music player aiming to provide a nice experience for its users"),
+    QT_TRANSLATE_NOOP("MainWindow", "The extensible, customizable, self-documenting real-time display editor"),
+    QT_TRANSLATE_NOOP("MainWindow", "Manage your email, contacts and schedule"),
+    QT_TRANSLATE_NOOP("MainWindow", "Downhill racing game starring Tux"),
+    QT_TRANSLATE_NOOP("MainWindow", "Cross-platform QtWebEngine browser"),
+    QT_TRANSLATE_NOOP("MainWindow", "Fast and reliable FTP, FTPS and SFTP client"),
+    QT_TRANSLATE_NOOP("MainWindow", "Fast, Private & Safe Web Browser"),
+    QT_TRANSLATE_NOOP("MainWindow", "Standalone web browser from mozilla.org - Extended Support Release"),
+    QT_TRANSLATE_NOOP("MainWindow", "Firefox-based web browser focused on performance and customizability"),
+    QT_TRANSLATE_NOOP("MainWindow", "Outline and bitmap font editor"),
+    QT_TRANSLATE_NOOP("MainWindow", "Matrix group messaging app"),
+    QT_TRANSLATE_NOOP("MainWindow", "Feature based parametric 3D CAD modeler"),
+    QT_TRANSLATE_NOOP("MainWindow", "FDM is a powerful modern download accelerator and organizer."),
+    QT_TRANSLATE_NOOP("MainWindow", "A lightweight email client for the GNOME desktop"),
+    QT_TRANSLATE_NOOP("MainWindow", "GNU Image Manipulation Program"),
+    QT_TRANSLATE_NOOP("MainWindow", "Simple GNOME application to access virtual systems"),
+    QT_TRANSLATE_NOOP("MainWindow", "An IDE for writing GNOME-based software"),
+    QT_TRANSLATE_NOOP("MainWindow", "Personal and small-business financial-accounting application"),
+    QT_TRANSLATE_NOOP("MainWindow", "Spreadsheet application for GNOME"),
+    QT_TRANSLATE_NOOP("MainWindow", "A Partition Magic clone, frontend to GNU Parted"),
+    QT_TRANSLATE_NOOP("MainWindow", "Multithreaded video transcoder"),
+    QT_TRANSLATE_NOOP("MainWindow", "Turn-based strategy artillery game similiar to Worms"),
+    QT_TRANSLATE_NOOP("MainWindow", "Free, easy, personal accounting for everyone"),
+    QT_TRANSLATE_NOOP("MainWindow", "IPTV streaming application with support for live TV, movies and series"),
+    QT_TRANSLATE_NOOP("MainWindow", "Professional vector graphics editor"),
+    QT_TRANSLATE_NOOP("MainWindow", "IDE for Java, Groovy and other programming languages with advanced refactoring features"),
+    QT_TRANSLATE_NOOP("MainWindow", "Download manager, written in Java, for one-click hosting sites like Rapidshare and MEGA. Uses its own updater"),
+    QT_TRANSLATE_NOOP("MainWindow", "Extendable continuous integration server (latest)"),
+    QT_TRANSLATE_NOOP("MainWindow", "A note taking and to-do application with synchronization capabilities - CLI App"),
+    QT_TRANSLATE_NOOP("MainWindow", "Feature-rich and easy to handle CD burning application"),
+    QT_TRANSLATE_NOOP("MainWindow", "A clone of the well known game Pac-Man"),
+    QT_TRANSLATE_NOOP("MainWindow", "A non-linear video editor for Linux using the MLT video framework"),
+    QT_TRANSLATE_NOOP("MainWindow", "C++ IDE using KDE technologies"),
+    QT_TRANSLATE_NOOP("MainWindow", "HDD and SSD benchmark tool with a very friendly graphical user interface"),
+    QT_TRANSLATE_NOOP("MainWindow", "Electronic schematic and printed circuit board (PCB) design tools"),
+    QT_TRANSLATE_NOOP("MainWindow", "An MP3, Ogg/Vorbis and FLAC tag editor, KDE version"),
+    QT_TRANSLATE_NOOP("MainWindow", "A tile matching game for one or two players"),
+    QT_TRANSLATE_NOOP("MainWindow", "KDE mail client"),
+    QT_TRANSLATE_NOOP("MainWindow", "Personal finance manager for KDE which operates similarly to MS-Money or Quicken"),
+    QT_TRANSLATE_NOOP("MainWindow", "Chess board by KDE with XBoard protocol support"),
+    QT_TRANSLATE_NOOP("MainWindow", "A software media player and entertainment hub for digital media (gl renderer)"),
+    QT_TRANSLATE_NOOP("MainWindow", "Paint Program"),
+    QT_TRANSLATE_NOOP("MainWindow", "Edit and paint images"),
+    QT_TRANSLATE_NOOP("MainWindow", "A sound editor"),
+    QT_TRANSLATE_NOOP("MainWindow", "Linux GPU Configuration Tool"),
+    QT_TRANSLATE_NOOP("MainWindow", "A 2D CAD drawing tool based on the community edition of QCad"),
+    QT_TRANSLATE_NOOP("MainWindow", "LibreOffice branch which contains new features and program enhancements"),
+    QT_TRANSLATE_NOOP("MainWindow", "LibreOffice maintenance branch"),
+    QT_TRANSLATE_NOOP("MainWindow", "Community-maintained fork of Firefox, focused on privacy, security and freedom."),
+    QT_TRANSLATE_NOOP("MainWindow", "The Linux MultiMedia Studio"),
+    QT_TRANSLATE_NOOP("MainWindow", "Music player for GNOME"),
+    QT_TRANSLATE_NOOP("MainWindow", "Open source graphical user interface application that aims to provide a workflow for HDR imaging"),
+    QT_TRANSLATE_NOOP("MainWindow", "A beautiful and fast mail client"),
+    QT_TRANSLATE_NOOP("MainWindow", "The Mario game with Portal gun mechanics"),
+    QT_TRANSLATE_NOOP("MainWindow", "Media Manager for handling Movies, TV Shows and Concerts/Music Videos for Kodi"),
+    QT_TRANSLATE_NOOP("MainWindow", "Free, open source software for digital DJing"),
+    QT_TRANSLATE_NOOP("MainWindow", "An Open Source, low-latency, high quality voice chat software (client)"),
+    QT_TRANSLATE_NOOP("MainWindow", "Create, play and print beautiful sheet music"),
+    QT_TRANSLATE_NOOP("MainWindow", "Fast and easy painting application for digital painters, with brush dynamics"),
+    QT_TRANSLATE_NOOP("MainWindow", "A client for matrix, the decentralized communication protocol"),
+    QT_TRANSLATE_NOOP("MainWindow", "IDE for Java, HTML5, PHP, Groovy, C and C++"),
+    QT_TRANSLATE_NOOP("MainWindow", "Nextcloud desktop client"),
+    QT_TRANSLATE_NOOP("MainWindow", "A cross-platform network file transfer application"),
+    QT_TRANSLATE_NOOP("MainWindow", "GPUs process monitoring for AMD, Intel and NVIDIA"),
+    QT_TRANSLATE_NOOP("MainWindow", "Free, open source software for live streaming and recording"),
+    QT_TRANSLATE_NOOP("MainWindow", "OverClock Checking Tool - CPU/GPU stress testing and monitoring"),
+    QT_TRANSLATE_NOOP("MainWindow", "An office suite that combines text, spreadsheet and presentation editors"),
+    QT_TRANSLATE_NOOP("MainWindow", "Open source Linux interface for iCUE LINK Hub and other Corsair AIOs, Hubs. [Latest Release - source]"),
+    QT_TRANSLATE_NOOP("MainWindow", "Open source RGB lighting control that doesn't depend on manufacturer software"),
+    QT_TRANSLATE_NOOP("MainWindow", "A full-featured 2D animation creation software"),
+    QT_TRANSLATE_NOOP("MainWindow", "Easy, intuitive tool to make 2D hand-drawn animations"),
+    QT_TRANSLATE_NOOP("MainWindow", "Editor for audio/video projects using the GStreamer framework"),
+    QT_TRANSLATE_NOOP("MainWindow", "Emulate Docker CLI using podman"),
+    QT_TRANSLATE_NOOP("MainWindow", "An open-source systems monitoring and alerting toolkit"),
+    QT_TRANSLATE_NOOP("MainWindow", "Server automation framework and application"),
+    QT_TRANSLATE_NOOP("MainWindow", "A terminal integrated SSH/Telnet client"),
+    QT_TRANSLATE_NOOP("MainWindow", "Python IDE for Professional Developers"),
+    QT_TRANSLATE_NOOP("MainWindow", "An advanced BitTorrent client programmed in C++, based on Qt toolkit and libtorrent-rasterbar"),
+    QT_TRANSLATE_NOOP("MainWindow", "Lightweight, cross-platform integrated development environment"),
+    QT_TRANSLATE_NOOP("MainWindow", "A keyboard-driven, vim-like browser based on Python and Qt"),
+    QT_TRANSLATE_NOOP("MainWindow", "Remote desktop client written in GTK+"),
+    QT_TRANSLATE_NOOP("MainWindow", "App to control asusctl"),
+    QT_TRANSLATE_NOOP("MainWindow", "MIDI/audio sequencer and notation editor"),
+    QT_TRANSLATE_NOOP("MainWindow", "Display and control your Android device"),
+    QT_TRANSLATE_NOOP("MainWindow", "Internet radio player"),
+    QT_TRANSLATE_NOOP("MainWindow", "Cross-platform Qt based Video Editor"),
+    QT_TRANSLATE_NOOP("MainWindow", "Signal Private Messenger for Linux"),
+    QT_TRANSLATE_NOOP("MainWindow", "Personal finance manager that aims at being powerful and intuitive"),
+    QT_TRANSLATE_NOOP("MainWindow", "Media player with built-in codecs that can play virtually all video and audio formats"),
+    QT_TRANSLATE_NOOP("MainWindow", "A simple sound converter application for GNOME"),
+    QT_TRANSLATE_NOOP("MainWindow", "A music player aimed at audio enthusiasts and music collectors"),
+    QT_TRANSLATE_NOOP("MainWindow", "A classic 2D jump'n'run sidescroller game in a style similar to the original SuperMario games"),
+    QT_TRANSLATE_NOOP("MainWindow", "Kart racing game featuring Tux and his friends"),
+    QT_TRANSLATE_NOOP("MainWindow", "An interior design application to draw the plan of your house in a 3D environment"),
+    QT_TRANSLATE_NOOP("MainWindow", "Professional vector animation program (GUI)"),
+    QT_TRANSLATE_NOOP("MainWindow", "Fast-paced multiplayer 2D shooter game"),
+    QT_TRANSLATE_NOOP("MainWindow", "Official Telegram Desktop client"),
+    QT_TRANSLATE_NOOP("MainWindow", "HashiCorp tool for building and updating infrastructure as code idempotently"),
+    QT_TRANSLATE_NOOP("MainWindow", "Standalone mail and news reader from mozilla.org"),
+    QT_TRANSLATE_NOOP("MainWindow", "Securely and easily download, verify, install, and launch Tor Browser in Linux"),
+    QT_TRANSLATE_NOOP("MainWindow", "Simple python application for transcoding video into formats supported by GStreamer"),
+    QT_TRANSLATE_NOOP("MainWindow", "A lightweight approach to removing Google web service dependency"),
+    QT_TRANSLATE_NOOP("MainWindow", "Changes the wallpaper on a regular interval using user-specified or automatically downloaded images."),
+    QT_TRANSLATE_NOOP("MainWindow", "Vi Improved, a highly configurable, improved version of the vi text editor"),
+    QT_TRANSLATE_NOOP("MainWindow", "Desktop user interface for managing virtual machines"),
+    QT_TRANSLATE_NOOP("MainWindow", "Powerful x86 virtualization for enterprise as well as home use"),
+    QT_TRANSLATE_NOOP("MainWindow", "An advanced browser made with the power user in mind."),
+    QT_TRANSLATE_NOOP("MainWindow", "Free and open source cross-platform multimedia player and framework"),
+    QT_TRANSLATE_NOOP("MainWindow", "LAN file sender, send and receive files across the network"),
+    QT_TRANSLATE_NOOP("MainWindow", "Secure messenger for everyone - Desktop client"),
+    QT_TRANSLATE_NOOP("MainWindow", "Kingsoft Office (WPS Office) - an office productivity suite"),
+    QT_TRANSLATE_NOOP("MainWindow", "Xtreme Download Manager: download manager with multiple browser integrations"),
+    QT_TRANSLATE_NOOP("MainWindow", "A simple CD/DVD burning tool based on libburnia libraries"),
+    QT_TRANSLATE_NOOP("MainWindow", "A free, fast-paced cross-platform first person shooter"),
+    QT_TRANSLATE_NOOP("MainWindow", "Free office suite compatible with Microsoft Office formats"),
+};
+// clang-format on
+
+
 // Process docs
 void MainWindow::processFile(const std::string& group, const std::string& category, const std::vector<std::string>& names) noexcept {
     if (names.empty()) {
@@ -457,15 +630,15 @@ void MainWindow::processFile(const std::string& group, const std::string& catego
     QString uninstall_names;
 
     if (auto pkg = m_alpm_manager->get_package_view(names[0])) {
-        description = QString(pkg->desc.data());
+        description = tr(pkg->desc.data());
     }
 
     install_names   = QString::fromStdString(fmt::format("{} {}", names[0], utils::join_range(names.begin() + 1, names.end(), ' ')));
     uninstall_names = install_names;
 
     QStringList templist;
-    templist << QString::fromStdString(category) << QString::fromStdString(names[0])
-             << description << install_names << uninstall_names << QString::fromStdString(group);
+    templist << tr(category.c_str()) << QString::fromStdString(names[0])
+             << description << install_names << uninstall_names << tr(group.c_str());
     m_popular_apps << templist;
 }
 
