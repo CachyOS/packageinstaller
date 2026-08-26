@@ -51,6 +51,12 @@
 #include <array>      // for array
 #include <ranges>     // for ranges::*
 
+#ifdef HAVE_APPSTREAM
+#include <AppStreamQt/component-box.h>
+#include <AppStreamQt/component.h>
+#include <AppStreamQt/pool.h>
+#endif
+
 #include <QCoreApplication>
 #include <QFile>
 #include <QMenu>
@@ -133,6 +139,7 @@ void MainWindow::setup() noexcept {
     const QString icon      = "software-update-available-symbolic";
     const QIcon backup_icon = QIcon(":/icons/software-update-available.png");
     m_ui->icon->setIcon(QIcon::fromTheme(icon, backup_icon));
+    loadAppStreamSummaries();
     fetch_net_pkglist();
     refreshPopularApps();
 
@@ -399,6 +406,41 @@ void processMap(MainWindow& window, const std::string& parent_category, ryml::No
     }
 }
 
+// Collect translated application summaries from the distribution's AppStream
+// catalogue, keyed by package name. Does nothing when AppStream is unavailable,
+// in which case callers fall back to the English pkgdesc.
+void MainWindow::loadAppStreamSummaries() noexcept {
+#ifdef HAVE_APPSTREAM
+    spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
+
+    AppStream::Pool pool;
+    // Only the distro catalogue carries <pkgname>; skipping the other sources
+    // keeps the pass short without losing any package mapping.
+    pool.setFlags(AppStream::Pool::FlagLoadOsCatalog);
+    if (!pool.load()) {
+        spdlog::warn("AppStream metadata unavailable, falling back to pkgdesc: {}", pool.lastError().toStdString());
+        return;
+    }
+
+    // A single pass over the catalogue is cheaper than one lookup per package.
+    for (const auto& component : pool.components()) {
+        const auto& summary = component.summary();
+        if (summary.isEmpty()) {
+            continue;
+        }
+        const bool is_app = (component.kind() == AppStream::Component::KindDesktopApp);
+        for (const auto& pkgname : component.packageNames()) {
+            // A package may be claimed by several components; a desktop
+            // application describes it better than an addon or a codec.
+            if (is_app || !m_appstream_summaries.contains(pkgname)) {
+                m_appstream_summaries.insert(pkgname, summary);
+            }
+        }
+    }
+    spdlog::debug("AppStream summaries loaded: {}", m_appstream_summaries.size());
+#endif
+}
+
 // Load data from Github repo
 void MainWindow::fetch_net_pkglist() noexcept {
     spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
@@ -456,8 +498,13 @@ void MainWindow::processFile(const std::string& group, const std::string& catego
     QString install_names;
     QString uninstall_names;
 
-    if (auto pkg = m_alpm_manager->get_package_view(names[0])) {
-        description = QString(pkg->desc.data());
+    // Prefer the AppStream summary, which is translated into the user's
+    // language; pkgdesc from the pacman database is English only.
+    description = m_appstream_summaries.value(QString::fromStdString(names[0]));
+    if (description.isEmpty()) {
+        if (auto pkg = m_alpm_manager->get_package_view(names[0])) {
+            description = QString(pkg->desc.data());
+        }
     }
 
     install_names   = QString::fromStdString(fmt::format("{} {}", names[0], utils::join_range(names.begin() + 1, names.end(), ' ')));
@@ -702,7 +749,10 @@ void MainWindow::displayPackages() noexcept {
         widget_item->setCheckState(TreeCol::Check, Qt::Unchecked);
         widget_item->setText(TreeCol::Name, key);
         widget_item->setText(TreeCol::Version, value.at(0));
-        widget_item->setText(TreeCol::Description, value.at(1));
+        // Same as for the popular apps: a translated AppStream summary if we
+        // have one, otherwise the English pkgdesc.
+        const auto& as_summary = m_appstream_summaries.value(key);
+        widget_item->setText(TreeCol::Description, as_summary.isEmpty() ? value.at(1) : as_summary);
         widget_item->setText(TreeCol::Displayed, QStringLiteral("true"));  // all items are displayed till filtered
 
         // update tree

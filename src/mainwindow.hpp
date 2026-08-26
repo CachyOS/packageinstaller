@@ -49,6 +49,7 @@
 #include <map>
 #include <string_view>
 
+#include <QHash>
 #include <QProgressDialog>
 #include <QSettings>
 #include <QTimer>
@@ -137,6 +138,7 @@ class MainWindow : public QDialog {
     void ifDownloadFailed() noexcept;
     void listFlatpakRemotes() noexcept;
     void listSizeInstalledFP() noexcept;
+    void loadAppStreamSummaries() noexcept;
     void fetch_net_pkglist() noexcept;
     void processFile(const std::string& group, const std::string& category, const std::vector<std::string>& names) noexcept;
     void refreshPopularApps() noexcept;
@@ -213,6 +215,10 @@ class MainWindow : public QDialog {
     Ui::MainWindow* m_ui{};
 
     alpm::AlpmManagerPtr m_alpm_manager;
+
+    /// Maps a package name to its AppStream summary, translated into the
+    /// user's language. Empty when no AppStream metadata is available.
+    QHash<QString, QString> m_appstream_summaries{};
 
     QString m_indexFilterFP{};
     bool m_warning_flatpaks{};

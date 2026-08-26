@@ -65,6 +65,18 @@ CPMAddPackage(
 
 find_package(PolkitQt6-1 REQUIRED)
 
+# Optional: localized application summaries from the distribution's AppStream
+# catalogue. Without it we fall back to the (English-only) pacman pkgdesc.
+option(ENABLE_APPSTREAM "Use AppStream metadata for localized descriptions" ON)
+if(ENABLE_APPSTREAM)
+   find_package(AppStreamQt 1.0 QUIET)
+   if(AppStreamQt_FOUND)
+      message(STATUS "AppStreamQt found: descriptions will be localized")
+   else()
+      message(STATUS "AppStreamQt not found: descriptions will fall back to pkgdesc")
+   endif()
+endif()
+
 ##
 ## CONFIGURATION
 ##
@@ -133,6 +145,11 @@ corrosion_add_cxxbridge(backend-rustlib-cxxbridge CRATE backend_rustlib FILES li
 include_directories(${CMAKE_SOURCE_DIR}/src ${CMAKE_BINARY_DIR})
 
 target_link_libraries(${PROJECT_NAME} PRIVATE project_warnings project_options Qt6::Widgets Threads::Threads spdlog::spdlog fmt::fmt ryml::ryml cpr::cpr backend-rustlib-cxxbridge PkgConfig::LIBALPM)
+
+if(AppStreamQt_FOUND)
+   target_link_libraries(${PROJECT_NAME} PRIVATE AppStreamQt)
+   target_compile_definitions(${PROJECT_NAME} PRIVATE HAVE_APPSTREAM)
+endif()
 
 option(ENABLE_UNITY "Enable Unity builds of projects" OFF)
 if(ENABLE_UNITY)
