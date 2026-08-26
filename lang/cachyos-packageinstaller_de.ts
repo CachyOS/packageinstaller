@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
-<TS version="2.1" language="de">
+<TS version="2.1" language="de_DE">
 <context>
     <name>MainWindow</name>
     <message>
@@ -74,7 +74,7 @@
         <location filename="../src/mainwindow.ui" line="191"/>
         <location filename="../src/mainwindow.cpp" line="1861"/>
         <source>Upgradable</source>
-        <translation>Ausbaufähig</translation>
+        <translation>Aktualisierbar</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="196"/>
@@ -131,7 +131,7 @@
     <message>
         <location filename="../src/mainwindow.ui" line="411"/>
         <source>Upgradable:</source>
-        <translation>Aufrüstbar:</translation>
+        <translation>Aktualisierbar:</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="441"/>
@@ -206,7 +206,7 @@
     <message>
         <location filename="../src/mainwindow.ui" line="679"/>
         <source>Total items </source>
-        <translation>Gesamte Posten </translation>
+        <translation>Elemente insgesamt </translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="693"/>
@@ -237,7 +237,7 @@
     <message>
         <location filename="../src/mainwindow.ui" line="816"/>
         <source>For current user</source>
-        <translation>Für aktuelle Benutzer</translation>
+        <translation>Für aktuellen Benutzer</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="834"/>
@@ -283,7 +283,7 @@
         <location filename="../src/mainwindow.cpp" line="1935"/>
         <location filename="../src/mainwindow.cpp" line="2156"/>
         <source>Install</source>
-        <translation>Installieren Sie</translation>
+        <translation>Installieren</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="1015"/>
@@ -293,7 +293,7 @@
     <message>
         <location filename="../src/mainwindow.ui" line="1034"/>
         <source>Quit application</source>
-        <translation>Beenden der Anwendung</translation>
+        <translation>Anwendung beenden</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="1037"/>
@@ -308,7 +308,7 @@
     <message>
         <location filename="../src/mainwindow.ui" line="1060"/>
         <source>Uninstall</source>
-        <translation>Deinstallieren Sie</translation>
+        <translation>Deinstallieren</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="1067"/>
@@ -360,7 +360,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="430"/>
         <source>Unable to fetch pkglist. Timeout!</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann pkglist nicht abrufen. Timeout!</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="524"/>
@@ -370,7 +370,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="531"/>
         <source>Please wait...</source>
-        <translation>Bitte warten Sie...</translation>
+        <translation>Bitte warten...</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="722"/>
@@ -381,7 +381,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="722"/>
         <source> in repo</source>
-        <translation> im Endlager</translation>
+        <translation> im Repository</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="724"/>
@@ -422,7 +422,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="958"/>
         <source>Remove</source>
-        <translation>entfernen</translation>
+        <translation>Entfernen</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="974"/>
@@ -432,7 +432,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="1001"/>
         <source>Installing packages...</source>
-        <translation>Installieren von Paketen...</translation>
+        <translation>Installiere Pakete...</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1054"/>
@@ -446,12 +446,12 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="81"/>
         <source>Cannot initialize ALPM library</source>
-        <translation type="unfinished"></translation>
+        <translation>Kann ALPM Bibliothek nicht initialisieren</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1130"/>
         <source>Fetching infomation about packages...</source>
-        <translation type="unfinished"></translation>
+        <translation>Rufe Informationen von Paketen ab...</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1385"/>
@@ -462,7 +462,7 @@
         <location filename="../src/mainwindow.cpp" line="1387"/>
         <location filename="../src/mainwindow.cpp" line="1406"/>
         <source>Package info</source>
-        <translation>Paket-Infos</translation>
+        <translation>Paketinfo</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1522"/>
@@ -567,7 +567,7 @@ Ist es in Ordnung, es zu installieren?</translation>
     <message>
         <location filename="../src/mainwindow.cpp" line="1760"/>
         <source>Flathub remote could not be added</source>
-        <translation>Flathub-Fernbedienung konnte nicht hinzugefügt werden</translation>
+        <translation>Flathub-remote konnte nicht hinzugefügt werden</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1773"/>
@@ -582,17 +582,17 @@ Ist es in Ordnung, es zu installieren?</translation>
     <message>
         <location filename="../src/mainwindow.cpp" line="1933"/>
         <source>Upgrade</source>
-        <translation>Upgrade</translation>
+        <translation type="unfinished">Upgrade</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1984"/>
         <source>Upgrading system...</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktualisiere System...</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2019"/>
         <source>Quit?</source>
-        <translation>Kündigen?</translation>
+        <translation>Schließen?</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2020"/>
@@ -620,7 +620,7 @@ Ist es in Ordnung, es zu installieren?</translation>
         <source>Potentially dangerous operation.
 Please make sure you check carefully the list of packages to be removed.</source>
         <translation>Potentiell gefährlicher Vorgang.
-Bitte überprüfen Sie sorgfältig die Liste der zu entfernenden Packstücke.</translation>
+Bitte überprüfen Sie sorgfältig die Liste der zu entfernenden Pakete.</translation>
     </message>
 </context>
 <context>
@@ -728,14 +728,16 @@ Bitte überprüfen Sie sorgfältig die Liste der zu entfernenden Packstücke.</t
     <message>
         <location filename="../src/main.cpp" line="160"/>
         <source>Instance of the program is already running! Please close it first</source>
-        <translation type="unfinished"></translation>
+        <translation>Das Programm läuft bereits! Bitte zuerst schließen</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="168"/>
         <source>No db found!
 Please run `pacman -Sy` to update DB!
 This is needed for the app to work properly</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Keine DB gefunden!
+Bitte führen Sie `pacman -Sy` aus, um die DB zu updaten!
+Dies wird benötigt damit die Anwendung ordentlich funktioniert</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="176"/>
@@ -750,7 +752,7 @@ This is needed for the app to work properly</source>
     <message>
         <location filename="../src/main.cpp" line="183"/>
         <source>Please don&apos;t run that application as root user!</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bitte führen Sie diese Anwendung nicht als root-Benutzer aus!</translation>
     </message>
     <message>
         <source>Please run that application as root user!</source>
