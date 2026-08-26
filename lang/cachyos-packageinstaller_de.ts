@@ -74,7 +74,7 @@
         <location filename="../src/mainwindow.ui" line="191"/>
         <location filename="../src/mainwindow.cpp" line="1861"/>
         <source>Upgradable</source>
-        <translation>Ausbaufähig</translation>
+        <translation>Aktualisierbar</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="196"/>
@@ -131,7 +131,7 @@
     <message>
         <location filename="../src/mainwindow.ui" line="411"/>
         <source>Upgradable:</source>
-        <translation>Aufrüstbar:</translation>
+        <translation>Aktualisierbar:</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="441"/>
@@ -166,7 +166,7 @@
         <location filename="../src/mainwindow.ui" line="555"/>
         <location filename="../src/mainwindow.cpp" line="1821"/>
         <source>All available</source>
-        <translation>Alle verfügbar</translation>
+        <translation>Alle verfügbaren</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="560"/>
@@ -186,7 +186,7 @@
         <location filename="../src/mainwindow.cpp" line="1937"/>
         <location filename="../src/mainwindow.cpp" line="1938"/>
         <source>All installed</source>
-        <translation>Alle installiert</translation>
+        <translation>Alle installierten</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="620"/>
@@ -216,7 +216,7 @@
     <message>
         <location filename="../src/mainwindow.ui" line="746"/>
         <source>Advanced</source>
-        <translation>Fortgeschrittene</translation>
+        <translation>Erweitert</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="776"/>
@@ -237,12 +237,12 @@
     <message>
         <location filename="../src/mainwindow.ui" line="816"/>
         <source>For current user</source>
-        <translation>Für aktuelle Benutzer</translation>
+        <translation>Für aktuellen Benutzer</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="834"/>
         <source>Remote (repo):</source>
-        <translation>Entfernt (Repo):</translation>
+        <translation>Remote (Repo):</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="877"/>
@@ -283,7 +283,7 @@
         <location filename="../src/mainwindow.cpp" line="1935"/>
         <location filename="../src/mainwindow.cpp" line="2156"/>
         <source>Install</source>
-        <translation>Installieren Sie</translation>
+        <translation>Installieren</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="1015"/>
@@ -308,7 +308,7 @@
     <message>
         <location filename="../src/mainwindow.ui" line="1060"/>
         <source>Uninstall</source>
-        <translation>Deinstallieren Sie</translation>
+        <translation>Deinstallieren</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="1067"/>
@@ -337,7 +337,7 @@
     </message>
     <message>
         <source>Refreshing sources...</source>
-        <translation type="vanished">Erfrischende Quellen...</translation>
+        <translation type="vanished">Aktualisiere Quellen...</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1526"/>
@@ -360,7 +360,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="430"/>
         <source>Unable to fetch pkglist. Timeout!</source>
-        <translation type="unfinished"></translation>
+        <translation>Konnte pkglist nicht abrufen. Zeitüberschreitung!</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="524"/>
@@ -381,7 +381,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="722"/>
         <source> in repo</source>
-        <translation> im Endlager</translation>
+        <translation> im Repository</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="724"/>
@@ -406,7 +406,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="850"/>
         <source>CachyOS includes this repository of flatpaks for the users&apos; convenience only, and is not responsible for the functionality of the individual flatpaks themselves. For more, consult flatpaks in the Wiki.</source>
-        <translation>CachyOS stellt diese Sammlung von Flatpaks nur für die Bequemlichkeit der Benutzer zur Verfügung und ist nicht verantwortlich für die Funktionalität der einzelnen Flatpaks selbst. Weitere Informationen finden Sie unter flatpaks im Wiki.</translation>
+        <translation>CachyOS stellt dieses Repository von Flatpaks nur für die Bequemlichkeit der Benutzer zur Verfügung und ist nicht verantwortlich für die Funktionalität der einzelnen Flatpaks selbst. Weitere Informationen finden Sie unter flatpaks im Wiki.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="858"/>
@@ -422,7 +422,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="958"/>
         <source>Remove</source>
-        <translation>entfernen</translation>
+        <translation>Entfernen</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="974"/>
@@ -446,12 +446,12 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="81"/>
         <source>Cannot initialize ALPM library</source>
-        <translation type="unfinished"></translation>
+        <translation>Konnte die ALPM Bibliothek nicht initialisieren</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1130"/>
         <source>Fetching infomation about packages...</source>
-        <translation type="unfinished"></translation>
+        <translation>Rufe Informationen über die Pakete ab</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1385"/>
@@ -567,7 +567,7 @@ Ist es in Ordnung, es zu installieren?</translation>
     <message>
         <location filename="../src/mainwindow.cpp" line="1760"/>
         <source>Flathub remote could not be added</source>
-        <translation>Flathub-Fernbedienung konnte nicht hinzugefügt werden</translation>
+        <translation>Flathub remote konnte nicht hinzugefügt werden</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1773"/>
@@ -582,17 +582,17 @@ Ist es in Ordnung, es zu installieren?</translation>
     <message>
         <location filename="../src/mainwindow.cpp" line="1933"/>
         <source>Upgrade</source>
-        <translation>Upgrade</translation>
+        <translation>Aktualisieren</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1984"/>
         <source>Upgrading system...</source>
-        <translation type="unfinished"></translation>
+        <translation>Aktualisiere das System...</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2019"/>
         <source>Quit?</source>
-        <translation>Kündigen?</translation>
+        <translation>Beenden?</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2020"/>
@@ -620,7 +620,7 @@ Ist es in Ordnung, es zu installieren?</translation>
         <source>Potentially dangerous operation.
 Please make sure you check carefully the list of packages to be removed.</source>
         <translation>Potentiell gefährlicher Vorgang.
-Bitte überprüfen Sie sorgfältig die Liste der zu entfernenden Packstücke.</translation>
+Bitte überprüfen Sie sorgfältig die Liste der zu entfernenden Pakete.</translation>
     </message>
 </context>
 <context>
@@ -628,7 +628,7 @@ Bitte überprüfen Sie sorgfältig die Liste der zu entfernenden Packstücke.</t
     <message>
         <location filename="../src/remotes.cpp" line="34"/>
         <source>Manage Flatpak Remotes</source>
-        <translation>Flatpak-Fernbedienungen verwalten</translation>
+        <translation>Flatpak Remotes verwalten</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="39"/>
@@ -638,7 +638,7 @@ Bitte überprüfen Sie sorgfältig die Liste der zu entfernenden Packstücke.</t
     <message>
         <location filename="../src/remotes.cpp" line="40"/>
         <source>For current user</source>
-        <translation>Für aktuelle Benutzer</translation>
+        <translation>Für aktuellen Benutzer</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="43"/>
@@ -678,22 +678,22 @@ Bitte überprüfen Sie sorgfältig die Liste der zu entfernenden Packstücke.</t
     <message>
         <location filename="../src/remotes.cpp" line="87"/>
         <source>Not removable</source>
-        <translation>Nicht abnehmbar</translation>
+        <translation>Nicht entfernbar</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="88"/>
         <source>Flathub is the main Flatpak remote and won&apos;t be removed</source>
-        <translation>Flathub ist die Haupt-Flatpak-Fernbedienung und wird nicht entfernt werden</translation>
+        <translation>Flathub ist die ursprüngliche Flatpak Remote und wird nicht entfernt werden</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="107"/>
         <source>Error adding remote</source>
-        <translation>Error adding remote</translation>
+        <translation>Fehler beim Hinzufügen von Remote</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="108"/>
         <source>Could not add remote - command returned an error. Please double-check the remote address and try again</source>
-        <translation>Remote kann nicht hinzugefügt werden - der Befehl hat einen Fehler zurückgegeben. Bitte überprüfen Sie die Adresse der Gegenstelle und versuchen Sie es erneut</translation>
+        <translation>Remote kann nicht hinzugefügt werden - der Befehl hat einen Fehler zurückgegeben. Bitte überprüfen Sie die Remote-Adresse und versuchen Sie es erneut</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="112"/>
@@ -728,14 +728,16 @@ Bitte überprüfen Sie sorgfältig die Liste der zu entfernenden Packstücke.</t
     <message>
         <location filename="../src/main.cpp" line="160"/>
         <source>Instance of the program is already running! Please close it first</source>
-        <translation type="unfinished"></translation>
+        <translation>Eine Instanz des Programmes läuft bereits! Bitte schießen Sie es zuerst</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="168"/>
         <source>No db found!
 Please run `pacman -Sy` to update DB!
 This is needed for the app to work properly</source>
-        <translation type="unfinished"></translation>
+        <translation>Keine Datenbank gefunden!
+Bitte führen Sie `pacman -Sy` aus, um die Datenbank zu aktualisieren!
+Dies ist erforderlich, damit dieses Programm funktionieren kann</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="176"/>
@@ -745,16 +747,16 @@ This is needed for the app to work properly</source>
     <message>
         <location filename="../src/main.cpp" line="182"/>
         <source>Unable to run the app</source>
-        <translation>Die Anwendung kann nicht ausgeführt werden</translation>
+        <translation>Das Programm kann nicht ausgeführt werden</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="183"/>
         <source>Please don&apos;t run that application as root user!</source>
-        <translation type="unfinished"></translation>
+        <translation>Bitte führe das Programm nicht als root-Benutzer aus!</translation>
     </message>
     <message>
         <source>Please run that application as root user!</source>
-        <translation type="vanished">Bitte führen Sie diese Anwendung als root-Benutzer aus!</translation>
+        <translation type="vanished">Bitte führen Sie dieses Programm als root-Benutzer aus!</translation>
     </message>
     <message>
         <location filename="../src/main.cpp" line="191"/>
@@ -764,7 +766,7 @@ This is needed for the app to work properly</source>
     <message>
         <location filename="../src/main.cpp" line="192"/>
         <source>Another package management application (like pamac or pacman), is already running. Please close that application first</source>
-        <translation>Eine andere Paketverwaltungsanwendung (wie pamac oder pacman) wird bereits ausgeführt. Bitte schließen Sie diese Anwendung zuerst</translation>
+        <translation>Eine andere Paketverwaltungsanwendung (wie pamac oder pacman) wird bereits ausgeführt. Bitte schließen Sie dieses Programm zuerst</translation>
     </message>
 </context>
 </TS>
