@@ -125,7 +125,7 @@
     <message>
         <location filename="../src/mainwindow.ui" line="284"/>
         <source>Remove orphan packages</source>
-        <translation>Удалить ненужные пакеты</translation>
+        <translation>Удалить пакеты-сироты</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="331"/>
@@ -242,7 +242,7 @@
     <message>
         <location filename="../src/mainwindow.ui" line="834"/>
         <source>Remote (repo):</source>
-        <translation>Удаленный (репозиторий):</translation>
+        <translation>Источник (репозиторий):</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="877"/>
@@ -274,7 +274,7 @@
     <message>
         <location filename="../src/mainwindow.ui" line="1086"/>
         <source>About...</source>
-        <translation>O...</translation>
+        <translation>О программе...</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.ui" line="1093"/>
@@ -370,7 +370,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="531"/>
         <source>Please wait...</source>
-        <translation>Пожалуйста подождите...</translation>
+        <translation>Пожалуйста, подождите...</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="722"/>
@@ -396,7 +396,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="850"/>
         <source>CachyOS includes this repository of flatpaks for the users&apos; convenience only, and is not responsible for the functionality of the individual flatpaks themselves. For more, consult flatpaks in the Wiki.</source>
-        <translation>CachyOS включает этот репозиторий flatpaks только для удобства пользователей и не несет ответственности за функциональность самих отдельных flatpaks. Для получения дополнительной информации обратитесь к flatpaks в Wiki.</translation>
+        <translation>CachyOS включает этот репозиторий flatpaks только для удобства пользователей и не несёт ответственности за функциональность самих отдельных flatpaks. Для получения дополнительной информации обратитесь к flatpaks в Wiki.</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="858"/>
@@ -512,7 +512,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="81"/>
         <source>Cannot initialize ALPM library</source>
-        <translation type="unfinished"></translation>
+        <translation>Не удалось инициализировать библиотеку ALPM</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="724"/>
@@ -522,7 +522,7 @@
     <message>
         <location filename="../src/mainwindow.cpp" line="1130"/>
         <source>Fetching infomation about packages...</source>
-        <translation type="unfinished"></translation>
+        <translation>Получение информации о пакетах...</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1651"/>
@@ -562,12 +562,12 @@ OK to go ahead and install it?</source>
     <message>
         <location filename="../src/mainwindow.cpp" line="1760"/>
         <source>Flathub remote failed</source>
-        <translation>Дистанционный Flathub завершился ошибкой</translation>
+        <translation>Не удалось подключить Flathub</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1760"/>
         <source>Flathub remote could not be added</source>
-        <translation>Не удалось добавить зеркало Flathub</translation>
+        <translation>Не удалось добавить источник Flathub</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="1773"/>
@@ -587,7 +587,7 @@ OK to go ahead and install it?</source>
     <message>
         <location filename="../src/mainwindow.cpp" line="1984"/>
         <source>Upgrading system...</source>
-        <translation type="unfinished"></translation>
+        <translation>Обновление системы...</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2019"/>
@@ -597,13 +597,13 @@ OK to go ahead and install it?</source>
     <message>
         <location filename="../src/mainwindow.cpp" line="2020"/>
         <source>Process still running, quitting might leave the system in an unstable state.&lt;p&gt;&lt;b&gt;Are you sure you want to exit CachyOS Package Installer?&lt;/b&gt;</source>
-        <translation>Процесс все еще запущен, завершение работы может привести к нестабильному состоянию системы.&lt;p&gt;&lt;b&gt; Вы уверены, что хотите выйти из установщика пакетов CachyOS?&lt;/b&gt;</translation>
+        <translation>Процесс всё ещё запущен, завершение работы может привести к нестабильному состоянию системы.&lt;p&gt;&lt;b&gt;Вы уверены, что хотите выйти из установщика пакетов CachyOS?&lt;/b&gt;</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2110"/>
         <location filename="../src/mainwindow.cpp" line="2120"/>
         <source>More &amp;info...</source>
-        <translation>Подробнее &amp;информация...</translation>
+        <translation>&amp;Подробнее...</translation>
     </message>
     <message>
         <location filename="../src/mainwindow.cpp" line="2154"/>
@@ -628,7 +628,7 @@ Please make sure you check carefully the list of packages to be removed.</source
     <message>
         <location filename="../src/remotes.cpp" line="34"/>
         <source>Manage Flatpak Remotes</source>
-        <translation>Управлять дистанционными Flatpak</translation>
+        <translation>Управление источниками Flatpak</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="39"/>
@@ -643,7 +643,7 @@ Please make sure you check carefully the list of packages to be removed.</source
     <message>
         <location filename="../src/remotes.cpp" line="43"/>
         <source>enter Flatpak remote URL</source>
-        <translation>введите удаленный URL для Flatpak</translation>
+        <translation>введите URL источника Flatpak</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="45"/>
@@ -653,17 +653,17 @@ Please make sure you check carefully the list of packages to be removed.</source
     <message>
         <location filename="../src/remotes.cpp" line="47"/>
         <source>Add or remove flatpak remotes (repos), or install apps using flatpakref URL or path</source>
-        <translation>Добавить или удалить дистанционные flatpak (репозитории), или установить приложения используя flatpakref URL или путь</translation>
+        <translation>Добавление и удаление источников (репозиториев) flatpak, а также установка приложений по URL или пути flatpakref</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="56"/>
         <source>Remove remote</source>
-        <translation>Удалить дистанционный</translation>
+        <translation>Удалить источник</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="61"/>
         <source>Add remote</source>
-        <translation>Добавить дистанционный</translation>
+        <translation>Добавить источник</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="66"/>
@@ -678,22 +678,22 @@ Please make sure you check carefully the list of packages to be removed.</source
     <message>
         <location filename="../src/remotes.cpp" line="87"/>
         <source>Not removable</source>
-        <translation>Не удаляемое</translation>
+        <translation>Не удаляется</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="88"/>
         <source>Flathub is the main Flatpak remote and won&apos;t be removed</source>
-        <translation>Flathub является основным дистанционным для Flatpak и не может быть удалён</translation>
+        <translation>Flathub — основной источник Flatpak, его нельзя удалить</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="107"/>
         <source>Error adding remote</source>
-        <translation>Ошибка при добавлении дистанционного</translation>
+        <translation>Ошибка при добавлении источника</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="108"/>
         <source>Could not add remote - command returned an error. Please double-check the remote address and try again</source>
-        <translation>Не получилось добавить дистанционный - команда вернула ошибку. Перепроверьте адрес дистанционного и попробуйте заново</translation>
+        <translation>Не удалось добавить источник: команда вернула ошибку. Проверьте адрес источника и попробуйте ещё раз</translation>
     </message>
     <message>
         <location filename="../src/remotes.cpp" line="112"/>
@@ -703,7 +703,7 @@ Please make sure you check carefully the list of packages to be removed.</source
     <message>
         <location filename="../src/remotes.cpp" line="112"/>
         <source>Remote added successfully</source>
-        <translation>Дистанционный успешно добавлен</translation>
+        <translation>Источник успешно добавлен</translation>
     </message>
 </context>
 <context>
@@ -752,7 +752,7 @@ This is needed for the app to work properly</source>
     <message>
         <location filename="../src/main.cpp" line="183"/>
         <source>Please don&apos;t run that application as root user!</source>
-        <translation type="unfinished"></translation>
+        <translation>Не запускайте это приложение от имени пользователя root!</translation>
     </message>
     <message>
         <source>Please run that application as root user!</source>
