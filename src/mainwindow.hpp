@@ -215,6 +215,7 @@ class MainWindow : public QDialog {
     alpm::AlpmManagerPtr m_alpm_manager;
 
     QString m_indexFilterFP{};
+    int m_filterIndexRepo{};
     bool m_warning_flatpaks{};
     bool m_setup_assistant_mode{};
     int m_height_app{};
