@@ -166,6 +166,7 @@
   packages:
     - scrcpy
     - variety
+    - winboat docker docker-compose"
 
 - name: "Video"
   packages:
