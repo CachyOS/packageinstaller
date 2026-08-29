@@ -161,6 +161,23 @@ auto main(int argc, char** argv) -> std::int32_t {
         return EXIT_FAILURE;
     }
 
+    const auto& cache_path   = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+    const auto& log_filepath = fmt::format("{}/cachyospi.log", cache_path.toStdString());
+    if (fs::exists(log_filepath)) {
+        std::ifstream currentfile{log_filepath};
+        const std::string file_data{std::istreambuf_iterator<char>(currentfile), std::istreambuf_iterator<char>()};
+        std::ofstream oldlogfile{fmt::format("{}.old", log_filepath)};
+        oldlogfile << "-----------------------------------------------------------\nCACHYOSPI SESSION\n"
+                      "-----------------------------------------------------------\n";
+        oldlogfile << file_data;
+        fs::remove(log_filepath);
+    }
+    auto logger = spdlog::create_async<spdlog::sinks::basic_file_sink_mt>("cachyos_logger", log_filepath);
+    spdlog::set_default_logger(logger);
+    spdlog::set_pattern("[%r][%^---%L---%$] %v");
+    spdlog::set_level(spdlog::level::debug);
+    spdlog::flush_every(std::chrono::seconds(5));
+
     // Check if we have valid databases
     {
         if (!alpm::is_valid_alpm_dbs()) {
@@ -193,23 +210,6 @@ auto main(int argc, char** argv) -> std::int32_t {
                         "is already running. Please close that application first"));
         return EXIT_FAILURE;
     }
-
-    const auto& cache_path   = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
-    const auto& log_filepath = fmt::format("{}/cachyospi.log", cache_path.toStdString());
-    if (fs::exists(log_filepath)) {
-        std::ifstream currentfile{log_filepath};
-        const std::string file_data{std::istreambuf_iterator<char>(currentfile), std::istreambuf_iterator<char>()};
-        std::ofstream oldlogfile{fmt::format("{}.old", log_filepath)};
-        oldlogfile << "-----------------------------------------------------------\nCACHYOSPI SESSION\n"
-                      "-----------------------------------------------------------\n";
-        oldlogfile << file_data;
-        fs::remove(log_filepath);
-    }
-    auto logger = spdlog::create_async<spdlog::sinks::basic_file_sink_mt>("cachyos_logger", log_filepath);
-    spdlog::set_default_logger(logger);
-    spdlog::set_pattern("[%r][%^---%L---%$] %v");
-    spdlog::set_level(spdlog::level::debug);
-    spdlog::flush_every(std::chrono::seconds(5));
 
     MainWindow w;
     w.show();
