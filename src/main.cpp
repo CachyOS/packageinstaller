@@ -138,6 +138,10 @@ auto main(int argc, char** argv) -> std::int32_t {
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
 #endif
 
+    // Avoid the Plasma native message-dialog helper, which can retain a stale
+    // QMessageBox pointer after a modal dialog closes.
+    QApplication::setAttribute(Qt::AA_DontUseNativeDialogs);
+
     /// 2. Application identification
     QApplication::setOrganizationName("cachyos");
     QApplication::setOrganizationDomain("cachyos.org");
