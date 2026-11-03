@@ -3,20 +3,19 @@
 "http://www.freedesktop.org/software/polkit/policyconfig-1.dtd">
 <policyconfig>
 
-  <vendor>cachyos-pi</vendor>
+  <vendor>CachyOS</vendor>
   <vendor_url>https://github.com/CachyOS/packageinstaller</vendor_url>
 
-  <action id="org.cachyos.cachyos-pi.pkexec.policy.run">
-    <description>Start the program</description>
-    <message>Authentication is required to run the app</message>
+  <action id="org.cachyos.cachyos-pi.manage-packages">
+    <description>Install, remove or update packages</description>
+    <message>Authentication is required to install, remove or update packages</message>
     <icon_name>cachyos-pi</icon_name>
     <defaults>
       <allow_any>no</allow_any>
       <allow_inactive>no</allow_inactive>
-      <allow_active>auth_admin</allow_active>
+      <allow_active>auth_admin_keep</allow_active>
     </defaults>
-    <annotate key="org.freedesktop.policykit.exec.path">/usr/bin/cachyos-pi</annotate>
-    <annotate key="org.freedesktop.policykit.exec.allow_gui">true</annotate>
+    <annotate key="org.freedesktop.policykit.exec.path">@PI_HELPER_DIR@/cachyos-pi-helper</annotate>
   </action>
 
 </policyconfig>

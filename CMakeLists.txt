@@ -20,3 +20,20 @@ enable_sanitizers(project_options)
 
 add_library(project_warnings INTERFACE)
 set_project_warnings(project_warnings)
+
+set(PI_HELPER_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/cachyos-pi")
+
+##
+## Privileged helper: the only thing that runs as root (through pkexec).
+##
+add_executable(cachyos-pi-helper src/helper/main.cpp)
+target_link_libraries(cachyos-pi-helper PRIVATE project_options project_warnings)
+
+##
+## Install
+##
+configure_file(org.cachyos.cachyos-pi.policy.in org.cachyos.cachyos-pi.policy @ONLY)
+
+install(TARGETS cachyos-pi-helper RUNTIME DESTINATION ${PI_HELPER_DIR})
+install(FILES "${CMAKE_CURRENT_BINARY_DIR}/org.cachyos.cachyos-pi.policy"
+        DESTINATION ${CMAKE_INSTALL_DATADIR}/polkit-1/actions)
