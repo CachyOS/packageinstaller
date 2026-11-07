@@ -44,6 +44,7 @@ qt_add_executable(${PROJECT_NAME}
     src/backend.hpp src/backend.cpp)
 
 set(PI_QML_FILES
+    qml/Main.qml
     qml/Look.qml
     qml/Glyph.qml
     qml/AppIcon.qml
@@ -53,6 +54,13 @@ set(PI_QML_FILES
     qml/SourceBadge.qml
     qml/NavButton.qml
     qml/SearchField.qml
+    qml/HomePage.qml
+    qml/BrowsePage.qml
+    qml/DetailsPage.qml
+    qml/UpdatesPage.qml
+    qml/AurPage.qml
+    qml/AurDetailsPage.qml
+    qml/TransactionDialog.qml
 )
 # Serve the QML files from the module root. Left in qml/, each file would also see its
 # siblings through the implicit directory import, which knows nothing about the qmldir
