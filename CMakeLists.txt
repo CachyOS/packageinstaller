@@ -43,9 +43,31 @@ qt_add_executable(${PROJECT_NAME}
     src/transaction.hpp src/transaction.cpp
     src/backend.hpp src/backend.cpp)
 
+set(PI_QML_FILES
+    qml/Look.qml
+    qml/Glyph.qml
+    qml/AppIcon.qml
+    qml/AppCard.qml
+    qml/PackageRow.qml
+    qml/PillButton.qml
+    qml/SourceBadge.qml
+    qml/NavButton.qml
+    qml/SearchField.qml
+)
+# Serve the QML files from the module root. Left in qml/, each file would also see its
+# siblings through the implicit directory import, which knows nothing about the qmldir
+# (and so would treat the Look singleton as a plain type).
+foreach(file IN LISTS PI_QML_FILES)
+    get_filename_component(name "${file}" NAME)
+    set_source_files_properties("${file}" PROPERTIES QT_RESOURCE_ALIAS "${name}")
+endforeach()
+# must precede qt_add_qml_module
+set_source_files_properties(qml/Look.qml PROPERTIES QT_QML_SINGLETON_TYPE TRUE)
+
 qt_add_qml_module(${PROJECT_NAME}
     URI CachyOS.PackageInstaller
     VERSION 1.0
+    QML_FILES ${PI_QML_FILES}
     RESOURCES
         pkglist.yaml
         icons/cachyos-pi.png)
