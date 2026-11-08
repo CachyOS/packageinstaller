@@ -14,11 +14,11 @@ include(Linker)
 include(Sanitizers)
 
 find_package(PkgConfig REQUIRED)
-find_package(Qt6 6.8 REQUIRED COMPONENTS Core Gui Widgets Qml Quick QuickControls2 Network Concurrent)
+find_package(Qt6 6.8 REQUIRED COMPONENTS Core Gui Widgets Qml Quick QuickControls2 Network Concurrent LinguistTools)
 find_package(AppStreamQt 1.0 REQUIRED)
 pkg_check_modules(LIBALPM REQUIRED IMPORTED_TARGET libalpm>=15.0.0)
 
-qt_standard_project_setup(REQUIRES 6.8)
+qt_standard_project_setup(REQUIRES 6.8 I18N_SOURCE_LANGUAGE en)
 
 add_library(project_options INTERFACE)
 target_compile_features(project_options INTERFACE cxx_std_23)
@@ -79,6 +79,10 @@ qt_add_qml_module(${PROJECT_NAME}
     RESOURCES
         pkglist.yaml
         icons/cachyos-pi.png)
+
+# i18n/cachyos-pi_en.ts only carries the English plural forms ("1 package" / "2 packages").
+# Refresh the .ts files with: cmake --build build --target update_translations
+qt_add_translations(TARGETS ${PROJECT_NAME} TS_FILE_DIR i18n)
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE
     PI_VERSION="${PROJECT_VERSION}"
