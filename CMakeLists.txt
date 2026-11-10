@@ -31,6 +31,13 @@ set_project_warnings(project_warnings)
 set(PI_HELPER_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/cachyos-pi")
 
 ##
+## PKGBUILD scanner: text analysis only, shared by the GUI, the CLI and the tests.
+##
+add_library(pi-scan STATIC src/pkgscan.hpp src/pkgscan.cpp)
+target_include_directories(pi-scan PUBLIC src)
+target_link_libraries(pi-scan PUBLIC Qt6::Core PRIVATE project_options project_warnings)
+
+##
 ## GUI
 ##
 qt_add_executable(${PROJECT_NAME}
@@ -82,7 +89,7 @@ qt_add_qml_module(${PROJECT_NAME}
 
 # i18n/cachyos-pi_en.ts only carries the English plural forms ("1 package" / "2 packages").
 # Refresh the .ts files with: cmake --build build --target update_translations
-qt_add_translations(TARGETS ${PROJECT_NAME} TS_FILE_DIR i18n)
+qt_add_translations(TARGETS ${PROJECT_NAME} SOURCE_TARGETS ${PROJECT_NAME} pi-scan TS_FILE_DIR i18n)
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE
     PI_VERSION="${PROJECT_VERSION}"
