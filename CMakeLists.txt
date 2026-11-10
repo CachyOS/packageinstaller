@@ -37,6 +37,10 @@ add_library(pi-scan STATIC src/pkgscan.hpp src/pkgscan.cpp)
 target_include_directories(pi-scan PUBLIC src)
 target_link_libraries(pi-scan PUBLIC Qt6::Core PRIVATE project_options project_warnings)
 
+add_executable(cachyos-pi-scan src/scan/main.cpp)
+target_compile_definitions(cachyos-pi-scan PRIVATE PI_VERSION="${PROJECT_VERSION}")
+target_link_libraries(cachyos-pi-scan PRIVATE pi-scan project_options project_warnings)
+
 ##
 ## GUI
 ##
@@ -112,6 +116,7 @@ target_link_libraries(cachyos-pi-helper PRIVATE project_options project_warnings
 configure_file(org.cachyos.cachyos-pi.policy.in org.cachyos.cachyos-pi.policy @ONLY)
 
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(TARGETS cachyos-pi-scan RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 install(TARGETS cachyos-pi-helper RUNTIME DESTINATION ${PI_HELPER_DIR})
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/org.cachyos.cachyos-pi.policy"
         DESTINATION ${CMAKE_INSTALL_DATADIR}/polkit-1/actions)
