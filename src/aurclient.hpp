@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #pragma once
 
+#include "pkgscan.hpp"
+
 #include <QNetworkAccessManager>
 #include <QObject>
 #include <QVariantList>
@@ -20,6 +22,11 @@ class AurClient : public QObject {
     Q_PROPERTY(QVariantMap details READ details NOTIFY detailsChanged)
     Q_PROPERTY(QString pkgbuild READ pkgbuild NOTIFY pkgbuildChanged)
     Q_PROPERTY(bool loadingDetails READ loadingDetails NOTIFY loadingDetailsChanged)
+    /// Scripts shipped next to the PKGBUILD (install scriptlet, hooks, units): [{name, text}].
+    Q_PROPERTY(QVariantList files READ files NOTIFY filesChanged)
+    /// What the automatic check wants a reviewer to look at: [{id, severity, file, line, title, detail, excerpt}].
+    Q_PROPERTY(QVariantList findings READ findings NOTIFY findingsChanged)
+    Q_PROPERTY(QStringList sourceHosts READ sourceHosts NOTIFY findingsChanged)
 
  public:
     explicit AurClient(const PackageModel* packages, QObject* parent = nullptr);
@@ -30,6 +37,9 @@ class AurClient : public QObject {
     [[nodiscard]] QVariantMap details() const { return m_details; }
     [[nodiscard]] QString pkgbuild() const { return m_pkgbuild; }
     [[nodiscard]] bool loadingDetails() const { return m_pending > 0; }
+    [[nodiscard]] QVariantList files() const { return m_files; }
+    [[nodiscard]] QVariantList findings() const { return m_findings; }
+    [[nodiscard]] QStringList sourceHosts() const { return m_analysis.hosts; }
 
     Q_INVOKABLE void search(const QString& query);
     /// Fetches dependency information and the PKGBUILD for review.
@@ -44,16 +54,25 @@ class AurClient : public QObject {
     void detailsChanged();
     void pkgbuildChanged();
     void loadingDetailsChanged();
+    void filesChanged();
+    void findingsChanged();
 
  private:
     [[nodiscard]] QVariantMap toMap(const QJsonObject& object) const;
     void setError(const QString& error);
+    void loadFile(const QString& name, const QString& pkgbase, int generation);
+    void rescan();
 
     const PackageModel* m_packages;
     QNetworkAccessManager m_network;
     QVariantList m_results;
     QVariantMap m_details;
     QString m_pkgbuild;
+    QVariantList m_files;
+    QVariantList m_findings;
+    pkgscan::Analysis m_analysis;
+    QStringList m_unreadable;
+    QString m_lookAlike;
     QString m_error;
     bool m_searching = false;
     int m_pending    = 0;

@@ -11,6 +11,9 @@
 namespace {
 
 constexpr auto AUR_HOST = "https://aur.archlinux.org";
+/// Scripts next to the PKGBUILD that are fetched for review.
+constexpr int MAX_FILES         = 8;
+constexpr qint64 MAX_FILE_SIZE = 512 * 1024;
 
 QNetworkRequest request(const QUrl& url) {
     QNetworkRequest req(url);
@@ -50,6 +53,8 @@ QVariantMap AurClient::toMap(const QJsonObject& object) const {
         {QStringLiteral("description"), object.value(QLatin1String("Description")).toString()},
         {QStringLiteral("url"), object.value(QLatin1String("URL")).toString()},
         {QStringLiteral("maintainer"), object.value(QLatin1String("Maintainer")).toString()},
+        {QStringLiteral("submitter"), object.value(QLatin1String("Submitter")).toString()},
+        {QStringLiteral("firstSubmitted"), object.value(QLatin1String("FirstSubmitted")).toInteger()},
         {QStringLiteral("votes"), object.value(QLatin1String("NumVotes")).toInt()},
         {QStringLiteral("popularity"), object.value(QLatin1String("Popularity")).toDouble()},
         {QStringLiteral("outOfDate"), !object.value(QLatin1String("OutOfDate")).isNull()},
@@ -127,8 +132,15 @@ void AurClient::loadDetails(const QString& name, const QString& pkgbase) {
     const int generation = ++m_detailsGeneration;
     m_details.clear();
     m_pkgbuild.clear();
+    m_files.clear();
+    m_findings.clear();
+    m_analysis = {};
+    m_unreadable.clear();
+    m_lookAlike.clear();
     emit detailsChanged();
     emit pkgbuildChanged();
+    emit filesChanged();
+    emit findingsChanged();
 
     const auto finishOne = [this] {
         --m_pending;
@@ -159,21 +171,113 @@ void AurClient::loadDetails(const QString& name, const QString& pkgbase) {
         if (!results.isEmpty()) {
             m_details = toMap(results.first().toObject());
             emit detailsChanged();
+
+            QStringList known;
+            for (int row = 0; row < m_packages->rowCount(); ++row) {
+                if (!m_packages->at(row).foreign()) {
+                    known << m_packages->at(row).name;
+                }
+            }
+            m_lookAlike = pkgscan::similarName(m_details.value(QStringLiteral("name")).toString(), known);
+            rescan();
         }
     });
 
     auto* pkgbuild = m_network.get(request(pkgbuildUrl));
-    connect(pkgbuild, &QNetworkReply::finished, this, [this, pkgbuild, generation, finishOne] {
+    connect(pkgbuild, &QNetworkReply::finished, this, [this, pkgbuild, pkgbase, generation, finishOne] {
         pkgbuild->deleteLater();
-        finishOne();
-        if (generation != m_detailsGeneration) {
-            return;
-        }
-        if (pkgbuild->error() == QNetworkReply::NoError) {
+        if (generation == m_detailsGeneration && pkgbuild->error() == QNetworkReply::NoError) {
             m_pkgbuild = QString::fromUtf8(pkgbuild->readAll());
             emit pkgbuildChanged();
+
+            m_analysis = pkgscan::scanPkgbuild(m_pkgbuild);
+            const auto count = qMin(m_analysis.localFiles.size(), qsizetype{MAX_FILES});
+            for (const auto& file : m_analysis.localFiles.mid(0, count)) {
+                loadFile(file, pkgbase, generation);
+            }
+            m_unreadable = m_analysis.localFiles.mid(count);
+            rescan();
         }
+        // after the file requests were counted, so that loading does not appear finished in between
+        finishOne();
     });
+}
+
+void AurClient::loadFile(const QString& name, const QString& pkgbase, int generation) {
+    QUrl url(QStringLiteral("%1/cgit/aur.git/plain/%2").arg(QLatin1String(AUR_HOST), QString::fromLatin1(QUrl::toPercentEncoding(name))));
+    QUrlQuery query;
+    query.addQueryItem(QStringLiteral("h"), QString::fromLatin1(QUrl::toPercentEncoding(pkgbase)));
+    url.setQuery(query);
+
+    ++m_pending;
+    emit loadingDetailsChanged();
+
+    auto* reply = m_network.get(request(url));
+    connect(reply, &QNetworkReply::finished, this, [this, reply, name, generation] {
+        reply->deleteLater();
+        if (generation == m_detailsGeneration) {
+            const auto data = reply->readAll();
+            if (reply->error() == QNetworkReply::NoError && data.size() <= MAX_FILE_SIZE) {
+                m_files << QVariantMap{{QStringLiteral("name"), name}, {QStringLiteral("text"), QString::fromUtf8(data)}};
+                // keep the order of the PKGBUILD, whichever reply arrives first
+                std::ranges::stable_sort(m_files, [this](const QVariant& a, const QVariant& b) {
+                    return m_analysis.localFiles.indexOf(a.toMap().value(QStringLiteral("name")).toString())
+                        < m_analysis.localFiles.indexOf(b.toMap().value(QStringLiteral("name")).toString());
+                });
+                emit filesChanged();
+            } else {
+                m_unreadable << name;
+            }
+            rescan();
+        }
+        --m_pending;
+        emit loadingDetailsChanged();
+    });
+}
+
+void AurClient::rescan() {
+    auto findings = m_analysis.findings;
+    for (const auto& item : std::as_const(m_files)) {
+        const auto file = item.toMap();
+        findings += pkgscan::scanScript(file.value(QStringLiteral("text")).toString(), file.value(QStringLiteral("name")).toString());
+    }
+    for (const auto& name : std::as_const(m_unreadable)) {
+        findings << pkgscan::Finding{QStringLiteral("unreadable-file"), pkgscan::Severity::Warning, {}, 0,
+            tr("“%1” could not be checked").arg(name),
+            tr("This file is part of the package and may run on your machine, but it could not be loaded for review."), {}};
+    }
+    // the search result lacks the submission details, wait for the full record
+    if (m_details.contains(QStringLiteral("firstSubmitted")) && m_details.value(QStringLiteral("firstSubmitted")).toLongLong() > 0) {
+        findings += pkgscan::scanMetadata(
+            {m_details.value(QStringLiteral("name")).toString(),
+                m_details.value(QStringLiteral("maintainer")).toString(),
+                m_details.value(QStringLiteral("submitter")).toString(),
+                m_details.value(QStringLiteral("votes")).toInt(),
+                m_details.value(QStringLiteral("popularity")).toDouble(),
+                m_details.value(QStringLiteral("firstSubmitted")).toLongLong(),
+                m_details.value(QStringLiteral("lastModified")).toLongLong()},
+            QDateTime::currentDateTimeUtc());
+    }
+    if (!m_lookAlike.isEmpty()) {
+        findings << pkgscan::Finding{QStringLiteral("look-alike"), pkgscan::Severity::Warning, {}, 0,
+            tr("The name is almost the same as “%1”").arg(m_lookAlike),
+            tr("“%1” is a package in the repositories. Make sure that this is not an imitation with a misspelled name.").arg(m_lookAlike), {}};
+    }
+    pkgscan::sort(findings);
+
+    m_findings.clear();
+    for (const auto& finding : std::as_const(findings)) {
+        m_findings << QVariantMap{
+            {QStringLiteral("id"), finding.id},
+            {QStringLiteral("severity"), pkgscan::severityName(finding.severity)},
+            {QStringLiteral("file"), finding.file},
+            {QStringLiteral("line"), finding.line},
+            {QStringLiteral("title"), finding.title},
+            {QStringLiteral("detail"), finding.detail},
+            {QStringLiteral("excerpt"), finding.excerpt},
+        };
+    }
+    emit findingsChanged();
 }
 
 void AurClient::refreshInstalled() {

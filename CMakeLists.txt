@@ -100,7 +100,7 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
     PI_HELPER_PATH="${PI_HELPER_DIR}/cachyos-pi-helper")
 target_include_directories(${PROJECT_NAME} PRIVATE src)
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    project_options project_warnings
+    project_options project_warnings pi-scan
     Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Qml Qt6::Quick Qt6::QuickControls2 Qt6::Network Qt6::Concurrent
     AppStreamQt PkgConfig::LIBALPM)
 
