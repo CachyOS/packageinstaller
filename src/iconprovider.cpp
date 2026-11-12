@@ -12,6 +12,17 @@ QPixmap IconProvider::requestPixmap(const QString& id, QSize* size, const QSize&
         *size = QSize(extent, extent);
     }
 
+    // The CachyOS kernels and their modules carry no icon; give them the CachyOS logo
+    // instead of a letter tile.
+    if (id == QLatin1String("linux-cachyos") || id.startsWith(QLatin1String("linux-cachyos-"))) {
+        QImageReader reader(QStringLiteral(":/qt/qml/CachyOS/PackageInstaller/icons/cachyos-logo.png"));
+        reader.setScaledSize(QSize(extent, extent));
+        const auto image = reader.read();
+        if (!image.isNull()) {
+            return QPixmap::fromImage(image);
+        }
+    }
+
     // "gimp-help-de" and "firefox-esr-bin" have no icon of their own: walk up the
     // name ("gimp-help", "gimp") so related packages share the application's icon.
     for (QString name = id; !name.isEmpty(); name.truncate(qMax<qsizetype>(name.lastIndexOf(QLatin1Char('-')), 0))) {
