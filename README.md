@@ -23,6 +23,15 @@ the CachyOS and Arch repositories, and build packages from the AUR.
   `cachyos-pi-helper`, a tiny pkexec helper that only accepts
   `install`, `remove` and `upgrade`.
 
+## Screenshots
+
+| | |
+| --- | --- |
+| ![Start page with the CachyOS picks](screenshots/discover.png) | ![Package details with AppStream screenshots](screenshots/details.png) |
+| Start page | Package details |
+| ![AUR review page with the findings of the PKGBUILD check](screenshots/aur-review.png) | ![AUR page listing updates for installed AUR packages](screenshots/aur-updates.png) |
+| PKGBUILD review with the automatic check | Updates for AUR packages |
+
 ## Dependencies
 
 Build:
@@ -103,3 +112,4 @@ the package database, so they are only done in the app.
 | `pkglist.yaml` | the curated "CachyOS picks" on the start page |
 | `org.cachyos.cachyos-pi.metainfo.xml` | AppStream metadata for software centres |
 | `packaging/` | PKGBUILDs |
+| `screenshots/` | the pictures in this file |
