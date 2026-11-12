@@ -10,7 +10,10 @@ the CachyOS and Arch repositories, and build packages from the AUR.
   Packages without AppStream data fall back to the icon theme and then to a
   generated tile, so every package has an icon.
 - **AUR** is opt-in. Search and PKGBUILD review happen in the app; building is
-  delegated to `paru`. Once enabled, the AUR page lists the installed AUR
+  delegated to `paru`. A package is cloned for the review, and that checkout is
+  what gets built, so a later change in the AUR cannot slip in. AUR packages it
+  depends on are reviewed in the same way; paru is started so that it cannot
+  fetch anything else from the AUR. Once enabled, the AUR page lists the installed AUR
   packages that have a newer version. Each update is reviewed like an install;
   "Review and update all" walks through the reviews and builds the accepted
   packages in one go.
@@ -28,7 +31,7 @@ sudo pacman -S base-devel cmake ninja qt6-base qt6-declarative qt6-tools appstre
 ```
 
 Runtime: `qt6-declarative`, `appstream-qt`, `archlinux-appstream-data`, `polkit`,
-`kimageformats` (the Arch icon cache is JPEG XL). Optional: `paru` (AUR builds),
+`kimageformats` (the Arch icon cache is JPEG XL). Optional: `paru` and `git` (AUR review and builds),
 `pacman-contrib` (`checkupdates`, to see updates without refreshing the system
 databases).
 

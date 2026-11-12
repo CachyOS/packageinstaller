@@ -19,6 +19,20 @@
         </translation>
     </message>
     <message numerus="yes">
+        <source>Build and install %n package(s)</source>
+        <translation>
+            <numerusform>Build and install %n package</numerusform>
+            <numerusform>Build and install %n packages</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>Skip and install %n package(s)</source>
+        <translation>
+            <numerusform>Skip and install %n package</numerusform>
+            <numerusform>Skip and install %n packages</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
         <source>Skip and update %n package(s)</source>
         <translation>
             <numerusform>Skip and update %n package</numerusform>

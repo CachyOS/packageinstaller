@@ -8,11 +8,15 @@ Flickable {
 
     // The search result this page was opened with.
     required property var item
-    // Set by "Review and update all": the packages to review one after the other.
-    // Nothing is built before the last one was reviewed or skipped.
+    // The packages to review one after the other: the ones this page was opened for, then
+    // the AUR packages they need. Nothing is built before the last one was reviewed or skipped.
     property var queue: []
+    // Opened by "Review and update all".
+    property bool updates: false
     property int position: 0
     property var accepted: []
+    // Why the accepted packages cannot be built, if they cannot.
+    property string blocked
     readonly property bool queued: queue.length > 1
     readonly property bool last: position >= queue.length - 1
 
@@ -25,9 +29,30 @@ Flickable {
 
     readonly property bool dangerous: Backend.aur.findings.some(f => f.severity === "danger")
 
-    Component.onCompleted: Backend.aur.loadDetails(item.name, item.pkgbase)
+    Component.onCompleted: {
+        if (queue.length === 0) {
+            queue = [item]
+        }
+        Backend.aur.loadDetails(item.name, item.pkgbase)
+        Backend.aur.resolve(queue.map(entry => entry.name))
+    }
 
-    // The queue is used up once its packages were built: return to the list of updates.
+    // AUR packages that the queue needs are reviewed as well, after the ones asked for.
+    Connections {
+        target: Backend.aur
+        function onPlanChanged() {
+            if (Backend.aur.resolving) {
+                return
+            }
+            const known = root.queue.map(entry => entry.name)
+            const extra = Backend.aur.plan.filter(entry => !known.includes(entry.name))
+            if (extra.length > 0) {
+                root.queue = root.queue.concat(extra)
+            }
+        }
+    }
+
+    // The queue is used up once its packages were built: return to where it was started.
     Connections {
         target: Backend.transaction
         enabled: root.queued && root.last
@@ -40,7 +65,11 @@ Flickable {
 
     // Moves on in the queue, with or without the current package.
     function advance(accept) {
+        if (accept) {
+            Backend.aur.accept(item.name)
+        }
         const names = accept ? accepted.concat([item.name]) : accepted
+        blocked = ""
         if (!last) {
             accepted = names
             position += 1
@@ -49,7 +78,10 @@ Flickable {
             Backend.aur.loadDetails(item.name, item.pkgbase)
             contentY = 0
         } else if (names.length > 0) {
-            Backend.installManyFromAur(names)
+            blocked = Backend.aur.blockedReason(names)
+            if (blocked.length === 0) {
+                Backend.installManyFromAur(names)
+            }
         } else {
             back()
         }
@@ -102,7 +134,7 @@ Flickable {
                 textFormat: Text.PlainText
                 visible: root.queued
                 anchors.verticalCenter: parent.verticalCenter
-                text: qsTr("Update %1 of %2").arg(root.position + 1).arg(root.queue.length)
+                text: qsTr("Package %1 of %2").arg(root.position + 1).arg(root.queue.length)
                 color: Look.textMuted
                 font.pixelSize: Look.fontBody
             }
@@ -160,6 +192,7 @@ Flickable {
                         text: (root.info.upgradable ? root.info.installedVersion + " → " : "")
                             + qsTr("%1 · %n vote(s)", "", root.info.votes).arg(root.info.version)
                             + (root.info.maintainer.length > 0 ? " · " + root.info.maintainer : " · " + qsTr("orphaned"))
+                            + (Backend.aur.revision.length > 0 ? " · " + qsTr("revision %1").arg(Backend.aur.revision.substring(0, 7)) : "")
                         color: Look.textMuted
                         font.pixelSize: Look.fontSmall + 1
                     }
@@ -168,6 +201,51 @@ Flickable {
         }
 
         // Notices
+        Rectangle {
+            visible: dependencyNotice.text.length > 0
+            width: parent.width
+            height: dependencyNotice.height + 28
+            radius: Look.radius
+            color: Look.accentSoft
+
+            Text {
+                id: dependencyNotice
+                textFormat: Text.PlainText
+                x: 16
+                y: 14
+                width: parent.width - 32
+                text: root.item.neededBy !== undefined && root.item.neededBy.length > 0
+                    ? qsTr("%1 needs this package. It is built from the AUR as well, so it is reviewed like the others.").arg(root.item.neededBy.join(", "))
+                    : Backend.aur.resolving ? qsTr("Checking which other AUR packages are needed…")
+                    : root.position === 0 && Backend.aur.plan.length > 0
+                    ? qsTr("Other AUR packages are needed and are built first: %1. You will review each of them before anything is built.").arg(Backend.aur.plan.map(entry => entry.name).join(", "))
+                    : ""
+                color: Look.text
+                font.pixelSize: Look.fontBody
+                wrapMode: Text.WordWrap
+            }
+        }
+
+        Rectangle {
+            visible: Backend.aur.problems.length > 0
+            width: parent.width
+            height: problemNotice.height + 28
+            radius: Look.radius
+            color: Look.dangerSoft
+
+            Text {
+                id: problemNotice
+                textFormat: Text.PlainText
+                x: 16
+                y: 14
+                width: parent.width - 32
+                text: Backend.aur.problems.join("\n")
+                color: Look.danger
+                font.pixelSize: Look.fontBody
+                wrapMode: Text.WordWrap
+            }
+        }
+
         Rectangle {
             visible: root.info.inRepos
             width: parent.width
@@ -530,6 +608,16 @@ Flickable {
                 }
             }
 
+            Text {
+                textFormat: Text.PlainText
+                visible: root.blocked.length > 0
+                width: parent.width
+                text: root.blocked
+                color: Look.danger
+                font.pixelSize: Look.fontBody
+                wrapMode: Text.WordWrap
+            }
+
             Row {
                 spacing: 12
 
@@ -538,12 +626,14 @@ Flickable {
                     implicitHeight: 42
                     visible: !root.info.inRepos
                     enabled: Backend.paruAvailable && root.reviewed && Backend.aur.pkgbuild.length > 0 && !Backend.aur.loadingDetails
+                        && (!root.last || !Backend.aur.resolving)
                     tone: root.dangerous ? "danger" : "primary"
-                    text: root.queued ? (root.last ? qsTr("Build and update %n package(s)", "", root.accepted.length + 1)
-                            : qsTr("Next package"))
+                    text: !root.last ? qsTr("Next package")
+                        : root.queued ? (root.updates ? qsTr("Build and update %n package(s)", "", root.accepted.length + 1)
+                            : qsTr("Build and install %n package(s)", "", root.accepted.length + 1))
                         : root.info.upgradable ? qsTr("Build and update")
                         : root.info.installed ? qsTr("Rebuild and reinstall") : qsTr("Build and install")
-                    onClicked: root.queued ? root.advance(true) : Backend.installFromAur(root.info.name)
+                    onClicked: root.advance(true)
                 }
 
                 PillButton {
@@ -552,8 +642,9 @@ Flickable {
                     enabled: !root.last || Backend.paruAvailable || root.accepted.length === 0
                     tone: "soft"
                     text: !root.last ? qsTr("Skip this package")
-                        : root.accepted.length > 0 ? qsTr("Skip and update %n package(s)", "", root.accepted.length)
-                        : qsTr("Skip")
+                        : root.accepted.length === 0 ? qsTr("Skip")
+                        : root.updates ? qsTr("Skip and update %n package(s)", "", root.accepted.length)
+                        : qsTr("Skip and install %n package(s)", "", root.accepted.length)
                     onClicked: root.advance(false)
                 }
             }

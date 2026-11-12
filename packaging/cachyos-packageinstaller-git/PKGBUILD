@@ -24,6 +24,7 @@ depends=(
 makedepends=('cmake' 'git' 'ninja' 'qt6-tools')
 optdepends=(
   'paru: build packages from the AUR'
+  'git: review and build packages from the AUR'
   'pacman-contrib: see updates without refreshing the system databases'
 )
 provides=("cachyos-packageinstaller=${pkgver%%.r*}")

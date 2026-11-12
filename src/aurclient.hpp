@@ -3,6 +3,7 @@
 
 #include "pkgscan.hpp"
 
+#include <QHash>
 #include <QNetworkAccessManager>
 #include <QObject>
 #include <QVariantList>
@@ -21,12 +22,20 @@ class AurClient : public QObject {
     Q_PROPERTY(QString error READ error NOTIFY errorChanged)
     Q_PROPERTY(QVariantMap details READ details NOTIFY detailsChanged)
     Q_PROPERTY(QString pkgbuild READ pkgbuild NOTIFY pkgbuildChanged)
+    /// Commit of the checkout that is shown and that a build would use.
+    Q_PROPERTY(QString revision READ revision NOTIFY pkgbuildChanged)
     Q_PROPERTY(bool loadingDetails READ loadingDetails NOTIFY loadingDetailsChanged)
     /// Scripts shipped next to the PKGBUILD (install scriptlet, hooks, units): [{name, text}].
     Q_PROPERTY(QVariantList files READ files NOTIFY filesChanged)
     /// What the automatic check wants a reviewer to look at: [{id, severity, file, line, title, detail, excerpt}].
     Q_PROPERTY(QVariantList findings READ findings NOTIFY findingsChanged)
     Q_PROPERTY(QStringList sourceHosts READ sourceHosts NOTIFY findingsChanged)
+    /// AUR packages that the packages passed to resolve() need and that are neither installed
+    /// nor in a repository. Same shape as `results`, plus `neededBy`.
+    Q_PROPERTY(QVariantList plan READ plan NOTIFY planChanged)
+    /// Dependencies that cannot be provided, as sentences.
+    Q_PROPERTY(QStringList problems READ problems NOTIFY planChanged)
+    Q_PROPERTY(bool resolving READ resolving NOTIFY planChanged)
     /// Installed AUR packages with a newer version in the AUR, same shape as `results`.
     Q_PROPERTY(QVariantList updates READ updates NOTIFY updatesChanged)
     Q_PROPERTY(bool checkingUpdates READ checkingUpdates NOTIFY checkingUpdatesChanged)
@@ -41,6 +50,10 @@ class AurClient : public QObject {
     [[nodiscard]] QString error() const { return m_error; }
     [[nodiscard]] QVariantMap details() const { return m_details; }
     [[nodiscard]] QString pkgbuild() const { return m_pkgbuild; }
+    [[nodiscard]] QString revision() const { return m_revision; }
+    [[nodiscard]] QVariantList plan() const { return m_plan; }
+    [[nodiscard]] QStringList problems() const { return m_problems; }
+    [[nodiscard]] bool resolving() const { return m_resolving; }
     [[nodiscard]] bool loadingDetails() const { return m_pending > 0; }
     [[nodiscard]] QVariantList files() const { return m_files; }
     [[nodiscard]] QVariantList findings() const { return m_findings; }
@@ -50,8 +63,19 @@ class AurClient : public QObject {
     [[nodiscard]] int installedCount() const { return m_installedCount; }
 
     Q_INVOKABLE void search(const QString& query);
-    /// Fetches dependency information and the PKGBUILD for review.
+    /// Fetches the package record and clones the package for review. What is shown is read
+    /// from that checkout, and the same checkout is what gets built.
     Q_INVOKABLE void loadDetails(const QString& name, const QString& pkgbase);
+    /// Works out which other AUR packages `names` need, see `plan`.
+    Q_INVOKABLE void resolve(const QStringList& names);
+    /// Records that the user reviewed the package that is shown, at the revision that is shown.
+    Q_INVOKABLE void accept(const QString& name);
+    /// Why `names` cannot be built as they are; empty when they can.
+    Q_INVOKABLE [[nodiscard]] QString blockedReason(const QStringList& names) const;
+    /// The reviewed checkouts of `names`; empty while blockedReason() has something to say.
+    [[nodiscard]] QStringList buildDirectories(const QStringList& names) const;
+    /// An empty directory to run the build from.
+    [[nodiscard]] QString buildWorkingDirectory() const;
     /// Re-evaluates the installed state after a transaction.
     void refreshInstalled();
     /// Asks the AUR for the current versions of the installed packages that are in no repository.
@@ -67,20 +91,43 @@ class AurClient : public QObject {
     void loadingDetailsChanged();
     void filesChanged();
     void findingsChanged();
+    void planChanged();
     void updatesChanged();
     void checkingUpdatesChanged();
 
  private:
     [[nodiscard]] QVariantMap toMap(const QJsonObject& object) const;
     void setError(const QString& error);
-    void loadFile(const QString& name, const QString& pkgbase, int generation);
+    void readCheckout(const QString& directory);
     void rescan();
+    void resolveNext(const QStringList& wanted, const QHash<QString, QStringList>& wantedBy, int generation);
+    void finishResolve();
+
+    struct Checkout {
+        QString directory;
+        QString commit;
+    };
 
     const PackageModel* m_packages;
     QNetworkAccessManager m_network;
     QVariantList m_results;
     QVariantMap m_details;
     QString m_pkgbuild;
+    QString m_revision;
+    QString m_cacheRoot;
+    int m_cloneCount = 0;
+    QHash<QString, Checkout> m_checkouts;  ///< by package base, the most recent clone
+    QHash<QString, QString> m_pkgbaseOf;   ///< package name -> package base
+    QHash<QString, QString> m_accepted;    ///< package name -> commit the user reviewed
+
+    QVariantList m_plan;
+    QStringList m_problems;
+    QStringList m_planTargets;
+    QHash<QString, QVariantMap> m_planInfo;     ///< every package the plan looked at
+    QHash<QString, QStringList> m_needs;        ///< package -> AUR packages it needs
+    QHash<QString, QStringList> m_unresolved;   ///< package -> dependencies nobody provides
+    bool m_resolving     = false;
+    int m_planGeneration = 0;
     QVariantList m_files;
     QVariantList m_findings;
     pkgscan::Analysis m_analysis;

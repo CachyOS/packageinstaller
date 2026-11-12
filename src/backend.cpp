@@ -213,6 +213,7 @@ void Backend::installFromAur(const QString& name) {
 
 void Backend::installManyFromAur(const QStringList& names) {
     if (m_aurEnabled && m_paruAvailable && !names.isEmpty()) {
-        m_transaction.prepare(Transaction::AurInstall, names);
+        // empty unless every package was reviewed and accepted at the revision that is on disk
+        m_transaction.prepareAur(names, m_aur.buildDirectories(names), m_aur.buildWorkingDirectory());
     }
 }

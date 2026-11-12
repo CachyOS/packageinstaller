@@ -56,6 +56,9 @@ class Transaction : public QObject {
 
     /// Starts a new operation and computes what it would do. Ignored while one is active.
     Q_INVOKABLE void prepare(Kind kind, const QStringList& targets);
+    /// Builds reviewed AUR checkouts. `directories` hold the PKGBUILDs of `names`;
+    /// `workingDirectory` must be empty, paru also looks for PKGBUILDs below it.
+    void prepareAur(const QStringList& names, const QStringList& directories, const QString& workingDirectory);
     Q_INVOKABLE void confirm();
     /// Aborts planning/confirmation, or a running AUR build.
     Q_INVOKABLE void cancel();
@@ -70,6 +73,7 @@ class Transaction : public QObject {
 
  private:
     void setState(State state);
+    void begin(Kind kind, const QStringList& targets);
     void appendLog(const QString& text);
     void onPlanFinished(int exitCode, QProcess::ExitStatus status);
     void onRunFinished(int exitCode, QProcess::ExitStatus status);
@@ -78,6 +82,8 @@ class Transaction : public QObject {
     State m_state = Idle;
     Kind m_kind   = Install;
     QStringList m_targets;
+    QStringList m_directories;
+    QString m_workingDirectory;
     QVariantList m_plan;
     QString m_planError;
     qint64 m_downloadSize = 0;

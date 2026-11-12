@@ -41,4 +41,8 @@ QList<Package> load(QString* dbPath, QString* error);
 
 int vercmp(const QString& a, const QString& b);
 
+/// The dependency strings ("foo>=1.2") that neither an installed package nor a package
+/// in the repositories satisfies. Reads the databases, so call it off the GUI thread.
+QStringList unsatisfied(const QStringList& depends);
+
 }  // namespace alpmdb

@@ -57,6 +57,33 @@ int vercmp(const QString& a, const QString& b) {
     return alpm_pkg_vercmp(a.toUtf8().constData(), b.toUtf8().constData());
 }
 
+QStringList unsatisfied(const QStringList& depends) {
+    const auto dbPath = pacmanConf({QStringLiteral("DBPath")}).value(0, QStringLiteral("/var/lib/pacman/"));
+    const auto repos  = pacmanConf({QStringLiteral("--repo-list")});
+
+    alpm_errno_t err{};
+    alpm_handle_t* handle = alpm_initialize("/", dbPath.toUtf8().constData(), &err);
+    if (handle == nullptr) {
+        return depends;
+    }
+    for (const auto& repo : repos) {
+        alpm_register_syncdb(handle, repo.toUtf8().constData(), ALPM_SIG_USE_DEFAULT);
+    }
+    auto* installed = alpm_db_get_pkgcache(alpm_get_localdb(handle));
+    auto* sync      = alpm_get_syncdbs(handle);
+
+    QStringList out;
+    for (const auto& depend : depends) {
+        const auto text = depend.toUtf8();
+        if (alpm_find_satisfier(installed, text.constData()) == nullptr
+            && alpm_find_dbs_satisfier(handle, sync, text.constData()) == nullptr) {
+            out << depend;
+        }
+    }
+    alpm_release(handle);
+    return out;
+}
+
 QList<Package> load(QString* dbPathOut, QString* error) {
     const auto dbPath = pacmanConf({QStringLiteral("DBPath")}).value(0, QStringLiteral("/var/lib/pacman/"));
     if (dbPathOut != nullptr) {

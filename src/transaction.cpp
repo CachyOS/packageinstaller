@@ -59,10 +59,25 @@ void Transaction::appendLog(const QString& text) {
     emit logChanged();
 }
 
-void Transaction::prepare(Kind kind, const QStringList& targets) {
-    if (m_state != Idle) {
+void Transaction::prepareAur(const QStringList& names, const QStringList& directories, const QString& workingDirectory) {
+    if (m_state != Idle || names.isEmpty() || directories.isEmpty()) {
         return;
     }
+    m_directories      = directories;
+    m_workingDirectory = workingDirectory;
+    begin(AurInstall, names);
+}
+
+void Transaction::prepare(Kind kind, const QStringList& targets) {
+    // AUR packages are only built from reviewed checkouts, see prepareAur()
+    if (m_state != Idle || kind == AurInstall) {
+        return;
+    }
+    m_directories.clear();
+    begin(kind, targets);
+}
+
+void Transaction::begin(Kind kind, const QStringList& targets) {
     m_kind    = kind;
     m_targets = targets;
     m_plan.clear();
@@ -154,11 +169,18 @@ void Transaction::confirm() {
     QStringList args;
     if (m_kind == AurInstall) {
         program = QStringLiteral("paru");
-        // The PKGBUILD was reviewed in our own UI before this point.
-        args = {QStringLiteral("-S"), QStringLiteral("--noconfirm"), QStringLiteral("--skipreview"),
-            QStringLiteral("--nosudoloop"), QStringLiteral("--sudo"), QStringLiteral("pkexec"), QStringLiteral("--")};
-        args << m_targets;
+        // paru builds the checkouts that were reviewed in our own UI and nothing else: with
+        // an AUR address that cannot be reached it stops when a dependency would have to
+        // come from the AUR, instead of downloading and building a recipe nobody looked at.
+        args = {QStringLiteral("-B"), QStringLiteral("-i"), QStringLiteral("--noconfirm"),
+            QStringLiteral("--nosudoloop"), QStringLiteral("--sudo"), QStringLiteral("pkexec"),
+            QStringLiteral("--mode=pkgbuilds"),
+            QStringLiteral("--aururl"), QStringLiteral("http://127.0.0.1:1"),
+            QStringLiteral("--aurrpcurl"), QStringLiteral("http://127.0.0.1:1/rpc")};
+        args << m_directories;
+        m_process.setWorkingDirectory(m_workingDirectory);
     } else if (QFileInfo(helperPath()).isExecutable()) {
+        m_process.setWorkingDirectory(QStringLiteral("/"));
         args << helperPath();
         switch (m_kind) {
         case Install: args << QStringLiteral("install") << m_targets; break;
@@ -167,6 +189,7 @@ void Transaction::confirm() {
         }
     } else {
         // Uninstalled development build: fall back to pacman behind the generic pkexec prompt.
+        m_process.setWorkingDirectory(QStringLiteral("/"));
         args << QStringLiteral("pacman");
         switch (m_kind) {
         case Install: args << QStringLiteral("-S") << QStringLiteral("--noconfirm") << QStringLiteral("--needed") << QStringLiteral("--") << m_targets; break;

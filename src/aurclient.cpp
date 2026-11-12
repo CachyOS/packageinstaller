@@ -2,11 +2,20 @@
 #include "aurclient.hpp"
 #include "packagemodel.hpp"
 
+#include <QDir>
+#include <QFile>
+#include <QFileInfo>
+#include <QFutureWatcher>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QNetworkReply>
+#include <QProcess>
+#include <QRegularExpression>
+#include <QSet>
+#include <QStandardPaths>
 #include <QUrlQuery>
+#include <QtConcurrent/QtConcurrentRun>
 
 namespace {
 
@@ -16,6 +25,48 @@ constexpr int MAX_FILES         = 8;
 constexpr qint64 MAX_FILE_SIZE = 512 * 1024;
 /// Names per info request of the update check; keeps the address well below the limit of the AUR.
 constexpr qsizetype INFO_BATCH = 100;
+/// Packages a dependency plan may grow to before it is given up.
+constexpr qsizetype MAX_PLAN = 60;
+
+/// Package bases become directory names and part of an address.
+bool isPackageBase(const QString& name) {
+    static const QRegularExpression valid(QStringLiteral("^[a-z0-9@_+][a-z0-9@._+-]*$"));
+    return name.size() <= 128 && valid.match(name).hasMatch();
+}
+
+/// Commit a checkout is at, read from the repository itself.
+QString headCommit(const QString& directory) {
+    const auto read = [&](const QString& name) {
+        QFile file(directory + QStringLiteral("/.git/") + name);
+        return file.open(QIODevice::ReadOnly) ? QString::fromLatin1(file.read(256)).trimmed() : QString();
+    };
+    auto head = read(QStringLiteral("HEAD"));
+    static const QRegularExpression reference(QStringLiteral("^ref: (refs/heads/[A-Za-z0-9._-]+)$"));
+    if (const auto match = reference.match(head); match.hasMatch()) {
+        head = read(match.captured(1));
+    }
+    static const QRegularExpression hash(QStringLiteral("^[0-9a-f]{40,64}$"));
+    return hash.match(head).hasMatch() ? head : QString();
+}
+
+/// Text of a regular file inside a checkout; a link could point anywhere on the machine.
+bool readText(const QString& path, QString* text) {
+    const QFileInfo info(path);
+    QFile file(path);
+    if (info.isSymLink() || !info.isFile() || info.size() > MAX_FILE_SIZE || !file.open(QIODevice::ReadOnly)) {
+        return false;
+    }
+    *text = QString::fromUtf8(file.readAll());
+    return true;
+}
+
+/// "foo>=1.2" -> "foo"
+QString dependName(const QString& depend) {
+    static const QRegularExpression constraint(QStringLiteral("[<>=].*$"));
+    auto name = depend;
+    name.remove(constraint);
+    return name;
+}
 
 QNetworkRequest request(const QUrl& url) {
     QNetworkRequest req(url);
@@ -34,7 +85,11 @@ QStringList toStringList(const QJsonValue& value) {
 
 }  // namespace
 
-AurClient::AurClient(const PackageModel* packages, QObject* parent) : QObject(parent), m_packages(packages) { }
+AurClient::AurClient(const PackageModel* packages, QObject* parent) : QObject(parent), m_packages(packages) {
+    // Checkouts only live as long as the review they belong to.
+    m_cacheRoot = QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QStringLiteral("/aur");
+    QDir(m_cacheRoot).removeRecursively();
+}
 
 void AurClient::setError(const QString& error) {
     if (m_error != error) {
@@ -64,6 +119,7 @@ QVariantMap AurClient::toMap(const QJsonObject& object) const {
         {QStringLiteral("licenses"), toStringList(object.value(QLatin1String("License")))},
         {QStringLiteral("depends"), toStringList(object.value(QLatin1String("Depends")))},
         {QStringLiteral("makeDepends"), toStringList(object.value(QLatin1String("MakeDepends")))},
+        {QStringLiteral("checkDepends"), toStringList(object.value(QLatin1String("CheckDepends")))},
         {QStringLiteral("installed"), installed},
         {QStringLiteral("installedVersion"), installed ? local->installedVersion : QString()},
         {QStringLiteral("upgradable"), installed && alpmdb::vercmp(local->installedVersion, version) < 0},
@@ -134,6 +190,7 @@ void AurClient::loadDetails(const QString& name, const QString& pkgbase) {
     const int generation = ++m_detailsGeneration;
     m_details.clear();
     m_pkgbuild.clear();
+    m_revision.clear();
     m_files.clear();
     m_findings.clear();
     m_analysis = {};
@@ -153,11 +210,6 @@ void AurClient::loadDetails(const QString& name, const QString& pkgbase) {
     QUrlQuery infoQuery;
     infoQuery.addQueryItem(QStringLiteral("arg[]"), QString::fromLatin1(QUrl::toPercentEncoding(name)));
     infoUrl.setQuery(infoQuery);
-
-    QUrl pkgbuildUrl(QStringLiteral("%1/cgit/aur.git/plain/PKGBUILD").arg(QLatin1String(AUR_HOST)));
-    QUrlQuery pkgbuildQuery;
-    pkgbuildQuery.addQueryItem(QStringLiteral("h"), QString::fromLatin1(QUrl::toPercentEncoding(pkgbase)));
-    pkgbuildUrl.setQuery(pkgbuildQuery);
 
     m_pending += 2;
     emit loadingDetailsChanged();
@@ -185,56 +237,282 @@ void AurClient::loadDetails(const QString& name, const QString& pkgbase) {
         }
     });
 
-    auto* pkgbuild = m_network.get(request(pkgbuildUrl));
-    connect(pkgbuild, &QNetworkReply::finished, this, [this, pkgbuild, pkgbase, generation, finishOne] {
-        pkgbuild->deleteLater();
-        if (generation == m_detailsGeneration && pkgbuild->error() == QNetworkReply::NoError) {
-            m_pkgbuild = QString::fromUtf8(pkgbuild->readAll());
-            emit pkgbuildChanged();
-
-            m_analysis = pkgscan::scanPkgbuild(m_pkgbuild);
-            const auto count = qMin(m_analysis.localFiles.size(), qsizetype{MAX_FILES});
-            for (const auto& file : m_analysis.localFiles.mid(0, count)) {
-                loadFile(file, pkgbase, generation);
-            }
-            m_unreadable = m_analysis.localFiles.mid(count);
-            rescan();
-        }
-        // after the file requests were counted, so that loading does not appear finished in between
+    // A fresh clone per review: everything shown comes from this one commit, and this
+    // directory is what gets built. Cloning runs none of the code in the repository.
+    if (!isPackageBase(pkgbase)) {
         finishOne();
+        return;
+    }
+    m_pkgbaseOf.insert(name, pkgbase);
+    m_checkouts.remove(pkgbase);
+    m_accepted.removeIf([&](const auto& entry) { return m_pkgbaseOf.value(entry.key()) == pkgbase; });
+
+    const auto directory = QStringLiteral("%1/%2/%3").arg(m_cacheRoot).arg(++m_cloneCount).arg(pkgbase);
+    QDir().mkpath(QFileInfo(directory).path());
+
+    auto env = QProcessEnvironment::systemEnvironment();
+    env.insert(QStringLiteral("GIT_TERMINAL_PROMPT"), QStringLiteral("0"));
+    env.insert(QStringLiteral("LC_ALL"), QStringLiteral("C"));
+
+    auto* clone = new QProcess(this);
+    clone->setProcessEnvironment(env);
+    clone->setProcessChannelMode(QProcess::MergedChannels);
+    connect(clone, &QProcess::errorOccurred, this, [clone, finishOne](QProcess::ProcessError error) {
+        if (error == QProcess::FailedToStart) {  // git is missing; finished() is not emitted then
+            clone->deleteLater();
+            finishOne();
+        }
+    });
+    connect(clone, &QProcess::finished, this, [this, clone, env, pkgbase, directory, generation, finishOne](int exitCode, QProcess::ExitStatus status) {
+        clone->deleteLater();
+        if (generation != m_detailsGeneration || status != QProcess::NormalExit || exitCode != 0) {
+            QDir(directory).removeRecursively();
+            finishOne();
+            return;
+        }
+        // nothing may move the checkout to another commit after the review
+        auto* detach = new QProcess(this);
+        detach->setProcessEnvironment(env);
+        connect(detach, &QProcess::finished, this, [this, detach, pkgbase, directory, generation, finishOne] {
+            detach->deleteLater();
+            const auto commit = headCommit(directory);
+            if (generation == m_detailsGeneration && !commit.isEmpty()) {
+                m_checkouts.insert(pkgbase, {directory, commit});
+                m_revision = commit;
+                readCheckout(directory);
+            }
+            finishOne();
+        });
+        detach->start(QStringLiteral("git"), {QStringLiteral("-C"), directory, QStringLiteral("remote"), QStringLiteral("remove"), QStringLiteral("origin")});
+    });
+    clone->start(QStringLiteral("git"),
+        {QStringLiteral("-c"), QStringLiteral("core.hooksPath=/dev/null"), QStringLiteral("clone"), QStringLiteral("--quiet"),
+            QStringLiteral("--depth=1"), QStringLiteral("--no-tags"), QStringLiteral("--"),
+            QStringLiteral("%1/%2.git").arg(QLatin1String(AUR_HOST), pkgbase), directory});
+}
+
+void AurClient::readCheckout(const QString& directory) {
+    if (!readText(directory + QStringLiteral("/PKGBUILD"), &m_pkgbuild)) {
+        m_pkgbuild.clear();
+        m_revision.clear();
+        emit pkgbuildChanged();
+        return;
+    }
+    m_analysis = pkgscan::scanPkgbuild(m_pkgbuild);
+
+    // a source without a telling name is still a script when it starts with "#!"
+    for (const auto& name : std::as_const(m_analysis.otherLocalFiles)) {
+        QFile file(directory + u'/' + name);
+        if (!QFileInfo(file).isSymLink() && file.open(QIODevice::ReadOnly) && file.read(2) == "#!") {
+            m_analysis.localFiles << name;
+        }
+    }
+
+    const auto count = qMin(m_analysis.localFiles.size(), qsizetype{MAX_FILES});
+    m_unreadable     = m_analysis.localFiles.mid(count);
+    for (const auto& name : m_analysis.localFiles.mid(0, count)) {
+        QString text;
+        if (readText(directory + u'/' + name, &text)) {
+            m_files << QVariantMap{{QStringLiteral("name"), name}, {QStringLiteral("text"), text}};
+        } else {
+            m_unreadable << name;
+        }
+    }
+    emit pkgbuildChanged();
+    emit filesChanged();
+    rescan();
+}
+
+void AurClient::resolve(const QStringList& names) {
+    const int generation = ++m_planGeneration;
+    m_plan.clear();
+    m_problems.clear();
+    m_planInfo.clear();
+    m_needs.clear();
+    m_unresolved.clear();
+    m_planTargets = names;
+    m_resolving   = !names.isEmpty();
+    emit planChanged();
+    if (m_resolving) {
+        resolveNext(names, {}, generation);
+    }
+}
+
+void AurClient::resolveNext(const QStringList& wanted, const QHash<QString, QStringList>& wantedBy, int generation) {
+    QUrl url(QStringLiteral("%1/rpc/v5/info").arg(QLatin1String(AUR_HOST)));
+    QUrlQuery query;
+    for (const auto& name : wanted.mid(0, INFO_BATCH)) {
+        query.addQueryItem(QStringLiteral("arg[]"), QString::fromLatin1(QUrl::toPercentEncoding(name)));
+    }
+    url.setQuery(query);
+
+    auto* reply = m_network.get(request(url));
+    connect(reply, &QNetworkReply::finished, this, [this, reply, wanted, wantedBy, generation] {
+        reply->deleteLater();
+        if (generation != m_planGeneration) {
+            return;
+        }
+        const auto json = QJsonDocument::fromJson(reply->readAll()).object();
+        if (reply->error() != QNetworkReply::NoError || json.value(QLatin1String("type")).toString() != QLatin1String("multiinfo")
+            || !json.value(QLatin1String("results")).isArray()) {
+            m_problems << tr("The AUR could not be asked about dependencies, so nothing can be built right now.");
+            // nothing is known about these packages, which blocks them in blockedReason()
+            m_planInfo.clear();
+            finishResolve();
+            return;
+        }
+
+        QHash<QString, QStringList> dependsOf;
+        QSet<QString> all;
+        for (const auto& item : json.value(QLatin1String("results")).toArray()) {
+            const auto map  = toMap(item.toObject());
+            const auto name = map.value(QStringLiteral("name")).toString();
+            m_planInfo.insert(name, map);
+            m_pkgbaseOf.insert(name, map.value(QStringLiteral("pkgbase")).toString());
+            auto& depends = dependsOf[name];
+            for (const char* key : {"depends", "makeDepends", "checkDepends"}) {
+                depends += map.value(QLatin1String(key)).toStringList();
+            }
+            all += QSet<QString>(depends.cbegin(), depends.cend());
+        }
+        // asked for, but not a package in the AUR
+        for (const auto& name : wanted) {
+            if (!m_planInfo.contains(name)) {
+                for (const auto& package : wantedBy.value(name, {name})) {
+                    m_unresolved[package] << name;
+                }
+            }
+        }
+
+        auto* watcher = new QFutureWatcher<QStringList>(this);
+        connect(watcher, &QFutureWatcher<QStringList>::finished, this, [this, watcher, dependsOf, generation] {
+            watcher->deleteLater();
+            if (generation != m_planGeneration) {
+                return;
+            }
+            const auto result = watcher->result();
+            const QSet<QString> missing(result.cbegin(), result.cend());
+            QHash<QString, QStringList> next;
+            for (auto it = dependsOf.cbegin(); it != dependsOf.cend(); ++it) {
+                for (const auto& depend : it.value()) {
+                    const auto name = dependName(depend);
+                    if (!missing.contains(depend) || name == it.key()) {
+                        continue;
+                    }
+                    if (!m_needs[it.key()].contains(name)) {
+                        m_needs[it.key()] << name;
+                    }
+                    if (!m_planInfo.contains(name) && !next[name].contains(it.key())) {
+                        next[name] << it.key();
+                    }
+                }
+            }
+            if (next.isEmpty()) {
+                finishResolve();
+            } else if (m_planInfo.size() + next.size() > MAX_PLAN) {
+                m_problems << tr("These packages need more than %1 other AUR packages, which is too many to review here.").arg(MAX_PLAN);
+                m_planInfo.clear();
+                finishResolve();
+            } else {
+                resolveNext(next.keys(), next, generation);
+            }
+        });
+        watcher->setFuture(QtConcurrent::run(alpmdb::unsatisfied, QStringList(all.cbegin(), all.cend())));
     });
 }
 
-void AurClient::loadFile(const QString& name, const QString& pkgbase, int generation) {
-    QUrl url(QStringLiteral("%1/cgit/aur.git/plain/%2").arg(QLatin1String(AUR_HOST), QString::fromLatin1(QUrl::toPercentEncoding(name))));
-    QUrlQuery query;
-    query.addQueryItem(QStringLiteral("h"), QString::fromLatin1(QUrl::toPercentEncoding(pkgbase)));
-    url.setQuery(query);
-
-    ++m_pending;
-    emit loadingDetailsChanged();
-
-    auto* reply = m_network.get(request(url));
-    connect(reply, &QNetworkReply::finished, this, [this, reply, name, generation] {
-        reply->deleteLater();
-        if (generation == m_detailsGeneration) {
-            const auto data = reply->readAll();
-            if (reply->error() == QNetworkReply::NoError && data.size() <= MAX_FILE_SIZE) {
-                m_files << QVariantMap{{QStringLiteral("name"), name}, {QStringLiteral("text"), QString::fromUtf8(data)}};
-                // keep the order of the PKGBUILD, whichever reply arrives first
-                std::ranges::stable_sort(m_files, [this](const QVariant& a, const QVariant& b) {
-                    return m_analysis.localFiles.indexOf(a.toMap().value(QStringLiteral("name")).toString())
-                        < m_analysis.localFiles.indexOf(b.toMap().value(QStringLiteral("name")).toString());
-                });
-                emit filesChanged();
-            } else {
-                m_unreadable << name;
-            }
-            rescan();
+void AurClient::finishResolve() {
+    m_resolving = false;
+    auto names  = m_planInfo.keys();
+    names.sort();
+    for (const auto& name : std::as_const(names)) {
+        if (m_planTargets.contains(name)) {
+            continue;
         }
-        --m_pending;
-        emit loadingDetailsChanged();
-    });
+        QStringList neededBy;
+        for (auto it = m_needs.cbegin(); it != m_needs.cend(); ++it) {
+            if (it.value().contains(name)) {
+                neededBy << it.key();
+            }
+        }
+        neededBy.sort();
+        auto map = m_planInfo.value(name);
+        map.insert(QStringLiteral("neededBy"), neededBy);
+        m_plan << map;
+    }
+    auto packages = m_unresolved.keys();
+    packages.sort();
+    for (const auto& package : std::as_const(packages)) {
+        const auto& depends = m_unresolved[package];
+        m_problems << (depends == QStringList{package}
+                ? tr("%1 is not a package in the AUR.").arg(package)
+                : tr("%1 needs %2, which is neither in the repositories nor a package in the AUR.").arg(package, depends.join(QStringLiteral(", "))));
+    }
+    emit planChanged();
+}
+
+void AurClient::accept(const QString& name) {
+    const auto checkout = m_checkouts.value(m_pkgbaseOf.value(name));
+    // only what is on screen right now can have been read
+    if (m_pending == 0 && !checkout.commit.isEmpty() && checkout.commit == m_revision && !m_pkgbuild.isEmpty()
+        && m_details.value(QStringLiteral("pkgbase")).toString() == m_pkgbaseOf.value(name)) {
+        m_accepted.insert(name, checkout.commit);
+    }
+}
+
+QString AurClient::blockedReason(const QStringList& names) const {
+    if (m_resolving) {
+        return tr("The dependencies are still being worked out.");
+    }
+    for (const auto& name : names) {
+        if (!m_planInfo.contains(name)) {
+            return m_problems.isEmpty() ? tr("The dependencies of %1 are not known.").arg(name) : m_problems.first();
+        }
+        if (m_unresolved.contains(name)) {
+            return tr("%1 needs %2, which is neither in the repositories nor a package in the AUR.").arg(name, m_unresolved.value(name).join(QStringLiteral(", ")));
+        }
+        // every AUR package it needs, directly or not, has to be part of the build
+        QStringList open = m_needs.value(name);
+        QSet<QString> seen;
+        while (!open.isEmpty()) {
+            const auto depend = open.takeLast();
+            if (seen.contains(depend)) {
+                continue;
+            }
+            seen << depend;
+            if (!names.contains(depend)) {
+                return tr("%1 needs the AUR package %2, which was not reviewed and accepted.").arg(name, depend);
+            }
+            open += m_needs.value(depend);
+        }
+        const auto checkout = m_checkouts.value(m_pkgbaseOf.value(name));
+        const auto accepted = m_accepted.value(name);
+        if (accepted.isEmpty() || checkout.commit != accepted || headCommit(checkout.directory) != accepted) {
+            return tr("%1 has to be reviewed again.").arg(name);
+        }
+    }
+    return {};
+}
+
+QStringList AurClient::buildDirectories(const QStringList& names) const {
+    QStringList directories;
+    if (names.isEmpty() || !blockedReason(names).isEmpty()) {
+        return directories;
+    }
+    for (const auto& name : names) {
+        const auto directory = m_checkouts.value(m_pkgbaseOf.value(name)).directory;
+        if (!directories.contains(directory)) {
+            directories << directory;
+        }
+    }
+    return directories;
+}
+
+QString AurClient::buildWorkingDirectory() const {
+    const auto directory = m_cacheRoot + QStringLiteral("/empty");
+    QDir(directory).removeRecursively();
+    QDir().mkpath(directory);
+    return directory;
 }
 
 void AurClient::rescan() {

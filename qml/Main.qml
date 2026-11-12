@@ -227,7 +227,7 @@ ApplicationWindow {
         id: aurPage
         AurPage {
             onOpenAur: item => stack.push(aurDetailsPage, {"item": item})
-            onReviewAll: items => stack.push(aurDetailsPage, {"item": items[0], "queue": items})
+            onReviewAll: items => stack.push(aurDetailsPage, {"item": items[0], "queue": items, "updates": true})
         }
     }
     Component {
