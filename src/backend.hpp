@@ -64,6 +64,8 @@ class Backend : public QObject {
     Q_INVOKABLE void remove(const QString& name);
     Q_INVOKABLE void upgradeAll();
     Q_INVOKABLE void installFromAur(const QString& name);
+    /// Builds several reviewed AUR packages in one paru run.
+    Q_INVOKABLE void installManyFromAur(const QStringList& names);
 
  signals:
     void loadingChanged();

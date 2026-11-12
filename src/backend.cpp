@@ -69,6 +69,11 @@ void Backend::setAurEnabled(bool enabled) {
     m_aurEnabled = enabled;
     QSettings().setValue(QStringLiteral("aur/enabled"), enabled);
     emit aurEnabledChanged();
+    if (enabled) {
+        m_aur.checkUpdates();
+    } else {
+        m_aur.clearUpdates();
+    }
 }
 
 void Backend::reload() {
@@ -91,6 +96,10 @@ void Backend::onLoaded() {
     m_packages.reset(std::move(result.packages));
     rebuildCurated();
     m_aur.refreshInstalled();
+    // only after the opt-in: the names of the installed packages are sent to the AUR
+    if (m_aurEnabled) {
+        m_aur.checkUpdates();
+    }
 
     m_loading = false;
     ++m_revision;
@@ -190,7 +199,11 @@ void Backend::upgradeAll() {
 }
 
 void Backend::installFromAur(const QString& name) {
-    if (m_aurEnabled && m_paruAvailable) {
-        m_transaction.prepare(Transaction::AurInstall, {name});
+    installManyFromAur({name});
+}
+
+void Backend::installManyFromAur(const QStringList& names) {
+    if (m_aurEnabled && m_paruAvailable && !names.isEmpty()) {
+        m_transaction.prepare(Transaction::AurInstall, names);
     }
 }

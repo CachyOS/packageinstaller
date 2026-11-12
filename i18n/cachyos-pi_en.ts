@@ -11,6 +11,20 @@
             <numerusform>%1 · %n votes</numerusform>
         </translation>
     </message>
+    <message numerus="yes">
+        <source>Build and update %n package(s)</source>
+        <translation>
+            <numerusform>Build and update %n package</numerusform>
+            <numerusform>Build and update %n packages</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>Skip and update %n package(s)</source>
+        <translation>
+            <numerusform>Skip and update %n package</numerusform>
+            <numerusform>Skip and update %n packages</numerusform>
+        </translation>
+    </message>
 </context>
 <context>
     <name>AurPage</name>
@@ -20,6 +34,20 @@
         <translation>
             <numerusform>%1 · %n vote</numerusform>
             <numerusform>%1 · %n votes</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>%n update(s) available</source>
+        <translation>
+            <numerusform>%n update available</numerusform>
+            <numerusform>%n updates available</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <source>Your %n AUR package(s) are up to date.</source>
+        <translation>
+            <numerusform>Your AUR package is up to date.</numerusform>
+            <numerusform>Your %n AUR packages are up to date.</numerusform>
         </translation>
     </message>
 </context>
@@ -58,6 +86,13 @@
 </context>
 <context>
     <name>TransactionDialog</name>
+    <message numerus="yes">
+        <source>Build %n package(s) from the AUR</source>
+        <translation>
+            <numerusform>Build %n package from the AUR</numerusform>
+            <numerusform>Build %n packages from the AUR</numerusform>
+        </translation>
+    </message>
     <message numerus="yes">
         <location filename="../qml/TransactionDialog.qml" line="105"/>
         <source>%n package(s) will be removed:</source>

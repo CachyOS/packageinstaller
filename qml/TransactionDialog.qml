@@ -16,7 +16,8 @@ Popup {
         case Transaction.Install: return qsTr("Install %1").arg(target);
         case Transaction.Remove: return qsTr("Remove %1").arg(target);
         case Transaction.Upgrade: return qsTr("Update the system");
-        default: return qsTr("Build %1 from the AUR").arg(target);
+        default: return tx.targets.length > 1 ? qsTr("Build %n package(s) from the AUR", "", tx.targets.length)
+            : qsTr("Build %1 from the AUR").arg(target);
         }
     }
 
@@ -101,7 +102,9 @@ Popup {
                 visible: root.tx.planError.length === 0
                 width: parent.width
                 text: root.kind === Transaction.Upgrade ? qsTr("The package databases will be refreshed and every available update installed.")
-                    : root.kind === Transaction.AurInstall ? qsTr("paru will download the sources, build the package as your user and then ask for permission to install it. This can take a while.")
+                    : root.kind === Transaction.AurInstall ? (root.tx.targets.length > 1
+                        ? qsTr("paru will download the sources, build %1 as your user and then ask for permission to install them. This can take a while.").arg(root.tx.targets.join(", "))
+                        : qsTr("paru will download the sources, build the package as your user and then ask for permission to install it. This can take a while."))
                     : root.kind === Transaction.Remove ? qsTr("%n package(s) will be removed:", "", root.tx.plan.length)
                     : qsTr("%n package(s) will be installed (%1 to download):", "", root.tx.plan.length).arg(Backend.formatSize(root.tx.downloadSize))
                 color: Look.textMuted

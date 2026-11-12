@@ -119,6 +119,7 @@ ApplicationWindow {
                 text: qsTr("AUR")
                 glyph: "M12 3 20 7.5v9L12 21l-8-4.5v-9zM4 7.5 12 12l8-4.5M12 12v9"
                 current: root.section === "aur"
+                badge: Backend.aur.updates.length
                 onClicked: root.show("aur")
             }
         }
@@ -223,6 +224,7 @@ ApplicationWindow {
         id: aurPage
         AurPage {
             onOpenAur: item => stack.push(aurDetailsPage, {"item": item})
+            onReviewAll: items => stack.push(aurDetailsPage, {"item": items[0], "queue": items})
         }
     }
     Component {

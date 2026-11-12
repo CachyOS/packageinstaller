@@ -8,6 +8,13 @@ Flickable {
 
     // The search result this page was opened with.
     required property var item
+    // Set by "Review and update all": the packages to review one after the other.
+    // Nothing is built before the last one was reviewed or skipped.
+    property var queue: []
+    property int position: 0
+    property var accepted: []
+    readonly property bool queued: queue.length > 1
+    readonly property bool last: position >= queue.length - 1
 
     signal back
     signal openPackage(string name)
@@ -19,6 +26,34 @@ Flickable {
     readonly property bool dangerous: Backend.aur.findings.some(f => f.severity === "danger")
 
     Component.onCompleted: Backend.aur.loadDetails(item.name, item.pkgbase)
+
+    // The queue is used up once its packages were built: return to the list of updates.
+    Connections {
+        target: Backend.transaction
+        enabled: root.queued && root.last
+        function onFinished(success) {
+            if (success) {
+                root.back()
+            }
+        }
+    }
+
+    // Moves on in the queue, with or without the current package.
+    function advance(accept) {
+        const names = accept ? accepted.concat([item.name]) : accepted
+        if (!last) {
+            accepted = names
+            position += 1
+            reviewed = false
+            item = queue[position]
+            Backend.aur.loadDetails(item.name, item.pkgbase)
+            contentY = 0
+        } else if (names.length > 0) {
+            Backend.installManyFromAur(names)
+        } else {
+            back()
+        }
+    }
 
     function marksFor(file) {
         return Backend.aur.findings.filter(f => f.file === file && f.line > 0)
@@ -53,11 +88,23 @@ Flickable {
         width: root.width - 2 * Look.pagePadding
         spacing: 20
 
-        PillButton {
-            tone: "soft"
-            implicitHeight: 32
-            text: qsTr("‹  Back")
-            onClicked: root.back()
+        Row {
+            spacing: 14
+
+            PillButton {
+                tone: "soft"
+                implicitHeight: 32
+                text: qsTr("‹  Back")
+                onClicked: root.back()
+            }
+
+            Text {
+                visible: root.queued
+                anchors.verticalCenter: parent.verticalCenter
+                text: qsTr("Update %1 of %2").arg(root.position + 1).arg(root.queue.length)
+                color: Look.textMuted
+                font.pixelSize: Look.fontBody
+            }
         }
 
         Item {
@@ -106,7 +153,8 @@ Flickable {
 
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
-                        text: qsTr("%1 · %n vote(s)", "", root.info.votes).arg(root.info.version)
+                        text: (root.info.upgradable ? root.info.installedVersion + " → " : "")
+                            + qsTr("%1 · %n vote(s)", "", root.info.votes).arg(root.info.version)
                             + (root.info.maintainer.length > 0 ? " · " + root.info.maintainer : " · " + qsTr("orphaned"))
                         color: Look.textMuted
                         font.pixelSize: Look.fontSmall + 1
@@ -461,14 +509,32 @@ Flickable {
                 }
             }
 
-            PillButton {
-                implicitWidth: 190
-                implicitHeight: 42
-                visible: !root.info.inRepos
-                enabled: Backend.paruAvailable && root.reviewed && Backend.aur.pkgbuild.length > 0 && !Backend.aur.loadingDetails
-                tone: root.dangerous ? "danger" : "primary"
-                text: root.info.installed ? qsTr("Rebuild and reinstall") : qsTr("Build and install")
-                onClicked: Backend.installFromAur(root.info.name)
+            Row {
+                spacing: 12
+
+                PillButton {
+                    implicitWidth: Math.max(190, implicitContentWidth + 36)
+                    implicitHeight: 42
+                    visible: !root.info.inRepos
+                    enabled: Backend.paruAvailable && root.reviewed && Backend.aur.pkgbuild.length > 0 && !Backend.aur.loadingDetails
+                    tone: root.dangerous ? "danger" : "primary"
+                    text: root.queued ? (root.last ? qsTr("Build and update %n package(s)", "", root.accepted.length + 1)
+                            : qsTr("Next package"))
+                        : root.info.upgradable ? qsTr("Build and update")
+                        : root.info.installed ? qsTr("Rebuild and reinstall") : qsTr("Build and install")
+                    onClicked: root.queued ? root.advance(true) : Backend.installFromAur(root.info.name)
+                }
+
+                PillButton {
+                    implicitHeight: 42
+                    visible: root.queued
+                    enabled: !root.last || Backend.paruAvailable || root.accepted.length === 0
+                    tone: "soft"
+                    text: !root.last ? qsTr("Skip this package")
+                        : root.accepted.length > 0 ? qsTr("Skip and update %n package(s)", "", root.accepted.length)
+                        : qsTr("Skip")
+                    onClicked: root.advance(false)
+                }
             }
         }
     }

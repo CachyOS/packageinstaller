@@ -14,6 +14,8 @@ constexpr auto AUR_HOST = "https://aur.archlinux.org";
 /// Scripts next to the PKGBUILD that are fetched for review.
 constexpr int MAX_FILES         = 8;
 constexpr qint64 MAX_FILE_SIZE = 512 * 1024;
+/// Names per info request of the update check; keeps the address well below the limit of the AUR.
+constexpr qsizetype INFO_BATCH = 100;
 
 QNetworkRequest request(const QUrl& url) {
     QNetworkRequest req(url);
@@ -280,15 +282,98 @@ void AurClient::rescan() {
     emit findingsChanged();
 }
 
+void AurClient::checkUpdates() {
+    QStringList names;
+    for (int row = 0; row < m_packages->rowCount(); ++row) {
+        const auto& package = m_packages->at(row);
+        if (package.foreign() && package.installed()) {
+            names << package.name;
+        }
+    }
+
+    const int generation = ++m_updatesGeneration;
+    m_updatesFound.clear();
+    m_updatesKnown   = 0;
+    m_updatesFailed  = false;
+    m_updatesPending = 0;
+    if (names.isEmpty()) {
+        m_updates.clear();
+        m_installedCount = 0;
+        emit updatesChanged();
+        return;
+    }
+
+    const bool wasChecking = checkingUpdates();
+    for (qsizetype first = 0; first < names.size(); first += INFO_BATCH) {
+        QUrl url(QStringLiteral("%1/rpc/v5/info").arg(QLatin1String(AUR_HOST)));
+        QUrlQuery query;
+        for (const auto& name : names.mid(first, INFO_BATCH)) {
+            query.addQueryItem(QStringLiteral("arg[]"), QString::fromLatin1(QUrl::toPercentEncoding(name)));
+        }
+        url.setQuery(query);
+
+        ++m_updateRequests;
+        ++m_updatesPending;
+        auto* reply = m_network.get(request(url));
+        connect(reply, &QNetworkReply::finished, this, [this, reply, generation] {
+            reply->deleteLater();
+            --m_updateRequests;
+            if (generation == m_updatesGeneration) {
+                --m_updatesPending;
+                const auto json = QJsonDocument::fromJson(reply->readAll()).object();
+                if (reply->error() != QNetworkReply::NoError || json.value(QLatin1String("type")).toString() == QLatin1String("error")) {
+                    m_updatesFailed = true;
+                }
+                for (const auto& item : json.value(QLatin1String("results")).toArray()) {
+                    auto map = toMap(item.toObject());
+                    ++m_updatesKnown;
+                    // installed packages that moved into a repository are updated from there
+                    if (map.value(QStringLiteral("upgradable")).toBool() && !map.value(QStringLiteral("inRepos")).toBool()) {
+                        m_updatesFound << map;
+                    }
+                }
+                // a check that could not reach the AUR keeps the previous list
+                if (m_updatesPending == 0 && !m_updatesFailed) {
+                    std::ranges::sort(m_updatesFound, [](const QVariantMap& a, const QVariantMap& b) {
+                        return a.value(QStringLiteral("name")).toString() < b.value(QStringLiteral("name")).toString();
+                    });
+                    m_updates.clear();
+                    for (const auto& map : std::as_const(m_updatesFound)) {
+                        m_updates << map;
+                    }
+                    m_installedCount = m_updatesKnown;
+                    emit updatesChanged();
+                }
+            }
+            if (m_updateRequests == 0) {
+                emit checkingUpdatesChanged();
+            }
+        });
+    }
+    if (!wasChecking) {
+        emit checkingUpdatesChanged();
+    }
+}
+
+void AurClient::clearUpdates() {
+    ++m_updatesGeneration;
+    m_updates.clear();
+    m_installedCount = -1;
+    emit updatesChanged();
+}
+
 void AurClient::refreshInstalled() {
     bool changed = false;
     for (auto& item : m_results) {
         auto map            = item.toMap();
         const auto* local   = m_packages->find(map.value(QStringLiteral("name")).toString());
         const bool installed = local != nullptr && local->installed();
-        if (map.value(QStringLiteral("installed")).toBool() != installed) {
+        const auto installedVersion = installed ? local->installedVersion : QString();
+        if (map.value(QStringLiteral("installedVersion")).toString() != installedVersion) {
             map.insert(QStringLiteral("installed"), installed);
-            map.insert(QStringLiteral("installedVersion"), installed ? local->installedVersion : QString());
+            map.insert(QStringLiteral("installedVersion"), installedVersion);
+            map.insert(QStringLiteral("upgradable"),
+                installed && alpmdb::vercmp(installedVersion, map.value(QStringLiteral("version")).toString()) < 0);
             item    = map;
             changed = true;
         }
@@ -298,7 +383,11 @@ void AurClient::refreshInstalled() {
     }
     if (!m_details.isEmpty()) {
         const auto* local = m_packages->find(m_details.value(QStringLiteral("name")).toString());
-        m_details.insert(QStringLiteral("installed"), local != nullptr && local->installed());
+        const bool installed = local != nullptr && local->installed();
+        m_details.insert(QStringLiteral("installed"), installed);
+        m_details.insert(QStringLiteral("installedVersion"), installed ? local->installedVersion : QString());
+        m_details.insert(QStringLiteral("upgradable"),
+            installed && alpmdb::vercmp(local->installedVersion, m_details.value(QStringLiteral("version")).toString()) < 0);
         emit detailsChanged();
     }
 }

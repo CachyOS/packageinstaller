@@ -27,6 +27,11 @@ class AurClient : public QObject {
     /// What the automatic check wants a reviewer to look at: [{id, severity, file, line, title, detail, excerpt}].
     Q_PROPERTY(QVariantList findings READ findings NOTIFY findingsChanged)
     Q_PROPERTY(QStringList sourceHosts READ sourceHosts NOTIFY findingsChanged)
+    /// Installed AUR packages with a newer version in the AUR, same shape as `results`.
+    Q_PROPERTY(QVariantList updates READ updates NOTIFY updatesChanged)
+    Q_PROPERTY(bool checkingUpdates READ checkingUpdates NOTIFY checkingUpdatesChanged)
+    /// How many installed packages the AUR knows; -1 until the first check has finished.
+    Q_PROPERTY(int installedCount READ installedCount NOTIFY updatesChanged)
 
  public:
     explicit AurClient(const PackageModel* packages, QObject* parent = nullptr);
@@ -40,12 +45,18 @@ class AurClient : public QObject {
     [[nodiscard]] QVariantList files() const { return m_files; }
     [[nodiscard]] QVariantList findings() const { return m_findings; }
     [[nodiscard]] QStringList sourceHosts() const { return m_analysis.hosts; }
+    [[nodiscard]] QVariantList updates() const { return m_updates; }
+    [[nodiscard]] bool checkingUpdates() const { return m_updateRequests > 0; }
+    [[nodiscard]] int installedCount() const { return m_installedCount; }
 
     Q_INVOKABLE void search(const QString& query);
     /// Fetches dependency information and the PKGBUILD for review.
     Q_INVOKABLE void loadDetails(const QString& name, const QString& pkgbase);
     /// Re-evaluates the installed state after a transaction.
     void refreshInstalled();
+    /// Asks the AUR for the current versions of the installed packages that are in no repository.
+    void checkUpdates();
+    void clearUpdates();
 
  signals:
     void resultsChanged();
@@ -56,6 +67,8 @@ class AurClient : public QObject {
     void loadingDetailsChanged();
     void filesChanged();
     void findingsChanged();
+    void updatesChanged();
+    void checkingUpdatesChanged();
 
  private:
     [[nodiscard]] QVariantMap toMap(const QJsonObject& object) const;
@@ -78,4 +91,13 @@ class AurClient : public QObject {
     int m_pending    = 0;
     int m_generation = 0;
     int m_detailsGeneration = 0;
+
+    QVariantList m_updates;
+    QList<QVariantMap> m_updatesFound;  ///< collected while a check runs
+    int m_updatesKnown      = 0;
+    bool m_updatesFailed    = false;
+    int m_installedCount    = -1;
+    int m_updateRequests    = 0;  ///< replies still expected, including those of a superseded check
+    int m_updatesPending    = 0;  ///< replies still expected by the current check
+    int m_updatesGeneration = 0;
 };

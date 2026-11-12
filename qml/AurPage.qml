@@ -7,8 +7,12 @@ Item {
     id: root
 
     property string query
+    // Without a search the page lists the installed AUR packages that can be updated.
+    readonly property bool showUpdates: query.trim().length < 2 && Backend.aur.updates.length > 0
 
     signal openAur(var item)
+    // Review several packages one after the other, then build them together.
+    signal reviewAll(var items)
 
     onQueryChanged: debounce.restart()
     Component.onCompleted: if (Backend.aurEnabled) Backend.aur.search(query)
@@ -120,10 +124,54 @@ Item {
         }
     }
 
+    Column {
+        id: updatesHeader
+        visible: Backend.aurEnabled && root.showUpdates
+        anchors.top: pageHeader.bottom
+        anchors.topMargin: 14
+        x: Look.pagePadding
+        width: parent.width - 2 * Look.pagePadding - 12
+        spacing: 2
+
+        Item {
+            width: parent.width
+            height: Math.max(updatesTitle.height, updateAll.height)
+
+            Text {
+                id: updatesTitle
+                anchors.verticalCenter: parent.verticalCenter
+                text: qsTr("%n update(s) available", "", Backend.aur.updates.length)
+                color: Look.text
+                font.pixelSize: Look.fontTitle
+                font.weight: Font.DemiBold
+            }
+
+            PillButton {
+                id: updateAll
+                visible: Backend.aur.updates.length > 1
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                implicitHeight: 34
+                text: qsTr("Review and update all")
+                onClicked: root.reviewAll(Backend.aur.updates)
+            }
+        }
+
+        Text {
+            width: parent.width
+            text: Backend.aur.updates.length > 1
+                ? qsTr("Each update is built from a new PKGBUILD. Open a package to review it, or review all of them one after the other and build them together.")
+                : qsTr("Each update is built from a new PKGBUILD. Open a package to review it before updating.")
+            color: Look.textMuted
+            font.pixelSize: Look.fontSmall + 1
+            wrapMode: Text.WordWrap
+        }
+    }
+
     ListView {
         id: list
         visible: Backend.aurEnabled
-        anchors.top: pageHeader.bottom
+        anchors.top: updatesHeader.visible ? updatesHeader.bottom : pageHeader.bottom
         anchors.topMargin: 14
         anchors.bottom: parent.bottom
         x: Look.pagePadding
@@ -131,7 +179,7 @@ Item {
         spacing: 8
         clip: true
         boundsBehavior: Flickable.StopAtBounds
-        model: Backend.aur.results
+        model: root.showUpdates ? Backend.aur.updates : Backend.aur.results
 
         ScrollBar.vertical: ScrollBar {}
 
@@ -143,10 +191,13 @@ Item {
             title: modelData.name
             summary: modelData.description
             source: "aur"
-            trailing: modelData.installed ? qsTr("Installed")
+            trailing: modelData.upgradable ? modelData.installedVersion + " → " + modelData.version
+                : modelData.installed ? qsTr("Installed")
                 : modelData.outOfDate ? qsTr("Out of date")
                 : qsTr("%1 · %n vote(s)", "", modelData.votes).arg(modelData.version)
-            trailingColor: modelData.outOfDate && !modelData.installed ? Look.warning : Look.textMuted
+            trailingColor: modelData.upgradable || (modelData.outOfDate && !modelData.installed) ? Look.warning : Look.textMuted
+            Accessible.description: modelData.upgradable
+                ? qsTr("Update from %1 to %2").arg(modelData.installedVersion).arg(modelData.version) : ""
             onClicked: root.openAur(modelData)
         }
     }
@@ -160,6 +211,16 @@ Item {
             anchors.horizontalCenter: parent.horizontalCenter
             visible: Backend.aur.searching
             running: visible
+        }
+
+        Text {
+            anchors.horizontalCenter: parent.horizontalCenter
+            visible: !Backend.aur.searching && Backend.aur.error.length === 0 && root.query.trim().length < 2
+                && (Backend.aur.checkingUpdates || Backend.aur.installedCount > 0)
+            text: Backend.aur.checkingUpdates ? qsTr("Checking your AUR packages for updates…")
+                : qsTr("Your %n AUR package(s) are up to date.", "", Backend.aur.installedCount)
+            color: Look.text
+            font.pixelSize: Look.fontTitle
         }
 
         Text {
