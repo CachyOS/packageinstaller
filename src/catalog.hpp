@@ -19,7 +19,16 @@ struct LoadResult {
     QString error;
 };
 
+namespace AppStream {
+class Component;
+}
+
 namespace catalog {
+
+/// The best icon AppStream has for a component.
+IconRef iconOf(const AppStream::Component& component);
+/// Up to eight screenshot addresses of a component.
+QStringList screenshotUrls(const AppStream::Component& component);
 
 /// Loads the pacman databases and enriches them with the system AppStream catalog
 /// (archlinux-appstream-data and any other catalog below /usr/share/swcatalog).

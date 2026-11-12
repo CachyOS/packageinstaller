@@ -24,7 +24,11 @@ struct AppInfo {
     bool desktopApp = false;
 };
 
-IconRef pickIcon(const AppStream::Component& component) {
+}  // namespace
+
+namespace catalog {
+
+IconRef iconOf(const AppStream::Component& component) {
     IconRef ref;
     uint best = 0;
     for (const auto& icon : component.icons()) {
@@ -49,7 +53,7 @@ IconRef pickIcon(const AppStream::Component& component) {
     return ref;
 }
 
-QStringList pickScreenshots(const AppStream::Component& component) {
+QStringList screenshotUrls(const AppStream::Component& component) {
     QStringList urls;
     for (const auto& shot : component.screenshotsAll()) {
         if (shot.mediaKind() != AppStream::Screenshot::MediaKindImage) {
@@ -75,6 +79,10 @@ QStringList pickScreenshots(const AppStream::Component& component) {
     return urls;
 }
 
+}  // namespace catalog
+
+namespace {
+
 QHash<QString, AppInfo> loadAppStream() {
     QHash<QString, AppInfo> apps;
 
@@ -99,8 +107,8 @@ QHash<QString, AppInfo> loadAppStream() {
         info.developer   = component.developer().name();
         info.homepage    = component.url(AppStream::Component::UrlKindHomepage).toString();
         info.categories  = component.categories();
-        info.screenshots = pickScreenshots(component);
-        info.icon        = pickIcon(component);
+        info.screenshots = catalog::screenshotUrls(component);
+        info.icon        = catalog::iconOf(component);
 
         for (const auto& pkgname : component.packageNames()) {
             // A package can ship several components (e.g. a suite); keep the desktop app with an icon.
