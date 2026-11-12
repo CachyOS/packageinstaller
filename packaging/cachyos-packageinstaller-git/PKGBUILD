@@ -1,0 +1,56 @@
+# Maintainer: CachyOS Team
+
+pkgname=cachyos-packageinstaller-git
+pkgver=2.0.0.r0.g0000000
+pkgrel=1
+pkgdesc="Small app store for CachyOS: install, remove and update packages, with AUR support (git version)"
+arch=('x86_64' 'aarch64')
+url="https://github.com/CachyOS/packageinstaller"
+license=('GPL-3.0-or-later')
+depends=(
+  'appstream-qt'
+  'archlinux-appstream-data'
+  'glibc'
+  'hicolor-icon-theme'
+  'kimageformats'
+  'libgcc'
+  'libjxl'
+  'libstdc++'
+  'pacman'
+  'polkit'
+  'qt6-base'
+  'qt6-declarative'
+)
+makedepends=('cmake' 'git' 'ninja' 'qt6-tools')
+optdepends=(
+  'paru: build packages from the AUR'
+  'pacman-contrib: see updates without refreshing the system databases'
+)
+provides=("cachyos-packageinstaller=${pkgver%%.r*}")
+conflicts=('cachyos-packageinstaller')
+source=("packageinstaller::git+$url.git")
+sha256sums=('SKIP')
+
+pkgver() {
+  cd packageinstaller
+  # version of the project, then commits since and hash of the last commit that changed it
+  local version commit
+  version=$(sed -n 's/^ *VERSION \([0-9.]*\)$/\1/p' CMakeLists.txt | head -n1)
+  commit=$(git log -n1 --format=%H -G'^ *VERSION [0-9.]+$' -- CMakeLists.txt)
+  printf '%s.r%s.g%s' "$version" "$(git rev-list --count "$commit..HEAD")" "$(git rev-parse --short=7 HEAD)"
+}
+
+build() {
+  cmake -S packageinstaller -B build -G Ninja \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr
+  cmake --build build
+}
+
+check() {
+  ctest --test-dir build --output-on-failure
+}
+
+package() {
+  DESTDIR="$pkgdir" cmake --install build
+}

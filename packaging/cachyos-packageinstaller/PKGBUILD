@@ -1,0 +1,47 @@
+# Maintainer: CachyOS Team
+
+pkgname=cachyos-packageinstaller
+pkgver=2.0.0
+pkgrel=1
+pkgdesc="Small app store for CachyOS: install, remove and update packages, with AUR support"
+arch=('x86_64' 'aarch64')
+url="https://github.com/CachyOS/packageinstaller"
+license=('GPL-3.0-or-later')
+groups=('cachyos')
+depends=(
+  'appstream-qt'
+  'archlinux-appstream-data'
+  'glibc'
+  'hicolor-icon-theme'
+  'kimageformats'
+  'libgcc'
+  'libjxl'
+  'libstdc++'
+  'pacman'
+  'polkit'
+  'qt6-base'
+  'qt6-declarative'
+)
+makedepends=('cmake' 'ninja' 'qt6-tools')
+optdepends=(
+  'paru: build packages from the AUR'
+  'pacman-contrib: see updates without refreshing the system databases'
+)
+source=("$pkgname-$pkgver.tar.gz::$url/archive/v$pkgver.tar.gz")
+# Replace with the checksum of the release tarball once v$pkgver is tagged (updpkgsums).
+sha256sums=('SKIP')
+
+build() {
+  cmake -S "packageinstaller-$pkgver" -B build -G Ninja \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_INSTALL_PREFIX=/usr
+  cmake --build build
+}
+
+check() {
+  ctest --test-dir build --output-on-failure
+}
+
+package() {
+  DESTDIR="$pkgdir" cmake --install build
+}
