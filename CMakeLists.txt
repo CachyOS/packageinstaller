@@ -72,6 +72,9 @@ set(PI_QML_FILES
     qml/UpdatesPage.qml
     qml/AurPage.qml
     qml/AurDetailsPage.qml
+    qml/FlatpakPage.qml
+    qml/FlatpakDetailsPage.qml
+    qml/Toggle.qml
     qml/InfoItem.qml
     qml/WebLink.qml
     qml/SettingsPage.qml

@@ -6,7 +6,7 @@ import CachyOS.PackageInstaller
 ApplicationWindow {
     id: root
 
-    // "home", "browse", "installed", "updates", "aur" or "settings"
+    // "home", "browse", "installed", "updates", "aur", "flatpak" or "settings"
     property string section: "home"
 
     // History for the back and forward buttons. Pages on top of a section live in the
@@ -34,12 +34,17 @@ ApplicationWindow {
         trail = [];
         historyDepth = visited.length;
         undoneDepth = undone.length;
-        if (name !== "browse" && name !== "installed" && name !== "aur")
+        if (!searchable(name))
             search.text = "";
         const page = name === "home" ? homePage : name === "updates" ? updatesPage : name === "aur" ? aurPage
-            : name === "settings" ? settingsPage : browsePage;
+            : name === "flatpak" ? flatpakPage : name === "settings" ? settingsPage : browsePage;
         stack.replace(null, page, name === "browse" || name === "installed" ? {"installedOnly": name === "installed", "query": search.text}
-            : name === "aur" ? {"query": search.text} : {});
+            : name === "aur" || name === "flatpak" ? {"query": search.text} : {});
+    }
+
+    // Sections with a list that the search field filters.
+    function searchable(name) {
+        return name === "browse" || name === "installed" || name === "aur" || name === "flatpak";
     }
 
     function openPage(component, properties) {
@@ -242,6 +247,14 @@ ApplicationWindow {
                 badge: Backend.aur.updates.length
                 onClicked: root.show("aur")
             }
+            NavButton {
+                width: parent.width
+                text: qsTr("Flatpak")
+                glyph: "M4 8l8-4l8 4v8l-8 4l-8-4zM4 8l8 4l8-4M12 12v8M8 6l8 4"
+                current: root.section === "flatpak"
+                badge: Backend.flatpak.updates.length
+                onClicked: root.show("flatpak")
+            }
         }
 
         NavButton {
@@ -280,7 +293,8 @@ ApplicationWindow {
             anchors.leftMargin: Look.pagePadding
             anchors.verticalCenter: parent.verticalCenter
             width: Math.min(parent.width - 2 * Look.pagePadding, 520)
-            placeholderText: root.section === "aur" ? qsTr("Search the AUR") : qsTr("Search apps and packages")
+            placeholderText: root.section === "aur" ? qsTr("Search the AUR")
+                : root.section === "flatpak" ? qsTr("Search Flatpak apps") : qsTr("Search apps and packages")
             Accessible.name: placeholderText
 
             onTextEdited: {
@@ -290,7 +304,7 @@ ApplicationWindow {
                     root.trail = [];
                     stack.pop(null);
                 }
-                if (root.section !== "browse" && root.section !== "installed" && root.section !== "aur")
+                if (!root.searchable(root.section))
                     root.show("browse");
                 else
                     stack.currentItem.query = text;
@@ -363,6 +377,19 @@ ApplicationWindow {
             onOpenSettings: root.show("settings")
             onOpenAur: item => root.openPage(aurDetailsPage, {"item": item})
             onReviewAll: items => root.openPage(aurDetailsPage, {"item": items[0], "queue": items, "updates": true})
+        }
+    }
+    Component {
+        id: flatpakPage
+        FlatpakPage {
+            onOpenSettings: root.show("settings")
+            onOpenApp: (appId, copy) => root.openPage(flatpakDetailsPage, {"appId": appId, "copy": copy})
+        }
+    }
+    Component {
+        id: flatpakDetailsPage
+        FlatpakDetailsPage {
+            onBack: root.back()
         }
     }
     Component {

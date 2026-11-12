@@ -8,6 +8,7 @@ Popup {
 
     readonly property Transaction tx: Backend.transaction
     readonly property int kind: tx.kind
+    readonly property bool removes: kind === Transaction.Remove || kind === Transaction.FlatpakRemove
     property bool showLog: false
 
     readonly property string heading: {
@@ -16,6 +17,10 @@ Popup {
         case Transaction.Install: return qsTr("Install %1").arg(target);
         case Transaction.Remove: return qsTr("Remove %1").arg(target);
         case Transaction.Upgrade: return qsTr("Update the system");
+        case Transaction.FlatpakInstall: return qsTr("Install %1").arg(target);
+        case Transaction.FlatpakRemove: return qsTr("Remove %1").arg(target);
+        case Transaction.FlatpakUpdate: return qsTr("Update Flatpak apps");
+        case Transaction.FlatpakSetup: return qsTr("Add Flathub");
         default: return tx.targets.length > 1 ? qsTr("Build %n package(s) from the AUR", "", tx.targets.length)
             : qsTr("Build %1 from the AUR").arg(target);
         }
@@ -105,7 +110,11 @@ Popup {
                 textFormat: Text.PlainText
                 visible: root.tx.planError.length === 0
                 width: parent.width
-                text: root.kind === Transaction.Upgrade ? qsTr("The package databases will be refreshed and every available update installed.")
+                text: root.kind === Transaction.FlatpakInstall ? qsTr("Flatpak will download the app and the runtime it needs, and install them for all users. It asks for permission itself if that is required.")
+                    : root.kind === Transaction.FlatpakRemove ? qsTr("The app will be removed. Its data in your home directory is kept.")
+                    : root.kind === Transaction.FlatpakUpdate ? qsTr("Every installed Flatpak app and runtime will be updated.")
+                    : root.kind === Transaction.FlatpakSetup ? qsTr("Flathub will be added as an app source for all users.")
+                    : root.kind === Transaction.Upgrade ? qsTr("The package databases will be refreshed and every available update installed.")
                     : root.kind === Transaction.AurInstall ? (root.tx.targets.length > 1
                         ? qsTr("paru will download the sources, build %1 as your user and then ask for permission to install them. This can take a while.").arg(root.tx.targets.join(", "))
                         : qsTr("paru will download the sources, build the package as your user and then ask for permission to install it. This can take a while."))
@@ -268,14 +277,16 @@ Popup {
             PillButton {
                 visible: root.tx.state === Transaction.Planning || root.tx.state === Transaction.Confirm || root.tx.cancellable
                 tone: "soft"
-                text: root.tx.state === Transaction.Running ? qsTr("Stop build") : qsTr("Cancel")
+                text: root.tx.state !== Transaction.Running ? qsTr("Cancel") : root.tx.isFlatpak ? qsTr("Stop") : qsTr("Stop build")
                 onClicked: root.tx.cancel()
             }
 
             PillButton {
                 visible: root.tx.state === Transaction.Confirm && root.tx.planError.length === 0
-                tone: root.kind === Transaction.Remove ? "danger" : "primary"
-                text: root.kind === Transaction.Remove ? qsTr("Remove") : root.kind === Transaction.Upgrade ? qsTr("Update") : qsTr("Install")
+                tone: root.removes ? "danger" : "primary"
+                text: root.removes ? qsTr("Remove")
+                    : root.kind === Transaction.Upgrade || root.kind === Transaction.FlatpakUpdate ? qsTr("Update")
+                    : root.kind === Transaction.FlatpakSetup ? qsTr("Add") : qsTr("Install")
                 onClicked: root.tx.confirm()
             }
 

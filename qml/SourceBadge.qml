@@ -1,6 +1,6 @@
 import QtQuick
 
-// Where a package comes from: "cachyos", "arch", "aur" or "local".
+// Where a package comes from: "cachyos", "arch", "aur", "flatpak" or "local".
 Rectangle {
     id: root
 
@@ -10,6 +10,7 @@ Rectangle {
             "cachyos": [qsTr("CachyOS"), Look.accentSoft, Look.accent],
             "arch": [qsTr("Arch"), Look.archSoft, Look.arch],
             "aur": [qsTr("AUR"), Look.warningSoft, Look.warning],
+            "flatpak": [qsTr("Flatpak"), Look.archSoft, Look.arch],
             "local": [qsTr("Local"), Look.surfaceAlt, Look.textMuted]
         })[source] ?? [source, Look.surfaceAlt, Look.textMuted]
 

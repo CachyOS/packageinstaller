@@ -273,7 +273,7 @@ Flickable {
                 }
             }
         }
-        // AUR
+        // AUR and Flatpak
         Column {
             width: parent.width
             spacing: 10
@@ -330,49 +330,69 @@ Flickable {
                     }
                 }
 
-                AbstractButton {
+                Toggle {
                     id: aurSwitch
                     anchors.right: parent.right
                     anchors.rightMargin: 18
                     anchors.verticalCenter: parent.verticalCenter
-                    width: 46
-                    height: 26
-                    // follows the setting instead of keeping a state of its own
-                    readonly property bool active: Backend.aurEnabled
-
-                    Accessible.role: Accessible.CheckBox
-                    Accessible.name: qsTr("Arch User Repository (AUR)")
-                    Accessible.checkable: true
-                    Accessible.checked: active
+                    active: Backend.aurEnabled
+                    name: qsTr("Arch User Repository (AUR)")
                     onClicked: Backend.aurEnabled = !Backend.aurEnabled
+                }
+            }
 
-                    HoverHandler {
-                        cursorShape: Qt.PointingHandCursor
+            Rectangle {
+                width: Math.min(parent.width, 914)
+                height: flatpakText.height + 32
+                radius: Look.radius
+                color: Look.surface
+                border.width: 1
+                border.color: Look.border
+
+                Column {
+                    id: flatpakText
+                    x: 18
+                    y: 16
+                    width: parent.width - 36 - flatpakSwitch.width - 18
+                    spacing: 4
+
+                    Text {
+                        textFormat: Text.PlainText
+                        text: qsTr("Flatpak")
+                        color: Look.text
+                        font.pixelSize: Look.fontBody + 1
+                        font.weight: Font.DemiBold
                     }
 
-                    background: Rectangle {
-                        radius: height / 2
-                        color: aurSwitch.active ? Look.accent : Look.surfaceAlt
-                        border.width: aurSwitch.visualFocus ? 2 : 1
-                        border.color: aurSwitch.visualFocus ? Look.text : (aurSwitch.active ? Look.accent : Look.border)
-
-                        Behavior on color {
-                            ColorAnimation { duration: 120 }
-                        }
-
-                        Rectangle {
-                            x: aurSwitch.active ? parent.width - width - 4 : 4
-                            anchors.verticalCenter: parent.verticalCenter
-                            width: 18
-                            height: 18
-                            radius: 9
-                            color: aurSwitch.active ? Look.onAccent : Look.textMuted
-
-                            Behavior on x {
-                                NumberAnimation { duration: 120; easing.type: Easing.OutCubic }
-                            }
-                        }
+                    Text {
+                        textFormat: Text.PlainText
+                        width: parent.width
+                        text: qsTr("Sandboxed apps from Flathub and other Flatpak remotes. They are packaged by their developers or the Flathub community, not by CachyOS, and bring their own libraries.")
+                        color: Look.textMuted
+                        font.pixelSize: Look.fontSmall + 1
+                        lineHeight: 1.25
+                        wrapMode: Text.WordWrap
                     }
+
+                    Text {
+                        textFormat: Text.PlainText
+                        visible: Backend.flatpakEnabled && !Backend.flatpak.loading && !Backend.flatpak.available
+                        width: parent.width
+                        text: qsTr("Flatpak is not installed. You can install it from the Flatpak page.")
+                        color: Look.warning
+                        font.pixelSize: Look.fontSmall + 1
+                        wrapMode: Text.WordWrap
+                    }
+                }
+
+                Toggle {
+                    id: flatpakSwitch
+                    anchors.right: parent.right
+                    anchors.rightMargin: 18
+                    anchors.verticalCenter: parent.verticalCenter
+                    active: Backend.flatpakEnabled
+                    name: qsTr("Flatpak")
+                    onClicked: Backend.flatpakEnabled = !Backend.flatpakEnabled
                 }
             }
         }
