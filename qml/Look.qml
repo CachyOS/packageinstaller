@@ -84,10 +84,118 @@ QtObject {
                 stops: ["#4338ca", "#2563eb", "#06b6d4"], text: "#ffffff", sub: "#e0ecff",
                 button: "#f3f8ff", buttonHover: "#ffffff", ink: "#1e2a78", image: "icons/cachyos-logo.png"
             }
+        },
+        // Community palettes, see THIRD-PARTY.md. The named colours are the official values;
+        // hover, alt and "soft" shades are blends of them, and a few colours are lightened or
+        // darkened so that text stays readable.
+        "nord": {
+            title: "Nord", author: "Sven Greb",
+            dark: {
+                window: "#2e3440", sidebar: "#282d37", surface: "#3b4252", surfaceHover: "#3f4758", surfaceAlt: "#434c5e",
+                border: "#4c566a", text: "#eceff4", textMuted: "#a8aeba",
+                accent: "#88c0d0", accentHover: "#a2ceda", accentSoft: "#40505d", onAccent: "#2e3440",
+                arch: "#b48ead", archSoft: "#494656",
+                danger: "#d18d94", dangerSoft: "#4f4651", warning: "#ebcb8b", warningSoft: "#54524f"
+            },
+            light: {
+                window: "#e5e9f0", sidebar: "#d8dee9", surface: "#eceff4", surfaceHover: "#e2e6ee", surfaceAlt: "#d8dee9",
+                border: "#bfc6d2", text: "#2e3440", textMuted: "#4c566a",
+                accent: "#4b678a", accentHover: "#405875", accentSoft: "#ccd4e0", onAccent: "#eceff4",
+                arch: "#78667c", archSoft: "#d4d4dd",
+                danger: "#a2525a", dangerSoft: "#dcd4db", warning: "#8d5c4c", warningSoft: "#d9d5d9"
+            },
+            hero: {
+                stops: ["#475b68", "#597785", "#665a6e"], text: "#ffffff", sub: "#eaf4f7",
+                button: "#88c0d0", buttonHover: "#a2ceda", ink: "#2e3440", image: "icons/cachyos-logo.png"
+            }
+        },
+        "dracula": {
+            title: "Dracula", author: "Dracula Theme",
+            dark: {
+                window: "#282a36", sidebar: "#21222c", surface: "#343746", surfaceHover: "#3c3f50", surfaceAlt: "#44475a",
+                border: "#4e5674", text: "#f8f8f2", textMuted: "#b4bccf",
+                accent: "#bd93f9", accentHover: "#ccabfa", accentSoft: "#463f5d", onAccent: "#282a36",
+                arch: "#8be9fd", archSoft: "#3c505e",
+                danger: "#ff5555", dangerSoft: "#53333c", warning: "#ffb86c", warningSoft: "#534641"
+            },
+            light: {
+                window: "#f5f1e0", sidebar: "#eae6d5", surface: "#fffbeb", surfaceHover: "#f3efde", surfaceAlt: "#e7e3d1",
+                border: "#d6d1be", text: "#1f1f1f", textMuted: "#6c664b",
+                accent: "#644ac9", accentHover: "#553fab", accentSoft: "#ded6dc", onAccent: "#fffbeb",
+                arch: "#036a96", archSoft: "#cedbd4",
+                danger: "#cb3a2a", dangerSoft: "#efd7c7", warning: "#a34d14", warningSoft: "#eadac3"
+            },
+            hero: {
+                stops: ["#52476d", "#705c94", "#527a8a"], text: "#ffffff", sub: "#f3ecfe",
+                button: "#bd93f9", buttonHover: "#ccabfa", ink: "#282a36", image: "icons/cachyos-logo.png"
+            }
+        },
+        "catppuccin": {
+            title: "Catppuccin", author: "Catppuccin",
+            dark: {
+                window: "#1e1e2e", sidebar: "#181825", surface: "#2b2c3d", surfaceHover: "#2e2f40", surfaceAlt: "#313244",
+                border: "#45475a", text: "#cdd6f4", textMuted: "#a6adc8",
+                accent: "#cba6f7", accentHover: "#d6baf9", accentSoft: "#413956", onAccent: "#11111b",
+                arch: "#89b4fa", archSoft: "#333c57",
+                danger: "#f38ba8", dangerSoft: "#493446", warning: "#f9e2af", warningSoft: "#4a4548"
+            },
+            light: {
+                window: "#e6e9ef", sidebar: "#dce0e8", surface: "#eff1f5", surfaceHover: "#e2e6ec", surfaceAlt: "#d6dae2",
+                border: "#ccd0da", text: "#4c4f69", textMuted: "#6c6f85",
+                accent: "#8839ef", accentHover: "#7430cb", accentSoft: "#d7cdef", onAccent: "#eff1f5",
+                arch: "#1e66f5", archSoft: "#c6d4f0",
+                danger: "#d20f39", dangerSoft: "#e3cad6", warning: "#a76a16", warningSoft: "#ddd7d1"
+            },
+            hero: {
+                stops: ["#4e4466", "#715f8e", "#4b5d84"], text: "#ffffff", sub: "#f6effe",
+                button: "#cba6f7", buttonHover: "#d6baf9", ink: "#11111b", image: "icons/cachyos-logo.png"
+            }
+        },
+        "tokyonight": {
+            title: "Tokyo Night", author: "Enkia",
+            dark: {
+                window: "#1a1b26", sidebar: "#16161e", surface: "#202330", surfaceHover: "#262a38", surfaceAlt: "#2d3040",
+                border: "#3a3e50", text: "#c0caf5", textMuted: "#8a90b0",
+                accent: "#7aa2f7", accentHover: "#97b6f9", accentSoft: "#2d3650", onAccent: "#1a1b26",
+                arch: "#bb9af7", archSoft: "#3a3450",
+                danger: "#f7768e", dangerSoft: "#462d3b", warning: "#e0af68", warningSoft: "#423933"
+            },
+            light: {
+                window: "#d6d8df", sidebar: "#cbcdd6", surface: "#e6e7ed", surfaceHover: "#d8d9e0", surfaceAlt: "#c9cbd4",
+                border: "#c1c2c7", text: "#343b58", textMuted: "#616476",
+                accent: "#2959aa", accentHover: "#234c90", accentSoft: "#bac4d7", onAccent: "#e6e7ed",
+                arch: "#7b43ba", archSoft: "#c7c0d9",
+                danger: "#8c4351", dangerSoft: "#ccc3cb", warning: "#8f5e15", warningSoft: "#ccc7c3"
+            },
+            hero: {
+                stops: ["#354161", "#485c8a", "#5e507e"], text: "#ffffff", sub: "#e7eefe",
+                button: "#7aa2f7", buttonHover: "#97b6f9", ink: "#1a1b26", image: "icons/cachyos-logo.png"
+            }
+        },
+        "solarized": {
+            title: "Solarized", author: "Ethan Schoonover",
+            dark: {
+                window: "#002b36", sidebar: "#00222a", surface: "#073642", surfaceHover: "#103c48", surfaceAlt: "#19424d",
+                border: "#294e57", text: "#eee8d5", textMuted: "#93a19f",
+                accent: "#56a5dc", accentHover: "#7bb9e4", accentSoft: "#114357", onAccent: "#002b36",
+                arch: "#989cd6", archSoft: "#1e4256",
+                danger: "#e56563", dangerSoft: "#2e373f", warning: "#c09b26", warningSoft: "#264133"
+            },
+            light: {
+                window: "#eee8d5", sidebar: "#dfdccb", surface: "#fdf6e3", surfaceHover: "#ece8d6", surfaceAlt: "#dcd9c9",
+                border: "#c7c8bc", text: "#073642", textMuted: "#586e75",
+                accent: "#1e6ca4", accentHover: "#1a5c8b", accentSoft: "#cdd4cd", onAccent: "#fdf6e3",
+                arch: "#595da1", archSoft: "#d6d2cd",
+                danger: "#ca2e2b", dangerSoft: "#e9cebd", warning: "#b74414", warningSoft: "#e6d1ba"
+            },
+            hero: {
+                stops: ["#184d64", "#296686", "#405a79"], text: "#ffffff", sub: "#e1eff9",
+                button: "#56a5dc", buttonHover: "#7bb9e4", ink: "#002b36", image: "icons/cachyos-logo.png"
+            }
         }
     })
     /// in the order the settings page shows them
-    readonly property var themeNames: ["classic", "midnight", "graphite", "aurora"]
+    readonly property var themeNames: ["classic", "midnight", "graphite", "aurora", "nord", "dracula", "catppuccin", "tokyonight", "solarized"]
 
     // an unknown name in the settings file falls back to the classic look
     readonly property var theme: themes[Backend.theme] ?? themes["classic"]
@@ -105,10 +213,10 @@ QtObject {
     readonly property color accentHover: palette.accentHover
     readonly property color accentSoft: palette.accentSoft
     readonly property color onAccent: palette.onAccent
-    readonly property color danger: dark ? "#ff7a7a" : "#c62f2f"
-    readonly property color dangerSoft: dark ? "#3a1c1e" : "#fbe3e3"
-    readonly property color warning: dark ? "#f4c05a" : "#9a6400"
-    readonly property color warningSoft: dark ? "#372c14" : "#fbefd3"
+    readonly property color danger: palette.danger ?? (dark ? "#ff7a7a" : "#c62f2f")
+    readonly property color dangerSoft: palette.dangerSoft ?? (dark ? "#3a1c1e" : "#fbe3e3")
+    readonly property color warning: palette.warning ?? (dark ? "#f4c05a" : "#9a6400")
+    readonly property color warningSoft: palette.warningSoft ?? (dark ? "#372c14" : "#fbefd3")
     readonly property color arch: palette.arch
     readonly property color archSoft: palette.archSoft
 

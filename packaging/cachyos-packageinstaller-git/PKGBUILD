@@ -54,4 +54,5 @@ check() {
 
 package() {
   DESTDIR="$pkgdir" cmake --install build
+  install -Dm644 packageinstaller/THIRD-PARTY.md "$pkgdir/usr/share/licenses/$pkgname/THIRD-PARTY.md"
 }

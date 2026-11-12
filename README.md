@@ -19,8 +19,9 @@ the CachyOS and Arch repositories, and build packages from the AUR.
   packages in one go.
 - **PKGBUILD check**: the review page marks lines a reviewer should look at
   (see below). It is a reading aid and never declares a package safe.
-- **Appearance**: the settings page switches between four colour themes and
-  between light, dark and following the desktop.
+- **Appearance**: the settings page switches between colour themes (four of our
+  own plus Nord, Dracula, Catppuccin, Tokyo Night and Solarized, credited in
+  `THIRD-PARTY.md`) and between light, dark and following the desktop.
 - **Privileges**: the GUI runs as the user. Package operations go through
   `cachyos-pi-helper`, a tiny pkexec helper that only accepts
   `install`, `remove` and `upgrade`.
@@ -114,4 +115,5 @@ the package database, so they are only done in the app.
 | `pkglist.yaml` | the curated "CachyOS picks" on the start page |
 | `org.cachyos.cachyos-pi.metainfo.xml` | AppStream metadata for software centres |
 | `packaging/` | PKGBUILDs |
+| `THIRD-PARTY.md` | credits and licence of the community colour palettes |
 | `screenshots/` | the pictures in this file |

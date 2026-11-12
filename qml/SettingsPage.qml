@@ -7,12 +7,15 @@ Flickable {
     id: root
 
     function themeTitle(name) {
-        return name === "midnight" ? qsTr("Midnight") : name === "graphite" ? qsTr("Graphite")
-            : name === "aurora" ? qsTr("Aurora") : qsTr("Classic")
+        // community palettes keep their own name
+        return Look.themes[name].title ?? (name === "midnight" ? qsTr("Midnight") : name === "graphite" ? qsTr("Graphite")
+            : name === "aurora" ? qsTr("Aurora") : qsTr("Classic"))
     }
 
     function themeHint(name) {
-        return name === "midnight" ? qsTr("Blue-black with the colours of the CachyOS logo")
+        const author = Look.themes[name].author
+        return author !== undefined ? qsTr("Community palette by %1").arg(author)
+            : name === "midnight" ? qsTr("Blue-black with the colours of the CachyOS logo")
             : name === "graphite" ? qsTr("Neutral greys and one bright mint")
             : name === "aurora" ? qsTr("Indigo tint with a cyan accent")
             : qsTr("The original teal look")
