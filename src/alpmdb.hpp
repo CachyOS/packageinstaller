@@ -18,6 +18,7 @@ struct Package {
     qint64 installSize  = 0;
     qint64 downloadSize = 0;
     bool upgradable     = false;
+    bool ignored        = false;  ///< held back by IgnorePkg or IgnoreGroup in pacman.conf
 
     // AppStream
     bool isApp = false;

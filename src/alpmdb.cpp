@@ -100,6 +100,14 @@ QList<Package> load(QString* dbPathOut, QString* error) {
         return {};
     }
 
+    // let libalpm match the names, patterns and groups the way pacman does
+    for (const auto& pattern : pacmanConf({QStringLiteral("IgnorePkg")})) {
+        alpm_option_add_ignorepkg(handle, pattern.toUtf8().constData());
+    }
+    for (const auto& group : pacmanConf({QStringLiteral("IgnoreGroup")})) {
+        alpm_option_add_ignoregroup(handle, group.toUtf8().constData());
+    }
+
     QList<Package> packages;
     QHash<QString, qsizetype> index;
 
@@ -127,10 +135,12 @@ QList<Package> load(QString* dbPathOut, QString* error) {
         if (const auto found = index.constFind(name); found != index.cend()) {
             auto& p            = packages[*found];
             p.installedVersion = version;
-            p.upgradable       = alpm_pkg_vercmp(alpm_pkg_get_version(pkg), p.version.toUtf8().constData()) < 0;
+            p.ignored          = alpm_pkg_should_ignore(handle, pkg) != 0;
+            p.upgradable       = !p.ignored && alpm_pkg_vercmp(alpm_pkg_get_version(pkg), p.version.toUtf8().constData()) < 0;
         } else {
             auto p             = fromAlpm(pkg, QStringLiteral("local"));
             p.installedVersion = version;
+            p.ignored          = alpm_pkg_should_ignore(handle, pkg) != 0;
             packages << p;
         }
     }

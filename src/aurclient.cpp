@@ -564,7 +564,8 @@ void AurClient::checkUpdates() {
     QStringList names;
     for (int row = 0; row < m_packages->rowCount(); ++row) {
         const auto& package = m_packages->at(row);
-        if (package.foreign() && package.installed()) {
+        // packages held back in pacman.conf are not offered, like `pacman -Syu` and paru do
+        if (package.foreign() && package.installed() && !package.ignored) {
             names << package.name;
         }
     }

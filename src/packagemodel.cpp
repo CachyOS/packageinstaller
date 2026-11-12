@@ -82,7 +82,7 @@ void PackageModel::applyUpdates(const QHash<QString, QString>& newVersions) {
     for (int i = 0; i < m_packages.size(); ++i) {
         auto& pkg        = m_packages[i];
         const auto found = newVersions.constFind(pkg.name);
-        const bool upgradable = found != newVersions.cend();
+        const bool upgradable = found != newVersions.cend() && !pkg.ignored;
         if (!upgradable && !pkg.upgradable) {
             continue;
         }
