@@ -61,6 +61,13 @@ int main(int argc, char** argv) {
 
     auto analysis = pkgscan::scanPkgbuild(pkgbuild);
     QStringList missing;
+    // a source without a telling name is still a script when it starts with "#!"
+    for (const auto& name : std::as_const(analysis.otherLocalFiles)) {
+        QString text;
+        if (readFile(target.absoluteDir().filePath(name), &text) && text.startsWith(QLatin1String("#!"))) {
+            analysis.localFiles << name;
+        }
+    }
     for (const auto& name : std::as_const(analysis.localFiles)) {
         QString text;
         if (readFile(target.absoluteDir().filePath(name), &text)) {

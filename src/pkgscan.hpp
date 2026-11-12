@@ -35,6 +35,8 @@ struct Analysis {
     QStringList hosts;
     /// Files next to the PKGBUILD that run on the machine (install scriptlet, scripts, hooks, units).
     QStringList localFiles;
+    /// Other local sources. One that starts with "#!" is a script as well, which only its content can tell.
+    QStringList otherLocalFiles;
 };
 
 struct Metadata {

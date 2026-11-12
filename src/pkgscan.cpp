@@ -4,6 +4,7 @@
 #include <QCoreApplication>
 #include <QHash>
 #include <QRegularExpression>
+#include <QSet>
 #include <QUrl>
 
 #include <algorithm>
@@ -230,6 +231,8 @@ struct Array {
 struct Parsed {
     QHash<QString, Array> arrays;
     QHash<QString, QString> scalars;
+    /// Every value assigned to `install`: a split package can set one per package function.
+    QStringList installs;
     /// Lines that only hold array data (dependency names, checksums, ...).
     QList<bool> dataLine;
 };
@@ -271,6 +274,10 @@ Parsed parse(const QString& text, int lineCount) {
                 if (c == quote) {
                     quote = QChar();
                 } else {
+                    // double quotes do not stop a command substitution
+                    if (quote == u'"' && (c == u'`' || (c == u'$' && i + 1 < text.size() && text.at(i + 1) == u'('))) {
+                        hasCode = true;
+                    }
                     token += c;
                 }
                 continue;
@@ -302,6 +309,16 @@ Parsed parse(const QString& text, int lineCount) {
         }
         flush();
         array.lastLine = line;
+        // "name=(); command" continues with code behind the closing parenthesis
+        if (i < text.size()) {
+            auto end = text.indexOf(u'\n', i);
+            if (end < 0) {
+                end = text.size();
+            }
+            if (!stripComment(text.mid(i + 1, end - i - 1)).trimmed().isEmpty()) {
+                hasCode = true;
+            }
+        }
         // arrays that run commands are still looked at by the line rules
         if (!hasCode) {
             for (int n = first; n <= line && n < parsed.dataLine.size(); ++n) {
@@ -319,6 +336,9 @@ Parsed parse(const QString& text, int lineCount) {
             value = value.mid(1, value.size() - 2);
         }
         parsed.scalars.insert(match.captured(1), value);
+        if (match.captured(1) == QLatin1String("install") && !parsed.installs.contains(value)) {
+            parsed.installs << value;
+        }
     }
     return parsed;
 }
@@ -329,7 +349,7 @@ QString expand(QString value, const Parsed& parsed) {
     // ${NAME:-fallback}: an environment override, the fallback is what a normal build uses
     static const QRegularExpression fallback(QStringLiteral("\\$\\{[A-Za-z_][A-Za-z0-9_]*:?[-=]([^{}]*)\\}"));
     value.replace(fallback, QStringLiteral("\\1"));
-    for (int pass = 0; pass < 4; ++pass) {
+    for (int pass = 0; pass < 8; ++pass) {
         QString out;
         qsizetype last = 0;
         bool changed   = false;
@@ -392,7 +412,34 @@ bool isVcsPackage(const QString& name) {
     return std::ranges::any_of(SUFFIXES, [&](const char* suffix) { return name.endsWith(QLatin1String(suffix)); });
 }
 
-void scanSources(const Parsed& parsed, Analysis& analysis) {
+/// Name under which makepkg stores a source: the part before "::", else the last part of the address.
+QString localName(const QString& spec) {
+    const auto rename = spec.indexOf(QLatin1String("::"));
+    const auto scheme = spec.indexOf(QLatin1String("://"));
+    if (rename > 0 && (scheme < 0 || rename < scheme)) {
+        return spec.left(rename);
+    }
+    // expansions that could not be resolved may hold "#", "?" and "/" of their own
+    static const QRegularExpression expansion(QStringLiteral("\\$\\{[^}]*\\}"));
+    static const QRegularExpression tail(QStringLiteral("[?#].*$"));
+    auto address = spec;
+    address.replace(expansion, QStringLiteral("$"));
+    address.remove(tail);
+    return address.section(u'/', -1);
+}
+
+/// Whether the PKGBUILD runs a local source file, whatever it is called.
+bool runsFile(const QString& text, const QString& name) {
+    const auto quoted = QRegularExpression::escape(name);
+    const QRegularExpression run(
+        QStringLiteral(R"((?:^|[\s;|&(!])(?:(?:ba|z|da|k|fi)?sh|python[0-9.]*|perl|ruby|node|lua|php|source|\.|exec|eval|chmod\s+\S*x\S*)\s[^\n;|&]*?(?<![A-Za-z0-9@._+-])%1(?![A-Za-z0-9@._+-]))"
+                       R"(|(?:^|[\s;|&("'])\./%1(?![A-Za-z0-9@._+-]))")
+            .arg(quoted),
+        QRegularExpression::MultilineOption);
+    return run.match(text).hasMatch();
+}
+
+void scanSources(const Parsed& parsed, const QString& text, Analysis& analysis) {
     static constexpr std::array STRONG = {"sha256sums", "sha512sums", "b2sums", "sha384sums", "sha224sums"};
     static constexpr std::array WEAK   = {"md5sums", "sha1sums", "cksums"};
     static const QRegularExpression vcsPrefix(QStringLiteral("^(git|svn|hg|bzr|fossil)\\+"));
@@ -404,6 +451,29 @@ void scanSources(const Parsed& parsed, Analysis& analysis) {
 
     auto names = parsed.arrays.keys();
     names.sort();
+
+    // makepkg treats a source as a detached signature when its stored name ends in .sig,
+    // .sign or .asc, and checks it against the source of the same name without that ending
+    static const QRegularExpression signature(QStringLiteral("\\.(sig|sign|asc)$"));
+    QSet<QString> stored;
+    for (const auto& name : std::as_const(names)) {
+        if (name == QLatin1String("source") || name.startsWith(QLatin1String("source_"))) {
+            for (const auto& entry : parsed.arrays[name].entries) {
+                stored << localName(expand(entry.value, parsed));
+            }
+        }
+    }
+    const auto isSignature = [&](const QString& local) {
+        const auto match = signature.match(local);
+        return match.hasMatch() && stored.contains(local.left(match.capturedStart()));
+    };
+    const auto isSigned = [&](const QString& local) {
+        return stored.contains(local + QLatin1String(".sig")) || stored.contains(local + QLatin1String(".sign"))
+            || stored.contains(local + QLatin1String(".asc"));
+    };
+    const bool hasKeys = !parsed.arrays.value(QStringLiteral("validpgpkeys")).entries.isEmpty();
+
+    QStringList plainLocal;
     for (const auto& name : std::as_const(names)) {
         if (name != QLatin1String("source") && !name.startsWith(QLatin1String("source_"))) {
             continue;
@@ -418,6 +488,7 @@ void scanSources(const Parsed& parsed, Analysis& analysis) {
         for (qsizetype i = 0; i < sources.size(); ++i) {
             const auto& entry = sources.at(i);
             auto spec         = expand(entry.value, parsed);
+            const auto local  = localName(spec);
             const auto rename = spec.indexOf(QLatin1String("::"));
             const auto scheme = spec.indexOf(QLatin1String("://"));
             if (rename > 0 && (scheme < 0 || rename < scheme)) {
@@ -431,8 +502,8 @@ void scanSources(const Parsed& parsed, Analysis& analysis) {
             const bool weak   = std::ranges::any_of(WEAK, [&](const char* a) { return checksum(a, i); });
 
             if (!remote) {
-                if (isPlainFileName(address) && isScriptFile(address) && !analysis.localFiles.contains(address)) {
-                    analysis.localFiles << address;
+                if (isPlainFileName(address) && !plainLocal.contains(address)) {
+                    plainLocal << address;
                 }
                 continue;
             }
@@ -466,32 +537,49 @@ void scanSources(const Parsed& parsed, Analysis& analysis) {
                 continue;
             }
 
-            // detached signatures are checked against validpgpkeys instead of a checksum
-            static const QRegularExpression signature(QStringLiteral("\\.(sig|asc|sign|minisig|gpg)([?#].*)?$"));
-            if (signature.match(address).hasMatch() || signature.match(expand(entry.value, parsed).section(QLatin1String("::"), 0, 0)).hasMatch()) {
+            // a detached signature needs no checksum of its own, and a source it signs is
+            // verified against validpgpkeys
+            if (isSignature(local)) {
                 continue;
             }
+            const bool verified = strong || (isSigned(local) && hasKeys);
 
             const bool plaintext = url.scheme() == QLatin1String("http") || url.scheme() == QLatin1String("ftp");
-            if (!strong && !weak) {
+            if (!verified && !weak) {
                 if (++unverified <= MAX_PER_RULE) {
                     analysis.findings << makeFinding("no-checksum", Severity::Warning, file, entry.line, tr("Download is not verified"),
                         plaintext ? tr("This file has no checksum and is fetched without encryption, so anybody on the network can replace it.")
                                   : tr("This file has no checksum (SKIP), so whatever the server sends is accepted."),
                         entry.value);
                 }
-            } else if (!strong) {
+            } else if (!verified) {
                 analysis.findings << makeFinding("weak-checksum", Severity::Info, file, entry.line, tr("Download is only verified with an outdated checksum"),
                     tr("MD5 and SHA-1 can be forged. Current packages use SHA-256 or BLAKE2."), entry.value);
             }
         }
     }
 
-    auto install = expand(parsed.scalars.value(QStringLiteral("install")), parsed);
-    if (!install.isEmpty() && isPlainFileName(install)) {
-        analysis.localFiles.removeAll(install);
-        analysis.localFiles.prepend(install);
+    for (const auto& name : std::as_const(plainLocal)) {
+        if (isScriptFile(name) || runsFile(text, name)) {
+            analysis.localFiles << name;
+        } else {
+            analysis.otherLocalFiles << name;
+        }
     }
+
+    // install scriptlets first, in the order of the PKGBUILD
+    QStringList installs;
+    for (const auto& value : parsed.installs) {
+        const auto install = expand(value, parsed);
+        if (!install.isEmpty() && isPlainFileName(install) && !installs.contains(install)) {
+            installs << install;
+        }
+    }
+    for (const auto& install : std::as_const(installs)) {
+        analysis.localFiles.removeAll(install);
+        analysis.otherLocalFiles.removeAll(install);
+    }
+    analysis.localFiles = installs + analysis.localFiles;
 }
 
 struct LogicalLine {
@@ -508,8 +596,9 @@ QList<LogicalLine> logicalLines(const QString& text) {
     for (int index = 0; index < lines.size(); ++index) {
         LogicalLine logical{index + 1, lines.at(index), stripComment(lines.at(index))};
         while (logical.code.endsWith(u'\\') && index + 1 < lines.size()) {
+            // like the shell: the backslash and the line break vanish, nothing is inserted
             logical.code.chop(1);
-            logical.code += u' ' + stripComment(lines.at(++index)).trimmed();
+            logical.code += stripComment(lines.at(++index));
         }
         if (!logical.code.trimmed().isEmpty()) {
             out << logical;
@@ -520,10 +609,52 @@ QList<LogicalLine> logicalLines(const QString& text) {
 
 /// Masks paths below the package and source directories, which a PKGBUILD is meant to write to.
 QString maskBuildPaths(const QString& code) {
-    static const QRegularExpression buildPath(QStringLiteral("[\"']?\\$\\{?(pkgdir|srcdir|startdir|_?builddir)\\}?[^\\s;|&)]*"));
+    // stops in front of a command substitution, which is code and not part of the path
+    static const QRegularExpression buildPath(QStringLiteral("[\"']?\\$\\{?(pkgdir|srcdir|startdir|_?builddir)\\}?(?:[^\\s;|&)$`]|\\$(?!\\())*"));
     auto out = code;
     out.replace(buildPath, QStringLiteral(" PKGPATH "));
     return out;
+}
+
+/// Whether a line consists of variable assignments only, with no command behind them.
+bool onlyAssigns(const QString& code) {
+    static const QRegularExpression name(QStringLiteral("\\G\\s*(?:(?:export|local|declare(?:\\s+-\\S+)*|readonly)\\s+)?[A-Za-z_][A-Za-z0-9_]*(?:\\[[^\\]]*\\])?\\+?="));
+    qsizetype i = 0;
+    bool any    = false;
+    while (true) {
+        const auto match = name.match(code, i);
+        if (!match.hasMatch()) {
+            return any && QStringView(code).mid(i).trimmed().isEmpty();
+        }
+        any = true;
+        i   = match.capturedEnd();
+        int depth = 0;
+        QChar quote;
+        for (; i < code.size(); ++i) {
+            const auto c = code.at(i);
+            if (!quote.isNull()) {
+                if (c == u'\\' && quote == u'"') {
+                    ++i;
+                } else if (c == quote) {
+                    quote = QChar();
+                }
+            } else if (c == u'\'' || c == u'"') {
+                quote = c;
+            } else if (c == u'\\') {
+                ++i;
+            } else if (c == u'(') {
+                ++depth;
+            } else if (c == u')' && depth > 0) {
+                --depth;
+            } else if (depth == 0 && (c.isSpace() || c == u';' || c == u'|' || c == u'&' || c == u'<' || c == u'>' || c == u')')) {
+                break;
+            }
+        }
+        // a value that is still open continues on the next line
+        if (!quote.isNull() || depth > 0) {
+            return true;
+        }
+    }
 }
 
 bool writesOutsidePackage(const QString& masked) {
@@ -555,11 +686,10 @@ Analysis scanPkgbuild(const QString& text) {
     const auto lines  = logicalLines(text);
     const auto parsed = parse(text, static_cast<int>(text.count(u'\n')) + 1);
 
-    scanSources(parsed, analysis);
+    scanSources(parsed, text, analysis);
 
     static const QRegularExpression functionStart(QStringLiteral("^\\s*(?:function\\s+)?([A-Za-z_][A-Za-z0-9_.+-]*)\\s*\\(\\s*\\)"));
-    static const QRegularExpression assignment(QStringLiteral("^\\s*(?:(?:export|local|declare(?:\\s+-\\S+)*|readonly)\\s+)?[A-Za-z_][A-Za-z0-9_]*\\+?="));
-    static const QRegularExpression plainArray(QStringLiteral("^\\s*(?:local\\s+)?[A-Za-z_][A-Za-z0-9_]*\\+?=\\([^$`]*\\)?\\s*$"));
+    static const QRegularExpression plainArray(QStringLiteral("^\\s*(?:local\\s+)?[A-Za-z_][A-Za-z0-9_]*\\+?=\\([^$`()]*\\)?\\s*$"));
     static const QRegularExpression homeAssigned(QStringLiteral("\\b(?:HOME|[A-Z_]+_HOME|GOPATH)="));
 
     QHash<QString, int> hits;
@@ -589,8 +719,7 @@ Analysis scanPkgbuild(const QString& text) {
         if (!inBody && !starts) {
             // Outside of functions only look at lines that execute something: descriptions
             // and option strings would otherwise match command names.
-            const bool assigns = assignment.match(code).hasMatch();
-            if (assigns && !substitution) {
+            if (onlyAssigns(code) && !substitution) {
                 continue;
             }
             if (substitution && ++topLevel <= MAX_PER_RULE) {
