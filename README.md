@@ -1,7 +1,8 @@
 # cachyos-packageinstaller
 
 A small app store for CachyOS: browse, install, remove and update packages from
-the CachyOS and Arch repositories, and build packages from the AUR.
+the CachyOS and Arch repositories, build packages from the AUR and install
+Flatpak apps.
 
 - **Repositories** are read directly through libalpm; nothing runs as root until
   you confirm an operation.
@@ -17,6 +18,12 @@ the CachyOS and Arch repositories, and build packages from the AUR.
   packages that have a newer version. Each update is reviewed like an install;
   "Review and update all" walks through the reviews and builds the accepted
   packages in one go.
+- **Flatpak** is opt-in as well and needs no extra build dependency: the app
+  reads the AppStream catalogue Flatpak keeps for its system-wide remotes and
+  runs the `flatpak` command to install (system-wide), remove and update apps.
+  Flatpak asks for permission itself. The Flatpak page lists the installed apps
+  and their updates; remotes other than Flathub are used if they are set up, but
+  are not managed here.
 - **PKGBUILD check**: the review page marks lines a reviewer should look at
   (see below). It is a reading aid and never declares a package safe.
 - **Appearance**: the settings page switches between colour themes (four of our
@@ -46,7 +53,7 @@ sudo pacman -S base-devel cmake ninja qt6-base qt6-declarative qt6-tools appstre
 
 Runtime: `qt6-declarative`, `appstream-qt`, `archlinux-appstream-data`, `polkit`,
 `kimageformats` (the Arch icon cache is JPEG XL). Optional: `paru` and `git` (AUR review and builds),
-`pacman-contrib` (`checkupdates`, to see updates without refreshing the system
+`flatpak` (Flatpak apps), `pacman-contrib` (`checkupdates`, to see updates without refreshing the system
 databases).
 
 ## Building
@@ -108,6 +115,7 @@ the package database, so they are only done in the app.
 | `src/iconprovider.*` | `image://pkgicon/<name>` icon lookup |
 | `src/packagemodel.*` | list model and search/category filter |
 | `src/aurclient.*` | AUR RPC search, details and PKGBUILD download |
+| `src/flatpakclient.*` | Flatpak catalogue, installed apps and updates |
 | `src/pkgscan.*` | static PKGBUILD and script check |
 | `src/scan/` | the `cachyos-pi-scan` command line tool |
 | `tests/` | unit tests for the check and for `pkglist.yaml` |
