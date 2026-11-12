@@ -10,7 +10,10 @@ the CachyOS and Arch repositories, and build packages from the AUR.
   Packages without AppStream data fall back to the icon theme and then to a
   generated tile, so every package has an icon.
 - **AUR** is opt-in. Search and PKGBUILD review happen in the app; building is
-  delegated to `paru`.
+  delegated to `paru`. Once enabled, the AUR page lists the installed AUR
+  packages that have a newer version. Each update is reviewed like an install;
+  "Review and update all" walks through the reviews and builds the accepted
+  packages in one go.
 - **PKGBUILD check**: the review page marks lines a reviewer should look at
   (see below). It is a reading aid and never declares a package safe.
 - **Privileges**: the GUI runs as the user. Package operations go through
@@ -21,7 +24,7 @@ the CachyOS and Arch repositories, and build packages from the AUR.
 
 Build:
 ```sh
-sudo pacman -S base-devel cmake ninja qt6-base qt6-declarative appstream-qt pacman
+sudo pacman -S base-devel cmake ninja qt6-base qt6-declarative qt6-tools appstream-qt pacman
 ```
 
 Runtime: `qt6-declarative`, `appstream-qt`, `archlinux-appstream-data`, `polkit`,
@@ -41,6 +44,17 @@ An uninstalled build can be run as `build/cachyos-pi`; without the installed
 helper it falls back to `pkexec pacman`.
 
 Run the tests with `ctest --test-dir build`.
+
+## Packaging
+
+`packaging/` holds two PKGBUILDs: `cachyos-packageinstaller` builds a tagged
+release, `cachyos-packageinstaller-git` the default branch. The release one
+needs its checksum filled in (`updpkgsums`) once the version is tagged.
+
+```sh
+cd packaging/cachyos-packageinstaller-git
+makepkg -si
+```
 
 ## PKGBUILD check
 
@@ -84,3 +98,5 @@ the package database, so they are only done in the app.
 | `src/helper/` | the pkexec helper |
 | `qml/` | the user interface |
 | `pkglist.yaml` | the curated "CachyOS picks" on the start page |
+| `org.cachyos.cachyos-pi.metainfo.xml` | AppStream metadata for software centres |
+| `packaging/` | PKGBUILDs |
