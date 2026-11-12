@@ -110,6 +110,7 @@ QList<Package> load(QString* dbPathOut, QString* error) {
 
     QList<Package> packages;
     QHash<QString, qsizetype> index;
+    QList<alpm_pkg_t*> candidates;  // the repository package behind each entry
 
     for (const auto& repo : repos) {
         alpm_db_t* db = alpm_register_syncdb(handle, repo.toUtf8().constData(), ALPM_SIG_USE_DEFAULT);
@@ -124,6 +125,7 @@ QList<Package> load(QString* dbPathOut, QString* error) {
             }
             index.insert(name, packages.size());
             packages << fromAlpm(pkg, repo);
+            candidates << pkg;
         }
     }
 
@@ -135,7 +137,9 @@ QList<Package> load(QString* dbPathOut, QString* error) {
         if (const auto found = index.constFind(name); found != index.cend()) {
             auto& p            = packages[*found];
             p.installedVersion = version;
-            p.ignored          = alpm_pkg_should_ignore(handle, pkg) != 0;
+            // like pacman: held back when the installed package or its update is ignored,
+            // which matters when a new version joins an ignored group
+            p.ignored          = alpm_pkg_should_ignore(handle, pkg) != 0 || alpm_pkg_should_ignore(handle, candidates.at(*found)) != 0;
             p.upgradable       = !p.ignored && alpm_pkg_vercmp(alpm_pkg_get_version(pkg), p.version.toUtf8().constData()) < 0;
         } else {
             auto p             = fromAlpm(pkg, QStringLiteral("local"));
