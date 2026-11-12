@@ -177,6 +177,12 @@ void Transaction::confirm() {
             QStringLiteral("--mode=pkgbuilds"),
             QStringLiteral("--aururl"), QStringLiteral("http://127.0.0.1:1"),
             QStringLiteral("--aurrpcurl"), QStringLiteral("http://127.0.0.1:1/rpc")};
+        // paru installs in several steps. Sent through our helper they fall under one polkit
+        // action that remembers the authentication, so the password is asked for once and
+        // not once per step as with a bare "pkexec pacman".
+        if (QFileInfo(helperPath()).isExecutable()) {
+            args << QStringLiteral("--sudoflags") << helperPath();
+        }
         args << m_directories;
         m_process.setWorkingDirectory(m_workingDirectory);
     } else if (QFileInfo(helperPath()).isExecutable()) {

@@ -24,7 +24,9 @@ the CachyOS and Arch repositories, and build packages from the AUR.
   `THIRD-PARTY.md`) and between light, dark and following the desktop.
 - **Privileges**: the GUI runs as the user. Package operations go through
   `cachyos-pi-helper`, a tiny pkexec helper that only accepts
-  `install`, `remove` and `upgrade`.
+  `install`, `remove` and `upgrade`, plus the three pacman calls paru makes to
+  install what it built. paru is started with the helper in place of sudo, so one
+  authentication covers a whole AUR build.
 
 ## Screenshots
 
