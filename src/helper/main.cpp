@@ -9,7 +9,9 @@
 // that one authentication covers a whole build instead of one per step.
 
 #include <algorithm>
+#include <climits>
 #include <cstdio>
+#include <cstdlib>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -40,15 +42,35 @@ bool validTarget(std::string_view target) {
     return validName(target.substr(0, slash)) && validName(target.substr(slash + 1));
 }
 
-/// An absolute path to a built package, without ".." and pointing at a regular file.
-bool validPackageFile(const char* path) {
-    const std::string_view text = path;
-    if (text.empty() || text.size() > 4096 || text.front() != '/' || text.find("/../") != std::string_view::npos
-        || text.find(".pkg.tar") == std::string_view::npos) {
-        return false;
+/// A built package: an absolute path to a regular file called "<something>.pkg.tar" with an
+/// optional compression ending. Links and ".." are resolved first and pacman is given the
+/// resolved path, so the file that was checked is the one that is named to pacman. The
+/// directory is not restricted, since makepkg puts packages where PKGDEST says.
+/// Returns the resolved path, or an empty string.
+std::string packageFile(const char* path) {
+    const std::string_view given = path;
+    if (given.empty() || given.size() >= PATH_MAX || given.front() != '/') {
+        return {};
     }
+    char resolved[PATH_MAX];
+    if (realpath(path, resolved) == nullptr) {
+        return {};
+    }
+    const std::string_view text = resolved;
+    const auto name   = text.substr(text.rfind('/') + 1);
+    const auto marker = name.rfind(".pkg.tar");
+    if (marker == std::string_view::npos || marker == 0) {
+        return {};
+    }
+    const auto ending = name.substr(marker + 8);  // "", ".zst", ".xz", ...
+    const bool plain  = ending.empty()
+        || (ending.size() > 1 && ending.front() == '.'
+            && std::ranges::all_of(ending.substr(1), [](char c) { return (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == 'Z'; }));
     struct stat info {};
-    return stat(path, &info) == 0 && S_ISREG(info.st_mode);
+    if (!plain || lstat(resolved, &info) != 0 || !S_ISREG(info.st_mode)) {
+        return {};
+    }
+    return std::string(text);
 }
 
 int usage() {
@@ -87,13 +109,17 @@ int pacmanForParu(int argc, char** argv, std::vector<std::string>& args) {
     }
     args.emplace_back("--");
     for (++i; i < argc; ++i) {
-        const bool valid = operation == "--upgrade" ? validPackageFile(argv[i])
-            : operation == "--sync" ? validTarget(argv[i]) : validName(argv[i]);
-        if (!valid) {
+        std::string target = argv[i];
+        if (operation == "--upgrade") {
+            target = packageFile(argv[i]);
+        } else if (!(operation == "--sync" ? validTarget(target) : validName(target))) {
+            target.clear();
+        }
+        if (target.empty()) {
             std::fprintf(stderr, "cachyos-pi-helper: invalid target '%s'\n", argv[i]);
             return 2;
         }
-        args.emplace_back(argv[i]);
+        args.push_back(std::move(target));
     }
     return 0;
 }
