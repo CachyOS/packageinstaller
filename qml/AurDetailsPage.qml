@@ -16,7 +16,28 @@ Flickable {
     readonly property var info: Backend.aur.details.name === item.name ? Backend.aur.details : item
     property bool reviewed: false
 
+    readonly property bool dangerous: Backend.aur.findings.some(f => f.severity === "danger")
+
     Component.onCompleted: Backend.aur.loadDetails(item.name, item.pkgbase)
+
+    function marksFor(file) {
+        return Backend.aur.findings.filter(f => f.file === file && f.line > 0)
+    }
+
+    // Scrolls the listing to the line a finding refers to.
+    function reveal(file, line) {
+        let view = file === "PKGBUILD" ? pkgbuildView : null
+        for (let i = 0; view === null && i < fileViews.count; ++i) {
+            if (fileViews.itemAt(i).modelData.name === file) {
+                view = fileViews.itemAt(i).view
+            }
+        }
+        if (view === null || line <= 0) {
+            return
+        }
+        const y = view.mapToItem(content, 0, view.lineY(line)).y + content.y
+        contentY = Math.max(0, Math.min(y - height / 3, contentHeight - height))
+    }
 
     contentWidth: width
     contentHeight: content.height + 2 * Look.pagePadding
@@ -171,6 +192,153 @@ Flickable {
             }
         }
 
+        // Automatic check
+        Column {
+            visible: Backend.aur.pkgbuild.length > 0
+            width: parent.width
+            spacing: 10
+
+            Text {
+                text: qsTr("Things to check")
+                color: Look.text
+                font.pixelSize: Look.fontTitle
+                font.weight: Font.DemiBold
+            }
+
+            Text {
+                width: parent.width
+                text: Backend.aur.findings.length > 0
+                    ? qsTr("An automatic check marked the points below. It only knows common tricks and cannot tell you that a package is safe, so read the script as well.")
+                    : qsTr("The automatic check found nothing unusual. It only knows common tricks and cannot tell you that a package is safe, so still read the script.")
+                color: Look.textMuted
+                font.pixelSize: Look.fontBody
+                wrapMode: Text.WordWrap
+            }
+
+            Rectangle {
+                visible: Backend.aur.findings.length > 0
+                width: parent.width
+                height: findingList.height
+                radius: Look.radius
+                color: Look.surface
+                border.width: 1
+                border.color: Look.border
+                clip: true
+
+                Column {
+                    id: findingList
+                    width: parent.width
+
+                    Repeater {
+                        model: Backend.aur.findings
+
+                        Rectangle {
+                            id: finding
+
+                            required property var modelData
+                            required property int index
+                            readonly property bool located: modelData.line > 0
+                            readonly property color ink: modelData.severity === "danger" ? Look.danger
+                                : modelData.severity === "warning" ? Look.warning : Look.arch
+
+                            width: findingList.width
+                            height: findingBody.height + 24
+                            color: findingHover.hovered && located ? Look.surfaceHover : "transparent"
+                            Accessible.role: located ? Accessible.Button : Accessible.StaticText
+                            Accessible.name: severityLabel.text + ": " + modelData.title + ". " + modelData.detail
+                            Accessible.onPressAction: root.reveal(modelData.file, modelData.line)
+
+                            Rectangle {
+                                visible: finding.index > 0
+                                x: 16
+                                width: parent.width - 32
+                                height: 1
+                                color: Look.border
+                            }
+
+                            Rectangle {
+                                id: severityPill
+                                x: 16
+                                y: 13
+                                width: 84
+                                height: 22
+                                radius: 11
+                                color: finding.modelData.severity === "danger" ? Look.dangerSoft
+                                    : finding.modelData.severity === "warning" ? Look.warningSoft : Look.archSoft
+
+                                Text {
+                                    id: severityLabel
+                                    anchors.centerIn: parent
+                                    text: finding.modelData.severity === "danger" ? qsTr("Dangerous")
+                                        : finding.modelData.severity === "warning" ? qsTr("Check") : qsTr("Note")
+                                    color: finding.ink
+                                    font.pixelSize: Look.fontSmall
+                                    font.weight: Font.DemiBold
+                                }
+                            }
+
+                            Column {
+                                id: findingBody
+                                anchors.left: severityPill.right
+                                anchors.leftMargin: 14
+                                anchors.right: parent.right
+                                anchors.rightMargin: 16
+                                y: 12
+                                spacing: 4
+
+                                Text {
+                                    width: parent.width
+                                    text: finding.modelData.title
+                                    color: Look.text
+                                    font.pixelSize: Look.fontBody
+                                    font.weight: Font.DemiBold
+                                    wrapMode: Text.WordWrap
+                                }
+
+                                Text {
+                                    width: parent.width
+                                    text: finding.modelData.detail
+                                    color: Look.textMuted
+                                    font.pixelSize: Look.fontBody
+                                    wrapMode: Text.WordWrap
+                                }
+
+                                Text {
+                                    visible: finding.located
+                                    width: parent.width
+                                    text: qsTr("%1, line %2").arg(finding.modelData.file).arg(finding.modelData.line) + "   " + finding.modelData.excerpt
+                                    color: finding.ink
+                                    font.family: "monospace"
+                                    font.pixelSize: Look.fontSmall
+                                    elide: Text.ElideRight
+                                }
+                            }
+
+                            HoverHandler {
+                                id: findingHover
+                                enabled: finding.located
+                                cursorShape: Qt.PointingHandCursor
+                            }
+
+                            TapHandler {
+                                enabled: finding.located
+                                onTapped: root.reveal(finding.modelData.file, finding.modelData.line)
+                            }
+                        }
+                    }
+                }
+            }
+
+            Text {
+                visible: Backend.aur.sourceHosts.length > 0
+                width: parent.width
+                text: qsTr("Downloads its sources from: %1").arg(Backend.aur.sourceHosts.join(", "))
+                color: Look.textMuted
+                font.pixelSize: Look.fontBody
+                wrapMode: Text.WordWrap
+            }
+        }
+
         // PKGBUILD review
         Column {
             width: parent.width
@@ -191,19 +359,17 @@ Flickable {
                 wrapMode: Text.WordWrap
             }
 
-            // Shown at full height: a nested vertical scroll area would swallow the wheel
-            // and make it easy to skip the end of the script.
-            Rectangle {
+            CodeView {
+                id: pkgbuildView
                 width: parent.width
-                height: Math.max(120, pkgbuildText.implicitHeight + 2)
-                radius: Look.radius
-                color: Look.surface
-                border.width: 1
-                border.color: Look.border
+                minimumHeight: 120
+                text: Backend.aur.pkgbuild
+                marks: root.marksFor("PKGBUILD")
+                accessibleName: qsTr("PKGBUILD")
 
                 BusyIndicator {
                     anchors.centerIn: parent
-                    visible: Backend.aur.loadingDetails
+                    visible: Backend.aur.loadingDetails && Backend.aur.pkgbuild.length === 0
                     running: visible
                 }
 
@@ -214,30 +380,46 @@ Flickable {
                     color: Look.textMuted
                     font.pixelSize: Look.fontBody
                 }
+            }
 
-                Flickable {
-                    anchors.fill: parent
-                    anchors.margins: 1
-                    clip: true
-                    contentWidth: pkgbuildText.implicitWidth
-                    contentHeight: height
-                    flickableDirection: Flickable.HorizontalFlick
-                    boundsBehavior: Flickable.StopAtBounds
+            // Install scriptlets, hooks and units run on the machine as well, some of them as root.
+            Repeater {
+                id: fileViews
+                model: Backend.aur.files
 
-                    ScrollBar.horizontal: ScrollBar {}
+                Column {
+                    id: fileSection
 
-                    TextEdit {
-                        id: pkgbuildText
-                        readOnly: true
-                        selectByMouse: true
-                        text: Backend.aur.pkgbuild
+                    required property var modelData
+                    readonly property alias view: fileView
+
+                    width: parent.width
+                    spacing: 10
+                    topPadding: 8
+
+                    Text {
+                        text: fileSection.modelData.name
                         color: Look.text
-                        selectionColor: Look.accent
-                        selectedTextColor: Look.onAccent
-                        font.family: "monospace"
-                        font.pixelSize: Look.fontSmall + 1
-                        padding: 14
-                        Accessible.name: qsTr("PKGBUILD")
+                        font.pixelSize: Look.fontTitle
+                        font.weight: Font.DemiBold
+                    }
+
+                    Text {
+                        width: parent.width
+                        text: fileSection.modelData.name.endsWith(".install")
+                            ? qsTr("This script runs as administrator when the package is installed, updated or removed.")
+                            : qsTr("This file is installed with the package and can start programs.")
+                        color: Look.textMuted
+                        font.pixelSize: Look.fontBody
+                        wrapMode: Text.WordWrap
+                    }
+
+                    CodeView {
+                        id: fileView
+                        width: parent.width
+                        text: fileSection.modelData.text
+                        marks: root.marksFor(fileSection.modelData.name)
+                        accessibleName: fileSection.modelData.name
                     }
                 }
             }
@@ -245,10 +427,11 @@ Flickable {
             CheckBox {
                 id: reviewBox
                 visible: !root.info.inRepos
-                enabled: Backend.aur.pkgbuild.length > 0
+                enabled: Backend.aur.pkgbuild.length > 0 && !Backend.aur.loadingDetails
                 checked: root.reviewed
                 onToggled: root.reviewed = checked
-                text: qsTr("I have read the PKGBUILD and trust it")
+                text: Backend.aur.files.length > 0 ? qsTr("I have read the PKGBUILD and the files above, and trust them")
+                    : qsTr("I have read the PKGBUILD and trust it")
 
                 contentItem: Text {
                     leftPadding: reviewBox.indicator.width + 10
@@ -282,7 +465,8 @@ Flickable {
                 implicitWidth: 190
                 implicitHeight: 42
                 visible: !root.info.inRepos
-                enabled: Backend.paruAvailable && root.reviewed && Backend.aur.pkgbuild.length > 0
+                enabled: Backend.paruAvailable && root.reviewed && Backend.aur.pkgbuild.length > 0 && !Backend.aur.loadingDetails
+                tone: root.dangerous ? "danger" : "primary"
                 text: root.info.installed ? qsTr("Rebuild and reinstall") : qsTr("Build and install")
                 onClicked: Backend.installFromAur(root.info.name)
             }
