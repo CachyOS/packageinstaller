@@ -9,8 +9,31 @@ ApplicationWindow {
     // "home", "browse", "installed", "updates" or "aur"
     property string section: "home"
 
+    // History for the back and forward buttons. Pages on top of a section live in the
+    // StackView (so the list below keeps its scroll position); `trail` remembers how each
+    // one was opened, `visited` the sections seen before, and `undone` what Back left.
+    property var trail: []
+    property var visited: []
+    property var undone: []
+    readonly property bool canGoBack: stack.depth > 1 || historyDepth > 0
+    property int historyDepth: 0
+    property int undoneDepth: 0
+
     function show(name) {
+        if (name !== section) {
+            visited.push(section);
+            if (visited.length > 50)
+                visited.shift();
+        }
+        undone = [];
+        showSection(name);
+    }
+
+    function showSection(name) {
         section = name;
+        trail = [];
+        historyDepth = visited.length;
+        undoneDepth = undone.length;
         if (name !== "browse" && name !== "installed" && name !== "aur")
             search.text = "";
         const page = name === "home" ? homePage : name === "updates" ? updatesPage : name === "aur" ? aurPage : browsePage;
@@ -18,8 +41,44 @@ ApplicationWindow {
             : name === "aur" ? {"query": search.text} : {});
     }
 
+    function openPage(component, properties) {
+        undone = [];
+        pushPage(component, properties);
+    }
+
+    function pushPage(component, properties) {
+        trail.push({"component": component, "properties": properties});
+        undoneDepth = undone.length;
+        stack.push(component, properties);
+    }
+
     function openPackage(name) {
-        stack.push(detailsPage, {"pkgName": name});
+        openPage(detailsPage, {"pkgName": name});
+    }
+
+    function back() {
+        if (stack.depth > 1) {
+            const page = trail.pop();
+            if (page !== undefined)
+                undone.push({"page": page});
+            undoneDepth = undone.length;
+            stack.pop();
+        } else if (visited.length > 0) {
+            undone.push({"section": section});
+            showSection(visited.pop());
+        }
+    }
+
+    function forward() {
+        const step = undone.pop();
+        if (step === undefined)
+            return;
+        if (step.page !== undefined) {
+            pushPage(step.page.component, step.page.properties);
+        } else {
+            visited.push(section);
+            showSection(step.section);
+        }
     }
 
     width: 1220
@@ -35,9 +94,19 @@ ApplicationWindow {
         onActivated: search.forceActiveFocus()
     }
     Shortcut {
-        sequences: [StandardKey.Back, "Escape"]
+        sequences: [StandardKey.Back]
+        enabled: root.canGoBack
+        onActivated: root.back()
+    }
+    Shortcut {
+        sequences: [StandardKey.Forward]
+        enabled: root.undoneDepth > 0
+        onActivated: root.forward()
+    }
+    Shortcut {
+        sequences: ["Escape"]
         enabled: stack.depth > 1
-        onActivated: stack.pop()
+        onActivated: root.back()
     }
 
     // Sidebar
@@ -154,8 +223,12 @@ ApplicationWindow {
             Accessible.name: placeholderText
 
             onTextEdited: {
-                if (stack.depth > 1)
+                root.undone = [];
+                root.undoneDepth = 0;
+                if (stack.depth > 1) {
+                    root.trail = [];
                     stack.pop(null);
+                }
                 if (root.section !== "browse" && root.section !== "installed" && root.section !== "aur")
                     root.show("browse");
                 else
@@ -226,14 +299,14 @@ ApplicationWindow {
     Component {
         id: aurPage
         AurPage {
-            onOpenAur: item => stack.push(aurDetailsPage, {"item": item})
-            onReviewAll: items => stack.push(aurDetailsPage, {"item": items[0], "queue": items, "updates": true})
+            onOpenAur: item => root.openPage(aurDetailsPage, {"item": item})
+            onReviewAll: items => root.openPage(aurDetailsPage, {"item": items[0], "queue": items, "updates": true})
         }
     }
     Component {
         id: detailsPage
         DetailsPage {
-            onBack: stack.pop()
+            onBack: root.back()
             onOpenPackage: name => root.openPackage(name)
             onShowUpdates: root.show("updates")
         }
@@ -241,8 +314,22 @@ ApplicationWindow {
     Component {
         id: aurDetailsPage
         AurDetailsPage {
-            onBack: stack.pop()
+            onBack: root.back()
             onOpenPackage: name => root.openPackage(name)
+        }
+    }
+
+    // The back and forward buttons of a mouse, anywhere in the window. Other buttons pass
+    // through, and a modal dialog covers this like everything else.
+    MouseArea {
+        anchors.fill: parent
+        z: 100
+        acceptedButtons: Qt.BackButton | Qt.ForwardButton
+        onPressed: mouse => {
+            if (mouse.button === Qt.BackButton)
+                root.back();
+            else
+                root.forward();
         }
     }
 
