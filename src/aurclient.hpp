@@ -3,12 +3,16 @@
 
 #include "pkgscan.hpp"
 
+#include <QDateTime>
 #include <QHash>
+#include <QLockFile>
 #include <QNetworkAccessManager>
 #include <QObject>
 #include <QVariantList>
 #include <QVariantMap>
 #include <QtQml/qqmlregistration.h>
+
+#include <memory>
 
 class PackageModel;
 
@@ -44,6 +48,7 @@ class AurClient : public QObject {
 
  public:
     explicit AurClient(const PackageModel* packages, QObject* parent = nullptr);
+    ~AurClient() override;
 
     [[nodiscard]] QVariantList results() const { return m_results; }
     [[nodiscard]] bool searching() const { return m_searching; }
@@ -106,7 +111,10 @@ class AurClient : public QObject {
     struct Checkout {
         QString directory;
         QString commit;
+        QByteArray digest;  ///< of the files as they were shown for review
+        QDateTime cloned;
     };
+    [[nodiscard]] bool intact(const Checkout& checkout) const;
 
     const PackageModel* m_packages;
     QNetworkAccessManager m_network;
@@ -114,7 +122,8 @@ class AurClient : public QObject {
     QVariantMap m_details;
     QString m_pkgbuild;
     QString m_revision;
-    QString m_cacheRoot;
+    QString m_cacheRoot;                     ///< checkouts of this window only
+    std::unique_ptr<QLockFile> m_cacheLock;  ///< held while the window lives
     int m_cloneCount = 0;
     QHash<QString, Checkout> m_checkouts;  ///< by package base, the most recent clone
     QHash<QString, QString> m_pkgbaseOf;   ///< package name -> package base

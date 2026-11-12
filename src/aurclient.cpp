@@ -2,7 +2,9 @@
 #include "aurclient.hpp"
 #include "packagemodel.hpp"
 
+#include <QCryptographicHash>
 #include <QDir>
+#include <QDirIterator>
 #include <QFile>
 #include <QFileInfo>
 #include <QFutureWatcher>
@@ -15,7 +17,10 @@
 #include <QSet>
 #include <QStandardPaths>
 #include <QUrlQuery>
+#include <QUuid>
 #include <QtConcurrent/QtConcurrentRun>
+
+#include <memory>
 
 namespace {
 
@@ -27,6 +32,8 @@ constexpr qint64 MAX_FILE_SIZE = 512 * 1024;
 constexpr qsizetype INFO_BATCH = 100;
 /// Packages a dependency plan may grow to before it is given up.
 constexpr qsizetype MAX_PLAN = 60;
+/// how long a checkout may be shown again for another package of the same recipe
+constexpr qint64 REUSE_SECONDS = 30 * 60;
 
 /// Package bases become directory names and part of an address.
 bool isPackageBase(const QString& name) {
@@ -47,6 +54,51 @@ QString headCommit(const QString& directory) {
     }
     static const QRegularExpression hash(QStringLiteral("^[0-9a-f]{40,64}$"));
     return hash.match(head).hasMatch() ? head : QString();
+}
+
+/// A digest over every file of a checkout (names, link targets and contents), without
+/// ".git". The commit alone does not show whether a file was edited after the review.
+/// Empty when the tree has grown beyond what a fresh clone holds, as after a build.
+QByteArray treeDigest(const QString& directory) {
+    constexpr qint64 MAX_BYTES = 16 * 1024 * 1024;
+    constexpr int MAX_ENTRIES  = 2000;
+
+    QStringList paths;
+    QDirIterator walk(directory, QDir::AllEntries | QDir::Hidden | QDir::System | QDir::NoDotAndDotDot, QDirIterator::Subdirectories);
+    const QDir root(directory);
+    while (walk.hasNext()) {
+        const auto relative = root.relativeFilePath(walk.next());
+        if (relative == QLatin1String(".git") || relative.startsWith(QLatin1String(".git/"))) {
+            continue;
+        }
+        paths << relative;
+        if (paths.size() > MAX_ENTRIES) {
+            return {};
+        }
+    }
+    paths.sort();
+
+    QCryptographicHash hash(QCryptographicHash::Sha256);
+    qint64 total = 0;
+    for (const auto& relative : std::as_const(paths)) {
+        const QFileInfo info(root.filePath(relative));
+        hash.addData(relative.toUtf8());
+        hash.addData(QByteArrayView("\0", 1));
+        if (info.isSymLink()) {
+            hash.addData("link:");
+            hash.addData(info.symLinkTarget().toUtf8());
+        } else if (info.isDir()) {
+            hash.addData("dir");
+        } else {
+            QFile file(info.filePath());
+            total += info.size();
+            if (total > MAX_BYTES || !file.open(QIODevice::ReadOnly) || !hash.addData(&file)) {
+                return {};
+            }
+        }
+        hash.addData(QByteArrayView("\0", 1));
+    }
+    return hash.result();
 }
 
 /// Text of a regular file inside a checkout; a link could point anywhere on the machine.
@@ -86,9 +138,35 @@ QStringList toStringList(const QJsonValue& value) {
 }  // namespace
 
 AurClient::AurClient(const PackageModel* packages, QObject* parent) : QObject(parent), m_packages(packages) {
-    // Checkouts only live as long as the review they belong to.
-    m_cacheRoot = QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QStringLiteral("/aur");
+    // Checkouts only live as long as the window they were reviewed in. Each window has a
+    // directory of its own and holds a lock for it, so that a second window does not delete
+    // what the first one is building; whatever no running window holds is left over.
+    const auto base = QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + QStringLiteral("/aur");
+    QDir().mkpath(base);
+    const auto entries = QDir(base).entryList(QDir::Dirs | QDir::NoDotAndDotDot);
+    for (const auto& entry : entries) {
+        const auto path = base + u'/' + entry;
+        QLockFile lock(path + QStringLiteral(".lock"));
+        lock.setStaleLockTime(0);  // only a lock whose process is gone counts as stale
+        if (lock.tryLock(0)) {
+            QDir(path).removeRecursively();
+            lock.unlock();
+        }
+    }
+    m_cacheRoot = base + u'/' + QUuid::createUuid().toString(QUuid::WithoutBraces);
+    m_cacheLock = std::make_unique<QLockFile>(m_cacheRoot + QStringLiteral(".lock"));
+    m_cacheLock->setStaleLockTime(0);
+    m_cacheLock->tryLock(0);
+    QDir().mkpath(m_cacheRoot);
+}
+
+AurClient::~AurClient() {
     QDir(m_cacheRoot).removeRecursively();
+}
+
+bool AurClient::intact(const Checkout& checkout) const {
+    return !checkout.commit.isEmpty() && !checkout.digest.isEmpty() && headCommit(checkout.directory) == checkout.commit
+        && treeDigest(checkout.directory) == checkout.digest;
 }
 
 void AurClient::setError(const QString& error) {
@@ -244,6 +322,20 @@ void AurClient::loadDetails(const QString& name, const QString& pkgbase) {
         return;
     }
     m_pkgbaseOf.insert(name, pkgbase);
+
+    // Packages built from one recipe share one checkout. When another of them was accepted
+    // a moment ago, show that same checkout: a new clone would invalidate the acceptance,
+    // and the two could then never be built together.
+    const auto existing = m_checkouts.value(pkgbase);
+    const bool sibling  = std::ranges::any_of(m_accepted.keys(), [&](const QString& other) {
+        return other != name && m_pkgbaseOf.value(other) == pkgbase && m_accepted.value(other) == existing.commit;
+    });
+    if (sibling && existing.cloned.secsTo(QDateTime::currentDateTimeUtc()) < REUSE_SECONDS && intact(existing)) {
+        m_revision = existing.commit;
+        readCheckout(existing.directory);
+        finishOne();
+        return;
+    }
     m_checkouts.remove(pkgbase);
     m_accepted.removeIf([&](const auto& entry) { return m_pkgbaseOf.value(entry.key()) == pkgbase; });
 
@@ -276,8 +368,9 @@ void AurClient::loadDetails(const QString& name, const QString& pkgbase) {
         connect(detach, &QProcess::finished, this, [this, detach, pkgbase, directory, generation, finishOne] {
             detach->deleteLater();
             const auto commit = headCommit(directory);
-            if (generation == m_detailsGeneration && !commit.isEmpty()) {
-                m_checkouts.insert(pkgbase, {directory, commit});
+            const auto digest = treeDigest(directory);
+            if (generation == m_detailsGeneration && !commit.isEmpty() && !digest.isEmpty()) {
+                m_checkouts.insert(pkgbase, {directory, commit, digest, QDateTime::currentDateTimeUtc()});
                 m_revision = commit;
                 readCheckout(directory);
             }
@@ -339,86 +432,103 @@ void AurClient::resolve(const QStringList& names) {
 }
 
 void AurClient::resolveNext(const QStringList& wanted, const QHash<QString, QStringList>& wantedBy, int generation) {
-    QUrl url(QStringLiteral("%1/rpc/v5/info").arg(QLatin1String(AUR_HOST)));
-    QUrlQuery query;
-    for (const auto& name : wanted.mid(0, INFO_BATCH)) {
-        query.addQueryItem(QStringLiteral("arg[]"), QString::fromLatin1(QUrl::toPercentEncoding(name)));
-    }
-    url.setQuery(query);
-
-    auto* reply = m_network.get(request(url));
-    connect(reply, &QNetworkReply::finished, this, [this, reply, wanted, wantedBy, generation] {
-        reply->deleteLater();
-        if (generation != m_planGeneration) {
-            return;
-        }
-        const auto json = QJsonDocument::fromJson(reply->readAll()).object();
-        if (reply->error() != QNetworkReply::NoError || json.value(QLatin1String("type")).toString() != QLatin1String("multiinfo")
-            || !json.value(QLatin1String("results")).isArray()) {
-            m_problems << tr("The AUR could not be asked about dependencies, so nothing can be built right now.");
-            // nothing is known about these packages, which blocks them in blockedReason()
-            m_planInfo.clear();
-            finishResolve();
-            return;
-        }
-
+    // the AUR answers for a limited number of names at once, so ask in batches
+    struct Lookup {
+        int pending = 0;
+        bool failed = false;
         QHash<QString, QStringList> dependsOf;
         QSet<QString> all;
-        for (const auto& item : json.value(QLatin1String("results")).toArray()) {
-            const auto map  = toMap(item.toObject());
-            const auto name = map.value(QStringLiteral("name")).toString();
-            m_planInfo.insert(name, map);
-            m_pkgbaseOf.insert(name, map.value(QStringLiteral("pkgbase")).toString());
-            auto& depends = dependsOf[name];
-            for (const char* key : {"depends", "makeDepends", "checkDepends"}) {
-                depends += map.value(QLatin1String(key)).toStringList();
-            }
-            all += QSet<QString>(depends.cbegin(), depends.cend());
-        }
-        // asked for, but not a package in the AUR
-        for (const auto& name : wanted) {
-            if (!m_planInfo.contains(name)) {
-                for (const auto& package : wantedBy.value(name, {name})) {
-                    m_unresolved[package] << name;
-                }
-            }
-        }
+    };
+    const auto lookup = std::make_shared<Lookup>();
 
-        auto* watcher = new QFutureWatcher<QStringList>(this);
-        connect(watcher, &QFutureWatcher<QStringList>::finished, this, [this, watcher, dependsOf, generation] {
-            watcher->deleteLater();
+    for (qsizetype first = 0; first < wanted.size(); first += INFO_BATCH) {
+        QUrl url(QStringLiteral("%1/rpc/v5/info").arg(QLatin1String(AUR_HOST)));
+        QUrlQuery query;
+        for (const auto& name : wanted.mid(first, INFO_BATCH)) {
+            query.addQueryItem(QStringLiteral("arg[]"), QString::fromLatin1(QUrl::toPercentEncoding(name)));
+        }
+        url.setQuery(query);
+
+        ++lookup->pending;
+        auto* reply = m_network.get(request(url));
+        connect(reply, &QNetworkReply::finished, this, [this, reply, lookup, wanted, wantedBy, generation] {
+            reply->deleteLater();
             if (generation != m_planGeneration) {
                 return;
             }
-            const auto result = watcher->result();
-            const QSet<QString> missing(result.cbegin(), result.cend());
-            QHash<QString, QStringList> next;
-            for (auto it = dependsOf.cbegin(); it != dependsOf.cend(); ++it) {
-                for (const auto& depend : it.value()) {
-                    const auto name = dependName(depend);
-                    if (!missing.contains(depend) || name == it.key()) {
-                        continue;
-                    }
-                    if (!m_needs[it.key()].contains(name)) {
-                        m_needs[it.key()] << name;
-                    }
-                    if (!m_planInfo.contains(name) && !next[name].contains(it.key())) {
-                        next[name] << it.key();
+            const auto json = QJsonDocument::fromJson(reply->readAll()).object();
+            if (reply->error() != QNetworkReply::NoError || json.value(QLatin1String("type")).toString() != QLatin1String("multiinfo")
+                || !json.value(QLatin1String("results")).isArray()) {
+                lookup->failed = true;
+            }
+            for (const auto& item : json.value(QLatin1String("results")).toArray()) {
+                const auto map  = toMap(item.toObject());
+                const auto name = map.value(QStringLiteral("name")).toString();
+                m_planInfo.insert(name, map);
+                m_pkgbaseOf.insert(name, map.value(QStringLiteral("pkgbase")).toString());
+                auto& depends = lookup->dependsOf[name];
+                for (const char* key : {"depends", "makeDepends", "checkDepends"}) {
+                    depends += map.value(QLatin1String(key)).toStringList();
+                }
+                lookup->all += QSet<QString>(depends.cbegin(), depends.cend());
+            }
+            if (--lookup->pending > 0) {
+                return;
+            }
+            if (lookup->failed) {
+                m_problems << tr("The AUR could not be asked about dependencies, so nothing can be built right now.");
+                // nothing is known about these packages, which blocks them in blockedReason()
+                m_planInfo.clear();
+                finishResolve();
+                return;
+            }
+            const auto dependsOf = lookup->dependsOf;
+            const auto all       = lookup->all;
+            // asked for, but not a package in the AUR
+            for (const auto& name : wanted) {
+                if (!m_planInfo.contains(name)) {
+                    for (const auto& package : wantedBy.value(name, {name})) {
+                        m_unresolved[package] << name;
                     }
                 }
             }
-            if (next.isEmpty()) {
-                finishResolve();
-            } else if (m_planInfo.size() + next.size() > MAX_PLAN) {
-                m_problems << tr("These packages need more than %1 other AUR packages, which is too many to review here.").arg(MAX_PLAN);
-                m_planInfo.clear();
-                finishResolve();
-            } else {
-                resolveNext(next.keys(), next, generation);
-            }
+
+            auto* watcher = new QFutureWatcher<QStringList>(this);
+            connect(watcher, &QFutureWatcher<QStringList>::finished, this, [this, watcher, dependsOf, generation] {
+                watcher->deleteLater();
+                if (generation != m_planGeneration) {
+                    return;
+                }
+                const auto result = watcher->result();
+                const QSet<QString> missing(result.cbegin(), result.cend());
+                QHash<QString, QStringList> next;
+                for (auto it = dependsOf.cbegin(); it != dependsOf.cend(); ++it) {
+                    for (const auto& depend : it.value()) {
+                        const auto name = dependName(depend);
+                        if (!missing.contains(depend) || name == it.key()) {
+                            continue;
+                        }
+                        if (!m_needs[it.key()].contains(name)) {
+                            m_needs[it.key()] << name;
+                        }
+                        if (!m_planInfo.contains(name) && !next[name].contains(it.key())) {
+                            next[name] << it.key();
+                        }
+                    }
+                }
+                if (next.isEmpty()) {
+                    finishResolve();
+                } else if (m_planInfo.size() + next.size() > MAX_PLAN) {
+                    m_problems << tr("These packages need more than %1 other AUR packages, which is too many to review here.").arg(MAX_PLAN);
+                    m_planInfo.clear();
+                    finishResolve();
+                } else {
+                    resolveNext(next.keys(), next, generation);
+                }
+            });
+            watcher->setFuture(QtConcurrent::run(alpmdb::unsatisfied, QStringList(all.cbegin(), all.cend())));
         });
-        watcher->setFuture(QtConcurrent::run(alpmdb::unsatisfied, QStringList(all.cbegin(), all.cend())));
-    });
+    }
 }
 
 void AurClient::finishResolve() {
@@ -487,7 +597,8 @@ QString AurClient::blockedReason(const QStringList& names) const {
         }
         const auto checkout = m_checkouts.value(m_pkgbaseOf.value(name));
         const auto accepted = m_accepted.value(name);
-        if (accepted.isEmpty() || checkout.commit != accepted || headCommit(checkout.directory) != accepted) {
+        // the commit and every file have to be what was on screen during the review
+        if (accepted.isEmpty() || checkout.commit != accepted || !intact(checkout)) {
             return tr("%1 has to be reviewed again.").arg(name);
         }
     }
