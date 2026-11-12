@@ -56,6 +56,7 @@
 #include <QMenu>
 #include <QMessageBox>
 #include <QProgressBar>
+#include <QRegularExpression>
 #include <QScreen>
 #include <QScrollBar>
 #include <QShortcut>
@@ -1403,7 +1404,15 @@ void MainWindow::displayPackageInfo(const QTreeWidgetItem* item) {
     }
     msg += "\n\n" + detail_list.at(detail_list.size() - 2);  // add info about space needed/freed
 
-    QMessageBox info(QMessageBox::NoIcon, tr("Package info"), msg, QMessageBox::Close);
+    // show the text as rich text to make URLs clickable, keeping pacman's line layout
+    static const QRegularExpression url_regex(R"((https?://[^\s<]+))");
+    auto rich_msg = msg.toHtmlEscaped();
+    rich_msg.replace(url_regex, R"(<a href="\1">\1</a>)");
+    rich_msg = R"(<p style="white-space: pre-wrap">)" + rich_msg + "</p>";
+
+    QMessageBox info(QMessageBox::NoIcon, tr("Package info"), rich_msg, QMessageBox::Close);
+    info.setTextFormat(Qt::RichText);
+    info.setTextInteractionFlags(Qt::TextBrowserInteraction);
     info.setDetailedText(details);
 
     // make it wider
