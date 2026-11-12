@@ -33,6 +33,8 @@ class Backend : public QObject {
     Q_PROPERTY(bool checkingUpdates READ checkingUpdates NOTIFY checkingUpdatesChanged)
     Q_PROPERTY(bool aurEnabled READ aurEnabled WRITE setAurEnabled NOTIFY aurEnabledChanged)
     Q_PROPERTY(bool paruAvailable READ paruAvailable CONSTANT)
+    Q_PROPERTY(QString theme READ theme WRITE setTheme NOTIFY themeChanged)
+    Q_PROPERTY(QString colorMode READ colorMode WRITE setColorMode NOTIFY colorModeChanged)
     Q_PROPERTY(QString version READ version CONSTANT)
 
  public:
@@ -52,6 +54,12 @@ class Backend : public QObject {
     [[nodiscard]] bool aurEnabled() const { return m_aurEnabled; }
     void setAurEnabled(bool enabled);
     [[nodiscard]] bool paruAvailable() const { return m_paruAvailable; }
+    /// Name of the colour theme; qml/Look.qml knows the palettes.
+    [[nodiscard]] QString theme() const { return m_theme; }
+    void setTheme(const QString& theme);
+    /// "system", "light" or "dark".
+    [[nodiscard]] QString colorMode() const { return m_colorMode; }
+    void setColorMode(const QString& mode);
     [[nodiscard]] QString version() const { return QStringLiteral(PI_VERSION); }
 
     /// Re-reads the pacman databases and the AppStream catalog in the background.
@@ -72,6 +80,8 @@ class Backend : public QObject {
     void revisionChanged();
     void checkingUpdatesChanged();
     void aurEnabledChanged();
+    void themeChanged();
+    void colorModeChanged();
 
  private:
     void onLoaded();
@@ -106,5 +116,7 @@ class Backend : public QObject {
     bool m_checkingUpdates = false;
     bool m_checkOutdated   = false;  ///< the databases were reloaded while checkupdates was running
     bool m_aurEnabled      = false;
+    QString m_theme;
+    QString m_colorMode;
     bool m_paruAvailable   = false;
 };

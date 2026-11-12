@@ -33,9 +33,9 @@ Flickable {
             radius: Look.radius + 4
             gradient: Gradient {
                 orientation: Gradient.Horizontal
-                GradientStop { position: 0; color: "#0b7f6f" }
-                GradientStop { position: 0.55; color: "#10a48d" }
-                GradientStop { position: 1; color: "#1c6fb8" }
+                GradientStop { position: 0; color: Look.heroStart }
+                GradientStop { position: 0.55; color: Look.heroMiddle }
+                GradientStop { position: 1; color: Look.heroEnd }
             }
 
             Image {
@@ -44,7 +44,7 @@ Flickable {
                 anchors.verticalCenter: parent.verticalCenter
                 width: 132
                 height: 132
-                source: "icons/cachyos-pi.png"
+                source: Look.heroImage
                 sourceSize: Qt.size(264, 264)
                 opacity: 0.92
                 visible: parent.width > 620
@@ -61,7 +61,7 @@ Flickable {
                     textFormat: Text.PlainText
                     width: parent.width
                     text: qsTr("Software for CachyOS")
-                    color: "white"
+                    color: Look.heroText
                     font.pixelSize: Look.fontHero
                     font.weight: Font.Bold
                     wrapMode: Text.WordWrap
@@ -71,7 +71,7 @@ Flickable {
                     textFormat: Text.PlainText
                     width: parent.width
                     text: qsTr("Optimised packages from the CachyOS and Arch repositories, plus the AUR when you want it.")
-                    color: "#e6fffa"
+                    color: Look.heroSub
                     font.pixelSize: Look.fontBody + 1
                     wrapMode: Text.WordWrap
                 }
@@ -86,13 +86,13 @@ Flickable {
                         onClicked: root.browse()
                         background: Rectangle {
                             radius: height / 2
-                            color: heroButton.hovered ? "#ffffff" : "#eafffb"
+                            color: heroButton.hovered ? Look.heroButtonHover : Look.heroButton
                         }
                         contentItem: Text {
                             textFormat: Text.PlainText
                             text: heroButton.text
                             font: heroButton.font
-                            color: "#075f53"
+                            color: Look.heroInk
                             horizontalAlignment: Text.AlignHCenter
                             verticalAlignment: Text.AlignVCenter
                         }

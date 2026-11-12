@@ -6,7 +6,7 @@ import CachyOS.PackageInstaller
 ApplicationWindow {
     id: root
 
-    // "home", "browse", "installed", "updates" or "aur"
+    // "home", "browse", "installed", "updates", "aur" or "settings"
     property string section: "home"
 
     // History for the back and forward buttons. Pages on top of a section live in the
@@ -36,7 +36,8 @@ ApplicationWindow {
         undoneDepth = undone.length;
         if (name !== "browse" && name !== "installed" && name !== "aur")
             search.text = "";
-        const page = name === "home" ? homePage : name === "updates" ? updatesPage : name === "aur" ? aurPage : browsePage;
+        const page = name === "home" ? homePage : name === "updates" ? updatesPage : name === "aur" ? aurPage
+            : name === "settings" ? settingsPage : browsePage;
         stack.replace(null, page, name === "browse" || name === "installed" ? {"installedOnly": name === "installed", "query": search.text}
             : name === "aur" ? {"query": search.text} : {});
     }
@@ -195,7 +196,19 @@ ApplicationWindow {
             }
         }
 
+        NavButton {
+            x: 12
+            width: parent.width - 24
+            anchors.bottom: versionText.top
+            anchors.bottomMargin: 10
+            text: qsTr("Settings")
+            glyph: "M4 7h9M17 7h3M4 17h3M11 17h9M15 4.5v5M9 14.5v5"
+            current: root.section === "settings"
+            onClicked: root.show("settings")
+        }
+
         Text {
+            id: versionText
             textFormat: Text.PlainText
             x: 18
             anchors.bottom: parent.bottom
@@ -302,6 +315,10 @@ ApplicationWindow {
             onOpenAur: item => root.openPage(aurDetailsPage, {"item": item})
             onReviewAll: items => root.openPage(aurDetailsPage, {"item": items[0], "queue": items, "updates": true})
         }
+    }
+    Component {
+        id: settingsPage
+        SettingsPage {}
     }
     Component {
         id: detailsPage

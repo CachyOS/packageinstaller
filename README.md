@@ -19,6 +19,8 @@ the CachyOS and Arch repositories, and build packages from the AUR.
   packages in one go.
 - **PKGBUILD check**: the review page marks lines a reviewer should look at
   (see below). It is a reading aid and never declares a package safe.
+- **Appearance**: the settings page switches between four colour themes and
+  between light, dark and following the desktop.
 - **Privileges**: the GUI runs as the user. Package operations go through
   `cachyos-pi-helper`, a tiny pkexec helper that only accepts
   `install`, `remove` and `upgrade`.

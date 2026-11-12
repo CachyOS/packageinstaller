@@ -3,21 +3,33 @@
 #include "iconprovider.hpp"
 
 #include <QFile>
+#include <QGuiApplication>
 #include <QLocale>
 #include <QQmlEngine>
 #include <QSettings>
 #include <QStandardPaths>
+#include <QStyleHints>
 #include <QtConcurrent/QtConcurrentRun>
 
 namespace {
 Backend* s_instance = nullptr;
+
+void applyColorMode(const QString& mode) {
+    const auto scheme = mode == QLatin1String("light") ? Qt::ColorScheme::Light
+        : mode == QLatin1String("dark") ? Qt::ColorScheme::Dark
+        : Qt::ColorScheme::Unknown;  // follow the desktop
+    QGuiApplication::styleHints()->setColorScheme(scheme);
 }
+}  // namespace
 
 Backend::Backend(IconProvider* icons, QObject* parent)
   : QObject(parent), m_aur(&m_packages), m_icons(icons) {
     s_instance      = this;
     m_aurEnabled    = QSettings().value(QStringLiteral("aur/enabled"), false).toBool();
     m_paruAvailable = !QStandardPaths::findExecutable(QStringLiteral("paru")).isEmpty();
+    m_theme         = QSettings().value(QStringLiteral("appearance/theme"), QStringLiteral("classic")).toString();
+    m_colorMode     = QSettings().value(QStringLiteral("appearance/mode"), QStringLiteral("system")).toString();
+    applyColorMode(m_colorMode);
 
     connect(&m_watcher, &QFutureWatcher<LoadResult>::finished, this, &Backend::onLoaded);
     connect(&m_transaction, &Transaction::finished, this, [this](bool) { reload(); });
@@ -68,6 +80,25 @@ Backend::Backend(IconProvider* icons, QObject* parent)
 Backend* Backend::create(QQmlEngine* /*qmlEngine*/, QJSEngine* /*jsEngine*/) {
     QQmlEngine::setObjectOwnership(s_instance, QQmlEngine::CppOwnership);
     return s_instance;
+}
+
+void Backend::setTheme(const QString& theme) {
+    if (theme == m_theme) {
+        return;
+    }
+    m_theme = theme;
+    QSettings().setValue(QStringLiteral("appearance/theme"), theme);
+    emit themeChanged();
+}
+
+void Backend::setColorMode(const QString& mode) {
+    if (mode == m_colorMode) {
+        return;
+    }
+    m_colorMode = mode;
+    QSettings().setValue(QStringLiteral("appearance/mode"), mode);
+    applyColorMode(mode);
+    emit colorModeChanged();
 }
 
 void Backend::setAurEnabled(bool enabled) {
