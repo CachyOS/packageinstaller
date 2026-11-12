@@ -24,6 +24,14 @@ Backend::Backend(IconProvider* icons, QObject* parent)
     connect(&m_checkUpdates, &QProcess::finished, this, [this](int exitCode, QProcess::ExitStatus status) {
         m_checkingUpdates = false;
         emit checkingUpdatesChanged();
+        if (m_checkOutdated) {
+            // started before the last reload: its answer may name packages that were updated since
+            m_checkOutdated = false;
+            if (!m_loading) {
+                checkUpdates();
+            }
+            return;
+        }
         // checkupdates: 0 = updates listed, 2 = no updates, anything else = failure (keep the local view)
         if (status != QProcess::NormalExit || (exitCode != 0 && exitCode != 2) || m_loading) {
             return;
@@ -116,6 +124,7 @@ void Backend::onLoaded() {
 
 void Backend::checkUpdates() {
     if (m_checkUpdates.state() != QProcess::NotRunning) {
+        m_checkOutdated = true;
         return;
     }
     const auto program = QStandardPaths::findExecutable(QStringLiteral("checkupdates"));

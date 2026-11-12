@@ -320,8 +320,10 @@ void AurClient::checkUpdates() {
             --m_updateRequests;
             if (generation == m_updatesGeneration) {
                 --m_updatesPending;
+                // a captive portal or an error page can answer with status 200 as well
                 const auto json = QJsonDocument::fromJson(reply->readAll()).object();
-                if (reply->error() != QNetworkReply::NoError || json.value(QLatin1String("type")).toString() == QLatin1String("error")) {
+                if (reply->error() != QNetworkReply::NoError || json.value(QLatin1String("type")).toString() != QLatin1String("multiinfo")
+                    || !json.value(QLatin1String("results")).isArray()) {
                     m_updatesFailed = true;
                 }
                 for (const auto& item : json.value(QLatin1String("results")).toArray()) {

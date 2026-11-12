@@ -104,6 +104,7 @@ class Backend : public QObject {
     bool m_loading         = false;
     bool m_reloadQueued    = false;
     bool m_checkingUpdates = false;
+    bool m_checkOutdated   = false;  ///< the databases were reloaded while checkupdates was running
     bool m_aurEnabled      = false;
     bool m_paruAvailable   = false;
 };
