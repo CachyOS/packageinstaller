@@ -90,6 +90,54 @@ ApplicationWindow {
     title: qsTr("CachyOS Package Installer")
     color: Look.window
 
+    // The page that scrolls up and down, for the keyboard: the page itself or the list in it.
+    function pageScroller() {
+        const page = stack.currentItem;
+        if (page instanceof Flickable)
+            return page;
+        for (const child of page?.children ?? []) {
+            if (child instanceof Flickable && child.visible && child.flickableDirection !== Flickable.HorizontalFlick)
+                return child;
+        }
+        return null;
+    }
+
+    function scrollPage(pages) {
+        const view = pageScroller();
+        if (view === null || view.contentHeight <= view.height)
+            return;
+        const top = view.originY;
+        view.contentY = Math.max(top, Math.min(view.contentY + pages * (view.height - 60), top + view.contentHeight - view.height));
+    }
+
+    // Moving through the controls with Tab must not leave the focus outside the visible
+    // part of a page. A click does not scroll: what was clicked is on screen already.
+    onActiveFocusItemChanged: {
+        const item = activeFocusItem;
+        if (!item || (item.focusReason !== Qt.TabFocusReason && item.focusReason !== Qt.BacktabFocusReason))
+            return;
+        for (let parent = item.parent; parent; parent = parent.parent) {
+            if (!(parent instanceof Flickable) || parent.contentHeight <= parent.height)
+                continue;
+            const top = item.mapToItem(parent.contentItem, 0, 0).y;
+            const bottom = top + item.height;
+            const last = parent.originY + parent.contentHeight - parent.height;
+            if (top - 16 < parent.contentY)
+                parent.contentY = Math.max(parent.originY, top - 16);
+            else if (bottom + 16 > parent.contentY + parent.height)
+                parent.contentY = Math.min(last, bottom + 16 - parent.height);
+            break;
+        }
+    }
+
+    Shortcut {
+        sequences: [StandardKey.MoveToNextPage]
+        onActivated: root.scrollPage(1)
+    }
+    Shortcut {
+        sequences: [StandardKey.MoveToPreviousPage]
+        onActivated: root.scrollPage(-1)
+    }
     Shortcut {
         sequences: [StandardKey.Find, "Ctrl+K"]
         onActivated: search.forceActiveFocus()
