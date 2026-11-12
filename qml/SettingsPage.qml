@@ -270,5 +270,108 @@ Flickable {
                 }
             }
         }
+        // AUR
+        Column {
+            width: parent.width
+            spacing: 10
+
+            Text {
+                textFormat: Text.PlainText
+                text: qsTr("Sources")
+                color: Look.text
+                font.pixelSize: Look.fontTitle
+                font.weight: Font.DemiBold
+            }
+
+            Rectangle {
+                width: Math.min(parent.width, 914)
+                height: aurText.height + 32
+                radius: Look.radius
+                color: Look.surface
+                border.width: 1
+                border.color: Look.border
+
+                Column {
+                    id: aurText
+                    x: 18
+                    y: 16
+                    width: parent.width - 36 - aurSwitch.width - 18
+                    spacing: 4
+
+                    Text {
+                        textFormat: Text.PlainText
+                        text: qsTr("Arch User Repository (AUR)")
+                        color: Look.text
+                        font.pixelSize: Look.fontBody + 1
+                        font.weight: Font.DemiBold
+                    }
+
+                    Text {
+                        textFormat: Text.PlainText
+                        width: parent.width
+                        text: qsTr("Build recipes written by the community. They are not reviewed by CachyOS, are built on your machine and can run any code while doing so, so read the PKGBUILD before installing.")
+                        color: Look.textMuted
+                        font.pixelSize: Look.fontSmall + 1
+                        lineHeight: 1.25
+                        wrapMode: Text.WordWrap
+                    }
+
+                    Text {
+                        textFormat: Text.PlainText
+                        visible: !Backend.paruAvailable
+                        width: parent.width
+                        text: qsTr("Building AUR packages needs “paru”, which is not installed. You can still search and review packages.")
+                        color: Look.warning
+                        font.pixelSize: Look.fontSmall + 1
+                        wrapMode: Text.WordWrap
+                    }
+                }
+
+                AbstractButton {
+                    id: aurSwitch
+                    anchors.right: parent.right
+                    anchors.rightMargin: 18
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: 46
+                    height: 26
+                    // follows the setting instead of keeping a state of its own
+                    readonly property bool active: Backend.aurEnabled
+
+                    Accessible.role: Accessible.CheckBox
+                    Accessible.name: qsTr("Arch User Repository (AUR)")
+                    Accessible.checkable: true
+                    Accessible.checked: active
+                    onClicked: Backend.aurEnabled = !Backend.aurEnabled
+
+                    HoverHandler {
+                        cursorShape: Qt.PointingHandCursor
+                    }
+
+                    background: Rectangle {
+                        radius: height / 2
+                        color: aurSwitch.active ? Look.accent : Look.surfaceAlt
+                        border.width: aurSwitch.visualFocus ? 2 : 1
+                        border.color: aurSwitch.visualFocus ? Look.text : (aurSwitch.active ? Look.accent : Look.border)
+
+                        Behavior on color {
+                            ColorAnimation { duration: 120 }
+                        }
+
+                        Rectangle {
+                            x: aurSwitch.active ? parent.width - width - 4 : 4
+                            anchors.verticalCenter: parent.verticalCenter
+                            width: 18
+                            height: 18
+                            radius: 9
+                            color: aurSwitch.active ? Look.onAccent : Look.textMuted
+
+                            Behavior on x {
+                                NumberAnimation { duration: 120; easing.type: Easing.OutCubic }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 }

@@ -13,6 +13,7 @@ Item {
     signal openAur(var item)
     // Review several packages one after the other, then build them together.
     signal reviewAll(var items)
+    signal openSettings
 
     onQueryChanged: debounce.restart()
     Component.onCompleted: if (Backend.aurEnabled) Backend.aur.search(query)
@@ -23,71 +24,44 @@ Item {
         onTriggered: if (Backend.aurEnabled) Backend.aur.search(root.query)
     }
 
-    // Opt-in
-    Rectangle {
+    // Turned off: the switch lives on the settings page
+    Column {
         visible: !Backend.aurEnabled
         anchors.centerIn: parent
-        width: Math.min(parent.width - 2 * Look.pagePadding, 620)
-        height: optIn.height + 56
-        radius: Look.radius + 2
-        color: Look.surface
-        border.width: 1
-        border.color: Look.border
+        width: Math.min(parent.width - 2 * Look.pagePadding, 520)
+        spacing: 12
 
-        Column {
-            id: optIn
-            x: 28
-            y: 28
-            width: parent.width - 56
-            spacing: 14
+        Glyph {
+            anchors.horizontalCenter: parent.horizontalCenter
+            size: 40
+            color: Look.textMuted
+            path: "M12 3 20 7.5v9L12 21l-8-4.5v-9zM4 7.5 12 12l8-4.5M12 12v9"
+        }
 
-            Row {
-                spacing: 12
+        Text {
+            textFormat: Text.PlainText
+            width: parent.width
+            text: qsTr("The AUR is turned off")
+            color: Look.text
+            font.pixelSize: Look.fontHeading
+            font.weight: Font.Bold
+            horizontalAlignment: Text.AlignHCenter
+        }
 
-                Glyph {
-                    anchors.verticalCenter: parent.verticalCenter
-                    size: 28
-                    color: Look.warning
-                    path: "M12 4 21 20H3zM12 10v5M12 17.5v.5"
-                }
+        Text {
+            textFormat: Text.PlainText
+            width: parent.width
+            text: qsTr("Turn it on in the settings to search and build community packages.")
+            color: Look.textMuted
+            font.pixelSize: Look.fontBody + 1
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.WordWrap
+        }
 
-                Text {
-                    textFormat: Text.PlainText
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: qsTr("Arch User Repository")
-                    color: Look.text
-                    font.pixelSize: Look.fontHeading
-                    font.weight: Font.Bold
-                }
-            }
-
-            Text {
-                textFormat: Text.PlainText
-                width: parent.width
-                text: qsTr("The AUR holds build recipes written by the community. They are not reviewed or supported by CachyOS, are built on your machine and can run any code while doing so. Always read the PKGBUILD before installing.")
-                color: Look.textMuted
-                font.pixelSize: Look.fontBody + 1
-                lineHeight: 1.3
-                wrapMode: Text.WordWrap
-            }
-
-            Text {
-                textFormat: Text.PlainText
-                visible: !Backend.paruAvailable
-                width: parent.width
-                text: qsTr("Building AUR packages needs “paru”, which is not installed. You can still search and review packages.")
-                color: Look.warning
-                font.pixelSize: Look.fontBody
-                wrapMode: Text.WordWrap
-            }
-
-            PillButton {
-                text: qsTr("Enable the AUR")
-                onClicked: {
-                    Backend.aurEnabled = true;
-                    Backend.aur.search(root.query);
-                }
-            }
+        PillButton {
+            anchors.horizontalCenter: parent.horizontalCenter
+            text: qsTr("Open settings")
+            onClicked: root.openSettings()
         }
     }
 
@@ -117,15 +91,6 @@ Item {
                 color: Look.textMuted
                 font.pixelSize: Look.fontSmall + 1
             }
-        }
-
-        PillButton {
-            anchors.right: parent.right
-            anchors.verticalCenter: parent.verticalCenter
-            tone: "soft"
-            implicitHeight: 30
-            text: qsTr("Disable the AUR")
-            onClicked: Backend.aurEnabled = false
         }
     }
 

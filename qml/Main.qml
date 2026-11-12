@@ -312,6 +312,7 @@ ApplicationWindow {
     Component {
         id: aurPage
         AurPage {
+            onOpenSettings: root.show("settings")
             onOpenAur: item => root.openPage(aurDetailsPage, {"item": item})
             onReviewAll: items => root.openPage(aurDetailsPage, {"item": items[0], "queue": items, "updates": true})
         }
