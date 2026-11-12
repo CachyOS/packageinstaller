@@ -122,6 +122,7 @@ install(TARGETS cachyos-pi-helper RUNTIME DESTINATION ${PI_HELPER_DIR})
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/org.cachyos.cachyos-pi.policy"
         DESTINATION ${CMAKE_INSTALL_DATADIR}/polkit-1/actions)
 install(FILES cachyos-pi.desktop DESTINATION ${CMAKE_INSTALL_DATADIR}/applications)
+install(FILES org.cachyos.cachyos-pi.metainfo.xml DESTINATION ${CMAKE_INSTALL_DATADIR}/metainfo)
 install(FILES icons/cachyos-pi.png DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hicolor/256x256/apps)
 
 ##

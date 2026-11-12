@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- SPDX-License-Identifier: CC0-1.0 -->
+<component type="desktop-application">
+  <id>org.cachyos.cachyos-pi</id>
+  <launchable type="desktop-id">cachyos-pi.desktop</launchable>
+  <name>CachyOS Package Installer</name>
+  <summary>Install, remove and update apps and packages</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <developer id="org.cachyos">
+    <name>CachyOS</name>
+  </developer>
+  <description>
+    <p>
+      A small app store for CachyOS. Browse, install, remove and update packages from the
+      CachyOS and Arch repositories, with icons and descriptions from the AppStream catalog.
+    </p>
+    <p>
+      Packages from the Arch User Repository can be searched and built after opting in. The
+      PKGBUILD and the scripts shipped with a package are shown before a build, and an
+      automatic check marks the lines that deserve a closer look.
+    </p>
+    <ul>
+      <li>Reads the package databases directly, nothing runs as root until you confirm</li>
+      <li>Shows what will be installed or removed before every operation</li>
+      <li>Lists updates for repository and AUR packages</li>
+    </ul>
+  </description>
+  <url type="homepage">https://github.com/CachyOS/packageinstaller</url>
+  <url type="bugtracker">https://github.com/CachyOS/packageinstaller/issues</url>
+  <url type="vcs-browser">https://github.com/CachyOS/packageinstaller</url>
+  <categories>
+    <category>System</category>
+    <category>PackageManager</category>
+  </categories>
+  <provides>
+    <binary>cachyos-pi</binary>
+    <binary>cachyos-pi-scan</binary>
+  </provides>
+  <requires>
+    <display_length compare="ge">768</display_length>
+  </requires>
+  <supports>
+    <control>pointing</control>
+    <control>keyboard</control>
+  </supports>
+  <content_rating type="oars-1.1"/>
+  <releases>
+    <release version="2.0.0" date="2026-11-12" type="development">
+      <description>
+        <p>Rewritten as a QML application with AUR support and a PKGBUILD check.</p>
+      </description>
+    </release>
+  </releases>
+</component>
