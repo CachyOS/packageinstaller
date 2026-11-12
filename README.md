@@ -105,7 +105,7 @@ the package database, so they are only done in the app.
 | `src/aurclient.*` | AUR RPC search, details and PKGBUILD download |
 | `src/pkgscan.*` | static PKGBUILD and script check |
 | `src/scan/` | the `cachyos-pi-scan` command line tool |
-| `tests/` | unit tests for the check |
+| `tests/` | unit tests for the check and for `pkglist.yaml` |
 | `src/transaction.*` | plan → confirm → run state machine |
 | `src/helper/` | the pkexec helper |
 | `qml/` | the user interface |

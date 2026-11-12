@@ -1,77 +1,101 @@
 - name: "Audio"
   packages:
+    - spotify-launcher
     - strawberry
-    - lollypop
-    - audacious
     - elisa
-    - kwave
+    - audacious
+    - lollypop
+    - amberol
+    - feishin
+    - easyeffects
     - audacity
+    - tenacity
     - ardour
     - lmms
     - mixxx
     - musescore
-    - rosegarden
+    - kwave
 
 - name: "Browsers"
   packages:
-    - librewolf
     - firefox
-    - firefox-esr-bin
-    - firefox-pure
-    - chromium
-    - ungoogled-chromium-bin
-    - vivaldi vivaldi-ffmpeg-codecs
-    - torbrowser-launcher
+    - zen-browser-bin
     - brave-bin
+    - librewolf
+    - chromium
+    - vivaldi vivaldi-ffmpeg-codecs
+    - helium-browser-bin
     - floorp-bin
+    - ungoogled-chromium-bin
+    - firefox-pure
+    - firefox-esr-bin
+    - torbrowser-launcher
     - falkon
     - qutebrowser python-adblock
 
 - name: "Communication"
   packages:
-    - telegram-desktop
     - discord
-    - neochat
-    - fractal
-    - element-desktop
+    - webcord
+    - telegram-desktop
     - signal-desktop
+    - element-desktop
+    - teamspeak3
     - mumble
+    - neochat
+    - nheko
+    - fractal
 
 - name: "Development"
   packages:
-    - vim
     - code
+    - vscodium
+    - zed
+    - neovim
+    - kate
+    - vim
     - emacs
     - qtcreator
-    - gnome-builder
     - kdevelop
-    - netbeans
-    - intellij-idea-community-edition
+    - gnome-builder
     - pycharm-community-edition
-    - cockpit cockpit-machines
-    - ansible
+    - godot
+    - github-cli
+    - lazygit
     - docker docker-compose
     - podman-docker podman-compose crun
-    - jenkins
-    - puppet
-    - prometheus
+    - distrobox
+    - boxbuddy
+    - ollama
+    - cockpit cockpit-machines
+    - ansible
     - terraform
 
 - name: "Games"
   packages:
     - cachyos-gaming-applications cachyos-gaming-meta
-    - aisleriot
-    - mari0
-    - kapman
-    - knights
-    - kmahjongg
+    - steam
+    - lutris
+    - heroic-games-launcher-bin
+    - prismlauncher
+    - retroarch
+    - dolphin-emu
+    - mangohud
+    - goverlay
+    - protonplus
+    - protonup-qt
+    - gamescope
+    - moonlight-qt
+    - sunshine
     - supertuxkart
     - supertux
-    - extremetuxracer
     - 0ad
-    - teeworlds
     - xonotic
     - hedgewars
+    - teeworlds
+    - extremetuxracer
+    - kmahjongg
+    - aisleriot
 
 - name: "Graphics"
   packages:
@@ -79,107 +103,136 @@
     - gimp
     - inkscape
     - blender
-    - digikam
     - darktable
-    - luminancehdr
+    - digikam
     - kolourpaint
     - mypaint
-    - sweethome3d
     - freecad
     - librecad
     - kicad
+    - sweethome3d
     - pencil2d
     - synfigstudio
     - opentoonz
+    - luminancehdr
     - fontforge
-    - birdfont
 
 - name: "Hardware Tools"
   packages:
-    - amdgpu_top
-    - cachyos-benchmarker
+    - lact
     - coolercontrol
+    - openrgb
+    - piper
+    - solaar
     - cpu-x
+    - nvtop
+    - amdgpu_top
     - gparted
     - kdiskmark
-    - lact
-    - nvtop
+    - cachyos-benchmarker
     - occt
     - openlinkhub
-    - openrgb
     - rog-control-center
 
 - name: "Internet"
   packages:
-    - xdman
-    - freedownloadmanager
-    - deluge-gtk
     - qbittorrent
     - nextcloud-client
+    - syncthing
+    - localsend
+    - kdeconnect
     - remmina
     - filezilla
-    - putty
-    - warpinator
+    - freedownloadmanager
     - jdownloader2
+    - xdman
+    - deluge-gtk
+    - warpinator
+    - putty
 
 - name: "Mail"
   packages:
     - thunderbird
+    - betterbird-bin
     - kmail
     - evolution
     - geary
     - mailspring
     - claws-mail
+    - protonmail-bridge
 
 - name: "Multimedia"
   packages:
+    - kodi kodi-platform kodi-eventclients
+    - handbrake
+    - freetube
     - hypnotix
     - shortwave
     - converseen
-    - handbrake
-    - transmageddon
     - soundconverter
-    - kodi kodi-platform kodi-eventclients
     - mediaelch
     - kid3
     - easytag
     - k3b cdparanoia cdrdao dvd+rw-tools emovix vcdimager cdrtools
-    - brasero
-    - xfburn
 
 - name: "Office"
   packages:
     - libreoffice-fresh libmythes
     - libreoffice-still libmythes
-    - joplin
     - onlyoffice-bin
-    - wps-office wps-office-mime
+    - obsidian
+    - joplin
+    - okular
+    - xournalpp
+    - rnote
     - calligra
-    - skrooge
+    - gnucash
     - kmymoney
+    - skrooge
+    - homebank
     - abiword
     - gnumeric
-    - gnucash
-    - homebank
 
-- name: "Other"
+- name: "Security"
   packages:
+    - keepassxc
+    - bitwarden
+    - proton-vpn-gtk-app
+    - tailscale
+    - veracrypt
+    - kleopatra
+
+- name: "System"
+  packages:
+    - cachyos-kernel-manager
+    - scx-manager
+    - btrfs-assistant
+    - snapper
+    - timeshift
+    - mission-center
+    - resources
+    - btop
+    - filelight
+    - bleachbit
+    - flameshot
     - scrcpy
     - variety
 
 - name: "Video"
   packages:
+    - vlc
+    - mpv
+    - haruna
+    - celluloid
+    - smplayer smplayer-skins smplayer-themes
+    - obs-studio
     - kdenlive movit sox opus-tools frei0r-plugins opentimelineio dvgrab opencv
-    - dragon
     - shotcut
     - pitivi frei0r-plugins
-    - obs-studio
-    - vlc
-    - smplayer smplayer-skins smplayer-themes
-    - baka-mplayer
+    - dragon
 
 - name: "Virtualization"
   packages:
-    - virtualbox
-    - gnome-boxes
     - virt-manager
+    - gnome-boxes
+    - virtualbox
