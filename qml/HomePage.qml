@@ -161,35 +161,61 @@ Flickable {
                 width: content.width
                 spacing: 12
 
-                Text {
-                    textFormat: Text.PlainText
-                    text: shelf.modelData.title
-                    color: Look.text
-                    font.pixelSize: Look.fontHeading - 2
-                    font.weight: Font.Bold
+                // As many cards as fit next to each other; two rows until "Show all" is pressed.
+                readonly property int columns: Math.max(1, Math.floor((width + 12) / 292))
+                readonly property real cardWidth: (width - (columns - 1) * 12) / columns
+                readonly property int total: modelData.packages.length
+                readonly property int limit: 2 * columns
+                property bool expanded: false
+
+                Item {
+                    width: parent.width
+                    height: Math.max(shelfTitle.implicitHeight, showAll.implicitHeight)
+
+                    Text {
+                        id: shelfTitle
+                        textFormat: Text.PlainText
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: shelf.modelData.title
+                        color: Look.text
+                        font.pixelSize: Look.fontHeading - 2
+                        font.weight: Font.Bold
+                    }
+
+                    PillButton {
+                        id: showAll
+                        visible: shelf.total > shelf.limit
+                        anchors.right: parent.right
+                        anchors.verticalCenter: parent.verticalCenter
+                        tone: "soft"
+                        implicitHeight: 28
+                        font.pixelSize: Look.fontSmall + 1
+                        text: shelf.expanded ? qsTr("Show less") : qsTr("Show all %1").arg(shelf.total)
+                        Accessible.description: shelf.modelData.title
+                        onClicked: shelf.expanded = !shelf.expanded
+                    }
                 }
 
-                ListView {
+                Flow {
                     width: parent.width
-                    height: 104
-                    orientation: ListView.Horizontal
                     spacing: 12
-                    clip: true
-                    boundsBehavior: Flickable.StopAtBounds
-                    model: shelf.modelData.packages
 
-                    delegate: AppCard {
-                        required property var modelData
+                    Repeater {
+                        model: shelf.expanded ? shelf.modelData.packages : shelf.modelData.packages.slice(0, shelf.limit)
 
-                        width: 300
-                        height: 104
-                        pkgName: modelData.name
-                        title: modelData.title
-                        summary: modelData.summary
-                        source: modelData.source
-                        installed: modelData.installed
-                        upgradable: modelData.upgradable
-                        onClicked: root.openPackage(modelData.name)
+                        AppCard {
+                            required property var modelData
+
+                            width: shelf.cardWidth
+                            height: 104
+                            pkgName: modelData.name
+                            title: modelData.title
+                            summary: modelData.summary
+                            source: modelData.source
+                            installed: modelData.installed
+                            upgradable: modelData.upgradable
+                            onClicked: root.openPackage(modelData.name)
+                        }
                     }
                 }
             }
