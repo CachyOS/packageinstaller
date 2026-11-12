@@ -72,6 +72,7 @@ set(PI_QML_FILES
     qml/AurPage.qml
     qml/AurDetailsPage.qml
     qml/CodeView.qml
+    qml/WheelScroll.qml
     qml/TransactionDialog.qml
 )
 # Serve the QML files from the module root. Left in qml/, each file would also see its

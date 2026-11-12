@@ -145,6 +145,8 @@ Item {
 
         ScrollBar.vertical: ScrollBar {}
 
+        WheelScroll {}
+
         delegate: Item {
             id: cell
 

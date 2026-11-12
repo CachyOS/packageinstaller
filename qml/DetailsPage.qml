@@ -23,6 +23,8 @@ Flickable {
 
     ScrollBar.vertical: ScrollBar {}
 
+    WheelScroll {}
+
     component InfoItem: Column {
         property string label
         property string value

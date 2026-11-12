@@ -113,6 +113,8 @@ Flickable {
 
     ScrollBar.vertical: ScrollBar {}
 
+    WheelScroll {}
+
     Column {
         id: content
         x: Look.pagePadding

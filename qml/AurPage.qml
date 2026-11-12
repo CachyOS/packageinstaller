@@ -190,6 +190,8 @@ Item {
 
         ScrollBar.vertical: ScrollBar {}
 
+        WheelScroll {}
+
         delegate: PackageRow {
             required property var modelData
 

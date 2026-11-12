@@ -76,6 +76,8 @@ Item {
 
         ScrollBar.vertical: ScrollBar {}
 
+        WheelScroll {}
+
         delegate: PackageRow {
             required property string name
             required property string version

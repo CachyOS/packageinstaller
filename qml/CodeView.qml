@@ -72,21 +72,45 @@ Rectangle {
         rightPadding: 4
     }
 
-    Flickable {
-        id: flick
+    // Not a Flickable: that would take slightly diagonal touchpad scrolling as sideways
+    // movement and hold back the page. Only a clearly sideways gesture moves the text.
+    Item {
+        id: viewport
+
+        property real offset: 0
+        readonly property real range: Math.max(0, edit.implicitWidth - width)
+
+        function scrollBy(distance) {
+            offset = Math.max(0, Math.min(offset + distance, range))
+        }
+
         anchors.fill: parent
         anchors.margins: 1
         anchors.leftMargin: gutter.width + 1
         clip: true
-        contentWidth: edit.implicitWidth
-        contentHeight: height
-        flickableDirection: Flickable.HorizontalFlick
-        boundsBehavior: Flickable.StopAtBounds
+        onRangeChanged: scrollBy(0)
 
-        ScrollBar.horizontal: ScrollBar {}
+        WheelHandler {
+            // the default is mice only; a wheel can arrive as a touchpad (Wayland)
+            acceptedDevices: PointerDevice.AllDevices
+            blocking: false
+            onWheel: event => {
+                const fingers = event.phase !== Qt.NoScrollPhase
+                const dx = event.angleDelta.x
+                const dy = event.angleDelta.y
+                if (event.modifiers & Qt.ShiftModifier) {
+                    // Shift turns the wheel sideways; some platforms swap the axes themselves
+                    const pixels = event.pixelDelta.x !== 0 ? event.pixelDelta.x : event.pixelDelta.y
+                    viewport.scrollBy(fingers && pixels !== 0 ? -pixels : -(dx !== 0 ? dx : dy) / 120 * 80)
+                } else if (Math.abs(dx) > Math.abs(dy)) {
+                    viewport.scrollBy(fingers && event.pixelDelta.x !== 0 ? -event.pixelDelta.x : -dx / 120 * 80)
+                }
+            }
+        }
 
         TextEdit {
             id: edit
+            x: -viewport.offset
             readOnly: true
             selectByMouse: true
             text: root.text
@@ -98,6 +122,17 @@ Rectangle {
             padding: root.padding
             leftPadding: 10
             Accessible.name: root.accessibleName
+        }
+
+        ScrollBar {
+            anchors.left: parent.left
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            orientation: Qt.Horizontal
+            visible: viewport.range > 0
+            size: viewport.width / Math.max(viewport.width, edit.implicitWidth)
+            position: viewport.offset / Math.max(1, edit.implicitWidth)
+            onPositionChanged: if (pressed) viewport.offset = Math.max(0, Math.min(position * edit.implicitWidth, viewport.range))
         }
     }
 }
