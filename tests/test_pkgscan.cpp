@@ -174,6 +174,13 @@ class TestPkgscan : public QObject {
             "pkgname=x\npkgver=1\nsource=(payload notes fix.patch)\nsha256sums=(a b c)\nbuild() {\n  bash payload\n  patch -p1 < fix.patch\n}\n"));
         QCOMPARE(analysis.localFiles, QStringList{QStringLiteral("payload")});
         QCOMPARE(analysis.otherLocalFiles, (QStringList{QStringLiteral("notes"), QStringLiteral("fix.patch")}));
+
+        // the command may be split over lines, even inside the name of the interpreter
+        for (const auto* build : {"  bash \\\n      payload\n", "  ba\\\nsh payload\n"}) {
+            const auto split = pkgscan::scanPkgbuild(
+                QStringLiteral("pkgname=x\npkgver=1\nsource=(payload)\nsha256sums=(a)\nbuild() {\n%1}\n").arg(QLatin1String(build)));
+            QCOMPARE(split.localFiles, QStringList{QStringLiteral("payload")});
+        }
     }
 
     void signatures() {
@@ -194,6 +201,30 @@ class TestPkgscan : public QObject {
         // without validpgpkeys any key in the keyring of the user would do
         const auto withoutKeys = pkgscan::scanPkgbuild(pair.arg(QString()));
         QCOMPARE(ids(withoutKeys.findings).count(QStringLiteral("no-checksum")), 1);
+
+        const QString keys = QStringLiteral("validpgpkeys=(0123456789ABCDEF0123456789ABCDEF01234567)\n");
+        // makepkg keeps the query of a plain download in the file name: not a signature
+        const auto query = pkgscan::scanPkgbuild(QStringLiteral(
+            "pkgname=x\npkgver=1\nsource=(https://example.org/payload 'https://example.org/payload.sig?download=1')\n"
+            "sha256sums=(SKIP SKIP)\n%1build() {\n  :\n}\n").arg(keys));
+        QCOMPARE(ids(query.findings).count(QStringLiteral("no-checksum")), 2);
+
+        // a signature that only another architecture downloads signs nothing here
+        const auto otherArch = pkgscan::scanPkgbuild(QStringLiteral(
+            "pkgname=x\npkgver=1\nsource=(https://example.org/payload)\nsha256sums=(SKIP)\n"
+            "source_aarch64=(https://example.org/payload.sig)\nsha256sums_aarch64=(SKIP)\n%1build() {\n  :\n}\n").arg(keys));
+        QCOMPARE(ids(otherArch.findings).count(QStringLiteral("no-checksum")), 1);
+        // while a common signature covers the source of one architecture
+        const auto common = pkgscan::scanPkgbuild(QStringLiteral(
+            "pkgname=x\npkgver=1\nsource=(https://example.org/payload.sig)\nsha256sums=(SKIP)\n"
+            "source_x86_64=(https://example.org/payload)\nsha256sums_x86_64=(SKIP)\n%1build() {\n  :\n}\n").arg(keys));
+        QVERIFY2(!ids(common.findings).contains(QStringLiteral("no-checksum")), qPrintable(ids(common.findings).join(u' ')));
+
+        // x.tar.sign signs the unpacked x.tar.xz
+        const auto packed = pkgscan::scanPkgbuild(QStringLiteral(
+            "pkgname=x\npkgver=1\nsource=(https://example.org/x.tar.xz https://example.org/x.tar.sign)\n"
+            "sha256sums=(SKIP SKIP)\n%1build() {\n  :\n}\n").arg(keys));
+        QVERIFY2(!ids(packed.findings).contains(QStringLiteral("no-checksum")), qPrintable(ids(packed.findings).join(u' ')));
     }
 
     void metadata() {

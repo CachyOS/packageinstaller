@@ -412,7 +412,9 @@ bool isVcsPackage(const QString& name) {
     return std::ranges::any_of(SUFFIXES, [&](const char* suffix) { return name.endsWith(QLatin1String(suffix)); });
 }
 
-/// Name under which makepkg stores a source: the part before "::", else the last part of the address.
+/// Name under which makepkg stores a source: the part before "::", else the last part of the
+/// address. Only version control sources lose their "#fragment" and "?query"; for a plain
+/// download makepkg keeps them, so "x.sig?download=1" is not stored as a signature.
 QString localName(const QString& spec) {
     const auto rename = spec.indexOf(QLatin1String("::"));
     const auto scheme = spec.indexOf(QLatin1String("://"));
@@ -421,15 +423,24 @@ QString localName(const QString& spec) {
     }
     // expansions that could not be resolved may hold "#", "?" and "/" of their own
     static const QRegularExpression expansion(QStringLiteral("\\$\\{[^}]*\\}"));
+    static const QRegularExpression vcs(QStringLiteral("^((git|svn|hg|bzr|fossil)\\+|git://)"));
     static const QRegularExpression tail(QStringLiteral("[?#].*$"));
     auto address = spec;
     address.replace(expansion, QStringLiteral("$"));
-    address.remove(tail);
+    if (vcs.match(address).hasMatch()) {
+        address.remove(tail);
+        while (address.endsWith(u'/')) {
+            address.chop(1);
+        }
+    }
     return address.section(u'/', -1);
 }
 
 /// Whether the PKGBUILD runs a local source file, whatever it is called.
-bool runsFile(const QString& text, const QString& name) {
+bool runsFile(const QString& script, const QString& name) {
+    // a command can be split over lines with a backslash, even in the middle of a word
+    auto text = script;
+    text.remove(QLatin1String("\\\n"));
     const auto quoted = QRegularExpression::escape(name);
     const QRegularExpression run(
         QStringLiteral(R"((?:^|[\s;|&(!])(?:(?:ba|z|da|k|fi)?sh|python[0-9.]*|perl|ruby|node|lua|php|source|\.|exec|eval|chmod\s+\S*x\S*)\s[^\n;|&]*?(?<![A-Za-z0-9@._+-])%1(?![A-Za-z0-9@._+-]))"
@@ -454,22 +465,45 @@ void scanSources(const Parsed& parsed, const QString& text, Analysis& analysis) 
 
     // makepkg treats a source as a detached signature when its stored name ends in .sig,
     // .sign or .asc, and checks it against the source of the same name without that ending
+    // (also when that source is stored compressed: x.tar.sign signs x.tar.xz). What counts is
+    // the set of sources one architecture really gets: the common ones plus its own.
     static const QRegularExpression signature(QStringLiteral("\\.(sig|sign|asc)$"));
-    QSet<QString> stored;
+    static const QRegularExpression compression(QStringLiteral("\\.(gz|bz2|xz|lrz|lzo|Z|zst|lz4|lz)$"));
+    QHash<QString, QSet<QString>> storedIn;
     for (const auto& name : std::as_const(names)) {
         if (name == QLatin1String("source") || name.startsWith(QLatin1String("source_"))) {
             for (const auto& entry : parsed.arrays[name].entries) {
-                stored << localName(expand(entry.value, parsed));
+                storedIn[name] << localName(expand(entry.value, parsed));
             }
         }
     }
+    QSet<QString> everything;
+    for (const auto& set : std::as_const(storedIn)) {
+        everything += set;
+    }
+    QSet<QString> stored;
+    // a signature file is recognised wherever its source is listed; whether a source counts
+    // as signed is decided within the sources of its own architecture
     const auto isSignature = [&](const QString& local) {
         const auto match = signature.match(local);
-        return match.hasMatch() && stored.contains(local.left(match.capturedStart()));
+        if (!match.hasMatch()) {
+            return false;
+        }
+        const auto base = local.left(match.capturedStart());
+        return everything.contains(base) || std::ranges::any_of(everything, [&](const QString& other) {
+            const auto packed = compression.match(other);
+            return packed.hasMatch() && other.left(packed.capturedStart()) == base;
+        });
     };
     const auto isSigned = [&](const QString& local) {
-        return stored.contains(local + QLatin1String(".sig")) || stored.contains(local + QLatin1String(".sign"))
-            || stored.contains(local + QLatin1String(".asc"));
+        auto bases = QStringList{local};
+        if (const auto packed = compression.match(local); packed.hasMatch()) {
+            bases << local.left(packed.capturedStart());
+        }
+        return std::ranges::any_of(bases, [&](const QString& base) {
+            return stored.contains(base + QLatin1String(".sig")) || stored.contains(base + QLatin1String(".sign"))
+                || stored.contains(base + QLatin1String(".asc"));
+        });
     };
     const bool hasKeys = !parsed.arrays.value(QStringLiteral("validpgpkeys")).entries.isEmpty();
 
@@ -480,6 +514,7 @@ void scanSources(const Parsed& parsed, const QString& text, Analysis& analysis) 
         }
         const auto suffix   = name.mid(6);
         const auto& sources = parsed.arrays[name].entries;
+        stored              = storedIn.value(QStringLiteral("source")) + storedIn.value(name);
         const auto checksum = [&](const char* algorithm, qsizetype index) {
             const auto sums = parsed.arrays.value(QLatin1String(algorithm) + suffix).entries;
             return index < sums.size() && sums.at(index).value != QLatin1String("SKIP");
