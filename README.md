@@ -11,6 +11,8 @@ the CachyOS and Arch repositories, and build packages from the AUR.
   generated tile, so every package has an icon.
 - **AUR** is opt-in. Search and PKGBUILD review happen in the app; building is
   delegated to `paru`.
+- **PKGBUILD check**: the review page marks lines a reviewer should look at
+  (see below). It is a reading aid and never declares a package safe.
 - **Privileges**: the GUI runs as the user. Package operations go through
   `cachyos-pi-helper`, a tiny pkexec helper that only accepts
   `install`, `remove` and `upgrade`.
@@ -38,6 +40,34 @@ sudo cmake --install build
 An uninstalled build can be run as `build/cachyos-pi`; without the installed
 helper it falls back to `pkexec pacman`.
 
+Run the tests with `ctest --test-dir build`.
+
+## PKGBUILD check
+
+`src/pkgscan.*` looks at the PKGBUILD, the install scriptlet and other scripts
+shipped with an AUR package, plus the package's AUR record. It only reads text:
+nothing from the package is sourced or executed. Findings have three levels:
+
+| Level | Examples |
+| --- | --- |
+| Dangerous | download piped into a shell, decoded-and-executed text, reverse shells, access to SSH keys or browser data, edits to sudoers |
+| Check | downloads without checksum, downloads outside `source=()`, `eval`, `sudo` in a build, writes outside `$pkgdir`, setuid bits, enabled services, orphaned or very new packages, look-alike names |
+| Note | unpinned VCS sources, outdated checksum types, commands at the top level, changed maintainer |
+
+The check knows common tricks only. No findings does not mean that a package is
+safe, which is why the review checkbox stays for every package.
+
+The same check is available on the command line:
+
+```sh
+cachyos-pi-scan path/to/package        # directory with a PKGBUILD
+cachyos-pi-scan --json path/to/PKGBUILD
+```
+
+It exits with 0 (nothing or notes), 1 (something to check), 2 (dangerous
+pattern) or 3 (unreadable). The package record and name checks need the AUR and
+the package database, so they are only done in the app.
+
 ## Layout
 
 | Path | Contents |
@@ -47,6 +77,9 @@ helper it falls back to `pkexec pacman`.
 | `src/iconprovider.*` | `image://pkgicon/<name>` icon lookup |
 | `src/packagemodel.*` | list model and search/category filter |
 | `src/aurclient.*` | AUR RPC search, details and PKGBUILD download |
+| `src/pkgscan.*` | static PKGBUILD and script check |
+| `src/scan/` | the `cachyos-pi-scan` command line tool |
+| `tests/` | unit tests for the check |
 | `src/transaction.*` | plan → confirm → run state machine |
 | `src/helper/` | the pkexec helper |
 | `qml/` | the user interface |
