@@ -52,6 +52,7 @@ Item {
                 }
 
                 Text {
+                    textFormat: Text.PlainText
                     anchors.verticalCenter: parent.verticalCenter
                     text: qsTr("Arch User Repository")
                     color: Look.text
@@ -61,6 +62,7 @@ Item {
             }
 
             Text {
+                textFormat: Text.PlainText
                 width: parent.width
                 text: qsTr("The AUR holds build recipes written by the community. They are not reviewed or supported by CachyOS, are built on your machine and can run any code while doing so. Always read the PKGBUILD before installing.")
                 color: Look.textMuted
@@ -70,6 +72,7 @@ Item {
             }
 
             Text {
+                textFormat: Text.PlainText
                 visible: !Backend.paruAvailable
                 width: parent.width
                 text: qsTr("Building AUR packages needs “paru”, which is not installed. You can still search and review packages.")
@@ -101,6 +104,7 @@ Item {
             spacing: 2
 
             Text {
+                textFormat: Text.PlainText
                 text: qsTr("AUR")
                 color: Look.text
                 font.pixelSize: Look.fontHeading
@@ -108,6 +112,7 @@ Item {
             }
 
             Text {
+                textFormat: Text.PlainText
                 text: qsTr("Community packages, built on your machine. Not reviewed by CachyOS.")
                 color: Look.textMuted
                 font.pixelSize: Look.fontSmall + 1
@@ -139,6 +144,7 @@ Item {
 
             Text {
                 id: updatesTitle
+                textFormat: Text.PlainText
                 anchors.verticalCenter: parent.verticalCenter
                 text: qsTr("%n update(s) available", "", Backend.aur.updates.length)
                 color: Look.text
@@ -158,6 +164,7 @@ Item {
         }
 
         Text {
+            textFormat: Text.PlainText
             width: parent.width
             text: Backend.aur.updates.length > 1
                 ? qsTr("Each update is built from a new PKGBUILD. Open a package to review it, or review all of them one after the other and build them together.")
@@ -214,6 +221,7 @@ Item {
         }
 
         Text {
+            textFormat: Text.PlainText
             anchors.horizontalCenter: parent.horizontalCenter
             visible: !Backend.aur.searching && Backend.aur.error.length === 0 && root.query.trim().length < 2
                 && (Backend.aur.checkingUpdates || Backend.aur.installedCount > 0)
@@ -224,6 +232,7 @@ Item {
         }
 
         Text {
+            textFormat: Text.PlainText
             anchors.horizontalCenter: parent.horizontalCenter
             visible: !Backend.aur.searching
             text: Backend.aur.error.length > 0 ? Backend.aur.error

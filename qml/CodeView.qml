@@ -57,6 +57,7 @@ Rectangle {
 
     Text {
         id: gutter
+        textFormat: Text.PlainText
         x: 1
         width: implicitWidth
         visible: root.text.length > 0

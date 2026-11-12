@@ -64,6 +64,7 @@ ApplicationWindow {
                 anchors.verticalCenter: parent.verticalCenter
 
                 Text {
+                    textFormat: Text.PlainText
                     text: qsTr("CachyOS")
                     color: Look.text
                     font.pixelSize: Look.fontTitle
@@ -71,6 +72,7 @@ ApplicationWindow {
                 }
 
                 Text {
+                    textFormat: Text.PlainText
                     text: qsTr("Package Installer")
                     color: Look.textMuted
                     font.pixelSize: Look.fontSmall
@@ -125,6 +127,7 @@ ApplicationWindow {
         }
 
         Text {
+            textFormat: Text.PlainText
             x: 18
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 16

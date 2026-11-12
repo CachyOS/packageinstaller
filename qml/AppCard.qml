@@ -41,6 +41,7 @@ AbstractButton {
             spacing: 4
 
             Text {
+                textFormat: Text.PlainText
                 width: parent.width
                 text: root.title
                 color: Look.text
@@ -50,6 +51,7 @@ AbstractButton {
             }
 
             Text {
+                textFormat: Text.PlainText
                 width: parent.width
                 text: root.summary
                 color: Look.textMuted
@@ -77,6 +79,7 @@ AbstractButton {
 
                     Text {
                         id: stateLabel
+                        textFormat: Text.PlainText
                         anchors.centerIn: parent
                         text: root.upgradable ? qsTr("Update available") : qsTr("Installed")
                         color: root.upgradable ? Look.warning : Look.textMuted

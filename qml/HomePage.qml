@@ -56,6 +56,7 @@ Flickable {
                 spacing: 8
 
                 Text {
+                    textFormat: Text.PlainText
                     width: parent.width
                     text: qsTr("Software for CachyOS")
                     color: "white"
@@ -65,6 +66,7 @@ Flickable {
                 }
 
                 Text {
+                    textFormat: Text.PlainText
                     width: parent.width
                     text: qsTr("Optimised packages from the CachyOS and Arch repositories, plus the AUR when you want it.")
                     color: "#e6fffa"
@@ -85,6 +87,7 @@ Flickable {
                             color: heroButton.hovered ? "#ffffff" : "#eafffb"
                         }
                         contentItem: Text {
+                            textFormat: Text.PlainText
                             text: heroButton.text
                             font: heroButton.font
                             color: "#075f53"
@@ -105,6 +108,7 @@ Flickable {
             color: Look.accentSoft
 
             Text {
+                textFormat: Text.PlainText
                 anchors.left: parent.left
                 anchors.leftMargin: 20
                 anchors.right: updatesButton.left
@@ -134,6 +138,7 @@ Flickable {
         }
 
         Text {
+            textFormat: Text.PlainText
             visible: Backend.error.length > 0
             width: parent.width
             text: Backend.error
@@ -155,6 +160,7 @@ Flickable {
                 spacing: 12
 
                 Text {
+                    textFormat: Text.PlainText
                     text: shelf.modelData.title
                     color: Look.text
                     font.pixelSize: Look.fontHeading - 2

@@ -50,6 +50,7 @@ Item {
             height: 34
 
             Text {
+                textFormat: Text.PlainText
                 anchors.verticalCenter: parent.verticalCenter
                 text: root.query.length > 0 ? qsTr("Results for “%1”").arg(root.query)
                     : root.installedOnly ? qsTr("Installed") : qsTr("Browse")
@@ -64,6 +65,7 @@ Item {
                 spacing: 12
 
                 Text {
+                    textFormat: Text.PlainText
                     anchors.verticalCenter: parent.verticalCenter
                     text: qsTr("%n package(s)", "", filter.count)
                     color: Look.textMuted
@@ -107,6 +109,7 @@ Item {
 
                     contentItem: Text {
                         id: chipLabel
+                        textFormat: Text.PlainText
                         text: chip.modelData.label
                         color: chip.current ? Look.onAccent : Look.text
                         font.pixelSize: Look.fontSmall + 1
@@ -181,6 +184,7 @@ Item {
         }
 
         Text {
+            textFormat: Text.PlainText
             anchors.horizontalCenter: parent.horizontalCenter
             visible: !Backend.loading
             text: root.query.length > 0 ? qsTr("Nothing found in the repositories.") : qsTr("Nothing here yet.")
@@ -189,6 +193,7 @@ Item {
         }
 
         Text {
+            textFormat: Text.PlainText
             anchors.horizontalCenter: parent.horizontalCenter
             visible: !Backend.loading && root.query.length > 0 && Backend.aurEnabled
             text: qsTr("Try the AUR tab for community packages.")

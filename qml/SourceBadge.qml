@@ -20,6 +20,7 @@ Rectangle {
 
     Text {
         id: label
+        textFormat: Text.PlainText
         anchors.centerIn: parent
         text: root.look[0]
         color: root.look[2]

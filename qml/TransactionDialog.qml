@@ -44,6 +44,7 @@ Popup {
         spacing: 16
 
         Text {
+            textFormat: Text.PlainText
             width: parent.width
             text: root.heading
             color: Look.text
@@ -64,6 +65,7 @@ Popup {
             }
 
             Text {
+                textFormat: Text.PlainText
                 anchors.verticalCenter: parent.verticalCenter
                 text: qsTr("Working out what will change…")
                 color: Look.textMuted
@@ -90,6 +92,7 @@ Popup {
 
                 Text {
                     id: planErrorText
+                    textFormat: Text.PlainText
                     width: parent.width - 12
                     text: root.tx.planError
                     color: Look.danger
@@ -99,6 +102,7 @@ Popup {
             }
 
             Text {
+                textFormat: Text.PlainText
                 visible: root.tx.planError.length === 0
                 width: parent.width
                 text: root.kind === Transaction.Upgrade ? qsTr("The package databases will be refreshed and every available update installed.")
@@ -129,6 +133,7 @@ Popup {
                     height: 30
 
                     Text {
+                        textFormat: Text.PlainText
                         anchors.left: parent.left
                         anchors.right: versionText.left
                         anchors.rightMargin: 12
@@ -142,6 +147,7 @@ Popup {
 
                     Text {
                         id: versionText
+                        textFormat: Text.PlainText
                         anchors.right: parent.right
                         anchors.rightMargin: 14
                         anchors.verticalCenter: parent.verticalCenter
@@ -193,6 +199,7 @@ Popup {
             }
 
             Text {
+                textFormat: Text.PlainText
                 visible: root.tx.state === Transaction.Finished
                 width: parent.width
                 text: root.tx.success ? qsTr("Done.")
@@ -204,6 +211,7 @@ Popup {
             }
 
             Text {
+                textFormat: Text.PlainText
                 visible: root.tx.state === Transaction.Running
                 width: parent.width
                 text: root.tx.lastLine

@@ -99,6 +99,7 @@ Flickable {
             }
 
             Text {
+                textFormat: Text.PlainText
                 visible: root.queued
                 anchors.verticalCenter: parent.verticalCenter
                 text: qsTr("Update %1 of %2").arg(root.position + 1).arg(root.queue.length)
@@ -126,6 +127,7 @@ Flickable {
                 spacing: 6
 
                 Text {
+                    textFormat: Text.PlainText
                     width: parent.width
                     text: root.info.name
                     color: Look.text
@@ -135,6 +137,7 @@ Flickable {
                 }
 
                 Text {
+                    textFormat: Text.PlainText
                     width: parent.width
                     text: root.info.description
                     color: Look.textMuted
@@ -152,6 +155,7 @@ Flickable {
                     }
 
                     Text {
+                        textFormat: Text.PlainText
                         anchors.verticalCenter: parent.verticalCenter
                         text: (root.info.upgradable ? root.info.installedVersion + " → " : "")
                             + qsTr("%1 · %n vote(s)", "", root.info.votes).arg(root.info.version)
@@ -179,6 +183,7 @@ Flickable {
                 spacing: 12
 
                 Text {
+                    textFormat: Text.PlainText
                     width: parent.width - openRepo.width - 12
                     anchors.verticalCenter: parent.verticalCenter
                     text: qsTr("A package with this name is available in the repositories. Install that one instead.")
@@ -204,6 +209,7 @@ Flickable {
 
             Text {
                 id: warnText
+                textFormat: Text.PlainText
                 x: 16
                 y: 14
                 width: parent.width - 32
@@ -222,6 +228,7 @@ Flickable {
             spacing: 6
 
             Text {
+                textFormat: Text.PlainText
                 visible: root.info.depends.length > 0
                 width: parent.width
                 text: qsTr("Depends on: %1").arg(root.info.depends.join(", "))
@@ -231,6 +238,7 @@ Flickable {
             }
 
             Text {
+                textFormat: Text.PlainText
                 visible: root.info.makeDepends.length > 0
                 width: parent.width
                 text: qsTr("Needed to build: %1").arg(root.info.makeDepends.join(", "))
@@ -247,6 +255,7 @@ Flickable {
             spacing: 10
 
             Text {
+                textFormat: Text.PlainText
                 text: qsTr("Things to check")
                 color: Look.text
                 font.pixelSize: Look.fontTitle
@@ -254,6 +263,7 @@ Flickable {
             }
 
             Text {
+                textFormat: Text.PlainText
                 width: parent.width
                 text: Backend.aur.findings.length > 0
                     ? qsTr("An automatic check marked the points below. It only knows common tricks and cannot tell you that a package is safe, so read the script as well.")
@@ -316,6 +326,7 @@ Flickable {
 
                                 Text {
                                     id: severityLabel
+                                    textFormat: Text.PlainText
                                     anchors.centerIn: parent
                                     text: finding.modelData.severity === "danger" ? qsTr("Dangerous")
                                         : finding.modelData.severity === "warning" ? qsTr("Check") : qsTr("Note")
@@ -335,6 +346,7 @@ Flickable {
                                 spacing: 4
 
                                 Text {
+                                    textFormat: Text.PlainText
                                     width: parent.width
                                     text: finding.modelData.title
                                     color: Look.text
@@ -344,6 +356,7 @@ Flickable {
                                 }
 
                                 Text {
+                                    textFormat: Text.PlainText
                                     width: parent.width
                                     text: finding.modelData.detail
                                     color: Look.textMuted
@@ -352,6 +365,7 @@ Flickable {
                                 }
 
                                 Text {
+                                    textFormat: Text.PlainText
                                     visible: finding.located
                                     width: parent.width
                                     text: qsTr("%1, line %2").arg(finding.modelData.file).arg(finding.modelData.line) + "   " + finding.modelData.excerpt
@@ -378,6 +392,7 @@ Flickable {
             }
 
             Text {
+                textFormat: Text.PlainText
                 visible: Backend.aur.sourceHosts.length > 0
                 width: parent.width
                 text: qsTr("Downloads its sources from: %1").arg(Backend.aur.sourceHosts.join(", "))
@@ -393,6 +408,7 @@ Flickable {
             spacing: 10
 
             Text {
+                textFormat: Text.PlainText
                 text: qsTr("PKGBUILD")
                 color: Look.text
                 font.pixelSize: Look.fontTitle
@@ -400,6 +416,7 @@ Flickable {
             }
 
             Text {
+                textFormat: Text.PlainText
                 width: parent.width
                 text: qsTr("This script runs on your machine when the package is built. Read it before you continue.")
                 color: Look.textMuted
@@ -422,6 +439,7 @@ Flickable {
                 }
 
                 Text {
+                    textFormat: Text.PlainText
                     anchors.centerIn: parent
                     visible: !Backend.aur.loadingDetails && Backend.aur.pkgbuild.length === 0
                     text: qsTr("The PKGBUILD could not be loaded, so this package cannot be installed from here.")
@@ -446,6 +464,7 @@ Flickable {
                     topPadding: 8
 
                     Text {
+                        textFormat: Text.PlainText
                         text: fileSection.modelData.name
                         color: Look.text
                         font.pixelSize: Look.fontTitle
@@ -453,6 +472,7 @@ Flickable {
                     }
 
                     Text {
+                        textFormat: Text.PlainText
                         width: parent.width
                         text: fileSection.modelData.name.endsWith(".install")
                             ? qsTr("This script runs as administrator when the package is installed, updated or removed.")
@@ -482,6 +502,7 @@ Flickable {
                     : qsTr("I have read the PKGBUILD and trust it")
 
                 contentItem: Text {
+                    textFormat: Text.PlainText
                     leftPadding: reviewBox.indicator.width + 10
                     text: reviewBox.text
                     color: Look.text

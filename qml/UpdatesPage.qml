@@ -26,6 +26,7 @@ Item {
             spacing: 2
 
             Text {
+                textFormat: Text.PlainText
                 text: filter.count > 0 ? qsTr("%n update(s) available", "", filter.count) : qsTr("Updates")
                 color: Look.text
                 font.pixelSize: Look.fontHeading
@@ -33,6 +34,7 @@ Item {
             }
 
             Text {
+                textFormat: Text.PlainText
                 text: Backend.checkingUpdates ? qsTr("Checking the repositories…")
                     : qsTr("Updates are always applied to the whole system.")
                 color: Look.textMuted
@@ -102,6 +104,7 @@ Item {
         }
 
         Text {
+            textFormat: Text.PlainText
             anchors.horizontalCenter: parent.horizontalCenter
             visible: !Backend.loading && !Backend.checkingUpdates
             text: qsTr("Your system is up to date.")

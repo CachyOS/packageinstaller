@@ -32,12 +32,14 @@ Flickable {
         spacing: 2
 
         Text {
+            textFormat: Text.PlainText
             text: parent.label
             color: Look.textMuted
             font.pixelSize: Look.fontSmall
         }
 
         Text {
+            textFormat: Text.PlainText
             width: parent.width
             text: parent.value
             color: Look.text
@@ -63,6 +65,7 @@ Flickable {
         }
 
         Text {
+            textFormat: Text.PlainText
             visible: !root.known
             text: qsTr("“%1” is not available in the repositories.").arg(root.pkgName)
             color: Look.textMuted
@@ -91,6 +94,7 @@ Flickable {
                 spacing: 6
 
                 Text {
+                    textFormat: Text.PlainText
                     width: parent.width
                     text: root.pkg.title ?? ""
                     color: Look.text
@@ -100,6 +104,7 @@ Flickable {
                 }
 
                 Text {
+                    textFormat: Text.PlainText
                     width: parent.width
                     text: root.pkg.summary ?? ""
                     color: Look.textMuted
@@ -117,6 +122,7 @@ Flickable {
                     }
 
                     Text {
+                        textFormat: Text.PlainText
                         anchors.verticalCenter: parent.verticalCenter
                         text: (root.pkg.developer ?? "").length > 0 ? root.pkg.developer : root.pkgName
                         color: Look.textMuted
@@ -265,12 +271,14 @@ Flickable {
                     spacing: 2
 
                     Text {
+                        textFormat: Text.PlainText
                         text: qsTr("Website")
                         color: Look.textMuted
                         font.pixelSize: Look.fontSmall
                     }
 
                     Text {
+                        textFormat: Text.PlainText
                         width: parent.width
                         text: root.pkg.url ?? ""
                         color: Look.accent
@@ -296,6 +304,7 @@ Flickable {
             spacing: 10
 
             Text {
+                textFormat: Text.PlainText
                 text: qsTr("Depends on")
                 color: Look.text
                 font.pixelSize: Look.fontTitle
@@ -327,6 +336,7 @@ Flickable {
 
                         contentItem: Text {
                             id: depLabel
+                            textFormat: Text.PlainText
                             text: dep.modelData
                             color: Look.text
                             font.pixelSize: Look.fontSmall + 1

@@ -44,6 +44,7 @@ AbstractButton {
                 spacing: 8
 
                 Text {
+                    textFormat: Text.PlainText
                     width: Math.min(implicitWidth, parent.width - badge.width - 8)
                     text: root.title
                     color: Look.text
@@ -60,6 +61,7 @@ AbstractButton {
             }
 
             Text {
+                textFormat: Text.PlainText
                 width: parent.width
                 text: root.summary
                 color: Look.textMuted
@@ -70,6 +72,7 @@ AbstractButton {
 
         Text {
             id: trailingText
+            textFormat: Text.PlainText
             anchors.right: parent.right
             anchors.rightMargin: 14
             anchors.verticalCenter: parent.verticalCenter

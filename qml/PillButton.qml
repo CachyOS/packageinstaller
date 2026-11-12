@@ -20,6 +20,7 @@ Button {
     opacity: enabled ? 1 : 0.45
 
     contentItem: Text {
+        textFormat: Text.PlainText
         text: root.text
         font: root.font
         color: root.ink

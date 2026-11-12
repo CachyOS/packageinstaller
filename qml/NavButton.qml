@@ -29,6 +29,7 @@ AbstractButton {
         }
 
         Text {
+            textFormat: Text.PlainText
             anchors.left: icon.right
             anchors.leftMargin: 12
             anchors.right: badge.visible ? badge.left : parent.right
@@ -54,6 +55,7 @@ AbstractButton {
 
             Text {
                 id: badgeText
+                textFormat: Text.PlainText
                 anchors.centerIn: parent
                 text: root.badge
                 color: Look.onAccent
