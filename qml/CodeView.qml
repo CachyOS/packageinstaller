@@ -90,21 +90,31 @@ Rectangle {
         clip: true
         onRangeChanged: scrollBy(0)
 
+        // A wheel handler only sees movement along its own axis, so there is one for each:
+        // sideways gestures move the text, and Shift turns an ordinary wheel sideways.
         WheelHandler {
-            // the default is mice only; a wheel can arrive as a touchpad (Wayland)
-            acceptedDevices: PointerDevice.AllDevices
+            acceptedDevices: PointerDevice.AllDevices  // the default is mice only
+            orientation: Qt.Horizontal
             blocking: false
             onWheel: event => {
-                const fingers = event.phase !== Qt.NoScrollPhase
-                const dx = event.angleDelta.x
-                const dy = event.angleDelta.y
-                if (event.modifiers & Qt.ShiftModifier) {
-                    // Shift turns the wheel sideways; some platforms swap the axes themselves
-                    const pixels = event.pixelDelta.x !== 0 ? event.pixelDelta.x : event.pixelDelta.y
-                    viewport.scrollBy(fingers && pixels !== 0 ? -pixels : -(dx !== 0 ? dx : dy) / 120 * 80)
-                } else if (Math.abs(dx) > Math.abs(dy)) {
-                    viewport.scrollBy(fingers && event.pixelDelta.x !== 0 ? -event.pixelDelta.x : -dx / 120 * 80)
+                if (Math.abs(event.angleDelta.x) <= Math.abs(event.angleDelta.y)) {
+                    return
                 }
+                const fingers = event.phase !== Qt.NoScrollPhase && event.pixelDelta.x !== 0
+                viewport.scrollBy(fingers ? -event.pixelDelta.x : -event.angleDelta.x / 120 * 80)
+            }
+        }
+
+        WheelHandler {
+            acceptedDevices: PointerDevice.AllDevices
+            acceptedModifiers: Qt.ShiftModifier
+            blocking: false
+            onWheel: event => {
+                // some platforms swap the axes themselves while Shift is held
+                const angle = event.angleDelta.y !== 0 ? event.angleDelta.y : event.angleDelta.x
+                const pixels = event.pixelDelta.y !== 0 ? event.pixelDelta.y : event.pixelDelta.x
+                const fingers = event.phase !== Qt.NoScrollPhase && pixels !== 0
+                viewport.scrollBy(fingers ? -pixels : -angle / 120 * 80)
             }
         }
 
