@@ -71,6 +71,8 @@ set(PI_QML_FILES
     qml/UpdatesPage.qml
     qml/AurPage.qml
     qml/AurDetailsPage.qml
+    qml/InfoItem.qml
+    qml/WebLink.qml
     qml/SettingsPage.qml
     qml/CodeView.qml
     qml/WheelScroll.qml

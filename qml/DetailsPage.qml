@@ -25,33 +25,6 @@ Flickable {
 
     WheelScroll {}
 
-    component InfoItem: Column {
-        property string label
-        property string value
-
-        visible: value.length > 0
-        width: 220
-        spacing: 2
-
-        Text {
-            textFormat: Text.PlainText
-            text: parent.label
-            color: Look.textMuted
-            font.pixelSize: Look.fontSmall
-        }
-
-        Text {
-            textFormat: Text.PlainText
-            width: parent.width
-            text: parent.value
-            color: Look.text
-            font.pixelSize: Look.fontBody
-            wrapMode: Text.WrapAnywhere
-            maximumLineCount: 3
-            elide: Text.ElideRight
-        }
-    }
-
     Column {
         id: content
         x: Look.pagePadding
@@ -268,7 +241,7 @@ Flickable {
                 }
 
                 Column {
-                    visible: (root.pkg.url ?? "").length > 0
+                    visible: link.valid
                     width: 220
                     spacing: 2
 
@@ -279,21 +252,10 @@ Flickable {
                         font.pixelSize: Look.fontSmall
                     }
 
-                    Text {
-                        textFormat: Text.PlainText
+                    WebLink {
+                        id: link
                         width: parent.width
-                        text: root.pkg.url ?? ""
-                        color: Look.accent
-                        font.pixelSize: Look.fontBody
-                        elide: Text.ElideRight
-
-                        TapHandler {
-                            onTapped: Qt.openUrlExternally(root.pkg.url)
-                        }
-
-                        HoverHandler {
-                            cursorShape: Qt.PointingHandCursor
-                        }
+                        url: root.pkg.url ?? ""
                     }
                 }
             }
