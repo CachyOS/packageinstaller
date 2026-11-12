@@ -92,7 +92,7 @@ qt_add_qml_module(${PROJECT_NAME}
     RESOURCES
         pkglist.yaml
         icons/cachyos-pi.png
-        icons/cachyos-logo.png)
+        icons/cachyos-kernel.png)
 
 # i18n/cachyos-pi_en.ts only carries the English plural forms ("1 package" / "2 packages").
 # Refresh the .ts files with: cmake --build build --target update_translations

@@ -12,10 +12,10 @@ QPixmap IconProvider::requestPixmap(const QString& id, QSize* size, const QSize&
         *size = QSize(extent, extent);
     }
 
-    // The CachyOS kernels and their modules carry no icon; give them the CachyOS logo
+    // The CachyOS kernels and their modules carry no icon; give them the Kernel Manager logo
     // instead of a letter tile.
     if (id == QLatin1String("linux-cachyos") || id.startsWith(QLatin1String("linux-cachyos-"))) {
-        QImageReader reader(QStringLiteral(":/qt/qml/CachyOS/PackageInstaller/icons/cachyos-logo.png"));
+        QImageReader reader(QStringLiteral(":/qt/qml/CachyOS/PackageInstaller/icons/cachyos-kernel.png"));
         reader.setScaledSize(QSize(extent, extent));
         const auto image = reader.read();
         if (!image.isNull()) {

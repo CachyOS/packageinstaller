@@ -7,7 +7,7 @@
 
 /// `image://pkgicon/<pkgname>`: an icon for every package.
 ///
-/// Lookup order: the CachyOS logo for the CachyOS kernels, AppStream cached icon, AppStream stock icon / icon theme,
+/// Lookup order: the Kernel Manager logo for the CachyOS kernels, AppStream cached icon, AppStream stock icon / icon theme,
 /// the same again for shortened names ("foo-bar-bin" -> "foo-bar" -> "foo", which
 /// covers AUR variants and split packages), and finally a generated tile so
 /// nothing is ever blank.
