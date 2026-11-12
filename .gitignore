@@ -1,42 +1,22 @@
-*.DS_Store
-*.dump
-*.ctu-info
-.cache
-.idea
-build
-build.sh
-cmake-build-release
-cmake-build-debug
+# builds
+/build*/
+/cmake-build-*/
 CMakeLists.txt.user
 compile_commands.json
 
-# Prerequisites
-*.d
+# editors and tools
+.cache/
+.idea/
+.vscode/
+*.swp
+.DS_Store
+/build.sh
 
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-
-# Fortran module files
-*.mod
-*.smod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-
-# Executables
-*.exe
-*.out
-*.app
+# makepkg output
+/packaging/*/src/
+/packaging/*/pkg/
+/packaging/*/packageinstaller/
+/packaging/*/*.pkg.tar.*
+/packaging/*/*.tar.gz
+/packaging/*/*.log
+/packaging/*/PKGBUILD.local
