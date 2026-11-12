@@ -23,10 +23,18 @@ QPixmap IconProvider::requestPixmap(const QString& id, QSize* size, const QSize&
         }
     }
 
+    // Flatpak apps have their own catalogue; an installed one also exports its icon to the theme.
+    if (id.startsWith(QLatin1String("flatpak/"))) {
+        const auto app    = id.mid(8);
+        const auto pixmap = lookup(m_flatpak, app, extent);
+        // "org.mozilla.firefox": the last part names the app
+        return pixmap.isNull() ? generated(app.section(QLatin1Char('.'), -1), extent) : pixmap;
+    }
+
     // "gimp-help-de" and "firefox-esr-bin" have no icon of their own: walk up the
     // name ("gimp-help", "gimp") so related packages share the application's icon.
     for (QString name = id; !name.isEmpty(); name.truncate(qMax<qsizetype>(name.lastIndexOf(QLatin1Char('-')), 0))) {
-        const auto pixmap = lookup(name, extent);
+        const auto pixmap = lookup(m_index, name, extent);
         if (!pixmap.isNull()) {
             return pixmap;
         }
@@ -34,8 +42,8 @@ QPixmap IconProvider::requestPixmap(const QString& id, QSize* size, const QSize&
     return generated(id, extent);
 }
 
-QPixmap IconProvider::lookup(const QString& name, int extent) const {
-    const auto ref = m_index.value(name);
+QPixmap IconProvider::lookup(const IconIndex& index, const QString& name, int extent) const {
+    const auto ref = index.value(name);
     if (!ref.path.isEmpty()) {
         QImageReader reader(ref.path);
         reader.setScaledSize(QSize(extent, extent));

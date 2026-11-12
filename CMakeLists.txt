@@ -50,6 +50,7 @@ qt_add_executable(${PROJECT_NAME}
     src/catalog.hpp src/catalog.cpp
     src/packagemodel.hpp src/packagemodel.cpp
     src/aurclient.hpp src/aurclient.cpp
+    src/flatpakclient.hpp src/flatpakclient.cpp
     src/iconprovider.hpp src/iconprovider.cpp
     src/transaction.hpp src/transaction.cpp
     src/backend.hpp src/backend.cpp)

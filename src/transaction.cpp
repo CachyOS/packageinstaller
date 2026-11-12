@@ -68,9 +68,17 @@ void Transaction::prepareAur(const QStringList& names, const QStringList& direct
     begin(AurInstall, names);
 }
 
+void Transaction::prepareFlatpak(Kind kind, const QStringList& names, const QStringList& arguments) {
+    if (m_state != Idle || kind < FlatpakInstall || arguments.isEmpty()) {
+        return;
+    }
+    m_arguments = arguments;
+    begin(kind, names);
+}
+
 void Transaction::prepare(Kind kind, const QStringList& targets) {
     // AUR packages are only built from reviewed checkouts, see prepareAur()
-    if (m_state != Idle || kind == AurInstall) {
+    if (m_state != Idle || kind == AurInstall || kind >= FlatpakInstall) {
         return;
     }
     m_directories.clear();
@@ -90,9 +98,9 @@ void Transaction::begin(Kind kind, const QStringList& targets) {
     emit planChanged();
     emit logChanged();
 
-    if (kind == Upgrade || kind == AurInstall) {
-        // A full upgrade refreshes the databases first, and paru resolves AUR
-        // dependencies itself; neither can be previewed without doing the work.
+    if (kind == Upgrade || kind == AurInstall || isFlatpak()) {
+        // A full upgrade refreshes the databases first, paru resolves AUR dependencies
+        // itself and flatpak picks the runtimes; none can be previewed without doing the work.
         setState(Confirm);
         return;
     }
@@ -185,6 +193,10 @@ void Transaction::confirm() {
         }
         args << m_directories;
         m_process.setWorkingDirectory(m_workingDirectory);
+    } else if (isFlatpak()) {
+        program = QStringLiteral("flatpak");
+        args    = m_arguments;
+        m_process.setWorkingDirectory(QStringLiteral("/"));
     } else if (QFileInfo(helperPath()).isExecutable()) {
         m_process.setWorkingDirectory(QStringLiteral("/"));
         args << helperPath();
@@ -215,7 +227,7 @@ void Transaction::onRunFinished(int exitCode, QProcess::ExitStatus status) {
     m_success = status == QProcess::NormalExit && exitCode == 0;
     if (!m_success) {
         // pkexec: 126 = dismissed by the user, 127 = not authorized
-        if (m_kind != AurInstall && (exitCode == 126 || exitCode == 127)) {
+        if (m_kind != AurInstall && !isFlatpak() && (exitCode == 126 || exitCode == 127)) {
             m_failureReason = tr("Authentication was cancelled or denied. Nothing was changed.");
         } else {
             appendLog(tr("\nThe operation failed (exit code %1).\n").arg(exitCode));
@@ -237,8 +249,8 @@ void Transaction::cancel() {
         setState(Idle);
         break;
     case Running:
-        // Never interrupt pacman itself; only a user-level AUR build can be stopped.
-        if (m_kind == AurInstall) {
+        // Never interrupt pacman itself; only work done as the user can be stopped.
+        if (cancellable()) {
             m_process.terminate();
         }
         break;

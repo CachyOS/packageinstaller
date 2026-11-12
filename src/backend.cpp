@@ -26,13 +26,25 @@ Backend::Backend(IconProvider* icons, QObject* parent)
   : QObject(parent), m_aur(&m_packages), m_icons(icons) {
     s_instance      = this;
     m_aurEnabled    = QSettings().value(QStringLiteral("aur/enabled"), false).toBool();
+    m_flatpakEnabled = QSettings().value(QStringLiteral("flatpak/enabled"), false).toBool();
     m_paruAvailable = !QStandardPaths::findExecutable(QStringLiteral("paru")).isEmpty();
     m_theme         = QSettings().value(QStringLiteral("appearance/theme"), QStringLiteral("classic")).toString();
     m_colorMode     = QSettings().value(QStringLiteral("appearance/mode"), QStringLiteral("system")).toString();
     applyColorMode(m_colorMode);
 
     connect(&m_watcher, &QFutureWatcher<LoadResult>::finished, this, &Backend::onLoaded);
-    connect(&m_transaction, &Transaction::finished, this, [this](bool) { reload(); });
+    connect(&m_transaction, &Transaction::finished, this, [this](bool) {
+        // a Flatpak operation leaves the pacman databases alone
+        if (m_transaction.isFlatpak()) {
+            m_flatpak.refresh();
+        } else {
+            reload();
+        }
+    });
+    connect(&m_flatpak, &FlatpakClient::iconsLoaded, this, [this](const IconIndex& index) { m_icons->setFlatpakIndex(index); });
+    if (m_flatpakEnabled) {
+        m_flatpak.refresh();
+    }
     connect(&m_checkUpdates, &QProcess::finished, this, [this](int exitCode, QProcess::ExitStatus status) {
         m_checkingUpdates = false;
         emit checkingUpdatesChanged();
@@ -115,6 +127,47 @@ void Backend::setAurEnabled(bool enabled) {
     }
 }
 
+void Backend::setFlatpakEnabled(bool enabled) {
+    if (enabled == m_flatpakEnabled) {
+        return;
+    }
+    m_flatpakEnabled = enabled;
+    QSettings().setValue(QStringLiteral("flatpak/enabled"), enabled);
+    emit flatpakEnabledChanged();
+    if (enabled) {
+        m_flatpak.refresh();
+    } else {
+        m_flatpak.clear();
+    }
+}
+
+void Backend::installFlatpak(const QString& id) {
+    if (m_flatpakEnabled) {
+        m_transaction.prepareFlatpak(Transaction::FlatpakInstall, {m_flatpak.title(id)}, m_flatpak.installArguments(id));
+    }
+}
+
+void Backend::removeFlatpak(const QString& key) {
+    if (m_flatpakEnabled) {
+        m_transaction.prepareFlatpak(Transaction::FlatpakRemove, {m_flatpak.installedTitle(key)}, m_flatpak.removeArguments(key));
+    }
+}
+
+void Backend::updateFlatpaks() {
+    if (m_flatpakEnabled) {
+        m_transaction.prepareFlatpak(Transaction::FlatpakUpdate, {},
+            {QStringLiteral("update"), QStringLiteral("--noninteractive")});
+    }
+}
+
+void Backend::addFlathub() {
+    if (m_flatpakEnabled && m_flatpak.available()) {
+        m_transaction.prepareFlatpak(Transaction::FlatpakSetup, {QStringLiteral("Flathub")},
+            {QStringLiteral("remote-add"), QStringLiteral("--system"), QStringLiteral("--if-not-exists"),
+                QStringLiteral("flathub"), QStringLiteral("https://dl.flathub.org/repo/flathub.flatpakrepo")});
+    }
+}
+
 void Backend::reload() {
     if (m_loading) {
         m_reloadQueued = true;
@@ -135,6 +188,10 @@ void Backend::onLoaded() {
     m_packages.reset(std::move(result.packages));
     rebuildCurated();
     m_aur.refreshInstalled();
+    // the flatpak package itself may just have been installed or removed
+    if (m_flatpakEnabled && !m_flatpak.loading() && m_flatpak.available() == QStandardPaths::findExecutable(QStringLiteral("flatpak")).isEmpty()) {
+        m_flatpak.refresh();
+    }
     // only after the opt-in: the names of the installed packages are sent to the AUR
     if (m_aurEnabled) {
         m_aur.checkUpdates();
