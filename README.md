@@ -48,10 +48,12 @@ Flatpak apps.
 
 Build:
 ```sh
-sudo pacman -S base-devel cmake ninja qt6-base qt6-declarative qt6-tools appstream-qt pacman
+sudo pacman -S base-devel cmake git ninja qt6-base qt6-declarative qt6-tools appstream-qt pacman elfutils
 ```
 
-Runtime: `qt6-declarative`, `appstream-qt`, `archlinux-appstream-data`, `polkit`,
+Qt 6.10 or newer and a C++26 compiler (GCC 15+, Clang 20+) are required.
+
+Runtime: `qt6-declarative`, `appstream-qt`, `archlinux-appstream-data`, `polkit`, `elfutils` (if built with libdw),
 `kimageformats` (the Arch icon cache is JPEG XL). Optional: `paru` and `git` (AUR review and builds),
 `flatpak` (Flatpak apps), `pacman-contrib` (`checkupdates`, to see updates without refreshing the system
 databases).
@@ -65,7 +67,7 @@ sudo cmake --install build
 ```
 
 An uninstalled build can be run as `build/cachyos-pi`; without the installed
-helper it falls back to `pkexec pacman`.
+helper it runs `build/cachyos-pi-helper` through pkexec's generic prompt.
 
 Run the tests with `ctest --test-dir build`.
 

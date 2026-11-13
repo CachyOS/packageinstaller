@@ -1,5 +1,15 @@
 # Third-party material
 
+## Libraries
+
+Fetched at pinned tags through CPM at configure time (see `CMakeLists.txt`) and linked into
+the binaries.
+
+| Library | Used for | License |
+| - | - | - |
+| [rapidyaml](https://github.com/biojppm/rapidyaml) v0.16.0 | reading `pkglist.yaml` | MIT |
+| [backward-cpp](https://github.com/bombela/backward-cpp) v1.6 | stack traces on crashes (GUI and `cachyos-pi-scan`) | MIT |
+
 ## Colour palettes
 
 The settings page offers colour themes based on the community palettes below. The
