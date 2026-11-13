@@ -26,13 +26,30 @@ class PackageModel : public QAbstractListModel {
     /// Marks packages as upgradable with the version a fresh database offers (from `checkupdates`).
     void applyUpdates(const QHash<QString, QString>& newVersions);
 
+    /// What the search compares against: the fields in lower case, so that a search needs
+    /// no case folding. Only used when `ascii` holds, where lower case and Unicode case
+    /// folding are the same thing; other packages are searched in their own fields.
+    struct SearchKey {
+        QString name;
+        QString title;
+        QString summary;
+        QString description;  ///< empty when it repeats the summary
+        bool ascii = false;
+    };
+
     const QList<Package>& packages() const { return m_packages; }
+    const SearchKey& searchKey(qsizetype row) const { return m_keys.at(row); }
+    /// The position of a row when all packages are sorted by title, ignoring case; rows
+    /// whose titles compare equal share one.
+    qsizetype titleOrder(qsizetype row) const { return m_titleOrder.at(row); }
     const Package& at(qsizetype row) const { return m_packages.at(row); }
     const Package* find(const QString& name) const;
     int upgradableCount() const;
 
  private:
     QList<Package> m_packages;
+    QList<SearchKey> m_keys;
+    QList<qsizetype> m_titleOrder;
     QHash<QString, qsizetype> m_index;
 };
 
@@ -70,12 +87,13 @@ class PackageFilter : public QSortFilterProxyModel {
     bool lessThan(const QModelIndex& left, const QModelIndex& right) const override;
 
  private:
-    int rank(const Package& pkg) const;
+    int rank(const Package& pkg, const PackageModel::SearchKey& key) const;
     template <typename Apply>
     void refilter(Apply apply, bool resort);
     void updateCount();
 
     QString m_query;
+    QString m_needle;  ///< the query in lower case; empty unless the query is plain ASCII
     QString m_category;
     Mode m_mode = All;
     mutable QList<int> m_rank;  ///< search rank per source row, filled by filterAcceptsRow
