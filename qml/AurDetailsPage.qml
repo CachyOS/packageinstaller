@@ -3,18 +3,20 @@ import QtQuick
 import QtQuick.Controls.Basic
 import CachyOS.PackageInstaller
 
-Flickable {
+ScrollPage {
     id: root
 
+    inset: Look.pagePadding - 8
+
     // The search result this page was opened with.
-    required property var item
+    required property aurPackage item
     // The packages to review one after the other: the ones this page was opened for, then
     // the AUR packages they need. Nothing is built before the last one was reviewed or skipped.
-    property var queue: []
+    property list<aurPackage> queue
     // Opened by "Review and update all".
     property bool updates: false
     property int position: 0
-    property var accepted: []
+    property list<string> accepted
     // Why the accepted packages cannot be built, if they cannot.
     property string blocked
     readonly property bool queued: queue.length > 1
@@ -24,10 +26,44 @@ Flickable {
     signal openPackage(string name)
 
     // Fresh RPC data once it arrives, the search result until then.
-    readonly property var info: Backend.aur.details.name === item.name ? Backend.aur.details : item
-    property bool reviewed: false
+    readonly property aurPackage info: Backend.aur.details.name === item.name ? Backend.aur.details : item
+    readonly property bool ready: Backend.aur.pkgbuild.length > 0 && !Backend.aur.loadingDetails
 
-    readonly property bool dangerous: Backend.aur.findings.some(f => f.severity === "danger")
+    component Paragraph: PlainText {
+        color: Look.textMuted
+        wrapMode: Text.WordWrap
+    }
+
+    component FileSection: Column {
+        id: section
+
+        required property string name
+        required property string note
+        property alias text: codeView.text
+        property alias marks: codeView.marks
+        property alias minimumHeight: codeView.minimumHeight
+        readonly property alias view: codeView
+        default property alias overlay: codeView.data
+
+        spacing: 10
+
+        SectionTitle {
+            text: section.name
+        }
+
+        Paragraph {
+            width: section.width
+            text: section.note
+        }
+
+        CodeView {
+            id: codeView
+            width: section.width
+            accessibleName: section.name
+        }
+    }
+
+    spacing: 20
 
     Component.onCompleted: {
         if (queue.length === 0) {
@@ -56,7 +92,7 @@ Flickable {
     Connections {
         target: Backend.transaction
         enabled: root.queued && root.last
-        function onFinished(success) {
+        function onFinished(success: bool) {
             if (success) {
                 root.back()
             }
@@ -64,7 +100,7 @@ Flickable {
     }
 
     // Moves on in the queue, with or without the current package.
-    function advance(accept) {
+    function advance(accept: bool) {
         if (accept) {
             Backend.aur.accept(item.name)
         }
@@ -73,7 +109,7 @@ Flickable {
         if (!last) {
             accepted = names
             position += 1
-            reviewed = false
+            reviewBox.checked = false
             item = queue[position]
             Backend.aur.loadDetails(item.name, item.pkgbase)
             contentY = 0
@@ -87,568 +123,331 @@ Flickable {
         }
     }
 
-    function marksFor(file) {
+    function marksFor(file: string): list<finding> {
         return Backend.aur.findings.filter(f => f.file === file && f.line > 0)
     }
 
-    // Scrolls the listing to the line a finding refers to.
-    function reveal(file, line) {
-        let view = file === "PKGBUILD" ? pkgbuildView : null
-        for (let i = 0; view === null && i < fileViews.count; ++i) {
-            if (fileViews.itemAt(i).modelData.name === file) {
-                view = fileViews.itemAt(i).view
+    function viewOf(file: string): CodeView {
+        if (file === "PKGBUILD") {
+            return pkgbuild.view
+        }
+        for (let i = 0; i < fileViews.count; ++i) {
+            const section = fileViews.itemAt(i) as FileSection
+            if (section && section.name === file) {
+                return section.view
             }
         }
+        return null
+    }
+
+    // Scrolls the listing to the line a finding refers to.
+    function reveal(file: string, line: int) {
+        const view = viewOf(file)
         if (view === null || line <= 0) {
             return
         }
-        const y = view.mapToItem(content, 0, view.lineY(line)).y + content.y
+        const y = view.mapToItem(contentItem, 0, view.lineY(line)).y
         contentY = Math.max(0, Math.min(y - height / 3, contentHeight - height))
     }
 
-    contentWidth: width
-    contentHeight: content.height + 2 * Look.pagePadding
-    clip: true
-    boundsBehavior: Flickable.StopAtBounds
+    DetailsHero {
+        width: parent.width
+        spacing: root.spacing
+        status: root.queued ? qsTr("Package %1 of %2").arg(root.position + 1).arg(root.queue.length) : ""
+        onBack: root.back()
+        iconName: root.item.name
+        title: root.info.name
+        summary: root.info.description
+        source: "aur"
+        byline: (root.info.upgradable ? root.info.installedVersion + " → " : "")
+            + qsTr("%1 · %n vote(s)", "", root.info.votes).arg(root.info.version)
+            + " · " + (root.info.maintainer.length > 0 ? root.info.maintainer : qsTr("orphaned"))
+            + (Backend.aur.revision.length > 0 ? " · " + qsTr("revision %1").arg(Backend.aur.revision.substring(0, 7)) : "")
 
-    ScrollBar.vertical: ScrollBar {}
+        PillButton {
+            visible: root.info.inRepos
+            text: qsTr("Open from the repositories")
+            onClicked: root.openPackage(root.info.name)
+        }
+    }
 
-    WheelScroll {}
+    Notice {
+        width: parent.width
+        text: root.item.neededBy.length > 0
+            ? qsTr("%1 needs this package. It is built from the AUR as well, so it is reviewed like the others.").arg(root.item.neededBy.join(", "))
+            : Backend.aur.resolving ? qsTr("Checking which other AUR packages are needed…")
+            : root.position === 0 && Backend.aur.planCount > 0
+            ? qsTr("Other AUR packages are needed and are built first: %1. You will review each of them before anything is built.").arg(Backend.aur.plan.map(entry => entry.name).join(", "))
+            : ""
+    }
+
+    Notice {
+        width: parent.width
+        tone: Notice.Danger
+        text: Backend.aur.problems.join("\n")
+    }
+
+    Notice {
+        width: parent.width
+        text: root.info.inRepos ? qsTr("A package with this name is available in the repositories. Install that one instead.") : ""
+    }
+
+    Notice {
+        width: parent.width
+        tone: Notice.Warning
+        text: !Backend.paruAvailable ? qsTr("Install “paru” to build AUR packages.")
+            : root.info.outOfDate ? qsTr("This package is flagged as out of date by AUR users.") : ""
+    }
 
     Column {
-        id: content
-        x: Look.pagePadding
-        y: Look.pagePadding - 8
-        width: root.width - 2 * Look.pagePadding
-        spacing: 20
+        visible: root.info.depends.length + root.info.makeDepends.length > 0
+        width: parent.width
+        spacing: 6
 
-        Row {
-            spacing: 14
-
-            PillButton {
-                tone: "soft"
-                implicitHeight: 32
-                text: qsTr("‹  Back")
-                onClicked: root.back()
-            }
-
-            Text {
-                textFormat: Text.PlainText
-                visible: root.queued
-                anchors.verticalCenter: parent.verticalCenter
-                text: qsTr("Package %1 of %2").arg(root.position + 1).arg(root.queue.length)
-                color: Look.textMuted
-                font.pixelSize: Look.fontBody
-            }
+        Paragraph {
+            visible: root.info.depends.length > 0
+            width: parent.width
+            text: qsTr("Depends on: %1").arg(root.info.depends.join(", "))
         }
 
-        Item {
+        Paragraph {
+            visible: root.info.makeDepends.length > 0
             width: parent.width
-            height: 104
+            text: qsTr("Needed to build: %1").arg(root.info.makeDepends.join(", "))
+        }
+    }
 
-            AppIcon {
-                id: heroIcon
-                anchors.verticalCenter: parent.verticalCenter
-                pkgName: root.item.name
-                size: 96
-            }
+    Column {
+        id: checks
+        visible: Backend.aur.pkgbuild.length > 0
+        width: parent.width
+        spacing: 10
+
+        SectionTitle {
+            text: qsTr("Things to check")
+        }
+
+        Paragraph {
+            width: checks.width
+            text: Backend.aur.findingCount > 0
+                ? qsTr("An automatic check marked the points below. It only knows common tricks and cannot tell you that a package is safe, so read the script as well.")
+                : qsTr("The automatic check found nothing unusual. It only knows common tricks and cannot tell you that a package is safe, so still read the script.")
+        }
+
+        Card {
+            visible: Backend.aur.findingCount > 0
+            width: checks.width
+            height: findingList.height
 
             Column {
-                anchors.left: heroIcon.right
-                anchors.leftMargin: 22
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: 6
+                id: findingList
+                width: checks.width
 
-                Text {
-                    textFormat: Text.PlainText
-                    width: parent.width
-                    text: root.info.name
-                    color: Look.text
-                    font.pixelSize: Look.fontHero - 2
-                    font.weight: Font.Bold
-                    elide: Text.ElideRight
-                }
+                Repeater {
+                    model: Backend.aur.findings
 
-                Text {
-                    textFormat: Text.PlainText
-                    width: parent.width
-                    text: root.info.description
-                    color: Look.textMuted
-                    font.pixelSize: Look.fontBody + 1
-                    wrapMode: Text.WordWrap
-                    maximumLineCount: 2
-                    elide: Text.ElideRight
-                }
+                    Rectangle {
+                        id: finding
 
-                Row {
-                    spacing: 8
+                        required property finding modelData
+                        required property int index
+                        readonly property string severity: modelData.severity
+                        readonly property bool located: modelData.line > 0
+                        readonly property color ink: Look.severityColor(severity, false)
 
-                    SourceBadge {
-                        source: "aur"
-                    }
-
-                    Text {
-                        textFormat: Text.PlainText
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: (root.info.upgradable ? root.info.installedVersion + " → " : "")
-                            + qsTr("%1 · %n vote(s)", "", root.info.votes).arg(root.info.version)
-                            + (root.info.maintainer.length > 0 ? " · " + root.info.maintainer : " · " + qsTr("orphaned"))
-                            + (Backend.aur.revision.length > 0 ? " · " + qsTr("revision %1").arg(Backend.aur.revision.substring(0, 7)) : "")
-                        color: Look.textMuted
-                        font.pixelSize: Look.fontSmall + 1
-                    }
-                }
-            }
-        }
-
-        // Notices
-        Rectangle {
-            visible: dependencyNotice.text.length > 0
-            width: parent.width
-            height: dependencyNotice.height + 28
-            radius: Look.radius
-            color: Look.accentSoft
-
-            Text {
-                id: dependencyNotice
-                textFormat: Text.PlainText
-                x: 16
-                y: 14
-                width: parent.width - 32
-                text: root.item.neededBy !== undefined && root.item.neededBy.length > 0
-                    ? qsTr("%1 needs this package. It is built from the AUR as well, so it is reviewed like the others.").arg(root.item.neededBy.join(", "))
-                    : Backend.aur.resolving ? qsTr("Checking which other AUR packages are needed…")
-                    : root.position === 0 && Backend.aur.plan.length > 0
-                    ? qsTr("Other AUR packages are needed and are built first: %1. You will review each of them before anything is built.").arg(Backend.aur.plan.map(entry => entry.name).join(", "))
-                    : ""
-                color: Look.text
-                font.pixelSize: Look.fontBody
-                wrapMode: Text.WordWrap
-            }
-        }
-
-        Rectangle {
-            visible: Backend.aur.problems.length > 0
-            width: parent.width
-            height: problemNotice.height + 28
-            radius: Look.radius
-            color: Look.dangerSoft
-
-            Text {
-                id: problemNotice
-                textFormat: Text.PlainText
-                x: 16
-                y: 14
-                width: parent.width - 32
-                text: Backend.aur.problems.join("\n")
-                color: Look.danger
-                font.pixelSize: Look.fontBody
-                wrapMode: Text.WordWrap
-            }
-        }
-
-        Rectangle {
-            visible: root.info.inRepos
-            width: parent.width
-            height: repoNotice.height + 28
-            radius: Look.radius
-            color: Look.accentSoft
-
-            Row {
-                id: repoNotice
-                x: 16
-                y: 14
-                width: parent.width - 32
-                spacing: 12
-
-                Text {
-                    textFormat: Text.PlainText
-                    width: parent.width - openRepo.width - 12
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: qsTr("A package with this name is available in the repositories. Install that one instead.")
-                    color: Look.text
-                    font.pixelSize: Look.fontBody
-                    wrapMode: Text.WordWrap
-                }
-
-                PillButton {
-                    id: openRepo
-                    text: qsTr("Open")
-                    onClicked: root.openPackage(root.info.name)
-                }
-            }
-        }
-
-        Rectangle {
-            visible: root.info.outOfDate || !Backend.paruAvailable
-            width: parent.width
-            height: warnText.height + 28
-            radius: Look.radius
-            color: Look.warningSoft
-
-            Text {
-                id: warnText
-                textFormat: Text.PlainText
-                x: 16
-                y: 14
-                width: parent.width - 32
-                text: !Backend.paruAvailable ? qsTr("Install “paru” to build AUR packages.")
-                    : qsTr("This package is flagged as out of date by AUR users.")
-                color: Look.warning
-                font.pixelSize: Look.fontBody
-                wrapMode: Text.WordWrap
-            }
-        }
-
-        // Dependencies
-        Column {
-            visible: root.info.depends.length + root.info.makeDepends.length > 0
-            width: parent.width
-            spacing: 6
-
-            Text {
-                textFormat: Text.PlainText
-                visible: root.info.depends.length > 0
-                width: parent.width
-                text: qsTr("Depends on: %1").arg(root.info.depends.join(", "))
-                color: Look.textMuted
-                font.pixelSize: Look.fontBody
-                wrapMode: Text.WordWrap
-            }
-
-            Text {
-                textFormat: Text.PlainText
-                visible: root.info.makeDepends.length > 0
-                width: parent.width
-                text: qsTr("Needed to build: %1").arg(root.info.makeDepends.join(", "))
-                color: Look.textMuted
-                font.pixelSize: Look.fontBody
-                wrapMode: Text.WordWrap
-            }
-        }
-
-        // Automatic check
-        Column {
-            visible: Backend.aur.pkgbuild.length > 0
-            width: parent.width
-            spacing: 10
-
-            Text {
-                textFormat: Text.PlainText
-                text: qsTr("Things to check")
-                color: Look.text
-                font.pixelSize: Look.fontTitle
-                font.weight: Font.DemiBold
-            }
-
-            Text {
-                textFormat: Text.PlainText
-                width: parent.width
-                text: Backend.aur.findings.length > 0
-                    ? qsTr("An automatic check marked the points below. It only knows common tricks and cannot tell you that a package is safe, so read the script as well.")
-                    : qsTr("The automatic check found nothing unusual. It only knows common tricks and cannot tell you that a package is safe, so still read the script.")
-                color: Look.textMuted
-                font.pixelSize: Look.fontBody
-                wrapMode: Text.WordWrap
-            }
-
-            Rectangle {
-                visible: Backend.aur.findings.length > 0
-                width: parent.width
-                height: findingList.height
-                radius: Look.radius
-                color: Look.surface
-                border.width: 1
-                border.color: Look.border
-                clip: true
-
-                Column {
-                    id: findingList
-                    width: parent.width
-
-                    Repeater {
-                        model: Backend.aur.findings
+                        width: findingList.width
+                        height: findingBody.height + 24
+                        color: findingHover.hovered && located ? Look.surfaceHover : "transparent"
+                        Accessible.role: located ? Accessible.Button : Accessible.StaticText
+                        Accessible.name: severityPill.text + ": " + modelData.title + ". " + modelData.detail
+                        Accessible.onPressAction: root.reveal(modelData.file, modelData.line)
 
                         Rectangle {
-                            id: finding
+                            visible: finding.index > 0
+                            x: 16
+                            width: finding.width - 32
+                            height: 1
+                            color: Look.border
+                        }
 
-                            required property var modelData
-                            required property int index
-                            readonly property bool located: modelData.line > 0
-                            readonly property color ink: modelData.severity === "danger" ? Look.danger
-                                : modelData.severity === "warning" ? Look.warning : Look.arch
+                        Pill {
+                            id: severityPill
+                            x: 16
+                            y: 13
+                            width: 84
+                            implicitHeight: 22
+                            text: Look.severityLabel(finding.severity)
+                            ink: finding.ink
+                            color: Look.severityColor(finding.severity, true)
+                            font.pixelSize: Look.fontSmall
+                        }
 
-                            width: findingList.width
-                            height: findingBody.height + 24
-                            color: findingHover.hovered && located ? Look.surfaceHover : "transparent"
-                            Accessible.role: located ? Accessible.Button : Accessible.StaticText
-                            Accessible.name: severityLabel.text + ": " + modelData.title + ". " + modelData.detail
-                            Accessible.onPressAction: root.reveal(modelData.file, modelData.line)
+                        Column {
+                            id: findingBody
+                            anchors.left: severityPill.right
+                            anchors.leftMargin: 14
+                            anchors.right: finding.right
+                            anchors.rightMargin: 16
+                            y: 12
+                            spacing: 4
 
-                            Rectangle {
-                                visible: finding.index > 0
-                                x: 16
-                                width: parent.width - 32
-                                height: 1
-                                color: Look.border
+                            PlainText {
+                                width: findingBody.width
+                                text: finding.modelData.title
+                                font.weight: Font.DemiBold
+                                wrapMode: Text.WordWrap
                             }
 
-                            Rectangle {
-                                id: severityPill
-                                x: 16
-                                y: 13
-                                width: 84
-                                height: 22
-                                radius: 11
-                                color: finding.modelData.severity === "danger" ? Look.dangerSoft
-                                    : finding.modelData.severity === "warning" ? Look.warningSoft : Look.archSoft
-
-                                Text {
-                                    id: severityLabel
-                                    textFormat: Text.PlainText
-                                    anchors.centerIn: parent
-                                    text: finding.modelData.severity === "danger" ? qsTr("Dangerous")
-                                        : finding.modelData.severity === "warning" ? qsTr("Check") : qsTr("Note")
-                                    color: finding.ink
-                                    font.pixelSize: Look.fontSmall
-                                    font.weight: Font.DemiBold
-                                }
+                            Paragraph {
+                                width: findingBody.width
+                                text: finding.modelData.detail
                             }
 
-                            Column {
-                                id: findingBody
-                                anchors.left: severityPill.right
-                                anchors.leftMargin: 14
-                                anchors.right: parent.right
-                                anchors.rightMargin: 16
-                                y: 12
-                                spacing: 4
-
-                                Text {
-                                    textFormat: Text.PlainText
-                                    width: parent.width
-                                    text: finding.modelData.title
-                                    color: Look.text
-                                    font.pixelSize: Look.fontBody
-                                    font.weight: Font.DemiBold
-                                    wrapMode: Text.WordWrap
-                                }
-
-                                Text {
-                                    textFormat: Text.PlainText
-                                    width: parent.width
-                                    text: finding.modelData.detail
-                                    color: Look.textMuted
-                                    font.pixelSize: Look.fontBody
-                                    wrapMode: Text.WordWrap
-                                }
-
-                                Text {
-                                    textFormat: Text.PlainText
-                                    visible: finding.located
-                                    width: parent.width
-                                    text: qsTr("%1, line %2").arg(finding.modelData.file).arg(finding.modelData.line) + "   " + finding.modelData.excerpt
-                                    color: finding.ink
-                                    font.family: "monospace"
-                                    font.pixelSize: Look.fontSmall
-                                    elide: Text.ElideRight
-                                }
+                            PlainText {
+                                visible: finding.located
+                                width: findingBody.width
+                                text: qsTr("%1, line %2").arg(finding.modelData.file).arg(finding.modelData.line) + "   " + finding.modelData.excerpt
+                                color: finding.ink
+                                font.family: "monospace"
+                                font.pixelSize: Look.fontSmall
+                                elide: Text.ElideRight
                             }
+                        }
 
-                            HoverHandler {
-                                id: findingHover
-                                enabled: finding.located
-                                cursorShape: Qt.PointingHandCursor
-                            }
+                        HoverHandler {
+                            id: findingHover
+                            enabled: finding.located
+                            cursorShape: Qt.PointingHandCursor
+                        }
 
-                            TapHandler {
-                                enabled: finding.located
-                                onTapped: root.reveal(finding.modelData.file, finding.modelData.line)
-                            }
+                        TapHandler {
+                            enabled: finding.located
+                            onTapped: root.reveal(finding.modelData.file, finding.modelData.line)
                         }
                     }
                 }
             }
+        }
 
-            Text {
-                textFormat: Text.PlainText
-                visible: Backend.aur.sourceHosts.length > 0
-                width: parent.width
-                text: qsTr("Downloads its sources from: %1").arg(Backend.aur.sourceHosts.join(", "))
-                color: Look.textMuted
-                font.pixelSize: Look.fontBody
-                wrapMode: Text.WordWrap
+        Paragraph {
+            visible: Backend.aur.sourceHosts.length > 0
+            width: checks.width
+            text: qsTr("Downloads its sources from: %1").arg(Backend.aur.sourceHosts.join(", "))
+        }
+    }
+
+    Column {
+        id: review
+        width: parent.width
+        spacing: 10
+
+        FileSection {
+            id: pkgbuild
+            width: review.width
+            name: "PKGBUILD"
+            note: qsTr("This script runs on your machine when the package is built. Read it before you continue.")
+            text: Backend.aur.pkgbuild
+            marks: root.marksFor("PKGBUILD")
+            minimumHeight: 120
+
+            BusyIndicator {
+                anchors.centerIn: parent
+                visible: Backend.aur.loadingDetails && Backend.aur.pkgbuild.length === 0
+                running: visible
+            }
+
+            Paragraph {
+                anchors.centerIn: parent
+                visible: !Backend.aur.loadingDetails && Backend.aur.pkgbuild.length === 0
+                text: qsTr("The PKGBUILD could not be loaded, so this package cannot be installed from here.")
             }
         }
 
-        // PKGBUILD review
-        Column {
-            width: parent.width
-            spacing: 10
+        // Install scriptlets, hooks and units run on the machine as well, some of them as root.
+        Repeater {
+            id: fileViews
+            model: Backend.aur.files
 
-            Text {
-                textFormat: Text.PlainText
-                text: qsTr("PKGBUILD")
-                color: Look.text
-                font.pixelSize: Look.fontTitle
-                font.weight: Font.DemiBold
+            FileSection {
+                required property scriptFile modelData
+
+                width: review.width
+                topPadding: 8
+                name: modelData.name
+                note: modelData.name.endsWith(".install")
+                    ? qsTr("This script runs as administrator when the package is installed, updated or removed.")
+                    : qsTr("This file is installed with the package and can start programs.")
+                text: modelData.text
+                marks: root.marksFor(modelData.name)
+            }
+        }
+
+        CheckBox {
+            id: reviewBox
+            visible: !root.info.inRepos
+            enabled: root.ready
+            text: Backend.aur.fileCount > 0 ? qsTr("I have read the PKGBUILD and the files above, and trust them")
+                : qsTr("I have read the PKGBUILD and trust it")
+
+            contentItem: PlainText {
+                leftPadding: reviewBox.indicator.width + 10
+                text: reviewBox.text
+                verticalAlignment: Text.AlignVCenter
             }
 
-            Text {
-                textFormat: Text.PlainText
-                width: parent.width
-                text: qsTr("This script runs on your machine when the package is built. Read it before you continue.")
-                color: Look.textMuted
-                font.pixelSize: Look.fontBody
-                wrapMode: Text.WordWrap
-            }
+            indicator: Rectangle {
+                implicitWidth: 20
+                implicitHeight: 20
+                y: (reviewBox.height - height) / 2
+                radius: 5
+                color: reviewBox.checked ? Look.accent : Look.surface
+                border.width: reviewBox.checked ? 0 : (reviewBox.visualFocus ? 2 : 1)
+                border.color: reviewBox.visualFocus ? Look.accent : Look.textMuted
 
-            CodeView {
-                id: pkgbuildView
-                width: parent.width
-                minimumHeight: 120
-                text: Backend.aur.pkgbuild
-                marks: root.marksFor("PKGBUILD")
-                accessibleName: qsTr("PKGBUILD")
-
-                BusyIndicator {
+                Glyph {
                     anchors.centerIn: parent
-                    visible: Backend.aur.loadingDetails && Backend.aur.pkgbuild.length === 0
-                    running: visible
-                }
-
-                Text {
-                    textFormat: Text.PlainText
-                    anchors.centerIn: parent
-                    visible: !Backend.aur.loadingDetails && Backend.aur.pkgbuild.length === 0
-                    text: qsTr("The PKGBUILD could not be loaded, so this package cannot be installed from here.")
-                    color: Look.textMuted
-                    font.pixelSize: Look.fontBody
+                    visible: reviewBox.checked
+                    size: 16
+                    strokeWidth: 2.6
+                    color: Look.onAccent
+                    path: "M5 12.5l4.5 4.5L19 7"
                 }
             }
+        }
 
-            // Install scriptlets, hooks and units run on the machine as well, some of them as root.
-            Repeater {
-                id: fileViews
-                model: Backend.aur.files
+        Notice {
+            width: review.width
+            tone: Notice.Danger
+            text: root.blocked
+        }
 
-                Column {
-                    id: fileSection
+        Row {
+            spacing: 12
 
-                    required property var modelData
-                    readonly property alias view: fileView
-
-                    width: parent.width
-                    spacing: 10
-                    topPadding: 8
-
-                    Text {
-                        textFormat: Text.PlainText
-                        text: fileSection.modelData.name
-                        color: Look.text
-                        font.pixelSize: Look.fontTitle
-                        font.weight: Font.DemiBold
-                    }
-
-                    Text {
-                        textFormat: Text.PlainText
-                        width: parent.width
-                        text: fileSection.modelData.name.endsWith(".install")
-                            ? qsTr("This script runs as administrator when the package is installed, updated or removed.")
-                            : qsTr("This file is installed with the package and can start programs.")
-                        color: Look.textMuted
-                        font.pixelSize: Look.fontBody
-                        wrapMode: Text.WordWrap
-                    }
-
-                    CodeView {
-                        id: fileView
-                        width: parent.width
-                        text: fileSection.modelData.text
-                        marks: root.marksFor(fileSection.modelData.name)
-                        accessibleName: fileSection.modelData.name
-                    }
-                }
-            }
-
-            CheckBox {
-                id: reviewBox
+            PillButton {
+                implicitWidth: Math.max(190, implicitContentWidth + 36)
+                size: "large"
                 visible: !root.info.inRepos
-                enabled: Backend.aur.pkgbuild.length > 0 && !Backend.aur.loadingDetails
-                checked: root.reviewed
-                onToggled: root.reviewed = checked
-                text: Backend.aur.files.length > 0 ? qsTr("I have read the PKGBUILD and the files above, and trust them")
-                    : qsTr("I have read the PKGBUILD and trust it")
-
-                contentItem: Text {
-                    textFormat: Text.PlainText
-                    leftPadding: reviewBox.indicator.width + 10
-                    text: reviewBox.text
-                    color: Look.text
-                    font.pixelSize: Look.fontBody
-                    verticalAlignment: Text.AlignVCenter
-                }
-
-                indicator: Rectangle {
-                    implicitWidth: 20
-                    implicitHeight: 20
-                    y: (reviewBox.height - height) / 2
-                    radius: 5
-                    color: reviewBox.checked ? Look.accent : Look.surface
-                    border.width: reviewBox.checked ? 0 : (reviewBox.visualFocus ? 2 : 1)
-                    border.color: reviewBox.visualFocus ? Look.accent : Look.textMuted
-
-                    Glyph {
-                        anchors.centerIn: parent
-                        visible: reviewBox.checked
-                        size: 16
-                        strokeWidth: 2.6
-                        color: Look.onAccent
-                        path: "M5 12.5l4.5 4.5L19 7"
-                    }
-                }
+                enabled: Backend.paruAvailable && reviewBox.checked && root.ready && (!root.last || !Backend.aur.resolving)
+                tone: Backend.aur.dangerous ? "danger" : "primary"
+                text: !root.last ? qsTr("Next package")
+                    : root.queued ? (root.updates ? qsTr("Build and update %n package(s)", "", root.accepted.length + 1)
+                        : qsTr("Build and install %n package(s)", "", root.accepted.length + 1))
+                    : root.info.upgradable ? qsTr("Build and update")
+                    : root.info.installed ? qsTr("Rebuild and reinstall") : qsTr("Build and install")
+                onClicked: root.advance(true)
             }
 
-            Text {
-                textFormat: Text.PlainText
-                visible: root.blocked.length > 0
-                width: parent.width
-                text: root.blocked
-                color: Look.danger
-                font.pixelSize: Look.fontBody
-                wrapMode: Text.WordWrap
-            }
-
-            Row {
-                spacing: 12
-
-                PillButton {
-                    implicitWidth: Math.max(190, implicitContentWidth + 36)
-                    implicitHeight: 42
-                    visible: !root.info.inRepos
-                    enabled: Backend.paruAvailable && root.reviewed && Backend.aur.pkgbuild.length > 0 && !Backend.aur.loadingDetails
-                        && (!root.last || !Backend.aur.resolving)
-                    tone: root.dangerous ? "danger" : "primary"
-                    text: !root.last ? qsTr("Next package")
-                        : root.queued ? (root.updates ? qsTr("Build and update %n package(s)", "", root.accepted.length + 1)
-                            : qsTr("Build and install %n package(s)", "", root.accepted.length + 1))
-                        : root.info.upgradable ? qsTr("Build and update")
-                        : root.info.installed ? qsTr("Rebuild and reinstall") : qsTr("Build and install")
-                    onClicked: root.advance(true)
-                }
-
-                PillButton {
-                    implicitHeight: 42
-                    visible: root.queued
-                    enabled: !root.last || Backend.paruAvailable || root.accepted.length === 0
-                    tone: "soft"
-                    text: !root.last ? qsTr("Skip this package")
-                        : root.accepted.length === 0 ? qsTr("Skip")
-                        : root.updates ? qsTr("Skip and update %n package(s)", "", root.accepted.length)
-                        : qsTr("Skip and install %n package(s)", "", root.accepted.length)
-                    onClicked: root.advance(false)
-                }
+            PillButton {
+                size: "large"
+                visible: root.queued
+                enabled: !root.last || Backend.paruAvailable || root.accepted.length === 0
+                tone: "soft"
+                text: !root.last ? qsTr("Skip this package")
+                    : root.accepted.length === 0 ? qsTr("Skip")
+                    : root.updates ? qsTr("Skip and update %n package(s)", "", root.accepted.length)
+                    : qsTr("Skip and install %n package(s)", "", root.accepted.length)
+                onClicked: root.advance(false)
             }
         }
     }

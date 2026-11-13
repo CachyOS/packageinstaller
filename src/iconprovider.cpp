@@ -1,42 +1,67 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "iconprovider.hpp"
 
+#include <QElapsedTimer>
 #include <QFileInfo>
 #include <QIcon>
 #include <QImageReader>
 #include <QPainter>
 #include <QPainterPath>
 
-/// One icon request. Lives until QML has taken the image.
+#include <atomic>
+#include <mutex>
+
+using namespace Qt::StringLiterals;
+
+class IconResponse;
+
+/// One icon request, shared by the provider (GUI thread) and the response QML holds
+/// (its image thread), which QML may delete at any time once it has cancelled.
+struct IconRequest {
+    QString id;
+    int extent = 0;
+    QString fallback;  ///< the name for the generated tile if the icon file is unreadable, GUI thread only
+    std::atomic_bool cancelled = false;
+
+    /// Answers once, on the response's thread. Does nothing if QML already deleted it.
+    void finish(const QImage& image);
+
+    std::mutex mutex;
+    IconResponse* response = nullptr;  ///< guarded by mutex, cleared when the response goes
+};
+
 class IconResponse : public QQuickImageResponse {
  public:
-    explicit IconResponse(QString fallback) : m_fallback(std::move(fallback)) { }
-
-    [[nodiscard]] QQuickTextureFactory* textureFactory() const override {
-        return QQuickTextureFactory::textureFactoryForImage(m_image);
+    explicit IconResponse(std::shared_ptr<IconRequest> request) : m_request(std::move(request)) {
+        m_request->response = this;
+    }
+    ~IconResponse() override {
+        const std::scoped_lock lock(m_request->mutex);
+        m_request->response = nullptr;
     }
 
-    /// Answers on the thread QML asked from: by then it listens, whichever thread got here first.
-    void finish(const QImage& image) {
-        QMetaObject::invokeMethod(this, [this, image] {
-            m_image = image;
-            emit finished();
-        }, Qt::QueuedConnection);
-    }
+    QQuickTextureFactory* textureFactory() const override { return QQuickTextureFactory::textureFactoryForImage(m_image); }
 
     /// The item that asked is gone, as happens to a whole page with every letter typed.
-    void cancel() override { m_cancelled.storeRelaxed(1); }
-    [[nodiscard]] bool cancelled() const { return m_cancelled.loadRelaxed() != 0; }
+    void cancel() override { m_request->cancelled = true; }
 
-    /// The name for the generated tile when the icon file turns out to be unreadable.
-    [[nodiscard]] const QString& fallback() const { return m_fallback; }
-    void setFallback(const QString& fallback) { m_fallback = fallback; }
+    void deliver(const QImage& image) {
+        m_image = image;
+        emit finished();
+    }
 
  private:
+    std::shared_ptr<IconRequest> m_request;
     QImage m_image;
-    QString m_fallback;
-    QAtomicInt m_cancelled;
 };
+
+void IconRequest::finish(const QImage& image) {
+    const std::scoped_lock lock(mutex);
+    if (auto* target = std::exchange(response, nullptr)) {
+        // posted while the lock keeps it alive, and Qt drops the call if it is deleted before
+        QMetaObject::invokeMethod(target, [target, image] { target->deliver(image); }, Qt::QueuedConnection);
+    }
+}
 
 IconProvider::IconProvider() {
     m_decoded.setMaxCost(64 * 1024 * 1024);
@@ -49,27 +74,20 @@ IconProvider::~IconProvider() {
     m_pool.waitForDone();
 }
 
-void IconProvider::setIndex(IconIndex index) {
-    m_index = std::move(index);
+void IconProvider::setIndex(IconIndex index, bool flatpak) {
+    (flatpak ? m_flatpak : m_index) = std::move(index);
     // A reload follows an install or removal, which may have brought icons to the theme.
     m_notInTheme.clear();
     m_decoded.clear();
 }
 
-void IconProvider::setFlatpakIndex(IconIndex index) {
-    m_flatpak = std::move(index);
-    m_notInTheme.clear();
-    m_decoded.clear();
-}
-
 QQuickImageResponse* IconProvider::requestImageResponse(const QString& id, const QSize& requestedSize) {
-    const int extent = requestedSize.width() > 0 ? requestedSize.width() : 64;
     // Called on QML's image thread; the indexes and the icon theme belong to the GUI thread.
-    auto* response = new IconResponse(id);
-    QMetaObject::invokeMethod(this, [this, request = Request{response, id, extent}] {
+    auto request   = std::make_shared<IconRequest>(id, requestedSize.width() > 0 ? requestedSize.width() : 64, id);
+    auto* response = new IconResponse(request);
+    QMetaObject::invokeMethod(this, [this, request = std::move(request)] {
         m_queue << request;
-        if (!m_draining) {
-            m_draining = true;
+        if (!std::exchange(m_draining, true)) {
             QMetaObject::invokeMethod(this, &IconProvider::drain, Qt::QueuedConnection);
         }
     }, Qt::QueuedConnection);
@@ -81,14 +99,11 @@ void IconProvider::drain() {
     spent.start();
     while (!m_queue.isEmpty() && spent.elapsed() < 4) {
         const auto request = m_queue.takeFirst();
-        if (request.response.isNull()) {
-            continue;
+        if (request->cancelled) {
+            request->finish({});
+        } else {
+            resolve(request);
         }
-        if (request.response->cancelled()) {
-            request.response->finish({});
-            continue;
-        }
-        resolve(request.response, request.id, request.extent);
     }
     m_draining = !m_queue.isEmpty();
     if (m_draining) {
@@ -97,80 +112,78 @@ void IconProvider::drain() {
     }
 }
 
-void IconProvider::resolve(const QPointer<IconResponse>& response, const QString& id, int extent) {
+void IconProvider::resolve(const Request& request) {
+    const auto& id   = request->id;
+    const int extent = request->extent;
     // The CachyOS kernels and their modules carry no icon; give them the Kernel Manager logo
     // instead of a letter tile.
-    if (id == QLatin1String("linux-cachyos") || id.startsWith(QLatin1String("linux-cachyos-"))) {
-        if (fromFile(response, QStringLiteral(":/qt/qml/CachyOS/PackageInstaller/icons/cachyos-kernel.png"), id, extent)) {
-            return;
-        }
+    if ((id == "linux-cachyos"_L1 || id.startsWith("linux-cachyos-"_L1))
+        && fromFile(request, u":/qt/qml/CachyOS/PackageInstaller/icons/cachyos-kernel.png"_s, id)) {
+        return;
     }
 
     // Flatpak apps have their own catalogue; an installed one also exports its icon to the theme.
-    if (id.startsWith(QLatin1String("flatpak/"))) {
+    if (id.startsWith("flatpak/"_L1)) {
         const auto app = id.mid(8);
         const auto ref = m_flatpak.value(app);
         // "org.mozilla.firefox": the last part names the app
-        const auto tile = app.section(QLatin1Char('.'), -1);
-        if (fromFile(response, ref.path, tile, extent)) {
+        const auto tile = app.section(u'.', -1);
+        if (fromFile(request, ref.path, tile)) {
             return;
         }
         const auto image = themed(ref, app, extent);
-        response->finish(image.isNull() ? generated(tile, extent) : image);
+        request->finish(image.isNull() ? generated(tile, extent) : image);
         return;
     }
 
     // "gimp-help-de" and "firefox-esr-bin" have no icon of their own: walk up the
     // name ("gimp-help", "gimp") so related packages share the application's icon.
-    for (QString name = id; !name.isEmpty(); name.truncate(qMax<qsizetype>(name.lastIndexOf(QLatin1Char('-')), 0))) {
+    for (QString name = id; !name.isEmpty(); name.truncate(qMax<qsizetype>(name.lastIndexOf(u'-'), 0))) {
         const auto ref = m_index.value(name);
-        if (fromFile(response, ref.path, id, extent)) {
+        if (fromFile(request, ref.path, id)) {
             return;
         }
-        const auto image = themed(ref, name, extent);
-        if (!image.isNull()) {
-            response->finish(image);
+        if (const auto image = themed(ref, name, extent); !image.isNull()) {
+            request->finish(image);
             return;
         }
     }
-    response->finish(generated(id, extent));
+    request->finish(generated(id, extent));
 }
 
-bool IconProvider::fromFile(const QPointer<IconResponse>& response, const QString& path, const QString& fallback, int extent) {
-    if (path.isEmpty() || !QFileInfo::exists(path)) {
+bool IconProvider::fromFile(const Request& request, const QString& path, const QString& fallback) {
+    if (path.isEmpty()) {
         return false;
     }
-    const auto key = QString::number(extent) + QLatin1Char(':') + path;
+    const Key key{path, request->extent};
     if (const auto* cached = m_decoded.object(key)) {
-        response->finish(*cached);
+        request->finish(*cached);
         return true;
     }
+    if (!QFileInfo::exists(path)) {
+        return false;
+    }
 
-    response->setFallback(fallback);
-    auto& waiting = m_waiting[key];
-    waiting << response;
+    request->fallback = fallback;
+    auto& waiting     = m_waiting[key];
+    waiting << request;
     if (waiting.size() > 1) {
         return true;  // already being decoded
     }
-    m_pool.start([this, key, path, extent] {
-        QImageReader reader(path);
-        reader.setScaledSize(QSize(extent, extent));
-        const auto image = reader.read();
-        QMetaObject::invokeMethod(this, [this, key, image] { decoded(key, image); }, Qt::QueuedConnection);
+    m_pool.start([this, key] {
+        QImageReader reader(key.first);
+        reader.setScaledSize(QSize(key.second, key.second));
+        QMetaObject::invokeMethod(this, [this, key, image = reader.read()] { decoded(key, image); }, Qt::QueuedConnection);
     });
     return true;
 }
 
-void IconProvider::decoded(const QString& key, const QImage& image) {
+void IconProvider::decoded(const Key& key, const QImage& image) {
     if (!image.isNull()) {
         m_decoded.insert(key, new QImage(image), qMax<qsizetype>(image.sizeInBytes(), 1));
     }
-    const int extent = key.section(QLatin1Char(':'), 0, 0).toInt();
-    const auto waiting = m_waiting.take(key);
-    for (const auto& response : waiting) {
-        if (!response.isNull()) {
-            response->finish(image.isNull() ? generated(response->fallback(), extent) : image);
-        }
+    for (const auto& request : m_waiting.take(key)) {
+        request->finish(image.isNull() ? generated(request->fallback, key.second) : image);
     }
 }
 

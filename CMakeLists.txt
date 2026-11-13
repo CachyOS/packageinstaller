@@ -62,6 +62,8 @@ set(PI_HELPER_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/cachyos-pi")
 add_library(pi-scan STATIC src/pkgscan.hpp src/pkgscan.cpp)
 target_include_directories(pi-scan PUBLIC src)
 target_link_libraries(pi-scan PUBLIC Qt6::Core PRIVATE project_options project_warnings)
+# the GUI registers Finding and ScriptFile for QML
+qt_extract_metatypes(pi-scan)
 
 add_executable(cachyos-pi-scan src/scan/main.cpp)
 target_compile_definitions(cachyos-pi-scan PRIVATE PI_VERSION="${PROJECT_VERSION}")
@@ -71,7 +73,7 @@ target_link_libraries(cachyos-pi-scan PRIVATE pi-scan project_options project_wa
 ## GUI
 ##
 qt_add_executable(${PROJECT_NAME}
-    src/main.cpp
+    src/main.cpp src/process.hpp
     src/alpmdb.hpp src/alpmdb.cpp
     src/catalog.hpp src/catalog.cpp
     src/packagemodel.hpp src/packagemodel.cpp
@@ -84,6 +86,7 @@ qt_add_executable(${PROJECT_NAME}
 set(PI_QML_FILES
     qml/Main.qml
     qml/Look.qml
+    qml/AppearanceSettings.qml
     qml/Glyph.qml
     qml/AppIcon.qml
     qml/AppCard.qml
@@ -94,7 +97,15 @@ set(PI_QML_FILES
     qml/SearchField.qml
     qml/HomePage.qml
     qml/BrowsePage.qml
+    qml/PageHeader.qml
+    qml/PageList.qml
+    qml/UpdatesBanner.qml
+    qml/EmptyState.qml
     qml/DetailsPage.qml
+    qml/ThemePreview.qml
+    qml/DetailsHero.qml
+    qml/ScreenshotStrip.qml
+    qml/FactsCard.qml
     qml/UpdatesPage.qml
     qml/AurPage.qml
     qml/AurDetailsPage.qml
@@ -106,7 +117,18 @@ set(PI_QML_FILES
     qml/SettingsPage.qml
     qml/CodeView.qml
     qml/WheelScroll.qml
+    qml/PlainText.qml
+    qml/Heading.qml
+    qml/SectionTitle.qml
+    qml/Muted.qml
+    qml/Notice.qml
+    qml/ScrollPage.qml
+    qml/Card.qml
+    qml/Pill.qml
+    qml/Chip.qml
+    qml/Dialog.qml
     qml/TransactionDialog.qml
+    qml/SourceCard.qml
 )
 # Serve the QML files from the module root. Left in qml/, each file would also see its
 # siblings through the implicit directory import, which knows nothing about the qmldir
@@ -139,7 +161,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE src)
 target_link_libraries(${PROJECT_NAME} PRIVATE
     project_options project_warnings pi-scan
     Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Qml Qt6::Quick Qt6::QuickControls2 Qt6::Network Qt6::Concurrent
-    AppStreamQt PkgConfig::LIBALPM backward)
+    AppStreamQt PkgConfig::LIBALPM ryml::ryml backward)
 
 # The project warnings are for our own sources, not for the code qmlcachegen generates.
 get_target_property(pi_sources ${PROJECT_NAME} SOURCES)
@@ -177,9 +199,13 @@ if(BUILD_TESTING)
     target_link_libraries(test-pkgscan PRIVATE pi-scan project_options Qt6::Test)
     add_test(NAME pkgscan COMMAND test-pkgscan)
 
-    qt_add_executable(test-pkglist tests/test_pkglist.cpp)
+    qt_add_executable(test-pkglist tests/test_pkglist.cpp
+        src/alpmdb.hpp src/alpmdb.cpp
+        src/catalog.hpp src/catalog.cpp)
     target_compile_definitions(test-pkglist PRIVATE PKGLIST_FILE="${CMAKE_CURRENT_SOURCE_DIR}/pkglist.yaml")
-    target_link_libraries(test-pkglist PRIVATE project_options Qt6::Test)
+    target_include_directories(test-pkglist PRIVATE src)
+    target_link_libraries(test-pkglist PRIVATE project_options project_warnings
+        Qt6::Test Qt6::Qml AppStreamQt PkgConfig::LIBALPM ryml::ryml)
     add_test(NAME pkglist COMMAND test-pkglist)
 
     add_executable(cachyos-pi-helper-test src/helper/main.cpp)

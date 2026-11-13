@@ -22,12 +22,12 @@ WheelHandler {
         easing.type: Easing.OutCubic
     }
 
-    function clamp(y) {
+    function clamp(y: real): real {
         const top = view.originY
         return Math.max(top, Math.min(y, top + view.contentHeight - view.height))
     }
 
-    onWheel: event => {
+    onWheel: function (event: WheelEvent) {
         if (view === null || view.contentHeight <= view.height) {
             return
         }

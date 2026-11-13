@@ -17,12 +17,10 @@ AbstractButton {
     Accessible.name: url
     onClicked: if (valid) Qt.openUrlExternally(url)
 
-    contentItem: Text {
+    contentItem: PlainText {
         id: label
-        textFormat: Text.PlainText
         text: root.url
         color: Look.accent
-        font.pixelSize: Look.fontBody
         font.underline: root.visualFocus || root.hovered
         elide: Text.ElideRight
     }

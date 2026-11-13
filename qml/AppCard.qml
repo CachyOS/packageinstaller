@@ -16,46 +16,40 @@ AbstractButton {
     Accessible.name: title
     Accessible.description: summary
 
-    background: Rectangle {
-        radius: Look.radius
-        color: root.hovered ? Look.surfaceHover : Look.surface
-        border.width: root.visualFocus ? 2 : 1
-        border.color: root.visualFocus || root.hovered ? Look.accent : Look.border
+    background: Card {
+        hovered: root.hovered
+        focused: root.visualFocus
     }
 
     contentItem: Item {
+        id: content
+
         AppIcon {
             id: icon
             x: 14
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenter: content.verticalCenter
             pkgName: root.pkgName
             size: 60
         }
 
         Column {
+            id: texts
             anchors.left: icon.right
             anchors.leftMargin: 14
-            anchors.right: parent.right
+            anchors.right: content.right
             anchors.rightMargin: 14
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenter: content.verticalCenter
             spacing: 4
 
-            Text {
-                textFormat: Text.PlainText
-                width: parent.width
+            SectionTitle {
+                width: texts.width
                 text: root.title
-                color: Look.text
-                font.pixelSize: Look.fontTitle
-                font.weight: Font.DemiBold
                 elide: Text.ElideRight
             }
 
-            Text {
-                textFormat: Text.PlainText
-                width: parent.width
+            Muted {
+                width: texts.width
                 text: root.summary
-                color: Look.textMuted
-                font.pixelSize: Look.fontSmall + 1
                 wrapMode: Text.WordWrap
                 maximumLineCount: 2
                 elide: Text.ElideRight
@@ -70,22 +64,11 @@ AbstractButton {
                     source: root.source
                 }
 
-                Rectangle {
+                Pill {
                     visible: root.installed
-                    width: stateLabel.implicitWidth + 16
-                    height: 20
-                    radius: 10
+                    text: root.upgradable ? qsTr("Update available") : qsTr("Installed")
+                    ink: root.upgradable ? Look.warning : Look.textMuted
                     color: root.upgradable ? Look.warningSoft : Look.surfaceAlt
-
-                    Text {
-                        id: stateLabel
-                        textFormat: Text.PlainText
-                        anchors.centerIn: parent
-                        text: root.upgradable ? qsTr("Update available") : qsTr("Installed")
-                        color: root.upgradable ? Look.warning : Look.textMuted
-                        font.pixelSize: 11
-                        font.weight: Font.DemiBold
-                    }
                 }
             }
         }

@@ -10,7 +10,6 @@ AbstractButton {
 
     implicitHeight: 42
     Accessible.role: Accessible.PageTab
-    Accessible.name: text
 
     background: Rectangle {
         radius: Look.radiusSmall
@@ -20,48 +19,39 @@ AbstractButton {
     }
 
     contentItem: Item {
+        id: content
+
         Glyph {
             id: icon
             x: 12
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenter: content.verticalCenter
             path: root.glyph
             color: root.current ? Look.accent : Look.textMuted
         }
 
-        Text {
-            textFormat: Text.PlainText
+        PlainText {
             anchors.left: icon.right
             anchors.leftMargin: 12
-            anchors.right: badge.visible ? badge.left : parent.right
+            anchors.right: badge.visible ? badge.left : content.right
             anchors.rightMargin: 8
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenter: content.verticalCenter
             text: root.text
             color: root.current ? Look.text : Look.textMuted
-            font.pixelSize: Look.fontBody
             font.weight: root.current ? Font.DemiBold : Font.Medium
             elide: Text.ElideRight
         }
 
-        Rectangle {
+        Pill {
             id: badge
             visible: root.badge > 0
-            anchors.right: parent.right
+            anchors.right: content.right
             anchors.rightMargin: 10
-            anchors.verticalCenter: parent.verticalCenter
-            width: Math.max(22, badgeText.implicitWidth + 12)
-            height: 20
-            radius: 10
+            anchors.verticalCenter: content.verticalCenter
+            width: Math.max(22, implicitWidth - 4)
+            text: root.badge
+            ink: Look.onAccent
             color: Look.accent
-
-            Text {
-                id: badgeText
-                textFormat: Text.PlainText
-                anchors.centerIn: parent
-                text: root.badge
-                color: Look.onAccent
-                font.pixelSize: 11
-                font.weight: Font.Bold
-            }
+            font.weight: Font.Bold
         }
     }
 

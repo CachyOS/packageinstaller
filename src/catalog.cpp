@@ -8,23 +8,17 @@
 #include <AppStreamQt/pool.h>
 #include <AppStreamQt/screenshot.h>
 
+#include <QDateTime>
+#include <QDirListing>
 #include <QFileInfo>
+#include <QIODevice>
 
-namespace {
+#include <ryml.hpp>
 
-struct AppInfo {
-    QString title;
-    QString summary;
-    QString description;
-    QString developer;
-    QString homepage;
-    QStringList categories;
-    QStringList screenshots;
-    IconRef icon;
-    bool desktopApp = false;
-};
+#include <mutex>
+#include <optional>
 
-}  // namespace
+using namespace Qt::StringLiterals;
 
 namespace catalog {
 
@@ -63,13 +57,12 @@ QStringList screenshotUrls(const AppStream::Component& component) {
         uint bestWidth = 0;
         for (const auto& image : shot.images()) {
             // the largest thumbnail up to ~1250px is plenty; fall back to the source image
-            const bool better = best.isEmpty() || (image.width() > bestWidth && image.width() <= 1300);
-            if (better) {
+            if (best.isEmpty() || (image.width() > bestWidth && image.width() <= 1300)) {
                 best      = image.url();
                 bestWidth = image.width();
             }
         }
-        if (best.isValid() && (best.scheme() == QLatin1String("https") || best.scheme() == QLatin1String("http"))) {
+        if (best.isValid() && (best.scheme() == "https"_L1 || best.scheme() == "http"_L1)) {
             urls << best.toString();
         }
         if (urls.size() >= 8) {
@@ -83,14 +76,39 @@ QStringList screenshotUrls(const AppStream::Component& component) {
 
 namespace {
 
-QHash<QString, AppInfo> loadAppStream() {
-    QHash<QString, AppInfo> apps;
+/// The AppStream fields of each package (in a partially filled Package) and its icon.
+struct AppStreamData {
+    QHash<QString, Package> apps;
+    IconIndex icons;
+};
+
+/// Newest modification time of the system catalog directories. A catalog update renames
+/// files into them, so this changes whenever the pool would read something new.
+qint64 catalogStamp() {
+    qint64 newest = 0;
+    const auto touch = [&newest](const QFileInfo& info) {
+        if (info.exists()) {
+            newest = std::max(newest, info.lastModified().toMSecsSinceEpoch());
+        }
+    };
+    for (const auto& root : {u"/usr/share/swcatalog"_s, u"/var/lib/swcatalog"_s, u"/var/cache/swcatalog"_s,
+             u"/usr/share/app-info"_s, u"/var/cache/app-info"_s}) {
+        touch(QFileInfo(root));
+        for (const auto& entry : QDirListing(root, QDirListing::IteratorFlag::DirsOnly)) {
+            touch(entry.fileInfo());
+        }
+    }
+    return newest;
+}
+
+AppStreamData readAppStream() {
+    AppStreamData data;
 
     AppStream::Pool pool;
     pool.setFlags(AppStream::Pool::FlagLoadOsCatalog);
     if (!pool.load()) {
         qWarning("AppStream: %s", qPrintable(pool.lastError()));
-        return apps;
+        return data;
     }
 
     for (const auto& component : pool.components()) {
@@ -99,50 +117,59 @@ QHash<QString, AppInfo> loadAppStream() {
             && kind != AppStream::Component::KindWebApp) {
             continue;
         }
-        AppInfo info;
-        info.desktopApp  = kind != AppStream::Component::KindConsoleApp;
-        info.title       = component.name();
-        info.summary     = component.summary();
-        info.description = component.description();
-        info.developer   = component.developer().name();
-        info.homepage    = component.url(AppStream::Component::UrlKindHomepage).toString();
-        info.categories  = component.categories();
-        info.screenshots = catalog::screenshotUrls(component);
-        info.icon        = catalog::iconOf(component);
+        Package app;
+        app.isApp           = kind != AppStream::Component::KindConsoleApp;
+        app.title           = component.name();
+        app.summary         = component.summary();
+        app.longDescription = component.description();
+        app.developer       = component.developer().name();
+        app.url             = component.url(AppStream::Component::UrlKindHomepage).toString();
+        app.categories      = component.categories();
+        app.screenshots     = catalog::screenshotUrls(component);
+        const auto icon     = catalog::iconOf(component);
 
         for (const auto& pkgname : component.packageNames()) {
             // A package can ship several components (e.g. a suite); keep the desktop app with an icon.
-            const auto existing = apps.constFind(pkgname);
-            if (existing != apps.cend() && (!existing->icon.path.isEmpty() || info.icon.path.isEmpty())) {
+            if (data.apps.contains(pkgname) && (!data.icons.value(pkgname).path.isEmpty() || icon.path.isEmpty())) {
                 continue;
             }
-            apps.insert(pkgname, info);
+            data.apps.insert(pkgname, app);
+            if (icon.path.isEmpty() && icon.stock.isEmpty()) {
+                data.icons.remove(pkgname);
+            } else {
+                data.icons.insert(pkgname, icon);
+            }
         }
     }
-    return apps;
+    return data;
 }
 
 }  // namespace
 
 namespace catalog {
 
-LoadResult load() {
-    LoadResult result;
-    result.packages = alpmdb::load(&result.dbPath, &result.error);
-
-    const auto apps = loadAppStream();
-    for (auto it = apps.cbegin(); it != apps.cend(); ++it) {
-        if (!it->icon.path.isEmpty() || !it->icon.stock.isEmpty()) {
-            result.icons.insert(it.key(), it->icon);
-        }
+std::expected<LoadResult, QString> load() {
+    auto databases = alpmdb::load();
+    if (!databases) {
+        return std::unexpected(databases.error());
     }
 
-    for (auto& pkg : result.packages) {
-        const auto found = apps.constFind(pkg.name);
-        if (found == apps.cend()) {
+    // Reading the pool takes seconds, so it is reused until the catalog on disk changes.
+    static std::mutex mutex;
+    static std::optional<qint64> stamp;
+    static AppStreamData cache;
+    const std::scoped_lock lock(mutex);
+    if (const auto now = catalogStamp(); stamp != now) {
+        cache = readAppStream();
+        stamp = now;
+    }
+
+    for (auto& pkg : databases->packages) {
+        const auto found = cache.apps.constFind(pkg.name);
+        if (found == cache.apps.cend()) {
             continue;
         }
-        pkg.isApp = found->desktopApp;
+        pkg.isApp = found->isApp;
         if (!found->title.isEmpty()) {
             pkg.title = found->title;
         }
@@ -150,14 +177,47 @@ LoadResult load() {
             pkg.summary = found->summary;
         }
         if (pkg.url.isEmpty()) {
-            pkg.url = found->homepage;
+            pkg.url = found->url;
         }
-        pkg.longDescription = found->description;
+        pkg.longDescription = found->longDescription;
         pkg.developer       = found->developer;
         pkg.categories      = found->categories;
         pkg.screenshots     = found->screenshots;
     }
-    return result;
+    return LoadResult{.packages = std::move(databases->packages), .dbPath = databases->dbPath, .icons = cache.icons};
+}
+
+CuratedList loadCurated(QIODevice& device) {
+    const auto yaml = device.readAll();
+    const auto tree = ryml::parse_in_arena(ryml::csubstr(yaml.constData(), static_cast<size_t>(yaml.size())));
+    const auto text = [](ryml::csubstr s) { return QString::fromUtf8(s.str, static_cast<qsizetype>(s.len)); };
+
+    CuratedList list;
+    const auto root = tree.crootref();
+    if (!root.is_seq()) {
+        return list;
+    }
+    for (const auto section : root.children()) {
+        const auto title    = section.is_map() ? section.find_child("name") : ryml::ConstNodeRef{};
+        const auto packages = section.is_map() ? section.find_child("packages") : ryml::ConstNodeRef{};
+        if (title.invalid() || !title.has_val() || packages.invalid() || !packages.is_seq()) {
+            continue;
+        }
+        CuratedSection out{.title = text(title.val()), .names = {}};
+        for (const auto entry : packages.children()) {
+            auto names = entry.has_val() ? text(entry.val()).split(u' ', Qt::SkipEmptyParts) : QStringList{};
+            if (names.isEmpty()) {
+                continue;
+            }
+            const auto name = names.takeFirst();
+            out.names << name;
+            if (!names.isEmpty()) {
+                list.companions.insert(name, names);
+            }
+        }
+        list.sections << out;
+    }
+    return list;
 }
 
 }  // namespace catalog

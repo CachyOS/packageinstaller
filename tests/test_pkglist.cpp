@@ -1,101 +1,97 @@
 // Checks pkglist.yaml: the shape the application expects, and that the listed
 // packages still exist in the repositories.
+#include "catalog.hpp"
+#include "process.hpp"
+
+#include <QBuffer>
 #include <QFile>
-#include <QProcess>
 #include <QSet>
 #include <QStandardPaths>
 #include <QSysInfo>
 #include <QTest>
 
-namespace {
-
-struct Entry {
-    QString section;
-    QStringList names;  // the package, then its companions
-};
-
-QList<Entry> readList(QStringList& sections) {
-    QList<Entry> entries;
-    QFile file(QStringLiteral(PKGLIST_FILE));
-    if (!file.open(QIODevice::ReadOnly)) {
-        return entries;
-    }
-    // same subset of YAML as Backend::loadCuratedList()
-    while (!file.atEnd()) {
-        const auto raw  = QString::fromUtf8(file.readLine());
-        const auto line = raw.trimmed();
-        if (line.startsWith(QLatin1String("- name:"))) {
-            sections << line.mid(7).trimmed().remove(QLatin1Char('"'));
-        } else if (line.startsWith(QLatin1String("- ")) && raw.startsWith(QLatin1Char(' ')) && !sections.isEmpty()) {
-            entries << Entry{sections.last(), line.mid(2).remove(QLatin1Char('"')).split(QLatin1Char(' '), Qt::SkipEmptyParts)};
-        }
-    }
-    return entries;
-}
-
-}  // namespace
+using namespace Qt::StringLiterals;
 
 class TestPkglist : public QObject {
     Q_OBJECT
 
  private slots:
     void initTestCase() {
-        m_entries = readList(m_sections);
+        QFile file(QString::fromUtf8(PKGLIST_FILE));
+        QVERIFY2(file.open(QIODevice::ReadOnly), "cannot open " PKGLIST_FILE);
+        m_list = catalog::loadCurated(file);
+    }
+
+    void parse() {
+        QByteArray yaml = R"(- name: "Video"
+  packages:
+    - vlc
+    - "mpv mpv-mpris yt-dlp"
+- name: Empty
+  packages: []
+)";
+        QBuffer buffer(&yaml);
+        QVERIFY(buffer.open(QIODevice::ReadOnly));
+        const auto list = catalog::loadCurated(buffer);
+        QCOMPARE(list.sections.size(), 2);
+        QCOMPARE(list.sections.at(0).title, u"Video"_s);
+        QCOMPARE(list.sections.at(0).names, (QStringList{u"vlc"_s, u"mpv"_s}));
+        QCOMPARE(list.companions.value(u"mpv"_s), (QStringList{u"mpv-mpris"_s, u"yt-dlp"_s}));
+        QVERIFY(!list.companions.contains(u"vlc"_s));
+        QVERIFY(list.sections.at(1).names.isEmpty());
     }
 
     void shape() {
-        QVERIFY2(!m_sections.isEmpty(), "no sections found in " PKGLIST_FILE);
-        QCOMPARE(QSet<QString>(m_sections.cbegin(), m_sections.cend()).size(), m_sections.size());
+        const auto& sections = m_list.sections;
+        QVERIFY2(!sections.isEmpty(), "no sections found in " PKGLIST_FILE);
 
-        QSet<QString> populated;
+        QSet<QString> titles;
         QSet<QString> seen;
-        for (const auto& entry : std::as_const(m_entries)) {
-            QVERIFY2(!entry.names.isEmpty(), qPrintable(QStringLiteral("empty entry in %1").arg(entry.section)));
-            populated << entry.section;
-            const auto& name = entry.names.first();
-            QVERIFY2(!seen.contains(name), qPrintable(QStringLiteral("%1 is listed twice").arg(name)));
-            seen << name;
-        }
-        for (const auto& section : std::as_const(m_sections)) {
-            QVERIFY2(populated.contains(section), qPrintable(QStringLiteral("section %1 is empty").arg(section)));
+        for (const auto& section : sections) {
+            QVERIFY2(!titles.contains(section.title), qPrintable(u"section %1 is listed twice"_s.arg(section.title)));
+            titles << section.title;
+            QVERIFY2(!section.names.isEmpty(), qPrintable(u"section %1 is empty"_s.arg(section.title)));
+            for (const auto& name : section.names) {
+                QVERIFY2(!seen.contains(name), qPrintable(u"%1 is listed twice"_s.arg(name)));
+                seen << name;
+            }
         }
     }
 
     void packagesExist() {
         // the list is written for the x86_64 repositories; other ports lack some of it
-        if (QSysInfo::currentCpuArchitecture() != QLatin1String("x86_64")) {
+        if (QSysInfo::currentCpuArchitecture() != "x86_64"_L1) {
             QSKIP("only checked on x86_64");
         }
-        const auto pacman = QStandardPaths::findExecutable(QStringLiteral("pacman"));
+        const auto pacman = QStandardPaths::findExecutable(u"pacman"_s);
         if (pacman.isEmpty()) {
             QSKIP("pacman is not available");
         }
-        QProcess process;
-        process.start(pacman, {QStringLiteral("-Slq")});
-        if (!process.waitForFinished(30000) || process.exitStatus() != QProcess::NormalExit || process.exitCode() != 0) {
+        const auto listed = outputLines(pacman, {u"-Slq"_s});
+        if (listed.isEmpty()) {
             QSKIP("could not list the sync databases");
         }
-        const auto listed = QString::fromUtf8(process.readAllStandardOutput()).split(QLatin1Char('\n'), Qt::SkipEmptyParts);
         const QSet<QString> available(listed.cbegin(), listed.cend());
         // a build chroot without the CachyOS repositories cannot judge the list
-        if (!available.contains(QStringLiteral("cachyos-kernel-manager"))) {
+        if (!available.contains(u"cachyos-kernel-manager"_s)) {
             QSKIP("the CachyOS repositories are not set up here");
         }
 
         QStringList missing;
-        for (const auto& entry : std::as_const(m_entries)) {
-            for (const auto& name : entry.names) {
-                if (!available.contains(name)) {
-                    missing << QStringLiteral("%1 (%2)").arg(name, entry.section);
+        for (const auto& section : std::as_const(m_list.sections)) {
+            for (const auto& name : section.names) {
+                for (const auto& required : QStringList{name} + m_list.companions.value(name)) {
+                    if (!available.contains(required)) {
+                        missing << u"%1 (%2)"_s.arg(required, section.title);
+                    }
                 }
             }
         }
-        QVERIFY2(missing.isEmpty(), qPrintable(QStringLiteral("not in the repositories: %1").arg(missing.join(QStringLiteral(", ")))));
+        QVERIFY2(missing.isEmpty(), qPrintable(u"not in the repositories: %1"_s.arg(missing.join(u", "_s))));
     }
 
  private:
-    QStringList m_sections;
-    QList<Entry> m_entries;
+    catalog::CuratedList m_list;
 };
 
 QTEST_GUILESS_MAIN(TestPkglist)

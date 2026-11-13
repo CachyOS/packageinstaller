@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "flatpakclient.hpp"
+#include "process.hpp"
 
 #include <AppStreamQt/bundle.h>
 #include <AppStreamQt/component.h>
@@ -11,68 +12,54 @@
 
 #include <QDateTime>
 #include <QFileInfo>
-#include <QProcessEnvironment>
+#include <QHash>
+#include <QPromise>
 #include <QStandardPaths>
 #include <QSysInfo>
 #include <QtConcurrent/QtConcurrentRun>
 
+#include <tuple>
+#include <utility>
+
+using namespace Qt::StringLiterals;
+
 namespace {
 
-constexpr int MAX_RESULTS = 150;
+constexpr qsizetype MAX_RESULTS = 150;
 
-using Cancel = std::shared_ptr<std::atomic_bool>;
-
-QProcessEnvironment plainEnvironment() {
-    auto env = QProcessEnvironment::systemEnvironment();
-    env.insert(QStringLiteral("LC_ALL"), QStringLiteral("C.UTF-8"));
-    return env;
-}
+using Load = QPromise<FlatpakState>;
 
 /// Runs `flatpak` and returns its output split into rows of tab separated columns.
-/// Gives up when `cancel` is set or after `timeout` milliseconds.
-QList<QStringList> rows(const Cancel& cancel, const QString& program, const QStringList& arguments, int timeout = 30000) {
-    QProcess process;
-    process.setProcessEnvironment(plainEnvironment());
-    process.start(program, arguments);
-    for (int waited = 0; !process.waitForFinished(200); waited += 200) {
-        if (process.state() == QProcess::NotRunning) {
-            break;
-        }
-        if (cancel->load() || waited >= timeout) {
-            process.kill();
-            process.waitForFinished(1000);
-            return {};
-        }
-    }
+/// Gives up when the load is cancelled or after `timeout` milliseconds.
+QList<QStringList> rows(const Load& load, const QString& program, const QStringList& arguments, int timeout = 30000) {
     QList<QStringList> result;
-    const auto lines = QString::fromUtf8(process.readAllStandardOutput()).split(QLatin1Char('\n'), Qt::SkipEmptyParts);
-    for (const auto& line : lines) {
-        result << line.split(QLatin1Char('\t'));
+    for (const auto& line : outputLines(program, arguments, timeout, [&] { return load.isCanceled(); })) {
+        result << line.split(u'\t');
     }
     return result;
 }
 
 /// Flatpak keeps the catalogue of a system-wide remote in this directory once it was fetched.
-QString catalogueOf(const QString& remote) {
-    return QStringLiteral("/var/lib/flatpak/appstream/%1/%2/active").arg(remote, QSysInfo::currentCpuArchitecture());
+QString catalogueOf(const QString& remote, const QString& arch) {
+    return u"/var/lib/flatpak/appstream/%1/%2/active"_s.arg(remote, arch);
 }
 
 /// Which of two offers of the same app is shown: Flathub before other remotes, the stable
 /// branch before others, then by name so the choice never depends on the order of loading.
 bool preferred(const FlatpakApp& a, const FlatpakApp& b) {
     const auto rank = [](const FlatpakApp& app) {
-        return std::tuple(app.remote != QLatin1String("flathub"), app.branch != QLatin1String("stable"), app.remote, app.branch);
+        return std::tuple(app.remote != "flathub"_L1, app.branch != "stable"_L1, app.remote, app.branch);
     };
     return rank(a) < rank(b);
 }
 
 /// Reads the catalogue of one system-wide remote. Only that directory is loaded, so a
 /// remote of the same name in the user's own installation cannot contribute anything.
-void loadCatalogue(FlatpakState& state, QHash<QString, qsizetype>& positions, const QString& remote) {
+void loadCatalogue(FlatpakState& state, QHash<QString, qsizetype>& positions, const QString& remote, const QString& arch) {
     AppStream::Pool pool;
     pool.setFlags(AppStream::Pool::FlagNone);
     pool.setLoadStdDataLocations(false);
-    pool.addExtraDataLocation(catalogueOf(remote), AppStream::Metadata::FormatStyleCatalog);
+    pool.addExtraDataLocation(catalogueOf(remote, arch), AppStream::Metadata::FormatStyleCatalog);
     if (!pool.load()) {
         qWarning("AppStream (Flatpak, %s): %s", qPrintable(remote), qPrintable(pool.lastError()));
         return;
@@ -82,13 +69,13 @@ void loadCatalogue(FlatpakState& state, QHash<QString, qsizetype>& positions, co
             continue;
         }
         // "app/<id>/<arch>/<branch>": the reference is what gets installed
-        const auto parts = component.bundle(AppStream::Bundle::KindFlatpak).id().split(QLatin1Char('/'));
-        if (parts.size() != 4 || parts.at(0) != QLatin1String("app")) {
+        const auto parts = component.bundle(AppStream::Bundle::KindFlatpak).id().split(u'/');
+        if (parts.size() != 4 || parts.at(0) != "app"_L1) {
             continue;
         }
         FlatpakApp app;
         app.id          = parts.at(1);
-        app.ref         = parts.mid(1).join(QLatin1Char('/'));
+        app.ref         = parts.sliced(1).join(u'/');
         app.branch      = parts.at(3);
         app.remote      = remote;
         app.title       = component.name();
@@ -101,8 +88,7 @@ void loadCatalogue(FlatpakState& state, QHash<QString, qsizetype>& positions, co
         if (const auto releases = component.releasesPlain().entries(); !releases.isEmpty()) {
             app.version = releases.first().version();
         }
-        app.haystack = (app.title + QLatin1Char('\n') + app.id + QLatin1Char('\n') + app.summary + QLatin1Char('\n')
-            + component.keywords().join(QLatin1Char(' '))).toLower();
+        app.haystack = (app.title + u'\n' + app.id + u'\n' + app.summary + u'\n' + component.keywords().join(u' ')).toLower();
 
         const auto known = positions.constFind(app.id);
         if (known != positions.cend() && !preferred(app, state.apps.at(*known))) {
@@ -122,17 +108,21 @@ void loadCatalogue(FlatpakState& state, QHash<QString, qsizetype>& positions, co
     }
 }
 
-FlatpakState load(const Cancel& cancel) {
+FlatpakState load(const Load& load) {
     FlatpakState state;
-    const auto program = QStandardPaths::findExecutable(QStringLiteral("flatpak"));
+    const auto& program = state.program = QStandardPaths::findExecutable(u"flatpak"_s);
     if (program.isEmpty()) {
         return state;
     }
-    state.available = true;
+    // QSysInfo says "arm64" where Flatpak says "aarch64"
+    static const auto arch = [&] {
+        const auto out = rows(load, program, {u"--default-arch"_s}, 5000);
+        return out.isEmpty() ? QSysInfo::currentCpuArchitecture().replace("arm64"_L1, "aarch64"_L1) : out.first().first().trimmed();
+    }();
 
-    for (const auto& row : rows(cancel, program, {QStringLiteral("remotes"), QStringLiteral("--system"), QStringLiteral("--columns=name")})) {
-        if (!row.at(0).trimmed().isEmpty()) {
-            state.remotes << row.at(0).trimmed();
+    for (const auto& row : rows(load, program, {u"remotes"_s, u"--system"_s, u"--columns=name"_s})) {
+        if (const auto remote = row.first().trimmed(); !remote.isEmpty()) {
+            state.remotes << remote;
         }
     }
 
@@ -141,17 +131,15 @@ FlatpakState load(const Cancel& cancel) {
     const auto stale = QDateTime::currentDateTime().addDays(-1);
     QHash<QString, qsizetype> positions;
     for (const auto& remote : std::as_const(state.remotes)) {
-        const QFileInfo catalogue(catalogueOf(remote) + QStringLiteral("/appstream.xml.gz"));
+        const QFileInfo catalogue(catalogueOf(remote, arch) + u"/appstream.xml.gz"_s);
         if (!catalogue.exists() || catalogue.lastModified() < stale) {
-            rows(cancel, program, {QStringLiteral("update"), QStringLiteral("--appstream"), QStringLiteral("--system"),
-                                      QStringLiteral("--noninteractive"), remote},
-                600000);
+            rows(load, program, {u"update"_s, u"--appstream"_s, u"--system"_s, u"--noninteractive"_s, remote}, 600000);
         }
-        if (cancel->load()) {
+        if (load.isCanceled()) {
             return state;
         }
-        if (QFileInfo::exists(catalogueOf(remote))) {
-            loadCatalogue(state, positions, remote);
+        if (QFileInfo::exists(catalogueOf(remote, arch))) {
+            loadCatalogue(state, positions, remote, arch);
         }
     }
     std::ranges::sort(state.apps, [](const FlatpakApp& a, const FlatpakApp& b) {
@@ -160,17 +148,16 @@ FlatpakState load(const Cancel& cancel) {
 
     // --all: locale and debug extensions are updated too, so they count as installed
     QSet<QString> apps;
-    for (const auto& row : rows(cancel, program, {QStringLiteral("list"), QStringLiteral("--app"), QStringLiteral("--columns=ref,installation")})) {
+    for (const auto& row : rows(load, program, {u"list"_s, u"--app"_s, u"--columns=ref,installation"_s})) {
         if (row.size() >= 2) {
-            apps.insert(row.at(1) + QLatin1Char(':') + row.at(0));
+            apps.insert(row.at(1) + u':' + row.at(0));
         }
     }
-    for (const auto& row : rows(cancel, program, {QStringLiteral("list"), QStringLiteral("--all"),
-             QStringLiteral("--columns=ref,name,version,origin,installation,size")})) {
+    for (const auto& row : rows(load, program, {u"list"_s, u"--all"_s, u"--columns=ref,name,version,origin,installation,size"_s})) {
         if (row.size() < 6) {
             continue;
         }
-        FlatpakInstalled entry{row.at(0), row.at(0).section(QLatin1Char('/'), 0, 0), row.at(1), row.at(2), row.at(3), row.at(4), row.at(5), false};
+        FlatpakInstalled entry{row.at(0), row.at(0).section(u'/', 0, 0), row.at(1), row.at(2), row.at(3), row.at(4), row.at(5), false};
         entry.isApp = apps.contains(entry.key());
         state.installed << entry;
     }
@@ -179,25 +166,21 @@ FlatpakState load(const Cancel& cancel) {
 
 /// The option that makes flatpak work on one installation.
 QString installationOption(const QString& installation) {
-    if (installation == QLatin1String("user")) {
-        return QStringLiteral("--user");
+    if (installation == "user"_L1 || installation == "system"_L1) {
+        return u"--"_s + installation;
     }
-    if (installation == QLatin1String("system")) {
-        return QStringLiteral("--system");
-    }
-    return QStringLiteral("--installation=") + installation;
+    return u"--installation="_s + installation;
 }
 
 }  // namespace
 
-FlatpakClient::FlatpakClient(QObject* parent) : QObject(parent), m_cancel(std::make_shared<std::atomic_bool>(false)) {
+FlatpakClient::FlatpakClient(QObject* parent) : QObject(parent) {
     connect(&m_watcher, &QFutureWatcher<FlatpakState>::finished, this, &FlatpakClient::onLoaded);
     m_checkUpdates.setProcessEnvironment(plainEnvironment());
     connect(&m_checkUpdates, &QProcess::finished, this, [this](int exitCode, QProcess::ExitStatus status) {
-        if (m_checkOutdated) {
-            // started before the installed apps were read again: its answer may name what was
-            // updated or removed since
-            m_checkOutdated = false;
+        if (m_checkGeneration != m_generation) {
+            // started before the installed apps were read again or cleared: its answer may name
+            // what was updated or removed since
             if (!m_loading) {
                 checkUpdates();
             }
@@ -205,36 +188,36 @@ FlatpakClient::FlatpakClient(QObject* parent) : QObject(parent), m_cancel(std::m
             return;
         }
         m_updates.clear();
-        if (status == QProcess::NormalExit && exitCode == 0 && !m_cleared) {
-            const auto lines = QString::fromUtf8(m_checkUpdates.readAllStandardOutput()).split(QLatin1Char('\n'), Qt::SkipEmptyParts);
-            for (const auto& line : lines) {
-                const auto row = line.split(QLatin1Char('\t'));
-                if (row.size() < 4) {
-                    continue;
-                }
-                // the listing does not say which installation; an app counts if any copy of it is one
-                const auto id  = row.at(0).section(QLatin1Char('/'), 0, 0);
-                bool isApp     = false;
-                QString before;
-                for (const auto& entry : std::as_const(m_state.installed)) {
-                    if (entry.ref == row.at(0) && entry.remote == row.at(3)) {
-                        isApp  = isApp || entry.isApp;
-                        before = entry.version;
-                    }
-                }
-                const auto* app = isApp ? find(id) : nullptr;
-                m_updates << QVariantMap{
-                    {QStringLiteral("id"), id},
-                    {QStringLiteral("ref"), row.at(0)},
-                    {QStringLiteral("title"), app != nullptr ? app->title : row.at(1)},
-                    {QStringLiteral("version"), row.at(2)},
-                    {QStringLiteral("installedVersion"), before},
-                    {QStringLiteral("remote"), row.at(3)},
-                    {QStringLiteral("isApp"), isApp},
-                };
+        const auto lines = status == QProcess::NormalExit && exitCode == 0
+            ? QString::fromUtf8(m_checkUpdates.readAllStandardOutput()).split(u'\n', Qt::SkipEmptyParts)
+            : QStringList();
+        // the listing does not say which installation; an app counts if any copy of it is one
+        QHash<std::pair<QString, QString>, std::pair<bool, QString>> copies;  // ref and remote: isApp and version
+        for (const auto& entry : std::as_const(m_state.installed)) {
+            auto& [isApp, version] = copies[{entry.ref, entry.remote}];
+            isApp                  = isApp || entry.isApp;
+            version                = entry.version;
+        }
+        for (const auto& line : lines) {
+            const auto row = line.split(u'\t');
+            if (row.size() < 4) {
+                continue;
             }
+            const auto id              = row.at(0).section(u'/', 0, 0);
+            const auto [isApp, before] = copies.value({row.at(0), row.at(3)});
+            const auto* app = isApp ? find(id) : nullptr;
+            FlatpakItem update;
+            update.id               = id;
+            update.ref              = row.at(0);
+            update.title            = app != nullptr ? app->title : row.at(1);
+            update.version          = row.at(2);
+            update.installedVersion = before;
+            update.remote           = row.at(3);
+            update.isApp            = isApp;
+            m_updates << update;
         }
         emit updatesChanged();
+        rebuild();
     });
     connect(&m_checkUpdates, &QProcess::errorOccurred, this, [this] { emit updatesChanged(); });
 }
@@ -248,36 +231,26 @@ FlatpakClient::~FlatpakClient() {
         m_checkUpdates.waitForFinished(2000);
     }
     m_watcher.disconnect(this);
-    cancelLoad();
+    m_watcher.cancel();
     m_watcher.waitForFinished();
 }
 
-void FlatpakClient::cancelLoad() {
-    m_cancel->store(true);
-}
-
 void FlatpakClient::refresh() {
-    m_cleared = false;
-    if (m_checkUpdates.state() != QProcess::NotRunning) {
-        m_checkOutdated = true;
-    }
     if (m_loading) {
         m_reloadQueued = true;
         return;
     }
+    ++m_generation;
     m_loading = true;
     emit loadingChanged();
-    m_cancel = std::make_shared<std::atomic_bool>(false);
-    m_watcher.setFuture(QtConcurrent::run(load, m_cancel));
+    m_watcher.setFuture(QtConcurrent::run([](Load& promise) { promise.addResult(load(promise)); }));
 }
 
 void FlatpakClient::clear() {
-    m_cleared = true;
-    cancelLoad();  // also stops a catalogue download
-    if (m_checkUpdates.state() != QProcess::NotRunning) {
-        m_checkOutdated = true;
-        m_checkUpdates.kill();
-    }
+    ++m_generation;
+    m_watcher.cancel();  // also stops a catalogue download
+    m_reloadQueued = false;
+    m_checkUpdates.kill();
     m_state = {};
     m_index.clear();
     m_results.clear();
@@ -291,11 +264,9 @@ void FlatpakClient::clear() {
 
 void FlatpakClient::onLoaded() {
     m_loading = false;
-    if (m_cleared || m_cancel->load()) {  // turned off while the catalogue was being read: the result is partial
-        const bool again = !m_cleared && m_reloadQueued;
-        m_reloadQueued   = false;
+    if (m_watcher.isCanceled()) {  // cleared while the catalogue was being read: the result is partial
         emit loadingChanged();
-        if (again) {
+        if (std::exchange(m_reloadQueued, false)) {
             refresh();
         }
         return;
@@ -305,22 +276,14 @@ void FlatpakClient::onLoaded() {
     for (qsizetype i = 0; i < m_state.apps.size(); ++i) {
         m_index.insert(m_state.apps.at(i).id, i);
     }
-    m_installed.clear();
-    for (const auto& entry : std::as_const(m_state.installed)) {
-        if (entry.isApp) {
-            m_installed << toMap(find(entry.id), &entry);
-        }
-    }
     emit iconsLoaded(m_state.icons);
     ++m_revision;
     emit loadingChanged();
-    emit changed();
-    search(m_query);
+    rebuild();
 
     // the flatpak package may have been installed or removed while this was running
-    const bool present = !QStandardPaths::findExecutable(QStringLiteral("flatpak")).isEmpty();
-    if (m_reloadQueued || present != m_state.available) {
-        m_reloadQueued = false;
+    const bool present = !QStandardPaths::findExecutable(u"flatpak"_s).isEmpty();
+    if (std::exchange(m_reloadQueued, false) || present != available()) {
         refresh();
         return;
     }
@@ -329,34 +292,49 @@ void FlatpakClient::onLoaded() {
 
 void FlatpakClient::checkUpdates() {
     if (m_checkUpdates.state() != QProcess::NotRunning) {
-        m_checkOutdated = true;  // asked again once it has finished
-        return;
+        return;  // stale by now, so it asks again once it has finished
     }
-    if (!m_state.available || m_state.installed.isEmpty()) {
+    if (!available() || m_state.installed.isEmpty()) {
         if (!m_updates.isEmpty()) {
             m_updates.clear();
             emit updatesChanged();
+            rebuild();
         }
         return;
     }
-    m_checkUpdates.start(QStringLiteral("flatpak"), {QStringLiteral("remote-ls"), QStringLiteral("--updates"), QStringLiteral("--all"),
-                                                        QStringLiteral("--columns=ref,name,version,origin")});
+    m_checkGeneration = m_generation;
+    m_checkUpdates.start(m_state.program, {u"remote-ls"_s, u"--updates"_s, u"--all"_s, u"--columns=ref,name,version,origin"_s});
     emit updatesChanged();
+}
+
+void FlatpakClient::rebuild() {
+    m_installed.clear();
+    for (const auto& entry : std::as_const(m_state.installed)) {
+        if (entry.isApp) {
+            m_installed << toItem(find(entry.id), &entry);
+        }
+    }
+    emit changed();
+    search(m_query);
+}
+
+int FlatpakClient::runtimeUpdates() const {
+    return static_cast<int>(std::ranges::count(m_updates, false, &FlatpakItem::isApp));
 }
 
 void FlatpakClient::search(const QString& query) {
     m_query = query.trimmed().toLower();
     m_results.clear();
     if (m_query.size() >= 2) {
-        const auto words = m_query.split(QLatin1Char(' '), Qt::SkipEmptyParts);
-        QVariantList rest;
+        const auto words = m_query.split(u' ', Qt::SkipEmptyParts);
+        QList<FlatpakItem> rest;
         for (const auto& app : std::as_const(m_state.apps)) {
             const bool matches = std::ranges::all_of(words, [&app](const QString& word) { return app.haystack.contains(word); });
             if (!matches) {
                 continue;
             }
             // apps whose name starts with the query come first
-            (app.title.startsWith(m_query, Qt::CaseInsensitive) ? m_results : rest) << toMap(&app, bestCopy(app.id));
+            (app.title.startsWith(m_query, Qt::CaseInsensitive) ? m_results : rest) << toItem(&app, bestCopy(app.id));
             if (m_results.size() + rest.size() >= MAX_RESULTS) {
                 break;
             }
@@ -389,7 +367,7 @@ const FlatpakInstalled* FlatpakClient::bestCopy(const QString& id) const {
             continue;
         }
         // the copy the catalogue entry stands for: same branch, system-wide
-        const int score = (app != nullptr && entry.ref == app->ref ? 2 : 0) + (entry.installation == QLatin1String("system") ? 1 : 0);
+        const int score = (app != nullptr && entry.ref == app->ref ? 2 : 0) + (entry.installation == "system"_L1 ? 1 : 0);
         if (score > bestScore) {
             best      = &entry;
             bestScore = score;
@@ -398,50 +376,41 @@ const FlatpakInstalled* FlatpakClient::bestCopy(const QString& id) const {
     return best;
 }
 
-QVariantMap FlatpakClient::toMap(const FlatpakApp* app, const FlatpakInstalled* copy) const {
-    QVariantMap map{
-        {QStringLiteral("key"), QString()},
-        {QStringLiteral("summary"), QString()},
-        {QStringLiteral("available"), app != nullptr},
-        {QStringLiteral("installed"), copy != nullptr},
-    };
+FlatpakItem FlatpakClient::toItem(const FlatpakApp* app, const FlatpakInstalled* copy) const {
+    FlatpakItem item;
     if (app != nullptr) {
-        map.insert(QStringLiteral("id"), app->id);
-        map.insert(QStringLiteral("ref"), app->ref);
-        map.insert(QStringLiteral("title"), app->title);
-        map.insert(QStringLiteral("summary"), app->summary);
-        map.insert(QStringLiteral("description"), app->description);
-        map.insert(QStringLiteral("developer"), app->developer);
-        map.insert(QStringLiteral("homepage"), app->homepage);
-        map.insert(QStringLiteral("license"), app->license);
-        map.insert(QStringLiteral("version"), app->version);
-        map.insert(QStringLiteral("remote"), app->remote);
-        map.insert(QStringLiteral("screenshots"), app->screenshots);
+        static_cast<FlatpakApp&>(item) = *app;
     }
+    item.available = app != nullptr;
+    item.installed = copy != nullptr;
     if (copy != nullptr) {
-        map.insert(QStringLiteral("id"), copy->id);
-        map.insert(QStringLiteral("key"), copy->key());
-        map.insert(QStringLiteral("ref"), copy->ref);
+        item.id  = copy->id;
+        item.key = copy->key();
+        item.ref = copy->ref;
         if (app == nullptr) {  // installed from a remote without a catalogue, or from a file
-            map.insert(QStringLiteral("title"), copy->name.isEmpty() ? copy->id : copy->name);
-            map.insert(QStringLiteral("remote"), copy->remote);
+            item.title  = copy->name.isEmpty() ? copy->id : copy->name;
+            item.remote = copy->remote;
         }
-        map.insert(QStringLiteral("installedVersion"), copy->version);
-        map.insert(QStringLiteral("installedFrom"), copy->remote);
-        map.insert(QStringLiteral("installation"), copy->installation);
-        map.insert(QStringLiteral("branch"), copy->ref.section(QLatin1Char('/'), 2, 2));
-        map.insert(QStringLiteral("size"), copy->size);
+        item.installedVersion = copy->version;
+        item.installedFrom    = copy->remote;
+        item.installation     = copy->installation;
+        item.branch           = copy->ref.section(u'/', 2, 2);
+        item.size             = copy->size;
+        if (const auto update = std::ranges::find(m_updates, copy->ref, &FlatpakItem::ref); update != m_updates.cend()) {
+            item.upgradable = true;
+            item.newVersion = update->version;
+        }
     }
-    return map;
+    return item;
 }
 
-QVariantMap FlatpakClient::app(const QString& id, const QString& key) const {
+FlatpakItem FlatpakClient::app(const QString& id, const QString& key) const {
     const auto* app  = find(id);
     const auto* copy = key.isEmpty() ? nullptr : findCopy(key);
     if (copy == nullptr) {  // none asked for, or it has just been removed
         copy = bestCopy(id);
     }
-    return app == nullptr && copy == nullptr ? QVariantMap{} : toMap(app, copy);
+    return app == nullptr && copy == nullptr ? FlatpakItem{} : toItem(app, copy);
 }
 
 QString FlatpakClient::title(const QString& id) const {
@@ -463,8 +432,7 @@ QStringList FlatpakClient::installArguments(const QString& id) const {
     if (app == nullptr) {
         return {};
     }
-    return {QStringLiteral("install"), QStringLiteral("--system"), QStringLiteral("--noninteractive"), app->remote,
-        QStringLiteral("app/") + app->ref};
+    return {u"install"_s, u"--system"_s, u"--noninteractive"_s, app->remote, u"app/"_s + app->ref};
 }
 
 QStringList FlatpakClient::removeArguments(const QString& key) const {
@@ -472,6 +440,5 @@ QStringList FlatpakClient::removeArguments(const QString& key) const {
     if (copy == nullptr) {
         return {};
     }
-    return {QStringLiteral("uninstall"), QStringLiteral("--noninteractive"), installationOption(copy->installation),
-        QStringLiteral("app/") + copy->ref};
+    return {u"uninstall"_s, u"--noninteractive"_s, installationOption(copy->installation), u"app/"_s + copy->ref};
 }

@@ -4,64 +4,60 @@ import QtQuick.Controls.Basic
 
 // Read-only script listing with line numbers. Shown at full height: a nested vertical
 // scroll area would swallow the wheel and make it easy to skip the end of the script.
-Rectangle {
+Card {
     id: root
 
     property string text
-    // Lines to highlight: [{line, severity}]
-    property var marks: []
+    property list<finding> marks
     property string accessibleName
     property int minimumHeight: 0
 
     readonly property real lineHeight: edit.lineCount > 0 ? edit.contentHeight / edit.lineCount : 0
     readonly property int padding: 14
 
-    function lineY(line) {
+    function lineY(line: int): real {
         return padding + (line - 1) * lineHeight
     }
 
-    function markColor(severity) {
-        return severity === "danger" ? Look.dangerSoft : severity === "warning" ? Look.warningSoft : Look.archSoft
-    }
-
-    function inkColor(severity) {
-        return severity === "danger" ? Look.danger : severity === "warning" ? Look.warning : Look.arch
+    function lineNumbers(count: int): string {
+        let numbers = ""
+        for (let i = 1; i <= count; ++i) {
+            numbers += i > 1 ? "\n" + i : "1"
+        }
+        return numbers
     }
 
     height: Math.max(minimumHeight, edit.implicitHeight + 2)
-    radius: Look.radius
-    color: Look.surface
-    border.width: 1
-    border.color: Look.border
-    clip: true
 
     Repeater {
-        model: root.text.length > 0 ? root.marks : []
+        model: root.marks
 
         Rectangle {
-            required property var modelData
+            id: mark
 
+            required property finding modelData
+
+            visible: root.text.length > 0
             x: 1
             y: root.lineY(modelData.line)
             width: root.width - 2
             height: root.lineHeight
-            color: root.markColor(modelData.severity)
+            color: Look.severityColor(modelData.severity, true)
 
             Rectangle {
                 width: 3
-                height: parent.height
-                color: root.inkColor(parent.modelData.severity)
+                height: mark.height
+                color: Look.severityColor(mark.modelData.severity, false)
             }
         }
     }
 
-    Text {
+    PlainText {
         id: gutter
-        textFormat: Text.PlainText
         x: 1
         width: implicitWidth
         visible: root.text.length > 0
-        text: Array.from({ length: edit.lineCount }, (_, i) => i + 1).join("\n")
+        text: root.lineNumbers(edit.lineCount)
         color: Look.textMuted
         opacity: 0.7
         horizontalAlignment: Text.AlignRight
@@ -80,7 +76,7 @@ Rectangle {
         property real offset: 0
         readonly property real range: Math.max(0, edit.implicitWidth - width)
 
-        function scrollBy(distance) {
+        function scrollBy(distance: real) {
             offset = Math.max(0, Math.min(offset + distance, range))
         }
 
@@ -128,7 +124,7 @@ Rectangle {
             selectionColor: Look.accent
             selectedTextColor: Look.onAccent
             font.family: "monospace"
-            font.pixelSize: Look.fontSmall + 1
+            font.pixelSize: Look.fontLabel
             padding: root.padding
             leftPadding: 10
             Accessible.name: root.accessibleName

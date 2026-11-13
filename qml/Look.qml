@@ -1,16 +1,27 @@
 pragma Singleton
 import QtQuick
-import CachyOS.PackageInstaller
 
 QtObject {
+    id: look
+
+    readonly property AppearanceSettings settings: AppearanceSettings {}
+
+    readonly property Binding scheme: Binding {
+        target: Application.styleHints
+        property: "colorScheme"
+        value: look.settings.mode === "light" ? Qt.ColorScheme.Light
+            : look.settings.mode === "dark" ? Qt.ColorScheme.Dark : Qt.ColorScheme.Unknown
+    }
+
     // The setting decides; asking Qt to switch the scheme is not honoured on every desktop.
-    readonly property bool dark: Backend.colorMode === "dark"
-        || (Backend.colorMode !== "light" && Application.styleHints.colorScheme !== Qt.ColorScheme.Light)
+    readonly property bool dark: settings.mode === "dark"
+        || (settings.mode !== "light" && Application.styleHints.colorScheme !== Qt.ColorScheme.Light)
 
     // The colour themes offered on the settings page, each for dark and light desktops.
     // `hero` is the banner on the start page: gradient, text, button and picture.
     readonly property var themes: ({
         "classic": {
+            title: qsTr("Classic"), hint: qsTr("The original teal look"),
             dark: {
                 window: "#0e1315", sidebar: "#0a0e10", surface: "#171e21", surfaceHover: "#1e272b", surfaceAlt: "#212b30",
                 border: "#263136", text: "#e9eff1", textMuted: "#8c9da4",
@@ -28,8 +39,8 @@ QtObject {
                 button: "#eafffb", buttonHover: "#ffffff", ink: "#075f53", image: "icons/cachyos-pi.png"
             }
         },
-        // blue-black neutrals with the mint and cyan of the CachyOS logo
         "midnight": {
+            title: qsTr("Midnight"), hint: qsTr("Blue-black with the colours of the CachyOS logo"),
             dark: {
                 window: "#0a0e14", sidebar: "#070a0f", surface: "#111823", surfaceHover: "#172131", surfaceAlt: "#1b2636",
                 border: "#212d3d", text: "#e6edf5", textMuted: "#8696ab",
@@ -47,8 +58,8 @@ QtObject {
                 button: "#2fe0c4", buttonHover: "#62ead4", ink: "#03201c", image: "icons/cachyos-logo.png"
             }
         },
-        // neutral greys and one bright mint
         "graphite": {
+            title: qsTr("Graphite"), hint: qsTr("Neutral greys and one bright mint"),
             dark: {
                 window: "#0f1011", sidebar: "#0a0b0c", surface: "#18191b", surfaceHover: "#1f2123", surfaceAlt: "#242628",
                 border: "#2c2f32", text: "#eceeef", textMuted: "#969a9e",
@@ -66,8 +77,8 @@ QtObject {
                 button: "#f2fffb", buttonHover: "#ffffff", ink: "#064a3a", image: "icons/cachyos-pi.png"
             }
         },
-        // indigo-tinted neutrals, cyan accent, violet for Arch
         "aurora": {
+            title: qsTr("Aurora"), hint: qsTr("Indigo tint with a cyan accent"),
             dark: {
                 window: "#0d0c16", sidebar: "#09080f", surface: "#161524", surfaceHover: "#1d1c30", surfaceAlt: "#222138",
                 border: "#2b2a45", text: "#ebeaf6", textMuted: "#9492b0",
@@ -89,7 +100,7 @@ QtObject {
         // hover, alt and "soft" shades are blends of them, and a few colours are lightened or
         // darkened so that text stays readable.
         "nord": {
-            title: "Nord", author: "Sven Greb",
+            title: "Nord", hint: qsTr("Community palette by %1").arg("Sven Greb"),
             dark: {
                 window: "#2e3440", sidebar: "#282d37", surface: "#3b4252", surfaceHover: "#3f4758", surfaceAlt: "#434c5e",
                 border: "#4c566a", text: "#eceff4", textMuted: "#a8aeba",
@@ -110,7 +121,7 @@ QtObject {
             }
         },
         "dracula": {
-            title: "Dracula", author: "Dracula Theme",
+            title: "Dracula", hint: qsTr("Community palette by %1").arg("Dracula Theme"),
             dark: {
                 window: "#282a36", sidebar: "#21222c", surface: "#343746", surfaceHover: "#3c3f50", surfaceAlt: "#44475a",
                 border: "#4e5674", text: "#f8f8f2", textMuted: "#b4bccf",
@@ -131,7 +142,7 @@ QtObject {
             }
         },
         "catppuccin": {
-            title: "Catppuccin", author: "Catppuccin",
+            title: "Catppuccin", hint: qsTr("Community palette by %1").arg("Catppuccin"),
             dark: {
                 window: "#1e1e2e", sidebar: "#181825", surface: "#2b2c3d", surfaceHover: "#2e2f40", surfaceAlt: "#313244",
                 border: "#45475a", text: "#cdd6f4", textMuted: "#a6adc8",
@@ -152,7 +163,7 @@ QtObject {
             }
         },
         "tokyonight": {
-            title: "Tokyo Night", author: "Enkia",
+            title: "Tokyo Night", hint: qsTr("Community palette by %1").arg("Enkia"),
             dark: {
                 window: "#1a1b26", sidebar: "#16161e", surface: "#202330", surfaceHover: "#262a38", surfaceAlt: "#2d3040",
                 border: "#3a3e50", text: "#c0caf5", textMuted: "#8a90b0",
@@ -173,7 +184,7 @@ QtObject {
             }
         },
         "solarized": {
-            title: "Solarized", author: "Ethan Schoonover",
+            title: "Solarized", hint: qsTr("Community palette by %1").arg("Ethan Schoonover"),
             dark: {
                 window: "#002b36", sidebar: "#00222a", surface: "#073642", surfaceHover: "#103c48", surfaceAlt: "#19424d",
                 border: "#294e57", text: "#eee8d5", textMuted: "#93a19f",
@@ -198,7 +209,7 @@ QtObject {
     readonly property var themeNames: ["classic", "midnight", "graphite", "aurora", "nord", "dracula", "catppuccin", "tokyonight", "solarized"]
 
     // an unknown name in the settings file falls back to the classic look
-    readonly property var theme: themes[Backend.theme] ?? themes["classic"]
+    readonly property var theme: themes[settings.theme] ?? themes["classic"]
     readonly property var palette: dark ? theme.dark : theme.light
 
     readonly property color window: palette.window
@@ -232,12 +243,35 @@ QtObject {
 
     readonly property int radius: 14
     readonly property int radiusSmall: 8
-    readonly property int spacing: 16
+    readonly property int radiusLarge: radius + 4
     readonly property int pagePadding: 28
+    /// room kept free for a vertical scroll bar
+    readonly property int gutter: 12
+    readonly property int textMaxWidth: 820
+    readonly property color scrim: "#99000000"
 
+    readonly property int fontCaption: 11
     readonly property int fontSmall: 12
+    readonly property int fontLabel: 13
     readonly property int fontBody: 14
+    readonly property int fontLead: 15
     readonly property int fontTitle: 16
+    readonly property int fontSubheading: fontHeading - 2
     readonly property int fontHeading: 22
     readonly property int fontHero: 30
+
+    /// Colour of a pkgscan finding: "danger", "warning" or a note.
+    function severityColor(severity: string, soft: bool): color {
+        return severity === "danger" ? (soft ? dangerSoft : danger)
+            : severity === "warning" ? (soft ? warningSoft : warning)
+            : (soft ? archSoft : arch)
+    }
+
+    function severityLabel(severity: string): string {
+        return severity === "danger" ? qsTr("Dangerous") : severity === "warning" ? qsTr("Check") : qsTr("Note")
+    }
+
+    function formatSize(bytes: real): string {
+        return Qt.locale().formattedDataSize(bytes, 1, Locale.DataSizeIecFormat)
+    }
 }

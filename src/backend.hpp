@@ -8,11 +8,10 @@
 #include "transaction.hpp"
 
 #include <QFileSystemWatcher>
-#include <QFutureWatcher>
 #include <QObject>
 #include <QProcess>
+#include <QSettings>
 #include <QTimer>
-#include <QVariantList>
 #include <QtQml/qqmlregistration.h>
 
 class IconProvider;
@@ -23,56 +22,49 @@ class Backend : public QObject {
     Q_OBJECT
     QML_ELEMENT
     QML_SINGLETON
-    Q_PROPERTY(PackageModel* packages READ packages CONSTANT)
-    Q_PROPERTY(AurClient* aur READ aur CONSTANT)
-    Q_PROPERTY(Transaction* transaction READ transaction CONSTANT)
-    Q_PROPERTY(bool loading READ loading NOTIFY loadingChanged)
-    Q_PROPERTY(QString error READ error NOTIFY loadingChanged)
-    Q_PROPERTY(int revision READ revision NOTIFY revisionChanged)
-    Q_PROPERTY(QVariantList curated READ curated NOTIFY revisionChanged)
-    Q_PROPERTY(int updateCount READ updateCount NOTIFY revisionChanged)
-    Q_PROPERTY(bool checkingUpdates READ checkingUpdates NOTIFY checkingUpdatesChanged)
-    Q_PROPERTY(bool aurEnabled READ aurEnabled WRITE setAurEnabled NOTIFY aurEnabledChanged)
-    Q_PROPERTY(bool paruAvailable READ paruAvailable CONSTANT)
-    Q_PROPERTY(FlatpakClient* flatpak READ flatpak CONSTANT)
-    Q_PROPERTY(bool flatpakEnabled READ flatpakEnabled WRITE setFlatpakEnabled NOTIFY flatpakEnabledChanged)
-    Q_PROPERTY(QString theme READ theme WRITE setTheme NOTIFY themeChanged)
-    Q_PROPERTY(QString colorMode READ colorMode WRITE setColorMode NOTIFY colorModeChanged)
-    Q_PROPERTY(QString version READ version CONSTANT)
+    Q_PROPERTY(PackageModel* packages READ packages CONSTANT FINAL)
+    Q_PROPERTY(AurClient* aur READ aur CONSTANT FINAL)
+    Q_PROPERTY(Transaction* transaction READ transaction CONSTANT FINAL)
+    Q_PROPERTY(bool loading READ loading NOTIFY loadingChanged FINAL)
+    Q_PROPERTY(QString error READ error NOTIFY loadingChanged FINAL)
+    Q_PROPERTY(int revision READ revision NOTIFY revisionChanged FINAL)
+    Q_PROPERTY(QList<CuratedSection> curated READ curated NOTIFY curatedChanged FINAL)
+    Q_PROPERTY(int curatedCount READ curatedCount NOTIFY curatedChanged FINAL)
+    Q_PROPERTY(int updateCount READ updateCount NOTIFY revisionChanged FINAL)
+    Q_PROPERTY(bool checkingUpdates READ checkingUpdates NOTIFY checkingUpdatesChanged FINAL)
+    Q_PROPERTY(bool aurEnabled READ aurEnabled WRITE setAurEnabled NOTIFY aurEnabledChanged FINAL)
+    Q_PROPERTY(bool paruAvailable READ paruAvailable CONSTANT FINAL)
+    Q_PROPERTY(FlatpakClient* flatpak READ flatpak CONSTANT FINAL)
+    Q_PROPERTY(bool flatpakEnabled READ flatpakEnabled WRITE setFlatpakEnabled NOTIFY flatpakEnabledChanged FINAL)
 
  public:
     explicit Backend(IconProvider* icons, QObject* parent = nullptr);
+    ~Backend() override;
 
     static Backend* create(QQmlEngine* qmlEngine, QJSEngine* jsEngine);
 
-    [[nodiscard]] PackageModel* packages() { return &m_packages; }
-    [[nodiscard]] AurClient* aur() { return &m_aur; }
-    [[nodiscard]] Transaction* transaction() { return &m_transaction; }
-    [[nodiscard]] bool loading() const { return m_loading; }
-    [[nodiscard]] QString error() const { return m_error; }
-    [[nodiscard]] int revision() const { return m_revision; }
-    [[nodiscard]] QVariantList curated() const { return m_curated; }
-    [[nodiscard]] int updateCount() const { return m_packages.upgradableCount(); }
-    [[nodiscard]] bool checkingUpdates() const { return m_checkingUpdates; }
-    [[nodiscard]] bool aurEnabled() const { return m_aurEnabled; }
+    PackageModel* packages() { return &m_packages; }
+    AurClient* aur() { return &m_aur; }
+    Transaction* transaction() { return &m_transaction; }
+    bool loading() const { return m_loading; }
+    QString error() const { return m_error; }
+    int revision() const { return m_revision; }
+    /// The curated shelves, holding only the names the repositories have.
+    QList<CuratedSection> curated() const { return m_curated; }
+    int curatedCount() const { return static_cast<int>(m_curated.size()); }
+    int updateCount() const { return m_packages.upgradableCount(); }
+    bool checkingUpdates() const { return m_checkingUpdates; }
+    bool aurEnabled() const { return m_aurEnabled; }
     void setAurEnabled(bool enabled);
-    [[nodiscard]] bool paruAvailable() const { return m_paruAvailable; }
-    [[nodiscard]] FlatpakClient* flatpak() { return &m_flatpak; }
-    [[nodiscard]] bool flatpakEnabled() const { return m_flatpakEnabled; }
+    bool paruAvailable() const { return m_paruAvailable; }
+    FlatpakClient* flatpak() { return &m_flatpak; }
+    bool flatpakEnabled() const { return m_flatpakEnabled; }
     void setFlatpakEnabled(bool enabled);
-    /// Name of the colour theme; qml/Look.qml knows the palettes.
-    [[nodiscard]] QString theme() const { return m_theme; }
-    void setTheme(const QString& theme);
-    /// "system", "light" or "dark".
-    [[nodiscard]] QString colorMode() const { return m_colorMode; }
-    void setColorMode(const QString& mode);
-    [[nodiscard]] QString version() const { return QStringLiteral(PI_VERSION); }
 
     /// Re-reads the pacman databases and the AppStream catalog in the background.
     Q_INVOKABLE void reload();
-    /// Everything known about one package; empty if it is not in the databases.
-    Q_INVOKABLE [[nodiscard]] QVariantMap package(const QString& name) const;
-    Q_INVOKABLE [[nodiscard]] QString formatSize(qint64 bytes) const;
+    /// Everything known about one package. `name` is empty if it is not in the databases.
+    Q_INVOKABLE Package package(const QString& name) const;
 
     Q_INVOKABLE void install(const QString& name);
     Q_INVOKABLE void remove(const QString& name);
@@ -92,48 +84,41 @@ class Backend : public QObject {
  signals:
     void loadingChanged();
     void revisionChanged();
+    void curatedChanged();
     void checkingUpdatesChanged();
     void aurEnabledChanged();
     void flatpakEnabledChanged();
-    void themeChanged();
-    void colorModeChanged();
+    /// Something the user asked for could not be done, and `text` says why.
+    void notice(const QString& text);
 
  private:
-    void onLoaded();
-    void loadCuratedList();
-    void rebuildCurated();
+    void onLoaded(std::expected<catalog::LoadResult, QString> result);
+    /// The network and subprocess checks that follow a database load.
+    void refreshSources();
     void checkUpdates();
-
-    struct CuratedEntry {
-        QString name;
-        QStringList companions;  ///< installed together with `name` (codecs, plugins)
-    };
-    struct CuratedSection {
-        QString title;
-        QList<CuratedEntry> entries;
-    };
+    void onUpdatesChecked(int exitCode, QProcess::ExitStatus status);
+    /// Stores a setting and announces it. Returns false when nothing changed.
+    bool store(bool& member, bool value, const QString& key, void (Backend::*changed)());
 
     PackageModel m_packages;
     AurClient m_aur;
     FlatpakClient m_flatpak;
     Transaction m_transaction;
     IconProvider* m_icons;
-    QFutureWatcher<LoadResult> m_watcher;
+    QSettings m_settings;
     QProcess m_checkUpdates;
     QFileSystemWatcher m_dbWatcher;  ///< notices pacman runs outside of this app
     QTimer m_dbChanged;
-    QList<CuratedSection> m_sections;
-    QHash<QString, QStringList> m_companions;
-    QVariantList m_curated;
+    catalog::CuratedList m_curatedList;
+    QList<CuratedSection> m_curated;
     QString m_error;
     int m_revision         = 0;
     bool m_loading         = false;
     bool m_reloadQueued    = false;
+    bool m_loadedOnce      = false;
     bool m_checkingUpdates = false;
     bool m_checkOutdated   = false;  ///< the databases were reloaded while checkupdates was running
     bool m_aurEnabled      = false;
     bool m_flatpakEnabled  = false;
-    QString m_theme;
-    QString m_colorMode;
     bool m_paruAvailable   = false;
 };

@@ -21,6 +21,7 @@ AbstractButton {
     }
 
     background: Rectangle {
+        id: track
         radius: height / 2
         color: root.active ? Look.accent : Look.surfaceAlt
         border.width: root.visualFocus ? 2 : 1
@@ -31,11 +32,11 @@ AbstractButton {
         }
 
         Rectangle {
-            x: root.active ? parent.width - width - 4 : 4
-            anchors.verticalCenter: parent.verticalCenter
+            x: root.active ? track.width - width - 4 : 4
+            anchors.verticalCenter: track.verticalCenter
             width: 18
             height: 18
-            radius: 9
+            radius: height / 2
             color: root.active ? Look.onAccent : Look.textMuted
 
             Behavior on x {

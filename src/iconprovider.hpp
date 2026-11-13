@@ -4,13 +4,13 @@
 #include "catalog.hpp"
 
 #include <QCache>
-#include <QElapsedTimer>
 #include <QImage>
-#include <QPointer>
 #include <QQuickAsyncImageProvider>
 #include <QThreadPool>
 
-class IconResponse;
+#include <memory>
+
+struct IconRequest;
 
 /// `image://pkgicon/<pkgname>`: an icon for every package.
 ///
@@ -33,34 +33,28 @@ class IconProvider : public QQuickAsyncImageProvider {
 
     QQuickImageResponse* requestImageResponse(const QString& id, const QSize& requestedSize) override;
 
-    void setIndex(IconIndex index);
-    /// Icons of Flatpak apps, asked for as `flatpak/<app id>`.
-    void setFlatpakIndex(IconIndex index);
+    /// Icons of the packages, or of Flatpak apps, which are asked for as `flatpak/<app id>`.
+    void setIndex(IconIndex index, bool flatpak = false);
 
  private:
-    using Waiting = QList<QPointer<IconResponse>>;
-
-    struct Request {
-        QPointer<IconResponse> response;
-        QString id;
-        int extent = 0;
-    };
+    using Request = std::shared_ptr<IconRequest>;
+    using Key     = std::pair<QString, int>;  ///< file, extent
 
     /// Works on the queue for a few milliseconds, then lets other events through.
     void drain();
-    void resolve(const QPointer<IconResponse>& response, const QString& id, int extent);
+    void resolve(const Request& request);
     /// Answers from the icon file, or returns false when there is none.
-    bool fromFile(const QPointer<IconResponse>& response, const QString& path, const QString& fallback, int extent);
-    void decoded(const QString& key, const QImage& image);
-    [[nodiscard]] QImage themed(const IconRef& ref, const QString& name, int extent);
-    [[nodiscard]] static QImage generated(const QString& name, int extent);
+    bool fromFile(const Request& request, const QString& path, const QString& fallback);
+    void decoded(const Key& key, const QImage& image);
+    QImage themed(const IconRef& ref, const QString& name, int extent);
+    static QImage generated(const QString& name, int extent);
 
     IconIndex m_index;
     IconIndex m_flatpak;
     QList<Request> m_queue;
     bool m_draining = false;
     QSet<QString> m_notInTheme;
-    QCache<QString, QImage> m_decoded;  ///< "<extent>:<path>"
-    QHash<QString, Waiting> m_waiting;  ///< requests waiting for the same file
+    QCache<Key, QImage> m_decoded;
+    QHash<Key, QList<Request>> m_waiting;  ///< requests waiting for the same file
     QThreadPool m_pool;
 };

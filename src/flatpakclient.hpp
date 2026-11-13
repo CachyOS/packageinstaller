@@ -6,15 +6,25 @@
 #include <QFutureWatcher>
 #include <QObject>
 #include <QProcess>
-#include <QVariantList>
-#include <QVariantMap>
 #include <QtQml/qqmlregistration.h>
-
-#include <atomic>
-#include <memory>
 
 /// One application from the AppStream catalogue of a Flatpak remote.
 struct FlatpakApp {
+    Q_GADGET
+    Q_PROPERTY(QString id MEMBER id FINAL)
+    Q_PROPERTY(QString ref MEMBER ref FINAL)
+    Q_PROPERTY(QString branch MEMBER branch FINAL)
+    Q_PROPERTY(QString remote MEMBER remote FINAL)
+    Q_PROPERTY(QString title MEMBER title FINAL)
+    Q_PROPERTY(QString summary MEMBER summary FINAL)
+    Q_PROPERTY(QString description MEMBER description FINAL)
+    Q_PROPERTY(QString developer MEMBER developer FINAL)
+    Q_PROPERTY(QString homepage MEMBER homepage FINAL)
+    Q_PROPERTY(QString license MEMBER license FINAL)
+    Q_PROPERTY(QString version MEMBER version FINAL)
+    Q_PROPERTY(QStringList screenshots MEMBER screenshots FINAL)
+
+ public:
     QString id;      ///< "org.mozilla.firefox"
     QString ref;     ///< "org.mozilla.firefox/x86_64/stable"
     QString branch;
@@ -25,7 +35,7 @@ struct FlatpakApp {
     QString developer;
     QString homepage;
     QString license;
-    QString version;
+    QString version;  ///< in the catalogue, or the new version of an update
     QStringList screenshots;
     QString haystack;  ///< lower case text the search looks at
 };
@@ -43,11 +53,39 @@ struct FlatpakInstalled {
 
     /// An app can be installed more than once (per user and system-wide, several branches);
     /// this tells the copies apart.
-    [[nodiscard]] QString key() const { return installation + QLatin1Char(':') + ref; }
+    QString key() const { return installation + u':' + ref; }
+};
+
+/// One app or runtime as QML sees it: a catalogue entry, an installed copy, or both.
+struct FlatpakItem : FlatpakApp {
+    Q_GADGET
+    QML_VALUE_TYPE(flatpakItem)
+    Q_PROPERTY(QString key MEMBER key FINAL)
+    Q_PROPERTY(bool available MEMBER available FINAL)
+    Q_PROPERTY(bool installed MEMBER installed FINAL)
+    Q_PROPERTY(QString installedVersion MEMBER installedVersion FINAL)
+    Q_PROPERTY(QString installedFrom MEMBER installedFrom FINAL)
+    Q_PROPERTY(QString installation MEMBER installation FINAL)
+    Q_PROPERTY(QString size MEMBER size FINAL)
+    Q_PROPERTY(bool isApp MEMBER isApp FINAL)
+    Q_PROPERTY(bool upgradable MEMBER upgradable FINAL)
+    Q_PROPERTY(QString newVersion MEMBER newVersion FINAL)
+
+ public:
+    QString key;  ///< names one installed copy, empty for an app that is not installed
+    bool available = false;  ///< a remote offers it
+    bool installed = false;
+    QString installedVersion;
+    QString installedFrom;
+    QString installation;
+    QString size;
+    bool isApp      = false;
+    bool upgradable = false;  ///< an installed copy for which a newer version was found
+    QString newVersion;       ///< of an upgradable copy, if flatpak said which
 };
 
 struct FlatpakState {
-    bool available = false;  ///< the flatpak command exists
+    QString program;         ///< the flatpak command, empty when it is not installed
     QStringList remotes;     ///< system-wide remotes
     QList<FlatpakApp> apps;
     QList<FlatpakInstalled> installed;
@@ -61,40 +99,46 @@ class FlatpakClient : public QObject {
     QML_ELEMENT
     QML_UNCREATABLE("Provided by Backend")
     /// The flatpak command is installed.
-    Q_PROPERTY(bool available READ available NOTIFY changed)
+    Q_PROPERTY(bool available READ available NOTIFY changed FINAL)
     /// At least one system-wide remote is set up.
-    Q_PROPERTY(bool hasRemote READ hasRemote NOTIFY changed)
-    Q_PROPERTY(bool loading READ loading NOTIFY loadingChanged)
-    Q_PROPERTY(int appCount READ appCount NOTIFY changed)
+    Q_PROPERTY(bool hasRemote READ hasRemote NOTIFY changed FINAL)
+    Q_PROPERTY(bool loading READ loading NOTIFY loadingChanged FINAL)
+    Q_PROPERTY(int appCount READ appCount NOTIFY changed FINAL)
     /// Bumped whenever the catalogue or the installed apps were read again.
-    Q_PROPERTY(int revision READ revision NOTIFY changed)
-    /// Apps matching the last search: [{id, key, ref, title, summary, remote, version, installed, ...}].
-    /// `key` names one installed copy and is empty for an app that is not installed.
-    Q_PROPERTY(QVariantList results READ results NOTIFY resultsChanged)
-    /// Installed apps, one entry per installed copy, same shape as `results`.
-    Q_PROPERTY(QVariantList installed READ installed NOTIFY changed)
-    /// Installed apps and runtimes with a newer version: [{id, ref, title, version, remote, isApp}].
-    Q_PROPERTY(QVariantList updates READ updates NOTIFY updatesChanged)
-    Q_PROPERTY(bool checkingUpdates READ checkingUpdates NOTIFY updatesChanged)
+    Q_PROPERTY(int revision READ revision NOTIFY changed FINAL)
+    /// Apps matching the last search.
+    Q_PROPERTY(QList<FlatpakItem> results READ results NOTIFY resultsChanged FINAL)
+    /// Installed apps, one entry per installed copy.
+    Q_PROPERTY(QList<FlatpakItem> installed READ installed NOTIFY changed FINAL)
+    Q_PROPERTY(int installedCount READ installedCount NOTIFY changed FINAL)
+    /// Installed apps and runtimes with a newer version.
+    Q_PROPERTY(QList<FlatpakItem> updates READ updates NOTIFY updatesChanged FINAL)
+    Q_PROPERTY(int updateCount READ updateCount NOTIFY updatesChanged FINAL)
+    /// How many of the updates are runtimes and extensions rather than apps.
+    Q_PROPERTY(int runtimeUpdates READ runtimeUpdates NOTIFY updatesChanged FINAL)
+    Q_PROPERTY(bool checkingUpdates READ checkingUpdates NOTIFY updatesChanged FINAL)
 
  public:
     explicit FlatpakClient(QObject* parent = nullptr);
     ~FlatpakClient() override;
 
-    [[nodiscard]] bool available() const { return m_state.available; }
-    [[nodiscard]] bool hasRemote() const { return !m_state.remotes.isEmpty(); }
-    [[nodiscard]] bool loading() const { return m_loading; }
-    [[nodiscard]] int appCount() const { return static_cast<int>(m_state.apps.size()); }
-    [[nodiscard]] int revision() const { return m_revision; }
-    [[nodiscard]] QVariantList results() const { return m_results; }
-    [[nodiscard]] QVariantList installed() const { return m_installed; }
-    [[nodiscard]] QVariantList updates() const { return m_updates; }
-    [[nodiscard]] bool checkingUpdates() const { return m_checkUpdates.state() != QProcess::NotRunning; }
+    bool available() const { return !m_state.program.isEmpty(); }
+    bool hasRemote() const { return !m_state.remotes.isEmpty(); }
+    bool loading() const { return m_loading; }
+    int appCount() const { return static_cast<int>(m_state.apps.size()); }
+    int revision() const { return m_revision; }
+    QList<FlatpakItem> results() const { return m_results; }
+    QList<FlatpakItem> installed() const { return m_installed; }
+    QList<FlatpakItem> updates() const { return m_updates; }
+    int installedCount() const { return static_cast<int>(m_installed.size()); }
+    int updateCount() const { return static_cast<int>(m_updates.size()); }
+    int runtimeUpdates() const;
+    bool checkingUpdates() const { return m_checkUpdates.state() != QProcess::NotRunning; }
 
     Q_INVOKABLE void search(const QString& query);
     /// Everything known about one app; empty if neither a remote nor the system knows it.
     /// `key` picks one installed copy; without it the copy that matches the catalogue is shown.
-    Q_INVOKABLE [[nodiscard]] QVariantMap app(const QString& id, const QString& key) const;
+    Q_INVOKABLE [[nodiscard]] FlatpakItem app(const QString& id, const QString& key) const;
 
     /// Reads the remotes, the catalogue and the installed apps again, then looks for updates.
     Q_INVOKABLE void refresh();
@@ -119,8 +163,9 @@ class FlatpakClient : public QObject {
  private:
     void onLoaded();
     void checkUpdates();
-    void cancelLoad();
-    [[nodiscard]] QVariantMap toMap(const FlatpakApp* app, const FlatpakInstalled* copy) const;
+    /// Builds `installed` and `results` again, e.g. to mark the copies that can be updated.
+    void rebuild();
+    [[nodiscard]] FlatpakItem toItem(const FlatpakApp* app, const FlatpakInstalled* copy) const;
     [[nodiscard]] const FlatpakApp* find(const QString& id) const;
     [[nodiscard]] const FlatpakInstalled* findCopy(const QString& key) const;
     /// The installed copy to show for an app from the catalogue.
@@ -130,14 +175,15 @@ class FlatpakClient : public QObject {
     QHash<QString, qsizetype> m_index;  ///< app id -> position in m_state.apps
     QFutureWatcher<FlatpakState> m_watcher;
     QProcess m_checkUpdates;
-    std::shared_ptr<std::atomic_bool> m_cancel;  ///< stops the catalogue load that is running
-    QVariantList m_results;
-    QVariantList m_installed;
-    QVariantList m_updates;
+    QList<FlatpakItem> m_results;
+    QList<FlatpakItem> m_installed;
+    QList<FlatpakItem> m_updates;
     QString m_query;
-    int m_revision      = 0;
-    bool m_loading      = false;
-    bool m_reloadQueued = false;
-    bool m_cleared      = true;
-    bool m_checkOutdated = false;  ///< the installed apps changed while the update check was running
+    /// Moves on whenever the installed apps are read again or everything is cleared. An
+    /// update check started in an older generation is stale.
+    int m_generation      = 0;
+    int m_checkGeneration = 0;
+    int m_revision        = 0;
+    bool m_loading        = false;
+    bool m_reloadQueued   = false;
 };

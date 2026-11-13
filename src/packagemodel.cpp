@@ -1,70 +1,27 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "packagemodel.hpp"
 
+#include <QScopedValueRollback>
+
 int PackageModel::rowCount(const QModelIndex& parent) const {
     return parent.isValid() ? 0 : static_cast<int>(m_packages.size());
 }
 
 QVariant PackageModel::data(const QModelIndex& index, int role) const {
-    if (!index.isValid() || index.row() < 0 || index.row() >= m_packages.size()) {
+    if (!checkIndex(index, CheckIndexOption::IndexIsValid | CheckIndexOption::ParentIsInvalid)) {
         return {};
     }
-    return field(m_packages.at(index.row()), role);
-}
-
-QVariant PackageModel::field(const Package& pkg, int role) {
+    const auto& pkg = m_packages.at(index.row());
     switch (role) {
+    case PackageRole: return QVariant::fromValue(pkg);
     case NameRole: return pkg.name;
-    case TitleRole: return pkg.title;
-    case SummaryRole: return pkg.summary;
-    case DescriptionRole: return pkg.description;
-    case LongDescriptionRole: return pkg.longDescription;
-    case VersionRole: return pkg.version;
-    case InstalledVersionRole: return pkg.installedVersion;
-    case InstalledRole: return pkg.installed();
-    case UpgradableRole: return pkg.upgradable;
-    case RepoRole: return pkg.repo;
-    case SourceRole:
-        if (pkg.foreign()) {
-            return QStringLiteral("local");
-        }
-        return pkg.repo.startsWith(QLatin1String("cachyos")) ? QStringLiteral("cachyos") : QStringLiteral("arch");
-    case UrlRole: return pkg.url;
-    case LicensesRole: return pkg.licenses;
-    case DependsRole: return pkg.depends;
-    case InstallSizeRole: return pkg.installSize;
-    case DownloadSizeRole: return pkg.downloadSize;
-    case IsAppRole: return pkg.isApp;
-    case DeveloperRole: return pkg.developer;
-    case CategoriesRole: return pkg.categories;
-    case ScreenshotsRole: return pkg.screenshots;
     default: return {};
     }
 }
 
 QHash<int, QByteArray> PackageModel::roleNames() const {
-    return {
-        {NameRole, "name"},
-        {TitleRole, "title"},
-        {SummaryRole, "summary"},
-        {DescriptionRole, "description"},
-        {LongDescriptionRole, "longDescription"},
-        {VersionRole, "version"},
-        {InstalledVersionRole, "installedVersion"},
-        {InstalledRole, "installed"},
-        {UpgradableRole, "upgradable"},
-        {RepoRole, "repo"},
-        {SourceRole, "source"},
-        {UrlRole, "url"},
-        {LicensesRole, "licenses"},
-        {DependsRole, "depends"},
-        {InstallSizeRole, "installSize"},
-        {DownloadSizeRole, "downloadSize"},
-        {IsAppRole, "isApp"},
-        {DeveloperRole, "developer"},
-        {CategoriesRole, "categories"},
-        {ScreenshotsRole, "screenshots"},
-    };
+    static const QHash<int, QByteArray> roles{{PackageRole, "pkg"}, {NameRole, "name"}};
+    return roles;
 }
 
 void PackageModel::reset(QList<Package> packages) {
@@ -72,16 +29,18 @@ void PackageModel::reset(QList<Package> packages) {
     m_packages = std::move(packages);
     m_index.clear();
     m_index.reserve(m_packages.size());
-    for (int i = 0; i < m_packages.size(); ++i) {
+    for (qsizetype i = 0; i < m_packages.size(); ++i) {
         m_index.insert(m_packages.at(i).name, i);
     }
     endResetModel();
 }
 
 void PackageModel::applyUpdates(const QHash<QString, QString>& newVersions) {
-    for (int i = 0; i < m_packages.size(); ++i) {
-        auto& pkg        = m_packages[i];
-        const auto found = newVersions.constFind(pkg.name);
+    qsizetype first = -1;
+    qsizetype last  = -1;
+    for (qsizetype i = 0; i < m_packages.size(); ++i) {
+        auto& pkg             = m_packages[i];
+        const auto found      = newVersions.constFind(pkg.name);
         const bool upgradable = found != newVersions.cend() && !pkg.ignored;
         if (!upgradable && !pkg.upgradable) {
             continue;
@@ -90,7 +49,13 @@ void PackageModel::applyUpdates(const QHash<QString, QString>& newVersions) {
             pkg.version = *found;
         }
         pkg.upgradable = upgradable;
-        emit dataChanged(index(i), index(i), {UpgradableRole, VersionRole});
+        if (first < 0) {
+            first = i;
+        }
+        last = i;
+    }
+    if (first >= 0) {
+        emit dataChanged(index(static_cast<int>(first)), index(static_cast<int>(last)), {PackageRole});
     }
 }
 
@@ -99,45 +64,41 @@ const Package* PackageModel::find(const QString& name) const {
     return found == m_index.cend() ? nullptr : &m_packages.at(*found);
 }
 
-QVariantMap PackageModel::toMap(const Package& pkg) const {
-    QVariantMap map;
-    const auto roles = roleNames();
-    for (auto it = roles.cbegin(); it != roles.cend(); ++it) {
-        map.insert(QString::fromLatin1(it.value()), field(pkg, it.key()));
-    }
-    return map;
-}
-
 int PackageModel::upgradableCount() const {
-    return static_cast<int>(std::ranges::count_if(m_packages, [](const Package& pkg) { return pkg.upgradable; }));
-}
-
-QStringList PackageModel::upgradableNames() const {
-    QStringList names;
-    for (const auto& pkg : m_packages) {
-        if (pkg.upgradable) {
-            names << pkg.name;
-        }
-    }
-    return names;
+    return static_cast<int>(std::ranges::count_if(m_packages, &Package::upgradable));
 }
 
 PackageFilter::PackageFilter(QObject* parent) : QSortFilterProxyModel(parent) {
     setDynamicSortFilter(true);
     sort(0);
-    connect(this, &QAbstractItemModel::rowsInserted, this, &PackageFilter::countChanged);
-    connect(this, &QAbstractItemModel::rowsRemoved, this, &PackageFilter::countChanged);
-    connect(this, &QAbstractItemModel::modelReset, this, &PackageFilter::countChanged);
-    connect(this, &QAbstractItemModel::layoutChanged, this, &PackageFilter::countChanged);
+    connect(this, &QAbstractItemModel::rowsInserted, this, &PackageFilter::updateCount);
+    connect(this, &QAbstractItemModel::rowsRemoved, this, &PackageFilter::updateCount);
+    connect(this, &QAbstractItemModel::modelReset, this, &PackageFilter::updateCount);
+    connect(this, &QAbstractItemModel::layoutChanged, this, &PackageFilter::updateCount);
 }
 
-const PackageModel* PackageFilter::packages() const {
-    return qobject_cast<const PackageModel*>(sourceModel());
+void PackageFilter::updateCount() {
+    if (!m_refiltering && rowCount() != m_count) {
+        m_count = rowCount();
+        emit countChanged();
+    }
 }
 
-void PackageFilter::refilter() {
-    invalidate();
-    emit countChanged();
+/// Changes the filter state in `apply`. Pass `resort` when that changes the search rank too.
+template <typename Apply>
+void PackageFilter::refilter(Apply apply, bool resort) {
+    {
+        const QScopedValueRollback guard(m_refiltering, true);
+        if (resort) {
+            apply();
+            invalidate();
+        } else {
+            beginFilterChange();
+            apply();
+            endFilterChange(Direction::Rows);
+        }
+    }
+    updateCount();
 }
 
 void PackageFilter::setQuery(const QString& query) {
@@ -145,27 +106,24 @@ void PackageFilter::setQuery(const QString& query) {
     if (trimmed == m_query) {
         return;
     }
-    m_query = trimmed;
+    refilter([&] { m_query = trimmed; }, true);
     emit queryChanged();
-    refilter();
 }
 
 void PackageFilter::setCategory(const QString& category) {
     if (category == m_category) {
         return;
     }
-    m_category = category;
+    refilter([&] { m_category = category; }, false);
     emit categoryChanged();
-    refilter();
 }
 
 void PackageFilter::setMode(Mode mode) {
     if (mode == m_mode) {
         return;
     }
-    m_mode = mode;
+    refilter([&] { m_mode = mode; }, false);
     emit modeChanged();
-    refilter();
 }
 
 /// 0 = no match; lower is better otherwise.
@@ -190,46 +148,36 @@ int PackageFilter::rank(const Package& pkg) const {
 }
 
 bool PackageFilter::filterAcceptsRow(int sourceRow, const QModelIndex& /*sourceParent*/) const {
-    const auto* model = packages();
+    const auto* model = qobject_cast<const PackageModel*>(sourceModel());
     if (model == nullptr) {
         return false;
     }
     const auto& pkg = model->at(sourceRow);
-    switch (m_mode) {
-    case Apps:
-        if (!pkg.isApp) {
-            return false;
+    const bool shown = [&] {
+        switch (m_mode) {
+        case Apps: return pkg.isApp;
+        case Installed: return pkg.installed();
+        case Updates: return pkg.upgradable;
+        case All: break;
         }
-        break;
-    case Installed:
-        if (!pkg.installed()) {
-            return false;
-        }
-        break;
-    case Updates:
-        if (!pkg.upgradable) {
-            return false;
-        }
-        break;
-    case All:
-        break;
-    }
-    if (!m_category.isEmpty() && !pkg.categories.contains(m_category)) {
+        return true;
+    }();
+    if (!shown || (!m_category.isEmpty() && !pkg.categories.contains(m_category))) {
         return false;
     }
-    return rank(pkg) != 0;
+    if (m_rank.size() != model->rowCount()) {
+        m_rank.resize(model->rowCount());
+    }
+    m_rank[sourceRow] = rank(pkg);
+    return m_rank.at(sourceRow) != 0;
 }
 
 bool PackageFilter::lessThan(const QModelIndex& left, const QModelIndex& right) const {
-    const auto* model = packages();
+    const auto* model = static_cast<const PackageModel*>(sourceModel());
     const auto& a     = model->at(left.row());
     const auto& b     = model->at(right.row());
-    if (!m_query.isEmpty()) {
-        const int ra = rank(a);
-        const int rb = rank(b);
-        if (ra != rb) {
-            return ra < rb;
-        }
+    if (const int ra = m_rank.value(left.row()), rb = m_rank.value(right.row()); ra != rb) {
+        return ra < rb;
     }
     if (a.isApp != b.isApp) {
         return a.isApp;

@@ -7,26 +7,11 @@ Item {
     id: root
 
     property string query
-    // true: only installed packages
     property bool installedOnly: false
     property string category: ""
     property bool appsOnly: true
 
     signal openPackage(string name)
-
-    readonly property var categories: [
-        {"id": "", "label": qsTr("All")},
-        {"id": "Network", "label": qsTr("Internet")},
-        {"id": "AudioVideo", "label": qsTr("Multimedia")},
-        {"id": "Graphics", "label": qsTr("Graphics")},
-        {"id": "Game", "label": qsTr("Games")},
-        {"id": "Office", "label": qsTr("Office")},
-        {"id": "Development", "label": qsTr("Development")},
-        {"id": "Education", "label": qsTr("Education")},
-        {"id": "Science", "label": qsTr("Science")},
-        {"id": "System", "label": qsTr("System")},
-        {"id": "Utility", "label": qsTr("Utilities")}
-    ]
 
     PackageFilter {
         id: filter
@@ -38,89 +23,56 @@ Item {
             : (root.appsOnly && root.query.length === 0) || root.category.length > 0 ? PackageFilter.Apps : PackageFilter.All
     }
 
-    Column {
+    ListModel {
+        id: categories
+        ListElement { category: ""; label: qsTr("All") }
+        ListElement { category: "Network"; label: qsTr("Internet") }
+        ListElement { category: "AudioVideo"; label: qsTr("Multimedia") }
+        ListElement { category: "Graphics"; label: qsTr("Graphics") }
+        ListElement { category: "Game"; label: qsTr("Games") }
+        ListElement { category: "Office"; label: qsTr("Office") }
+        ListElement { category: "Development"; label: qsTr("Development") }
+        ListElement { category: "Education"; label: qsTr("Education") }
+        ListElement { category: "Science"; label: qsTr("Science") }
+        ListElement { category: "System"; label: qsTr("System") }
+        ListElement { category: "Utility"; label: qsTr("Utilities") }
+    }
+
+    PageHeader {
         id: pageHeader
-        x: Look.pagePadding
-        y: Look.pagePadding - 6
-        width: parent.width - 2 * Look.pagePadding
-        spacing: 14
-
-        Item {
-            width: parent.width
-            height: 34
-
-            Text {
-                textFormat: Text.PlainText
-                anchors.verticalCenter: parent.verticalCenter
-                text: root.query.length > 0 ? qsTr("Results for “%1”").arg(root.query)
-                    : root.installedOnly ? qsTr("Installed") : qsTr("Browse")
-                color: Look.text
-                font.pixelSize: Look.fontHeading
-                font.weight: Font.Bold
+        compact: true
+        title: root.query.length > 0 ? qsTr("Results for “%1”").arg(root.query)
+            : root.installedOnly ? qsTr("Installed") : qsTr("Browse")
+        actions: [
+            Muted {
+                anchors.verticalCenter: parent?.verticalCenter
+                text: qsTr("%n package(s)", "", filter.count)
+            },
+            PillButton {
+                visible: !root.installedOnly && root.query.length === 0 && root.category.length === 0
+                tone: "soft"
+                implicitHeight: 30
+                text: root.appsOnly ? qsTr("Show all packages") : qsTr("Show apps only")
+                onClicked: root.appsOnly = !root.appsOnly
             }
-
-            Row {
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: 12
-
-                Text {
-                    textFormat: Text.PlainText
-                    anchors.verticalCenter: parent.verticalCenter
-                    text: qsTr("%n package(s)", "", filter.count)
-                    color: Look.textMuted
-                    font.pixelSize: Look.fontSmall + 1
-                }
-
-                PillButton {
-                    visible: !root.installedOnly && root.query.length === 0 && root.category.length === 0
-                    tone: "soft"
-                    implicitHeight: 30
-                    text: root.appsOnly ? qsTr("Show all packages") : qsTr("Show apps only")
-                    onClicked: root.appsOnly = !root.appsOnly
-                }
-            }
-        }
+        ]
 
         Flow {
-            width: parent.width
+            width: pageHeader.width
             spacing: 8
 
             Repeater {
-                model: root.categories
+                model: categories
 
-                AbstractButton {
+                Chip {
                     id: chip
 
-                    required property var modelData
-                    readonly property bool current: root.category === modelData.id
+                    required property string category
+                    required property string label
 
-                    implicitHeight: 30
-                    implicitWidth: chipLabel.implicitWidth + 28
-                    onClicked: root.category = modelData.id
-                    Accessible.name: modelData.label
-
-                    background: Rectangle {
-                        radius: height / 2
-                        color: chip.current ? Look.accent : (chip.hovered ? Look.surfaceAlt : Look.surface)
-                        border.width: chip.current ? 0 : 1
-                        border.color: chip.visualFocus ? Look.accent : Look.border
-                    }
-
-                    contentItem: Text {
-                        id: chipLabel
-                        textFormat: Text.PlainText
-                        text: chip.modelData.label
-                        color: chip.current ? Look.onAccent : Look.text
-                        font.pixelSize: Look.fontSmall + 1
-                        font.weight: Font.DemiBold
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
-                    }
-
-                    HoverHandler {
-                        cursorShape: Qt.PointingHandCursor
-                    }
+                    text: chip.label
+                    current: root.category === chip.category
+                    onClicked: root.category = chip.category
                 }
             }
         }
@@ -133,74 +85,43 @@ Item {
 
         anchors.top: pageHeader.bottom
         anchors.topMargin: 18
-        anchors.bottom: parent.bottom
+        anchors.bottom: root.bottom
         x: Look.pagePadding
-        width: parent.width - 2 * Look.pagePadding + 12
+        // every card keeps a gap on its right, so the grid is one gutter wider to end flush with the header
+        width: root.width - 2 * Look.pagePadding + Look.gutter
         cellWidth: Math.floor(width / columns)
         cellHeight: 116
-        clip: true
         boundsBehavior: Flickable.StopAtBounds
         model: filter
         cacheBuffer: 600
+        reuseItems: true
+        clip: true
 
         ScrollBar.vertical: ScrollBar {}
 
         WheelScroll {}
 
-        delegate: Item {
-            id: cell
+        delegate: AppCard {
+            required property packageInfo pkg
 
-            required property string name
-            required property string title
-            required property string summary
-            required property string source
-            required property bool installed
-            required property bool upgradable
-
-            width: grid.cellWidth
-            height: grid.cellHeight
-
-            AppCard {
-                width: parent.width - 12
-                height: parent.height - 12
-                pkgName: cell.name
-                title: cell.title
-                summary: cell.summary
-                source: cell.source
-                installed: cell.installed
-                upgradable: cell.upgradable
-                onClicked: root.openPackage(cell.name)
-            }
+            width: grid.cellWidth - Look.gutter
+            height: grid.cellHeight - Look.gutter
+            pkgName: pkg.name
+            title: pkg.title
+            summary: pkg.summary
+            source: pkg.source
+            installed: pkg.installed
+            upgradable: pkg.upgradable
+            onClicked: root.openPackage(pkg.name)
         }
     }
 
-    Column {
+    EmptyState {
         anchors.centerIn: grid
         visible: filter.count === 0
-        spacing: 8
-
-        BusyIndicator {
-            anchors.horizontalCenter: parent.horizontalCenter
-            visible: Backend.loading
-            running: visible
-        }
-
-        Text {
-            textFormat: Text.PlainText
-            anchors.horizontalCenter: parent.horizontalCenter
-            visible: !Backend.loading
-            text: root.query.length > 0 ? qsTr("Nothing found in the repositories.") : qsTr("Nothing here yet.")
-            color: Look.textMuted
-            font.pixelSize: Look.fontTitle
-        }
-
-        Text {
-            textFormat: Text.PlainText
-            anchors.horizontalCenter: parent.horizontalCenter
-            visible: !Backend.loading && root.query.length > 0 && Backend.aurEnabled
-            text: qsTr("Try the AUR tab for community packages.")
-            color: Look.textMuted
-            font.pixelSize: Look.fontBody
-        }
+        busy: Backend.loading
+        plain: true
+        title: Backend.loading ? "" : root.query.length > 0 ? qsTr("Nothing found in the repositories.") : qsTr("Nothing here yet.")
+        text: !Backend.loading && root.query.length > 0 && Backend.aurEnabled ? qsTr("Try the AUR tab for community packages.") : ""
     }
 }

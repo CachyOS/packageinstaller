@@ -15,6 +15,7 @@ TextField {
     selectByMouse: true
 
     background: Rectangle {
+        id: frame
         radius: height / 2
         color: Look.surface
         border.width: root.activeFocus ? 2 : 1
@@ -22,7 +23,7 @@ TextField {
 
         Glyph {
             x: 13
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenter: frame.verticalCenter
             size: 17
             color: Look.textMuted
             path: "M11 4a7 7 0 1 0 0 14a7 7 0 0 0 0-14zM16 16l4.5 4.5"

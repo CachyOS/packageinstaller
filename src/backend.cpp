@@ -1,38 +1,27 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "backend.hpp"
 #include "iconprovider.hpp"
+#include "process.hpp"
 
 #include <QFile>
-#include <QGuiApplication>
-#include <QLocale>
 #include <QQmlEngine>
-#include <QSettings>
 #include <QStandardPaths>
-#include <QStyleHints>
 #include <QtConcurrent/QtConcurrentRun>
+
+using namespace Qt::StringLiterals;
 
 namespace {
 Backend* s_instance = nullptr;
-
-void applyColorMode(const QString& mode) {
-    const auto scheme = mode == QLatin1String("light") ? Qt::ColorScheme::Light
-        : mode == QLatin1String("dark") ? Qt::ColorScheme::Dark
-        : Qt::ColorScheme::Unknown;  // follow the desktop
-    QGuiApplication::styleHints()->setColorScheme(scheme);
-}
 }  // namespace
 
 Backend::Backend(IconProvider* icons, QObject* parent)
   : QObject(parent), m_aur(&m_packages), m_icons(icons) {
-    s_instance      = this;
-    m_aurEnabled    = QSettings().value(QStringLiteral("aur/enabled"), false).toBool();
-    m_flatpakEnabled = QSettings().value(QStringLiteral("flatpak/enabled"), false).toBool();
-    m_paruAvailable = !QStandardPaths::findExecutable(QStringLiteral("paru")).isEmpty();
-    m_theme         = QSettings().value(QStringLiteral("appearance/theme"), QStringLiteral("classic")).toString();
-    m_colorMode     = QSettings().value(QStringLiteral("appearance/mode"), QStringLiteral("system")).toString();
-    applyColorMode(m_colorMode);
+    Q_ASSERT(s_instance == nullptr);
+    s_instance       = this;
+    m_aurEnabled     = m_settings.value(u"aur/enabled"_s, false).toBool();
+    m_flatpakEnabled = m_settings.value(u"flatpak/enabled"_s, false).toBool();
+    m_paruAvailable  = !QStandardPaths::findExecutable(u"paru"_s).isEmpty();
 
-    connect(&m_watcher, &QFutureWatcher<LoadResult>::finished, this, &Backend::onLoaded);
     connect(&m_transaction, &Transaction::finished, this, [this](bool) {
         // a Flatpak operation leaves the pacman databases alone
         if (m_transaction.isFlatpak()) {
@@ -41,38 +30,9 @@ Backend::Backend(IconProvider* icons, QObject* parent)
             reload();
         }
     });
-    connect(&m_flatpak, &FlatpakClient::iconsLoaded, this, [this](const IconIndex& index) { m_icons->setFlatpakIndex(index); });
-    if (m_flatpakEnabled) {
-        m_flatpak.refresh();
-    }
-    connect(&m_checkUpdates, &QProcess::finished, this, [this](int exitCode, QProcess::ExitStatus status) {
-        m_checkingUpdates = false;
-        emit checkingUpdatesChanged();
-        if (m_checkOutdated) {
-            // started before the last reload: its answer may name packages that were updated since
-            m_checkOutdated = false;
-            if (!m_loading) {
-                checkUpdates();
-            }
-            return;
-        }
-        // checkupdates: 0 = updates listed, 2 = no updates, anything else = failure (keep the local view)
-        if (status != QProcess::NormalExit || (exitCode != 0 && exitCode != 2) || m_loading) {
-            return;
-        }
-        QHash<QString, QString> versions;
-        const auto lines = QString::fromUtf8(m_checkUpdates.readAllStandardOutput()).split(QLatin1Char('\n'), Qt::SkipEmptyParts);
-        for (const auto& line : lines) {
-            // "name 1.0-1 -> 1.1-1"
-            const auto fields = line.split(QLatin1Char(' '), Qt::SkipEmptyParts);
-            if (fields.size() == 4) {
-                versions.insert(fields.at(0), fields.at(3));
-            }
-        }
-        m_packages.applyUpdates(versions);
-        ++m_revision;
-        emit revisionChanged();
-    });
+    connect(&m_flatpak, &FlatpakClient::iconsLoaded, this, [this](const IconIndex& index) { m_icons->setIndex(index, true); });
+    m_checkUpdates.setProcessEnvironment(plainEnvironment());
+    connect(&m_checkUpdates, &QProcess::finished, this, &Backend::onUpdatesChecked);
 
     // A transaction touches the database many times; reload once things have settled,
     // and leave it to the transaction itself while one of ours is running.
@@ -80,46 +40,48 @@ Backend::Backend(IconProvider* icons, QObject* parent)
     m_dbChanged.setInterval(1500);
     connect(&m_dbWatcher, &QFileSystemWatcher::directoryChanged, &m_dbChanged, qOverload<>(&QTimer::start));
     connect(&m_dbChanged, &QTimer::timeout, this, [this] {
-        if (m_transaction.state() == Transaction::Idle) {
+        // a transaction of ours reloads by itself when it ends
+        if (m_transaction.state() != Transaction::Running && m_transaction.state() != Transaction::Planning) {
             reload();
         }
     });
 
-    loadCuratedList();
+    QFile pkglist(u":/qt/qml/CachyOS/PackageInstaller/pkglist.yaml"_s);
+    if (pkglist.open(QIODevice::ReadOnly)) {
+        m_curatedList = catalog::loadCurated(pkglist);
+    } else {
+        qWarning("pkglist.yaml is missing from the resources");
+    }
     reload();
 }
 
+Backend::~Backend() {
+    // paru keeps building after the app is gone, so leave its checkouts in place
+    if (m_transaction.state() == Transaction::Running) {
+        m_aur.keepCheckouts();
+    }
+}
+
 Backend* Backend::create(QQmlEngine* /*qmlEngine*/, QJSEngine* /*jsEngine*/) {
+    Q_ASSERT(s_instance != nullptr);
     QQmlEngine::setObjectOwnership(s_instance, QQmlEngine::CppOwnership);
     return s_instance;
 }
 
-void Backend::setTheme(const QString& theme) {
-    if (theme == m_theme) {
-        return;
+bool Backend::store(bool& member, bool value, const QString& key, void (Backend::*changed)()) {
+    if (member == value) {
+        return false;
     }
-    m_theme = theme;
-    QSettings().setValue(QStringLiteral("appearance/theme"), theme);
-    emit themeChanged();
-}
-
-void Backend::setColorMode(const QString& mode) {
-    if (mode == m_colorMode) {
-        return;
-    }
-    m_colorMode = mode;
-    QSettings().setValue(QStringLiteral("appearance/mode"), mode);
-    applyColorMode(mode);
-    emit colorModeChanged();
+    member = value;
+    m_settings.setValue(key, value);
+    emit(this->*changed)();
+    return true;
 }
 
 void Backend::setAurEnabled(bool enabled) {
-    if (enabled == m_aurEnabled) {
+    if (!store(m_aurEnabled, enabled, u"aur/enabled"_s, &Backend::aurEnabledChanged)) {
         return;
     }
-    m_aurEnabled = enabled;
-    QSettings().setValue(QStringLiteral("aur/enabled"), enabled);
-    emit aurEnabledChanged();
     if (enabled) {
         m_aur.checkUpdates();
     } else {
@@ -128,12 +90,9 @@ void Backend::setAurEnabled(bool enabled) {
 }
 
 void Backend::setFlatpakEnabled(bool enabled) {
-    if (enabled == m_flatpakEnabled) {
+    if (!store(m_flatpakEnabled, enabled, u"flatpak/enabled"_s, &Backend::flatpakEnabledChanged)) {
         return;
     }
-    m_flatpakEnabled = enabled;
-    QSettings().setValue(QStringLiteral("flatpak/enabled"), enabled);
-    emit flatpakEnabledChanged();
     if (enabled) {
         m_flatpak.refresh();
     } else {
@@ -155,16 +114,14 @@ void Backend::removeFlatpak(const QString& key) {
 
 void Backend::updateFlatpaks() {
     if (m_flatpakEnabled) {
-        m_transaction.prepareFlatpak(Transaction::FlatpakUpdate, {},
-            {QStringLiteral("update"), QStringLiteral("--noninteractive")});
+        m_transaction.prepareFlatpak(Transaction::FlatpakUpdate, {}, {u"update"_s, u"--noninteractive"_s});
     }
 }
 
 void Backend::addFlathub() {
     if (m_flatpakEnabled && m_flatpak.available()) {
-        m_transaction.prepareFlatpak(Transaction::FlatpakSetup, {QStringLiteral("Flathub")},
-            {QStringLiteral("remote-add"), QStringLiteral("--system"), QStringLiteral("--if-not-exists"),
-                QStringLiteral("flathub"), QStringLiteral("https://dl.flathub.org/repo/flathub.flatpakrepo")});
+        m_transaction.prepareFlatpak(Transaction::FlatpakSetup, {u"Flathub"_s},
+            {u"remote-add"_s, u"--system"_s, u"--if-not-exists"_s, u"flathub"_s, u"https://dl.flathub.org/repo/flathub.flatpakrepo"_s});
     }
 }
 
@@ -175,27 +132,41 @@ void Backend::reload() {
     }
     m_loading = true;
     emit loadingChanged();
-    m_watcher.setFuture(QtConcurrent::run(catalog::load));
+    QtConcurrent::run(catalog::load).then(this, [this](std::expected<catalog::LoadResult, QString> result) {
+        onLoaded(std::move(result));
+    });
 }
 
-void Backend::onLoaded() {
-    auto result = m_watcher.result();
-    m_error     = result.error;
-    if (m_dbWatcher.directories().isEmpty() && !result.dbPath.isEmpty()) {
-        m_dbWatcher.addPaths({result.dbPath + QStringLiteral("/local"), result.dbPath + QStringLiteral("/sync")});
+void Backend::onLoaded(std::expected<catalog::LoadResult, QString> result) {
+    if (result) {
+        m_error = result->packages.isEmpty() ? tr("The pacman databases are empty. Refresh them with a system update.") : QString();
+        if (m_dbWatcher.directories().isEmpty()) {
+            m_dbWatcher.addPaths({result->dbPath + u"/local"_s, result->dbPath + u"/sync"_s});
+        }
+        m_icons->setIndex(std::move(result->icons));
+        m_packages.reset(std::move(result->packages));
+    } else {
+        m_error = result.error();
+        m_packages.reset({});
     }
-    m_icons->setIndex(std::move(result.icons));
-    m_packages.reset(std::move(result.packages));
-    rebuildCurated();
+
+    QList<CuratedSection> curated;
+    for (const auto& section : std::as_const(m_curatedList.sections)) {
+        CuratedSection shown{.title = section.title, .names = {}};
+        for (const auto& name : section.names) {
+            if (const auto* pkg = m_packages.find(name); pkg != nullptr && !pkg->foreign()) {
+                shown.names << name;
+            }
+        }
+        if (!shown.names.isEmpty()) {
+            curated << shown;
+        }
+    }
+    if (curated != m_curated) {
+        m_curated = std::move(curated);
+        emit curatedChanged();
+    }
     m_aur.refreshInstalled();
-    // the flatpak package itself may just have been installed or removed
-    if (m_flatpakEnabled && !m_flatpak.loading() && m_flatpak.available() == QStandardPaths::findExecutable(QStringLiteral("flatpak")).isEmpty()) {
-        m_flatpak.refresh();
-    }
-    // only after the opt-in: the names of the installed packages are sent to the AUR
-    if (m_aurEnabled) {
-        m_aur.checkUpdates();
-    }
 
     m_loading = false;
     ++m_revision;
@@ -207,6 +178,21 @@ void Backend::onLoaded() {
         reload();
         return;
     }
+    // let the first frame through before starting processes and network requests
+    QTimer::singleShot(0, this, &Backend::refreshSources);
+}
+
+void Backend::refreshSources() {
+    const bool first = !std::exchange(m_loadedOnce, true);
+    // also when the flatpak package itself was just installed or removed
+    const bool flatpakChanged = m_flatpak.available() == QStandardPaths::findExecutable(u"flatpak"_s).isEmpty();
+    if (m_flatpakEnabled && !m_flatpak.loading() && (first || flatpakChanged)) {
+        m_flatpak.refresh();
+    }
+    // only after the opt-in: the names of the installed packages are sent to the AUR
+    if (m_aurEnabled) {
+        m_aur.checkUpdates();
+    }
     checkUpdates();
 }
 
@@ -215,71 +201,49 @@ void Backend::checkUpdates() {
         m_checkOutdated = true;
         return;
     }
-    const auto program = QStandardPaths::findExecutable(QStringLiteral("checkupdates"));
+    const auto program = QStandardPaths::findExecutable(u"checkupdates"_s);
     if (program.isEmpty()) {
         return;  // pacman-contrib is optional; the local sync databases are used as they are
     }
     m_checkingUpdates = true;
     emit checkingUpdatesChanged();
-    m_checkUpdates.start(program, {QStringLiteral("--nocolor")});
+    m_checkUpdates.start(program, {u"--nocolor"_s});
 }
 
-/// pkglist.yaml is a flat list of sections, each with a list of entries; an
-/// entry is "package [companion...]". That subset is parsed here directly.
-void Backend::loadCuratedList() {
-    QFile file(QStringLiteral(":/qt/qml/CachyOS/PackageInstaller/pkglist.yaml"));
-    if (!file.open(QIODevice::ReadOnly)) {
-        qWarning("pkglist.yaml is missing from the resources");
+void Backend::onUpdatesChecked(int exitCode, QProcess::ExitStatus status) {
+    m_checkingUpdates = false;
+    emit checkingUpdatesChanged();
+    if (std::exchange(m_checkOutdated, false)) {
+        // started before the last reload: its answer may name packages that were updated since
+        if (!m_loading) {
+            checkUpdates();
+        }
         return;
     }
-    while (!file.atEnd()) {
-        const auto raw  = QString::fromUtf8(file.readLine());
-        const auto line = raw.trimmed();
-        if (line.startsWith(QLatin1String("- name:"))) {
-            auto title = line.mid(7).trimmed();
-            title.remove(QLatin1Char('"'));
-            m_sections << CuratedSection{title, {}};
-        } else if (line.startsWith(QLatin1String("- ")) && raw.startsWith(QLatin1Char(' ')) && !m_sections.isEmpty()) {
-            auto names = line.mid(2).remove(QLatin1Char('"')).split(QLatin1Char(' '), Qt::SkipEmptyParts);
-            if (names.isEmpty()) {
-                continue;
-            }
-            const auto name = names.takeFirst();
-            m_sections.last().entries << CuratedEntry{name, names};
-            if (!names.isEmpty()) {
-                m_companions.insert(name, names);
-            }
+    // checkupdates: 0 = updates listed, 2 = no updates, anything else = failure (keep the local view)
+    if (status != QProcess::NormalExit || (exitCode != 0 && exitCode != 2) || m_loading) {
+        return;
+    }
+    QHash<QString, QString> versions;
+    for (const auto& line : QString::fromUtf8(m_checkUpdates.readAllStandardOutput()).split(u'\n', Qt::SkipEmptyParts)) {
+        // "name 1.0-1 -> 1.1-1"
+        if (const auto fields = line.split(u' ', Qt::SkipEmptyParts); fields.size() == 4) {
+            versions.insert(fields.at(0), fields.at(3));
         }
     }
+    m_packages.applyUpdates(versions);
+    ++m_revision;
+    emit revisionChanged();
 }
 
-void Backend::rebuildCurated() {
-    m_curated.clear();
-    for (const auto& section : std::as_const(m_sections)) {
-        QVariantList packages;
-        for (const auto& entry : section.entries) {
-            if (const auto* pkg = m_packages.find(entry.name); pkg != nullptr && !pkg->foreign()) {
-                packages << m_packages.toMap(*pkg);
-            }
-        }
-        if (!packages.isEmpty()) {
-            m_curated << QVariantMap{{QStringLiteral("title"), section.title}, {QStringLiteral("packages"), packages}};
-        }
-    }
-}
-
-QVariantMap Backend::package(const QString& name) const {
+Package Backend::package(const QString& name) const {
     const auto* pkg = m_packages.find(name);
-    return pkg == nullptr ? QVariantMap{} : m_packages.toMap(*pkg);
-}
-
-QString Backend::formatSize(qint64 bytes) const {
-    return QLocale().formattedDataSize(bytes, 1, QLocale::DataSizeIecFormat);
+    return pkg == nullptr ? Package{} : *pkg;
 }
 
 void Backend::install(const QString& name) {
     QStringList targets{name};
-    for (const auto& companion : m_companions.value(name)) {
+    for (const auto& companion : m_curatedList.companions.value(name)) {
         if (const auto* pkg = m_packages.find(companion); pkg != nullptr && !pkg->foreign() && !pkg->installed()) {
             targets << companion;
         }
@@ -301,7 +265,11 @@ void Backend::installFromAur(const QString& name) {
 
 void Backend::installManyFromAur(const QStringList& names) {
     if (m_aurEnabled && m_paruAvailable && !names.isEmpty()) {
-        // empty unless every package was reviewed and accepted at the revision that is on disk
-        m_transaction.prepareAur(names, m_aur.buildDirectories(names), m_aur.buildWorkingDirectory());
+        const auto directories = m_aur.buildDirectories(names);
+        if (!directories) {
+            emit notice(directories.error());
+            return;
+        }
+        m_transaction.prepareAur(names, *directories, m_aur.buildWorkingDirectory());
     }
 }

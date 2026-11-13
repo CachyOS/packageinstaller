@@ -15,72 +15,68 @@ AbstractButton {
     implicitHeight: 64
     Accessible.name: title
 
-    background: Rectangle {
+    background: Card {
         radius: Look.radiusSmall + 2
-        color: root.hovered ? Look.surfaceHover : Look.surface
-        border.width: root.visualFocus ? 2 : 1
-        border.color: root.visualFocus || root.hovered ? Look.accent : Look.border
+        hovered: root.hovered
+        focused: root.visualFocus
     }
 
     contentItem: Item {
+        id: content
+
         AppIcon {
             id: icon
             x: 12
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenter: content.verticalCenter
             pkgName: root.pkgName
             size: 40
         }
 
         Column {
+            id: texts
             anchors.left: icon.right
             anchors.leftMargin: 12
             anchors.right: trailingText.left
             anchors.rightMargin: 12
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.verticalCenter: content.verticalCenter
             spacing: 2
 
             Row {
-                width: parent.width
+                id: titleRow
+                width: texts.width
                 spacing: 8
 
-                Text {
-                    textFormat: Text.PlainText
-                    width: Math.min(implicitWidth, parent.width - badge.width - 8)
+                PlainText {
+                    width: Math.min(implicitWidth, texts.width - badge.width - 8)
                     text: root.title
-                    color: Look.text
-                    font.pixelSize: Look.fontBody + 1
+                    font.pixelSize: Look.fontLead
                     font.weight: Font.DemiBold
                     elide: Text.ElideRight
                 }
 
                 SourceBadge {
                     id: badge
-                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.verticalCenter: titleRow.verticalCenter
                     source: root.source
                 }
             }
 
-            Text {
-                textFormat: Text.PlainText
-                width: parent.width
+            Muted {
+                width: texts.width
                 text: root.summary
-                color: Look.textMuted
-                font.pixelSize: Look.fontSmall + 1
                 elide: Text.ElideRight
             }
         }
 
-        Text {
+        Muted {
             id: trailingText
-            textFormat: Text.PlainText
-            anchors.right: parent.right
+            anchors.right: content.right
             anchors.rightMargin: 14
-            anchors.verticalCenter: parent.verticalCenter
-            width: Math.min(implicitWidth, parent.width * 0.42)
+            anchors.verticalCenter: content.verticalCenter
+            width: Math.min(implicitWidth, content.width * 0.42)
             horizontalAlignment: Text.AlignRight
             text: root.trailing
             color: root.trailingColor
-            font.pixelSize: Look.fontSmall + 1
             elide: Text.ElideMiddle
         }
     }

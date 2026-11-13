@@ -1,31 +1,34 @@
 import QtQuick
 
-// A labelled fact on a details page; hidden while it has no value.
+// A link is only offered for a valid web address.
 Column {
     id: root
 
     property string label
     property string value
+    property bool link
 
-    visible: value.length > 0
+    visible: link ? web.valid : value.length > 0
     width: 220
     spacing: 2
 
-    Text {
-        textFormat: Text.PlainText
+    Muted {
         text: root.label
-        color: Look.textMuted
         font.pixelSize: Look.fontSmall
     }
 
-    Text {
-        textFormat: Text.PlainText
-        width: parent.width
+    PlainText {
+        visible: !root.link
+        width: root.width
         text: root.value
-        color: Look.text
-        font.pixelSize: Look.fontBody
         wrapMode: Text.WrapAnywhere
         maximumLineCount: 3
         elide: Text.ElideRight
+    }
+
+    WebLink {
+        id: web
+        width: root.width
+        url: root.link ? root.value : ""
     }
 }

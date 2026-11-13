@@ -3,131 +3,86 @@ import QtQuick
 import QtQuick.Controls.Basic
 import CachyOS.PackageInstaller
 
-Popup {
+Dialog {
     id: root
 
     readonly property Transaction tx: Backend.transaction
-    readonly property int kind: tx.kind
-    readonly property bool removes: kind === Transaction.Remove || kind === Transaction.FlatpakRemove
+    readonly property int phase: tx.state
+    readonly property bool hasPlanError: tx.planError.length > 0
+    readonly property bool removes: tx.kind === Transaction.Remove || tx.kind === Transaction.FlatpakRemove
+    readonly property bool failedSilently: phase === Transaction.Finished && !tx.success && tx.failureReason.length === 0
     property bool showLog: false
 
-    readonly property string heading: {
-        const target = tx.targets.length > 0 ? tx.targets[0] : "";
-        switch (kind) {
-        case Transaction.Install: return qsTr("Install %1").arg(target);
-        case Transaction.Remove: return qsTr("Remove %1").arg(target);
-        case Transaction.Upgrade: return qsTr("Update the system");
-        case Transaction.FlatpakInstall: return qsTr("Install %1").arg(target);
-        case Transaction.FlatpakRemove: return qsTr("Remove %1").arg(target);
-        case Transaction.FlatpakUpdate: return qsTr("Update Flatpak apps");
-        case Transaction.FlatpakSetup: return qsTr("Add Flathub");
-        default: return tx.targets.length > 1 ? qsTr("Build %n package(s) from the AUR", "", tx.targets.length)
-            : qsTr("Build %1 from the AUR").arg(target);
-        }
-    }
-
-    visible: tx.state !== Transaction.Idle
+    visible: phase !== Transaction.Idle
     onVisibleChanged: if (visible) showLog = false
-    modal: true
     closePolicy: Popup.NoAutoClose
-    anchors.centerIn: Overlay.overlay
-    width: Math.min(Overlay.overlay ? Overlay.overlay.width - 80 : 640, 640)
-    padding: 26
-
-    Overlay.modal: Rectangle {
-        color: "#99000000"
-    }
-
-    background: Rectangle {
-        radius: Look.radius + 4
-        color: Look.surface
-        border.width: 1
-        border.color: Look.border
-    }
+    width: Math.min(Overlay.overlay.width - 80, 640)
 
     contentItem: Column {
+        id: body
         spacing: 16
 
-        Text {
-            textFormat: Text.PlainText
-            width: parent.width
-            text: root.heading
-            color: Look.text
-            font.pixelSize: Look.fontHeading
-            font.weight: Font.Bold
+        Heading {
+            width: body.width
+            text: root.tx.title
             elide: Text.ElideRight
         }
 
-        // Planning
         Row {
-            visible: root.tx.state === Transaction.Planning
+            id: planning
+            visible: root.phase === Transaction.Planning
             spacing: 12
 
             BusyIndicator {
                 width: 28
                 height: 28
-                running: parent.visible
+                running: planning.visible
             }
 
-            Text {
-                textFormat: Text.PlainText
-                anchors.verticalCenter: parent.verticalCenter
+            Muted {
+                anchors.verticalCenter: planning.verticalCenter
                 text: qsTr("Working out what will change…")
-                color: Look.textMuted
                 font.pixelSize: Look.fontBody
             }
         }
 
-        // Confirm
         Column {
-            visible: root.tx.state === Transaction.Confirm
-            width: parent.width
+            id: confirm
+            visible: root.phase === Transaction.Confirm
+            width: body.width
             spacing: 12
 
             // pacman can be verbose; never let the message push the buttons off the window
             Flickable {
-                visible: root.tx.planError.length > 0
-                width: parent.width
-                height: Math.min(planErrorText.implicitHeight, 220)
-                contentHeight: planErrorText.implicitHeight
+                visible: root.hasPlanError
+                width: confirm.width
+                height: Math.min(planError.implicitHeight, 220)
+                contentHeight: planError.implicitHeight
                 clip: true
                 boundsBehavior: Flickable.StopAtBounds
 
                 ScrollBar.vertical: ScrollBar {}
 
-                Text {
-                    id: planErrorText
-                    textFormat: Text.PlainText
-                    width: parent.width - 12
+                PlainText {
+                    id: planError
+                    width: confirm.width - Look.gutter
                     text: root.tx.planError
                     color: Look.danger
-                    font.pixelSize: Look.fontBody
                     wrapMode: Text.WordWrap
                 }
             }
 
-            Text {
-                textFormat: Text.PlainText
-                visible: root.tx.planError.length === 0
-                width: parent.width
-                text: root.kind === Transaction.FlatpakInstall ? qsTr("Flatpak will download the app and the runtime it needs, and install them for all users. It asks for permission itself if that is required.")
-                    : root.kind === Transaction.FlatpakRemove ? qsTr("The app will be removed. Its data in your home directory is kept.")
-                    : root.kind === Transaction.FlatpakUpdate ? qsTr("Every installed Flatpak app and runtime will be updated.")
-                    : root.kind === Transaction.FlatpakSetup ? qsTr("Flathub will be added as an app source for all users.")
-                    : root.kind === Transaction.Upgrade ? qsTr("The package databases will be refreshed and every available update installed.")
-                    : root.kind === Transaction.AurInstall ? (root.tx.targets.length > 1
-                        ? qsTr("paru will download the sources, build %1 as your user and then ask for permission to install them. This can take a while.").arg(root.tx.targets.join(", "))
-                        : qsTr("paru will download the sources, build the package as your user and then ask for permission to install it. This can take a while."))
-                    : root.kind === Transaction.Remove ? qsTr("%n package(s) will be removed:", "", root.tx.plan.length)
-                    : qsTr("%n package(s) will be installed (%1 to download):", "", root.tx.plan.length).arg(Backend.formatSize(root.tx.downloadSize))
-                color: Look.textMuted
+            Muted {
+                visible: !root.hasPlanError
+                width: confirm.width
+                text: root.tx.summary
                 font.pixelSize: Look.fontBody
                 wrapMode: Text.WordWrap
             }
 
             ListView {
                 visible: count > 0
-                width: parent.width
+                width: confirm.width
                 height: Math.min(contentHeight, 260)
                 clip: true
                 boundsBehavior: Flickable.StopAtBounds
@@ -136,48 +91,44 @@ Popup {
                 ScrollBar.vertical: ScrollBar {}
 
                 delegate: Item {
-                    required property var modelData
+                    id: planRow
+
+                    required property planEntry modelData
 
                     width: ListView.view.width
                     height: 30
 
-                    Text {
-                        textFormat: Text.PlainText
-                        anchors.left: parent.left
-                        anchors.right: versionText.left
+                    PlainText {
+                        anchors.left: planRow.left
+                        anchors.right: planVersion.left
                         anchors.rightMargin: 12
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: parent.modelData.name
-                        color: Look.text
-                        font.pixelSize: Look.fontBody
-                        font.weight: parent.modelData.requested ? Font.DemiBold : Font.Normal
+                        anchors.verticalCenter: planRow.verticalCenter
+                        text: planRow.modelData.name
+                        font.weight: planRow.modelData.requested ? Font.DemiBold : Font.Normal
                         elide: Text.ElideRight
                     }
 
-                    Text {
-                        id: versionText
-                        textFormat: Text.PlainText
-                        anchors.right: parent.right
+                    Muted {
+                        id: planVersion
+                        anchors.right: planRow.right
                         anchors.rightMargin: 14
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: parent.modelData.version
-                        color: Look.textMuted
-                        font.pixelSize: Look.fontSmall + 1
+                        anchors.verticalCenter: planRow.verticalCenter
+                        text: planRow.modelData.version
                     }
                 }
             }
         }
 
-        // Running / finished
         Column {
-            visible: root.tx.state === Transaction.Running || root.tx.state === Transaction.Finished
-            width: parent.width
+            id: progressArea
+            visible: root.phase === Transaction.Running || root.phase === Transaction.Finished
+            width: body.width
             spacing: 12
 
             ProgressBar {
                 id: progress
-                visible: root.tx.state === Transaction.Running
-                width: parent.width
+                visible: root.phase === Transaction.Running
+                width: progressArea.width
                 indeterminate: true
 
                 background: Rectangle {
@@ -191,8 +142,8 @@ Popup {
                     clip: true
 
                     Rectangle {
-                        width: parent.width * 0.3
-                        height: parent.height
+                        width: progress.width * 0.3
+                        height: 6
                         radius: 3
                         color: Look.accent
 
@@ -207,10 +158,9 @@ Popup {
                 }
             }
 
-            Text {
-                textFormat: Text.PlainText
-                visible: root.tx.state === Transaction.Finished
-                width: parent.width
+            PlainText {
+                visible: root.phase === Transaction.Finished
+                width: progressArea.width
                 text: root.tx.success ? qsTr("Done.")
                     : root.tx.failureReason.length > 0 ? root.tx.failureReason : qsTr("The operation did not complete.")
                 wrapMode: Text.WordWrap
@@ -219,79 +169,89 @@ Popup {
                 font.weight: Font.DemiBold
             }
 
-            Text {
-                textFormat: Text.PlainText
-                visible: root.tx.state === Transaction.Running
-                width: parent.width
+            Muted {
+                visible: root.phase === Transaction.Running
+                width: progressArea.width
                 text: root.tx.lastLine
-                color: Look.textMuted
-                font.pixelSize: Look.fontSmall + 1
                 elide: Text.ElideRight
             }
 
             Rectangle {
                 // open by default only when the log is the sole explanation of a failure
-                visible: root.showLog || (root.tx.state === Transaction.Finished && !root.tx.success && root.tx.failureReason.length === 0)
-                width: parent.width
+                visible: root.showLog || root.failedSilently
+                width: progressArea.width
                 height: 240
                 radius: Look.radiusSmall
                 color: Look.window
                 border.width: 1
                 border.color: Look.border
 
-                ScrollView {
-                    id: logScroll
+                ListView {
+                    id: logView
                     anchors.fill: parent
                     anchors.margins: 1
+                    leftMargin: 10
+                    rightMargin: 10
+                    topMargin: 10
+                    bottomMargin: 10
                     clip: true
+                    boundsBehavior: Flickable.StopAtBounds
+                    reuseItems: true
+                    model: root.tx.log
 
-                    TextArea {
-                        readOnly: true
-                        selectByMouse: true
-                        text: root.tx.log
-                        color: Look.text
+                    ScrollBar.vertical: ScrollBar {}
+
+                    delegate: PlainText {
+                        required property string display
+
+                        width: logView.width - 20
+                        text: display
                         font.family: "monospace"
                         font.pixelSize: Look.fontSmall
-                        wrapMode: TextEdit.WrapAnywhere
-                        padding: 10
-                        background: null
-                        onTextChanged: cursorPosition = length
+                        wrapMode: Text.WrapAnywhere
                     }
+
+                    // rows get their text only after they are inserted, so wait until they are laid out
+                    onCountChanged: Qt.callLater(positionViewAtEnd)
                 }
             }
         }
 
-        // Buttons
         Row {
-            anchors.right: parent.right
+            anchors.right: body.right
             spacing: 10
 
             PillButton {
-                visible: root.tx.state === Transaction.Running
-                    || (root.tx.state === Transaction.Finished && (root.tx.success || root.tx.failureReason.length > 0))
+                visible: root.phase === Transaction.Running || (root.phase === Transaction.Finished && !root.failedSilently)
                 tone: "soft"
                 text: root.showLog ? qsTr("Hide details") : qsTr("Show details")
                 onClicked: root.showLog = !root.showLog
             }
 
             PillButton {
-                visible: root.tx.state === Transaction.Planning || root.tx.state === Transaction.Confirm || root.tx.cancellable
+                visible: root.showLog && logView.count > 0
                 tone: "soft"
-                text: root.tx.state !== Transaction.Running ? qsTr("Cancel") : root.tx.isFlatpak ? qsTr("Stop") : qsTr("Stop build")
+                text: qsTr("Copy log")
+                onClicked: root.tx.copyLog()
+            }
+
+            PillButton {
+                visible: root.phase === Transaction.Planning || root.phase === Transaction.Confirm || root.tx.cancellable
+                tone: "soft"
+                text: root.phase !== Transaction.Running ? qsTr("Cancel")
+                    : root.tx.kind === Transaction.AurInstall ? qsTr("Stop build") : qsTr("Stop")
                 onClicked: root.tx.cancel()
             }
 
             PillButton {
-                visible: root.tx.state === Transaction.Confirm && root.tx.planError.length === 0
+                visible: root.phase === Transaction.Confirm && !root.hasPlanError
                 tone: root.removes ? "danger" : "primary"
-                text: root.removes ? qsTr("Remove")
-                    : root.kind === Transaction.Upgrade || root.kind === Transaction.FlatpakUpdate ? qsTr("Update")
-                    : root.kind === Transaction.FlatpakSetup ? qsTr("Add") : qsTr("Install")
+                text: root.tx.confirmLabel
                 onClicked: root.tx.confirm()
             }
 
             PillButton {
-                visible: root.tx.state === Transaction.Finished
+                visible: root.phase === Transaction.Finished
                 text: qsTr("Close")
                 onClicked: root.tx.dismiss()
             }
