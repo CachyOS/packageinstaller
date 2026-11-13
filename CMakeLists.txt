@@ -65,7 +65,7 @@ target_link_libraries(pi-scan PUBLIC Qt6::Core PRIVATE project_options project_w
 
 add_executable(cachyos-pi-scan src/scan/main.cpp)
 target_compile_definitions(cachyos-pi-scan PRIVATE PI_VERSION="${PROJECT_VERSION}")
-target_link_libraries(cachyos-pi-scan PRIVATE pi-scan project_options project_warnings)
+target_link_libraries(cachyos-pi-scan PRIVATE pi-scan project_options project_warnings backward)
 
 ##
 ## GUI

@@ -1,0 +1,25 @@
+pkgbase = hello-tool
+	pkgdesc = Small tool that uses curl and wget style downloads, with eval support
+	pkgver = 1.4.2
+	pkgrel = 1
+	url = https://github.com/example/hello-tool
+	install = hello-tool.install
+	arch = x86_64
+	license = MIT
+	makedepends = git
+	makedepends = cmake
+	makedepends = wget
+	makedepends = sudo
+	depends = curl
+	depends = glibc
+	source = hello-tool-1.4.2.tar.gz::https://github.com/example/hello-tool/archive/v1.4.2.tar.gz
+	source = hello-tool.service
+	source = fix-build.patch
+	sha256sums = 0f3a5f5b0a9c2f6b8c0d51b7d9a2e5f2d3b1c0a9e8f7d6c5b4a39281706f5e4d
+	sha256sums = b5bb9d8014a0f9b1d61e21e796d78dccdf1352f23cd32812f4850b878ae4944c
+	sha256sums = 7d865e959b2466918c9863afca942d0fb89d7c9ac0c99bafc3749504ded97730
+
+pkgname = hello-tool
+	depends = curl
+	depends = glibc
+	depends = wget

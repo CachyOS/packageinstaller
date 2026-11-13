@@ -7,100 +7,74 @@
 #include <QCommandLineParser>
 #include <QCoreApplication>
 #include <QDir>
-#include <QFile>
 #include <QFileInfo>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QTextStream>
 
+#include <backward.hpp>
+
+using namespace Qt::StringLiterals;
+
 namespace {
 
-constexpr qint64 MAX_FILE_SIZE = 1024 * 1024;
-
-bool readFile(const QString& path, QString* text) {
-    QFile file(path);
-    if (!file.open(QIODevice::ReadOnly) || file.size() > MAX_FILE_SIZE) {
-        return false;
-    }
-    *text = QString::fromUtf8(file.readAll());
-    return true;
-}
+constexpr int EXIT_UNREADABLE = 3;
 
 }  // namespace
 
 int main(int argc, char** argv) {
-    QCoreApplication app(argc, argv);
-    QCoreApplication::setApplicationName(QStringLiteral("cachyos-pi-scan"));
-    QCoreApplication::setApplicationVersion(QStringLiteral(PI_VERSION));
+    const backward::SignalHandling signalHandling;
+    const QCoreApplication app(argc, argv);
+    QCoreApplication::setApplicationName(u"cachyos-pi-scan"_s);
+    QCoreApplication::setApplicationVersion(u"" PI_VERSION ""_s);
 
     QCommandLineParser parser;
-    parser.setApplicationDescription(QStringLiteral(
-        "Lists the parts of an AUR package that deserve a closer look.\n"
+    parser.setApplicationDescription(
+        u"Lists the parts of an AUR package that deserve a closer look.\n"
         "This is a reading aid: no findings does not mean the package is safe.\n\n"
-        "Exit status: 0 nothing or notes only, 1 warnings, 2 dangerous patterns, 3 could not read the package."));
+        "Exit status: 0 nothing or notes only, 1 warnings, 2 dangerous patterns, 3 could not read the package."_s);
     parser.addHelpOption();
     parser.addVersionOption();
-    parser.addOption({QStringLiteral("json"), QStringLiteral("Print the result as JSON.")});
-    parser.addPositionalArgument(QStringLiteral("path"), QStringLiteral("A PKGBUILD or the directory that contains it."), QStringLiteral("[path]"));
+    const QCommandLineOption json(u"json"_s, u"Print the result as JSON."_s);
+    const QCommandLineOption srcinfoOption(u"srcinfo"_s, u"The .SRCINFO to read sources from (default: .SRCINFO next to the PKGBUILD)."_s, u"file"_s);
+    parser.addOptions({json, srcinfoOption});
+    parser.addPositionalArgument(u"path"_s, u"A PKGBUILD or the directory that contains it."_s, u"[path]"_s);
     parser.process(app);
 
     QTextStream out(stdout);
     QTextStream err(stderr);
 
     const auto args = parser.positionalArguments();
-    QFileInfo target(args.isEmpty() ? QStringLiteral(".") : args.first());
+    QFileInfo target(args.isEmpty() ? u"."_s : args.first());
     if (target.isDir()) {
-        target = QFileInfo(QDir(target.absoluteFilePath()), QStringLiteral("PKGBUILD"));
+        target = QFileInfo(QDir(target.absoluteFilePath()), u"PKGBUILD"_s);
     }
-    QString pkgbuild;
-    if (!readFile(target.absoluteFilePath(), &pkgbuild)) {
-        err << "cachyos-pi-scan: cannot read " << target.filePath() << '\n';
-        return 3;
+    const auto pkgbuild = pkgscan::readText(target.absoluteFilePath());
+    const auto srcinfoPath = parser.isSet(srcinfoOption) ? parser.value(srcinfoOption) : target.absoluteDir().filePath(u".SRCINFO"_s);
+    const auto srcinfo  = pkgscan::readText(srcinfoPath);
+    if (!pkgbuild || (!srcinfo && parser.isSet(srcinfoOption))) {
+        err << "cachyos-pi-scan: cannot read " << (pkgbuild ? srcinfoPath : target.filePath()) << '\n';
+        return EXIT_UNREADABLE;
     }
 
-    auto analysis = pkgscan::scanPkgbuild(pkgbuild);
-    QStringList missing;
-    // a source without a telling name is still a script when it starts with "#!"
-    for (const auto& name : std::as_const(analysis.otherLocalFiles)) {
-        QString text;
-        if (readFile(target.absoluteDir().filePath(name), &text) && text.startsWith(QLatin1String("#!"))) {
-            analysis.localFiles << name;
-        }
-    }
-    for (const auto& name : std::as_const(analysis.localFiles)) {
-        QString text;
-        if (readFile(target.absoluteDir().filePath(name), &text)) {
-            analysis.findings += pkgscan::scanScript(text, name);
-        } else {
-            missing << name;
-        }
+    auto analysis    = pkgscan::scanPkgbuild(*pkgbuild, srcinfo.value_or(QString()));
+    const auto files = pkgscan::collectFiles(target.absoluteDir(), analysis);
+    for (const auto& [name, text] : files.files) {
+        analysis.findings += pkgscan::scanScript(text, name);
     }
     pkgscan::sort(analysis.findings);
 
-    auto worst = pkgscan::Severity::Info;
-    for (const auto& finding : std::as_const(analysis.findings)) {
-        worst = std::max(worst, finding.severity);
-    }
-
-    if (parser.isSet(QStringLiteral("json"))) {
+    if (parser.isSet(json)) {
         QJsonArray findings;
         for (const auto& finding : std::as_const(analysis.findings)) {
-            findings << QJsonObject{
-                {QStringLiteral("id"), finding.id},
-                {QStringLiteral("severity"), pkgscan::severityName(finding.severity)},
-                {QStringLiteral("file"), finding.file},
-                {QStringLiteral("line"), finding.line},
-                {QStringLiteral("title"), finding.title},
-                {QStringLiteral("detail"), finding.detail},
-                {QStringLiteral("excerpt"), finding.excerpt},
-            };
+            findings << pkgscan::toJson(finding);
         }
         const QJsonObject root{
-            {QStringLiteral("findings"), findings},
-            {QStringLiteral("hosts"), QJsonArray::fromStringList(analysis.hosts)},
-            {QStringLiteral("files"), QJsonArray::fromStringList(analysis.localFiles)},
-            {QStringLiteral("unreadable"), QJsonArray::fromStringList(missing)},
+            {u"findings"_s, findings},
+            {u"hosts"_s, QJsonArray::fromStringList(analysis.hosts)},
+            {u"files"_s, QJsonArray::fromStringList(analysis.localFiles)},
+            {u"unreadable"_s, QJsonArray::fromStringList(files.unreadable)},
         };
         out << QJsonDocument(root).toJson(QJsonDocument::Indented);
     } else {
@@ -112,9 +86,9 @@ int main(int argc, char** argv) {
             out << "    " << finding.detail << '\n';
         }
         if (!analysis.hosts.isEmpty()) {
-            out << "Downloads from: " << analysis.hosts.join(QStringLiteral(", ")) << '\n';
+            out << "Downloads from: " << analysis.hosts.join(u", "_s) << '\n';
         }
-        for (const auto& name : std::as_const(missing)) {
+        for (const auto& name : std::as_const(files.unreadable)) {
             out << "Not checked (file missing): " << name << '\n';
         }
         if (analysis.findings.isEmpty()) {
@@ -122,5 +96,6 @@ int main(int argc, char** argv) {
         }
     }
 
-    return worst == pkgscan::Severity::Danger ? 2 : worst == pkgscan::Severity::Warning ? 1 : 0;
+    // findings are sorted most severe first, and the severities are the exit codes 0 to 2
+    return analysis.findings.isEmpty() ? 0 : static_cast<int>(analysis.findings.first().severity);
 }

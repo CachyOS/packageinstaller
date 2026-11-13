@@ -1,0 +1,22 @@
+pkgbase = firefoxx-bin
+	pkgver = 1.0
+	pkgrel = 1
+	url = https://example.org
+	arch = any
+	source = https://example.org/app-1.0.tar.gz
+	source = http://203.0.113.7/extra.bin
+	source = tool::https://cdn.discordapp.com/attachments/1/2/tool
+	source = git+https://github.com/example/lib.git
+	source = old.tar.gz::https://example.org/old.tar.gz
+	md5sums = SKIP
+	md5sums = SKIP
+	md5sums = SKIP
+	md5sums = SKIP
+	md5sums = d41d8cd98f00b204e9800998ecf8427e
+	sha256sums = SKIP
+	sha256sums = SKIP
+	sha256sums = SKIP
+	sha256sums = SKIP
+	sha256sums = SKIP
+
+pkgname = firefoxx-bin

