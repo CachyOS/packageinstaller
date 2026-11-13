@@ -70,6 +70,13 @@ target_compile_definitions(cachyos-pi-scan PRIVATE PI_VERSION="${PROJECT_VERSION
 target_link_libraries(cachyos-pi-scan PRIVATE pi-scan project_options project_warnings backward)
 
 ##
+## AppImage menu entries: text handling only, shared by the GUI and the tests.
+##
+add_library(pi-appimage STATIC src/appimagedesktop.hpp src/appimagedesktop.cpp)
+target_include_directories(pi-appimage PUBLIC src)
+target_link_libraries(pi-appimage PUBLIC Qt6::Core PRIVATE project_options project_warnings)
+
+##
 ## GUI
 ##
 qt_add_executable(${PROJECT_NAME}
@@ -229,4 +236,8 @@ if(BUILD_TESTING)
     target_link_libraries(test-helper PRIVATE project_options Qt6::Test)
     add_dependencies(test-helper cachyos-pi-helper-test)
     add_test(NAME helper COMMAND test-helper)
+
+    qt_add_executable(test-appimage tests/test_appimage.cpp)
+    target_link_libraries(test-appimage PRIVATE pi-appimage project_options Qt6::Test)
+    add_test(NAME appimage COMMAND test-appimage)
 endif()
