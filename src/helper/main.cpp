@@ -10,6 +10,7 @@
 
 #include <algorithm>
 #include <climits>
+#include <csignal>
 #include <cstdio>
 #include <cstdlib>
 #include <string>
@@ -170,10 +171,18 @@ int main(int argc, char** argv) {
     }
     execArgs.push_back(nullptr);
 
+    std::signal(SIGPIPE, SIG_IGN);
+    setsid();
+
     char path[]  = "PATH=/usr/bin";
     char lang[]  = "LC_ALL=C.UTF-8";
     char* envp[] = {path, lang, nullptr};
+#ifdef PI_HELPER_TESTING
+    const char* pacman = std::getenv("CACHYOS_PI_HELPER_PACMAN");
+    execve(pacman != nullptr ? pacman : PACMAN, execArgs.data(), envp);
+#else
     execve(PACMAN, execArgs.data(), envp);
+#endif
     std::perror("cachyos-pi-helper: cannot run pacman");
     return 127;
 }

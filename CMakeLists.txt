@@ -181,4 +181,16 @@ if(BUILD_TESTING)
     target_compile_definitions(test-pkglist PRIVATE PKGLIST_FILE="${CMAKE_CURRENT_SOURCE_DIR}/pkglist.yaml")
     target_link_libraries(test-pkglist PRIVATE project_options Qt6::Test)
     add_test(NAME pkglist COMMAND test-pkglist)
+
+    add_executable(cachyos-pi-helper-test src/helper/main.cpp)
+    target_compile_definitions(cachyos-pi-helper-test PRIVATE PI_HELPER_TESTING)
+    target_link_libraries(cachyos-pi-helper-test PRIVATE project_options project_warnings)
+
+    qt_add_executable(test-helper tests/test_helper.cpp)
+    target_compile_definitions(test-helper PRIVATE
+        TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/tests/data"
+        HELPER="$<TARGET_FILE:cachyos-pi-helper-test>")
+    target_link_libraries(test-helper PRIVATE project_options Qt6::Test)
+    add_dependencies(test-helper cachyos-pi-helper-test)
+    add_test(NAME helper COMMAND test-helper)
 endif()
