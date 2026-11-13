@@ -28,6 +28,7 @@ optdepends=(
   'paru: build packages from the AUR'
   'git: review and build packages from the AUR'
   'flatpak: install Flatpak apps'
+  'fuse2: start most AppImages'
   'pacman-contrib: see updates without refreshing the system databases'
 )
 source=("$pkgname-$pkgver.tar.gz::$url/archive/v$pkgver.tar.gz")
