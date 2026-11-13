@@ -1,8 +1,8 @@
 # cachyos-packageinstaller
 
 A small app store for CachyOS: browse, install, remove and update packages from
-the CachyOS and Arch repositories, build packages from the AUR and install
-Flatpak apps.
+the CachyOS and Arch repositories, build packages from the AUR, install
+Flatpak apps and add AppImage files to the menu.
 
 - **Repositories** are read directly through libalpm; nothing runs as root until
   you confirm an operation.
@@ -24,6 +24,12 @@ Flatpak apps.
   Flatpak asks for permission itself. The Flatpak page lists the installed apps
   and their updates; remotes other than Flathub are used if they are set up, but
   are not managed here.
+- **AppImage** is opt-in too. There is no catalogue and no update check: a file
+  you downloaded (picked, dropped on the page, or given as `cachyos-pi file.AppImage`)
+  is copied to `~/Applications` and gets a menu entry and an icon, all as your
+  user. Reading the name and icon runs the file's own extractor, so the page
+  asks first. The menu entries carry a mark and are the only record; adding a
+  newer file of the same app replaces the old one.
 - **PKGBUILD check**: the review page marks lines a reviewer should look at
   (see below). It is a reading aid and never declares a package safe.
 - **Appearance**: the settings page switches between colour themes (four of our
@@ -55,7 +61,7 @@ Qt 6.10 or newer and a C++26 compiler (GCC 15+, Clang 20+) are required.
 
 Runtime: `qt6-declarative`, `appstream-qt`, `archlinux-appstream-data`, `polkit`, `elfutils` (if built with libdw),
 `kimageformats` (the Arch icon cache is JPEG XL). Optional: `paru` and `git` (AUR review and builds),
-`flatpak` (Flatpak apps), `pacman-contrib` (`checkupdates`, to see updates without refreshing the system
+`flatpak` (Flatpak apps), `fuse2` (most AppImages need it to start), `pacman-contrib` (`checkupdates`, to see updates without refreshing the system
 databases).
 
 ## Building
@@ -118,9 +124,10 @@ the package database, so they are only done in the app.
 | `src/packagemodel.*` | list model and search/category filter |
 | `src/aurclient.*` | AUR RPC search, details and PKGBUILD download |
 | `src/flatpakclient.*` | Flatpak catalogue, installed apps and updates |
+| `src/appimageclient.*`, `src/appimagedesktop.*` | AppImage files: add, list, remove; menu entry rewriting |
 | `src/pkgscan.*` | static PKGBUILD and script check |
 | `src/scan/` | the `cachyos-pi-scan` command line tool |
-| `tests/` | unit tests for the check and for `pkglist.yaml` |
+| `tests/` | unit tests for the check, the AppImage menu entries and `pkglist.yaml` |
 | `src/transaction.*` | plan → confirm → run state machine |
 | `src/helper/` | the pkexec helper |
 | `qml/` | the user interface |
