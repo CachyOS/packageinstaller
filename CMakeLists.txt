@@ -121,6 +121,7 @@ set(PI_QML_FILES
     qml/AurDetailsPage.qml
     qml/FlatpakPage.qml
     qml/FlatpakDetailsPage.qml
+    qml/AppImagePage.qml
     qml/Toggle.qml
     qml/InfoItem.qml
     qml/WebLink.qml

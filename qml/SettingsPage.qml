@@ -150,5 +150,13 @@ ScrollPage {
             active: Backend.flatpakEnabled
             onToggled: Backend.flatpakEnabled = !Backend.flatpakEnabled
         }
+
+        SourceCard {
+            width: sources.width
+            title: qsTr("AppImage")
+            description: qsTr("Single-file apps that you downloaded yourself. They get a menu entry and an icon. They are not checked or sandboxed, and they are not updated for you.")
+            active: Backend.appImagesEnabled
+            onToggled: Backend.appImagesEnabled = !Backend.appImagesEnabled
+        }
     }
 }

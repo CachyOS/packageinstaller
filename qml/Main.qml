@@ -6,7 +6,7 @@ import CachyOS.PackageInstaller
 ApplicationWindow {
     id: root
 
-    // "home", "browse", "installed", "updates", "aur", "flatpak" or "settings"
+    // "home", "browse", "installed", "updates", "aur", "flatpak", "appimage" or "settings"
     property string section: "home"
 
     // History for the back and forward buttons. Pages on top of a section live in the
@@ -54,6 +54,7 @@ ApplicationWindow {
         case "updates": return updatesPage;
         case "aur": return aurPage;
         case "flatpak": return flatpakPage;
+        case "appimage": return appImagePage;
         case "settings": return settingsPage;
         default: return homePage;
         }
@@ -154,6 +155,8 @@ ApplicationWindow {
         }
     }
 
+    Component.onCompleted: if (Backend.hasStartupFile) show("appimage")
+
     width: 1220
     height: 800
     minimumWidth: 760
@@ -251,6 +254,7 @@ ApplicationWindow {
                     ListElement { name: "updates"; label: qsTr("Updates"); glyph: "M12 4v11M7 11l5 5l5-5M5 20h14" }
                     ListElement { name: "aur"; label: qsTr("AUR"); glyph: "M12 3 20 7.5v9L12 21l-8-4.5v-9zM4 7.5 12 12l8-4.5M12 12v9" }
                     ListElement { name: "flatpak"; label: qsTr("Flatpak"); glyph: "M4 8l8-4l8 4v8l-8 4l-8-4zM4 8l8 4l8-4M12 12v8M8 6l8 4" }
+                    ListElement { name: "appimage"; label: qsTr("AppImage"); glyph: "M5 4h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zM12 8v8M8 12h8" }
                 }
 
                 NavButton {
@@ -400,6 +404,12 @@ ApplicationWindow {
         id: flatpakDetailsPage
         FlatpakDetailsPage {
             onBack: root.back()
+        }
+    }
+    Component {
+        id: appImagePage
+        AppImagePage {
+            onOpenSettings: root.showSources()
         }
     }
     Component {
