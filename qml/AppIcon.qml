@@ -8,10 +8,10 @@ Image {
 
     width: size
     height: size
-    sourceSize: Qt.size(size * 2, size * 2)
+    // Qt multiplies this by the scale factor of the screen when it asks the provider
+    sourceSize: Qt.size(size, size)
     source: pkgName.length > 0 ? "image://pkgicon/" + pkgName : ""
     fillMode: Image.PreserveAspectFit
     smooth: true
-    mipmap: true
     cache: true
 }

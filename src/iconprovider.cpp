@@ -64,7 +64,8 @@ void IconRequest::finish(const QImage& image) {
 }
 
 IconProvider::IconProvider() {
-    m_decoded.setMaxCost(64 * 1024 * 1024);
+    // QML keeps what is on screen; this only spares decoding again when scrolling back.
+    m_decoded.setMaxCost(16 * 1024 * 1024);
     // Leave cores to the GUI: a page of icons is small work.
     m_pool.setMaxThreadCount(qBound(1, QThread::idealThreadCount() / 2, 4));
 }
@@ -196,7 +197,7 @@ QImage IconProvider::themed(const IconRef& ref, const QString& name, int extent)
             m_notInTheme.insert(themeName);
             continue;
         }
-        const auto pixmap = QIcon::fromTheme(themeName).pixmap(extent, extent);
+        const auto pixmap = QIcon::fromTheme(themeName).pixmap(QSize(extent, extent), 1.0);  // extent is in pixels already
         if (!pixmap.isNull()) {
             return pixmap.toImage();
         }

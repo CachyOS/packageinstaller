@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "backend.hpp"
 #include "iconprovider.hpp"
+#include "memory.hpp"
 #include "process.hpp"
 
 #include <QFile>
@@ -149,6 +150,8 @@ void Backend::onLoaded(std::expected<catalog::LoadResult, QString> result) {
         m_error = result.error();
         m_packages.reset({});
     }
+    // the databases as libalpm parsed them, and the previous package list
+    releaseFreedMemory();
 
     QList<CuratedSection> curated;
     for (const auto& section : std::as_const(m_curatedList.sections)) {

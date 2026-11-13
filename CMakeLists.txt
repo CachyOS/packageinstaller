@@ -73,7 +73,7 @@ target_link_libraries(cachyos-pi-scan PRIVATE pi-scan project_options project_wa
 ## GUI
 ##
 qt_add_executable(${PROJECT_NAME}
-    src/main.cpp src/process.hpp
+    src/main.cpp src/process.hpp src/memory.hpp
     src/alpmdb.hpp src/alpmdb.cpp
     src/catalog.hpp src/catalog.cpp
     src/packagemodel.hpp src/packagemodel.cpp

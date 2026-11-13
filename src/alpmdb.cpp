@@ -4,6 +4,7 @@
 
 #include <QCoreApplication>
 #include <QHash>
+#include <QSet>
 
 #include <alpm.h>
 
@@ -81,24 +82,28 @@ std::expected<Handle, QString> open(const Config& config) {
     return handle;
 }
 
+/// Dependency and licence names repeat across thousands of packages; one copy of each is kept.
+using Interned = QSet<QString>;
+
 template <typename T, typename Proj = std::identity>
-QStringList toStringList(alpm_list_t* list, Proj proj = {}) {
+QStringList toStringList(alpm_list_t* list, Interned& interned, Proj proj = {}) {
     QStringList out;
+    out.reserve(static_cast<qsizetype>(alpm_list_count(list)));
     for (auto* it = list; it != nullptr; it = alpm_list_next(it)) {
-        out << QString::fromUtf8(std::invoke(proj, static_cast<T*>(it->data)));
+        out << *interned.insert(QString::fromUtf8(std::invoke(proj, static_cast<T*>(it->data))));
     }
     return out;
 }
 
-Package fromAlpm(alpm_pkg_t* pkg, const QString& repo) {
+Package fromAlpm(alpm_pkg_t* pkg, const QString& repo, Interned& interned) {
     Package p;
     p.name         = QString::fromUtf8(alpm_pkg_get_name(pkg));
     p.version      = QString::fromUtf8(alpm_pkg_get_version(pkg));
     p.description  = QString::fromUtf8(alpm_pkg_get_desc(pkg));
     p.url          = QString::fromUtf8(alpm_pkg_get_url(pkg));
     p.repo         = repo;
-    p.licenses     = toStringList<const char>(alpm_pkg_get_licenses(pkg));
-    p.depends      = toStringList<alpm_depend_t>(alpm_pkg_get_depends(pkg), &alpm_depend_t::name);
+    p.licenses     = toStringList<const char>(alpm_pkg_get_licenses(pkg), interned);
+    p.depends      = toStringList<alpm_depend_t>(alpm_pkg_get_depends(pkg), interned, &alpm_depend_t::name);
     p.installSize  = static_cast<qint64>(alpm_pkg_get_isize(pkg));
     p.downloadSize = static_cast<qint64>(alpm_pkg_get_size(pkg));
     p.title        = p.name;
@@ -145,6 +150,7 @@ std::expected<Databases, QString> load() {
     auto& packages = result.packages;
     QHash<QString, qsizetype> index;
     QList<alpm_pkg_t*> candidates;  // the repository package behind each entry
+    Interned interned;
 
     for (auto* db = alpm_get_syncdbs(handle); db != nullptr; db = alpm_list_next(db)) {
         auto* sync      = static_cast<alpm_db_t*>(db->data);
@@ -156,7 +162,7 @@ std::expected<Databases, QString> load() {
                 continue;  // an earlier repository wins
             }
             index.insert(name, packages.size());
-            packages << fromAlpm(pkg, repo);
+            packages << fromAlpm(pkg, repo, interned);
             candidates << pkg;
         }
     }
@@ -173,12 +179,13 @@ std::expected<Databases, QString> load() {
             p.ignored    = alpm_pkg_should_ignore(handle, pkg) != 0 || alpm_pkg_should_ignore(handle, candidates.at(*found)) != 0;
             p.upgradable = !p.ignored && vercmp(version, p.version) < 0;
         } else {
-            auto p             = fromAlpm(pkg, u"local"_s);
+            auto p             = fromAlpm(pkg, u"local"_s, interned);
             p.installedVersion = version;
             p.ignored          = alpm_pkg_should_ignore(handle, pkg) != 0;
             packages << p;
         }
     }
+    packages.squeeze();
     return result;
 }
 

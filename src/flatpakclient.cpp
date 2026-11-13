@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "flatpakclient.hpp"
+#include "memory.hpp"
 #include "process.hpp"
 
 #include <AppStreamQt/bundle.h>
@@ -264,6 +265,7 @@ void FlatpakClient::clear() {
 
 void FlatpakClient::onLoaded() {
     m_loading = false;
+    releaseFreedMemory();  // the catalogue as AppStream parsed it
     if (m_watcher.isCanceled()) {  // cleared while the catalogue was being read: the result is partial
         emit loadingChanged();
         if (std::exchange(m_reloadQueued, false)) {

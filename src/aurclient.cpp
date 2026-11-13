@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "aurclient.hpp"
+#include "memory.hpp"
 #include "packagemodel.hpp"
 #include "process.hpp"
 
@@ -459,6 +460,7 @@ void AurClient::resolveNext(const QStringList& wanted, const QHash<QString, QStr
         }
 
         QtConcurrent::run(alpmdb::unsatisfied, all.values()).then(this, [this, dependsOf, generation](const QStringList& result) {
+            releaseFreedMemory();  // the databases read for the check
             if (generation != m_planGeneration) {
                 return;
             }
