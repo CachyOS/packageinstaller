@@ -9,7 +9,7 @@
 namespace appimage {
 
 /// Key naming the managed AppImage file in a desktop entry written by integrate().
-inline constexpr auto PATH_KEY = "X-CachyOS-PI-AppImage";
+inline constexpr QLatin1StringView PATH_KEY{"X-CachyOS-PI-AppImage"};
 /// No desktop entry is read or written beyond this size.
 inline constexpr qint64 MAX_ENTRY_BYTES = 256 * 1024;
 

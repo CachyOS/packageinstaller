@@ -11,19 +11,17 @@ Item {
     readonly property AppImageClient client: Backend.appImages
     readonly property bool ready: Backend.appImagesEnabled
 
-    // The file that is waiting for a yes: {url, ok, name, size, reason}
-    property var candidate: ({})
-    // The app that is waiting to be removed: an entry of client.apps
-    property var doomed: ({})
+    // The file that is waiting for a yes
+    property appImageCandidate candidate
+    // The app that is waiting to be removed
+    property appImageItem doomed
 
     signal openSettings
 
     function propose(url: url): void {
         if (!ready || client.busy)
             return;
-        const info = client.inspect(url);
-        info.url = url;
-        candidate = info;
+        candidate = client.inspect(url);
         addDialog.open();
     }
 
@@ -141,7 +139,7 @@ Item {
             PlainText {
                 anchors.verticalCenter: parent.verticalCenter
                 width: parent.width - (root.client.busy ? 32 : 0)
-                text: root.client.busy ? qsTr("Adding %1…").arg(root.candidate.name ?? "")
+                text: root.client.busy ? qsTr("Adding %1…").arg(root.candidate.name)
                     : root.client.error.length > 0 ? root.client.error
                     : qsTr("%1 was added to your menu.").arg(root.client.added)
                 color: root.client.busy ? Look.textMuted : root.client.error.length > 0 ? Look.danger : Look.accent
@@ -162,7 +160,7 @@ Item {
         delegate: Card {
             id: row
 
-            required property var modelData
+            required property appImageItem modelData
 
             width: list.rowWidth
             height: 72
@@ -261,15 +259,15 @@ Item {
 
             Heading {
                 width: addBody.width
-                text: root.candidate.ok ? qsTr("Add %1?").arg(root.candidate.name ?? "") : qsTr("Cannot add this file")
+                text: root.candidate.ok ? qsTr("Add %1?").arg(root.candidate.name) : qsTr("Cannot add this file")
                 elide: Text.ElideMiddle
             }
 
             Muted {
                 width: addBody.width
                 text: root.candidate.ok
-                    ? qsTr("The file (%1) is copied to %2 and added to your menu. To read its name and icon the file itself is run right away, so only add files from a source you trust: nobody has checked this program and it is not sandboxed.").arg(root.candidate.size ?? "").arg(root.client.directory)
-                    : (root.candidate.reason ?? "")
+                    ? qsTr("The file (%1) is copied to %2 and added to your menu. To read its name and icon the file itself is run right away, so only add files from a source you trust: nobody has checked this program and it is not sandboxed.").arg(root.candidate.size).arg(root.client.directory)
+                    : root.candidate.reason
                 font.pixelSize: Look.fontBody
                 lineHeight: 1.25
                 wrapMode: Text.WordWrap
@@ -287,7 +285,7 @@ Item {
                 }
 
                 PillButton {
-                    visible: root.candidate.ok === true
+                    visible: root.candidate.ok
                     text: qsTr("Add")
                     onClicked: {
                         addDialog.close();
@@ -308,15 +306,15 @@ Item {
 
             Heading {
                 width: removeBody.width
-                text: qsTr("Remove %1?").arg(root.doomed.name ?? "")
+                text: qsTr("Remove %1?").arg(root.doomed.name)
                 elide: Text.ElideRight
             }
 
             Muted {
                 width: removeBody.width
-                text: root.doomed.owned === false
-                    ? qsTr("Only the menu entry is deleted. It points to %1, which is not a file this app added, so that file is left alone.").arg(root.doomed.path ?? "")
-                    : qsTr("The file %1 and its menu entry are deleted. Settings the app saved in your home directory are kept.").arg(root.doomed.path ?? "")
+                text: !root.doomed.owned
+                    ? qsTr("Only the menu entry is deleted. It points to %1, which is not a file this app added, so that file is left alone.").arg(root.doomed.path)
+                    : qsTr("The file %1 and its menu entry are deleted. Settings the app saved in your home directory are kept.").arg(root.doomed.path)
                 font.pixelSize: Look.fontBody
                 lineHeight: 1.25
                 wrapMode: Text.WrapAtWordBoundaryOrAnywhere
