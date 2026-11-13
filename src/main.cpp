@@ -8,31 +8,36 @@
 #include <QQuickStyle>
 #include <QTranslator>
 
+#include <backward.hpp>
+
+using namespace Qt::StringLiterals;
+
 int main(int argc, char** argv) {
+    // prints a stack trace on a crash, then re-raises the signal
+    const backward::SignalHandling crashHandler;
+
     // QApplication (not QGuiApplication): icon theme lookups go through the platform theme.
     QApplication app(argc, argv);
-    QCoreApplication::setOrganizationName(QStringLiteral("CachyOS"));
-    QCoreApplication::setApplicationName(QStringLiteral("cachyos-pi"));
-    QCoreApplication::setApplicationVersion(QStringLiteral(PI_VERSION));
-    QGuiApplication::setDesktopFileName(QStringLiteral("cachyos-pi"));
-    QGuiApplication::setWindowIcon(QIcon::fromTheme(QStringLiteral("cachyos-pi"),
-        QIcon(QStringLiteral(":/qt/qml/CachyOS/PackageInstaller/icons/cachyos-pi.png"))));
+    QCoreApplication::setOrganizationName(u"CachyOS"_s);
+    QCoreApplication::setApplicationName(u"cachyos-pi"_s);
+    QCoreApplication::setApplicationVersion(QString::fromLatin1(PI_VERSION));
+    QGuiApplication::setDesktopFileName(u"cachyos-pi"_s);
+    QGuiApplication::setWindowIcon(QIcon::fromTheme(u"cachyos-pi"_s, QIcon(u":/qt/qml/CachyOS/PackageInstaller/icons/cachyos-pi.png"_s)));
 
     // Without a translation for the locale, still load the English plural forms.
     QTranslator translator;
-    if (translator.load(QLocale(), QStringLiteral("cachyos-pi"), QStringLiteral("_"), QStringLiteral(":/i18n"))
-        || translator.load(QStringLiteral(":/i18n/cachyos-pi_en.qm"))) {
+    if (translator.load(QLocale(), u"cachyos-pi"_s, u"_"_s, u":/i18n"_s) || translator.load(u":/i18n/cachyos-pi_en.qm"_s)) {
         QCoreApplication::installTranslator(&translator);
     }
 
     // The UI brings its own look; Basic is the style meant for customisation.
-    QQuickStyle::setStyle(QStringLiteral("Basic"));
+    QQuickStyle::setStyle(u"Basic"_s);
 
     auto* icons = new IconProvider;  // owned by the engine below
     Backend backend(icons);
 
     QQmlApplicationEngine engine;
-    engine.addImageProvider(QStringLiteral("pkgicon"), icons);
+    engine.addImageProvider(u"pkgicon"_s, icons);
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed, &app, [] { QCoreApplication::exit(1); },
         Qt::QueuedConnection);
     engine.loadFromModule("CachyOS.PackageInstaller", "Main");

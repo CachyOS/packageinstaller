@@ -21,6 +21,30 @@ pkg_check_modules(LIBALPM REQUIRED IMPORTED_TARGET libalpm>=15.0.0)
 qt_standard_project_setup(REQUIRES 6.10 I18N_SOURCE_LANGUAGE en)
 qt_policy(SET QTP0004 NEW)
 
+include(CPM)
+CPMAddPackage(
+    NAME rapidyaml
+    GITHUB_REPOSITORY biojppm/rapidyaml
+    GIT_TAG v0.16.0
+    EXCLUDE_FROM_ALL YES)
+# Only the header is used, its CMakeLists is too old for current CMake.
+CPMAddPackage(
+    NAME backward
+    GITHUB_REPOSITORY bombela/backward-cpp
+    GIT_TAG v1.6
+    DOWNLOAD_ONLY YES)
+
+add_library(backward INTERFACE)
+target_include_directories(backward SYSTEM INTERFACE "${backward_SOURCE_DIR}")
+# With libdw, crash traces show file and line numbers instead of bare addresses.
+pkg_check_modules(LIBDW IMPORTED_TARGET libdw)
+if(LIBDW_FOUND)
+    target_compile_definitions(backward INTERFACE BACKWARD_HAS_DW=1)
+    target_link_libraries(backward INTERFACE PkgConfig::LIBDW)
+else()
+    message(STATUS "libdw not found: crash traces will lack file and line numbers")
+endif()
+
 add_library(project_options INTERFACE)
 target_compile_features(project_options INTERFACE cxx_std_26)
 target_compile_definitions(project_options INTERFACE QT_DISABLE_DEPRECATED_UP_TO=0x060A00)
@@ -115,7 +139,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE src)
 target_link_libraries(${PROJECT_NAME} PRIVATE
     project_options project_warnings pi-scan
     Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Qml Qt6::Quick Qt6::QuickControls2 Qt6::Network Qt6::Concurrent
-    AppStreamQt PkgConfig::LIBALPM)
+    AppStreamQt PkgConfig::LIBALPM backward)
 
 # The project warnings are for our own sources, not for the code qmlcachegen generates.
 get_target_property(pi_sources ${PROJECT_NAME} SOURCES)
