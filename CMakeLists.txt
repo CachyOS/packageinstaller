@@ -14,14 +14,16 @@ include(Linker)
 include(Sanitizers)
 
 find_package(PkgConfig REQUIRED)
-find_package(Qt6 6.8 REQUIRED COMPONENTS Core Gui Widgets Qml Quick QuickControls2 Network Concurrent LinguistTools)
+find_package(Qt6 6.10 REQUIRED COMPONENTS Core Gui Widgets Qml Quick QuickControls2 Network Concurrent LinguistTools)
 find_package(AppStreamQt 1.0 REQUIRED)
 pkg_check_modules(LIBALPM REQUIRED IMPORTED_TARGET libalpm>=15.0.0)
 
-qt_standard_project_setup(REQUIRES 6.8 I18N_SOURCE_LANGUAGE en)
+qt_standard_project_setup(REQUIRES 6.10 I18N_SOURCE_LANGUAGE en)
+qt_policy(SET QTP0004 NEW)
 
 add_library(project_options INTERFACE)
-target_compile_features(project_options INTERFACE cxx_std_23)
+target_compile_features(project_options INTERFACE cxx_std_26)
+target_compile_definitions(project_options INTERFACE QT_DISABLE_DEPRECATED_UP_TO=0x060A00)
 configure_linker(project_options)
 enable_sanitizers(project_options)
 
@@ -115,6 +117,11 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Qml Qt6::Quick Qt6::QuickControls2 Qt6::Network Qt6::Concurrent
     AppStreamQt PkgConfig::LIBALPM)
 
+# The project warnings are for our own sources, not for the code qmlcachegen generates.
+get_target_property(pi_sources ${PROJECT_NAME} SOURCES)
+list(FILTER pi_sources INCLUDE REGEX "/\\.rcc/qmlcache/")
+set_source_files_properties(${pi_sources} TARGET_DIRECTORY ${PROJECT_NAME} PROPERTIES COMPILE_OPTIONS "-w")
+
 ##
 ## Privileged helper: the only thing that runs as root (through pkexec).
 ##
@@ -140,7 +147,7 @@ install(FILES icons/cachyos-pi.png DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hi
 ##
 include(CTest)
 if(BUILD_TESTING)
-    find_package(Qt6 6.8 REQUIRED COMPONENTS Test)
+    find_package(Qt6 6.10 REQUIRED COMPONENTS Test)
     qt_add_executable(test-pkgscan tests/test_pkgscan.cpp)
     target_compile_definitions(test-pkgscan PRIVATE TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/tests/data")
     target_link_libraries(test-pkgscan PRIVATE pi-scan project_options Qt6::Test)
