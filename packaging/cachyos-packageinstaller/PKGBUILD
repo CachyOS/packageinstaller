@@ -11,6 +11,7 @@ groups=('cachyos')
 depends=(
   'appstream-qt'
   'archlinux-appstream-data'
+  'elfutils'
   'glibc'
   'hicolor-icon-theme'
   'kimageformats'
@@ -22,7 +23,7 @@ depends=(
   'qt6-base'
   'qt6-declarative'
 )
-makedepends=('cmake' 'ninja' 'qt6-tools')
+makedepends=('cmake' 'git' 'ninja' 'qt6-tools')
 optdepends=(
   'paru: build packages from the AUR'
   'git: review and build packages from the AUR'
@@ -34,6 +35,8 @@ source=("$pkgname-$pkgver.tar.gz::$url/archive/v$pkgver.tar.gz")
 sha256sums=('SKIP')
 
 build() {
+  # keep CPM's downloads of rapidyaml and backward-cpp in $srcdir
+  export CPM_SOURCE_CACHE="$srcdir/cpm"
   cmake -S "packageinstaller-$pkgver" -B build -G Ninja \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=/usr

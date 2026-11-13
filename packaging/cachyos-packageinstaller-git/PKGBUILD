@@ -10,6 +10,7 @@ license=('GPL-3.0-or-later')
 depends=(
   'appstream-qt'
   'archlinux-appstream-data'
+  'elfutils'
   'glibc'
   'hicolor-icon-theme'
   'kimageformats'
@@ -43,6 +44,8 @@ pkgver() {
 }
 
 build() {
+  # keep CPM's downloads of rapidyaml and backward-cpp in $srcdir
+  export CPM_SOURCE_CACHE="$srcdir/cpm"
   cmake -S packageinstaller -B build -G Ninja \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_INSTALL_PREFIX=/usr
