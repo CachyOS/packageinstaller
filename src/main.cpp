@@ -3,6 +3,7 @@
 #include "iconprovider.hpp"
 
 #include <QApplication>
+#include <QFileInfo>
 #include <QIcon>
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
@@ -35,6 +36,10 @@ int main(int argc, char** argv) {
 
     auto* icons = new IconProvider;  // owned by the engine below
     Backend backend(icons);
+    // "cachyos-pi some.AppImage" offers to add that file
+    if (const auto arguments = QCoreApplication::arguments(); arguments.size() > 1 && QFileInfo(arguments.at(1)).isFile()) {
+        backend.setStartupFile(QUrl::fromLocalFile(QFileInfo(arguments.at(1)).absoluteFilePath()));
+    }
 
     QQmlApplicationEngine engine;
     engine.addImageProvider(u"pkgicon"_s, icons);

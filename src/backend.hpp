@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #pragma once
 
+#include "appimageclient.hpp"
 #include "aurclient.hpp"
 #include "catalog.hpp"
 #include "flatpakclient.hpp"
@@ -13,6 +14,7 @@
 #include <QProcess>
 #include <QSettings>
 #include <QTimer>
+#include <QUrl>
 #include <QtQml/qqmlregistration.h>
 
 class IconProvider;
@@ -38,6 +40,10 @@ class Backend : public QObject {
     Q_PROPERTY(FlatpakClient* flatpak READ flatpak CONSTANT FINAL)
     Q_PROPERTY(UpdateNotice* updateNotice READ updateNotice CONSTANT FINAL)
     Q_PROPERTY(bool flatpakEnabled READ flatpakEnabled WRITE setFlatpakEnabled NOTIFY flatpakEnabledChanged FINAL)
+    Q_PROPERTY(AppImageClient* appImages READ appImages CONSTANT FINAL)
+    Q_PROPERTY(bool appImagesEnabled READ appImagesEnabled WRITE setAppImagesEnabled NOTIFY appImagesEnabledChanged FINAL)
+    /// The app was started with an AppImage file to add.
+    Q_PROPERTY(bool hasStartupFile READ hasStartupFile NOTIFY startupFileChanged FINAL)
 
  public:
     explicit Backend(IconProvider* icons, QObject* parent = nullptr);
@@ -63,6 +69,13 @@ class Backend : public QObject {
     bool flatpakEnabled() const { return m_flatpakEnabled; }
     void setFlatpakEnabled(bool enabled);
     UpdateNotice* updateNotice() { return &m_updateNotice; }
+    AppImageClient* appImages() { return &m_appImages; }
+    bool appImagesEnabled() const { return m_appImagesEnabled; }
+    void setAppImagesEnabled(bool enabled);
+    bool hasStartupFile() const { return !m_startupFile.isEmpty(); }
+    void setStartupFile(const QUrl& file) { m_startupFile = file; }
+    /// The file from the command line; handed out once.
+    Q_INVOKABLE QUrl takeStartupFile();
 
     /// Re-reads the pacman databases and the AppStream catalog in the background.
     Q_INVOKABLE void reload();
@@ -92,6 +105,8 @@ class Backend : public QObject {
     void aurEnabledChanged();
     void paruAvailableChanged();
     void flatpakEnabledChanged();
+    void appImagesEnabledChanged();
+    void startupFileChanged();
     /// Something the user asked for could not be done, and `text` says why.
     void notice(const QString& text);
 
@@ -109,6 +124,7 @@ class Backend : public QObject {
     PackageModel m_packages;
     AurClient m_aur;
     FlatpakClient m_flatpak;
+    AppImageClient m_appImages;
     Transaction m_transaction;
     UpdateNotice m_updateNotice;
     IconProvider* m_icons;
@@ -128,5 +144,7 @@ class Backend : public QObject {
     bool m_checkOutdated   = false;  ///< the databases were reloaded while checkupdates was running
     bool m_aurEnabled      = false;
     bool m_flatpakEnabled  = false;
+    bool m_appImagesEnabled = false;
+    QUrl m_startupFile;
     bool m_paruAvailable   = false;
 };

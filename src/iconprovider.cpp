@@ -82,6 +82,11 @@ void IconProvider::setIndex(IconIndex index, bool flatpak) {
     m_decoded.clear();
 }
 
+void IconProvider::setAppImageIndex(IconIndex index) {
+    m_appImages = std::move(index);
+    m_decoded.clear();  // a newer file of the same app replaces its icon in place
+}
+
 QQuickImageResponse* IconProvider::requestImageResponse(const QString& id, const QSize& requestedSize) {
     // Called on QML's image thread; the indexes and the icon theme belong to the GUI thread.
     auto request   = std::make_shared<IconRequest>(id, requestedSize.width() > 0 ? requestedSize.width() : 64, id);
@@ -129,6 +134,18 @@ void IconProvider::resolve(const Request& request) {
         const auto ref = m_flatpak.value(app);
         // "org.mozilla.firefox": the last part names the app
         const auto tile = app.section(u'.', -1);
+        if (fromFile(request, ref.path, tile)) {
+            return;
+        }
+        const auto image = themed(ref, app, extent);
+        request->finish(image.isNull() ? generated(tile, extent) : image);
+        return;
+    }
+
+    if (id.startsWith("appimage/"_L1)) {
+        const auto app  = id.mid(9);
+        const auto tile = app.section(u'.', -1);
+        const auto ref  = m_appImages.value(app);
         if (fromFile(request, ref.path, tile)) {
             return;
         }

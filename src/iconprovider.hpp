@@ -35,6 +35,8 @@ class IconProvider : public QQuickAsyncImageProvider {
 
     /// Icons of the packages, or of Flatpak apps, which are asked for as `flatpak/<app id>`.
     void setIndex(IconIndex index, bool flatpak = false);
+    /// Icons of the AppImages the user added, asked for as `appimage/<id>`.
+    void setAppImageIndex(IconIndex index);
 
  private:
     using Request = std::shared_ptr<IconRequest>;
@@ -51,6 +53,7 @@ class IconProvider : public QQuickAsyncImageProvider {
 
     IconIndex m_index;
     IconIndex m_flatpak;
+    IconIndex m_appImages;
     QList<Request> m_queue;
     bool m_draining = false;
     QSet<QString> m_notInTheme;
