@@ -21,6 +21,7 @@ Backend::Backend(IconProvider* icons, QObject* parent)
     s_instance       = this;
     m_aurEnabled     = m_settings.value(u"aur/enabled"_s, false).toBool();
     m_flatpakEnabled = m_settings.value(u"flatpak/enabled"_s, false).toBool();
+    m_appImagesEnabled = m_settings.value(u"appimage/enabled"_s, false).toBool();
     m_paruAvailable  = !QStandardPaths::findExecutable(u"paru"_s).isEmpty();
 
     connect(&m_transaction, &Transaction::finished, this, [this](bool) {
@@ -32,6 +33,7 @@ Backend::Backend(IconProvider* icons, QObject* parent)
         }
     });
     connect(&m_flatpak, &FlatpakClient::iconsLoaded, this, [this](const IconIndex& index) { m_icons->setIndex(index, true); });
+    connect(&m_appImages, &AppImageClient::iconsLoaded, this, [this](const IconIndex& index) { m_icons->setAppImageIndex(index); });
     m_checkUpdates.setProcessEnvironment(plainEnvironment());
     connect(&m_checkUpdates, &QProcess::finished, this, &Backend::onUpdatesChecked);
 
@@ -99,6 +101,18 @@ void Backend::setFlatpakEnabled(bool enabled) {
     } else {
         m_flatpak.clear();
     }
+}
+
+void Backend::setAppImagesEnabled(bool enabled) {
+    if (store(m_appImagesEnabled, enabled, u"appimage/enabled"_s, &Backend::appImagesEnabledChanged) && enabled) {
+        m_appImages.refresh();
+    }
+}
+
+QUrl Backend::takeStartupFile() {
+    const auto file = std::exchange(m_startupFile, QUrl());
+    emit startupFileChanged();
+    return file;
 }
 
 void Backend::installFlatpak(const QString& id) {
@@ -211,6 +225,9 @@ void Backend::refreshSources() {
     const bool flatpakChanged = m_flatpak.available() == QStandardPaths::findExecutable(u"flatpak"_s).isEmpty();
     if (m_flatpakEnabled && !m_flatpak.loading() && (first || flatpakChanged)) {
         m_flatpak.refresh();
+    }
+    if (m_appImagesEnabled) {
+        m_appImages.refresh();  // cheap, and notices fuse2 being installed
     }
     // only after the opt-in: the names of the installed packages are sent to the AUR
     if (m_aurEnabled) {
