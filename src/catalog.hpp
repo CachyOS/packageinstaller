@@ -40,6 +40,7 @@ namespace catalog {
 struct LoadResult {
     QList<Package> packages;
     QString dbPath;
+    QStringList repos;
     IconIndex icons;
 };
 

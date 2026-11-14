@@ -144,6 +144,7 @@ void Backend::onLoaded(std::expected<catalog::LoadResult, QString> result) {
         if (m_dbWatcher.directories().isEmpty()) {
             m_dbWatcher.addPaths({result->dbPath + u"/local"_s, result->dbPath + u"/sync"_s});
         }
+        m_updateNotice.setDatabase(result->dbPath, result->repos);
         m_icons->setIndex(std::move(result->icons));
         m_packages.reset(std::move(result->packages));
     } else {
@@ -196,6 +197,8 @@ void Backend::refreshSources() {
     if (m_aurEnabled) {
         m_aur.checkUpdates();
     }
+    // every package operation ends in a reload; the notices change far less often
+    m_updateNotice.check(std::chrono::minutes(10));
     checkUpdates();
 }
 
@@ -259,6 +262,8 @@ void Backend::remove(const QString& name) {
 }
 
 void Backend::upgradeAll() {
+    // a notice may have been published since the last look; the dialog waits for the answer
+    m_updateNotice.check();
     m_transaction.prepare(Transaction::Upgrade, {});
 }
 

@@ -146,7 +146,7 @@ std::expected<Databases, QString> load() {
     }
     auto* handle = opened->get();
 
-    Databases result{.packages = {}, .dbPath = config.dbPath};
+    Databases result{.packages = {}, .dbPath = config.dbPath, .repos = config.repos};
     auto& packages = result.packages;
     QHash<QString, qsizetype> index;
     QList<alpm_pkg_t*> candidates;  // the repository package behind each entry

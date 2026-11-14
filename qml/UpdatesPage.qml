@@ -31,6 +31,10 @@ Item {
                 onClicked: Backend.upgradeAll()
             }
         ]
+
+        UpdateNoticeBox {
+            width: pageHeader.width
+        }
     }
 
     PageList {

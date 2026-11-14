@@ -10,6 +10,9 @@ Dialog {
     readonly property int phase: tx.state
     readonly property bool hasPlanError: tx.planError.length > 0
     readonly property bool removes: tx.kind === Transaction.Remove || tx.kind === Transaction.FlatpakRemove
+    /// pacman accepts an update notice by itself, so an upgrade waits until it can be read here
+    readonly property bool upgrade: tx.kind === Transaction.Upgrade
+    readonly property bool awaitsNotice: upgrade && Backend.updateNotice.checking
     readonly property bool failedSilently: phase === Transaction.Finished && !tx.success && tx.failureReason.length === 0
     property bool showLog: false
 
@@ -75,9 +78,26 @@ Dialog {
             Muted {
                 visible: !root.hasPlanError
                 width: confirm.width
-                text: root.tx.summary
+                text: root.awaitsNotice ? qsTr("Looking for an update notice…") : root.tx.summary
                 font.pixelSize: Look.fontBody
                 wrapMode: Text.WordWrap
+            }
+
+            Column {
+                visible: root.upgrade && !root.hasPlanError
+                width: confirm.width
+                spacing: 12
+
+                UpdateNoticeBox {
+                    width: confirm.width
+                    maxHeight: 260
+                }
+
+                Notice {
+                    visible: !root.awaitsNotice && Backend.updateNotice.failed
+                    width: confirm.width
+                    text: qsTr("The update notices could not be checked. If CachyOS published one, it will only appear in the details of this update.")
+                }
             }
 
             ListView {
@@ -247,6 +267,7 @@ Dialog {
                 visible: root.phase === Transaction.Confirm && !root.hasPlanError
                 tone: root.removes ? "danger" : "primary"
                 text: root.tx.confirmLabel
+                enabled: !root.awaitsNotice
                 onClicked: root.tx.confirm()
             }
 

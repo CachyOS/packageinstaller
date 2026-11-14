@@ -81,6 +81,7 @@ qt_add_executable(${PROJECT_NAME}
     src/flatpakclient.hpp src/flatpakclient.cpp
     src/iconprovider.hpp src/iconprovider.cpp
     src/transaction.hpp src/transaction.cpp
+    src/updatenotice.hpp src/updatenotice.cpp
     src/backend.hpp src/backend.cpp)
 
 set(PI_QML_FILES
@@ -107,6 +108,7 @@ set(PI_QML_FILES
     qml/ScreenshotStrip.qml
     qml/FactsCard.qml
     qml/UpdatesPage.qml
+    qml/UpdateNoticeBox.qml
     qml/AurPage.qml
     qml/AurDetailsPage.qml
     qml/FlatpakPage.qml
@@ -207,6 +209,14 @@ if(BUILD_TESTING)
     target_link_libraries(test-pkglist PRIVATE project_options project_warnings
         Qt6::Test Qt6::Qml AppStreamQt PkgConfig::LIBALPM ryml::ryml)
     add_test(NAME pkglist COMMAND test-pkglist)
+
+    qt_add_executable(test-updatenotice tests/test_updatenotice.cpp
+        src/updatenotice.hpp src/updatenotice.cpp)
+    target_compile_definitions(test-updatenotice PRIVATE PI_VERSION="${PROJECT_VERSION}")
+    target_include_directories(test-updatenotice PRIVATE src)
+    target_link_libraries(test-updatenotice PRIVATE project_options project_warnings
+        Qt6::Test Qt6::Qml Qt6::Network)
+    add_test(NAME updatenotice COMMAND test-updatenotice)
 
     add_executable(cachyos-pi-helper-test src/helper/main.cpp)
     target_compile_definitions(cachyos-pi-helper-test PRIVATE PI_HELPER_TESTING)

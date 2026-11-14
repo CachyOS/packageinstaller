@@ -6,6 +6,7 @@
 #include "flatpakclient.hpp"
 #include "packagemodel.hpp"
 #include "transaction.hpp"
+#include "updatenotice.hpp"
 
 #include <QFileSystemWatcher>
 #include <QObject>
@@ -35,6 +36,7 @@ class Backend : public QObject {
     Q_PROPERTY(bool aurEnabled READ aurEnabled WRITE setAurEnabled NOTIFY aurEnabledChanged FINAL)
     Q_PROPERTY(bool paruAvailable READ paruAvailable CONSTANT FINAL)
     Q_PROPERTY(FlatpakClient* flatpak READ flatpak CONSTANT FINAL)
+    Q_PROPERTY(UpdateNotice* updateNotice READ updateNotice CONSTANT FINAL)
     Q_PROPERTY(bool flatpakEnabled READ flatpakEnabled WRITE setFlatpakEnabled NOTIFY flatpakEnabledChanged FINAL)
 
  public:
@@ -60,6 +62,7 @@ class Backend : public QObject {
     FlatpakClient* flatpak() { return &m_flatpak; }
     bool flatpakEnabled() const { return m_flatpakEnabled; }
     void setFlatpakEnabled(bool enabled);
+    UpdateNotice* updateNotice() { return &m_updateNotice; }
 
     /// Re-reads the pacman databases and the AppStream catalog in the background.
     Q_INVOKABLE void reload();
@@ -104,6 +107,7 @@ class Backend : public QObject {
     AurClient m_aur;
     FlatpakClient m_flatpak;
     Transaction m_transaction;
+    UpdateNotice m_updateNotice;
     IconProvider* m_icons;
     QSettings m_settings;
     QProcess m_checkUpdates;

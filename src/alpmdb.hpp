@@ -73,6 +73,7 @@ namespace alpmdb {
 struct Databases {
     QList<Package> packages;
     QString dbPath;  ///< pacman's DBPath
+    QStringList repos;  ///< the sync repositories of pacman.conf, in its order
 };
 
 /// Reads the local and sync databases configured in pacman.conf (read-only, no lock).

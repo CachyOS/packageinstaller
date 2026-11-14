@@ -184,7 +184,7 @@ std::expected<LoadResult, QString> load() {
         pkg.categories      = found->categories;
         pkg.screenshots     = found->screenshots;
     }
-    return LoadResult{.packages = std::move(databases->packages), .dbPath = databases->dbPath, .icons = cache.icons};
+    return LoadResult{.packages = std::move(databases->packages), .dbPath = databases->dbPath, .repos = databases->repos, .icons = cache.icons};
 }
 
 CuratedList loadCurated(QIODevice& device) {
