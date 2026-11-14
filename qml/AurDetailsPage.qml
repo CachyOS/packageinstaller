@@ -42,6 +42,7 @@ ScrollPage {
         property alias text: codeView.text
         property alias marks: codeView.marks
         property alias minimumHeight: codeView.minimumHeight
+        property alias diff: codeView.diff
         readonly property alias view: codeView
         default property alias overlay: codeView.data
 
@@ -356,6 +357,20 @@ ScrollPage {
         id: review
         width: parent.width
         spacing: 10
+
+        FileSection {
+            visible: Backend.aur.changes.length > 0
+            width: review.width
+            name: qsTr("Changes since version %1").arg(root.info.installedVersion)
+            note: qsTr("What changed in this package since the version you have installed. Only the recipe is compared: the source code it downloads can change without showing up here.")
+            text: Backend.aur.changes
+            diff: true
+        }
+
+        Notice {
+            width: review.width
+            text: Backend.aur.changesProblem
+        }
 
         FileSection {
             id: pkgbuild

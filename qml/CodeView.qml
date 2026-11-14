@@ -4,6 +4,8 @@ import QtQuick.Controls.Basic
 
 // Read-only script listing with line numbers. Shown at full height: a nested vertical
 // scroll area would swallow the wheel and make it easy to skip the end of the script.
+// With `diff` it shows changes instead, from pkgscan::readableDiff(): added and removed
+// lines are tinted, and the line numbers, which would mean nothing, are left out.
 Card {
     id: root
 
@@ -11,12 +13,39 @@ Card {
     property list<finding> marks
     property string accessibleName
     property int minimumHeight: 0
+    property bool diff: false
+    // runs of lines of one kind, so that a long change needs only a few tints
+    readonly property var diffRuns: diff ? runs(text) : []
 
     readonly property real lineHeight: edit.lineCount > 0 ? edit.contentHeight / edit.lineCount : 0
     readonly property int padding: 14
 
     function lineY(line: int): real {
         return padding + (line - 1) * lineHeight
+    }
+
+    // "add", "remove", "hunk" or "file" for the line; context lines get no tint
+    function kindOf(line: string): string {
+        const first = line.charAt(0)
+        return first === "+" ? "add" : first === "-" ? "remove" : first === "@" ? "hunk"
+            : first === " " || first === "\\" || first === "" ? "" : "file"
+    }
+
+    function runs(text: string): var {
+        const found = []
+        const lines = text.split("\n")
+        for (let i = 0; i < lines.length; ++i) {
+            const kind = kindOf(lines[i])
+            const last = found.length > 0 ? found[found.length - 1] : null
+            if (kind === "") {
+                continue
+            } else if (last !== null && last.kind === kind && last.line + last.count === i + 1) {
+                last.count += 1
+            } else {
+                found.push({"line": i + 1, "count": 1, "kind": kind})
+            }
+        }
+        return found
     }
 
     function lineNumbers(count: int): string {
@@ -28,6 +57,21 @@ Card {
     }
 
     height: Math.max(minimumHeight, edit.implicitHeight + 2)
+
+    Repeater {
+        model: root.diffRuns
+
+        Rectangle {
+            required property var modelData
+
+            x: 1
+            y: root.lineY(modelData.line)
+            width: root.width - 2
+            height: modelData.count * root.lineHeight
+            color: modelData.kind === "add" ? Look.accentSoft : modelData.kind === "remove" ? Look.dangerSoft
+                : modelData.kind === "file" ? Look.archSoft : Look.surfaceAlt
+        }
+    }
 
     Repeater {
         model: root.marks
@@ -55,8 +99,8 @@ Card {
     PlainText {
         id: gutter
         x: 1
-        width: implicitWidth
-        visible: root.text.length > 0
+        width: root.diff ? 0 : implicitWidth
+        visible: root.text.length > 0 && !root.diff
         text: root.lineNumbers(edit.lineCount)
         color: Look.textMuted
         opacity: 0.7

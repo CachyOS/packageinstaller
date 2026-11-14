@@ -39,6 +39,15 @@ constexpr qsizetype MAX_PLAN = 60;
 constexpr qint64 REUSE_SECONDS = 30 * 60;
 /// What a git command may print here: the .SRCINFO of every version of a long-lived recipe.
 constexpr qsizetype MAX_GIT_OUTPUT = 16 * 1024 * 1024;
+/// Changes larger than this are not shown; nobody reads them, and the page would crawl.
+constexpr qsizetype MAX_CHANGES = 1024 * 1024;
+/// Versions of a recipe that are looked through for the installed one.
+constexpr int MAX_VERSIONS = 1000;
+
+/// Said when the history of a checkout cannot be read; the page shows the full files instead.
+QString unreadableHistory() {
+    return AurClient::tr("The changes since the installed version could not be read from the history of this package. Read the full files below.");
+}
 
 /// Commit a checkout is at, read from the repository itself.
 QString headCommit(const QString& directory) {
@@ -183,11 +192,16 @@ QString AurPackage::pageUrl() const {
     return AUR_HOST + "/packages/"_L1 + QString::fromLatin1(QUrl::toPercentEncoding(name));
 }
 
+QString AurClient::installedAurVersion(const QString& name) const {
+    // a package of that name from a repository is not this one
+    const auto* local = m_packages->find(name);
+    return local != nullptr && local->installed() && local->foreign() ? local->installedVersion : QString();
+}
+
 void AurClient::applyLocal(AurPackage& package) const {
     const auto* local        = m_packages->find(package.name);
-    // a package of that name from a repository is not this one
-    package.installed        = local != nullptr && local->installed() && local->foreign();
-    package.installedVersion = package.installed ? local->installedVersion : QString();
+    package.installedVersion = installedAurVersion(package.name);
+    package.installed        = !package.installedVersion.isEmpty();
     package.upgradable       = package.installed && alpmdb::vercmp(package.installedVersion, package.version) < 0;
     package.inRepos          = local != nullptr && !local->foreign();
 }
@@ -349,6 +363,7 @@ void AurClient::loadDetails(const QString& name, const QString& pkgbase) {
     m_analysis = {};
     m_unreadable.clear();
     m_lookAlike.clear();
+    setChanges({}, {});
     emit detailsChanged();
     emit pkgbuildChanged();
     emit filesChanged();
@@ -383,14 +398,18 @@ void AurClient::loadDetails(const QString& name, const QString& pkgbase) {
     // Packages built from one recipe share one checkout. When another of them was accepted
     // a moment ago, show that same checkout: a new clone would invalidate the acceptance,
     // and the two could then never be built together.
-    const auto existing = m_checkouts.value(pkgbase);
+    // the history of an installed package holds the version it was built from
+    const auto installed = installedAurVersion(name);
+    const auto existing  = m_checkouts.value(pkgbase);
     const bool sibling  = std::ranges::any_of(m_accepted.asKeyValueRange(), [&](const auto& entry) {
         const auto& [other, commit] = entry;
         return other != name && m_pkgbaseOf.value(other) == pkgbase && commit == existing.commit;
     });
-    if (sibling && existing.cloned.secsTo(QDateTime::currentDateTimeUtc()) < REUSE_SECONDS && intact(existing)) {
+    if (sibling && (installed.isEmpty() || existing.history) && existing.cloned.secsTo(QDateTime::currentDateTimeUtc()) < REUSE_SECONDS
+        && intact(existing)) {
         m_revision = existing.commit;
         readCheckout(existing.directory);
+        loadChanges(existing.directory, installed, generation);
         finishOne();
         return;
     }
@@ -404,25 +423,110 @@ void AurClient::loadDetails(const QString& name, const QString& pkgbase) {
         QDir(directory).removeRecursively();
         finishOne();
     };
-    git({u"clone"_s, u"--quiet"_s, u"--depth=1"_s, u"--no-tags"_s, u"--"_s, u"%1/%2.git"_s.arg(AUR_HOST, pkgbase), directory},
-        [this, pkgbase, directory, generation, finishOne, fail](bool cloned) {
+    QStringList clone{u"clone"_s, u"--quiet"_s, u"--no-tags"_s};
+    if (installed.isEmpty()) {
+        clone << u"--depth=1"_s;
+    }
+    git(clone + QStringList{u"--"_s, u"%1/%2.git"_s.arg(AUR_HOST, pkgbase), directory},
+        [this, installed, pkgbase, directory, generation, finishOne, fail](bool cloned) {
             if (!cloned || generation != m_detailsGeneration) {
                 fail();
                 return;
             }
             // nothing may move the checkout to another commit between the last check and the build
-            git({u"-C"_s, directory, u"remote"_s, u"remove"_s, u"origin"_s}, [this, pkgbase, directory, generation, finishOne, fail](bool detached) {
+            git({u"-C"_s, directory, u"remote"_s, u"remove"_s, u"origin"_s}, [this, installed, pkgbase, directory, generation, finishOne, fail](bool detached) {
                 const auto commit = headCommit(directory);
                 auto tree         = treeDigests(directory, true);
                 if (!detached || generation != m_detailsGeneration || commit.isEmpty() || tree.digest.isEmpty()) {
                     fail();
                     return;
                 }
-                m_checkouts.insert(pkgbase, {directory, commit, std::move(tree.digest), std::move(tree.stamp), QDateTime::currentDateTimeUtc()});
+                m_checkouts.insert(pkgbase, {directory, commit, std::move(tree.digest), std::move(tree.stamp), QDateTime::currentDateTimeUtc(),
+                                                !installed.isEmpty()});
                 m_revision = commit;
                 readCheckout(directory);
+                loadChanges(directory, installed, generation);
                 finishOne();
             });
+        });
+}
+
+void AurClient::setChanges(const QString& changes, const QString& problem) {
+    m_changes        = changes;
+    m_changesProblem = problem;
+    emit changesChanged();
+}
+
+void AurClient::loadChanges(const QString& directory, const QString& installed, int generation) {
+    if (installed.isEmpty()) {
+        return;
+    }
+    ++m_pending;
+    emit loadingDetailsChanged();
+    // what is found only counts while the same package is shown
+    const auto done = [this, generation](const std::expected<QString, QString>& changes) {
+        if (generation == m_detailsGeneration) {
+            setChanges(changes.value_or(QString()), changes ? QString() : changes.error());
+        }
+        --m_pending;
+        emit loadingDetailsChanged();
+    };
+    findCommit(directory, installed, [this, directory, done](const std::expected<QString, QString>& commit) {
+        if (commit) {
+            diffSince(directory, *commit, done);
+        } else {
+            done(std::unexpected(commit.error()));
+        }
+    });
+}
+
+void AurClient::findCommit(const QString& directory, const QString& version, std::function<void(std::expected<QString, QString>)> done) {
+    // the commits that changed the .SRCINFO, newest first
+    gitRead({u"-C"_s, directory, u"rev-list"_s, u"--max-count=%1"_s.arg(MAX_VERSIONS), u"HEAD"_s, u"--"_s, u".SRCINFO"_s}, {},
+        [this, directory, version, done](const std::optional<QByteArray>& list) {
+            const auto commits = list ? list->trimmed().split('\n') : QList<QByteArray>{};
+            if (commits.isEmpty() || commits.first().isEmpty()) {
+                done(std::unexpected(unreadableHistory()));
+                return;
+            }
+            QByteArray objects;
+            for (const auto& commit : commits) {
+                objects += commit + ":.SRCINFO\n";
+            }
+            gitRead({u"-C"_s, directory, u"cat-file"_s, u"--batch"_s}, objects, [version, done, commits](const std::optional<QByteArray>& output) {
+                if (!output) {
+                    done(std::unexpected(unreadableHistory()));
+                    return;
+                }
+                const auto contents = pkgscan::catFileContents(*output);
+                const auto found    = std::ranges::find_if(contents, [&](QByteArrayView srcinfo) {
+                    // the version is named before the first package, the rest need not be read
+                    const auto end = srcinfo.indexOf("\npkgname"_ba);
+                    const auto own = pkgscan::srcinfoVersion(QString::fromUtf8(end < 0 ? srcinfo : srcinfo.first(end)));
+                    return !own.isEmpty() && alpmdb::vercmp(own, version) == 0;
+                });
+                if (found == contents.cend()) {
+                    done(std::unexpected(tr("The installed version %1 is not in the history of this package, so the changes since cannot be shown. "
+                                            "This is usual for packages that build the newest source code, whose names end in “-git”. Read the full files below.")
+                                             .arg(version)));
+                    return;
+                }
+                done(QString::fromLatin1(commits.at(std::distance(contents.cbegin(), found))));
+            });
+        });
+}
+
+void AurClient::diffSince(const QString& directory, const QString& commit, std::function<void(std::expected<QString, QString>)> done) {
+    gitRead({u"-C"_s, directory, u"diff"_s, u"--no-color"_s, u"--no-ext-diff"_s, u"--no-textconv"_s, u"--no-renames"_s, u"--unified=3"_s, commit,
+                u"HEAD"_s, u"--"_s, u"."_s, u":(exclude).SRCINFO"_s},
+        {}, [done](const std::optional<QByteArray>& diff) {
+            if (!diff) {
+                done(std::unexpected(unreadableHistory()));
+            } else if (diff->size() > MAX_CHANGES) {
+                done(std::unexpected(tr("The changes since the installed version are too large to show here. Read the full files below.")));
+            } else {
+                done(pkgscan::readableDiff(QString::fromUtf8(*diff)));
+            }
         });
 }
 
@@ -696,7 +800,15 @@ void AurClient::refreshInstalled() {
     if (changed) {
         emit resultsChanged();
     }
+    const auto before = m_details.installedVersion;
     if (!m_details.name.isEmpty() && refresh(m_details)) {
         emit detailsChanged();
+        // the changes count from the installed version, which is another one now
+        if (m_details.installedVersion != before) {
+            setChanges({}, {});
+            if (const auto checkout = m_checkouts.constFind(m_pkgbaseOf.value(m_details.name)); checkout != m_checkouts.cend() && checkout->history) {
+                loadChanges(checkout->directory, m_details.installedVersion, m_detailsGeneration);
+            }
+        }
     }
 }

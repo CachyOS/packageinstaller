@@ -121,6 +121,11 @@ class AurClient : public QObject {
     Q_PROPERTY(bool checkingUpdates READ checkingUpdates NOTIFY checkingUpdatesChanged FINAL)
     /// How many installed packages the AUR knows; -1 until the first check has finished.
     Q_PROPERTY(int installedCount READ installedCount NOTIFY updatesChanged FINAL)
+    /// For an installed package: what changed in its recipe since the installed version,
+    /// in the form of pkgscan::readableDiff(). Empty when nothing did or it is not known.
+    Q_PROPERTY(QString changes READ changes NOTIFY changesChanged FINAL)
+    /// Why the changes of an installed package cannot be shown, if they cannot.
+    Q_PROPERTY(QString changesProblem READ changesProblem NOTIFY changesChanged FINAL)
 
  public:
     explicit AurClient(const PackageModel* packages, QObject* parent = nullptr);
@@ -149,6 +154,8 @@ class AurClient : public QObject {
     int updateCount() const { return static_cast<int>(m_updates.size()); }
     bool checkingUpdates() const { return m_updateChecks > 0; }
     int installedCount() const { return m_installedCount; }
+    QString changes() const { return m_changes; }
+    QString changesProblem() const { return m_changesProblem; }
 
     Q_INVOKABLE void search(const QString& query);
     /// Fetches the package record and clones the package for review. What is shown is read
@@ -185,6 +192,7 @@ class AurClient : public QObject {
     void planChanged();
     void updatesChanged();
     void checkingUpdatesChanged();
+    void changesChanged();
 
  private:
     [[nodiscard]] AurPackage fromJson(const QJsonObject& object) const;
@@ -197,6 +205,16 @@ class AurClient : public QObject {
     /// Like git(), with `input` on its standard input. Passes on what it printed, or nothing
     /// when it failed or printed more than is ever needed here.
     void gitRead(const QStringList& arguments, const QByteArray& input, std::function<void(std::optional<QByteArray> output)> done);
+    /// The installed version of `name` if it was built from the AUR, else an empty string.
+    [[nodiscard]] QString installedAurVersion(const QString& name) const;
+    /// Sets `changes` to what changed in the checkout in `directory` since `installed`.
+    /// Nothing to do for an empty `installed`.
+    void loadChanges(const QString& directory, const QString& installed, int generation);
+    /// The newest commit whose .SRCINFO names `version`, or why there is none.
+    void findCommit(const QString& directory, const QString& version, std::function<void(std::expected<QString, QString>)> done);
+    /// The changes of the checkout since `commit`, or why they cannot be shown.
+    void diffSince(const QString& directory, const QString& commit, std::function<void(std::expected<QString, QString>)> done);
+    void setChanges(const QString& changes, const QString& problem);
     void setError(const QString& error);
     void readCheckout(const QString& directory);
     void rescan();
@@ -209,6 +227,7 @@ class AurClient : public QObject {
         QByteArray digest;  ///< of the files as they were shown for review
         QByteArray stamp;   ///< names, sizes and times of those files: a cheap check for edits
         QDateTime cloned;
+        bool history = false;  ///< cloned with every commit, not only the newest
     };
     [[nodiscard]] static bool intact(const Checkout& checkout, bool verifyContents = true);
 
@@ -235,6 +254,8 @@ class AurClient : public QObject {
     bool m_resolving     = false;
     int m_planGeneration = 0;
     QList<pkgscan::ScriptFile> m_files;
+    QString m_changes;
+    QString m_changesProblem;
     QList<pkgscan::Finding> m_findings;
     pkgscan::Analysis m_analysis;
     QStringList m_unreadable;
