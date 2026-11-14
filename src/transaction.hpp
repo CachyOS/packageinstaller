@@ -22,9 +22,9 @@ struct PlanEntry {
     bool requested = false;  ///< one of the targets rather than a dependency
 };
 
-/// One package operation: plan (unprivileged `pacman --print`), confirm, run.
+/// One operation on the system, most of them on packages: plan (unprivileged `pacman --print`), confirm, run.
 ///
-/// Repository operations run through the pkexec helper; AUR installs are
+/// Repository operations and the mirror ranking run through the pkexec helper; AUR installs are
 /// delegated to paru, which runs as the user and elevates through the helper too.
 /// Flatpak operations run the flatpak command as the user.
 ///
@@ -65,7 +65,8 @@ class Transaction : public QObject {
         FlatpakInstall,
         FlatpakRemove,
         FlatpakUpdate,
-        FlatpakSetup };
+        FlatpakSetup,
+        RateMirrors };
     Q_ENUM(Kind)
 
     explicit Transaction(QObject* parent = nullptr);
@@ -143,6 +144,7 @@ class Transaction : public QObject {
     QStringDecoder m_decoder{QStringDecoder::Utf8};
     QString m_partial;  ///< the line being written, before its '\n'
     QString m_lastLine;
+    bool m_helperStarted = false;  ///< pkexec let the helper through: a 126 or 127 is then not a refusal
     QString m_failureReason;
     bool m_success                = false;
     bool m_quitOnLastWindowClosed = true;
