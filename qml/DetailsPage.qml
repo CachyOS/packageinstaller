@@ -34,7 +34,9 @@ ScrollPage {
         byline: root.pkg.developer.length > 0 ? root.pkg.developer : root.pkgName
         unavailable: root.known ? "" : qsTr("“%1” is not available in the repositories.").arg(root.pkgName)
         screenshots: root.pkg.screenshots
-        description: root.pkg.longDescription.length > 0 ? root.pkg.longDescription : root.pkg.description
+        // without an AppStream entry the summary is the description already
+        description: root.pkg.longDescription.length > 0 ? root.pkg.longDescription
+            : root.pkg.description !== root.pkg.summary ? root.pkg.description : ""
         onBack: root.back()
 
         PillButton {
