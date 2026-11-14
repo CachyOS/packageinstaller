@@ -37,6 +37,8 @@ constexpr qsizetype INFO_BATCH = 100;
 constexpr qsizetype MAX_PLAN = 60;
 /// how long a checkout may be shown again for another package of the same recipe
 constexpr qint64 REUSE_SECONDS = 30 * 60;
+/// What a git command may print here: the .SRCINFO of every version of a long-lived recipe.
+constexpr qsizetype MAX_GIT_OUTPUT = 16 * 1024 * 1024;
 
 /// Commit a checkout is at, read from the repository itself.
 QString headCommit(const QString& directory) {
@@ -245,6 +247,10 @@ void AurClient::fetchInfo(const QStringList& names, std::function<void(QList<Aur
 }
 
 void AurClient::git(const QStringList& arguments, std::function<void(bool)> done) {
+    gitRead(arguments, {}, [done = std::move(done)](const std::optional<QByteArray>& output) { done(output.has_value()); });
+}
+
+void AurClient::gitRead(const QStringList& arguments, const QByteArray& input, std::function<void(std::optional<QByteArray>)> done) {
     static const auto environment = [] {
         auto env = plainEnvironment();
         for (const auto& [key, value] : std::to_array<std::pair<QString, QString>>({{u"GIT_CONFIG_NOSYSTEM"_s, u"1"_s},
@@ -256,19 +262,37 @@ void AurClient::git(const QStringList& arguments, std::function<void(bool)> done
     }();
     auto* process = new QProcess(this);
     process->setProcessEnvironment(environment);
-    process->setStandardOutputFile(QProcess::nullDevice());
     process->setStandardErrorFile(QProcess::nullDevice());
+    auto output = std::make_shared<std::optional<QByteArray>>(QByteArray());
+    connect(process, &QProcess::readyReadStandardOutput, this, [process, output] {
+        if (*output) {
+            (*output)->append(process->readAllStandardOutput());
+            if ((*output)->size() > MAX_GIT_OUTPUT) {
+                output->reset();
+                process->kill();
+            }
+        } else {
+            process->readAllStandardOutput();
+        }
+    });
     connect(process, &QProcess::errorOccurred, this, [process, done](QProcess::ProcessError error) {
         if (error == QProcess::FailedToStart) {  // finished() is not emitted then
             process->deleteLater();
-            done(false);
+            done(std::nullopt);
         }
     });
-    connect(process, &QProcess::finished, this, [process, done](int exitCode, QProcess::ExitStatus status) {
+    connect(process, &QProcess::finished, this, [process, done, output](int exitCode, QProcess::ExitStatus status) {
         process->deleteLater();
-        done(status == QProcess::NormalExit && exitCode == 0);
+        if (*output && status == QProcess::NormalExit && exitCode == 0) {
+            (*output)->append(process->readAllStandardOutput());
+            done(std::move(*output));
+        } else {
+            done(std::nullopt);
+        }
     });
     process->start(u"git"_s, QStringList{u"-c"_s, u"core.hooksPath=/dev/null"_s} + arguments);
+    process->write(input);
+    process->closeWriteChannel();
 }
 
 void AurClient::search(const QString& query) {

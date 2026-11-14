@@ -14,6 +14,7 @@
 #include <expected>
 #include <functional>
 #include <memory>
+#include <optional>
 
 class PackageModel;
 
@@ -193,6 +194,9 @@ class AurClient : public QObject {
     void fetchInfo(const QStringList& names, std::function<void(QList<AurPackage> found, bool failed)> done);
     /// Runs git in isolation from the user's and the system's configuration.
     void git(const QStringList& arguments, std::function<void(bool ok)> done);
+    /// Like git(), with `input` on its standard input. Passes on what it printed, or nothing
+    /// when it failed or printed more than is ever needed here.
+    void gitRead(const QStringList& arguments, const QByteArray& input, std::function<void(std::optional<QByteArray> output)> done);
     void setError(const QString& error);
     void readCheckout(const QString& directory);
     void rescan();
