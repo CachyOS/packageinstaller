@@ -2,6 +2,8 @@
 #include "appimageclient.hpp"
 #include "appimagedesktop.hpp"
 
+#include <QCryptographicHash>
+#include <QDateTime>
 #include <QDir>
 #include <QDirIterator>
 #include <QFile>
@@ -9,11 +11,16 @@
 #include <QLocale>
 #include <QProcess>
 #include <QLockFile>
+#include <QNetworkDiskCache>
+#include <QNetworkReply>
 #include <QRandomGenerator>
 #include <QSaveFile>
+#include <QSettings>
 #include <QStandardPaths>
 #include <QTemporaryDir>
 #include <QtConcurrent/QtConcurrentRun>
+
+#include <expected>
 
 using namespace Qt::StringLiterals;
 
@@ -21,6 +28,9 @@ namespace {
 
 constexpr qint64 MAX_ICON_BYTES    = 8 * 1024 * 1024;
 constexpr qint64 MAX_EXTRACT_BYTES = 1024LL * 1024 * 1024;  ///< what reading the metadata may unpack
+constexpr qint64 MAX_RELEASE_BYTES = 8 * 1024 * 1024;       ///< the description of a release
+constexpr qint64 CHECK_INTERVAL    = 6 * 60 * 60;           ///< seconds between two looks for newer releases
+constexpr auto LAST_CHECK_KEY      = "appimage/lastUpdateCheck"_L1;
 
 using Cancel = std::shared_ptr<std::atomic_bool>;
 
@@ -226,6 +236,23 @@ void refreshMenu() {
     }
 }
 
+/// A name in the install folder that is new and ours alone.
+QString privatePath(QLatin1StringView extension) {
+    return u"%1/.cachyos-pi-%2.%3"_s.arg(installDirectory()).arg(QRandomGenerator::global()->generate64(), 16, 16, u'0').arg(extension);
+}
+
+void removeIcons(const QString& id) {
+    for (const auto* extension : {".svg", ".png"}) {
+        QFile::remove(iconDirectory() + u'/' + id + QLatin1StringView(extension));
+    }
+}
+
+/// Deletes a menu entry of ours and its icons. The AppImage it starts is the caller's business.
+void removeMenuEntry(const QString& desktopName) {
+    QFile::remove(menuDirectory() + u'/' + desktopName);
+    removeIcons(desktopName.chopped(8));
+}
+
 /// Removes a file when it goes out of scope, unless it was handed over.
 struct Discard {
     QString path;
@@ -236,13 +263,46 @@ struct Discard {
     }
 };
 
-AppImageResult install(const QString& source, const Cancel& cancel) {
+/// Copies `source` to `target`, which must not exist. Returns what went wrong, if anything.
+QString copyTo(const QString& source, const QString& target, const Cancel& cancel) {
+    QFile output(target);
+    QFile input(source);
+    if (!output.open(QIODevice::WriteOnly | QIODevice::NewOnly) || !input.open(QIODevice::ReadOnly)) {
+        return AppImageClient::tr("Could not copy the file to %1.").arg(installDirectory());
+    }
+    while (!input.atEnd()) {
+        const auto chunk = input.read(4 * 1024 * 1024);
+        if (cancel->load()) {
+            return AppImageClient::tr("Adding the AppImage was stopped.");
+        }
+        if (input.error() != QFile::NoError || output.write(chunk) != chunk.size()) {
+            return AppImageClient::tr("Could not copy the file to %1. Is there enough free space?").arg(installDirectory());
+        }
+    }
+    if (!output.flush()) {
+        return AppImageClient::tr("Could not copy the file to %1. Is there enough free space?").arg(installDirectory());
+    }
+    return {};
+}
+
+/// A file this app downloaded: it lies in the install folder under a name of ours already
+/// and is the working copy. `name` is what it is called where it came from.
+struct Fetched {
+    QString name;
+    appimage::Tracking tracking;
+    QString replaces;  ///< the menu entry this is an update of; empty for a new app
+};
+
+/// Adds `source`, a file of the user's, or the download `fetched` describes.
+AppImageResult install(const QString& source, const Cancel& cancel, const Fetched& fetched) {
     const auto cancelled = AppImageResult{AppImageClient::tr("Adding the AppImage was stopped."), {}};
+    const bool downloaded = !fetched.name.isEmpty();
+    Discard working{downloaded ? source : QString()};
     const QFileInfo sourceInfo(source);
     if (!sourceInfo.isFile() || !appimage::isAppImage(source)) {
         return {AppImageClient::tr("This file is not an AppImage."), {}};
     }
-    auto fileName = appimage::safeName(sourceInfo.fileName()).left(100);
+    auto fileName = appimage::safeName(downloaded ? fetched.name : sourceInfo.fileName()).left(100);
     if (!fileName.endsWith(".AppImage"_L1, Qt::CaseInsensitive)) {
         fileName += u".AppImage"_s;
     }
@@ -256,31 +316,15 @@ AppImageResult install(const QString& source, const Cancel& cancel) {
     }
 
     // Work on a private copy inside the install folder: its name is new and ours alone, and
-    // the last step is a rename on one file system.
+    // the last step is a rename on one file system. A download is such a copy already.
     // (Not a QTemporaryFile: that keeps the file open, and a file open for writing cannot be run.)
-    const auto stagingPath = u"%1/.cachyos-pi-%2.part"_s.arg(installDirectory()).arg(QRandomGenerator::global()->generate64(), 16, 16, u'0');
-    QFile staging(stagingPath);
-    QFile input(source);
-    if (!staging.open(QIODevice::WriteOnly | QIODevice::NewOnly)) {  // fails if the name exists
-        return {AppImageClient::tr("Could not copy the file to %1.").arg(installDirectory()), {}};
-    }
-    Discard stagedFile{stagingPath};
-    if (!input.open(QIODevice::ReadOnly)) {
-        return {AppImageClient::tr("Could not copy the file to %1.").arg(installDirectory()), {}};
-    }
-    while (!input.atEnd()) {
-        const auto chunk = input.read(4 * 1024 * 1024);
-        if (cancel->load()) {
-            return cancelled;
-        }
-        if (input.error() != QFile::NoError || staging.write(chunk) != chunk.size()) {
-            return {AppImageClient::tr("Could not copy the file to %1. Is there enough free space?").arg(installDirectory()), {}};
+    const auto stagingPath = downloaded ? source : privatePath("part"_L1);
+    if (!downloaded) {
+        working.path = stagingPath;
+        if (const auto failed = copyTo(source, stagingPath, cancel); !failed.isEmpty()) {
+            return {failed, {}};
         }
     }
-    if (!staging.flush()) {
-        return {AppImageClient::tr("Could not copy the file to %1. Is there enough free space?").arg(installDirectory()), {}};
-    }
-    staging.close();
     QFile::setPermissions(stagingPath, QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner | QFile::ReadGroup | QFile::ExeGroup
             | QFile::ReadOther | QFile::ExeOther);
 
@@ -334,8 +378,21 @@ AppImageResult install(const QString& source, const Cancel& cancel) {
     }
     const auto id = desktopName.chopped(8);  // without ".desktop"
 
+    // An update belongs to one entry. That entry has to be what it was when the update was
+    // offered; anything else happened behind our back while the file came in.
+    const auto entries = managedEntries();
+    QString renamedFrom;
+    if (!fetched.replaces.isEmpty()) {
+        if (appimage::tracking(entries.value(fetched.replaces)).source != fetched.tracking.source) {
+            return {AppImageClient::tr("The list of AppImages changed in the meantime. Nothing was updated."), {}};
+        }
+        if (fetched.replaces != desktopName) {
+            renamedFrom = fetched.replaces;  // the new release calls its menu entry differently
+        }
+    }
+
     // An entry of that name which is ours is the same app, added before: its file is replaced.
-    auto previous = managedEntries().value(desktopName).value(appimage::PATH_KEY);
+    auto previous = entries.value(desktopName).value(appimage::PATH_KEY);
     if (!ownedFile(previous) || !QFileInfo::exists(previous)) {
         previous.clear();
     }
@@ -361,7 +418,7 @@ AppImageResult install(const QString& source, const Cancel& cancel) {
         }
     }
 
-    const auto entry = appimage::integrate(original, destination, iconPath);
+    const auto entry = appimage::integrate(original, destination, iconPath, fetched.tracking);
     if (entry.isEmpty()) {
         return {AppImageClient::tr("The menu entry inside the AppImage is not usable."), {}};
     }
@@ -379,7 +436,7 @@ AppImageResult install(const QString& source, const Cancel& cancel) {
         }
     };
     if (occupied(destination)) {  // only ever `previous`, see freeDestination()
-        backup = u"%1/.cachyos-pi-%2.bak"_s.arg(installDirectory()).arg(QRandomGenerator::global()->generate64(), 16, 16, u'0');
+        backup = privatePath("bak"_L1);
         if (!QFile::rename(destination, backup)) {
             return {AppImageClient::tr("Could not replace the earlier copy in %1.").arg(installDirectory()), {}};
         }
@@ -388,7 +445,7 @@ AppImageResult install(const QString& source, const Cancel& cancel) {
         restore();
         return {AppImageClient::tr("Could not move the AppImage into %1.").arg(installDirectory()), {}};
     }
-    stagedFile.path.clear();
+    working.path.clear();
     QSaveFile menuEntry(menuDirectory() + u'/' + desktopName);
     if (!menuEntry.open(QIODevice::WriteOnly) || menuEntry.write(entry.toUtf8()) < 0 || !menuEntry.commit()) {
         restore();
@@ -396,9 +453,7 @@ AppImageResult install(const QString& source, const Cancel& cancel) {
     }
 
     // Committed: the rest is tidying up.
-    for (const auto* extension : {".svg", ".png"}) {
-        QFile::remove(iconDirectory() + u'/' + id + QLatin1StringView(extension));
-    }
+    removeIcons(id);
     if (!stagedIcon.path.isEmpty() && QFile::rename(stagedIcon.path, iconPath)) {
         stagedIcon.path.clear();
     }
@@ -408,30 +463,134 @@ AppImageResult install(const QString& source, const Cancel& cancel) {
     if (!previous.isEmpty() && previous != destination) {
         QFile::remove(previous);
     }
+    if (!renamedFrom.isEmpty()) {
+        // the entry that was updated goes, along with its file: the new one took its place
+        const auto old = entries.value(renamedFrom).value(appimage::PATH_KEY);
+        if (ownedFile(old) && old != destination) {
+            QFile::remove(old);
+        }
+        removeMenuEntry(renamedFrom);
+    }
     refreshMenu();
     return {{}, keys.value(u"Name"_s)};
 }
 
+QNetworkRequest request(const QUrl& url) {
+    QNetworkRequest req(url);
+    req.setHeader(QNetworkRequest::UserAgentHeader, u"cachyos-pi/" PI_VERSION ""_s);
+    req.setTransferTimeout(20000);
+    return req;
+}
+
+/// Asks GitHub about the newest release of `source`. `load` says whether an answer that
+/// was kept from an earlier question will do.
+QNetworkReply* askRelease(QNetworkAccessManager& network, const appimage::Source& source, QNetworkRequest::CacheLoadControl load) {
+    auto req = request(appimage::latestReleaseUrl(source));
+    req.setRawHeader("Accept", "application/vnd.github+json");
+    req.setRawHeader("X-GitHub-Api-Version", "2022-11-28");
+    req.setAttribute(QNetworkRequest::CacheLoadControlAttribute, load);
+    auto* reply = network.get(req);
+    QObject::connect(reply, &QNetworkReply::readyRead, reply, [reply] {
+        if (reply->bytesAvailable() > MAX_RELEASE_BYTES) {
+            reply->abort();
+        }
+    });
+    return reply;
+}
+
+/// The release a finished question came to, or why there is none.
+std::expected<appimage::Release, QString> readRelease(QNetworkReply* reply, const appimage::Source& source) {
+    if (reply->error() != QNetworkReply::NoError) {
+        const auto status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        if (status == 404) {
+            return std::unexpected(AppImageClient::tr("There is no project %1 on GitHub, or it has not published a release.").arg(source.slug()));
+        }
+        if (status == 403 || status == 429) {
+            return std::unexpected(AppImageClient::tr("GitHub answers only a limited number of questions per hour, and that limit is reached. Try again later."));
+        }
+        return std::unexpected(AppImageClient::tr("GitHub could not be reached."));
+    }
+    // an answer from the cache arrives in one piece, past the check while it comes in
+    if (reply->bytesAvailable() <= MAX_RELEASE_BYTES) {
+        if (auto release = appimage::parseRelease(reply->readAll())) {
+            return *std::move(release);
+        }
+    }
+    return std::unexpected(AppImageClient::tr("GitHub gave an answer about %1 that could not be read.").arg(source.slug()));
+}
+
+/// The file of the newest known release that takes the place of what `tracked` names;
+/// null when that one is installed or nothing is known. `tag` gets the name of the release.
+const appimage::Asset* newerAsset(const QHash<QString, appimage::Release>& releases, const appimage::Tracking& tracked, QString* tag = nullptr) {
+    const auto release = releases.constFind(tracked.source);
+    if (release == releases.cend()) {
+        return nullptr;
+    }
+    const auto file = appimage::choose(release->assets, tracked.variant);
+    if (file < 0 || release->assets.at(file).id == tracked.asset) {
+        return nullptr;
+    }
+    if (tag != nullptr) {
+        *tag = release->tag;
+    }
+    return &release->assets.at(file);
+}
+
 }  // namespace
 
+struct AppImageClient::Download {
+    appimage::Asset asset;
+    Fetched fetched;  ///< what install() is told about it
+    QNetworkReply* reply = nullptr;
+    QFile file;
+    QCryptographicHash hash{QCryptographicHash::Sha256};
+    qint64 received = 0;
+    bool broken     = false;  ///< more than announced arrived, or it could not be written
+    bool cancelled  = false;
+};
+
 AppImageClient::AppImageClient(QObject* parent) : QObject(parent), m_cancel(std::make_shared<std::atomic_bool>(false)) {
+    // GitHub's answers are kept: asking again for one that did not change is cheap
+    auto* cache = new QNetworkDiskCache(&m_network);
+    cache->setCacheDirectory(QStandardPaths::writableLocation(QStandardPaths::CacheLocation) + u"/github"_s);
+    cache->setMaximumCacheSize(32 * 1024 * 1024);
+    m_network.setCache(cache);
+
     connect(&m_watcher, &QFutureWatcher<AppImageResult>::finished, this, [this] {
         const auto result = m_watcher.result();
-        m_busy            = false;
-        emit busyChanged();
+        setBusy(false);
         setMessage(result.error, result.error.isEmpty() ? result.name : QString());
         refresh();
     });
 }
 
 AppImageClient::~AppImageClient() {
+    if (m_download) {
+        m_download->reply->disconnect(this);
+        m_download->reply->abort();
+        m_download->file.remove();
+    }
     m_watcher.disconnect(this);
     m_cancel->store(true);  // stops a copy or an extraction that is running
     m_watcher.waitForFinished();
 }
 
+bool AppImageClient::tracking() const {
+    return std::ranges::any_of(m_apps, [](const AppImageItem& app) { return !app.source.isEmpty(); });
+}
+
+int AppImageClient::updateCount() const {
+    return static_cast<int>(std::ranges::count_if(m_apps, [](const AppImageItem& app) { return !app.update.isEmpty(); }));
+}
+
 QString AppImageClient::directory() const {
     return installDirectory();
+}
+
+void AppImageClient::setBusy(bool busy, const QString& subject) {
+    m_busy    = busy;
+    m_subject = subject;
+    emit busyChanged();
 }
 
 void AppImageClient::setMessage(const QString& error, const QString& added) {
@@ -463,10 +622,208 @@ void AppImageClient::add(const QUrl& file) {
     if (m_busy || !file.isLocalFile()) {
         return;
     }
-    m_busy = true;
-    emit busyChanged();
     clearMessage();
-    m_watcher.setFuture(QtConcurrent::run(install, file.toLocalFile(), m_cancel));
+    setBusy(true, file.fileName());
+    m_watcher.setFuture(QtConcurrent::run(install, file.toLocalFile(), m_cancel, Fetched{.name = {}, .tracking = {}, .replaces = {}}));
+}
+
+void AppImageClient::lookUp(const QString& link) {
+    clearOffer();
+    const auto source = appimage::parseSource(link);
+    if (!source) {
+        m_offer.error = tr("This is not a link to a project on GitHub. One looks like https://github.com/owner/project.");
+        emit offerChanged();
+        return;
+    }
+    m_offeredSource = *source;
+    m_lookup        = askRelease(m_network, *source, QNetworkRequest::PreferNetwork);
+    connect(m_lookup, &QNetworkReply::finished, this, [this] {
+        auto* reply = std::exchange(m_lookup, nullptr);
+        reply->deleteLater();
+        m_offer.source     = m_offeredSource.slug();
+        const auto release = readRelease(reply, m_offeredSource);
+        if (!release) {
+            m_offer.error = release.error();
+        } else {
+            m_releases.insert(appimage::sourceValue(m_offeredSource), *release);
+            m_offer.release = release->tag;
+            m_offeredAssets = release->assets;
+            for (const auto& asset : std::as_const(m_offeredAssets)) {
+                m_offer.files << AppImageChoice{.name = asset.name,
+                    .size                             = QLocale().formattedDataSize(asset.size, 1, QLocale::DataSizeIecFormat)};
+            }
+            // the file the link named, as far as the newest release still has one of that kind
+            m_offer.preferred = static_cast<int>(std::max<qsizetype>(0, appimage::choose(m_offeredAssets, appimage::variant(m_offeredSource.file))));
+            if (m_offeredAssets.isEmpty()) {
+                m_offer.error = tr("The newest release of %1 (%2) has no AppImage file for this computer.").arg(m_offer.source, release->tag);
+            }
+        }
+        emit offerChanged();
+    });
+    emit offerChanged();
+}
+
+void AppImageClient::clearOffer() {
+    if (auto* reply = std::exchange(m_lookup, nullptr); reply != nullptr) {
+        reply->disconnect(this);
+        reply->abort();
+        reply->deleteLater();
+    }
+    m_offer = {};
+    m_offeredAssets.clear();
+    emit offerChanged();
+}
+
+void AppImageClient::addOffered(int file) {
+    if (file >= 0 && file < m_offeredAssets.size()) {
+        download(m_offeredSource, m_offeredAssets.at(file));
+    }
+}
+
+void AppImageClient::update(const QString& id) {
+    const auto desktopName = id + u".desktop"_s;
+    const auto tracked     = appimage::tracking(appimage::mainGroup(readText(menuDirectory() + u'/' + desktopName, appimage::MAX_ENTRY_BYTES)));
+    const auto source      = appimage::sourceFromValue(tracked.source);
+    const auto* asset      = newerAsset(m_releases, tracked);
+    if (!source || asset == nullptr) {
+        refresh();  // what the list showed is out of date
+        return;
+    }
+    download(*source, *asset, desktopName);
+}
+
+void AppImageClient::download(const appimage::Source& source, const appimage::Asset& asset, const QString& replaces) {
+    if (m_busy) {
+        return;
+    }
+    clearMessage();
+    // what a crash left behind; the working copy of another window is younger than that
+    const QDir folder(installDirectory());
+    for (const auto& stale : folder.entryInfoList({u".cachyos-pi-*.part"_s}, QDir::Files | QDir::Hidden)) {
+        if (stale.lastModified().daysTo(QDateTime::currentDateTime()) >= 1) {
+            QFile::remove(stale.filePath());
+        }
+    }
+    auto download     = std::make_unique<Download>();
+    download->asset   = asset;
+    download->fetched = {.name = asset.name,
+        .tracking = {.source = appimage::sourceValue(source), .asset = asset.id, .variant = appimage::variant(asset.name)},
+        .replaces = replaces};
+    // next to where it will end up: install() takes it over as its working copy
+    download->file.setFileName(privatePath("part"_L1));
+    if (!QDir().mkpath(installDirectory()) || !download->file.open(QIODevice::WriteOnly | QIODevice::NewOnly)) {
+        setMessage(tr("Could not write to %1.").arg(installDirectory()), {});
+        return;
+    }
+    download->file.setPermissions(QFile::ReadOwner | QFile::WriteOwner);
+    auto req = request(asset.url);
+    req.setAttribute(QNetworkRequest::CacheSaveControlAttribute, false);
+    req.setAttribute(QNetworkRequest::RedirectPolicyAttribute, QNetworkRequest::NoLessSafeRedirectPolicy);
+    download->reply = m_network.get(req);
+    m_download      = std::move(download);
+    m_progress      = 0;
+    emit progressChanged();
+    connect(m_download->reply, &QNetworkReply::readyRead, this, [this] {
+        auto& current    = *m_download;
+        const auto chunk = current.reply->readAll();
+        current.received += chunk.size();
+        if (current.received > current.asset.size || current.file.write(chunk) != chunk.size()) {
+            current.broken = true;
+            current.reply->abort();  // ends in onDownloaded(), `current` is gone after it
+            return;
+        }
+        if (!current.asset.sha256.isEmpty()) {
+            current.hash.addData(chunk);
+        }
+        if (const auto percent = static_cast<int>(current.received * 100 / current.asset.size); percent != m_progress) {
+            m_progress = percent;
+            emit progressChanged();
+        }
+    });
+    connect(m_download->reply, &QNetworkReply::finished, this, &AppImageClient::onDownloaded);
+    setBusy(true, asset.name);
+}
+
+void AppImageClient::cancelDownload() {
+    if (m_download) {
+        m_download->cancelled = true;
+        m_download->reply->abort();
+    }
+}
+
+void AppImageClient::onDownloaded() {
+    const auto download = std::move(m_download);
+    download->reply->deleteLater();
+    const auto path     = download->file.fileName();
+    const bool complete = download->reply->error() == QNetworkReply::NoError && !download->broken && download->file.flush();
+    download->file.close();
+    QString error;
+    if (download->cancelled) {
+        // the user knows
+    } else if (!complete) {
+        error = tr("%1 could not be downloaded. Check the connection and the free space in %2.").arg(download->asset.name, installDirectory());
+    } else if (download->received != download->asset.size
+        || (!download->asset.sha256.isEmpty() && download->hash.result() != download->asset.sha256)) {
+        error = tr("The file that arrived is not the one GitHub lists as %1, so it was not added.").arg(download->asset.name);
+    }
+    if (download->cancelled || !error.isEmpty()) {
+        QFile::remove(path);
+        setBusy(false);
+        setMessage(error, {});
+        return;
+    }
+    emit busyChanged();  // not downloading any more
+    m_watcher.setFuture(QtConcurrent::run(install, path, m_cancel, download->fetched));
+}
+
+void AppImageClient::checkUpdates(bool now) {
+    if (m_checks > 0) {
+        return;
+    }
+    QHash<QString, appimage::Source> sources;
+    const auto entries = managedEntries();
+    for (const auto& keys : entries) {
+        const auto value = appimage::tracking(keys).source;
+        if (const auto source = appimage::sourceFromValue(value)) {
+            sources.insert(value, *source);
+        }
+    }
+    if (sources.isEmpty()) {
+        return;
+    }
+    // Between two real looks the answers GitHub gave last time are read back from disk.
+    const auto last  = QSettings().value(LAST_CHECK_KEY).toDateTime();
+    const auto age   = last.secsTo(QDateTime::currentDateTimeUtc());
+    const bool fresh = now || !last.isValid() || age < 0 || age > CHECK_INTERVAL;
+    if (!fresh && std::ranges::all_of(sources.keys(), [this](const QString& value) { return m_releases.contains(value); })) {
+        return;  // nothing the last answers do not tell already
+    }
+    m_checkError.clear();
+    for (const auto& [value, source] : sources.asKeyValueRange()) {
+        auto* reply = askRelease(m_network, source, fresh ? QNetworkRequest::PreferNetwork : QNetworkRequest::AlwaysCache);
+        ++m_checks;
+        connect(reply, &QNetworkReply::finished, this, [this, reply, value, source, fresh, now] {
+            reply->deleteLater();
+            if (const auto release = readRelease(reply, source)) {
+                m_releases.insert(value, *release);
+            } else if (fresh) {
+                m_checkError = release.error();
+            }
+            if (--m_checks > 0) {
+                return;
+            }
+            if (fresh) {
+                // also after a failure: a project that is gone is not asked about on every start
+                QSettings().setValue(LAST_CHECK_KEY, QDateTime::currentDateTimeUtc());
+            }
+            if (now && !m_busy) {
+                setMessage(m_checkError, {});
+            }
+            refresh();
+            emit checkingChanged();
+        });
+    }
+    emit checkingChanged();
 }
 
 void AppImageClient::remove(const QString& id, const QString& path) {
@@ -493,10 +850,7 @@ void AppImageClient::remove(const QString& id, const QString& path) {
         setMessage(tr("Could not delete %1.").arg(path), {});
         return;
     }
-    QFile::remove(menuDirectory() + u'/' + desktopName);
-    for (const auto* extension : {".svg", ".png"}) {
-        QFile::remove(iconDirectory() + u'/' + id + QLatin1StringView(extension));
-    }
+    removeMenuEntry(desktopName);
     refreshMenu();
     clearMessage();
     refresh();
@@ -522,6 +876,12 @@ void AppImageClient::refresh() {
         const auto id   = entry.chopped(8);  // without ".desktop"
         const auto path = keys.value(appimage::PATH_KEY);
         const QFileInfo file(path);
+        const auto tracked = appimage::tracking(keys);
+        const auto source  = appimage::sourceFromValue(tracked.source);
+        QString update;
+        if (source) {
+            newerAsset(m_releases, tracked, &update);
+        }
         apps << AppImageItem{
             .id      = id,
             .name    = keys.value(u"Name"_s),
@@ -534,6 +894,8 @@ void AppImageClient::refresh() {
             .owned = ownedFile(path),
             // a command line tool: there is nothing to open without a terminal
             .terminal = keys.value(u"Terminal"_s) == "true"_L1,
+            .source   = source ? source->slug() : QString(),
+            .update   = update,
         };
         const auto icon = keys.value(u"Icon"_s);
         if (icon.startsWith(u'/')) {

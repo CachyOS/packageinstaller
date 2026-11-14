@@ -70,6 +70,7 @@ ApplicationWindow {
         case "updates": return Backend.updateCount;
         case "aur": return Backend.aur.updateCount;
         case "flatpak": return Backend.flatpak.updateCount;
+        case "appimage": return Backend.appImagesEnabled ? Backend.appImages.updateCount : 0;
         default: return 0;
         }
     }

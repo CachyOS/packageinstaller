@@ -189,7 +189,7 @@ QStringList commandLine(const QString& exec) {
     return words;
 }
 
-QString integrate(const QString& desktopFile, const QString& appImagePath, const QString& iconPath) {
+QString integrate(const QString& desktopFile, const QString& appImagePath, const QString& iconPath, const Tracking& tracking) {
     const auto groups = parse(desktopFile);
     const Group* main = nullptr;
     for (const auto& group : groups) {
@@ -199,7 +199,7 @@ QString integrate(const QString& desktopFile, const QString& appImagePath, const
     }
     if (main == nullptr || main->values.value(u"Name"_s).isEmpty() || main->values.value(u"Exec"_s).isEmpty()
         || main->values.value(u"Type"_s, u"Application"_s) != "Application"_L1
-        || !printable(appImagePath) || !printable(iconPath)) {
+        || !printable(appImagePath) || !printable(iconPath) || !printable(tracking.source) || !printable(tracking.variant)) {
         return {};
     }
     const auto program = quoteExec(appImagePath);
@@ -241,6 +241,10 @@ QString integrate(const QString& desktopFile, const QString& appImagePath, const
         out << u"Actions="_s + actions.join(u';') + u';';
     }
     out << PATH_KEY + u'=' + appImagePath;
+    if (!tracking.source.isEmpty()) {
+        out << SOURCE_KEY + u'=' + tracking.source << ASSET_KEY + u'=' + QString::number(tracking.asset)
+            << VARIANT_KEY + u'=' + tracking.variant;
+    }
 
     for (const auto& action : std::as_const(actions)) {
         const auto wanted = u"Desktop Action "_s + action;
@@ -260,6 +264,12 @@ QString integrate(const QString& desktopFile, const QString& appImagePath, const
     }
     const auto entry = out.join(u'\n') + u'\n';
     return entry.toUtf8().size() > MAX_ENTRY_BYTES ? QString() : entry;
+}
+
+Tracking tracking(const QHash<QString, QString>& mainGroup) {
+    return {.source  = mainGroup.value(SOURCE_KEY),
+            .asset   = mainGroup.value(ASSET_KEY).toLongLong(),
+            .variant = mainGroup.value(VARIANT_KEY)};
 }
 
 QString safeName(const QString& name) {

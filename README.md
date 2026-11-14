@@ -24,12 +24,19 @@ Flatpak apps and add AppImage files to the menu.
   Flatpak asks for permission itself. The Flatpak page lists the installed apps
   and their updates; remotes other than Flathub are used if they are set up, but
   are not managed here.
-- **AppImage** is opt-in too. There is no catalogue and no update check: a file
-  you downloaded (picked, dropped on the page, or given as `cachyos-pi file.AppImage`)
-  is copied to `~/Applications` and gets a menu entry and an icon, all as your
+- **AppImage** is opt-in too. There is no catalogue: a file you downloaded
+  (picked, dropped on the page, or given as `cachyos-pi file.AppImage`) is
+  copied to `~/Applications` and gets a menu entry and an icon, all as your
   user. Reading the name and icon runs the file's own extractor, so the page
   asks first. The menu entries carry a mark and are the only record; adding a
   newer file of the same app replaces the old one.
+  A file can also be taken from a project on GitHub ("From GitHub…", a link
+  like `https://github.com/owner/project`): the AppImage of its newest release
+  is downloaded, the menu entry remembers the project, and a newer release is
+  shown as an update on the page. GitHub is asked at most every six hours, or
+  when "Check for updates" is pressed; nothing is replaced without a click.
+  Releases are not signed: the download is only compared with the size and
+  checksum GitHub lists for it.
 - **PKGBUILD check**: the review page marks lines a reviewer should look at
   (see below). It is a reading aid and never declares a package safe.
 - **Appearance**: the settings page switches between colour themes (four of our
@@ -125,6 +132,7 @@ the package database, so they are only done in the app.
 | `src/aurclient.*` | AUR RPC search, details and PKGBUILD download |
 | `src/flatpakclient.*` | Flatpak catalogue, installed apps and updates |
 | `src/appimageclient.*`, `src/appimagedesktop.*` | AppImage files: add, list, remove; menu entry rewriting |
+| `src/appimagesource.*` | AppImages from GitHub releases: links, release answers, which file to take |
 | `src/pkgscan.*` | static PKGBUILD and script check |
 | `src/scan/` | the `cachyos-pi-scan` command line tool |
 | `tests/` | unit tests for the check, the AppImage menu entries and `pkglist.yaml` |

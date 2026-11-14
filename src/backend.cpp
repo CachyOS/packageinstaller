@@ -106,6 +106,7 @@ void Backend::setFlatpakEnabled(bool enabled) {
 void Backend::setAppImagesEnabled(bool enabled) {
     if (store(m_appImagesEnabled, enabled, u"appimage/enabled"_s, &Backend::appImagesEnabledChanged) && enabled) {
         m_appImages.refresh();
+        m_appImages.checkUpdates(false);
     }
 }
 
@@ -228,6 +229,7 @@ void Backend::refreshSources() {
     }
     if (m_appImagesEnabled) {
         m_appImages.refresh();  // cheap, and notices fuse2 being installed
+        m_appImages.checkUpdates(false);
     }
     // only after the opt-in: the names of the installed packages are sent to the AUR
     if (m_aurEnabled) {
