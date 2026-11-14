@@ -28,6 +28,7 @@ optdepends=(
   'git: review and build packages from the AUR'
   'flatpak: install Flatpak apps'
   'pacman-contrib: see updates without refreshing the system databases'
+  'cachyos-rate-mirrors: rank the mirrors by speed from the settings'
 )
 provides=("cachyos-packageinstaller=${pkgver%%.r*}")
 conflicts=('cachyos-packageinstaller')

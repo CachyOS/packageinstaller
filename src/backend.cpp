@@ -1,10 +1,12 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "backend.hpp"
+#include "helper/shared.hpp"
 #include "iconprovider.hpp"
 #include "memory.hpp"
 #include "process.hpp"
 
 #include <QFile>
+#include <QFileInfo>
 #include <QQmlEngine>
 #include <QStandardPaths>
 #include <QtConcurrent/QtConcurrentRun>
@@ -27,7 +29,8 @@ Backend::Backend(IconProvider* icons, QObject* parent)
         // a Flatpak operation leaves the pacman databases alone
         if (m_transaction.isFlatpak()) {
             m_flatpak.refresh();
-        } else {
+        } else if (m_transaction.kind() != Transaction::RateMirrors) {
+            // ranking the mirrors changes no package
             reload();
         }
     });
@@ -285,6 +288,16 @@ void Backend::upgradeAll() {
     // a notice may have been published since the last look; the dialog waits for the answer
     m_updateNotice.check();
     m_transaction.prepare(Transaction::Upgrade, {});
+}
+
+bool Backend::canRateMirrors() const {
+    return QFileInfo(QString::fromLatin1(helper::RATE_MIRRORS)).isExecutable();
+}
+
+void Backend::rateMirrors() {
+    if (canRateMirrors()) {
+        m_transaction.prepare(Transaction::RateMirrors, {});
+    }
 }
 
 void Backend::installFromAur(const QString& name) {

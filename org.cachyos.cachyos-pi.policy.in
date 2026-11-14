@@ -7,8 +7,8 @@
   <vendor_url>https://github.com/CachyOS/packageinstaller</vendor_url>
 
   <action id="org.cachyos.cachyos-pi.manage-packages">
-    <description>Install, remove or update packages</description>
-    <message>Authentication is required to install, remove or update packages</message>
+    <description>Install, remove or update packages, or rank the mirrors</description>
+    <message>Authentication is required to install, remove or update packages, or to rank the mirrors</message>
     <icon_name>cachyos-pi</icon_name>
     <defaults>
       <allow_any>no</allow_any>

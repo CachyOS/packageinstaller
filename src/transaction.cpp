@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "transaction.hpp"
+#include "helper/shared.hpp"
 #include "process.hpp"
 
 #include <QCoreApplication>
@@ -17,8 +18,29 @@ using namespace Qt::StringLiterals;
 
 namespace {
 
-constexpr std::array HELPER_KINDS{Transaction::Install, Transaction::Remove, Transaction::Upgrade};
+constexpr std::array HELPER_KINDS{Transaction::Install, Transaction::Remove, Transaction::Upgrade, Transaction::RateMirrors};
 constexpr std::array FLATPAK_KINDS{Transaction::FlatpakInstall, Transaction::FlatpakRemove, Transaction::FlatpakUpdate, Transaction::FlatpakSetup};
+
+/// What the helper is asked to do. No default: a new kind has to be named here.
+QString helperVerb(Transaction::Kind kind) {
+    switch (kind) {
+    case Transaction::Install: return u"install"_s;
+    case Transaction::Remove: return u"remove"_s;
+    case Transaction::Upgrade: return u"upgrade"_s;
+    case Transaction::RateMirrors: return u"rate-mirrors"_s;
+    case Transaction::AurInstall:
+    case Transaction::FlatpakInstall:
+    case Transaction::FlatpakRemove:
+    case Transaction::FlatpakUpdate:
+    case Transaction::FlatpakSetup: break;
+    }
+    return {};
+}
+
+/// Operations on named repository packages: `pacman --print` can say what they change.
+bool plannable(Transaction::Kind kind) {
+    return kind == Transaction::Install || kind == Transaction::Remove;
+}
 
 /// pacman redraws progress bars after '\r': only the last drawing of a line counts.
 QStringView latest(QStringView line) {
@@ -62,6 +84,7 @@ QString Transaction::title() const {
     case Upgrade: return tr("Update the system");
     case FlatpakUpdate: return tr("Update Flatpak apps");
     case FlatpakSetup: return tr("Add Flathub");
+    case RateMirrors: return tr("Rank the mirrors");
     default:
         return m_targets.size() > 1 ? tr("Build %n package(s) from the AUR", "", static_cast<int>(m_targets.size()))
                                     : tr("Build %1 from the AUR").arg(target);
@@ -77,6 +100,8 @@ QString Transaction::summary() const {
     case FlatpakUpdate: return tr("Every installed Flatpak app and runtime will be updated.");
     case FlatpakSetup: return tr("Flathub will be added as an app source for all users.");
     case Upgrade: return tr("The package databases will be refreshed and every available update installed.");
+    case RateMirrors:
+        return tr("The download speed of the Arch and CachyOS mirrors will be measured and the mirror lists rewritten to prefer the fast ones. This takes a minute or two; the previous lists are kept as backups.");
     case AurInstall:
         return m_targets.size() > 1
             ? tr("paru will download the sources, build %1 as your user and then ask for permission to install them. This can take a while.").arg(m_targets.join(", "_L1))
@@ -95,6 +120,7 @@ QString Transaction::confirmLabel() const {
     case Upgrade:
     case FlatpakUpdate: return tr("Update");
     case FlatpakSetup: return tr("Add");
+    case RateMirrors: return tr("Rank");
     default: return tr("Install");
     }
 }
@@ -153,8 +179,8 @@ void Transaction::prepare(Kind kind, const QStringList& targets) {
         return;
     }
     m_program = u"pkexec"_s;
-    m_args    = {helperPath(), kind == Install ? u"install"_s : kind == Remove ? u"remove"_s : u"upgrade"_s};
-    if (kind != Upgrade) {
+    m_args    = {helperPath(), helperVerb(kind)};
+    if (plannable(kind)) {
         m_args << targets;
     }
     m_workingDirectory = u"/"_s;
@@ -209,9 +235,10 @@ void Transaction::begin(Kind kind, const QStringList& targets) {
     if ((usesHelper() || kind == AurInstall) && !QFileInfo(helperPath()).isExecutable()) {
         m_planError = tr("%1 is missing. Reinstall the package installer.").arg(helperPath());
     }
-    // A full upgrade refreshes the databases first, paru resolves AUR dependencies itself
-    // and flatpak picks the runtimes; none can be previewed without doing the work.
-    if (!m_planError.isEmpty() || kind == Upgrade || kind == AurInstall || isFlatpak()) {
+    // A full upgrade refreshes the databases first, paru resolves AUR dependencies itself,
+    // flatpak picks the runtimes and the mirrors have to be measured: none of that can be
+    // previewed without doing the work.
+    if (!m_planError.isEmpty() || !plannable(kind)) {
         emit planChanged();
         setState(Confirm);
         return;
@@ -338,8 +365,10 @@ void Transaction::onRunFinished(int exitCode, QProcess::ExitStatus status) {
         launch(m_program, m_cleanupArgs, m_workingDirectory);
         return;
     }
-    if (!success && usesHelper() && (exitCode == 126 || exitCode == 127)) {
-        // pkexec: 126 = dismissed by the user, 127 = not authorized
+    // pkexec: 126 = dismissed by the user, 127 = not authorized. What the helper starts can
+    // end with the same codes, but then the helper has announced itself first.
+    const auto started = [](const QString& line) { return line.startsWith(QLatin1StringView(helper::STARTED)); };
+    if (!success && usesHelper() && (exitCode == 126 || exitCode == 127) && std::ranges::none_of(m_log.stringList(), started)) {
         m_failureReason = tr("Authentication was cancelled or denied. Nothing was changed.");
     } else if (!success) {
         appendLog(tr("\nThe operation failed (exit code %1).\n").arg(exitCode));

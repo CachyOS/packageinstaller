@@ -5,4 +5,4 @@ pipe=default
 [ $((0x$ignored >> 12 & 1)) -eq 1 ] && pipe=ignored
 own=no
 [ "$session" = "$$" ] && own=yes
-echo "fake pacman $* sigpipe=$pipe setsid=$own"
+echo "fake ${0##*/} $* sigpipe=$pipe setsid=$own"

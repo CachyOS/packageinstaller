@@ -31,7 +31,8 @@ Flatpak apps.
   `THIRD-PARTY.md`) and between light, dark and following the desktop.
 - **Privileges**: the GUI runs as the user. Package operations go through
   `cachyos-pi-helper`, a tiny pkexec helper that only accepts
-  `install`, `remove` and `upgrade`, plus the three pacman calls paru makes to
+  `install`, `remove`, `upgrade` and `rate-mirrors` (which runs
+  `cachyos-rate-mirrors`), plus the three pacman calls paru makes to
   install what it built. paru is started with the helper in place of sudo, so one
   authentication covers a whole AUR build.
 
@@ -56,7 +57,7 @@ Qt 6.10 or newer and a C++26 compiler (GCC 15+, Clang 20+) are required.
 Runtime: `qt6-declarative`, `appstream-qt`, `archlinux-appstream-data`, `polkit`, `elfutils` (if built with libdw),
 `kimageformats` (the Arch icon cache is JPEG XL). Optional: `paru` and `git` (AUR review and builds),
 `flatpak` (Flatpak apps), `pacman-contrib` (`checkupdates`, to see updates without refreshing the system
-databases).
+databases), `cachyos-rate-mirrors` (ranking the mirrors from the settings).
 
 ## Building
 

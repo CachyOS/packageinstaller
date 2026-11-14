@@ -151,4 +151,23 @@ ScrollPage {
             onToggled: Backend.flatpakEnabled = !Backend.flatpakEnabled
         }
     }
+
+    Section {
+        id: mirrors
+        visible: Backend.canRateMirrors
+        width: sources.width
+        title: qsTr("Mirrors")
+
+        SettingCard {
+            width: mirrors.width
+            title: qsTr("Rank the mirrors by speed")
+            description: qsTr("Packages are downloaded from the first mirror that answers. Ranking measures the Arch and CachyOS mirrors from your connection and rewrites the mirror lists to prefer the fast ones. Worth doing when downloads are slow or fail.")
+
+            PillButton {
+                tone: "soft"
+                text: qsTr("Rank mirrors")
+                onClicked: Backend.rateMirrors()
+            }
+        }
+    }
 }

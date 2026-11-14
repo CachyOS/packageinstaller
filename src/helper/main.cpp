@@ -3,19 +3,24 @@
 // cachyos-pi-helper: the only part of the package installer that runs as root.
 // It is started through pkexec and accepts a fixed set of verbs, which it maps
 // to pacman invocations. Package names are validated and never reach a shell.
+// One more verb ranks the mirrors with cachyos-rate-mirrors, which takes no arguments.
 //
 // The "pacman" verb exists for paru, which is started with this helper in place of
 // sudo. It accepts only the three operations paru uses to install what it built, so
 // that one authentication covers a whole build instead of one per step.
 
 #include <algorithm>
+#include <cerrno>
 #include <climits>
 #include <csignal>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 #include <string>
 #include <string_view>
 #include <vector>
+
+#include "shared.hpp"
 
 #include <sys/stat.h>
 #include <unistd.h>
@@ -75,7 +80,7 @@ std::string packageFile(const char* path) {
 }
 
 int usage() {
-    std::fputs("usage: cachyos-pi-helper install <pkg>... | remove <pkg>... | upgrade\n"
+    std::fputs("usage: cachyos-pi-helper install <pkg>... | remove <pkg>... | upgrade | rate-mirrors\n"
                "       cachyos-pi-helper pacman --sync|--upgrade|--database [options] -- <target>...\n",
         stderr);
     return 2;
@@ -132,17 +137,21 @@ int main(int argc, char** argv) {
         return usage();
     }
     const std::string_view verb = argv[1];
+    const char* program         = PACMAN;
     std::vector<std::string> args{"pacman"};
 
+    if ((verb == "upgrade" || verb == "rate-mirrors") && argc != 2) {
+        return usage();
+    }
     if (verb == "install") {
         args.insert(args.end(), {"-S", "--noconfirm", "--needed", "--"});
     } else if (verb == "remove") {
         args.insert(args.end(), {"-Rs", "--noconfirm", "--"});
     } else if (verb == "upgrade") {
-        if (argc != 2) {
-            return usage();
-        }
         args.insert(args.end(), {"-Syu", "--noconfirm"});
+    } else if (verb == "rate-mirrors") {
+        program = helper::RATE_MIRRORS;
+        args    = {"cachyos-rate-mirrors"};
     } else if (verb == "pacman") {
         if (const int status = pacmanForParu(argc, argv, args); status != 0) {
             return status;
@@ -151,7 +160,7 @@ int main(int argc, char** argv) {
         return usage();
     }
 
-    if (verb != "upgrade" && verb != "pacman") {
+    if (verb == "install" || verb == "remove") {
         if (argc < 3) {
             return usage();
         }
@@ -178,11 +187,18 @@ int main(int argc, char** argv) {
     char lang[]  = "LC_ALL=C.UTF-8";
     char* envp[] = {path, lang, nullptr};
 #ifdef PI_HELPER_TESTING
-    const char* pacman = std::getenv("CACHYOS_PI_HELPER_PACMAN");
-    execve(pacman != nullptr ? pacman : PACMAN, execArgs.data(), envp);
-#else
-    execve(PACMAN, execArgs.data(), envp);
+    // the tests keep stand-ins for both programs in one directory
+    std::string standIn;
+    if (const char* directory = std::getenv("CACHYOS_PI_HELPER_BINDIR"); directory != nullptr) {
+        standIn = std::string(directory) + '/' + args.front();
+        program = standIn.c_str();
+    }
 #endif
-    std::perror("cachyos-pi-helper: cannot run pacman");
+    std::fputs(helper::STARTED, stderr);
+    for (const auto& arg : args) {
+        std::fprintf(stderr, "%s%s", arg.c_str(), &arg == &args.back() ? "\n" : " ");
+    }
+    execve(program, execArgs.data(), envp);
+    std::fprintf(stderr, "cachyos-pi-helper: cannot run %s: %s\n", program, std::strerror(errno));
     return 127;
 }

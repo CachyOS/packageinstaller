@@ -35,6 +35,8 @@ class Backend : public QObject {
     Q_PROPERTY(bool checkingUpdates READ checkingUpdates NOTIFY checkingUpdatesChanged FINAL)
     Q_PROPERTY(bool aurEnabled READ aurEnabled WRITE setAurEnabled NOTIFY aurEnabledChanged FINAL)
     Q_PROPERTY(bool paruAvailable READ paruAvailable NOTIFY paruAvailableChanged FINAL)
+    /// cachyos-rate-mirrors is installed; looked up again after every database load
+    Q_PROPERTY(bool canRateMirrors READ canRateMirrors NOTIFY revisionChanged FINAL)
     Q_PROPERTY(FlatpakClient* flatpak READ flatpak CONSTANT FINAL)
     Q_PROPERTY(UpdateNotice* updateNotice READ updateNotice CONSTANT FINAL)
     Q_PROPERTY(bool flatpakEnabled READ flatpakEnabled WRITE setFlatpakEnabled NOTIFY flatpakEnabledChanged FINAL)
@@ -59,6 +61,7 @@ class Backend : public QObject {
     bool aurEnabled() const { return m_aurEnabled; }
     void setAurEnabled(bool enabled);
     bool paruAvailable() const { return m_paruAvailable; }
+    bool canRateMirrors() const;
     FlatpakClient* flatpak() { return &m_flatpak; }
     bool flatpakEnabled() const { return m_flatpakEnabled; }
     void setFlatpakEnabled(bool enabled);
@@ -72,6 +75,8 @@ class Backend : public QObject {
     Q_INVOKABLE void install(const QString& name);
     Q_INVOKABLE void remove(const QString& name);
     Q_INVOKABLE void upgradeAll();
+    /// Sorts the mirror lists by speed with cachyos-rate-mirrors.
+    Q_INVOKABLE void rateMirrors();
     Q_INVOKABLE void installFromAur(const QString& name);
     /// Builds several reviewed AUR packages in one paru run.
     Q_INVOKABLE void installManyFromAur(const QStringList& names);

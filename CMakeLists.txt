@@ -131,6 +131,7 @@ set(PI_QML_FILES
     qml/Dialog.qml
     qml/TransactionDialog.qml
     qml/SourceCard.qml
+    qml/SettingCard.qml
 )
 # Serve the QML files from the module root. Left in qml/, each file would also see its
 # siblings through the implicit directory import, which knows nothing about the qmldir
@@ -173,7 +174,7 @@ set_source_files_properties(${pi_sources} TARGET_DIRECTORY ${PROJECT_NAME} PROPE
 ##
 ## Privileged helper: the only thing that runs as root (through pkexec).
 ##
-add_executable(cachyos-pi-helper src/helper/main.cpp)
+add_executable(cachyos-pi-helper src/helper/main.cpp src/helper/shared.hpp)
 target_link_libraries(cachyos-pi-helper PRIVATE project_options project_warnings)
 
 ##
