@@ -101,6 +101,8 @@ class Backend : public QObject {
     void refreshSources();
     void checkUpdates();
     void onUpdatesChecked(int exitCode, QProcess::ExitStatus status);
+    /// Marks the updates checkupdates last listed again, after the package list was read anew.
+    void applyKnownUpdates();
     /// Stores a setting and announces it. Returns false when nothing changed.
     bool store(bool& member, bool value, const QString& key, void (Backend::*changed)());
 
@@ -116,6 +118,7 @@ class Backend : public QObject {
     QTimer m_dbChanged;
     catalog::CuratedList m_curatedList;
     QList<CuratedSection> m_curated;
+    QHash<QString, QString> m_newVersions;  ///< name and new version, as checkupdates last listed them
     QString m_error;
     int m_revision         = 0;
     bool m_loading         = false;

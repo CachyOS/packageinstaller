@@ -148,6 +148,7 @@ void Backend::onLoaded(std::expected<catalog::LoadResult, QString> result) {
         m_updateNotice.setDatabase(result->dbPath, result->repos);
         m_icons->setIndex(std::move(result->icons));
         m_packages.reset(std::move(result->packages));
+        applyKnownUpdates();
     } else {
         m_error = result.error();
         m_packages.reset({});
@@ -185,6 +186,18 @@ void Backend::onLoaded(std::expected<catalog::LoadResult, QString> result) {
     }
     // let the first frame through before starting processes and network requests
     QTimer::singleShot(0, this, &Backend::refreshSources);
+}
+
+void Backend::applyKnownUpdates() {
+    // The sync databases only know what the last refresh saw. Until checkupdates has
+    // answered again, its previous answer still holds for all that was not updated since.
+    m_newVersions.removeIf([this](const std::pair<const QString&, QString&>& update) {
+        const auto* pkg = m_packages.find(update.first);
+        return pkg == nullptr || !pkg->installed() || alpmdb::vercmp(pkg->installedVersion, update.second) >= 0;
+    });
+    if (!m_newVersions.isEmpty()) {
+        m_packages.applyUpdates(m_newVersions);
+    }
 }
 
 void Backend::refreshSources() {
@@ -244,6 +257,7 @@ void Backend::onUpdatesChecked(int exitCode, QProcess::ExitStatus status) {
         }
     }
     m_packages.applyUpdates(versions);
+    m_newVersions = std::move(versions);
     ++m_revision;
     emit revisionChanged();
 }
