@@ -8,6 +8,11 @@ ScrollPage {
 
     inset: Look.pagePadding - 6
 
+    /// Scrolls to the switches for the AUR and Flatpak.
+    function revealSources(): void {
+        contentY = Math.max(0, Math.min(sources.y + inset - 16, contentHeight - height));
+    }
+
     component Section: Column {
         property alias title: heading.text
 

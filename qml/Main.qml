@@ -36,6 +36,17 @@ ApplicationWindow {
         stack.replace(null, pageFor(name));
     }
 
+    // The settings, at the switches a page that is turned off sends the user to.
+    function showSources(): void {
+        show("settings");
+        // once the new page has been laid out
+        Qt.callLater(() => {
+            const page = stack.currentItem as SettingsPage;
+            if (page !== null)
+                page.revealSources();
+        });
+    }
+
     function pageFor(name: string): Component {
         switch (name) {
         case "browse": return browsePage;
@@ -372,7 +383,7 @@ ApplicationWindow {
         id: aurPage
         AurPage {
             query: search.text
-            onOpenSettings: root.show("settings")
+            onOpenSettings: root.showSources()
             onOpenAur: item => root.openPage(aurDetailsPage, {"item": item})
             onReviewAll: items => root.openPage(aurDetailsPage, {"item": items[0], "queue": items, "updates": true})
         }
@@ -381,7 +392,7 @@ ApplicationWindow {
         id: flatpakPage
         FlatpakPage {
             query: search.text
-            onOpenSettings: root.show("settings")
+            onOpenSettings: root.showSources()
             onOpenApp: (appId, copy) => root.openPage(flatpakDetailsPage, {"appId": appId, "copy": copy})
         }
     }
