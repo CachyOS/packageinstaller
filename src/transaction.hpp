@@ -96,7 +96,8 @@ class Transaction : public QObject {
     /// `workingDirectory` must be empty, paru also looks for PKGBUILDs below it.
     void prepareAur(const QStringList& names, const QStringList& directories, const QString& workingDirectory);
     /// Runs `flatpak` with `arguments`; `names` is what the dialog calls the operation.
-    void prepareFlatpak(Kind kind, const QStringList& names, const QStringList& arguments);
+    /// `cleanup` is a second run that follows a successful first one and may fail.
+    void prepareFlatpak(Kind kind, const QStringList& names, const QStringList& arguments, const QStringList& cleanup = {});
     Q_INVOKABLE void confirm();
     /// Aborts planning/confirmation, or interrupts a cancellable running operation.
     Q_INVOKABLE void cancel();
@@ -132,10 +133,12 @@ class Transaction : public QObject {
     QStringList m_targets;
     QString m_program;
     QStringList m_args;
+    QStringList m_cleanupArgs;  ///< a run of `m_program` after the main one, if not empty
     QString m_workingDirectory;
     QList<PlanEntry> m_plan;
     QString m_planError;
     qint64 m_downloadSize = 0;
+    bool m_cleaning       = false;  ///< the cleanup run is the one that is running
     QStringListModel m_log;
     QStringDecoder m_decoder{QStringDecoder::Utf8};
     QString m_partial;  ///< the line being written, before its '\n'

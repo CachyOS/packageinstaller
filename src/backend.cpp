@@ -109,7 +109,8 @@ void Backend::installFlatpak(const QString& id) {
 
 void Backend::removeFlatpak(const QString& key) {
     if (m_flatpakEnabled) {
-        m_transaction.prepareFlatpak(Transaction::FlatpakRemove, {m_flatpak.installedTitle(key)}, m_flatpak.removeArguments(key));
+        m_transaction.prepareFlatpak(Transaction::FlatpakRemove, {m_flatpak.installedTitle(key)}, m_flatpak.removeArguments(key),
+            m_flatpak.cleanupArguments(key));
     }
 }
 

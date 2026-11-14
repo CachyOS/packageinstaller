@@ -149,6 +149,8 @@ class FlatpakClient : public QObject {
     /// empty when there is no such app.
     [[nodiscard]] QStringList installArguments(const QString& id) const;
     [[nodiscard]] QStringList removeArguments(const QString& key) const;
+    /// Arguments that remove the runtimes no app needs any more, where the copy `key` is installed.
+    [[nodiscard]] QStringList cleanupArguments(const QString& key) const;
     [[nodiscard]] QString title(const QString& id) const;
     [[nodiscard]] QString installedTitle(const QString& key) const;
 

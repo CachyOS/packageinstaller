@@ -72,7 +72,8 @@ QString Transaction::summary() const {
     switch (m_kind) {
     case FlatpakInstall:
         return tr("Flatpak will download the app and the runtime it needs, and install them for all users. It asks for permission itself if that is required.");
-    case FlatpakRemove: return tr("The app will be removed. Its data in your home directory is kept.");
+    case FlatpakRemove:
+        return tr("The app will be removed, and with it the runtimes that no other app needs. Its data in your home directory is kept.");
     case FlatpakUpdate: return tr("Every installed Flatpak app and runtime will be updated.");
     case FlatpakSetup: return tr("Flathub will be added as an app source for all users.");
     case Upgrade: return tr("The package databases will be refreshed and every available update installed.");
@@ -178,7 +179,7 @@ void Transaction::prepareAur(const QStringList& names, const QStringList& direct
     begin(AurInstall, names);
 }
 
-void Transaction::prepareFlatpak(Kind kind, const QStringList& names, const QStringList& arguments) {
+void Transaction::prepareFlatpak(Kind kind, const QStringList& names, const QStringList& arguments, const QStringList& cleanup) {
     if (m_state != Idle || !std::ranges::contains(FLATPAK_KINDS, kind) || arguments.isEmpty()) {
         return;
     }
@@ -186,10 +187,13 @@ void Transaction::prepareFlatpak(Kind kind, const QStringList& names, const QStr
     m_args             = arguments;
     m_workingDirectory = u"/"_s;
     begin(kind, names);
+    m_cleanupArgs = cleanup;
 }
 
 void Transaction::begin(Kind kind, const QStringList& targets) {
     m_kind    = kind;
+    m_cleanupArgs.clear();
+    m_cleaning = false;
     m_targets = targets;
     m_plan.clear();
     m_planError.clear();
@@ -319,6 +323,21 @@ void Transaction::confirm() {
 
 void Transaction::onRunFinished(int exitCode, QProcess::ExitStatus status) {
     const bool success = status == QProcess::NormalExit && exitCode == 0;
+    if (m_cleaning) {
+        // what was asked for is done; the cleanup is a courtesy
+        m_cleaning = false;
+        if (!success) {
+            appendLog(tr("\nThe unused runtimes could not be removed (exit code %1).\n").arg(exitCode));
+        }
+        finish(true);
+        return;
+    }
+    if (success && !m_cleanupArgs.isEmpty()) {
+        m_cleaning = true;
+        appendLog(u"$ %1 %2\n"_s.arg(m_program, m_cleanupArgs.join(u' ')));
+        launch(m_program, m_cleanupArgs, m_workingDirectory);
+        return;
+    }
     if (!success && usesHelper() && (exitCode == 126 || exitCode == 127)) {
         // pkexec: 126 = dismissed by the user, 127 = not authorized
         m_failureReason = tr("Authentication was cancelled or denied. Nothing was changed.");

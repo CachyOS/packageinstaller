@@ -444,3 +444,11 @@ QStringList FlatpakClient::removeArguments(const QString& key) const {
     }
     return {u"uninstall"_s, u"--noninteractive"_s, installationOption(copy->installation), u"app/"_s + copy->ref};
 }
+
+QStringList FlatpakClient::cleanupArguments(const QString& key) const {
+    const auto* copy = findCopy(key);
+    if (copy == nullptr) {
+        return {};
+    }
+    return {u"uninstall"_s, u"--noninteractive"_s, u"--unused"_s, installationOption(copy->installation)};
+}
