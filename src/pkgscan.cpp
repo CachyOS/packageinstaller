@@ -923,6 +923,99 @@ QString similarName(const QString& name, const QStringList& known) {
     return similar != known.end() ? *similar : QString();
 }
 
+QString srcinfoVersion(QStringView srcinfo) {
+    QString pkgver;
+    QString pkgrel;
+    QString epoch;
+    for (const auto line : srcinfo.tokenize(u'\n')) {
+        // the package base comes first; the packages after it may only repeat its version
+        if (line.startsWith("pkgname"_L1)) {
+            break;
+        }
+        const auto separator = line.indexOf(u" = ");
+        if (separator < 0) {
+            continue;
+        }
+        const auto key   = line.first(separator).trimmed();
+        const auto value = line.sliced(separator + 3).trimmed().toString();
+        if (key == "pkgver"_L1) {
+            pkgver = value;
+        } else if (key == "pkgrel"_L1) {
+            pkgrel = value;
+        } else if (key == "epoch"_L1) {
+            epoch = value;
+        }
+    }
+    if (pkgver.isEmpty() || pkgrel.isEmpty()) {
+        return {};
+    }
+    return (epoch.isEmpty() || epoch == "0"_L1 ? QString() : epoch + u':') + pkgver + u'-' + pkgrel;
+}
+
+QList<QByteArrayView> catFileContents(QByteArrayView output) {
+    QList<QByteArrayView> contents;
+    qsizetype at = 0;
+    while (at < output.size()) {
+        const auto end = output.indexOf('\n', at);
+        if (end < 0) {
+            break;
+        }
+        // "<object> blob <size>" or "<object> missing"
+        const auto header = output.sliced(at, end - at);
+        at                = end + 1;
+        const auto space  = header.lastIndexOf(' ');
+        bool ok           = false;
+        const auto size   = header.contains(" blob "_ba) && space > 0 ? header.sliced(space + 1).toLongLong(&ok) : -1;
+        if (!ok || size < 0 || at + size > output.size()) {
+            contents << QByteArrayView();
+            continue;
+        }
+        contents << output.sliced(at, size);
+        at += size + 1;  // and the newline after it
+    }
+    return contents;
+}
+
+QString readableDiff(QStringView diff) {
+    QStringList lines;
+    QString file;           // the file whose name has not been written yet
+    QString state;          // what happened to it, if more than a change of its lines
+    bool inHeader = false;  // between "diff --git" and its first hunk
+    const auto flush = [&](const QString& fallback = {}) {
+        if (!file.isEmpty()) {
+            const auto note = !state.isEmpty() ? state : fallback;
+            lines << (note.isEmpty() ? file : u"%1 (%2)"_s.arg(file, note));
+            file.clear();
+        }
+    };
+    for (const auto line : diff.tokenize(u'\n')) {
+        if (line.startsWith("diff --git "_L1)) {
+            flush(u"mode changed"_s);
+            // "diff --git a/<name> b/<name>", without renames both names are the same
+            const auto at = line.lastIndexOf(" b/"_L1);
+            file          = (at < 0 ? line.mid(11) : line.mid(at + 3)).toString();
+            state.clear();
+            inHeader = true;
+        } else if (inHeader && line.startsWith("new file mode"_L1)) {
+            state = u"new file"_s;
+        } else if (inHeader && line.startsWith("deleted file mode"_L1)) {
+            state = u"removed"_s;
+        } else if (inHeader && line.startsWith("Binary files"_L1)) {
+            flush();
+            lines << u"\\ binary file, not shown"_s;
+            inHeader = false;
+        } else if (inHeader && !line.startsWith("@@"_L1)) {
+            continue;  // index, ---, +++ and mode lines
+        } else {
+            flush();
+            inHeader = false;
+            lines << line.toString();
+        }
+    }
+    flush(u"mode changed"_s);
+    return lines.join(u'\n');
+}
+
 std::optional<QString> readText(const QString& path, qint64 maxSize) {
     const QFileInfo info(path);
     QFile file(path);

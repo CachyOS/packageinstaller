@@ -330,6 +330,66 @@ class TestPkgscan : public QObject {
         QCOMPARE(pkgscan::similarName(QStringLiteral("vlcc"), known), QString());
         QCOMPARE(pkgscan::similarName(QStringLiteral("spotify"), known), QString());
     }
+
+    void srcinfoVersions() {
+        QCOMPARE(pkgscan::srcinfoVersion(u"pkgbase = pfetch\n\tpkgdesc = x\n\tpkgver = 1.11.0\n\tpkgrel = 1\n\npkgname = pfetch\n"_s), u"1.11.0-1"_s);
+        QCOMPARE(pkgscan::srcinfoVersion(u"pkgbase = a\n\tpkgver = 2.0\n\tpkgrel = 3\n\tepoch = 1\n"_s), u"1:2.0-3"_s);
+        QCOMPARE(pkgscan::srcinfoVersion(u"pkgbase = a\n\tpkgver = 2.0\n\tpkgrel = 3\n\tepoch = 0\n"_s), u"2.0-3"_s);
+        // a split package does not change the version of the base
+        QCOMPARE(pkgscan::srcinfoVersion(u"pkgbase = a\n\tpkgver = 2.0\n\tpkgrel = 1\n\npkgname = a-doc\n\tpkgver = 9\n"_s), u"2.0-1"_s);
+        QCOMPARE(pkgscan::srcinfoVersion(u"pkgbase = a\n\tpkgrel = 1\n"_s), QString());
+        QCOMPARE(pkgscan::srcinfoVersion(QString()), QString());
+    }
+
+    void catFileContents() {
+        const auto output = "aaa blob 5\nhello\nbbb missing\nccc blob 0\n\nddd blob 3\nx\ny\n"_ba;
+        const auto contents = pkgscan::catFileContents(output);
+        QCOMPARE(contents.size(), 4);
+        QCOMPARE(contents.at(0), "hello"_ba);
+        QVERIFY(contents.at(1).isEmpty());
+        QVERIFY(contents.at(2).isEmpty());
+        QCOMPARE(contents.at(3), "x\ny"_ba);
+        // a size beyond the end is not trusted
+        QCOMPARE(pkgscan::catFileContents("aaa blob 99\nshort\n"_ba).value(0), QByteArrayView());
+    }
+
+    void readableDiffs() {
+        const auto diff = u"diff --git a/PKGBUILD b/PKGBUILD\n"
+                          "index 1111111..2222222 100644\n"
+                          "--- a/PKGBUILD\n"
+                          "+++ b/PKGBUILD\n"
+                          "@@ -1,3 +1,3 @@\n"
+                          " pkgname=a\n"
+                          "-pkgver=1\n"
+                          "+pkgver=2\n"
+                          "diff --git a/a.install b/a.install\n"
+                          "new file mode 100644\n"
+                          "index 0000000..3333333\n"
+                          "--- /dev/null\n"
+                          "+++ b/a.install\n"
+                          "@@ -0,0 +1 @@\n"
+                          "+post_install() { :; }\n"
+                          "diff --git a/old.patch b/old.patch\n"
+                          "deleted file mode 100644\n"
+                          "index 4444444..0000000\n"
+                          "--- a/old.patch\n"
+                          "+++ /dev/null\n"
+                          "@@ -1 +0,0 @@\n"
+                          "--- a/x\n"
+                          "diff --git a/logo.png b/logo.png\n"
+                          "index 5555555..6666666 100644\n"
+                          "Binary files a/logo.png and b/logo.png differ\n"
+                          "diff --git a/run.sh b/run.sh\n"
+                          "old mode 100644\n"
+                          "new mode 100755\n"_s;
+        const auto changes = pkgscan::readableDiff(diff);
+        // a removed line that looks like a header stays what it is
+        QCOMPARE(changes.split(u'\n'), (QStringList{u"PKGBUILD"_s, u"@@ -1,3 +1,3 @@"_s, u" pkgname=a"_s, u"-pkgver=1"_s,
+                                                u"+pkgver=2"_s, u"a.install (new file)"_s, u"@@ -0,0 +1 @@"_s, u"+post_install() { :; }"_s,
+                                                u"old.patch (removed)"_s, u"@@ -1 +0,0 @@"_s, u"--- a/x"_s, u"logo.png"_s,
+                                                u"\\ binary file, not shown"_s, u"run.sh (mode changed)"_s}));
+        QCOMPARE(pkgscan::readableDiff(QString()), QString());
+    }
 };
 
 QTEST_APPLESS_MAIN(TestPkgscan)

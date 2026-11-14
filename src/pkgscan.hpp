@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #pragma once
 
+#include <QByteArrayView>
 #include <QDateTime>
 #include <QList>
 #include <QObject>
@@ -104,6 +105,18 @@ struct LocalFiles {
 [[nodiscard]] std::optional<QString> readText(const QString& path, qint64 maxSize = MAX_FILE_SIZE);
 /// Whether `name` is usable as an AUR package base, and so as a directory name and URL part.
 [[nodiscard]] bool validPkgbase(QStringView name);
+
+/// The version of the package base in a .SRCINFO as pacman shows it once built,
+/// "[epoch:]pkgver-pkgrel". Empty when the file names none.
+[[nodiscard]] QString srcinfoVersion(QStringView srcinfo);
+
+/// Splits the output of `git cat-file --batch` into the contents it printed, in order. A
+/// missing object gives an empty entry. The views point into `output`.
+[[nodiscard]] QList<QByteArrayView> catFileContents(QByteArrayView output);
+
+/// Makes `git diff` output readable: the lines git needs to apply it give way to one line per
+/// file that names it. Every other line starts with "+", "-", " ", "@@" or "\\" as before.
+[[nodiscard]] QString readableDiff(QStringView diff);
 
 /// Most severe first, then by file and line.
 void sort(QList<Finding>& findings);
