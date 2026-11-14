@@ -283,7 +283,7 @@ void AurClient::search(const QString& query) {
     QUrl url(AUR_HOST + "/rpc/v5/search/"_L1 + QString::fromLatin1(QUrl::toPercentEncoding(term)));
     url.setQuery(u"by=name-desc"_s);
     auto* reply = m_network.get(request(url));
-    connect(reply, &QNetworkReply::finished, this, [this, reply, generation] {
+    connect(reply, &QNetworkReply::finished, this, [this, reply, generation, term = term.toLower()] {
         reply->deleteLater();
         if (generation != m_generation) {
             return;  // superseded by a newer search
@@ -302,6 +302,8 @@ void AurClient::search(const QString& query) {
                 packages << fromJson(item.toObject());
             }
             std::ranges::sort(packages, std::ranges::greater{}, &AurPackage::popularity);
+            // the package that is called what was typed comes first
+            std::ranges::stable_partition(packages, [&term](const AurPackage& package) { return package.name == term; });
         }
         m_results = std::move(packages);
         emit resultsChanged();
