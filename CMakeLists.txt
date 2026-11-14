@@ -72,7 +72,8 @@ target_link_libraries(cachyos-pi-scan PRIVATE pi-scan project_options project_wa
 ##
 ## AppImage menu entries: text handling only, shared by the GUI and the tests.
 ##
-add_library(pi-appimage STATIC src/appimagedesktop.hpp src/appimagedesktop.cpp)
+add_library(pi-appimage STATIC src/appimagedesktop.hpp src/appimagedesktop.cpp
+    src/appimagesource.hpp src/appimagesource.cpp)
 target_include_directories(pi-appimage PUBLIC src)
 target_link_libraries(pi-appimage PUBLIC Qt6::Core PRIVATE project_options project_warnings)
 

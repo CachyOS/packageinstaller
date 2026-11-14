@@ -103,11 +103,26 @@ Item {
         visible: root.ready
         title: qsTr("AppImage")
         subtitle: qsTr("Apps you downloaded as a single file. Not checked, not sandboxed and not updated by CachyOS.")
-        actions: PillButton {
-            enabled: !root.client.busy
-            text: qsTr("Add AppImage…")
-            onClicked: fileDialog.open()
-        }
+        actions: [
+            PillButton {
+                visible: root.client.tracking
+                enabled: !root.client.checking
+                tone: "soft"
+                text: qsTr("Check for updates")
+                onClicked: root.client.checkUpdates()
+            },
+            PillButton {
+                enabled: !root.client.busy
+                tone: "soft"
+                text: qsTr("From GitHub…")
+                onClicked: githubDialog.open()
+            },
+            PillButton {
+                enabled: !root.client.busy
+                text: qsTr("Add AppImage…")
+                onClicked: fileDialog.open()
+            }
+        ]
 
         // Most AppImages cannot start without libfuse 2
         Notice {
@@ -125,25 +140,40 @@ Item {
 
         // What the last action came to
         Row {
-            visible: root.client.busy || root.client.error.length > 0 || root.client.added.length > 0
+            id: status
+
+            readonly property bool working: root.client.busy || root.client.checking
+
+            visible: working || root.client.error.length > 0 || root.client.added.length > 0
             width: pageHeader.width
             spacing: 10
 
             BusyIndicator {
                 width: 22
                 height: 22
-                visible: root.client.busy
+                visible: status.working
                 running: visible
             }
 
             PlainText {
                 anchors.verticalCenter: parent.verticalCenter
-                width: parent.width - (root.client.busy ? 32 : 0)
-                text: root.client.busy ? qsTr("Adding %1…").arg(root.candidate.name)
+                width: status.width - (status.working ? 32 : 0) - (stop.visible ? stop.width + 10 : 0)
+                text: root.client.downloading ? qsTr("Downloading %1… %2 %").arg(root.client.subject).arg(root.client.progress)
+                    : root.client.busy ? qsTr("Adding %1…").arg(root.client.subject)
+                    : root.client.checking ? qsTr("Looking for newer releases…")
                     : root.client.error.length > 0 ? root.client.error
                     : qsTr("%1 was added to your menu.").arg(root.client.added)
-                color: root.client.busy ? Look.textMuted : root.client.error.length > 0 ? Look.danger : Look.accent
+                color: status.working ? Look.textMuted : root.client.error.length > 0 ? Look.danger : Look.accent
                 wrapMode: Text.WordWrap
+            }
+
+            PillButton {
+                id: stop
+                visible: root.client.downloading
+                size: "small"
+                tone: "soft"
+                text: qsTr("Stop")
+                onClicked: root.client.cancelDownload()
             }
         }
     }
@@ -161,6 +191,9 @@ Item {
             id: row
 
             required property appImageItem modelData
+            // where newer releases come from
+            readonly property string origin: modelData.source.length > 0 ? "github.com/" + modelData.source : ""
+            readonly property bool hasUpdate: modelData.update.length > 0
 
             width: list.rowWidth
             height: 72
@@ -204,8 +237,9 @@ Item {
                 Muted {
                     width: texts.width
                     text: row.modelData.missing ? qsTr("The file is gone: %1").arg(row.modelData.path)
-                        : [row.modelData.summary, row.modelData.version, row.modelData.size].filter(part => part.length > 0).join(" · ")
-                    color: row.modelData.missing ? Look.warning : Look.textMuted
+                        : row.hasUpdate ? qsTr("Release %1 is available from %2").arg(row.modelData.update).arg(row.origin)
+                        : [row.modelData.summary, row.modelData.version, row.modelData.size, row.origin].filter(part => part.length > 0).join(" · ")
+                    color: row.modelData.missing ? Look.warning : row.hasUpdate ? Look.accent : Look.textMuted
                     elide: Text.ElideRight
                 }
             }
@@ -216,6 +250,15 @@ Item {
                 anchors.rightMargin: 12
                 anchors.verticalCenter: row.verticalCenter
                 spacing: 8
+
+                PillButton {
+                    visible: row.hasUpdate
+                    enabled: !root.client.busy
+                    size: "small"
+                    text: qsTr("Update")
+                    Accessible.name: qsTr("Update %1").arg(row.modelData.name)
+                    onClicked: root.client.update(row.modelData.id)
+                }
 
                 PillButton {
                     visible: !row.modelData.missing && !row.modelData.terminal && row.modelData.owned
@@ -246,7 +289,7 @@ Item {
         anchors.centerIn: list
         plain: true
         title: qsTr("No AppImages added yet")
-        text: qsTr("Drop an AppImage file here or choose one with “Add AppImage…”. It is copied to %1 and gets a menu entry.").arg(root.client.directory)
+        text: qsTr("Drop an AppImage file here, choose one with “Add AppImage…” or take one from a project on GitHub. It is copied to %1 and gets a menu entry.").arg(root.client.directory)
     }
 
     Sheet {
@@ -290,6 +333,209 @@ Item {
                     onClicked: {
                         addDialog.close();
                         root.client.add(root.candidate.url);
+                    }
+                }
+            }
+        }
+    }
+
+    Sheet {
+        id: githubDialog
+
+        // which file of the release is taken
+        property int picked: 0
+
+        firstButton: linkField
+        onOpened: linkField.selectAll()
+        onClosed: root.client.clearOffer()
+
+        Connections {
+            target: root.client
+
+            function onOfferChanged(): void {
+                githubDialog.picked = root.client.offer.preferred;
+            }
+        }
+
+        contentItem: Column {
+            id: githubBody
+            spacing: 14
+
+            Heading {
+                width: githubBody.width
+                text: qsTr("Add an AppImage from GitHub")
+            }
+
+            Muted {
+                width: githubBody.width
+                text: qsTr("Give the link of a project on GitHub that publishes AppImage files. The file of its newest release is downloaded, and newer releases are offered on this page as updates.")
+                font.pixelSize: Look.fontBody
+                lineHeight: 1.25
+                wrapMode: Text.WordWrap
+            }
+
+            Row {
+                width: githubBody.width
+                spacing: 10
+
+                TextField {
+                    id: linkField
+                    width: githubBody.width - lookUp.width - 10
+                    implicitHeight: 40
+                    leftPadding: 14
+                    rightPadding: 14
+                    font.pixelSize: Look.fontBody
+                    color: Look.text
+                    placeholderText: "https://github.com/owner/project"
+                    placeholderTextColor: Look.textMuted
+                    selectionColor: Look.accent
+                    selectedTextColor: Look.onAccent
+                    selectByMouse: true
+                    Accessible.name: qsTr("Link of the project on GitHub")
+                    onAccepted: if (lookUp.enabled) lookUp.clicked()
+
+                    background: Rectangle {
+                        radius: height / 2
+                        color: Look.surface
+                        border.width: linkField.activeFocus ? 2 : 1
+                        border.color: linkField.activeFocus ? Look.accent : Look.border
+                    }
+                }
+
+                PillButton {
+                    id: lookUp
+                    enabled: linkField.text.trim().length > 0 && !root.client.lookingUp
+                    tone: "soft"
+                    text: qsTr("Look up")
+                    onClicked: root.client.lookUp(linkField.text)
+                }
+            }
+
+            Row {
+                visible: root.client.lookingUp
+                spacing: 10
+
+                BusyIndicator {
+                    width: 22
+                    height: 22
+                    running: root.client.lookingUp
+                }
+
+                Muted {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: qsTr("Asking GitHub…")
+                }
+            }
+
+            PlainText {
+                visible: text.length > 0
+                width: githubBody.width
+                text: root.client.offer.error
+                color: Look.danger
+                wrapMode: Text.WordWrap
+            }
+
+            Column {
+                visible: root.client.offer.files.length > 0
+                width: githubBody.width
+                spacing: 8
+
+                PlainText {
+                    width: githubBody.width
+                    text: qsTr("Release %1 of %2").arg(root.client.offer.release).arg(root.client.offer.source)
+                    font.weight: Font.DemiBold
+                    elide: Text.ElideRight
+                }
+
+                // a release can carry many files
+                Flickable {
+                    width: githubBody.width
+                    height: Math.min(choices.height, 184)
+                    contentHeight: choices.height
+                    clip: true
+                    boundsBehavior: Flickable.StopAtBounds
+
+                    ScrollBar.vertical: ScrollBar {}
+
+                    WheelScroll {}
+
+                    Column {
+                        id: choices
+                        width: githubBody.width
+                        spacing: 8
+
+                        Repeater {
+                            model: root.client.offer.files
+
+                            AbstractButton {
+                                id: choice
+
+                                required property appImageChoice modelData
+                                required property int index
+
+                                readonly property bool chosen: index === githubDialog.picked
+
+                                width: githubBody.width
+                                implicitHeight: 40
+                                Accessible.name: modelData.name
+                                Accessible.role: Accessible.RadioButton
+                                Accessible.checked: chosen
+                                onClicked: githubDialog.picked = index
+
+                                background: Rectangle {
+                                    radius: Look.radius
+                                    color: choice.chosen ? Look.accentSoft : "transparent"
+                                    border.width: choice.chosen || choice.visualFocus ? 2 : 1
+                                    border.color: choice.chosen || choice.visualFocus ? Look.accent : Look.border
+                                }
+
+                                contentItem: Item {
+                                    PlainText {
+                                        x: 14
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        width: parent.width - 28 - fileSize.width - 10
+                                        text: choice.modelData.name
+                                        elide: Text.ElideMiddle
+                                    }
+
+                                    Muted {
+                                        id: fileSize
+                                        anchors.right: parent.right
+                                        anchors.rightMargin: 14
+                                        anchors.verticalCenter: parent.verticalCenter
+                                        text: choice.modelData.size
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                Muted {
+                    width: githubBody.width
+                    text: qsTr("The file is saved in %1 and added to your menu. To read its name and icon the file itself is run right away, so only add projects you trust: nobody has checked this program and it is not sandboxed.").arg(root.client.directory)
+                    font.pixelSize: Look.fontBody
+                    lineHeight: 1.25
+                    wrapMode: Text.WordWrap
+                }
+            }
+
+            Row {
+                anchors.right: githubBody.right
+                spacing: 10
+
+                PillButton {
+                    tone: "soft"
+                    text: qsTr("Cancel")
+                    onClicked: githubDialog.close()
+                }
+
+                PillButton {
+                    enabled: root.client.offer.files.length > 0 && !root.client.busy
+                    text: qsTr("Download and add")
+                    onClicked: {
+                        root.client.addOffered(githubDialog.picked);
+                        githubDialog.close();
                     }
                 }
             }
