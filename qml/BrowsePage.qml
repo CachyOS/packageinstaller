@@ -121,7 +121,9 @@ Item {
         visible: filter.count === 0
         busy: Backend.loading
         plain: true
-        title: Backend.loading ? "" : root.query.length > 0 ? qsTr("Nothing found in the repositories.") : qsTr("Nothing here yet.")
-        text: !Backend.loading && root.query.length > 0 && Backend.aurEnabled ? qsTr("Try the AUR tab for community packages.") : ""
+        title: Backend.loading ? "" : root.query.length === 0 ? qsTr("Nothing here yet.")
+            : root.installedOnly ? qsTr("No installed package matches “%1”.").arg(root.query) : qsTr("Nothing found in the repositories.")
+        text: !Backend.loading && root.query.length > 0 && !root.installedOnly && Backend.aurEnabled
+            ? qsTr("Try the AUR tab for community packages.") : ""
     }
 }
