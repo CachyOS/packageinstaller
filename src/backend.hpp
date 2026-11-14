@@ -34,7 +34,7 @@ class Backend : public QObject {
     Q_PROPERTY(int updateCount READ updateCount NOTIFY revisionChanged FINAL)
     Q_PROPERTY(bool checkingUpdates READ checkingUpdates NOTIFY checkingUpdatesChanged FINAL)
     Q_PROPERTY(bool aurEnabled READ aurEnabled WRITE setAurEnabled NOTIFY aurEnabledChanged FINAL)
-    Q_PROPERTY(bool paruAvailable READ paruAvailable CONSTANT FINAL)
+    Q_PROPERTY(bool paruAvailable READ paruAvailable NOTIFY paruAvailableChanged FINAL)
     Q_PROPERTY(FlatpakClient* flatpak READ flatpak CONSTANT FINAL)
     Q_PROPERTY(UpdateNotice* updateNotice READ updateNotice CONSTANT FINAL)
     Q_PROPERTY(bool flatpakEnabled READ flatpakEnabled WRITE setFlatpakEnabled NOTIFY flatpakEnabledChanged FINAL)
@@ -90,6 +90,7 @@ class Backend : public QObject {
     void curatedChanged();
     void checkingUpdatesChanged();
     void aurEnabledChanged();
+    void paruAvailableChanged();
     void flatpakEnabledChanged();
     /// Something the user asked for could not be done, and `text` says why.
     void notice(const QString& text);

@@ -188,6 +188,11 @@ void Backend::onLoaded(std::expected<catalog::LoadResult, QString> result) {
 
 void Backend::refreshSources() {
     const bool first = !std::exchange(m_loadedOnce, true);
+    // paru may have been installed or removed, by this app or outside of it
+    if (const bool paru = !QStandardPaths::findExecutable(u"paru"_s).isEmpty(); paru != m_paruAvailable) {
+        m_paruAvailable = paru;
+        emit paruAvailableChanged();
+    }
     // also when the flatpak package itself was just installed or removed
     const bool flatpakChanged = m_flatpak.available() == QStandardPaths::findExecutable(u"flatpak"_s).isEmpty();
     if (m_flatpakEnabled && !m_flatpak.loading() && (first || flatpakChanged)) {

@@ -197,6 +197,12 @@ ScrollPage {
         tone: Notice.Warning
         text: !Backend.paruAvailable ? qsTr("Install “paru” to build AUR packages.")
             : root.info.outOfDate ? qsTr("This package is flagged as out of date by AUR users.") : ""
+
+        PillButton {
+            visible: !Backend.paruAvailable
+            text: qsTr("Install paru")
+            onClicked: Backend.install("paru")
+        }
     }
 
     Column {
