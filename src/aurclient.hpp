@@ -43,6 +43,8 @@ struct AurPackage {
     Q_PROPERTY(bool inRepos MEMBER inRepos FINAL)
     /// AUR packages of a plan that need this one.
     Q_PROPERTY(QStringList neededBy MEMBER neededBy FINAL)
+    /// The package's page on the AUR website.
+    Q_PROPERTY(QString pageUrl READ pageUrl FINAL)
 
  public:
     QString name;
@@ -66,6 +68,8 @@ struct AurPackage {
     bool upgradable = false;
     bool inRepos    = false;  ///< a package of the same name in the repositories should be installed from there
     QStringList neededBy{};
+
+    [[nodiscard]] QString pageUrl() const;
 
     bool operator==(const AurPackage&) const = default;
 };

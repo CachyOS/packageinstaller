@@ -177,6 +177,10 @@ void AurClient::setError(const QString& error) {
     }
 }
 
+QString AurPackage::pageUrl() const {
+    return AUR_HOST + "/packages/"_L1 + QString::fromLatin1(QUrl::toPercentEncoding(name));
+}
+
 void AurClient::applyLocal(AurPackage& package) const {
     const auto* local        = m_packages->find(package.name);
     // a package of that name from a repository is not this one

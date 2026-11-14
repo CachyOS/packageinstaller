@@ -10,6 +10,9 @@ Column {
     required property string source
     required property string byline
     property string unavailable
+    /// a web page about the package: the title opens it, and so does `linkText` next to the byline
+    property string link
+    property string linkText
     property alias status: statusText.text
     property alias screenshots: strip.model
     property string description
@@ -66,11 +69,26 @@ Column {
             spacing: 6
 
             PlainText {
-                width: texts.width
+                // only as wide as the name, so the space next to it is not part of the link
+                width: Math.min(implicitWidth, texts.width)
                 text: root.title
                 font.pixelSize: Look.fontHero
                 font.weight: Font.Bold
+                font.underline: pageLink.valid && titleHover.hovered
                 elide: Text.ElideRight
+
+                // the keyboard reaches the same page through the link below
+                HoverHandler {
+                    id: titleHover
+                    enabled: pageLink.valid
+                    cursorShape: Qt.PointingHandCursor
+                }
+
+                // the link below decides what may be opened
+                TapHandler {
+                    enabled: pageLink.valid
+                    onTapped: pageLink.click()
+                }
             }
 
             Muted {
@@ -93,6 +111,13 @@ Column {
                 Muted {
                     anchors.verticalCenter: badge.verticalCenter
                     text: root.byline
+                }
+
+                WebLink {
+                    id: pageLink
+                    anchors.verticalCenter: badge.verticalCenter
+                    url: root.link
+                    text: root.linkText
                 }
             }
         }

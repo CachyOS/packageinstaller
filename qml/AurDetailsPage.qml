@@ -159,6 +159,8 @@ ScrollPage {
         title: root.info.name
         summary: root.info.description
         source: "aur"
+        link: root.info.pageUrl
+        linkText: qsTr("AUR page")
         byline: (root.info.upgradable ? root.info.installedVersion + " → " : root.info.installed ? qsTr("Installed") + " · " : "")
             + qsTr("%1 · %n vote(s)", "", root.info.votes).arg(root.info.version)
             + " · " + (root.info.maintainer.length > 0 ? root.info.maintainer : qsTr("orphaned"))
