@@ -179,7 +179,8 @@ void AurClient::setError(const QString& error) {
 
 void AurClient::applyLocal(AurPackage& package) const {
     const auto* local        = m_packages->find(package.name);
-    package.installed        = local != nullptr && local->installed();
+    // a package of that name from a repository is not this one
+    package.installed        = local != nullptr && local->installed() && local->foreign();
     package.installedVersion = package.installed ? local->installedVersion : QString();
     package.upgradable       = package.installed && alpmdb::vercmp(package.installedVersion, package.version) < 0;
     package.inRepos          = local != nullptr && !local->foreign();

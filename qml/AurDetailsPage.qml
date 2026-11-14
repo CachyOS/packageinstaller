@@ -159,7 +159,7 @@ ScrollPage {
         title: root.info.name
         summary: root.info.description
         source: "aur"
-        byline: (root.info.upgradable ? root.info.installedVersion + " → " : "")
+        byline: (root.info.upgradable ? root.info.installedVersion + " → " : root.info.installed ? qsTr("Installed") + " · " : "")
             + qsTr("%1 · %n vote(s)", "", root.info.votes).arg(root.info.version)
             + " · " + (root.info.maintainer.length > 0 ? root.info.maintainer : qsTr("orphaned"))
             + (Backend.aur.revision.length > 0 ? " · " + qsTr("revision %1").arg(Backend.aur.revision.substring(0, 7)) : "")
@@ -168,6 +168,14 @@ ScrollPage {
             visible: root.info.inRepos
             text: qsTr("Open from the repositories")
             onClicked: root.openPackage(root.info.name)
+        }
+
+        PillButton {
+            visible: root.info.installed && !root.queued
+            implicitWidth: 150
+            tone: "danger"
+            text: qsTr("Remove")
+            onClicked: Backend.remove(root.info.name)
         }
     }
 

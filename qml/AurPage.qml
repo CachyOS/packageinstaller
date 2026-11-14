@@ -71,6 +71,7 @@ Item {
             source: "aur"
             trailing: modelData.upgradable ? modelData.installedVersion + " → " + modelData.version
                 : modelData.installed ? qsTr("Installed")
+                : modelData.inRepos ? qsTr("In the repositories")
                 : modelData.outOfDate ? qsTr("Out of date")
                 : qsTr("%1 · %n vote(s)", "", modelData.votes).arg(modelData.version)
             trailingColor: modelData.upgradable || (modelData.outOfDate && !modelData.installed) ? Look.warning : Look.textMuted
