@@ -46,7 +46,10 @@ Flatpak apps and add AppImage files to the menu.
   `cachyos-pi-helper`, a tiny pkexec helper that only accepts
   `install`, `remove` and `upgrade`, plus the three pacman calls paru makes to
   install what it built. paru is started with the helper in place of sudo, so one
-  authentication covers a whole AUR build.
+  authentication covers a whole AUR build. Each of the four has its own polkit
+  action and prompt: being allowed to install from the repositories does not
+  allow installing a package file. pacman runs in a session of its own and is
+  never interrupted.
 
 ## Screenshots
 

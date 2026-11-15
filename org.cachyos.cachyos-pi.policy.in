@@ -6,9 +6,12 @@
   <vendor>CachyOS</vendor>
   <vendor_url>https://github.com/CachyOS/packageinstaller</vendor_url>
 
-  <action id="org.cachyos.cachyos-pi.manage-packages">
-    <description>Install, remove or update packages</description>
-    <message>Authentication is required to install, remove or update packages</message>
+  <!-- One action per verb of the helper, matched by its first argument: an
+       authentication for one of them does not cover another. -->
+
+  <action id="org.cachyos.cachyos-pi.install">
+    <description>Install packages from the repositories</description>
+    <message>Authentication is required to install packages from the repositories</message>
     <icon_name>cachyos-pi</icon_name>
     <defaults>
       <allow_any>no</allow_any>
@@ -16,6 +19,47 @@
       <allow_active>auth_admin_keep</allow_active>
     </defaults>
     <annotate key="org.freedesktop.policykit.exec.path">@PI_HELPER_DIR@/cachyos-pi-helper</annotate>
+    <annotate key="org.freedesktop.policykit.exec.argv1">install</annotate>
+  </action>
+
+  <action id="org.cachyos.cachyos-pi.remove">
+    <description>Remove packages</description>
+    <message>Authentication is required to remove packages</message>
+    <icon_name>cachyos-pi</icon_name>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">@PI_HELPER_DIR@/cachyos-pi-helper</annotate>
+    <annotate key="org.freedesktop.policykit.exec.argv1">remove</annotate>
+  </action>
+
+  <action id="org.cachyos.cachyos-pi.upgrade">
+    <description>Update the system</description>
+    <message>Authentication is required to update the system</message>
+    <icon_name>cachyos-pi</icon_name>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">@PI_HELPER_DIR@/cachyos-pi-helper</annotate>
+    <annotate key="org.freedesktop.policykit.exec.argv1">upgrade</annotate>
+  </action>
+
+  <!-- what paru calls to install the packages it built -->
+  <action id="org.cachyos.cachyos-pi.install-built">
+    <description>Install packages that were built on this computer</description>
+    <message>Authentication is required to install packages that were built on this computer</message>
+    <icon_name>cachyos-pi</icon_name>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">@PI_HELPER_DIR@/cachyos-pi-helper</annotate>
+    <annotate key="org.freedesktop.policykit.exec.argv1">pacman</annotate>
   </action>
 
 </policyconfig>
