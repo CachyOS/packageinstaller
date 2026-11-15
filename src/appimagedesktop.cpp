@@ -199,7 +199,8 @@ QString integrate(const QString& desktopFile, const QString& appImagePath, const
     }
     if (main == nullptr || main->values.value(u"Name"_s).isEmpty() || main->values.value(u"Exec"_s).isEmpty()
         || main->values.value(u"Type"_s, u"Application"_s) != "Application"_L1
-        || !printable(appImagePath) || !printable(iconPath) || !printable(tracking.source) || !printable(tracking.variant)) {
+        || !printable(appImagePath) || !printable(iconPath) || !printable(tracking.source) || !printable(tracking.variant)
+        || !printable(tracking.release)) {
         return {};
     }
     const auto program = quoteExec(appImagePath);
@@ -244,6 +245,9 @@ QString integrate(const QString& desktopFile, const QString& appImagePath, const
     if (!tracking.source.isEmpty()) {
         out << SOURCE_KEY + u'=' + tracking.source << ASSET_KEY + u'=' + QString::number(tracking.asset)
             << VARIANT_KEY + u'=' + tracking.variant;
+        if (!tracking.release.isEmpty()) {
+            out << RELEASE_KEY + u'=' + tracking.release;
+        }
     }
 
     for (const auto& action : std::as_const(actions)) {
@@ -269,7 +273,8 @@ QString integrate(const QString& desktopFile, const QString& appImagePath, const
 Tracking tracking(const QHash<QString, QString>& mainGroup) {
     return {.source  = mainGroup.value(SOURCE_KEY),
             .asset   = mainGroup.value(ASSET_KEY).toLongLong(),
-            .variant = mainGroup.value(VARIANT_KEY)};
+            .variant = mainGroup.value(VARIANT_KEY),
+            .release = mainGroup.value(RELEASE_KEY)};
 }
 
 QString safeName(const QString& name) {

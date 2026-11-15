@@ -81,6 +81,11 @@ std::optional<Source> sourceFromValue(const QString& value) {
     return Source{.owner = parts.at(0), .repo = parts.at(1), .file = {}};
 }
 
+bool sameRelease(QStringView one, QStringView other) {
+    const auto bare = [](QStringView name) { return name.startsWith(u'v') ? name.mid(1) : name; };
+    return !one.isEmpty() && bare(one) == bare(other);
+}
+
 QUrl latestReleaseUrl(const Source& source) {
     return QUrl(u"https://api.github.com/repos/%1/%2/releases/latest"_s.arg(source.owner, source.repo));
 }

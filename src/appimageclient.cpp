@@ -530,6 +530,10 @@ const appimage::Asset* newerAsset(const QHash<QString, appimage::Release>& relea
     if (file < 0 || release->assets.at(file).id == tracked.asset) {
         return nullptr;
     }
+    // the upload is not known for a file another program downloaded: go by the release
+    if (tracked.asset == 0 && appimage::sameRelease(tracked.release, release->tag)) {
+        return nullptr;
+    }
     if (tag != nullptr) {
         *tag = release->tag;
     }
@@ -707,7 +711,8 @@ void AppImageClient::download(const appimage::Source& source, const appimage::As
     auto download     = std::make_unique<Download>();
     download->asset   = asset;
     download->fetched = {.name = asset.name,
-        .tracking = {.source = appimage::sourceValue(source), .asset = asset.id, .variant = appimage::variant(asset.name)},
+        .tracking = {.source = appimage::sourceValue(source), .asset = asset.id, .variant = appimage::variant(asset.name),
+            .release = m_releases.value(appimage::sourceValue(source)).tag},
         .replaces = replaces};
     // next to where it will end up: install() takes it over as its working copy
     download->file.setFileName(privatePath("part"_L1));

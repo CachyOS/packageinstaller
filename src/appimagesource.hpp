@@ -55,6 +55,9 @@ struct Release {
 /// be empty. Nothing when the answer does not describe a release.
 std::optional<Release> parseRelease(const QByteArray& answer);
 
+/// True when both name the same release: "1.2" and "v1.2" do. Never for an empty name.
+bool sameRelease(QStringView one, QStringView other);
+
 /// A file name without its version: "App-1.2.3-x86_64.AppImage" and "App-1.10-x86_64.AppImage"
 /// give the same text. Tells the files of one release apart across releases.
 QString variant(const QString& fileName);

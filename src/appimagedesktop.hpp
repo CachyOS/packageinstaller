@@ -14,14 +14,16 @@ inline constexpr QLatin1StringView PATH_KEY{"X-CachyOS-PI-AppImage"};
 inline constexpr QLatin1StringView SOURCE_KEY{"X-CachyOS-PI-Source"};
 inline constexpr QLatin1StringView ASSET_KEY{"X-CachyOS-PI-Asset"};
 inline constexpr QLatin1StringView VARIANT_KEY{"X-CachyOS-PI-Variant"};
+inline constexpr QLatin1StringView RELEASE_KEY{"X-CachyOS-PI-Release"};
 /// No desktop entry is read or written beyond this size.
 inline constexpr qint64 MAX_ENTRY_BYTES = 256 * 1024;
 
 /// Where a managed AppImage was downloaded from, so that a newer release can be found.
 struct Tracking {
     QString source;   ///< the repository, as sourceValue() writes it; empty for a file added by hand
-    qint64 asset = 0; ///< the upload that is installed
+    qint64 asset = 0; ///< the upload that is installed; 0 when only `release` is known
     QString variant;  ///< which file of a release it is, see variant()
+    QString release;  ///< the release it is from; may lack the "v" of a tag
 };
 
 /// The keys of the [Desktop Entry] group of a desktop file; other groups are ignored and

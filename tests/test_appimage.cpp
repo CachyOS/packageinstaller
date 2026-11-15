@@ -175,12 +175,31 @@ class TestAppImage : public QObject {
         // what the file says about itself is not taken over
         QVERIFY(appimage::tracking(plain).source.isEmpty());
 
-        const appimage::Tracking wanted{.source = u"github:o/r"_s, .asset = 42, .variant = u"e-#-x#.appimage"_s};
+        const appimage::Tracking wanted{.source = u"github:o/r"_s, .asset = 42, .variant = u"e-#-x#.appimage"_s, .release = {}};
         const auto stored = appimage::tracking(appimage::mainGroup(appimage::integrate(original, u"/a/E.AppImage"_s, {}, wanted)));
         QCOMPARE(stored.source, wanted.source);
         QCOMPARE(stored.asset, wanted.asset);
         QCOMPARE(stored.variant, wanted.variant);
-        QVERIFY(appimage::integrate(original, u"/a/E.AppImage"_s, {}, {.source = u"github:o/r\nExec=x"_s, .asset = 1, .variant = {}}).isEmpty());
+        QVERIFY(appimage::integrate(original, u"/a/E.AppImage"_s, {}, {.source = u"github:o/r\nExec=x"_s, .asset = 1, .variant = {}, .release = {}}).isEmpty());
+    }
+
+    void releaseOfATakenOverFile() {
+        const auto original = u"[Desktop Entry]\nName=Editor\nExec=editor\n"_s;
+        const appimage::Tracking wanted{.source = u"github:o/r"_s, .asset = 0, .variant = u"e.appimage"_s, .release = u"v1.2"_s};
+        const auto stored = appimage::tracking(appimage::mainGroup(appimage::integrate(original, u"/a/E.AppImage"_s, {}, wanted)));
+        QCOMPARE(stored.release, wanted.release);
+        QCOMPARE(stored.asset, 0);
+        auto broken    = wanted;
+        broken.release = u"v1\nExec=x"_s;
+        QVERIFY(appimage::integrate(original, u"/a/E.AppImage"_s, {}, broken).isEmpty());
+    }
+
+    void sameReleases() {
+        QVERIFY(appimage::sameRelease(u"1.18.2", u"v1.18.2"));
+        QVERIFY(appimage::sameRelease(u"v2", u"v2"));
+        QVERIFY(!appimage::sameRelease(u"1.17.0", u"v1.18.2"));
+        QVERIFY(!appimage::sameRelease(u"", u""));
+        QVERIFY(!appimage::sameRelease(u"", u"v"));
     }
 
     void sources_data() {
