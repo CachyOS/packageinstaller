@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "appimagedesktop.hpp"
+#include "appimageimport.hpp"
 #include "appimagesource.hpp"
 
 #include <QJsonArray>
@@ -194,12 +195,76 @@ class TestAppImage : public QObject {
         QVERIFY(appimage::integrate(original, u"/a/E.AppImage"_s, {}, broken).isEmpty());
     }
 
+    void shellyDatabase() {
+        // as Shelly 3 writes it
+        const QByteArray database = R"([
+          {"name": "Editor-1.2-x86_64", "version": "1.2", "release_tag": "v1.2", "raw_update_info": "",
+           "icon_name": "editor", "description": "Edits", "desktop_name": "Editor", "size_on_disk": 123,
+           "environment_variables": [{"key": "A", "value": "1"}], "command_line_args": "",
+           "path": "/home/u/.local/bin/Editor-1.2-x86_64.AppImage", "update_url": "", "update_type": "github",
+           "repo_owner": "owner", "repo_name": "editor", "allow_prerelease": false},
+          {"name": "Plain", "version": "Unknown", "update_type": "none", "repo_owner": null, "repo_name": null},
+          {"name": "Numbered", "path": "/opt/n.AppImage", "version": "1.18.2", "release_tag": null, "update_type": 2, "repo_owner": "o", "repo_name": "n"},
+          {"name": "Elsewhere", "path": "/opt/e.AppImage", "update_type": "gitlab", "repo_owner": "o", "repo_name": "e"},
+          {"name": "Odd", "path": "/opt/o.AppImage", "update_type": "github", "repo_owner": "o/x", "repo_name": "../e"},
+          {"name": "Relative", "path": "bin/r.AppImage"},
+          {"path": "/opt/nameless.AppImage"},
+          "text", 7
+        ])";
+        const auto apps = appimage::parseShellyDatabase(database, u"/home/u/.local/bin"_s);
+        QCOMPARE(apps.size(), 5);
+        QCOMPARE(apps.at(0).name, u"Editor-1.2-x86_64"_s);
+        QCOMPARE(apps.at(0).title, u"Editor"_s);
+        QCOMPARE(apps.at(0).path, u"/home/u/.local/bin/Editor-1.2-x86_64.AppImage"_s);
+        QCOMPARE(apps.at(0).icon, u"editor"_s);
+        QCOMPARE(apps.at(0).release, u"v1.2"_s);
+        QCOMPARE(apps.at(0).source->slug(), u"owner/editor"_s);
+        QCOMPARE(appimage::shellyIconFiles(apps.at(0)),
+            QStringList({u"icons/hicolor/scalable/apps/editor.svg"_s, u"icons/hicolor/256x256/apps/editor.png"_s}));
+        QVERIFY(appimage::shellyIconFiles({.name = u"x"_s, .title = {}, .path = {}, .icon = u"../x"_s, .source = {}, .release = {}}).isEmpty());
+        QVERIFY(appimage::shellyIconFiles(apps.at(1)).isEmpty());
+        // no path: where Shelly would look for it
+        QCOMPARE(apps.at(1).title, u"Plain"_s);
+        QVERIFY(apps.at(1).release.isEmpty());
+        QCOMPARE(apps.at(1).path, u"/home/u/.local/bin/Plain.AppImage"_s);
+        QVERIFY(!apps.at(1).source);
+        QCOMPARE(apps.at(2).source->slug(), u"o/n"_s);
+        QCOMPARE(apps.at(2).release, u"1.18.2"_s);
+        QVERIFY(!apps.at(3).source);  // only GitHub is followed here
+        QVERIFY(!apps.at(4).source);  // not a repository
+
+        QVERIFY(appimage::parseShellyDatabase("not json", u"/b"_s).isEmpty());
+        QVERIFY(appimage::parseShellyDatabase("{}", u"/b"_s).isEmpty());
+        QVERIFY(appimage::parseShellyDatabase(R"([{"name": "Plain"}])", {}).isEmpty());
+    }
+
+    void shellyDatabaseWithoutSomeApps() {
+        const QByteArray database = R"([{"name": "A", "path": "/a", "size_on_disk": 9007199254740993, "extra": {"k": [1, 2]}},
+                                        {"name": "B", "path": "/b"}, {"name": "C", "path": "/c"}])";
+        const auto rest = appimage::withoutShellyApps(database, {u"B"_s, u"missing"_s});
+        const auto left = QJsonDocument::fromJson(rest).array();
+        QCOMPARE(left.size(), 2);
+        // what this app does not know about is kept as it is
+        QCOMPARE(left.at(0).toObject().value("extra"_L1).toObject().value("k"_L1).toArray().size(), 2);
+        QCOMPARE(left.at(0).toObject().value("size_on_disk"_L1).toInteger(), 9007199254740993);
+        QCOMPARE(left.at(1).toObject().value("name"_L1).toString(), u"C"_s);
+        QCOMPARE(QJsonDocument::fromJson(appimage::withoutShellyApps(database, {u"A"_s, u"B"_s, u"C"_s})).array().size(), 0);
+        QVERIFY(appimage::withoutShellyApps("not json", {u"A"_s}).isEmpty());
+        QVERIFY(appimage::withoutShellyApps("{}", {u"A"_s}).isEmpty());
+    }
+
     void sameReleases() {
         QVERIFY(appimage::sameRelease(u"1.18.2", u"v1.18.2"));
         QVERIFY(appimage::sameRelease(u"v2", u"v2"));
         QVERIFY(!appimage::sameRelease(u"1.17.0", u"v1.18.2"));
         QVERIFY(!appimage::sameRelease(u"", u""));
         QVERIFY(!appimage::sameRelease(u"", u"v"));
+    }
+
+    void shellyFolder() {
+        QCOMPARE(appimage::shellyInstallDirectory(R"({"AppImageInstallPath": "/opt/appimages"})"), u"/opt/appimages"_s);
+        QVERIFY(appimage::shellyInstallDirectory(R"({"AppImageInstallPath": null})").isEmpty());
+        QVERIFY(appimage::shellyInstallDirectory("").isEmpty());
     }
 
     void sources_data() {
