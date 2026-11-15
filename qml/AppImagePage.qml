@@ -34,10 +34,28 @@ Item {
             propose(file);
     }
 
-    onReadyChanged: offerStartupFile()
+    // Asked once per run, when Shelly manages AppImages and nothing else is being asked.
+    function offerShelly(): void {
+        if (ready && !client.busy && !addDialog.visible && client.takeShellyPrompt())
+            shellyDialog.open();
+    }
+
+    onReadyChanged: {
+        offerStartupFile();
+        offerShelly();
+    }
     Component.onCompleted: {
         client.clearMessage();
         offerStartupFile();
+        offerShelly();
+    }
+
+    Connections {
+        target: root.client
+
+        function onShellyAppsChanged(): void {
+            root.offerShelly();
+        }
     }
 
     component Sheet: Dialog {
@@ -48,6 +66,30 @@ Item {
         closePolicy: Popup.CloseOnEscape
         width: Math.min(Overlay.overlay.width - 80, 560)
         onOpened: firstButton.forceActiveFocus(Qt.TabFocusReason)
+    }
+
+    // A list inside a sheet that scrolls once it gets long
+    component CappedList: Flickable {
+        default property alias rows: column.data
+        property alias spacing: column.spacing
+
+        height: Math.min(column.height, 184)
+        contentHeight: column.height
+        clip: true
+        boundsBehavior: Flickable.StopAtBounds
+
+        ScrollBar.vertical: ScrollBar {}
+
+        WheelScroll {}
+
+        Column {
+            id: column
+            width: parent.width
+        }
+    }
+
+    function origin(source: string): string {
+        return source.length > 0 ? "github.com/" + source : "";
     }
 
     // Files can be dropped anywhere on the page
@@ -138,6 +180,20 @@ Item {
             }
         }
 
+        // Shelly users can bring their AppImages along
+        Notice {
+            width: pageHeader.width
+            text: root.client.shellyApps.length > 0 && !root.client.busy
+                ? qsTr("You have %n AppImage(s) in Shelly. You can bring them along to this app.", "", root.client.shellyApps.length) : ""
+
+            PillButton {
+                size: "small"
+                tone: "soft"
+                text: qsTr("Move from Shelly…")
+                onClicked: shellyDialog.open()
+            }
+        }
+
         // What the last action came to
         Row {
             id: status
@@ -161,8 +217,7 @@ Item {
                 text: root.client.downloading ? qsTr("Downloading %1… %2 %").arg(root.client.subject).arg(root.client.progress)
                     : root.client.busy ? qsTr("Adding %1…").arg(root.client.subject)
                     : root.client.checking ? qsTr("Looking for newer releases…")
-                    : root.client.error.length > 0 ? root.client.error
-                    : qsTr("%1 was added to your menu.").arg(root.client.added)
+                    : [root.client.error, root.client.added].filter(part => part.length > 0).join("\n")
                 color: status.working ? Look.textMuted : root.client.error.length > 0 ? Look.danger : Look.accent
                 wrapMode: Text.WordWrap
             }
@@ -192,7 +247,7 @@ Item {
 
             required property appImageItem modelData
             // where newer releases come from
-            readonly property string origin: modelData.source.length > 0 ? "github.com/" + modelData.source : ""
+            readonly property string origin: root.origin(modelData.source)
             readonly property bool hasUpdate: modelData.update.length > 0
 
             width: list.rowWidth
@@ -448,63 +503,50 @@ Item {
                 }
 
                 // a release can carry many files
-                Flickable {
+                CappedList {
                     width: githubBody.width
-                    height: Math.min(choices.height, 184)
-                    contentHeight: choices.height
-                    clip: true
-                    boundsBehavior: Flickable.StopAtBounds
+                    spacing: 8
 
-                    ScrollBar.vertical: ScrollBar {}
+                    Repeater {
+                        model: root.client.offer.files
 
-                    WheelScroll {}
+                        AbstractButton {
+                            id: choice
 
-                    Column {
-                        id: choices
-                        width: githubBody.width
-                        spacing: 8
+                            required property appImageChoice modelData
+                            required property int index
 
-                        Repeater {
-                            model: root.client.offer.files
+                            readonly property bool chosen: index === githubDialog.picked
 
-                            AbstractButton {
-                                id: choice
+                            width: githubBody.width
+                            implicitHeight: 40
+                            Accessible.name: modelData.name
+                            Accessible.role: Accessible.RadioButton
+                            Accessible.checked: chosen
+                            onClicked: githubDialog.picked = index
 
-                                required property appImageChoice modelData
-                                required property int index
+                            background: Rectangle {
+                                radius: Look.radius
+                                color: choice.chosen ? Look.accentSoft : "transparent"
+                                border.width: choice.chosen || choice.visualFocus ? 2 : 1
+                                border.color: choice.chosen || choice.visualFocus ? Look.accent : Look.border
+                            }
 
-                                readonly property bool chosen: index === githubDialog.picked
-
-                                width: githubBody.width
-                                implicitHeight: 40
-                                Accessible.name: modelData.name
-                                Accessible.role: Accessible.RadioButton
-                                Accessible.checked: chosen
-                                onClicked: githubDialog.picked = index
-
-                                background: Rectangle {
-                                    radius: Look.radius
-                                    color: choice.chosen ? Look.accentSoft : "transparent"
-                                    border.width: choice.chosen || choice.visualFocus ? 2 : 1
-                                    border.color: choice.chosen || choice.visualFocus ? Look.accent : Look.border
+                            contentItem: Item {
+                                PlainText {
+                                    x: 14
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    width: parent.width - 28 - fileSize.width - 10
+                                    text: choice.modelData.name
+                                    elide: Text.ElideMiddle
                                 }
 
-                                contentItem: Item {
-                                    PlainText {
-                                        x: 14
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        width: parent.width - 28 - fileSize.width - 10
-                                        text: choice.modelData.name
-                                        elide: Text.ElideMiddle
-                                    }
-
-                                    Muted {
-                                        id: fileSize
-                                        anchors.right: parent.right
-                                        anchors.rightMargin: 14
-                                        anchors.verticalCenter: parent.verticalCenter
-                                        text: choice.modelData.size
-                                    }
+                                Muted {
+                                    id: fileSize
+                                    anchors.right: parent.right
+                                    anchors.rightMargin: 14
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: choice.modelData.size
                                 }
                             }
                         }
@@ -536,6 +578,98 @@ Item {
                     onClicked: {
                         root.client.addOffered(githubDialog.picked);
                         githubDialog.close();
+                    }
+                }
+            }
+        }
+    }
+
+    Sheet {
+        id: shellyDialog
+        firstButton: shellyLater
+
+        contentItem: Column {
+            id: shellyBody
+            spacing: 14
+
+            Heading {
+                width: shellyBody.width
+                text: qsTr("Bring your AppImages along from Shelly?")
+            }
+
+            Muted {
+                width: shellyBody.width
+                text: qsTr("You added these AppImages with Shelly. They can be moved to %1 and looked after by this app from now on:").arg(root.client.directory)
+                font.pixelSize: Look.fontBody
+                lineHeight: 1.25
+                wrapMode: Text.WordWrap
+            }
+
+            CappedList {
+                width: shellyBody.width
+                spacing: 6
+
+                Repeater {
+                    model: root.client.shellyApps
+
+                    Column {
+                        id: shellyApp
+
+                        required property appImageImport modelData
+
+                        width: shellyBody.width
+                        spacing: 2
+
+                        PlainText {
+                            width: shellyApp.width
+                            text: shellyApp.modelData.name
+                            font.weight: Font.DemiBold
+                            elide: Text.ElideRight
+                        }
+
+                        Muted {
+                            width: shellyApp.width
+                            text: [shellyApp.modelData.path, shellyApp.modelData.size, root.origin(shellyApp.modelData.source)].filter(part => part.length > 0).join(" · ")
+                            elide: Text.ElideMiddle
+                        }
+                    }
+                }
+            }
+
+            Muted {
+                width: shellyBody.width
+                text: qsTr("Each file gets a new menu entry and is taken off Shelly's list, so it shows up only once. Apps that Shelly updates from GitHub keep getting their updates here. Other update sources, environment variables and extra arguments set in Shelly are not carried over. To read its name and icon each file is run right away.")
+                font.pixelSize: Look.fontBody
+                lineHeight: 1.25
+                wrapMode: Text.WordWrap
+            }
+
+            Row {
+                anchors.right: shellyBody.right
+                spacing: 10
+
+                PillButton {
+                    tone: "soft"
+                    text: qsTr("Don't ask again")
+                    onClicked: {
+                        shellyDialog.close();
+                        root.client.dismissShelly();
+                    }
+                }
+
+                PillButton {
+                    id: shellyLater
+                    tone: "soft"
+                    text: qsTr("Not now")
+                    onClicked: shellyDialog.close()
+                }
+
+                PillButton {
+                    enabled: !root.client.busy && root.client.shellyApps.length > 0
+                    text: qsTr("Move")
+                    onClicked: {
+                        shellyDialog.close();
+                        root.client.migrateShelly();
                     }
                 }
             }

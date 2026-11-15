@@ -17,6 +17,7 @@
 struct AppImageResult {
     QString error;  ///< empty on success
     QString name;   ///< what the app calls itself
+    QString done = {};  ///< what was achieved, as a sentence for the user; some apps can be moved although others failed
 };
 
 /// One AppImage in the list, read from the menu entry this app wrote for it.
@@ -61,6 +62,24 @@ struct AppImageChoice {
     QString size;  ///< for display
 
     bool operator==(const AppImageChoice&) const = default;
+};
+
+/// An AppImage that Shelly manages and that can be moved over to this app.
+struct AppImageImport {
+    Q_GADGET
+    QML_VALUE_TYPE(appImageImport)
+    Q_PROPERTY(QString name MEMBER name FINAL)
+    Q_PROPERTY(QString path MEMBER path FINAL)
+    Q_PROPERTY(QString size MEMBER size FINAL)
+    Q_PROPERTY(QString source MEMBER source FINAL)
+
+ public:
+    QString name;
+    QString path;
+    QString size;    ///< for display
+    QString source;  ///< "owner/repo" on GitHub when Shelly updates it from there
+
+    bool operator==(const AppImageImport&) const = default;
 };
 
 /// What a GitHub link led to, before anything is downloaded.
@@ -134,8 +153,10 @@ class AppImageClient : public QObject {
     Q_PROPERTY(int updateCount READ updateCount NOTIFY appsChanged FINAL)
     /// Why the last add or remove failed; empty after a success.
     Q_PROPERTY(QString error READ error NOTIFY messageChanged FINAL)
-    /// Name of the app that was added last; empty after a failure.
+    /// What the last action achieved, as a sentence; empty when it achieved nothing.
     Q_PROPERTY(QString added READ added NOTIFY messageChanged FINAL)
+    /// The AppImages Shelly manages. Empty once the user said not to ask about them.
+    Q_PROPERTY(QList<AppImageImport> shellyApps READ shellyApps NOTIFY shellyAppsChanged FINAL)
     /// Where the files are kept, for display.
     Q_PROPERTY(QString directory READ directory CONSTANT FINAL)
     /// libfuse 2 is installed; most AppImages need it to start.
@@ -149,6 +170,7 @@ class AppImageClient : public QObject {
     bool busy() const { return m_busy; }
     QString error() const { return m_error; }
     QString added() const { return m_added; }
+    QList<AppImageImport> shellyApps() const { return m_shellyApps; }
     QString directory() const;
     bool fuseAvailable() const { return m_fuseAvailable; }
     QString subject() const { return m_subject; }
@@ -176,6 +198,13 @@ class AppImageClient : public QObject {
     Q_INVOKABLE void checkUpdates(bool now = true);
     /// Downloads the newer release of an app and replaces its file.
     Q_INVOKABLE void update(const QString& id);
+    /// True once per run of the app, when there are AppImages of Shelly's to ask about.
+    Q_INVOKABLE bool takeShellyPrompt();
+    /// Moves the AppImages Shelly manages over: each is added like a file the user picked
+    /// and then taken off Shelly's hands, with its file, menu entry, icon and record.
+    Q_INVOKABLE void migrateShelly();
+    /// Never asks about Shelly's AppImages again.
+    Q_INVOKABLE void dismissShelly();
     /// Stops the download that is running.
     Q_INVOKABLE void cancelDownload();
     /// Deletes the AppImage, its menu entry and its icon. `path` is the file the user was
@@ -192,6 +221,7 @@ class AppImageClient : public QObject {
     void progressChanged();
     void offerChanged();
     void checkingChanged();
+    void shellyAppsChanged();
     /// New icons for `image://pkgicon/appimage/<id>`.
     void iconsLoaded(const IconIndex& icons);
 
@@ -208,6 +238,8 @@ class AppImageClient : public QObject {
     QList<AppImageItem> m_apps;
     QString m_error;
     QString m_added;
+    QList<AppImageImport> m_shellyApps;
+    bool m_shellyPrompted = false;
     QString m_subject;
     QString m_checkError;  ///< why the last look for newer releases failed
     QNetworkAccessManager m_network;

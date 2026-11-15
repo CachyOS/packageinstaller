@@ -2,9 +2,31 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="en" sourcelanguage="en">
 <context>
+    <name>AppImageClient</name>
+    <message numerus="yes">
+        <location filename="../src/appimageclient.cpp" line="746"/>
+        <source>%n AppImage(s) from Shelly</source>
+        <translation>
+            <numerusform>%n AppImage from Shelly</numerusform>
+            <numerusform>%n AppImages from Shelly</numerusform>
+        </translation>
+    </message>
+</context>
+<context>
+    <name>AppImagePage</name>
+    <message numerus="yes">
+        <location filename="../qml/AppImagePage.qml" line="187"/>
+        <source>You have %n AppImage(s) in Shelly. You can bring them along to this app.</source>
+        <translation>
+            <numerusform>You have %n AppImage in Shelly. You can bring it along to this app.</numerusform>
+            <numerusform>You have %n AppImages in Shelly. You can bring them along to this app.</numerusform>
+        </translation>
+    </message>
+</context>
+<context>
     <name>AurDetailsPage</name>
     <message numerus="yes">
-        <location filename="../qml/AurDetailsPage.qml" line="164"/>
+        <location filename="../qml/AurDetailsPage.qml" line="165"/>
         <source>%1 · %n vote(s)</source>
         <translation>
             <numerusform>%1 · %n vote</numerusform>
@@ -12,7 +34,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/AurDetailsPage.qml" line="435"/>
+        <location filename="../qml/AurDetailsPage.qml" line="450"/>
         <source>Build and update %n package(s)</source>
         <translation>
             <numerusform>Build and update %n package</numerusform>
@@ -20,7 +42,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/AurDetailsPage.qml" line="436"/>
+        <location filename="../qml/AurDetailsPage.qml" line="451"/>
         <source>Build and install %n package(s)</source>
         <translation>
             <numerusform>Build and install %n package</numerusform>
@@ -28,7 +50,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/AurDetailsPage.qml" line="450"/>
+        <location filename="../qml/AurDetailsPage.qml" line="465"/>
         <source>Skip and install %n package(s)</source>
         <translation>
             <numerusform>Skip and install %n package</numerusform>
@@ -36,7 +58,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/AurDetailsPage.qml" line="449"/>
+        <location filename="../qml/AurDetailsPage.qml" line="464"/>
         <source>Skip and update %n package(s)</source>
         <translation>
             <numerusform>Skip and update %n package</numerusform>
@@ -47,7 +69,7 @@
 <context>
     <name>AurPage</name>
     <message numerus="yes">
-        <location filename="../qml/AurPage.qml" line="75"/>
+        <location filename="../qml/AurPage.qml" line="76"/>
         <source>%1 · %n vote(s)</source>
         <translation>
             <numerusform>%1 · %n vote</numerusform>
@@ -55,7 +77,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/AurPage.qml" line="89"/>
+        <location filename="../qml/AurPage.qml" line="90"/>
         <source>Your %n AUR package(s) are up to date.</source>
         <translation>
             <numerusform>Your AUR package is up to date.</numerusform>
@@ -66,7 +88,7 @@
 <context>
     <name>BrowsePage</name>
     <message numerus="yes">
-        <location filename="../qml/BrowsePage.qml" line="45"/>
+        <location filename="../qml/BrowsePage.qml" line="49"/>
         <source>%n package(s)</source>
         <translation>
             <numerusform>%n package</numerusform>
@@ -94,12 +116,9 @@
     </message>
 </context>
 <context>
-    <name>HomePage</name>
-</context>
-<context>
     <name>Transaction</name>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="83"/>
+        <location filename="../src/transaction.cpp" line="66"/>
         <source>Build %n package(s) from the AUR</source>
         <translation>
             <numerusform>Build %n package from the AUR</numerusform>
@@ -107,7 +126,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="100"/>
+        <location filename="../src/transaction.cpp" line="84"/>
         <source>%n package(s) will be removed:</source>
         <translation>
             <numerusform>%n package will be removed:</numerusform>
@@ -115,7 +134,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="102"/>
+        <location filename="../src/transaction.cpp" line="86"/>
         <source>%n package(s) will be installed (%1 to download):</source>
         <translation>
             <numerusform>%n package will be installed (%1 to download):</numerusform>
@@ -123,7 +142,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="327"/>
+        <location filename="../src/transaction.cpp" line="303"/>
         <source>%1 cannot be removed: %n installed package(s) depend on it.</source>
         <translation>
             <numerusform>%1 cannot be removed: %n installed package depends on it.</numerusform>
@@ -132,12 +151,9 @@
     </message>
 </context>
 <context>
-    <name>TransactionDialog</name>
-</context>
-<context>
     <name>UpdatesBanner</name>
     <message numerus="yes">
-        <location filename="../qml/UpdatesBanner.qml" line="23"/>
+        <location filename="../qml/UpdatesBanner.qml" line="22"/>
         <source>%n update(s) available</source>
         <translation>
             <numerusform>%n update available</numerusform>
