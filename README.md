@@ -27,8 +27,8 @@ Flatpak apps.
 - **PKGBUILD check**: the review page marks lines a reviewer should look at
   (see below). It is a reading aid and never declares a package safe.
 - **Appearance**: the settings page switches between colour themes (four of our
-  own plus Nord, Dracula, Catppuccin, Tokyo Night and Solarized, credited in
-  `THIRD-PARTY.md`) and between light, dark and following the desktop.
+  own plus Nord, Dracula, three flavours of Catppuccin, Tokyo Night, Solarized,
+  Gruvbox, Rosé Pine and Everforest, credited in `THIRD-PARTY.md`) and between light, dark and following the desktop.
 - **Privileges**: the GUI runs as the user. Package operations go through
   `cachyos-pi-helper`, a tiny pkexec helper that only accepts
   `install`, `remove` and `upgrade`, plus the three pacman calls paru makes to

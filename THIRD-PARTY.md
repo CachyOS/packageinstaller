@@ -15,15 +15,18 @@ the binaries.
 The settings page offers colour themes based on the community palettes below. The
 colour values in `qml/Look.qml` are taken from these projects; some shades are blends
 of them. The projects are not affiliated with CachyOS and do not endorse this
-application. All five are published under the MIT License.
+application. All of them are published under the MIT License.
 
 | Theme | Source | Copyright |
 | --- | --- | --- |
 | Nord | <https://github.com/nordtheme/nord> | Copyright (c) 2016-present Sven Greb |
 | Dracula (light: Alucard) | <https://github.com/dracula/dracula-theme> | Copyright (c) 2023 Dracula Theme |
-| Catppuccin (Mocha and Latte) | <https://github.com/catppuccin/catppuccin> | Copyright (c) 2021 Catppuccin |
+| Catppuccin (Mocha, Macchiato and Frappé; light: Latte) | <https://github.com/catppuccin/catppuccin> | Copyright (c) 2021 Catppuccin |
 | Tokyo Night | <https://github.com/tokyo-night/tokyo-night-vscode-theme> | Copyright (c) 2018-present Enkia |
 | Solarized | <https://github.com/altercation/solarized> | Copyright (c) 2011 Ethan Schoonover |
+| Gruvbox | <https://github.com/morhetz/gruvbox> | Copyright (c) Pavel Pertsev |
+| Rosé Pine (light: Dawn) | <https://github.com/rose-pine/rose-pine-theme> | Copyright (c) 2023 Rosé Pine |
+| Everforest | <https://github.com/sainnhe/everforest> | Copyright (c) 2019 sainnhe |
 
 ### MIT License
 

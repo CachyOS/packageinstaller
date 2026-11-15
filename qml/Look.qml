@@ -142,7 +142,7 @@ QtObject {
             }
         },
         "catppuccin": {
-            title: "Catppuccin", hint: qsTr("Community palette by %1").arg("Catppuccin"),
+            title: "Catppuccin Mocha", hint: qsTr("Community palette by %1").arg("Catppuccin"),
             dark: {
                 window: "#1e1e2e", sidebar: "#181825", surface: "#2b2c3d", surfaceHover: "#2e2f40", surfaceAlt: "#313244",
                 border: "#45475a", text: "#cdd6f4", textMuted: "#a6adc8",
@@ -160,6 +160,48 @@ QtObject {
             hero: {
                 stops: ["#4e4466", "#715f8e", "#4b5d84"], text: "#ffffff", sub: "#f6effe",
                 button: "#cba6f7", buttonHover: "#d6baf9", ink: "#11111b", image: "icons/cachyos-logo.png"
+            }
+        },
+        "catppuccinmacchiato": {
+            title: "Catppuccin Macchiato", hint: qsTr("Community palette by %1").arg("Catppuccin"),
+            dark: {
+                window: "#24273a", sidebar: "#1e2030", surface: "#303448", surfaceHover: "#33374c", surfaceAlt: "#363a4f",
+                border: "#494d64", text: "#cad3f5", textMuted: "#a5adcb",
+                accent: "#c6a0f6", accentHover: "#d3b5f8", accentSoft: "#443f60", onAccent: "#181926",
+                arch: "#8aadf4", archSoft: "#38425f",
+                danger: "#ed8796", dangerSoft: "#4c3a4c", warning: "#eed49f", warningSoft: "#4c4a4e"
+            },
+            light: {
+                window: "#e6e9ef", sidebar: "#dce0e8", surface: "#eff1f5", surfaceHover: "#e2e6ec", surfaceAlt: "#d6dae2",
+                border: "#ccd0da", text: "#4c4f69", textMuted: "#6c6f85",
+                accent: "#8839ef", accentHover: "#7430cb", accentSoft: "#d7cdef", onAccent: "#eff1f5",
+                arch: "#1e66f5", archSoft: "#c6d4f0",
+                danger: "#d20f39", dangerSoft: "#e3cad6", warning: "#a76a16", warningSoft: "#ddd7d1"
+            },
+            hero: {
+                stops: ["#51496f", "#726194", "#4f5f88"], text: "#ffffff", sub: "#f4ecfd",
+                button: "#c6a0f6", buttonHover: "#d3b5f8", ink: "#181926", image: "icons/cachyos-logo.png"
+            }
+        },
+        "catppuccinfrappe": {
+            title: "Catppuccin Frappé", hint: qsTr("Community palette by %1").arg("Catppuccin"),
+            dark: {
+                window: "#303446", sidebar: "#292c3c", surface: "#3c4053", surfaceHover: "#3e4256", surfaceAlt: "#414559",
+                border: "#51576d", text: "#c6d0f5", textMuted: "#a5adce",
+                accent: "#cca2e7", accentHover: "#d7b6ec", accentSoft: "#4f4a66", onAccent: "#232634",
+                arch: "#8eacee", archSoft: "#434c68",
+                danger: "#ec9b9d", dangerSoft: "#564957", warning: "#e5c890", warningSoft: "#545255"
+            },
+            light: {
+                window: "#e6e9ef", sidebar: "#dce0e8", surface: "#eff1f5", surfaceHover: "#e2e6ec", surfaceAlt: "#d6dae2",
+                border: "#ccd0da", text: "#4c4f69", textMuted: "#6c6f85",
+                accent: "#8839ef", accentHover: "#7430cb", accentSoft: "#d7cdef", onAccent: "#eff1f5",
+                arch: "#1e66f5", archSoft: "#c6d4f0",
+                danger: "#d20f39", dangerSoft: "#e3cad6", warning: "#a76a16", warningSoft: "#ddd7d1"
+            },
+            hero: {
+                stops: ["#5c5373", "#7b6993", "#57668d"], text: "#ffffff", sub: "#f5ecfa",
+                button: "#cca2e7", buttonHover: "#d7b6ec", ink: "#232634", image: "icons/cachyos-logo.png"
             }
         },
         "tokyonight": {
@@ -203,10 +245,74 @@ QtObject {
                 stops: ["#184d64", "#296686", "#405a79"], text: "#ffffff", sub: "#e1eff9",
                 button: "#56a5dc", buttonHover: "#7bb9e4", ink: "#002b36", image: "icons/cachyos-logo.png"
             }
+        },
+        "gruvbox": {
+            title: "Gruvbox", hint: qsTr("Community palette by %1").arg("Pavel Pertsev"),
+            dark: {
+                window: "#282828", sidebar: "#1d2021", surface: "#32302f", surfaceHover: "#373432", surfaceAlt: "#3c3836",
+                border: "#504945", text: "#ebdbb2", textMuted: "#a89984",
+                accent: "#8ec07c", accentHover: "#a7ce99", accentSoft: "#3c4639", onAccent: "#282828",
+                arch: "#d3869b", archSoft: "#4a3b3f",
+                danger: "#fc7161", dangerSoft: "#523733", warning: "#fabd2f", warningSoft: "#524629"
+            },
+            light: {
+                window: "#f2e5bc", sidebar: "#ebdbb2", surface: "#fbf1c7", surfaceHover: "#eee0b7", surfaceAlt: "#e4d4a9",
+                border: "#d5c4a1", text: "#3c3836", textMuted: "#665c54",
+                accent: "#3b6f4f", accentHover: "#325e43", accentSoft: "#d5d2ab", onAccent: "#fbf1c7",
+                arch: "#8f3f71", archSoft: "#e2cab0",
+                danger: "#9d0006", dangerSoft: "#e4c09f", warning: "#946110", warningSoft: "#e3d0a0"
+            },
+            hero: {
+                stops: ["#455340", "#597150", "#704f58"], text: "#ffffff", sub: "#e8f2e5",
+                button: "#8ec07c", buttonHover: "#a7ce99", ink: "#282828", image: "icons/cachyos-logo.png"
+            }
+        },
+        "rosepine": {
+            title: "Rosé Pine", hint: qsTr("Community palette by %1").arg("Rosé Pine"),
+            dark: {
+                window: "#191724", sidebar: "#14121d", surface: "#1f1d2e", surfaceHover: "#222034", surfaceAlt: "#26233a",
+                border: "#403d52", text: "#e0def4", textMuted: "#908caa",
+                accent: "#c4a7e7", accentHover: "#d1baec", accentSoft: "#3b344b", onAccent: "#191724",
+                arch: "#9ccfd8", archSoft: "#333c48",
+                danger: "#eb6f92", dangerSoft: "#43293a", warning: "#f6c177", warningSoft: "#453935"
+            },
+            light: {
+                window: "#faf4ed", sidebar: "#f2e9e1", surface: "#fffaf3", surfaceHover: "#f4ede8", surfaceAlt: "#eae2da",
+                border: "#dfdad9", text: "#575279", textMuted: "#6f6c87",
+                accent: "#79668e", accentHover: "#675779", accentSoft: "#e5ddde", onAccent: "#fffaf3",
+                arch: "#286983", archSoft: "#d8dedc",
+                danger: "#a2596e", dangerSoft: "#ecdbd9", warning: "#9a6822", warningSoft: "#ebdecd"
+            },
+            hero: {
+                stops: ["#493f5b", "#6b5c82", "#506470"], text: "#ffffff", sub: "#f3edfa",
+                button: "#c4a7e7", buttonHover: "#d1baec", ink: "#191724", image: "icons/cachyos-logo.png"
+            }
+        },
+        "everforest": {
+            title: "Everforest", hint: qsTr("Community palette by %1").arg("sainnhe"),
+            dark: {
+                window: "#2d353b", sidebar: "#232a2e", surface: "#343f44", surfaceHover: "#384448", surfaceAlt: "#3d484d",
+                border: "#4f585e", text: "#d3c6aa", textMuted: "#a1aca4",
+                accent: "#a7c080", accentHover: "#bace9c", accentSoft: "#455149", onAccent: "#232a2e",
+                arch: "#7fbbb3", archSoft: "#3d5053",
+                danger: "#ea9597", dangerSoft: "#53484d", warning: "#dbbc7f", warningSoft: "#505049"
+            },
+            light: {
+                window: "#f4f0d9", sidebar: "#e6e2cc", surface: "#fdf6e3", surfaceHover: "#efebd4", surfaceAlt: "#e6e2cc",
+                border: "#cfd0bb", text: "#4a555b", textMuted: "#636e62",
+                accent: "#637101", accentHover: "#546001", accentSoft: "#dddcb6", onAccent: "#fdf6e3",
+                arch: "#2e769e", archSoft: "#d4dcd0",
+                danger: "#c14240", dangerSoft: "#ecd4c1", warning: "#936a00", warningSoft: "#e4dbb6"
+            },
+            hero: {
+                stops: ["#4f5c4e", "#68785c", "#4f6d6d"], text: "#ffffff", sub: "#edf2e6",
+                button: "#a7c080", buttonHover: "#bace9c", ink: "#232a2e", image: "icons/cachyos-logo.png"
+            }
         }
     })
     /// in the order the settings page shows them
-    readonly property var themeNames: ["classic", "midnight", "graphite", "aurora", "nord", "dracula", "catppuccin", "tokyonight", "solarized"]
+    readonly property var themeNames: ["classic", "midnight", "graphite", "aurora", "nord", "dracula", "catppuccin", "catppuccinmacchiato", "catppuccinfrappe",
+        "tokyonight", "solarized", "gruvbox", "rosepine", "everforest"]
 
     // an unknown name in the settings file falls back to the classic look
     readonly property var theme: themes[settings.theme] ?? themes["classic"]
