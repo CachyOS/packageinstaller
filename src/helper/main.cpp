@@ -8,7 +8,7 @@
 // sudo. It accepts only the three operations paru uses to install what it built, so
 // that one authentication covers a whole build instead of one per step.
 
-#include <cerrno>   // for errno
+#include <cerrno>   // for errno, EINTR
 #include <csignal>  // for signal
 #include <cstdio>   // for stderr
 #include <cstdlib>  // for getenv
@@ -26,7 +26,8 @@
 #include <utility>       // for pair
 #include <vector>        // for vector
 
-#include <unistd.h>  // for setsid, execve
+#include <sys/wait.h>  // for waitpid, WIFEXITED
+#include <unistd.h>    // for fork, setsid, execve, _exit
 
 namespace fs = std::filesystem;
 using namespace std::string_literals;
@@ -34,7 +35,7 @@ using namespace std::string_view_literals;
 
 namespace {
 
-constexpr auto kPacman = "/usr/bin/pacman"sv;
+constexpr auto kPacman = "/usr/bin/pacman";
 
 // pkexec itself answers 126 and 127 when the user is not let through
 constexpr int kRefused    = 2;
@@ -194,26 +195,55 @@ auto c_strings(std::span<std::string> strings) noexcept -> std::vector<char*> {
     return pointers;
 }
 
+auto pacman_path() noexcept -> const char* {
+#ifdef PI_HELPER_TESTING
+    if (const char* fake = std::getenv("CACHYOS_PI_HELPER_PACMAN"); fake != nullptr) {
+        return fake;
+    }
+#endif
+    return kPacman;
+}
+
+[[noreturn]] void exec_in_own_session(char* const* argv, char* const* envp) noexcept {
+    // out of reach of the caller's terminal and of a signal to its process group
+    if (setsid() < 0) {
+        std::println(stderr, "cachyos-pi-helper: cannot start a session: {}", std::generic_category().message(errno));
+        _exit(kNotStarted);
+    }
+    execve(pacman_path(), argv, envp);
+    std::println(stderr, "cachyos-pi-helper: cannot run pacman: {}", std::generic_category().message(errno));
+    _exit(kNotStarted);
+}
+
+auto exit_status_of(pid_t child) noexcept -> int {
+    int status{};
+    while (waitpid(child, &status, 0) < 0) {
+        if (errno != EINTR) {
+            return kNotStarted;
+        }
+    }
+    return WIFEXITED(status) ? WEXITSTATUS(status) : 128 + WTERMSIG(status);
+}
+
 auto run(Args& args) noexcept -> int {
     // TODO(vnepogodin): copy gucc code into here for now
     std::array environment{"PATH=/usr/bin"s, "LC_ALL=C.UTF-8"s};
-
-    // NOTE: yenuenly we don't even need std::string here..
-    std::string pacman{kPacman};
-#ifdef PI_HELPER_TESTING
-    if (const char* fake = std::getenv("CACHYOS_PI_HELPER_PACMAN"); fake != nullptr) {
-        pacman = fake;
-    }
-#endif
+    const auto argv = c_strings(args);
+    const auto envp = c_strings(environment);
 
     // pacman goes on when whoever reads its output is gone
     std::signal(SIGPIPE, SIG_IGN);
-    // out of reach of the caller's terminal and of a signal to its process group
-    setsid();
 
-    execve(pacman.c_str(), c_strings(args).data(), c_strings(environment).data());
-    std::println(stderr, "cachyos-pi-helper: cannot run pacman: {}", std::generic_category().message(errno));
-    return kNotStarted;
+    // the app starts as a process group leader, which cannot start a session
+    const pid_t child = fork();
+    if (child < 0) {
+        std::println(stderr, "cachyos-pi-helper: cannot fork: {}", std::generic_category().message(errno));
+        return kNotStarted;
+    }
+    if (child == 0) {
+        exec_in_own_session(argv.data(), envp.data());
+    }
+    return exit_status_of(child);
 }
 
 }  // namespace
