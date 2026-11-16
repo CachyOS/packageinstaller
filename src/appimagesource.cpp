@@ -6,6 +6,7 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QRegularExpression>
+#include <QVersionNumber>
 
 using namespace Qt::StringLiterals;
 
@@ -31,6 +32,10 @@ bool foreign(const QString& fileName) {
         "|(?<![a-z])arm(?![a-z])|x86(?![_-]?64)"_s,
         QRegularExpression::CaseInsensitiveOption);
     return other.match(fileName).hasMatch();
+}
+
+QStringView withoutV(QStringView name) {
+    return name.startsWith(u'v', Qt::CaseInsensitive) ? name.mid(1) : name;
 }
 
 }  // namespace
@@ -81,9 +86,24 @@ std::optional<Source> sourceFromValue(const QString& value) {
     return Source{.owner = parts.at(0), .repo = parts.at(1), .file = {}};
 }
 
+std::optional<std::strong_ordering> compareReleases(QStringView installed, QStringView offered) {
+    const auto version = [](QStringView name) -> std::optional<QVersionNumber> {
+        name = withoutV(name);
+        qsizetype end   = 0;
+        const auto read = QVersionNumber::fromString(name, &end);
+        // "1.2-rc1" and "nightly" are more than a version: nothing to order them by
+        return read.isNull() || end != name.size() ? std::nullopt : std::optional{read.normalized()};
+    };
+    const auto have = version(installed);
+    const auto get  = version(offered);
+    return have && get ? std::optional{QVersionNumber::compare(*have, *get) <=> 0} : std::nullopt;
+}
+
 bool sameRelease(QStringView one, QStringView other) {
-    const auto bare = [](QStringView name) { return name.startsWith(u'v') ? name.mid(1) : name; };
-    return !one.isEmpty() && bare(one) == bare(other);
+    if (const auto order = compareReleases(one, other)) {
+        return std::is_eq(*order);
+    }
+    return !one.isEmpty() && withoutV(one) == withoutV(other);
 }
 
 QUrl latestReleaseUrl(const Source& source) {
@@ -142,9 +162,12 @@ QString variant(const QString& fileName) {
             }
         }
     }
-    // A version is a number that stands alone, "1.2.3" or "v7". Digits inside a word stay:
-    // "qt5" and "qt6" are different builds.
-    static const QRegularExpression version(u"(?<![a-z0-9A-Z])v?\\d+(?:[._]\\d+)*(?![a-zA-Z0-9])"_s);
+    // A version is a number that stands alone, "1.2.3" or "v7", with the count of a
+    // pre-release if it has one: "1.2.3rc1", "2.0-beta.1". Digits inside a word stay:
+    // "qt5" and "qt6" are different builds, and so is a "-beta" that is not counted.
+    // Possessive, so that no shorter number is tried when what follows does not fit.
+    static const QRegularExpression version(
+        u"(?<![a-z0-9A-Z])v?\\d++(?:[._]\\d++)*+(?:[-._]?(?:rc|beta|alpha|pre)[._]?\\d++)?+(?![a-zA-Z0-9])"_s);
     return name.replace(version, u"#"_s);
 }
 
@@ -160,7 +183,8 @@ qsizetype choose(const QList<Asset>& assets, const QString& variant) {
     if (matches == 1) {
         return found;
     }
-    return assets.size() == 1 ? 0 : -1;
+    // only a file whose kind was never known may be continued by whatever is there
+    return variant.isEmpty() && assets.size() == 1 ? 0 : -1;
 }
 
 }  // namespace appimage

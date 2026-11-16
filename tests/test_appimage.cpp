@@ -46,7 +46,7 @@ class TestAppImage : public QObject {
     }
 
     void integration() {
-        const auto original = 
+        const auto original =
             u"# written by a tool\r\n"
             "[Desktop Entry]\r\n"
             "Type=Application\n"
@@ -73,7 +73,7 @@ class TestAppImage : public QObject {
             "[Desktop Entry]\n"
             "Exec=/usr/bin/evil\n"_s;
         const auto entry = appimage::integrate(original, u"/h/Applications/E.AppImage"_s, u"/h/icons/e.png"_s);
-        QCOMPARE(entry, 
+        QCOMPARE(entry,
             u"[Desktop Entry]\n"
             "Type=Application\n"
             "Name=Editor\n"
@@ -359,17 +359,43 @@ class TestAppImage : public QObject {
         QVERIFY(!appimage::parseRelease(QByteArray()).has_value());
     }
 
+    void releaseOrder_data() {
+        QTest::addColumn<QString>("installed");
+        QTest::addColumn<QString>("offered");
+        QTest::addColumn<int>("order");
+        QTest::newRow("same, with and without v") << u"1.2.0"_s << u"v1.2"_s << 0;
+        QTest::newRow("capital V") << u"V1.2"_s << u"1.2"_s << 0;
+        QTest::newRow("numbers, not text") << u"v1.9"_s << u"v1.10"_s << -1;
+        QTest::newRow("moved back") << u"2.0"_s << u"1.9.9"_s << 1;
+        QTest::newRow("rolling") << u"nightly"_s << u"nightly"_s << 2;
+        QTest::newRow("pre-release") << u"1.2-rc1"_s << u"1.2"_s << 2;
+        QTest::newRow("nothing remembered") << QString() << u"1.2"_s << 2;
+    }
+
+    void releaseOrder() {
+        QFETCH(QString, installed);
+        QFETCH(QString, offered);
+        QFETCH(int, order);
+        const auto result = appimage::compareReleases(installed, offered);
+        QCOMPARE(result ? (std::is_lt(*result) ? -1 : std::is_gt(*result) ? 1 : 0) : 2, order);
+        QCOMPARE(appimage::sameRelease(installed, offered), order == 0 || installed == u"nightly");
+    }
+
     void variants() {
         QCOMPARE(appimage::variant(u"App-1.2.3-x86_64.AppImage"_s), appimage::variant(u"App-1.10-x86_64.AppImage"_s));
         QCOMPARE(appimage::variant(u"App-2024.05.01-x86_64.AppImage"_s), appimage::variant(u"app-7-x86_64.appimage"_s));
         QVERIFY(appimage::variant(u"App-1.2-x86_64.AppImage"_s) != appimage::variant(u"App-1.2-lite-x86_64.AppImage"_s));
         QCOMPARE(appimage::variant(u"App_v1.2.3_amd64.AppImage"_s), appimage::variant(u"App_v2_amd64.AppImage"_s));
         QCOMPARE(appimage::variant(u"1.2-App.AppImage"_s), appimage::variant(u"3-App.AppImage"_s));
-        // numbers that are no version stay
+
         QVERIFY(appimage::variant(u"App-1.2-qt5-x86_64.AppImage"_s) != appimage::variant(u"App-1.2-qt6-x86_64.AppImage"_s));
         QVERIFY(appimage::variant(u"App-1.2-x86_64.AppImage"_s) != appimage::variant(u"App-1.2-x86_64-v3.AppImage"_s));
         QVERIFY(appimage::variant(u"App-1.2-x86_64-v2.AppImage"_s) != appimage::variant(u"App-1.2-x86_64-v3.AppImage"_s));
         QCOMPARE(appimage::variant(u"App-1.2-x86_64-v3.AppImage"_s), appimage::variant(u"App-1.3-x86_64-v3.AppImage"_s));
+
+        QCOMPARE(appimage::variant(u"App-1.2.3rc1-x86_64.AppImage"_s), appimage::variant(u"App-1.2.4-x86_64.AppImage"_s));
+        QCOMPARE(appimage::variant(u"App-2.0.0-beta.1-x86_64.AppImage"_s), appimage::variant(u"App-2.0.0-x86_64.AppImage"_s));
+        QVERIFY(appimage::variant(u"App-1.2-beta-x86_64.AppImage"_s) != appimage::variant(u"App-1.2-x86_64.AppImage"_s));
 
         const auto assets = appimage::parseRelease(releaseJson(u"v2"_s, {file(1, u"App-2.0-x86_64.AppImage"_s),
             file(2, u"App-2.0-lite-x86_64.AppImage"_s)}))->assets;
@@ -378,8 +404,9 @@ class TestAppImage : public QObject {
         // renamed in the new release: not clear which of two it is
         QCOMPARE(appimage::choose(assets, u"other-#.appimage"_s), -1);
         QCOMPARE(appimage::choose(assets, QString()), -1);
-        // a single file is the one, whatever it is called now
-        QCOMPARE(appimage::choose(assets.mid(0, 1), u"other-#.appimage"_s), 0);
+
+        QCOMPARE(appimage::choose(assets.mid(0, 1), u"other-#.appimage"_s), -1);
+        QCOMPARE(appimage::choose(assets.mid(0, 1), QString()), 0);
         QCOMPARE(appimage::choose({}, u"other-#.appimage"_s), -1);
     }
 };

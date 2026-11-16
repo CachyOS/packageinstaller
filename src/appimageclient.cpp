@@ -665,17 +665,23 @@ const appimage::Asset* newerAsset(const QHash<QString, appimage::Release>& relea
         return nullptr;
     }
     const auto file = appimage::choose(release->assets, tracked.variant);
-    if (file < 0 || release->assets.at(file).id == tracked.asset) {
+    if (file < 0) {
         return nullptr;
     }
-    // the upload is not known for a file another program downloaded: go by the release
-    if (tracked.asset == 0 && appimage::sameRelease(tracked.release, release->tag)) {
+    const auto& asset = release->assets.at(file);
+    // Versions say which is newer: a file uploaded again, or an older release that became
+    // the latest, is no update. A release without one ("nightly") goes by the upload, and
+    // by its name when another program downloaded the file and the upload is not known.
+    const auto order = appimage::compareReleases(tracked.release, release->tag);
+    const bool newer = order ? std::is_lt(*order)
+                             : asset.id != tracked.asset && (tracked.asset != 0 || !appimage::sameRelease(tracked.release, release->tag));
+    if (!newer) {
         return nullptr;
     }
     if (tag != nullptr) {
         *tag = release->tag;
     }
-    return &release->assets.at(file);
+    return &asset;
 }
 
 }  // namespace

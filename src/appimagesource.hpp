@@ -6,6 +6,7 @@
 #include <QString>
 #include <QUrl>
 
+#include <compare>
 #include <optional>
 
 /// AppImages that come from the releases of a GitHub repository: reading the link the
@@ -55,15 +56,19 @@ struct Release {
 /// be empty. Nothing when the answer does not describe a release.
 std::optional<Release> parseRelease(const QByteArray& answer);
 
-/// True when both name the same release: "1.2" and "v1.2" do. Never for an empty name.
+/// How the release `installed` stands to `offered` when both are named by a version:
+/// "1.9" is less than "v1.10". Nothing for names that are not ("nightly", "1.2-rc1").
+std::optional<std::strong_ordering> compareReleases(QStringView installed, QStringView offered);
+
+/// True when both name the same release: "1.2.0" and "v1.2" do. Never for an empty name.
 bool sameRelease(QStringView one, QStringView other);
 
 /// A file name without its version: "App-1.2.3-x86_64.AppImage" and "App-1.10-x86_64.AppImage"
 /// give the same text. Tells the files of one release apart across releases.
 QString variant(const QString& fileName);
 
-/// The file of `assets` that continues `variant`: the one of that kind, else the only
-/// one there is. -1 when that is not clear.
+/// The file of `assets` that continues `variant`: the one of that kind. For an empty
+/// `variant` the only file there is. -1 when that is not clear.
 qsizetype choose(const QList<Asset>& assets, const QString& variant);
 
 }  // namespace appimage
