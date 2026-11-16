@@ -50,6 +50,19 @@ class TestUpdateNotice : public QObject {
         QVERIFY(!updatenotice::parse("[{\"id\":\"1\",\"body\":\"text\"}]").has_value());
     }
 
+    void statuses() {
+        const QByteArray notice = R"({"id": "7", "body": "Read this."})";
+        QCOMPARE(updatenotice::read(false, notice)->id, u"7"_s);
+        // how the server says that there is none
+        QVERIFY(updatenotice::read(true, "No notice found\n")->id.isEmpty());
+        QVERIFY(updatenotice::read(false, "No notice found")->id.isEmpty());
+        // a missing page, also one that is JSON, and a notice under that status are no answer
+        QVERIFY(!updatenotice::read(true, "<html>Not Found</html>"));
+        QVERIFY(!updatenotice::read(true, R"({"detail": "Not Found"})"));
+        QVERIFY(!updatenotice::read(true, notice));
+        QVERIFY(!updatenotice::read(true, {}));
+    }
+
     void seen() {
         const updatenotice::Message notice{.id = u"2130f114"_s, .body = u"text"_s};
         QVERIFY(updatenotice::pending(notice, {}));

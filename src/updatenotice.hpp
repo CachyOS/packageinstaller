@@ -23,6 +23,11 @@ struct Message {
 /// sentence when there is no notice (an empty message). Nothing for any other answer.
 std::optional<Message> parse(const QByteArray& answer);
 
+/// What a whole answer says. The server tells that there is no notice with a plain
+/// sentence under status 404 (`notFound`), which is an answer like any other; nothing
+/// for anything else under that status.
+std::optional<Message> read(bool notFound, const QByteArray& answer);
+
 /// Whether `message` still has to be shown. `seenId` is what pacman stored when the last
 /// notice was accepted.
 bool pending(const Message& message, const QByteArray& seenId);

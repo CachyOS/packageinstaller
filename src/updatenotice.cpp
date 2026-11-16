@@ -18,12 +18,17 @@ QUrl noticeUrl() {
     return QUrl(custom.isEmpty() ? QString(NOTICE_URL) : custom);
 }
 
+/// The sentence the server sends when there is no notice.
+bool saysNone(const QByteArray& answer) {
+    return answer.trimmed() == "No notice found";
+}
+
 }  // namespace
 
 namespace updatenotice {
 
 std::optional<Message> parse(const QByteArray& answer) {
-    if (answer.trimmed() == "No notice found") {
+    if (saysNone(answer)) {
         return Message{};
     }
     const auto document = QJsonDocument::fromJson(answer);
@@ -40,6 +45,14 @@ std::optional<Message> parse(const QByteArray& answer) {
         return Message{};
     }
     return message;
+}
+
+std::optional<Message> read(bool notFound, const QByteArray& answer) {
+    if (!notFound) {
+        return parse(answer);
+    }
+    // anything else under that status is a page that is missing, not an answer
+    return saysNone(answer) ? std::optional(Message{}) : std::nullopt;
 }
 
 bool pending(const Message& message, const QByteArray& seenId) {
@@ -92,8 +105,11 @@ void UpdateNotice::onFinished() {
     auto* reply = std::exchange(m_reply, nullptr);
     reply->deleteLater();
     m_deadline.stop();
-    // an aborted request ends with an error
-    auto message = reply->error() == QNetworkReply::NoError ? updatenotice::parse(reply->readAll()) : std::nullopt;
+    // "No notice" comes with status 404, which Qt reports as an error of its own. After any
+    // other error the answer is not whole or not there, as when the request was aborted.
+    const auto error    = reply->error();
+    const bool notFound = error == QNetworkReply::ContentNotFoundError;
+    auto message = notFound || error == QNetworkReply::NoError ? updatenotice::read(notFound, reply->readAll()) : std::nullopt;
     m_failed     = !message.has_value();
     if (message) {
         m_message = *std::move(message);
