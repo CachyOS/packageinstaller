@@ -159,4 +159,23 @@ ScrollPage {
             onToggled: Backend.appImagesEnabled = !Backend.appImagesEnabled
         }
     }
+
+    Section {
+        id: mirrors
+        width: sources.width
+        title: qsTr("Mirrors")
+
+        SettingCard {
+            width: mirrors.width
+            title: qsTr("Rank the mirrors by speed")
+            description: qsTr("Packages are downloaded from the first mirror that answers. Ranking measures the Arch and CachyOS mirrors from your connection and rewrites the mirror lists to prefer the fast ones. Worth doing when downloads are slow or fail.")
+            warning: Backend.canRateMirrors ? "" : qsTr("Ranking needs the “cachyos-rate-mirrors” package, which is not installed.")
+
+            PillButton {
+                tone: "soft"
+                text: Backend.canRateMirrors ? qsTr("Rank mirrors") : qsTr("Install cachyos-rate-mirrors")
+                onClicked: Backend.canRateMirrors ? Backend.rateMirrors() : Backend.install("cachyos-rate-mirrors")
+            }
+        }
+    }
 }

@@ -7,6 +7,10 @@
 // The "pacman" verb exists for paru, which is started with this helper in place of
 // sudo. It accepts only the three operations paru uses to install what it built, so
 // that one authentication covers a whole build instead of one per step.
+//
+// One more verb ranks the mirrors with cachyos-rate-mirrors, which takes no arguments.
+
+#include "shared.hpp"
 
 #include <cerrno>   // for errno, EINTR
 #include <csignal>  // for signal
@@ -52,6 +56,12 @@ constexpr std::array kParuOptions{
 
 using Args      = std::vector<std::string>;
 using Arguments = std::span<const std::string_view>;
+
+/// What the helper starts: the program and its argv, argv[0] included.
+struct Command {
+    const char* program;
+    Args args;
+};
 
 constexpr auto is_lower_or_digit(char c) noexcept -> bool {
     return (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9');
@@ -101,7 +111,7 @@ auto resolve_package_file(std::string_view given) noexcept -> std::optional<std:
 }
 
 auto usage() noexcept -> std::optional<Args> {
-    std::println(stderr, "usage: cachyos-pi-helper install <pkg>... | remove <pkg>... | upgrade\n"
+    std::println(stderr, "usage: cachyos-pi-helper install <pkg>... | remove <pkg>... | upgrade | rate-mirrors\n"
                          "       cachyos-pi-helper pacman --sync|--upgrade|--database [options] -- <target>...");
     return std::nullopt;
 }
@@ -165,7 +175,7 @@ auto pacman_for_paru(Arguments arguments) noexcept -> std::optional<Args> {
     return args;
 }
 
-auto pacman_command(Arguments arguments) noexcept -> std::optional<Args> {
+auto pacman_args(Arguments arguments) noexcept -> std::optional<Args> {
     if (arguments.empty()) {
         return usage();
     }
@@ -186,6 +196,17 @@ auto pacman_command(Arguments arguments) noexcept -> std::optional<Args> {
     return usage();
 }
 
+auto command_for(Arguments arguments) noexcept -> std::optional<Command> {
+    if (arguments.size() == 1 && arguments.front() == "rate-mirrors"sv) {
+        return Command{helper::kRateMirrors, {"cachyos-rate-mirrors"}};
+    }
+    auto args = pacman_args(arguments);
+    if (!args) {
+        return std::nullopt;
+    }
+    return Command{kPacman, std::move(*args)};
+}
+
 // TODO(vnepogodin): also gucc function
 auto c_strings(std::span<std::string> strings) noexcept -> std::vector<char*> {
     auto pointers = strings
@@ -195,23 +216,24 @@ auto c_strings(std::span<std::string> strings) noexcept -> std::vector<char*> {
     return pointers;
 }
 
-auto pacman_path() noexcept -> const char* {
+auto program_path(const char* program) noexcept -> std::string {
 #ifdef PI_HELPER_TESTING
-    if (const char* fake = std::getenv("CACHYOS_PI_HELPER_PACMAN"); fake != nullptr) {
-        return fake;
+    // the tests keep stand-ins for both programs in one directory
+    if (const char* directory = std::getenv("CACHYOS_PI_HELPER_BINDIR"); directory != nullptr) {
+        return (fs::path{directory} / fs::path{program}.filename()).native();
     }
 #endif
-    return kPacman;
+    return program;
 }
 
-[[noreturn]] void exec_in_own_session(char* const* argv, char* const* envp) noexcept {
+[[noreturn]] void exec_in_own_session(const char* program, char* const* argv, char* const* envp) noexcept {
     // out of reach of the caller's terminal and of a signal to its process group
     if (setsid() < 0) {
         std::println(stderr, "cachyos-pi-helper: cannot start a session: {}", std::generic_category().message(errno));
         _exit(kNotStarted);
     }
-    execve(pacman_path(), argv, envp);
-    std::println(stderr, "cachyos-pi-helper: cannot run pacman: {}", std::generic_category().message(errno));
+    execve(program, argv, envp);
+    std::println(stderr, "cachyos-pi-helper: cannot run {}: {}", program, std::generic_category().message(errno));
     _exit(kNotStarted);
 }
 
@@ -225,9 +247,13 @@ auto exit_status_of(pid_t child) noexcept -> int {
     return WIFEXITED(status) ? WEXITSTATUS(status) : 128 + WTERMSIG(status);
 }
 
-auto run(Args& args) noexcept -> int {
+auto run(Command& command) noexcept -> int {
     // TODO(vnepogodin): copy gucc code into here for now
     std::array environment{"PATH=/usr/bin"s, "LC_ALL=C.UTF-8"s};
+    auto& args         = command.args;
+    const auto program = program_path(command.program);
+    // the app tells a refused authentication by the absence of this line
+    std::println(stderr, "{}{}", helper::kStarted, args | std::ranges::views::join_with(' ') | std::ranges::to<std::string>());
     const auto argv = c_strings(args);
     const auto envp = c_strings(environment);
 
@@ -241,7 +267,7 @@ auto run(Args& args) noexcept -> int {
         return kNotStarted;
     }
     if (child == 0) {
-        exec_in_own_session(argv.data(), envp.data());
+        exec_in_own_session(program.c_str(), argv.data(), envp.data());
     }
     return exit_status_of(child);
 }
@@ -253,6 +279,6 @@ int main(int argc, char** argv) {
         | std::ranges::views::drop(1)
         | std::ranges::to<std::vector<std::string_view>>();
 
-    auto command = pacman_command(arguments);
+    auto command = command_for(arguments);
     return command ? run(*command) : kRefused;
 }
