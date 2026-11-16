@@ -229,6 +229,8 @@ void Transaction::launch(const QString& program, const QStringList& args, const 
     auto* process = new QProcess(this);
     m_process     = process;
     process->setProcessChannelMode(QProcess::MergedChannels);
+    // script that asks reads the end of input, not a pipe that stays open
+    process->setStandardInputFile(QProcess::nullDevice());
     process->setWorkingDirectory(workingDirectory);
     process->setProcessEnvironment(env);
     // a group of its own, so one SIGINT reaches everything it started (makepkg, ...)
