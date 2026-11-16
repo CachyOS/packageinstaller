@@ -8,181 +8,221 @@
 // sudo. It accepts only the three operations paru uses to install what it built, so
 // that one authentication covers a whole build instead of one per step.
 
-#include <algorithm>
-#include <climits>
-#include <csignal>
-#include <cstdio>
-#include <cstdlib>
-#include <string>
-#include <string_view>
-#include <vector>
+#include <cerrno>   // for errno
+#include <csignal>  // for signal
+#include <cstdio>   // for stderr
+#include <cstdlib>  // for getenv
 
-#include <sys/stat.h>
-#include <unistd.h>
+#include <algorithm>     // for all_of, contains, find
+#include <array>         // for array
+#include <filesystem>    // for path, canonical, is_regular_file
+#include <optional>      // for optional
+#include <print>         // for println
+#include <ranges>        // for ranges::*
+#include <span>          // for span
+#include <string>        // for string
+#include <string_view>   // for string_view
+#include <system_error>  // for error_code, generic_category
+#include <utility>       // for pair
+#include <vector>        // for vector
+
+#include <unistd.h>  // for setsid, execve
+
+namespace fs = std::filesystem;
+using namespace std::string_literals;
+using namespace std::string_view_literals;
 
 namespace {
 
-constexpr auto PACMAN = "/usr/bin/pacman";
+constexpr auto kPacman = "/usr/bin/pacman"sv;
 
-bool validName(std::string_view name) {
+// pkexec itself answers 126 and 127 when the user is not let through
+constexpr int kRefused    = 2;
+constexpr int kNotStarted = 127;
+
+constexpr std::array kParuOperations{"--sync"sv, "--upgrade"sv, "--database"sv};
+
+// besides --noconfirm, which every operation takes
+constexpr std::array kParuOptions{
+    std::pair{"--sync"sv, "--needed"sv},
+    std::pair{"--database"sv, "--asdeps"sv},
+    std::pair{"--database"sv, "--asexplicit"sv},
+};
+
+using Args      = std::vector<std::string>;
+using Arguments = std::span<const std::string_view>;
+
+constexpr auto is_lower_or_digit(char c) noexcept -> bool {
+    return (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9');
+}
+
+constexpr auto is_package_name(std::string_view name) noexcept -> bool {
     if (name.empty() || name.size() > 255 || name.front() == '-' || name.front() == '.') {
         return false;
     }
     return std::ranges::all_of(name, [](char c) {
-        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c == '@' || c == '.'
-            || c == '_' || c == '+' || c == '-';
+        return is_lower_or_digit(c) || (c >= 'A' && c <= 'Z') || "@._+-"sv.contains(c);
     });
 }
 
-/// "name" or "repo/name", as paru names packages from the repositories.
-bool validTarget(std::string_view target) {
+constexpr auto is_repo_target(std::string_view target) noexcept -> bool {
     const auto slash = target.find('/');
     if (slash == std::string_view::npos) {
-        return validName(target);
+        return is_package_name(target);
     }
-    return validName(target.substr(0, slash)) && validName(target.substr(slash + 1));
+    return is_package_name(target.substr(0, slash)) && is_package_name(target.substr(slash + 1));
 }
 
-/// A built package: an absolute path to a regular file called "<something>.pkg.tar" with an
-/// optional compression ending. Links and ".." are resolved first and pacman is given the
-/// resolved path, so the file that was checked is the one that is named to pacman. The
-/// directory is not restricted, since makepkg puts packages where PKGDEST says.
-/// Returns the resolved path, or an empty string.
-std::string packageFile(const char* path) {
-    const std::string_view given = path;
-    if (given.empty() || given.size() >= PATH_MAX || given.front() != '/') {
-        return {};
-    }
-    char resolved[PATH_MAX];
-    if (realpath(path, resolved) == nullptr) {
-        return {};
-    }
-    const std::string_view text = resolved;
-    const auto name   = text.substr(text.rfind('/') + 1);
-    const auto marker = name.rfind(".pkg.tar");
+constexpr auto is_package_file_name(std::string_view name) noexcept -> bool {
+    constexpr auto kMarker = ".pkg.tar"sv;
+    const auto marker      = name.rfind(kMarker);
     if (marker == std::string_view::npos || marker == 0) {
-        return {};
+        return false;
     }
-    const auto ending = name.substr(marker + 8);  // "", ".zst", ".xz", ...
-    const bool plain  = ending.empty()
+    const auto ending = name.substr(marker + kMarker.size());
+    return ending.empty()
         || (ending.size() > 1 && ending.front() == '.'
-            && std::ranges::all_of(ending.substr(1), [](char c) { return (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9') || c == 'Z'; }));
-    struct stat info {};
-    if (!plain || lstat(resolved, &info) != 0 || !S_ISREG(info.st_mode)) {
-        return {};
+            && std::ranges::all_of(ending.substr(1), [](char c) { return is_lower_or_digit(c) || c == 'Z'; }));
+}
+
+auto resolve_package_file(std::string_view given) noexcept -> std::optional<std::string> {
+    const fs::path path{given};
+    if (!path.is_absolute()) {
+        return std::nullopt;
     }
-    return std::string(text);
+    // links and ".." are followed first, so the file that was checked is the one pacman is given
+    std::error_code ec{};
+    const auto resolved = fs::canonical(path, ec);
+    if (ec || !is_package_file_name(resolved.filename().native()) || !fs::is_regular_file(resolved, ec)) {
+        return std::nullopt;
+    }
+    return resolved.native();
 }
 
-int usage() {
-    std::fputs("usage: cachyos-pi-helper install <pkg>... | remove <pkg>... | upgrade\n"
-               "       cachyos-pi-helper pacman --sync|--upgrade|--database [options] -- <target>...\n",
-        stderr);
-    return 2;
+auto usage() noexcept -> std::optional<Args> {
+    std::println(stderr, "usage: cachyos-pi-helper install <pkg>... | remove <pkg>... | upgrade\n"
+                         "       cachyos-pi-helper pacman --sync|--upgrade|--database [options] -- <target>...");
+    return std::nullopt;
 }
 
-/// The invocations paru makes: install dependencies from the repositories, install the
-/// packages it built, and set their install reason. Anything else is refused.
-int pacmanForParu(int argc, char** argv, std::vector<std::string>& args) {
-    if (argc < 5) {
+auto refuse(std::string_view what, std::string_view value) noexcept -> std::optional<Args> {
+    std::println(stderr, "cachyos-pi-helper: {} '{}'", what, value);
+    return std::nullopt;
+}
+
+auto with_package_names(Args args, Arguments names) noexcept -> std::optional<Args> {
+    if (names.empty()) {
         return usage();
     }
-    const std::string_view operation = argv[2];
-    if (operation != "--sync" && operation != "--upgrade" && operation != "--database") {
-        std::fprintf(stderr, "cachyos-pi-helper: pacman operation '%s' is not allowed\n", argv[2]);
-        return 2;
+    args.emplace_back("--");
+    for (const auto name : names) {
+        if (!is_package_name(name)) {
+            return refuse("invalid package name", name);
+        }
+        args.emplace_back(name);
     }
-    args.emplace_back(operation);
+    return args;
+}
 
-    int i = 3;
-    for (; i < argc && std::string_view(argv[i]) != "--"; ++i) {
-        const std::string_view option = argv[i];
-        const bool allowed = option == "--noconfirm" || (operation == "--sync" && option == "--needed")
-            || (operation == "--database" && (option == "--asdeps" || option == "--asexplicit"));
-        if (!allowed) {
-            std::fprintf(stderr, "cachyos-pi-helper: pacman option '%s' is not allowed here\n", argv[i]);
-            return 2;
+auto paru_target(std::string_view operation, std::string_view target) noexcept -> std::optional<std::string> {
+    if (operation == "--upgrade"sv) {
+        return resolve_package_file(target);
+    }
+    const bool valid = operation == "--sync"sv ? is_repo_target(target) : is_package_name(target);
+    return valid ? std::optional<std::string>{target} : std::nullopt;
+}
+
+auto pacman_for_paru(Arguments arguments) noexcept -> std::optional<Args> {
+    if (arguments.size() < 3) {
+        return usage();
+    }
+    const auto operation = arguments.front();
+    if (!std::ranges::contains(kParuOperations, operation)) {
+        return refuse("pacman operation is not allowed:", operation);
+    }
+    Args args{"pacman", std::string{operation}};
+
+    const auto separator = std::ranges::find(arguments, "--"sv);
+    for (const auto option : Arguments{arguments.begin() + 1, separator}) {
+        if (option != "--noconfirm"sv && !std::ranges::contains(kParuOptions, std::pair{operation, option})) {
+            return refuse("pacman option is not allowed here:", option);
         }
         args.emplace_back(option);
     }
-    if (i >= argc - 1) {
-        return usage();  // no "--", or nothing after it
+    const Arguments targets{separator == arguments.end() ? separator : separator + 1, arguments.end()};
+    if (targets.empty()) {
+        return usage();
     }
     args.emplace_back("--");
-    for (++i; i < argc; ++i) {
-        std::string target = argv[i];
-        if (operation == "--upgrade") {
-            target = packageFile(argv[i]);
-        } else if (!(operation == "--sync" ? validTarget(target) : validName(target))) {
-            target.clear();
+    for (const auto given : targets) {
+        auto target = paru_target(operation, given);
+        if (!target) {
+            return refuse("invalid target", given);
         }
-        if (target.empty()) {
-            std::fprintf(stderr, "cachyos-pi-helper: invalid target '%s'\n", argv[i]);
-            return 2;
-        }
-        args.push_back(std::move(target));
+        args.push_back(std::move(*target));
     }
-    return 0;
+    return args;
+}
+
+auto pacman_command(Arguments arguments) noexcept -> std::optional<Args> {
+    if (arguments.empty()) {
+        return usage();
+    }
+    const auto verb = arguments.front();
+    const auto rest = arguments.subspan(1);
+    if (verb == "install"sv) {
+        return with_package_names({"pacman", "-S", "--noconfirm", "--needed"}, rest);
+    }
+    if (verb == "remove"sv) {
+        return with_package_names({"pacman", "-Rs", "--noconfirm"}, rest);
+    }
+    if (verb == "upgrade"sv && rest.empty()) {
+        return Args{"pacman", "-Syu", "--noconfirm"};
+    }
+    if (verb == "pacman"sv) {
+        return pacman_for_paru(rest);
+    }
+    return usage();
+}
+
+// TODO(vnepogodin): also gucc function
+auto c_strings(std::span<std::string> strings) noexcept -> std::vector<char*> {
+    auto pointers = strings
+        | std::ranges::views::transform([](std::string& text) { return text.data(); })
+        | std::ranges::to<std::vector<char*>>();
+    pointers.push_back(nullptr);
+    return pointers;
+}
+
+auto run(Args& args) noexcept -> int {
+    // TODO(vnepogodin): copy gucc code into here for now
+    std::array environment{"PATH=/usr/bin"s, "LC_ALL=C.UTF-8"s};
+
+    // NOTE: yenuenly we don't even need std::string here..
+    std::string pacman{kPacman};
+#ifdef PI_HELPER_TESTING
+    if (const char* fake = std::getenv("CACHYOS_PI_HELPER_PACMAN"); fake != nullptr) {
+        pacman = fake;
+    }
+#endif
+
+    // pacman goes on when whoever reads its output is gone
+    std::signal(SIGPIPE, SIG_IGN);
+    // out of reach of the caller's terminal and of a signal to its process group
+    setsid();
+
+    execve(pacman.c_str(), c_strings(args).data(), c_strings(environment).data());
+    std::println(stderr, "cachyos-pi-helper: cannot run pacman: {}", std::generic_category().message(errno));
+    return kNotStarted;
 }
 
 }  // namespace
 
 int main(int argc, char** argv) {
-    if (argc < 2) {
-        return usage();
-    }
-    const std::string_view verb = argv[1];
-    std::vector<std::string> args{"pacman"};
+    const auto arguments = std::span{argv, static_cast<std::size_t>(argc)}
+        | std::ranges::views::drop(1)
+        | std::ranges::to<std::vector<std::string_view>>();
 
-    if (verb == "install") {
-        args.insert(args.end(), {"-S", "--noconfirm", "--needed", "--"});
-    } else if (verb == "remove") {
-        args.insert(args.end(), {"-Rs", "--noconfirm", "--"});
-    } else if (verb == "upgrade") {
-        if (argc != 2) {
-            return usage();
-        }
-        args.insert(args.end(), {"-Syu", "--noconfirm"});
-    } else if (verb == "pacman") {
-        if (const int status = pacmanForParu(argc, argv, args); status != 0) {
-            return status;
-        }
-    } else {
-        return usage();
-    }
-
-    if (verb != "upgrade" && verb != "pacman") {
-        if (argc < 3) {
-            return usage();
-        }
-        for (int i = 2; i < argc; ++i) {
-            if (!validName(argv[i])) {
-                std::fprintf(stderr, "cachyos-pi-helper: invalid package name '%s'\n", argv[i]);
-                return 2;
-            }
-            args.emplace_back(argv[i]);
-        }
-    }
-
-    std::vector<char*> execArgs;
-    execArgs.reserve(args.size() + 1);
-    for (auto& arg : args) {
-        execArgs.push_back(arg.data());
-    }
-    execArgs.push_back(nullptr);
-
-    std::signal(SIGPIPE, SIG_IGN);
-    setsid();
-
-    char path[]  = "PATH=/usr/bin";
-    char lang[]  = "LC_ALL=C.UTF-8";
-    char* envp[] = {path, lang, nullptr};
-#ifdef PI_HELPER_TESTING
-    const char* pacman = std::getenv("CACHYOS_PI_HELPER_PACMAN");
-    execve(pacman != nullptr ? pacman : PACMAN, execArgs.data(), envp);
-#else
-    execve(PACMAN, execArgs.data(), envp);
-#endif
-    std::perror("cachyos-pi-helper: cannot run pacman");
-    return 127;
+    auto command = pacman_command(arguments);
+    return command ? run(*command) : kRefused;
 }
