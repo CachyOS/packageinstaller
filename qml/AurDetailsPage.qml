@@ -42,6 +42,8 @@ ScrollPage {
         property alias text: codeView.text
         property alias marks: codeView.marks
         property alias minimumHeight: codeView.minimumHeight
+        property alias lineNumbers: codeView.lineNumbers
+        property alias runs: codeView.runs
         readonly property alias view: codeView
         default property alias overlay: codeView.data
 
@@ -69,7 +71,7 @@ ScrollPage {
         if (queue.length === 0) {
             queue = [item]
         }
-        Backend.aur.loadDetails(item.name, item.pkgbase)
+        Backend.aur.loadDetails(item.name, item.pkgbase, item.upgradable)
         Backend.aur.resolve(queue.map(entry => entry.name))
     }
 
@@ -111,7 +113,7 @@ ScrollPage {
             position += 1
             reviewBox.checked = false
             item = queue[position]
-            Backend.aur.loadDetails(item.name, item.pkgbase)
+            Backend.aur.loadDetails(item.name, item.pkgbase, item.upgradable)
             contentY = 0
         } else if (names.length > 0) {
             blocked = Backend.aur.blockedReason(names)
@@ -356,6 +358,21 @@ ScrollPage {
         id: review
         width: parent.width
         spacing: 10
+
+        FileSection {
+            visible: Backend.aur.changes.length > 0
+            width: review.width
+            name: qsTr("Changes since version %1").arg(root.info.installedVersion)
+            note: qsTr("What changed in this package since the version you have installed. Only the recipe is compared: the source code it downloads can change without showing up here.")
+            text: Backend.aur.changes
+            runs: Backend.aur.changeRuns
+            lineNumbers: false
+        }
+
+        Notice {
+            width: review.width
+            text: Backend.aur.changesNote
+        }
 
         FileSection {
             id: pkgbuild

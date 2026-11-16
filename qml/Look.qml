@@ -373,6 +373,11 @@ QtObject {
             : (soft ? archSoft : arch)
     }
 
+    /// the tint of a run of changed lines, by its kind in git::DiffRun
+    function diffColor(kind: string): color {
+        return kind === "added" ? accentSoft : kind === "removed" ? dangerSoft : kind === "file" ? archSoft : surfaceAlt
+    }
+
     function severityLabel(severity: string): string {
         return severity === "danger" ? qsTr("Dangerous") : severity === "warning" ? qsTr("Check") : qsTr("Note")
     }
