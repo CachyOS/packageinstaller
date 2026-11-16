@@ -234,6 +234,53 @@ bool nameTaken(const QString& desktopName, const QString& takenOver = {}) {
     return false;
 }
 
+/// A file this app downloaded: it lies in the install folder under a name of ours already
+/// and is the working copy. `name` is what it is called where it came from.
+struct Fetched {
+    QString name;
+    appimage::Tracking tracking;
+    QString replaces;        ///< the menu entry this is an update of; empty for a new app
+    bool takesOver = false;  ///< the file is one another program manages: its menu entry may be replaced
+};
+
+/// True when `existing`, an entry of ours, is an earlier copy of the app that is being
+/// added: both came from the same repository, or they are called the same.
+bool sameApp(const QHash<QString, QString>& existing, const QHash<QString, QString>& added, const appimage::Tracking& tracking) {
+    const auto source = appimage::tracking(existing).source;
+    if (!source.isEmpty() && !tracking.source.isEmpty()) {
+        return source == tracking.source;
+    }
+    return existing.value(u"Name"_s) == added.value(u"Name"_s);
+}
+
+/// The name of the menu entry for the app `added` describes. `wanted`, as the AppImage
+/// calls it, is kept so windows are matched to the entry, unless it belongs to something
+/// else: another program, or another app of ours that calls its entry alike. Empty when
+/// no name is free.
+QString entryName(const QString& wanted, const Entries& ours, const QHash<QString, QString>& added, const Fetched& fetched, const QString& foreign) {
+    const auto usable = [&](const QString& name) {
+        if (const auto existing = ours.constFind(name); existing != ours.cend()) {
+            return name == fetched.replaces || sameApp(*existing, added, fetched.tracking);
+        }
+        return !nameTaken(name, foreign);
+    };
+    if (usable(wanted)) {
+        return wanted;
+    }
+    // an update stays the entry it is, whatever the new release calls it
+    if (!fetched.replaces.isEmpty()) {
+        return fetched.replaces;
+    }
+    const auto stem = u"appimage-"_s + wanted.chopped(8);  // without ".desktop"
+    for (int n = 1; n < 100; ++n) {
+        const auto name = n == 1 ? stem + u".desktop"_s : u"%1-%2.desktop"_s.arg(stem).arg(n);
+        if (usable(name)) {
+            return name;
+        }
+    }
+    return {};
+}
+
 /// Where the new file goes. A name that is in use is only taken over from `replaceable`,
 /// the earlier copy of the same app; anything else there belongs to someone else.
 QString freeDestination(const QString& fileName, const QString& replaceable) {
@@ -309,15 +356,6 @@ QString copyTo(const QString& source, const QString& target, const Cancel& cance
     return {};
 }
 
-/// A file this app downloaded: it lies in the install folder under a name of ours already
-/// and is the working copy. `name` is what it is called where it came from.
-struct Fetched {
-    QString name;
-    appimage::Tracking tracking;
-    QString replaces;        ///< the menu entry this is an update of; empty for a new app
-    bool takesOver = false;  ///< the file is one another program manages: its menu entry may be replaced
-};
-
 /// Adds `source`, a file of the user's, or the download `fetched` describes.
 AppImageResult install(const QString& source, const Cancel& cancel, const Fetched& fetched) {
     const auto cancelled = AppImageResult{AppImageClient::tr("Adding the AppImage was stopped."), {}};
@@ -392,21 +430,16 @@ AppImageResult install(const QString& source, const Cancel& cancel, const Fetche
         return {AppImageClient::tr("The AppImage does not describe an application (no menu entry inside)."), {}};
     }
 
-    // "org.example.App.desktop" keeps its name so windows are matched to the entry, unless
-    // that name belongs to something else already.
-    auto desktopName = appimage::safeDesktopName(desktopFile.name);
-    const auto foreign = fetched.takesOver ? source : QString();
-    if (nameTaken(desktopName, foreign)) {
-        desktopName.prepend(u"appimage-"_s);
-    }
-    if (nameTaken(desktopName, foreign)) {
-        return {AppImageClient::tr("Another application already uses the menu entry “%1”.").arg(desktopName), {}};
+    const auto entries     = managedEntries();
+    const auto wanted      = appimage::safeDesktopName(desktopFile.name);
+    const auto desktopName = entryName(wanted, entries, keys, fetched, fetched.takesOver ? source : QString());
+    if (desktopName.isEmpty()) {
+        return {AppImageClient::tr("Another application already uses the menu entry “%1”.").arg(wanted), {}};
     }
     const auto id = desktopName.chopped(8);  // without ".desktop"
 
     // An update belongs to one entry. That entry has to be what it was when the update was
     // offered; anything else happened behind our back while the file came in.
-    const auto entries = managedEntries();
     QString renamedFrom;
     if (!fetched.replaces.isEmpty()) {
         if (appimage::tracking(entries.value(fetched.replaces)).source != fetched.tracking.source) {
@@ -417,7 +450,7 @@ AppImageResult install(const QString& source, const Cancel& cancel, const Fetche
         }
     }
 
-    // An entry of that name which is ours is the same app, added before: its file is replaced.
+    // An entry of that name is an earlier copy of this app, see entryName(): its file is replaced.
     auto previous = entries.value(desktopName).value(appimage::PATH_KEY);
     if (!ownedFile(previous) || !QFileInfo::exists(previous)) {
         previous.clear();
