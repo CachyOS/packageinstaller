@@ -48,6 +48,8 @@ struct AppImageItem {
     bool terminal = false;  ///< a command line tool
     QString source;         ///< "owner/repo" on GitHub when the file came from there
     QString update;         ///< the newer release that can be installed; empty when there is none known
+
+    friend bool operator==(const AppImageItem&, const AppImageItem&) = default;
 };
 
 /// One AppImage file of a release, for the user to pick.
@@ -236,6 +238,7 @@ class AppImageClient : public QObject {
     QFutureWatcher<AppImageResult> m_watcher;
     std::shared_ptr<std::atomic_bool> m_cancel;  ///< set at shutdown to stop the worker
     QList<AppImageItem> m_apps;
+    IconIndex m_icons;  ///< as last announced with iconsLoaded()
     QString m_error;
     QString m_added;
     QList<AppImageImport> m_shellyApps;

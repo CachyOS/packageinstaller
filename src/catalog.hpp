@@ -14,6 +14,8 @@ class QIODevice;
 struct IconRef {
     QString path;   ///< cached AppStream icon on disk
     QString stock;  ///< icon theme name
+
+    friend bool operator==(const IconRef&, const IconRef&) = default;
 };
 using IconIndex = QHash<QString, IconRef>;
 

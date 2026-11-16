@@ -188,21 +188,27 @@ QString findIcon(const QString& root, const QString& iconName) {
 
 using Entries = QHash<QString, QHash<QString, QString>>;
 
-/// The user's menu entries: desktop file name -> keys of its main group.
-Entries menuEntries() {
+/// The user's menu entries: desktop file name -> keys of its main group. With `ours`,
+/// only those this app wrote.
+Entries menuEntries(bool ours = false) {
     Entries entries;
     const QDir directory(menuDirectory());
     for (const auto& name : directory.entryList({u"*.desktop"_s}, QDir::Files)) {
-        entries.insert(name, appimage::mainGroup(readText(directory.filePath(name), appimage::MAX_ENTRY_BYTES)));
+        const auto text = readText(directory.filePath(name), appimage::MAX_ENTRY_BYTES);
+        // nearly all entries are other programs': those are told apart without parsing
+        if (ours && !text.contains(appimage::PATH_KEY)) {
+            continue;
+        }
+        auto keys = appimage::mainGroup(text);
+        if (!ours || keys.contains(appimage::PATH_KEY)) {
+            entries.insert(name, std::move(keys));
+        }
     }
     return entries;
 }
 
-/// Those of the user's menu entries that are ours.
 Entries managedEntries() {
-    auto entries = menuEntries();
-    entries.removeIf([](const std::pair<const QString&, QHash<QString, QString>&>& entry) { return !entry.second.contains(appimage::PATH_KEY); });
-    return entries;
+    return menuEntries(true);
 }
 
 /// A menu entry another program wrote for the AppImage `file`: it starts that file and
@@ -663,6 +669,7 @@ AppImageClient::AppImageClient(QObject* parent) : QObject(parent), m_cancel(std:
         const auto result = m_watcher.result();
         setBusy(false);
         setMessage(result.error, result.done);
+        m_icons.clear();  // an icon may have been replaced under the name it had
         refresh();
     });
 }
@@ -993,7 +1000,7 @@ void AppImageClient::launch(const QString& id) {
 }
 
 void AppImageClient::refresh() {
-    m_fuseAvailable = QFileInfo::exists(u"/usr/lib/libfuse.so.2"_s);
+    const bool fuseAvailable = QFileInfo::exists(u"/usr/lib/libfuse.so.2"_s);
 
     QList<AppImageItem> apps;
     IconIndex icons;
@@ -1031,9 +1038,16 @@ void AppImageClient::refresh() {
         }
     }
     std::ranges::sort(apps, [](const AppImageItem& a, const AppImageItem& b) { return a.name.compare(b.name, Qt::CaseInsensitive) < 0; });
-    m_apps = std::move(apps);
-    emit iconsLoaded(icons);
-    emit appsChanged();
+    // every reload of the package list comes through here: nothing new, nothing to redraw
+    if (icons != m_icons) {
+        m_icons = std::move(icons);
+        emit iconsLoaded(m_icons);
+    }
+    if (apps != m_apps || fuseAvailable != m_fuseAvailable) {
+        m_apps          = std::move(apps);
+        m_fuseAvailable = fuseAvailable;
+        emit appsChanged();
+    }
 
     QList<AppImageImport> shellyApps;
     if (!m_busy && !QSettings().value(SHELLY_DISMISSED_KEY, false).toBool()) {

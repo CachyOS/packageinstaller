@@ -8,8 +8,10 @@
 #include <QPainter>
 #include <QPainterPath>
 
+#include <algorithm>
 #include <atomic>
 #include <mutex>
+#include <ranges>
 
 using namespace Qt::StringLiterals;
 
@@ -83,12 +85,20 @@ void IconProvider::setIndex(IconIndex index, bool flatpak) {
 }
 
 void IconProvider::setAppImageIndex(IconIndex index) {
+    // A newer file of the same app replaces its icon in place.
+    const auto listed = [&](const QString& file) {
+        return std::ranges::contains(m_appImages, file, &IconRef::path) || std::ranges::contains(index, file, &IconRef::path);
+    };
+    for (const auto& key : m_decoded.keys()) {
+        if (listed(key.first)) {
+            m_decoded.remove(key);
+        }
+    }
     m_appImages = std::move(index);
-    m_decoded.clear();  // a newer file of the same app replaces its icon in place
 }
 
 QQuickImageResponse* IconProvider::requestImageResponse(const QString& id, const QSize& requestedSize) {
-    // Called on QML's image thread; the indexes and the icon theme belong to the GUI thread.
+    // the icon theme belong to the GUI thread.
     auto request   = std::make_shared<IconRequest>(id, requestedSize.width() > 0 ? requestedSize.width() : 64, id);
     auto* response = new IconResponse(request);
     QMetaObject::invokeMethod(this, [this, request = std::move(request)] {
