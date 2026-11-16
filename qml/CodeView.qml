@@ -4,6 +4,7 @@ import QtQuick.Controls.Basic
 
 // Read-only script listing with line numbers. Shown at full height: a nested vertical
 // scroll area would swallow the wheel and make it easy to skip the end of the script.
+// Lines can be tinted by kind through `runs`, for example to show changes.
 Card {
     id: root
 
@@ -11,6 +12,9 @@ Card {
     property list<finding> marks
     property string accessibleName
     property int minimumHeight: 0
+    property bool lineNumbers: true
+    /// runs of lines of one kind, so that a long change needs only a few tints
+    property list<diffRun> runs
 
     readonly property real lineHeight: edit.lineCount > 0 ? edit.contentHeight / edit.lineCount : 0
     readonly property int padding: 14
@@ -28,6 +32,22 @@ Card {
     }
 
     height: Math.max(minimumHeight, edit.implicitHeight + 2)
+
+    Repeater {
+        model: root.runs
+
+        Rectangle {
+            id: run
+
+            required property diffRun modelData
+
+            x: 1
+            y: root.lineY(run.modelData.line)
+            width: root.width - 2
+            height: run.modelData.count * root.lineHeight
+            color: Look.diffColor(run.modelData.kind)
+        }
+    }
 
     Repeater {
         model: root.marks
@@ -55,8 +75,8 @@ Card {
     PlainText {
         id: gutter
         x: 1
-        width: implicitWidth
-        visible: root.text.length > 0
+        width: root.lineNumbers ? implicitWidth : 0
+        visible: root.text.length > 0 && root.lineNumbers
         text: root.lineNumbers(edit.lineCount)
         color: Look.textMuted
         opacity: 0.7
