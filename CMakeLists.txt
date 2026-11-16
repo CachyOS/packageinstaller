@@ -80,6 +80,7 @@ qt_add_executable(${PROJECT_NAME}
     src/aurclient.hpp src/aurclient.cpp
     src/flatpakclient.hpp src/flatpakclient.cpp
     src/iconprovider.hpp src/iconprovider.cpp
+    src/paletteprovider.hpp src/paletteprovider.cpp
     src/transaction.hpp src/transaction.cpp
     src/updatenotice.hpp src/updatenotice.cpp
     src/backend.hpp src/backend.cpp)
@@ -217,6 +218,13 @@ if(BUILD_TESTING)
     target_link_libraries(test-updatenotice PRIVATE project_options project_warnings
         Qt6::Test Qt6::Qml Qt6::Network)
     add_test(NAME updatenotice COMMAND test-updatenotice)
+
+    qt_add_executable(test-palette tests/test_palette.cpp
+        src/paletteprovider.hpp src/paletteprovider.cpp)
+    target_include_directories(test-palette PRIVATE src)
+    target_link_libraries(test-palette PRIVATE project_options project_warnings
+        Qt6::Test Qt6::Qml Qt6::Core)
+    add_test(NAME palette COMMAND test-palette)
 
     add_executable(cachyos-pi-helper-test src/helper/main.cpp)
     target_compile_definitions(cachyos-pi-helper-test PRIVATE PI_HELPER_TESTING)
