@@ -202,46 +202,25 @@ ApplicationWindow {
 
     Rectangle {
         id: sidebar
-        width: 224
-        height: root.height
+        y: topBar.height
+        width: 104
+        height: root.height - topBar.height
         color: Look.sidebar
 
-        Row {
-            id: brand
-            x: 18
-            y: 20
-            spacing: 10
-
-            Image {
-                width: 34
-                height: 34
-                source: "icons/cachyos-pi.png"
-                sourceSize: Qt.size(68, 68)
-            }
-
-            Column {
-                anchors.verticalCenter: brand.verticalCenter
-
-                PlainText {
-                    text: qsTr("CachyOS")
-                    font.pixelSize: Look.fontTitle
-                    font.weight: Font.Bold
-                }
-
-                Muted {
-                    text: qsTr("Package Installer")
-                    font.pixelSize: Look.fontSmall
-                }
-            }
+        Rectangle {
+            width: 1
+            height: parent.height
+            anchors.right: parent.right
+            color: Look.border
         }
 
         Column {
             id: nav
-            anchors.top: brand.bottom
-            anchors.topMargin: 26
-            x: 12
-            width: sidebar.width - 24
-            spacing: 4
+            x: 8
+            width: sidebar.width - 16
+            anchors.top: parent.top
+            anchors.topMargin: 12
+            spacing: 2
 
             Repeater {
                 model: ListModel {
@@ -249,6 +228,35 @@ ApplicationWindow {
                     ListElement { name: "browse"; label: qsTr("Browse"); glyph: "M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" }
                     ListElement { name: "installed"; label: qsTr("Installed"); glyph: "M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0-18zM8 12l3 3l5-6" }
                     ListElement { name: "updates"; label: qsTr("Updates"); glyph: "M12 4v11M7 11l5 5l5-5M5 20h14" }
+                }
+
+                NavButton {
+                    required property string name
+                    required property string label
+                    required glyph
+
+                    width: nav.width
+                    text: label
+                    current: root.section === name
+                    badge: root.badge(name)
+                    onClicked: root.show(name)
+                }
+            }
+
+            Item {
+                width: nav.width
+                height: 17
+
+                Rectangle {
+                    width: nav.width - 24
+                    height: 1
+                    anchors.centerIn: parent
+                    color: Look.border
+                }
+            }
+
+            Repeater {
+                model: ListModel {
                     ListElement { name: "aur"; label: qsTr("AUR"); glyph: "M12 3 20 7.5v9L12 21l-8-4.5v-9zM4 7.5 12 12l8-4.5M12 12v9" }
                     ListElement { name: "flatpak"; label: qsTr("Flatpak"); glyph: "M4 8l8-4l8 4v8l-8 4l-8-4zM4 8l8 4l8-4M12 12v8M8 6l8 4" }
                 }
@@ -267,11 +275,21 @@ ApplicationWindow {
             }
         }
 
+        Rectangle {
+            width: sidebar.width - 40
+            height: 1
+            color: Look.border
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.bottom: settings.top
+            anchors.bottomMargin: 8
+        }
+
         NavButton {
-            x: 12
-            width: sidebar.width - 24
+            id: settings
+            x: 8
+            width: sidebar.width - 16
             anchors.bottom: versionText.top
-            anchors.bottomMargin: 10
+            anchors.bottomMargin: 8
             text: qsTr("Settings")
             glyph: "M4 7h9M17 7h3M4 17h3M11 17h9M15 4.5v5M9 14.5v5"
             current: root.section === "settings"
@@ -280,25 +298,60 @@ ApplicationWindow {
 
         Muted {
             id: versionText
-            x: 18
-            anchors.bottom: sidebar.bottom
-            anchors.bottomMargin: 16
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 14
+            anchors.horizontalCenter: parent.horizontalCenter
             text: qsTr("Version %1").arg(Qt.application.version)
-            font.pixelSize: Look.fontSmall
+            font.pixelSize: Look.fontCaption
         }
     }
 
     Item {
         id: topBar
-        x: sidebar.width
-        width: root.width - sidebar.width
-        height: 68
+        width: root.width
+        height: 72
+
+        Rectangle {
+            width: parent.width
+            height: 1
+            anchors.bottom: parent.bottom
+            color: Look.border
+        }
+
+        Row {
+            id: brand
+            x: 20
+            anchors.verticalCenter: parent.verticalCenter
+            spacing: 10
+
+            Image {
+                width: 30
+                height: 30
+                source: "icons/cachyos-pi.png"
+                sourceSize: Qt.size(60, 60)
+            }
+
+            Column {
+                anchors.verticalCenter: parent.verticalCenter
+
+                PlainText {
+                    text: qsTr("CachyOS")
+                    font.pixelSize: Look.fontTitle
+                    font.weight: Font.Bold
+                }
+
+                Muted {
+                    text: qsTr("Package Installer")
+                    font.pixelSize: Look.fontCaption
+                }
+            }
+        }
 
         SearchField {
             id: search
-            x: Look.pagePadding
-            anchors.verticalCenter: topBar.verticalCenter
-            width: Math.min(topBar.width - 2 * Look.pagePadding, 520)
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            width: Math.min(520, Math.max(220, topBar.width - 2 * (brand.width + 40)))
             placeholderText: root.section === "aur" ? qsTr("Search the AUR")
                 : root.section === "flatpak" ? qsTr("Search Flatpak apps") : qsTr("Search apps and packages")
             Accessible.name: placeholderText
@@ -316,9 +369,9 @@ ApplicationWindow {
         }
 
         BusyIndicator {
-            anchors.right: topBar.right
-            anchors.rightMargin: Look.pagePadding
-            anchors.verticalCenter: topBar.verticalCenter
+            anchors.right: parent.right
+            anchors.rightMargin: 20
+            anchors.verticalCenter: parent.verticalCenter
             width: 26
             height: 26
             visible: Backend.loading
@@ -499,5 +552,14 @@ ApplicationWindow {
             toast.open();
             toastTimer.restart();
         }
+    }
+
+    Timer {
+        interval: 1500
+        running: true
+        onTriggered: sidebar.grabToImage(result => {
+            result.saveToFile("/tmp/opencode/rail.png");
+            Qt.quit();
+        })
     }
 }
