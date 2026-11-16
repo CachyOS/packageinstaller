@@ -59,10 +59,10 @@ set(PI_HELPER_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/cachyos-pi")
 ##
 ## PKGBUILD scanner: text analysis only, shared by the GUI, the CLI and the tests.
 ##
-add_library(pi-scan STATIC src/pkgscan.hpp src/pkgscan.cpp)
+add_library(pi-scan STATIC src/pkgscan.hpp src/pkgscan.cpp src/gitoutput.hpp src/gitoutput.cpp)
 target_include_directories(pi-scan PUBLIC src)
 target_link_libraries(pi-scan PUBLIC Qt6::Core PRIVATE project_options project_warnings)
-# the GUI registers Finding and ScriptFile for QML
+# the GUI registers Finding, ScriptFile and DiffRun for QML
 qt_extract_metatypes(pi-scan)
 
 add_executable(cachyos-pi-scan src/scan/main.cpp)
@@ -212,6 +212,10 @@ if(BUILD_TESTING)
     target_compile_definitions(test-pkgscan PRIVATE TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/tests/data")
     target_link_libraries(test-pkgscan PRIVATE pi-scan project_options Qt6::Test)
     add_test(NAME pkgscan COMMAND test-pkgscan)
+
+    qt_add_executable(test-gitoutput tests/test_gitoutput.cpp)
+    target_link_libraries(test-gitoutput PRIVATE pi-scan project_options Qt6::Test)
+    add_test(NAME gitoutput COMMAND test-gitoutput)
 
     qt_add_executable(test-pkglist tests/test_pkglist.cpp
         src/alpmdb.hpp src/alpmdb.cpp
