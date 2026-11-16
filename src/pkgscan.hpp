@@ -105,6 +105,10 @@ struct LocalFiles {
 /// Whether `name` is usable as an AUR package base, and so as a directory name and URL part.
 [[nodiscard]] bool validPkgbase(QStringView name);
 
+/// The version of the package base in a .SRCINFO as pacman shows it once built,
+/// "[epoch:]pkgver-pkgrel". Empty when the file names none.
+[[nodiscard]] QString srcinfoVersion(QStringView srcinfo);
+
 /// Most severe first, then by file and line.
 void sort(QList<Finding>& findings);
 [[nodiscard]] QString severityName(Severity severity);

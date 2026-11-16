@@ -923,6 +923,35 @@ QString similarName(const QString& name, const QStringList& known) {
     return similar != known.end() ? *similar : QString();
 }
 
+QString srcinfoVersion(QStringView srcinfo) {
+    QString pkgver;
+    QString pkgrel;
+    QString epoch;
+    for (const auto line : srcinfo.tokenize(u'\n')) {
+        // the package base comes first; the packages after it may only repeat its version
+        if (line.startsWith("pkgname"_L1)) {
+            break;
+        }
+        const auto separator = line.indexOf(u" = ");
+        if (separator < 0) {
+            continue;
+        }
+        const auto key   = line.first(separator).trimmed();
+        const auto value = line.sliced(separator + 3).trimmed().toString();
+        if (key == "pkgver"_L1) {
+            pkgver = value;
+        } else if (key == "pkgrel"_L1) {
+            pkgrel = value;
+        } else if (key == "epoch"_L1) {
+            epoch = value;
+        }
+    }
+    if (pkgver.isEmpty() || pkgrel.isEmpty()) {
+        return {};
+    }
+    return (epoch.isEmpty() || epoch == "0"_L1 ? QString() : epoch + u':') + pkgver + u'-' + pkgrel;
+}
+
 std::optional<QString> readText(const QString& path, qint64 maxSize) {
     const QFileInfo info(path);
     QFile file(path);

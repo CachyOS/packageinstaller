@@ -330,6 +330,16 @@ class TestPkgscan : public QObject {
         QCOMPARE(pkgscan::similarName(QStringLiteral("vlcc"), known), QString());
         QCOMPARE(pkgscan::similarName(QStringLiteral("spotify"), known), QString());
     }
+
+    void srcinfoVersions() {
+        QCOMPARE(pkgscan::srcinfoVersion(u"pkgbase = pfetch\n\tpkgdesc = x\n\tpkgver = 1.11.0\n\tpkgrel = 1\n\npkgname = pfetch\n"_s), u"1.11.0-1"_s);
+        QCOMPARE(pkgscan::srcinfoVersion(u"pkgbase = a\n\tpkgver = 2.0\n\tpkgrel = 3\n\tepoch = 1\n"_s), u"1:2.0-3"_s);
+        QCOMPARE(pkgscan::srcinfoVersion(u"pkgbase = a\n\tpkgver = 2.0\n\tpkgrel = 3\n\tepoch = 0\n"_s), u"2.0-3"_s);
+        // a split package does not change the version of the base
+        QCOMPARE(pkgscan::srcinfoVersion(u"pkgbase = a\n\tpkgver = 2.0\n\tpkgrel = 1\n\npkgname = a-doc\n\tpkgver = 9\n"_s), u"2.0-1"_s);
+        QCOMPARE(pkgscan::srcinfoVersion(u"pkgbase = a\n\tpkgrel = 1\n"_s), QString());
+        QCOMPARE(pkgscan::srcinfoVersion(QString()), QString());
+    }
 };
 
 QTEST_APPLESS_MAIN(TestPkgscan)
