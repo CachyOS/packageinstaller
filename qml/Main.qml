@@ -210,86 +210,102 @@ ApplicationWindow {
         height: root.height
         color: Look.sidebar
 
-        Row {
-            id: brand
-            x: 18
-            y: 20
-            spacing: 10
+        // In a short window (a high scale factor on a small screen) the sidebar scrolls;
+        // Settings stays below the sections instead of being drawn over them.
+        Flickable {
+            id: sidebarView
+            anchors.fill: sidebar
+            contentHeight: Math.max(height, nav.y + nav.height + 24 + footer.height)
+            boundsBehavior: Flickable.StopAtBounds
 
-            Image {
-                width: 34
-                height: 34
-                source: "icons/cachyos-pi.png"
-                sourceSize: Qt.size(68, 68)
+            ScrollBar.vertical: ScrollBar {}
+
+            WheelScroll {}
+
+            Row {
+                id: brand
+                x: 18
+                y: 20
+                spacing: 10
+
+                Image {
+                    width: 34
+                    height: 34
+                    source: "icons/cachyos-pi.png"
+                    sourceSize: Qt.size(68, 68)
+                }
+
+                Column {
+                    anchors.verticalCenter: brand.verticalCenter
+
+                    PlainText {
+                        text: qsTr("CachyOS")
+                        font.pixelSize: Look.fontTitle
+                        font.weight: Font.Bold
+                    }
+
+                    Muted {
+                        text: qsTr("Package Installer")
+                        font.pixelSize: Look.fontSmall
+                    }
+                }
             }
 
             Column {
-                anchors.verticalCenter: brand.verticalCenter
+                id: nav
+                anchors.top: brand.bottom
+                anchors.topMargin: 26
+                x: 12
+                width: sidebar.width - 24
+                spacing: 4
 
-                PlainText {
-                    text: qsTr("CachyOS")
-                    font.pixelSize: Look.fontTitle
-                    font.weight: Font.Bold
+                Repeater {
+                    model: ListModel {
+                        ListElement { name: "home"; label: qsTr("Discover"); glyph: "M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" }
+                        ListElement { name: "browse"; label: qsTr("Browse"); glyph: "M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" }
+                        ListElement { name: "installed"; label: qsTr("Installed"); glyph: "M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0-18zM8 12l3 3l5-6" }
+                        ListElement { name: "updates"; label: qsTr("Updates"); glyph: "M12 4v11M7 11l5 5l5-5M5 20h14" }
+                        ListElement { name: "aur"; label: qsTr("AUR"); glyph: "M12 3 20 7.5v9L12 21l-8-4.5v-9zM4 7.5 12 12l8-4.5M12 12v9" }
+                        ListElement { name: "flatpak"; label: qsTr("Flatpak"); glyph: "M4 8l8-4l8 4v8l-8 4l-8-4zM4 8l8 4l8-4M12 12v8M8 6l8 4" }
+                        ListElement { name: "appimage"; label: qsTr("AppImage"); glyph: "M5 4h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zM12 8v8M8 12h8" }
+                    }
+
+                    NavButton {
+                        required property string name
+                        required property string label
+                        required glyph
+
+                        width: nav.width
+                        text: label
+                        current: root.section === name
+                        badge: root.badge(name)
+                        onClicked: root.show(name)
+                    }
+                }
+            }
+
+            Column {
+                id: footer
+                anchors.bottom: parent.bottom
+                x: nav.x
+                width: nav.width
+                bottomPadding: 16
+                spacing: 10
+
+                NavButton {
+                    width: footer.width
+                    text: qsTr("Settings")
+                    glyph: "M4 7h9M17 7h3M4 17h3M11 17h9M15 4.5v5M9 14.5v5"
+                    current: root.section === "settings"
+                    onClicked: root.show("settings")
                 }
 
                 Muted {
-                    text: qsTr("Package Installer")
+                    x: 6
+                    text: qsTr("Version %1").arg(Qt.application.version)
                     font.pixelSize: Look.fontSmall
                 }
             }
-        }
-
-        Column {
-            id: nav
-            anchors.top: brand.bottom
-            anchors.topMargin: 26
-            x: 12
-            width: sidebar.width - 24
-            spacing: 4
-
-            Repeater {
-                model: ListModel {
-                    ListElement { name: "home"; label: qsTr("Discover"); glyph: "M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" }
-                    ListElement { name: "browse"; label: qsTr("Browse"); glyph: "M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" }
-                    ListElement { name: "installed"; label: qsTr("Installed"); glyph: "M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0-18zM8 12l3 3l5-6" }
-                    ListElement { name: "updates"; label: qsTr("Updates"); glyph: "M12 4v11M7 11l5 5l5-5M5 20h14" }
-                    ListElement { name: "aur"; label: qsTr("AUR"); glyph: "M12 3 20 7.5v9L12 21l-8-4.5v-9zM4 7.5 12 12l8-4.5M12 12v9" }
-                    ListElement { name: "flatpak"; label: qsTr("Flatpak"); glyph: "M4 8l8-4l8 4v8l-8 4l-8-4zM4 8l8 4l8-4M12 12v8M8 6l8 4" }
-                    ListElement { name: "appimage"; label: qsTr("AppImage"); glyph: "M5 4h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zM12 8v8M8 12h8" }
-                }
-
-                NavButton {
-                    required property string name
-                    required property string label
-                    required glyph
-
-                    width: nav.width
-                    text: label
-                    current: root.section === name
-                    badge: root.badge(name)
-                    onClicked: root.show(name)
-                }
-            }
-        }
-
-        NavButton {
-            x: 12
-            width: sidebar.width - 24
-            anchors.bottom: versionText.top
-            anchors.bottomMargin: 10
-            text: qsTr("Settings")
-            glyph: "M4 7h9M17 7h3M4 17h3M11 17h9M15 4.5v5M9 14.5v5"
-            current: root.section === "settings"
-            onClicked: root.show("settings")
-        }
-
-        Muted {
-            id: versionText
-            x: 18
-            anchors.bottom: sidebar.bottom
-            anchors.bottomMargin: 16
-            text: qsTr("Version %1").arg(Qt.application.version)
-            font.pixelSize: Look.fontSmall
         }
     }
 
