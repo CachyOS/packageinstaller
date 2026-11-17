@@ -436,6 +436,11 @@ AppImageResult install(const QString& source, const Cancel& cancel, const Fetche
     if (desktopName.isEmpty()) {
         return {AppImageClient::tr("Another application already uses the menu entry “%1”.").arg(wanted), {}};
     }
+    // what another program hands over never replaces an app of ours, whatever its entry is
+    // called: ours is newer, or what the user chose to keep
+    if (fetched.takesOver && std::ranges::any_of(entries, [&](const auto& existing) { return sameApp(existing, keys, fetched.tracking); })) {
+        return {AppImageClient::tr("%1 is one of your AppImages already.").arg(keys.value(u"Name"_s)), {}};
+    }
     const auto id = desktopName.chopped(8);  // without ".desktop"
 
     // An update belongs to one entry. That entry has to be what it was when the update was
