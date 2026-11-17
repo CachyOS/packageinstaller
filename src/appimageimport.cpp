@@ -5,6 +5,9 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QRegularExpression>
+
+#include <algorithm>
 
 using namespace Qt::StringLiterals;
 
@@ -77,6 +80,98 @@ QByteArray withoutShellyApps(const QByteArray& database, const QStringList& name
         }
     }
     return QJsonDocument(kept).toJson();
+}
+
+QList<GearLeverApp> parseGearLeverConfig(const QByteArray& config) {
+    // As Python's configparser writes it: "[section]", then "key = value" with the key in
+    // lower case. Comments start with "#" or ";", an indented line continues a value.
+    QHash<QString, QHash<QString, QString>> sections;
+    QStringList order;
+    QString section;
+    for (const auto line : QString::fromUtf8(config).tokenize(u'\n')) {
+        const auto text = line.trimmed();
+        if (text.isEmpty() || line.front().isSpace() || text.startsWith(u'#') || text.startsWith(u';')) {
+            continue;
+        }
+        if (text.startsWith(u'[') && text.endsWith(u']')) {
+            section = text.sliced(1, text.size() - 2).toString();
+            if (!sections.contains(section)) {
+                order << section;
+                sections.insert(section, {});
+            }
+            continue;
+        }
+        // the first "=" or ":" ends the key
+        const auto equals    = text.indexOf(u'=');
+        const auto colon     = text.indexOf(u':');
+        const auto separator = equals < 0 ? colon : colon < 0 ? equals : std::min(equals, colon);
+        if (separator > 0 && !section.isEmpty()) {
+            sections[section].insert(text.first(separator).trimmed().toString().toLower(), text.sliced(separator + 1).trimmed().toString());
+        }
+    }
+
+    static const QRegularExpression appSection(u"^app\\.[0-9a-f]{32}$"_s);
+    QList<GearLeverApp> apps;
+    for (const auto& name : std::as_const(order)) {
+        if (!appSection.match(name).hasMatch()) {
+            continue;
+        }
+        const auto& keys = sections[name];
+        GearLeverApp app{.path = keys.value(u"file_path"_s), .source = {}, .variant = {}};
+        if (!app.path.startsWith(u'/')) {
+            continue;
+        }
+        const auto update = sections.value(name + u".update_manager"_s);
+        if (update.value(u"manager"_s) == "GithubUpdater"_L1) {
+            app.source = parseSource(update.value(u"repo"_s));
+            if (app.source) {
+                app.source->file.clear();
+                app.variant = patternVariant(update.value(u"repo_filename"_s));
+            }
+        }
+        apps << app;
+    }
+    return apps;
+}
+
+QString gearLeverIcon(const QHash<QString, QString>& entry, const QString& path) {
+    if (entry.contains(PATH_KEY) || !entry.contains(GEARLEVER_NAME_KEY) || entry.value(u"TryExec"_s) != path || !path.startsWith(u'/')) {
+        return {};
+    }
+    // Gear Lever puts the icon into ".icons" in the folder of the file
+    const auto icon = entry.value(u"Icon"_s);
+    return isManagedPath(icon, path.first(path.lastIndexOf(u'/')) + u"/.icons"_s) ? icon : QString();
+}
+
+QString patternVariant(const QString& given) {
+    // Gear Lever may name the .zsync file next to the AppImage; it downloads the AppImage
+    auto pattern = given;
+    if (pattern.endsWith(".zsync"_L1, Qt::CaseInsensitive)) {
+        pattern.chop(6);
+    }
+    // "?" and "[...]" are rare in these patterns and not worth guessing at
+    if (pattern.contains(u'?') || pattern.contains(u'[')) {
+        return {};
+    }
+    // a "*" that stands alone, or after a "v", is where the version goes; inside a word it could be anything
+    const auto word = [&pattern](qsizetype at) { return at >= 0 && at < pattern.size() && pattern[at].isLetterOrNumber(); };
+    QString name;
+    for (qsizetype at = 0; at < pattern.size(); ++at) {
+        if (pattern[at] != u'*') {
+            name += pattern[at];
+            continue;
+        }
+        const bool afterV = at > 0 && pattern[at - 1].toLower() == u'v' && !word(at - 2);
+        if ((word(at - 1) && !afterV) || word(at + 1)) {
+            return {};
+        }
+        name += u'0';
+    }
+    // "*.AppImage" names no file in particular
+    if (const auto rest = QString(pattern).remove(u'*'); rest.isEmpty() || rest.compare(".appimage"_L1, Qt::CaseInsensitive) == 0) {
+        return {};
+    }
+    return variant(name);
 }
 
 }  // namespace appimage
