@@ -8,8 +8,6 @@ Item {
     property string query
     readonly property AurClient aur: Backend.aur
     readonly property bool searching: query.trim().length >= 2
-    // Without a search the page lists the installed AUR packages that can be updated.
-    readonly property bool showUpdates: !searching && aur.updateCount > 0
 
     signal openAur(item: aurPackage)
     // Review several packages one after the other, then build them together.
@@ -42,7 +40,7 @@ Item {
         subtitle: qsTr("Community packages, built on your machine. Not reviewed by CachyOS.")
 
         UpdatesBanner {
-            visible: root.showUpdates
+            visible: !root.searching && count > 0
             width: pageHeader.width - Look.gutter
             count: root.aur.updateCount
             action: count > 1 ? qsTr("Review and update all") : ""
@@ -59,7 +57,8 @@ Item {
         anchors.top: pageHeader.bottom
         anchors.topMargin: 14
         anchors.bottom: root.bottom
-        model: root.showUpdates ? root.aur.updates : root.aur.results
+        // without a search: the installed AUR packages, those with updates first
+        model: root.searching ? root.aur.results : root.aur.installed
 
         delegate: PackageRow {
             required property aurPackage modelData
@@ -70,7 +69,7 @@ Item {
             summary: modelData.description
             source: "aur"
             trailing: modelData.upgradable ? modelData.installedVersion + " → " + modelData.version
-                : modelData.installed ? qsTr("Installed")
+                : modelData.installed ? (root.searching ? qsTr("Installed") : modelData.installedVersion)
                 : modelData.inRepos ? qsTr("In the repositories")
                 : modelData.outOfDate ? qsTr("Out of date")
                 : qsTr("%1 · %n vote(s)", "", modelData.votes).arg(modelData.version)
@@ -85,10 +84,8 @@ Item {
         visible: Backend.aurEnabled && list.count === 0
         anchors.centerIn: list
         busy: root.aur.searching
-        title: !busy && root.aur.error.length === 0 && !root.searching && (root.aur.checkingUpdates || root.aur.installedCount > 0)
-            ? (root.aur.checkingUpdates ? qsTr("Checking your AUR packages for updates…")
-                : qsTr("Your %n AUR package(s) are up to date.", "", root.aur.installedCount))
-            : ""
+        title: !busy && root.aur.error.length === 0 && !root.searching && root.aur.checkingUpdates
+            ? qsTr("Looking up your AUR packages…") : ""
         text: busy ? ""
             : root.aur.error.length > 0 ? root.aur.error
             : !root.searching ? qsTr("Type in the search field to find AUR packages.")
