@@ -19,7 +19,7 @@ Dialog {
     visible: phase !== Transaction.Idle
     onVisibleChanged: if (visible) showLog = false
     closePolicy: Popup.NoAutoClose
-    width: Math.min(Overlay.overlay.width - 80, 640)
+    maxWidth: 640
 
     contentItem: Column {
         id: body

@@ -472,7 +472,6 @@ ApplicationWindow {
         readonly property bool running: Backend.transaction.state === Transaction.Running
 
         onRunningChanged: if (!running) close()
-        width: Math.min(Overlay.overlay.width - 80, 480)
 
         contentItem: Column {
             id: quitBody

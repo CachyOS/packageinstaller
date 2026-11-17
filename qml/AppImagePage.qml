@@ -64,7 +64,7 @@ Item {
 
         focus: true
         closePolicy: Popup.CloseOnEscape
-        width: Math.min(Overlay.overlay.width - 80, 560)
+        maxWidth: 560
         onOpened: firstButton.forceActiveFocus(Qt.TabFocusReason)
     }
 
