@@ -12,7 +12,8 @@ Card {
     property list<finding> marks
     property string accessibleName
     property int minimumHeight: 0
-    property bool lineNumbers: true
+    /// line numbers in a gutter on the left
+    property bool numbered: true
     /// runs of lines of one kind, so that a long change needs only a few tints
     property list<diffRun> runs
 
@@ -75,8 +76,8 @@ Card {
     PlainText {
         id: gutter
         x: 1
-        width: root.lineNumbers ? implicitWidth : 0
-        visible: root.text.length > 0 && root.lineNumbers
+        width: root.numbered ? implicitWidth : 0
+        visible: root.text.length > 0 && root.numbered
         text: root.lineNumbers(edit.lineCount)
         color: Look.textMuted
         opacity: 0.7

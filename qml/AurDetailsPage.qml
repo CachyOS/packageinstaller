@@ -42,7 +42,7 @@ ScrollPage {
         property alias text: codeView.text
         property alias marks: codeView.marks
         property alias minimumHeight: codeView.minimumHeight
-        property alias lineNumbers: codeView.lineNumbers
+        property alias numbered: codeView.numbered
         property alias runs: codeView.runs
         readonly property alias view: codeView
         default property alias overlay: codeView.data
@@ -366,7 +366,7 @@ ScrollPage {
             note: qsTr("What changed in this package since the version you have installed. Only the recipe is compared: the source code it downloads can change without showing up here.")
             text: Backend.aur.changes
             runs: Backend.aur.changeRuns
-            lineNumbers: false
+            numbered: false
         }
 
         Notice {
