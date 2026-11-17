@@ -34,27 +34,27 @@ Item {
             propose(file);
     }
 
-    // Asked once per run, when Shelly manages AppImages and nothing else is being asked.
-    function offerShelly(): void {
-        if (ready && !client.busy && !addDialog.visible && client.takeShellyPrompt())
-            shellyDialog.open();
+    // Asked once per run, when other programs manage AppImages and nothing else is being asked.
+    function offerImports(): void {
+        if (ready && !client.busy && !addDialog.visible && client.takeImportPrompt())
+            importDialog.open();
     }
 
     onReadyChanged: {
         offerStartupFile();
-        offerShelly();
+        offerImports();
     }
     Component.onCompleted: {
         client.clearMessage();
         offerStartupFile();
-        offerShelly();
+        offerImports();
     }
 
     Connections {
         target: root.client
 
-        function onShellyAppsChanged(): void {
-            root.offerShelly();
+        function onImportsChanged(): void {
+            root.offerImports();
         }
     }
 
@@ -180,17 +180,17 @@ Item {
             }
         }
 
-        // Shelly users can bring their AppImages along
+        // Users of Shelly or Gear Lever can bring their AppImages along
         Notice {
             width: pageHeader.width
-            text: root.client.shellyApps.length > 0 && !root.client.busy
-                ? qsTr("You have %n AppImage(s) in Shelly. You can bring them along to this app.", "", root.client.shellyApps.length) : ""
+            text: root.client.imports.length > 0 && !root.client.busy
+                ? qsTr("You have %n AppImage(s) in %1. You can bring them along to this app.", "", root.client.imports.length).arg(root.client.importTools) : ""
 
             PillButton {
                 size: "small"
                 tone: "soft"
-                text: qsTr("Move from Shelly…")
-                onClicked: shellyDialog.open()
+                text: qsTr("Move from %1…").arg(root.client.importTools)
+                onClicked: importDialog.open()
             }
         }
 
@@ -585,51 +585,53 @@ Item {
     }
 
     Sheet {
-        id: shellyDialog
-        firstButton: shellyLater
+        id: importDialog
+        firstButton: importLater
 
         contentItem: Column {
-            id: shellyBody
+            id: importBody
             spacing: 14
 
             Heading {
-                width: shellyBody.width
-                text: qsTr("Bring your AppImages along from Shelly?")
+                width: importBody.width
+                text: qsTr("Bring your AppImages along from %1?").arg(root.client.importTools)
             }
 
             Muted {
-                width: shellyBody.width
-                text: qsTr("You added these AppImages with Shelly. They can be moved to %1 and looked after by this app from now on:").arg(root.client.directory)
+                width: importBody.width
+                text: qsTr("You added these AppImages with %1. They can be moved to %2 and looked after by this app from now on:").arg(root.client.importTools, root.client.directory)
                 font.pixelSize: Look.fontBody
                 lineHeight: 1.25
                 wrapMode: Text.WordWrap
             }
 
             CappedList {
-                width: shellyBody.width
+                width: importBody.width
                 spacing: 6
 
                 Repeater {
-                    model: root.client.shellyApps
+                    model: root.client.imports
 
                     Column {
-                        id: shellyApp
+                        id: importedApp
 
                         required property appImageImport modelData
 
-                        width: shellyBody.width
+                        width: importBody.width
                         spacing: 2
 
                         PlainText {
-                            width: shellyApp.width
-                            text: shellyApp.modelData.name
+                            width: importedApp.width
+                            text: importedApp.modelData.name
                             font.weight: Font.DemiBold
                             elide: Text.ElideRight
                         }
 
                         Muted {
-                            width: shellyApp.width
-                            text: [shellyApp.modelData.path, shellyApp.modelData.size, root.origin(shellyApp.modelData.source)].filter(part => part.length > 0).join(" · ")
+                            width: importedApp.width
+                            // the program only needs saying when the list has apps of two
+                            text: [importedApp.modelData.tool !== root.client.importTools ? importedApp.modelData.tool : "", importedApp.modelData.path,
+                                importedApp.modelData.size, root.origin(importedApp.modelData.source)].filter(part => part.length > 0).join(" · ")
                             elide: Text.ElideMiddle
                         }
                     }
@@ -637,39 +639,39 @@ Item {
             }
 
             Muted {
-                width: shellyBody.width
-                text: qsTr("Each file gets a new menu entry and is taken off Shelly's list, so it shows up only once. Apps that Shelly updates from GitHub keep getting their updates here. Other update sources, environment variables and extra arguments set in Shelly are not carried over. To read its name and icon each file is run right away.")
+                width: importBody.width
+                text: qsTr("Each file gets a new menu entry and its old one is removed, so it shows up only once. Apps that are updated from GitHub keep getting their updates here. Other update sources, environment variables and extra arguments are not carried over. To read its name and icon each file is run right away.")
                 font.pixelSize: Look.fontBody
                 lineHeight: 1.25
                 wrapMode: Text.WordWrap
             }
 
             Row {
-                anchors.right: shellyBody.right
+                anchors.right: importBody.right
                 spacing: 10
 
                 PillButton {
                     tone: "soft"
                     text: qsTr("Don't ask again")
                     onClicked: {
-                        shellyDialog.close();
-                        root.client.dismissShelly();
+                        importDialog.close();
+                        root.client.dismissImports();
                     }
                 }
 
                 PillButton {
-                    id: shellyLater
+                    id: importLater
                     tone: "soft"
                     text: qsTr("Not now")
-                    onClicked: shellyDialog.close()
+                    onClicked: importDialog.close()
                 }
 
                 PillButton {
-                    enabled: !root.client.busy && root.client.shellyApps.length > 0
+                    enabled: !root.client.busy && root.client.imports.length > 0
                     text: qsTr("Move")
                     onClicked: {
-                        shellyDialog.close();
-                        root.client.migrateShelly();
+                        importDialog.close();
+                        root.client.migrateImports();
                     }
                 }
             }
