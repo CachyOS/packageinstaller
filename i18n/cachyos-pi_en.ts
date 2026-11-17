@@ -4,11 +4,11 @@
 <context>
     <name>AppImageClient</name>
     <message numerus="yes">
-        <location filename="../src/appimageclient.cpp" line="792"/>
-        <source>%n AppImage(s) from Shelly</source>
+        <location filename="../src/appimageclient.cpp" line="958"/>
+        <source>%n AppImage(s) from %1</source>
         <translation>
-            <numerusform>%n AppImage from Shelly</numerusform>
-            <numerusform>%n AppImages from Shelly</numerusform>
+            <numerusform>%n AppImage from %1</numerusform>
+            <numerusform>%n AppImages from %1</numerusform>
         </translation>
     </message>
 </context>
@@ -16,10 +16,10 @@
     <name>AppImagePage</name>
     <message numerus="yes">
         <location filename="../qml/AppImagePage.qml" line="187"/>
-        <source>You have %n AppImage(s) in Shelly. You can bring them along to this app.</source>
+        <source>You have %n AppImage(s) in %1. You can bring them along to this app.</source>
         <translation>
-            <numerusform>You have %n AppImage in Shelly. You can bring it along to this app.</numerusform>
-            <numerusform>You have %n AppImages in Shelly. You can bring them along to this app.</numerusform>
+            <numerusform>You have %n AppImage in %1. You can bring it along to this app.</numerusform>
+            <numerusform>You have %n AppImages in %1. You can bring them along to this app.</numerusform>
         </translation>
     </message>
 </context>

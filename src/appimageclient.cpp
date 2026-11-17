@@ -16,11 +16,13 @@
 #include <QNetworkReply>
 #include <QRandomGenerator>
 #include <QSaveFile>
+#include <QSet>
 #include <QSettings>
 #include <QStandardPaths>
 #include <QTemporaryDir>
 #include <QtConcurrent/QtConcurrentRun>
 
+#include <array>
 #include <expected>
 
 using namespace Qt::StringLiterals;
@@ -32,8 +34,7 @@ constexpr qint64 MAX_EXTRACT_BYTES = 1024LL * 1024 * 1024;  ///< what reading th
 constexpr qint64 MAX_RELEASE_BYTES = 8 * 1024 * 1024;       ///< the description of a release
 constexpr qint64 CHECK_INTERVAL    = 6 * 60 * 60;           ///< seconds between two looks for newer releases
 constexpr auto LAST_CHECK_KEY      = "appimage/lastUpdateCheck"_L1;
-constexpr auto SHELLY_DISMISSED_KEY = "appimage/shellyDismissed"_L1;
-constexpr qint64 MAX_SHELLY_BYTES   = 4 * 1024 * 1024;  ///< Shelly's list and its configuration
+constexpr qint64 MAX_IMPORT_BYTES  = 4 * 1024 * 1024;  ///< the lists and configuration of other programs
 
 using Cancel = std::shared_ptr<std::atomic_bool>;
 
@@ -188,33 +189,34 @@ QString findIcon(const QString& root, const QString& iconName) {
 
 using Entries = QHash<QString, QHash<QString, QString>>;
 
-/// The user's menu entries: desktop file name -> keys of its main group. With `ours`,
-/// only those this app wrote.
-Entries menuEntries(bool ours = false) {
+/// The user's menu entries: desktop file name -> keys of its main group. With `mark`,
+/// only those whose text has it: most entries are of no interest, and are told apart
+/// without parsing them.
+Entries menuEntries(QLatin1StringView mark = {}) {
     Entries entries;
     const QDir directory(menuDirectory());
     for (const auto& name : directory.entryList({u"*.desktop"_s}, QDir::Files)) {
         const auto text = readText(directory.filePath(name), appimage::MAX_ENTRY_BYTES);
-        // nearly all entries are other programs': those are told apart without parsing
-        if (ours && !text.contains(appimage::PATH_KEY)) {
-            continue;
-        }
-        auto keys = appimage::mainGroup(text);
-        if (!ours || keys.contains(appimage::PATH_KEY)) {
-            entries.insert(name, std::move(keys));
+        if (mark.isEmpty() || text.contains(mark)) {
+            entries.insert(name, appimage::mainGroup(text));
         }
     }
     return entries;
 }
 
+/// The menu entries this app wrote.
 Entries managedEntries() {
-    return menuEntries(true);
+    auto entries = menuEntries(appimage::PATH_KEY);
+    entries.removeIf([](const auto& entry) { return !entry.value().contains(appimage::PATH_KEY); });
+    return entries;
 }
 
 /// A menu entry another program wrote for the AppImage `file`: it starts that file and
 /// is not one of ours.
 bool startsForeign(const QHash<QString, QString>& keys, const QString& file) {
-    return !file.isEmpty() && !keys.contains(appimage::PATH_KEY) && appimage::commandLine(keys.value(u"Exec"_s)).contains(file);
+    // TryExec as well: an Exec line can quote the path the way a shell does, which desktop entries do not
+    return !file.isEmpty() && !keys.contains(appimage::PATH_KEY)
+        && (keys.value(u"TryExec"_s) == file || appimage::commandLine(keys.value(u"Exec"_s)).contains(file));
 }
 
 /// True when another program already owns a menu entry of this name: a file of the user's
@@ -540,33 +542,173 @@ AppImageResult install(const QString& source, const Cancel& cancel, const Fetche
     return {{}, name, AppImageClient::tr("%1 was added to your menu.").arg(name)};
 }
 
-QString shellyFile(QLatin1StringView name) {
+/// An AppImage another program manages, as this app would take it over.
+struct Import {
+    QString key;    ///< what that program's own records call it, if it keeps any
+    QString title;  ///< the name of the app, for display
+    QString path;   ///< the AppImage file
+    appimage::Tracking tracking;
+    QStringList leftovers;  ///< what the program made for it besides a menu entry, removed once it is moved
+};
+
+/// Where a file another program updated from GitHub keeps being updated from.
+appimage::Tracking takenOver(const std::optional<appimage::Source>& source, const QString& variant, const QString& release) {
+    return {.source = source ? appimage::sourceValue(*source) : QString(), .asset = 0, .variant = variant, .release = release};
+}
+
+/// A program whose AppImages can be moved over to this app.
+struct Importer {
+    QLatin1StringView id;    ///< for the setting that says not to ask again
+    QLatin1StringView name;  ///< as the user knows it; a name, so not translated
+    /// What it manages, unchecked.
+    QList<Import> (*records)();
+    /// Takes the moved apps (their keys) off the program's own records; says what went
+    /// wrong. None for a program that keeps no records besides the menu entries.
+    QString (*forget)(const QStringList& keys);
+};
+
+QString configFile(QLatin1StringView name) {
     return QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation) + u'/' + name;
 }
 
-/// Shelly's records of AppImage files that are there. A file one of our menu entries
-/// (`ours`) starts already is not Shelly's to give.
-QList<appimage::ShellyApp> shellyRecords(const Entries& ours) {
-    const auto database = readBytes(shellyFile(appimage::SHELLY_DATABASE), MAX_SHELLY_BYTES);
+QList<Import> shellyRecords() {
+    const auto database = readBytes(configFile(appimage::SHELLY_DATABASE), MAX_IMPORT_BYTES);
     if (database.isEmpty()) {
         return {};
     }
-    auto folder = appimage::shellyInstallDirectory(readBytes(shellyFile(appimage::SHELLY_CONFIG), MAX_SHELLY_BYTES));
+    auto folder = appimage::shellyInstallDirectory(readBytes(configFile(appimage::SHELLY_CONFIG), MAX_IMPORT_BYTES));
     if (folder.isEmpty()) {
         folder = qEnvironmentVariable("XDG_BIN_HOME", QDir::homePath() + u"/.local/bin"_s);
     }
-    auto records = appimage::parseShellyDatabase(database, folder);
-    erase_if(records, [&ours](const appimage::ShellyApp& app) {
-        const QFileInfo info(app.path);
-        return info.isSymLink() || !info.isFile() || !appimage::isAppImage(app.path)
-            || std::ranges::any_of(ours, [&app](const auto& keys) { return keys.value(appimage::PATH_KEY) == app.path; });
-    });
-    return records;
+    const auto data = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
+    QList<Import> imports;
+    for (const auto& app : appimage::parseShellyDatabase(database, folder)) {
+        Import import{.key = app.name,
+            .title         = app.title,
+            .path          = app.path,
+            .tracking      = takenOver(app.source, appimage::variant(QFileInfo(app.path).fileName()), app.release),
+            .leftovers     = {}};
+        for (const auto& icon : appimage::shellyIconFiles(app)) {
+            import.leftovers << data + u'/' + icon;
+        }
+        imports << import;
+    }
+    return imports;
 }
 
-/// What Shelly left in the user's menu and icon theme for the file `app` names. `menu`
-/// is the menu as it was before anything was moved.
-void removeShellyTraces(const appimage::ShellyApp& app, const Entries& menu) {
+QString forgetShelly(const QStringList& keys) {
+    // read again: Shelly may have written to its list in the meantime
+    const auto path = configFile(appimage::SHELLY_DATABASE);
+    const auto rest = appimage::withoutShellyApps(readBytes(path, MAX_IMPORT_BYTES), keys);
+    QSaveFile database(path);
+    if (rest.isEmpty() || !database.open(QIODevice::WriteOnly) || database.write(rest) < 0 || !database.commit()) {
+        return AppImageClient::tr("Shelly's own list could not be updated; it still names the apps that were moved.");
+    }
+    return {};
+}
+
+/// Gear Lever's configuration remembers every file it once looked at, so an app counts as
+/// its own only while Gear Lever's menu entry for the file is there, see gearLeverIcon().
+/// Newest first: Gear Lever may keep earlier versions of an app next to the newest, and
+/// of those only the first is moved.
+QList<Import> gearLeverRecords() {
+    QList<appimage::GearLeverApp> apps;
+    for (const auto& config : {QDir::homePath() + u'/' + appimage::GEARLEVER_FLATPAK_CONFIG, configFile(appimage::GEARLEVER_CONFIG)}) {
+        apps << appimage::parseGearLeverConfig(readBytes(config, MAX_IMPORT_BYTES));
+    }
+    // The files that were moved or deleted stay in the configuration. A file both
+    // installations know counts once, with the record that says where it is updated from.
+    std::ranges::stable_partition(apps, [](const appimage::GearLeverApp& app) { return app.source.has_value(); });
+    QSet<QString> seen;
+    erase_if(apps, [&seen](const appimage::GearLeverApp& app) {
+        if (seen.contains(app.path) || !QFileInfo(app.path).isFile()) {
+            return true;
+        }
+        seen.insert(app.path);
+        return false;
+    });
+    if (apps.isEmpty()) {
+        return {};
+    }
+    QList<std::pair<QDateTime, Import>> found;
+    const auto menu = menuEntries(appimage::GEARLEVER_NAME_KEY);
+    for (const auto& app : std::as_const(apps)) {
+        for (const auto& keys : menu) {
+            if (const auto icon = appimage::gearLeverIcon(keys, app.path); !icon.isEmpty()) {
+                found.emplace_back(QFileInfo(app.path).lastModified(),
+                    Import{.key = {},
+                        // the name inside the file; Gear Lever's own may carry a version: "App (1.2)"
+                        .title     = keys.value(appimage::GEARLEVER_NAME_KEY),
+                        .path      = app.path,
+                        .tracking  = takenOver(app.source, app.variant, keys.value(u"X-AppImage-Version"_s)),
+                        .leftovers = {icon}});
+                break;
+            }
+        }
+    }
+    std::ranges::stable_sort(found, std::ranges::greater(), &std::pair<QDateTime, Import>::first);
+    QList<Import> imports;
+    for (auto& [modified, import] : found) {
+        imports << std::move(import);
+    }
+    return imports;
+}
+
+constexpr std::array IMPORTERS{
+    Importer{.id = "shelly"_L1, .name = "Shelly"_L1, .records = shellyRecords, .forget = forgetShelly},
+    Importer{.id = "gearlever"_L1, .name = "Gear Lever"_L1, .records = gearLeverRecords, .forget = nullptr},
+};
+
+QString dismissedKey(const Importer& importer) {
+    return u"appimage/%1Dismissed"_s.arg(importer.id);
+}
+
+using Offered = QList<std::pair<const Importer*, QList<Import>>>;
+
+/// True for a path in the install folder, links followed.
+bool insideInstallDirectory(const QString& canonicalPath) {
+    const auto folder = QFileInfo(installDirectory()).canonicalFilePath();
+    return canonicalPath.isEmpty() || (!folder.isEmpty() && canonicalPath.startsWith(folder + u'/'));
+}
+
+/// What can be moved over, by program, from those the user did not say no to: AppImage
+/// files that are there, that none of our menu entries (`ours`) starts already and that
+/// are no app of ours by sameApp(). Such a file would take that app's place, and is mostly
+/// an older copy of it, like one Gear Lever keeps. The same app in two programs, or twice
+/// in one, is moved once.
+Offered importable(const Entries& ours) {
+    QList<QHash<QString, QString>> taken(ours.cbegin(), ours.cend());
+    Offered offered;
+    for (const auto& importer : IMPORTERS) {
+        if (QSettings().value(dismissedKey(importer), false).toBool()) {
+            continue;
+        }
+        QList<Import> apps;
+        for (auto& app : importer.records()) {
+            const QHash<QString, QString> keys{{u"Name"_s, app.title}, {appimage::SOURCE_KEY, app.tracking.source}};
+            if (std::ranges::any_of(taken, [&](const auto& existing) {
+                    return existing.value(appimage::PATH_KEY) == app.path || sameApp(existing, keys, app.tracking);
+                })) {
+                continue;
+            }
+            // by a link or ".." on the way, a path can lead to a file of ours: never one to delete
+            const QFileInfo info(app.path);
+            if (info.isSymLink() || !info.isFile() || !appimage::isAppImage(app.path) || insideInstallDirectory(info.canonicalFilePath())) {
+                continue;
+            }
+            taken << keys;
+            apps << std::move(app);
+        }
+        if (!apps.isEmpty()) {
+            offered.emplace_back(&importer, std::move(apps));
+        }
+    }
+    return offered;
+}
+
+/// What the program that managed `app` left behind for it. `menu` is the menu as it was
+/// before anything was moved.
+void removeTraces(const Import& app, const Entries& menu) {
     for (const auto& [name, keys] : menu.asKeyValueRange()) {
         // looked at again: the entry of that name may be the one that was just written
         const auto path = menuDirectory() + u'/' + name;
@@ -574,48 +716,58 @@ void removeShellyTraces(const appimage::ShellyApp& app, const Entries& menu) {
             QFile::remove(path);
         }
     }
-    const auto data = QStandardPaths::writableLocation(QStandardPaths::GenericDataLocation);
-    for (const auto& icon : appimage::shellyIconFiles(app)) {
-        QFile::remove(data + u'/' + icon);
+    for (const auto& leftover : app.leftovers) {
+        // a linked folder could lead anywhere, our icons included
+        if (const auto folder = QFileInfo(leftover).absolutePath(); QFileInfo(folder).canonicalFilePath() == folder) {
+            QFile::remove(leftover);
+        }
     }
 }
 
-/// Adds every AppImage Shelly manages and takes it off Shelly's hands. One that cannot be
-/// added stays with Shelly, untouched.
+/// Adds every AppImage the other programs manage and takes it off their hands. One that
+/// cannot be added stays where it is, untouched.
 AppImageResult migrate(const Cancel& cancel) {
-    QStringList moved;
-    QStringList done;
     QStringList failed;
+    QStringList report;
     const auto menu = menuEntries();
-    for (const auto& app : shellyRecords(managedEntries())) {
-        if (cancel->load()) {
-            break;
+    for (const auto& [importer, apps] : importable(managedEntries())) {
+        QStringList moved;
+        QStringList done;
+        for (const auto& app : apps) {
+            if (cancel->load()) {
+                break;
+            }
+            const QFileInfo before(app.path);
+            const auto size     = before.size();
+            const auto modified = before.lastModified();
+            const auto result   = install(app.path, cancel, Fetched{.name = {}, .tracking = app.tracking, .replaces = {}, .takesOver = true});
+            if (!result.error.isEmpty()) {
+                failed << AppImageClient::tr("%1 was not moved: %2").arg(app.title, result.error);
+                continue;
+            }
+            // the other program may have put a newer file there in the meantime: that one stays,
+            // along with what it needs
+            if (const QFileInfo after(app.path); after.isSymLink() || after.size() != size || after.lastModified() != modified) {
+                failed << AppImageClient::tr("%1 changed while it was being moved, so it was left in %2.").arg(after.fileName(), after.absolutePath());
+            } else {
+                removeTraces(app, menu);
+                QFile::remove(app.path);
+            }
+            moved << result.name;
+            done << app.key;
         }
-        const appimage::Tracking tracking{.source = app.source ? appimage::sourceValue(*app.source) : QString(),
-            .asset                                = 0,
-            .variant                              = appimage::variant(QFileInfo(app.path).fileName()),
-            .release                              = app.release};
-        const auto result = install(app.path, cancel, Fetched{.name = {}, .tracking = tracking, .replaces = {}, .takesOver = true});
-        if (!result.error.isEmpty()) {
-            failed << AppImageClient::tr("%1 was not moved: %2").arg(app.title, result.error);
+        if (moved.isEmpty()) {
             continue;
         }
-        removeShellyTraces(app, menu);
-        QFile::remove(app.path);
-        moved << result.name;
-        done << app.name;
-    }
-    if (!done.isEmpty()) {
-        // read again: Shelly may have written to its list in the meantime
-        const auto path = shellyFile(appimage::SHELLY_DATABASE);
-        const auto rest = appimage::withoutShellyApps(readBytes(path, MAX_SHELLY_BYTES), done);
-        QSaveFile database(path);
-        if (rest.isEmpty() || !database.open(QIODevice::WriteOnly) || database.write(rest) < 0 || !database.commit()) {
-            failed << AppImageClient::tr("Shelly's own list could not be updated; it still names the apps that were moved.");
+        if (const auto error = importer->forget ? importer->forget(done) : QString(); !error.isEmpty()) {
+            failed << error;
         }
+        report << AppImageClient::tr("Moved from %1: %2.").arg(importer->name, QLocale().createSeparatedList(moved));
+    }
+    if (!report.isEmpty()) {
         refreshMenu();
     }
-    return {failed.join(u'\n'), {}, moved.isEmpty() ? QString() : AppImageClient::tr("Moved from Shelly: %1.").arg(QLocale().createSeparatedList(moved))};
+    return {failed.join(u'\n'), {}, report.join(u' ')};
 }
 
 QNetworkRequest request(const QUrl& url) {
@@ -781,25 +933,36 @@ void AppImageClient::add(const QUrl& file) {
     m_watcher.setFuture(QtConcurrent::run(install, file.toLocalFile(), m_cancel, Fetched{.name = {}, .tracking = {}, .replaces = {}}));
 }
 
-bool AppImageClient::takeShellyPrompt() {
-    if (m_shellyPrompted || m_shellyApps.isEmpty()) {
+bool AppImageClient::takeImportPrompt() {
+    if (m_importPrompted || m_imports.isEmpty()) {
         return false;
     }
-    m_shellyPrompted = true;
+    m_importPrompted = true;
     return true;
 }
 
-void AppImageClient::migrateShelly() {
-    if (m_busy || m_shellyApps.isEmpty()) {
+QString AppImageClient::importTools() const {
+    QStringList tools;
+    for (const auto& app : m_imports) {
+        tools << app.tool;
+    }
+    tools.removeDuplicates();
+    return QLocale().createSeparatedList(tools);
+}
+
+void AppImageClient::migrateImports() {
+    if (m_busy || m_imports.isEmpty()) {
         return;
     }
     clearMessage();
-    setBusy(true, tr("%n AppImage(s) from Shelly", nullptr, static_cast<int>(m_shellyApps.size())));
+    setBusy(true, tr("%n AppImage(s) from %1", nullptr, static_cast<int>(m_imports.size())).arg(importTools()));
     m_watcher.setFuture(QtConcurrent::run(migrate, m_cancel));
 }
 
-void AppImageClient::dismissShelly() {
-    QSettings().setValue(SHELLY_DISMISSED_KEY, true);
+void AppImageClient::dismissImports() {
+    for (const auto& [importer, apps] : importable(managedEntries())) {
+        QSettings().setValue(dismissedKey(*importer), true);
+    }
     refresh();
 }
 
@@ -1093,17 +1256,21 @@ void AppImageClient::refresh() {
         emit appsChanged();
     }
 
-    QList<AppImageImport> shellyApps;
-    if (!m_busy && !QSettings().value(SHELLY_DISMISSED_KEY, false).toBool()) {
-        for (const auto& app : shellyRecords(entries)) {
-            shellyApps << AppImageImport{.name = app.title,
-                .path                          = app.path,
-                .size                          = QLocale().formattedDataSize(QFileInfo(app.path).size(), 1, QLocale::DataSizeIecFormat),
-                .source                        = app.source ? app.source->slug() : QString()};
+    QList<AppImageImport> imports;
+    if (!m_busy) {
+        for (const auto& [importer, offered] : importable(entries)) {
+            for (const auto& app : offered) {
+                const auto source = appimage::sourceFromValue(app.tracking.source);
+                imports << AppImageImport{.name = app.title,
+                    .path                       = app.path,
+                    .size                       = QLocale().formattedDataSize(QFileInfo(app.path).size(), 1, QLocale::DataSizeIecFormat),
+                    .source                     = source ? source->slug() : QString(),
+                    .tool                       = importer->name};
+            }
         }
     }
-    if (shellyApps != m_shellyApps) {
-        m_shellyApps = std::move(shellyApps);
-        emit shellyAppsChanged();
+    if (imports != m_imports) {
+        m_imports = std::move(imports);
+        emit importsChanged();
     }
 }

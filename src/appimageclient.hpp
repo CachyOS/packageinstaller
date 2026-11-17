@@ -66,7 +66,8 @@ struct AppImageChoice {
     bool operator==(const AppImageChoice&) const = default;
 };
 
-/// An AppImage that Shelly manages and that can be moved over to this app.
+/// An AppImage that another program (Shelly, Gear Lever) manages and that can be moved
+/// over to this app.
 struct AppImageImport {
     Q_GADGET
     QML_VALUE_TYPE(appImageImport)
@@ -74,12 +75,14 @@ struct AppImageImport {
     Q_PROPERTY(QString path MEMBER path FINAL)
     Q_PROPERTY(QString size MEMBER size FINAL)
     Q_PROPERTY(QString source MEMBER source FINAL)
+    Q_PROPERTY(QString tool MEMBER tool FINAL)
 
  public:
     QString name;
     QString path;
     QString size;    ///< for display
-    QString source;  ///< "owner/repo" on GitHub when Shelly updates it from there
+    QString source;  ///< "owner/repo" on GitHub when the program updates it from there
+    QString tool;    ///< the program, by name
 
     bool operator==(const AppImageImport&) const = default;
 };
@@ -157,8 +160,10 @@ class AppImageClient : public QObject {
     Q_PROPERTY(QString error READ error NOTIFY messageChanged FINAL)
     /// What the last action achieved, as a sentence; empty when it achieved nothing.
     Q_PROPERTY(QString added READ added NOTIFY messageChanged FINAL)
-    /// The AppImages Shelly manages. Empty once the user said not to ask about them.
-    Q_PROPERTY(QList<AppImageImport> shellyApps READ shellyApps NOTIFY shellyAppsChanged FINAL)
+    /// The AppImages other programs manage, of those the user did not say no to.
+    Q_PROPERTY(QList<AppImageImport> imports READ imports NOTIFY importsChanged FINAL)
+    /// The programs of `imports`, by name, as a list for a sentence: "Shelly and Gear Lever".
+    Q_PROPERTY(QString importTools READ importTools NOTIFY importsChanged FINAL)
     /// Where the files are kept, for display.
     Q_PROPERTY(QString directory READ directory CONSTANT FINAL)
     /// libfuse 2 is installed; most AppImages need it to start.
@@ -172,7 +177,8 @@ class AppImageClient : public QObject {
     bool busy() const { return m_busy; }
     QString error() const { return m_error; }
     QString added() const { return m_added; }
-    QList<AppImageImport> shellyApps() const { return m_shellyApps; }
+    QList<AppImageImport> imports() const { return m_imports; }
+    QString importTools() const;
     QString directory() const;
     bool fuseAvailable() const { return m_fuseAvailable; }
     QString subject() const { return m_subject; }
@@ -200,13 +206,13 @@ class AppImageClient : public QObject {
     Q_INVOKABLE void checkUpdates(bool now = true);
     /// Downloads the newer release of an app and replaces its file.
     Q_INVOKABLE void update(const QString& id);
-    /// True once per run of the app, when there are AppImages of Shelly's to ask about.
-    Q_INVOKABLE bool takeShellyPrompt();
-    /// Moves the AppImages Shelly manages over: each is added like a file the user picked
-    /// and then taken off Shelly's hands, with its file, menu entry, icon and record.
-    Q_INVOKABLE void migrateShelly();
-    /// Never asks about Shelly's AppImages again.
-    Q_INVOKABLE void dismissShelly();
+    /// True once per run of the app, when there are AppImages of other programs to ask about.
+    Q_INVOKABLE bool takeImportPrompt();
+    /// Moves the AppImages of `imports` over: each is added like a file the user picked and
+    /// then taken off the other program's hands, with its file, menu entry, icon and record.
+    Q_INVOKABLE void migrateImports();
+    /// Never asks about the AppImages of the programs in `imports` again.
+    Q_INVOKABLE void dismissImports();
     /// Stops the download that is running.
     Q_INVOKABLE void cancelDownload();
     /// Deletes the AppImage, its menu entry and its icon. `path` is the file the user was
@@ -223,7 +229,7 @@ class AppImageClient : public QObject {
     void progressChanged();
     void offerChanged();
     void checkingChanged();
-    void shellyAppsChanged();
+    void importsChanged();
     /// New icons for `image://pkgicon/appimage/<id>`.
     void iconsLoaded(const IconIndex& icons);
 
@@ -241,8 +247,8 @@ class AppImageClient : public QObject {
     IconIndex m_icons;  ///< as last announced with iconsLoaded()
     QString m_error;
     QString m_added;
-    QList<AppImageImport> m_shellyApps;
-    bool m_shellyPrompted = false;
+    QList<AppImageImport> m_imports;
+    bool m_importPrompted = false;
     QString m_subject;
     QString m_checkError;  ///< why the last look for newer releases failed
     QNetworkAccessManager m_network;
