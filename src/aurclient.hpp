@@ -122,12 +122,12 @@ class AurClient : public QObject {
     /// Dependencies that cannot be provided, as sentences.
     Q_PROPERTY(QStringList problems READ problems NOTIFY planChanged FINAL)
     Q_PROPERTY(bool resolving READ resolving NOTIFY planChanged FINAL)
+    /// The installed AUR packages the AUR knows, those with a newer version first.
+    Q_PROPERTY(QList<AurPackage> installed READ installed NOTIFY updatesChanged FINAL)
     /// Installed AUR packages with a newer version in the AUR.
     Q_PROPERTY(QList<AurPackage> updates READ updates NOTIFY updatesChanged FINAL)
     Q_PROPERTY(int updateCount READ updateCount NOTIFY updatesChanged FINAL)
     Q_PROPERTY(bool checkingUpdates READ checkingUpdates NOTIFY checkingUpdatesChanged FINAL)
-    /// How many installed packages the AUR knows; -1 until the first check has finished.
-    Q_PROPERTY(int installedCount READ installedCount NOTIFY updatesChanged FINAL)
     /// For an update: what changed in its recipe since the installed version, in the form of
     /// git::readableDiff(). Empty when nothing did or it is not known.
     Q_PROPERTY(QString changes READ changes NOTIFY changesChanged FINAL)
@@ -159,10 +159,10 @@ class AurClient : public QObject {
         return std::ranges::any_of(m_findings, [](const pkgscan::Finding& f) { return f.severity == pkgscan::Severity::Danger; });
     }
     QStringList sourceHosts() const { return m_analysis.hosts; }
-    QList<AurPackage> updates() const { return m_updates; }
-    int updateCount() const { return static_cast<int>(m_updates.size()); }
+    QList<AurPackage> installed() const { return m_installed; }
+    QList<AurPackage> updates() const;
+    int updateCount() const { return static_cast<int>(std::ranges::count_if(m_installed, &AurPackage::upgradable)); }
     bool checkingUpdates() const { return m_updateChecks > 0; }
-    int installedCount() const { return m_installedCount; }
     QString changes() const { return m_changes.text; }
     QList<git::DiffRun> changeRuns() const { return m_changes.runs; }
     QString changesNote() const { return m_changesNote; }
@@ -209,6 +209,9 @@ class AurClient : public QObject {
     [[nodiscard]] AurPackage fromJson(const QJsonObject& object) const;
     /// Sets installed, installedVersion, upgradable and inRepos from the local database.
     void applyLocal(AurPackage& package) const;
+    /// Takes the answer of an update check, or the same list after a reload: sorts it and
+    /// derives the updates.
+    void setInstalled(QList<AurPackage> installed);
     /// Asks the AUR about `names` in batches and passes every record to `done` once all replies are in.
     void fetchInfo(const QStringList& names, std::function<void(QList<AurPackage> found, bool failed)> done);
     /// Runs git in isolation from the user's and the system's configuration.
@@ -286,8 +289,7 @@ class AurClient : public QObject {
     int m_generation = 0;
     int m_detailsGeneration = 0;
 
-    QList<AurPackage> m_updates;
-    int m_installedCount    = -1;
+    QList<AurPackage> m_installed;
     int m_updateChecks      = 0;  ///< checks still running, including superseded ones
     int m_updatesGeneration = 0;
 };

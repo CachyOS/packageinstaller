@@ -771,9 +771,7 @@ void AurClient::checkUpdates() {
 
     const int generation = ++m_updatesGeneration;
     if (names.isEmpty()) {
-        m_updates.clear();
-        m_installedCount = 0;
-        emit updatesChanged();
+        setInstalled({});
         return;
     }
     if (m_updateChecks++ == 0) {
@@ -782,12 +780,7 @@ void AurClient::checkUpdates() {
     fetchInfo(names, [this, generation](QList<AurPackage> found, bool failed) {
         // a check that could not reach the AUR keeps the previous list
         if (generation == m_updatesGeneration && !failed) {
-            m_installedCount = static_cast<int>(found.size());
-            // installed packages that moved into a repository are updated from there
-            found.removeIf([](const AurPackage& package) { return !package.upgradable || package.inRepos; });
-            std::ranges::sort(found, {}, &AurPackage::name);
-            m_updates = std::move(found);
-            emit updatesChanged();
+            setInstalled(std::move(found));
         }
         if (--m_updateChecks == 0) {
             emit checkingUpdatesChanged();
@@ -795,11 +788,26 @@ void AurClient::checkUpdates() {
     });
 }
 
+void AurClient::setInstalled(QList<AurPackage> installed) {
+    // installed packages that moved into a repository are updated from there
+    installed.removeIf([](const AurPackage& package) { return !package.installed || package.inRepos; });
+    std::ranges::sort(installed, [](const AurPackage& a, const AurPackage& b) {
+        return a.upgradable != b.upgradable ? a.upgradable : a.name < b.name;
+    });
+    // every reload ends in a check: the same answer must not rebuild the page's list
+    if (installed != m_installed) {
+        m_installed = std::move(installed);
+        emit updatesChanged();
+    }
+}
+
+QList<AurPackage> AurClient::updates() const {
+    return m_installed | std::views::filter(&AurPackage::upgradable) | std::ranges::to<QList>();
+}
+
 void AurClient::clearUpdates() {
     ++m_updatesGeneration;
-    m_updates.clear();
-    m_installedCount = -1;
-    emit updatesChanged();
+    setInstalled({});
 }
 
 void AurClient::refreshInstalled() {
@@ -811,12 +819,20 @@ void AurClient::refreshInstalled() {
         applyLocal(package);
         return package != before;
     };
-    bool changed = false;
-    for (auto& package : m_results) {
-        changed |= refresh(package);
-    }
-    if (changed) {
+    const auto refreshAll = [&refresh](QList<AurPackage>& packages) {
+        bool changed = false;
+        for (auto& package : packages) {
+            changed |= refresh(package);
+        }
+        return changed;
+    };
+    if (refreshAll(m_results)) {
         emit resultsChanged();
+    }
+    // what was updated or removed since the last check shows at once; what is new in the
+    // AUR, or newly installed, comes with the next check
+    if (auto installed = m_installed; refreshAll(installed)) {
+        setInstalled(std::move(installed));
     }
     // An accepted checkout that is now installed is where the changes of its next update start.
     // Only now, after the build: accepting alone must not replace what was built before.
