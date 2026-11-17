@@ -65,7 +65,7 @@ Flatpak apps and add AppImage files to the menu.
 
 Build:
 ```sh
-sudo pacman -S base-devel cmake git ninja qt6-base qt6-declarative qt6-tools appstream-qt pacman elfutils
+sudo pacman -S --needed base-devel cmake git ninja qt6-base qt6-declarative qt6-tools appstream-qt pacman elfutils
 ```
 
 Qt 6.10 or newer and a C++26 compiler (GCC 15+, Clang 20+) are required.
