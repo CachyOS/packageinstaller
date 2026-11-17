@@ -267,6 +267,104 @@ class TestAppImage : public QObject {
         QVERIFY(appimage::shellyInstallDirectory("").isEmpty());
     }
 
+    void gearLeverConfig() {
+        // as Gear Lever 4.6 writes it, with the empty sections it leaves for files it only looked at
+        const auto config = QByteArray(R"([DEFAULT]
+fetch-updates-in-background = no
+
+[app.de1cf8ffa34d272d3e7590b01dbee6dd.update_manager]
+
+[app.d13b5beea46f0d7af318a54855af511e]
+default_exec_arguments =
+name = LocalSend
+file_path = /home/u/AppImages/localsend.appimage
+
+[app.f5fec74c5458597804beeb85e687bde6]
+default_exec_arguments = %F
+name = Neovim
+file_path = /home/u/AppImages/neovim.appimage
+website: https://neovim.io
+
+[app.d13b5beea46f0d7af318a54855af511e.update_manager]
+repo = localsend/localsend
+repo_filename = LocalSend-*-linux-x86-64.AppImage
+allow_prereleases = False
+manager = GithubUpdater
+
+# a comment
+[app.0123456789abcdef0123456789abcdef]
+name = Relative
+file_path = AppImages/relative.appimage
+
+[app.fedcba9876543210fedcba9876543210]
+name = GitLab
+FILE_PATH = /home/u/AppImages/gitlab.appimage
+  continued = not a key
+
+[app.fedcba9876543210fedcba9876543210.update_manager]
+repo = owner/project
+manager = GitlabUpdater
+)");
+        const auto apps = appimage::parseGearLeverConfig(config);
+        QCOMPARE(apps.size(), 3);
+        QCOMPARE(apps.at(0).path, u"/home/u/AppImages/localsend.appimage"_s);
+        QVERIFY(apps.at(0).source);
+        QCOMPARE(apps.at(0).source->slug(), u"localsend/localsend"_s);
+        QVERIFY(apps.at(0).source->file.isEmpty());
+        QCOMPARE(apps.at(0).variant, appimage::variant(u"LocalSend-1.18.2-linux-x86-64.AppImage"_s));
+        // updates from the file itself or from elsewhere than GitHub are not carried over
+        QCOMPARE(apps.at(1).path, u"/home/u/AppImages/neovim.appimage"_s);
+        QVERIFY(!apps.at(1).source);
+        QCOMPARE(apps.at(2).path, u"/home/u/AppImages/gitlab.appimage"_s);
+        QVERIFY(!apps.at(2).source);
+
+        QVERIFY(appimage::parseGearLeverConfig("").isEmpty());
+        QVERIFY(appimage::parseGearLeverConfig("not an ini file\n[app.x]\nfile_path = /a\n").isEmpty());
+    }
+
+    void gearLeverEntries() {
+        const auto path = u"/home/u/AppImages/localsend.appimage"_s;
+        QHash<QString, QString> entry{{u"TryExec"_s, path}, {u"Icon"_s, u"/home/u/AppImages/.icons/localsend"_s},
+            {u"X-AppImage-Name"_s, u"LocalSend"_s}, {u"Exec"_s, u"env DESKTOPINTEGRATION=1 "_s + path}};
+        QCOMPARE(appimage::gearLeverIcon(entry, path), u"/home/u/AppImages/.icons/localsend"_s);
+        QVERIFY(appimage::gearLeverIcon(entry, u"/home/u/AppImages/other.appimage"_s).isEmpty());
+
+        // not copied by Gear Lever: no icon of its own next to the file
+        auto other = entry;
+        other[u"Icon"_s] = u"/usr/share/icons/hicolor/48x48/apps/app.png"_s;
+        QVERIFY(appimage::gearLeverIcon(other, path).isEmpty());
+        other[u"Icon"_s] = u"applications-other"_s;
+        QVERIFY(appimage::gearLeverIcon(other, path).isEmpty());
+        for (const auto& icon : {u"/home/u/AppImages/.icons/"_s, u"/home/u/AppImages/.icons/../x"_s, u"/home/u/AppImages/.icons/a/b"_s}) {
+            other[u"Icon"_s] = icon;
+            QVERIFY2(appimage::gearLeverIcon(other, path).isEmpty(), qPrintable(icon));
+        }
+        // written by someone else, or by this app
+        other = entry;
+        other.remove(u"X-AppImage-Name"_s);
+        QVERIFY(appimage::gearLeverIcon(other, path).isEmpty());
+        other = entry;
+        other.insert(appimage::PATH_KEY, path);
+        QVERIFY(appimage::gearLeverIcon(other, path).isEmpty());
+    }
+
+    void patternVariants() {
+        const auto release = appimage::variant(u"App-2.0-x86_64.AppImage"_s);
+        QCOMPARE(appimage::patternVariant(u"App-*-x86_64.AppImage"_s), release);
+        QCOMPARE(appimage::patternVariant(u"App-v*-x86_64.AppImage"_s), appimage::variant(u"App-v2.0-x86_64.AppImage"_s));
+        QCOMPARE(appimage::patternVariant(u"App-2.0-x86_64.AppImage"_s), release);
+        QCOMPARE(appimage::patternVariant(u"App-*-x86_64.AppImage.zsync"_s), release);
+        QVERIFY(appimage::patternVariant(u"App-*-lite-x86_64.AppImage"_s) != release);
+        // which file it is cannot be told
+        QVERIFY(appimage::patternVariant(u"App*.AppImage"_s).isEmpty());
+        QVERIFY(appimage::patternVariant(u"App-*x86_64.AppImage"_s).isEmpty());
+        QVERIFY(appimage::patternVariant(u"App-?.AppImage"_s).isEmpty());
+        QVERIFY(appimage::patternVariant(u"App-[0-9].AppImage"_s).isEmpty());
+        QVERIFY(appimage::patternVariant(u"*.AppImage"_s).isEmpty());
+        QVERIFY(appimage::patternVariant(u"*"_s).isEmpty());
+        QVERIFY(appimage::patternVariant({}).isEmpty());
+    }
+
     void sources_data() {
         QTest::addColumn<QString>("link");
         QTest::addColumn<QString>("slug");
