@@ -1,13 +1,13 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "backend.hpp"
 #include "iconprovider.hpp"
+#include "localization.hpp"
 
 #include <QApplication>
 #include <QFileInfo>
 #include <QIcon>
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
-#include <QTranslator>
 
 #include <backward.hpp>
 
@@ -25,11 +25,8 @@ int main(int argc, char** argv) {
     QGuiApplication::setDesktopFileName(u"cachyos-pi"_s);
     QGuiApplication::setWindowIcon(QIcon::fromTheme(u"cachyos-pi"_s, QIcon(u":/qt/qml/CachyOS/PackageInstaller/icons/cachyos-pi.png"_s)));
 
-    // Without a translation for the locale, still load the English plural forms.
-    QTranslator translator;
-    if (translator.load(QLocale(), u"cachyos-pi"_s, u"_"_s, u":/i18n"_s) || translator.load(u":/i18n/cachyos-pi_en.qm"_s)) {
-        QCoreApplication::installTranslator(&translator);
-    }
+    // The chosen language is installed before QML reads its first string.
+    Localization localization(nullptr);
 
     // The UI brings its own look; Basic is the style meant for customisation.
     QQuickStyle::setStyle(u"Basic"_s);
@@ -43,8 +40,8 @@ int main(int argc, char** argv) {
 
     QQmlApplicationEngine engine;
     engine.addImageProvider(u"pkgicon"_s, icons);
-    QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed, &app, [] { QCoreApplication::exit(1); },
-        Qt::QueuedConnection);
+    QObject::connect(&localization, &Localization::languageChanged, &engine, [&engine] { engine.retranslate(); });
+    QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed, &app, [] { QCoreApplication::exit(1); }, Qt::QueuedConnection);
     engine.loadFromModule("CachyOS.PackageInstaller", "Main");
     return QApplication::exec();
 }

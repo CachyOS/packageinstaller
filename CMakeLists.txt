@@ -18,7 +18,7 @@ find_package(Qt6 6.10 REQUIRED COMPONENTS Core Gui Widgets Qml Quick QuickContro
 find_package(AppStreamQt 1.0 REQUIRED)
 pkg_check_modules(LIBALPM REQUIRED IMPORTED_TARGET libalpm>=15.0.0)
 
-qt_standard_project_setup(REQUIRES 6.10 I18N_SOURCE_LANGUAGE en)
+qt_standard_project_setup(REQUIRES 6.10 I18N_SOURCE_LANGUAGE en I18N_TRANSLATED_LANGUAGES zh_CN zh_TW)
 qt_policy(SET QTP0004 NEW)
 
 include(CPM)
@@ -89,6 +89,7 @@ qt_add_executable(${PROJECT_NAME}
     src/aurclient.hpp src/aurclient.cpp
     src/flatpakclient.hpp src/flatpakclient.cpp
     src/appimageclient.hpp src/appimageclient.cpp
+    src/localization.hpp src/localization.cpp
     src/iconprovider.hpp src/iconprovider.cpp
     src/transaction.hpp src/transaction.cpp
     src/updatenotice.hpp src/updatenotice.cpp

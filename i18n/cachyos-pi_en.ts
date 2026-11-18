@@ -80,7 +80,7 @@
 <context>
     <name>BrowsePage</name>
     <message numerus="yes">
-        <location filename="../qml/BrowsePage.qml" line="49"/>
+        <location filename="../qml/BrowsePage.qml" line="48"/>
         <source>%n package(s)</source>
         <translation>
             <numerusform>%n package</numerusform>
@@ -120,12 +120,18 @@
     <message numerus="yes">
         <location filename="../src/transaction.cpp" line="111"/>
         <source>Old versions of installed packages will be removed from the pacman cache; %n version(s) of each package will be kept.</source>
-        <translation><numerusform>Old versions of installed packages will be removed from the pacman cache; %n version of each package will be kept.</numerusform><numerusform>Old versions of installed packages will be removed from the pacman cache; %n versions of each package will be kept.</numerusform></translation>
+        <translation>
+            <numerusform>Old versions of installed packages will be removed from the pacman cache; %n version of each package will be kept.</numerusform>
+            <numerusform>Old versions of installed packages will be removed from the pacman cache; %n versions of each package will be kept.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../src/transaction.cpp" line="113"/>
         <source>Cached versions of packages that are no longer installed will be removed from the pacman cache; %n version(s) of each package will be kept.</source>
-        <translation><numerusform>Cached versions of packages that are no longer installed will be removed from the pacman cache; %n version of each package will be kept.</numerusform><numerusform>Cached versions of packages that are no longer installed will be removed from the pacman cache; %n versions of each package will be kept.</numerusform></translation>
+        <translation>
+            <numerusform>Cached versions of packages that are no longer installed will be removed from the pacman cache; %n version of each package will be kept.</numerusform>
+            <numerusform>Cached versions of packages that are no longer installed will be removed from the pacman cache; %n versions of each package will be kept.</numerusform>
+        </translation>
     </message>
     <message numerus="yes">
         <location filename="../src/transaction.cpp" line="118"/>

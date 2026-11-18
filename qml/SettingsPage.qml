@@ -33,26 +33,55 @@ ScrollPage {
     Section {
         title: qsTr("Appearance")
 
-        Row {
+        Flow {
+            width: parent.width
             spacing: 8
 
             Repeater {
-                model: ListModel {
-                    ListElement { mode: "system"; label: qsTr("Follow the desktop") }
-                    ListElement { mode: "light"; label: qsTr("Light") }
-                    ListElement { mode: "dark"; label: qsTr("Dark") }
-                }
+                model: [
+                    { mode: "system", label: qsTr("Follow the desktop") },
+                    { mode: "light", label: qsTr("Light") },
+                    { mode: "dark", label: qsTr("Dark") }
+                ]
 
                 PillButton {
-                    required property string mode
-                    required property string label
-                    readonly property bool current: Look.settings.mode === mode
+                    required property var modelData
+                    readonly property bool current: Look.settings.mode === modelData.mode
 
-                    text: label
+                    text: modelData.label
                     tone: current ? "primary" : "soft"
                     Accessible.checkable: true
                     Accessible.checked: current
-                    onClicked: Look.settings.mode = mode
+                    onClicked: Look.settings.mode = modelData.mode
+                }
+            }
+        }
+    }
+
+    Section {
+        title: qsTr("Language")
+
+        Flow {
+            width: parent.width
+            spacing: 8
+
+            Repeater {
+                model: [
+                    { code: "system", label: qsTr("Follow the system") },
+                    { code: "en", label: "English" },
+                    { code: "zh_CN", label: "简体中文" },
+                    { code: "zh_TW", label: "繁體中文" }
+                ]
+
+                PillButton {
+                    required property var modelData
+                    readonly property bool current: Localization.language === modelData.code
+
+                    text: modelData.label
+                    tone: current ? "primary" : "soft"
+                    Accessible.checkable: true
+                    Accessible.checked: current
+                    onClicked: Localization.language = modelData.code
                 }
             }
         }
