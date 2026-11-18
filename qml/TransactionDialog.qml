@@ -24,6 +24,17 @@ Dialog {
     contentItem: Column {
         id: body
         spacing: 16
+        focus: true
+
+        // Esc leaves the dialog where a button does so without harm: it cancels before the
+        // start and closes the result. A running transaction is only stopped on purpose.
+        Keys.onEscapePressed: {
+            if (root.phase === Transaction.Planning || root.phase === Transaction.Confirm) {
+                root.tx.cancel()
+            } else if (root.phase === Transaction.Finished) {
+                root.tx.dismiss()
+            }
+        }
 
         Heading {
             width: body.width
