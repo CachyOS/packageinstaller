@@ -69,7 +69,7 @@
 <context>
     <name>AurPage</name>
     <message numerus="yes">
-        <location filename="../qml/AurPage.qml" line="75"/>
+        <location filename="../qml/AurPage.qml" line="76"/>
         <source>%1 · %n vote(s)</source>
         <translation>
             <numerusform>%1 · %n vote</numerusform>

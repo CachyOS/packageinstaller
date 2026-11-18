@@ -42,6 +42,7 @@ struct AurPackage {
     Q_PROPERTY(bool installed MEMBER installed FINAL)
     Q_PROPERTY(QString installedVersion MEMBER installedVersion FINAL)
     Q_PROPERTY(bool upgradable MEMBER upgradable FINAL)
+    Q_PROPERTY(bool heldBack MEMBER heldBack FINAL)
     Q_PROPERTY(bool inRepos MEMBER inRepos FINAL)
     /// AUR packages of a plan that need this one.
     Q_PROPERTY(QStringList neededBy MEMBER neededBy FINAL)
@@ -68,10 +69,13 @@ struct AurPackage {
     bool installed = false;
     QString installedVersion{};
     bool upgradable = false;
+    bool heldBack   = false;  ///< by IgnorePkg or IgnoreGroup in pacman.conf: not updated with the others
     bool inRepos    = false;  ///< a package of the same name in the repositories should be installed from there
     QStringList neededBy{};
 
     [[nodiscard]] QString pageUrl() const;
+    /// An update that is counted and updated with the others, like `pacman -Syu` and paru do.
+    [[nodiscard]] bool offered() const { return upgradable && !heldBack; }
 
     bool operator==(const AurPackage&) const = default;
 };
@@ -161,7 +165,7 @@ class AurClient : public QObject {
     QStringList sourceHosts() const { return m_analysis.hosts; }
     QList<AurPackage> installed() const { return m_installed; }
     QList<AurPackage> updates() const;
-    int updateCount() const { return static_cast<int>(std::ranges::count_if(m_installed, &AurPackage::upgradable)); }
+    int updateCount() const { return static_cast<int>(std::ranges::count_if(m_installed, &AurPackage::offered)); }
     bool checkingUpdates() const { return m_updateChecks > 0; }
     QString changes() const { return m_changes.text; }
     QList<git::DiffRun> changeRuns() const { return m_changes.runs; }
@@ -207,10 +211,10 @@ class AurClient : public QObject {
 
  private:
     [[nodiscard]] AurPackage fromJson(const QJsonObject& object) const;
-    /// Sets installed, installedVersion, upgradable and inRepos from the local database.
+    /// Sets installed, installedVersion, upgradable, heldBack and inRepos from the local database.
     void applyLocal(AurPackage& package) const;
-    /// Takes the answer of an update check, or the same list after a reload: sorts it and
-    /// derives the updates.
+    /// Takes the answer of an update check, or the same list after a reload: brings it up
+    /// to date with the local database, sorts it and derives the updates.
     void setInstalled(QList<AurPackage> installed);
     /// Asks the AUR about `names` in batches and passes every record to `done` once all replies are in.
     void fetchInfo(const QStringList& names, std::function<void(QList<AurPackage> found, bool failed)> done);

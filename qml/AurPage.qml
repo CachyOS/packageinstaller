@@ -68,14 +68,17 @@ Item {
             title: modelData.name
             summary: modelData.description
             source: "aur"
-            trailing: modelData.upgradable ? modelData.installedVersion + " → " + modelData.version
+            trailing: modelData.upgradable && modelData.heldBack ? qsTr("%1, held back").arg(modelData.installedVersion)
+                : modelData.upgradable ? modelData.installedVersion + " → " + modelData.version
                 : modelData.installed ? (root.searching ? qsTr("Installed") : modelData.installedVersion)
                 : modelData.inRepos ? qsTr("In the repositories")
                 : modelData.outOfDate ? qsTr("Out of date")
                 : qsTr("%1 · %n vote(s)", "", modelData.votes).arg(modelData.version)
-            trailingColor: modelData.upgradable || (modelData.outOfDate && !modelData.installed) ? Look.warning : Look.textMuted
-            Accessible.description: modelData.upgradable
-                ? qsTr("Update from %1 to %2").arg(modelData.installedVersion).arg(modelData.version) : ""
+            trailingColor: (modelData.upgradable && !modelData.heldBack) || (modelData.outOfDate && !modelData.installed)
+                ? Look.warning : Look.textMuted
+            Accessible.description: modelData.upgradable && modelData.heldBack
+                ? qsTr("Version %1 is held back in pacman.conf").arg(modelData.version)
+                : modelData.upgradable ? qsTr("Update from %1 to %2").arg(modelData.installedVersion).arg(modelData.version) : ""
             onClicked: root.openAur(modelData)
         }
     }
