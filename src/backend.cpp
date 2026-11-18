@@ -33,7 +33,7 @@ auto parse_cache_dry_run(const QByteArray& output) -> std::optional<CacheScan> {
         return CacheScan{};
     }
     static const QRegularExpression finished(
-        uR"(finished dry run:\s*(\d+) candidates?(?: \(disk space saved: ([^)]+)\))?"_s);
+        uR"(finished dry run:\s*(\d+) candidates?(?: \(disk space saved: ([^)]+)\))?)"_s);
     for (const auto& raw : text.split(u'\n')) {
         const auto line = raw.trimmed();
         if (!line.startsWith(u"==> finished dry run:"_s)) {
