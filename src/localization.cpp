@@ -44,6 +44,10 @@ bool Localization::supported(const QString& language) {
 }
 
 QString Localization::codeForLocale(const QLocale& locale) {
+    if (locale.language() == QLocale::Portuguese) {
+        // The Brazilian catalogue also serves the other Portuguese locales.
+        return u"pt_BR"_s;
+    }
     if (locale.language() != QLocale::Chinese) {
         return u"en"_s;
     }

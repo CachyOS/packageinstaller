@@ -18,7 +18,7 @@ find_package(Qt6 6.10 REQUIRED COMPONENTS Core Gui Widgets Qml Quick QuickContro
 find_package(AppStreamQt 1.0 REQUIRED)
 pkg_check_modules(LIBALPM REQUIRED IMPORTED_TARGET libalpm>=15.0.0)
 
-qt_standard_project_setup(REQUIRES 6.10 I18N_SOURCE_LANGUAGE en I18N_TRANSLATED_LANGUAGES zh_CN zh_TW)
+qt_standard_project_setup(REQUIRES 6.10 I18N_SOURCE_LANGUAGE en I18N_TRANSLATED_LANGUAGES pt_BR zh_CN zh_TW)
 qt_policy(SET QTP0004 NEW)
 
 include(CPM)

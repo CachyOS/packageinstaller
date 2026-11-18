@@ -69,6 +69,7 @@ ScrollPage {
                 model: [
                     { code: "system", label: qsTr("Follow the system") },
                     { code: "en", label: "English" },
+                    { code: "pt_BR", label: "Português (Brasil)" },
                     { code: "zh_CN", label: "简体中文" },
                     { code: "zh_TW", label: "繁體中文" }
                 ]
