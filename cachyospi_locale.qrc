@@ -13,6 +13,7 @@
         <file alias="ka">lang/cachyos-packageinstaller_ka.qm</file>
         <file alias="ko">lang/cachyos-packageinstaller_ko.qm</file>
         <file alias="pl">lang/cachyos-packageinstaller_pl.qm</file>
+        <file alias="pt_BR">lang/cachyos-packageinstaller_pt_BR.qm</file>
         <file alias="ru">lang/cachyos-packageinstaller_ru.qm</file>
         <file alias="sk">lang/cachyos-packageinstaller_sk.qm</file>
         <file alias="sv">lang/cachyos-packageinstaller_sv.qm</file>
