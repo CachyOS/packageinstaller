@@ -219,6 +219,7 @@ void AurClient::applyLocal(AurPackage& package) const {
     package.installed        = local != nullptr && local->installed() && local->foreign();
     package.installedVersion = package.installed ? local->installedVersion : QString();
     package.upgradable       = package.installed && alpmdb::vercmp(package.installedVersion, package.version) < 0;
+    package.heldBack         = package.installed && local->ignored;
     package.inRepos          = local != nullptr && !local->foreign();
 }
 
@@ -764,9 +765,9 @@ void AurClient::rescan() {
 }
 
 void AurClient::checkUpdates() {
-    // packages held back in pacman.conf are not offered, like `pacman -Syu` and paru do
+    // held back packages are listed as well, only not counted as updates
     const auto names = m_packages->packages()
-        | std::views::filter([](const Package& package) { return package.foreign() && package.installed() && !package.ignored; })
+        | std::views::filter([](const Package& package) { return package.foreign() && package.installed(); })
         | std::views::transform(&Package::name) | std::ranges::to<QStringList>();
 
     const int generation = ++m_updatesGeneration;
@@ -789,10 +790,15 @@ void AurClient::checkUpdates() {
 }
 
 void AurClient::setInstalled(QList<AurPackage> installed) {
+    // The records of a check were compared with the database as their batch came in, and
+    // a reload may have come between the batches or before the last one.
+    for (auto& package : installed) {
+        applyLocal(package);
+    }
     // installed packages that moved into a repository are updated from there
     installed.removeIf([](const AurPackage& package) { return !package.installed || package.inRepos; });
     std::ranges::sort(installed, [](const AurPackage& a, const AurPackage& b) {
-        return a.upgradable != b.upgradable ? a.upgradable : a.name < b.name;
+        return a.offered() != b.offered() ? a.offered() : a.name < b.name;
     });
     // every reload ends in a check: the same answer must not rebuild the page's list
     if (installed != m_installed) {
@@ -802,7 +808,7 @@ void AurClient::setInstalled(QList<AurPackage> installed) {
 }
 
 QList<AurPackage> AurClient::updates() const {
-    return m_installed | std::views::filter(&AurPackage::upgradable) | std::ranges::to<QList>();
+    return m_installed | std::views::filter(&AurPackage::offered) | std::ranges::to<QList>();
 }
 
 void AurClient::clearUpdates() {
@@ -831,9 +837,7 @@ void AurClient::refreshInstalled() {
     }
     // what was updated or removed since the last check shows at once; what is new in the
     // AUR, or newly installed, comes with the next check
-    if (auto installed = m_installed; refreshAll(installed)) {
-        setInstalled(std::move(installed));
-    }
+    setInstalled(m_installed);
     // An accepted checkout that is now installed is where the changes of its next update start.
     // Only now, after the build: accepting alone must not replace what was built before.
     for (const auto& [name, commit] : m_accepted.asKeyValueRange()) {
