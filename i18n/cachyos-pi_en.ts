@@ -4,7 +4,7 @@
 <context>
     <name>AppImageClient</name>
     <message numerus="yes">
-        <location filename="../src/appimageclient.cpp" line="746"/>
+        <location filename="../src/appimageclient.cpp" line="792"/>
         <source>%n AppImage(s) from Shelly</source>
         <translation>
             <numerusform>%n AppImage from Shelly</numerusform>
@@ -26,7 +26,7 @@
 <context>
     <name>AurDetailsPage</name>
     <message numerus="yes">
-        <location filename="../qml/AurDetailsPage.qml" line="165"/>
+        <location filename="../qml/AurDetailsPage.qml" line="167"/>
         <source>%1 · %n vote(s)</source>
         <translation>
             <numerusform>%1 · %n vote</numerusform>
@@ -34,7 +34,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/AurDetailsPage.qml" line="450"/>
+        <location filename="../qml/AurDetailsPage.qml" line="467"/>
         <source>Build and update %n package(s)</source>
         <translation>
             <numerusform>Build and update %n package</numerusform>
@@ -42,7 +42,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/AurDetailsPage.qml" line="451"/>
+        <location filename="../qml/AurDetailsPage.qml" line="468"/>
         <source>Build and install %n package(s)</source>
         <translation>
             <numerusform>Build and install %n package</numerusform>
@@ -50,7 +50,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/AurDetailsPage.qml" line="465"/>
+        <location filename="../qml/AurDetailsPage.qml" line="482"/>
         <source>Skip and install %n package(s)</source>
         <translation>
             <numerusform>Skip and install %n package</numerusform>
@@ -58,7 +58,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/AurDetailsPage.qml" line="464"/>
+        <location filename="../qml/AurDetailsPage.qml" line="481"/>
         <source>Skip and update %n package(s)</source>
         <translation>
             <numerusform>Skip and update %n package</numerusform>
@@ -88,7 +88,7 @@
 <context>
     <name>BrowsePage</name>
     <message numerus="yes">
-        <location filename="../qml/BrowsePage.qml" line="49"/>
+        <location filename="../qml/BrowsePage.qml" line="48"/>
         <source>%n package(s)</source>
         <translation>
             <numerusform>%n package</numerusform>
@@ -118,7 +118,7 @@
 <context>
     <name>Transaction</name>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="66"/>
+        <location filename="../src/transaction.cpp" line="89"/>
         <source>Build %n package(s) from the AUR</source>
         <translation>
             <numerusform>Build %n package from the AUR</numerusform>
@@ -126,7 +126,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="84"/>
+        <location filename="../src/transaction.cpp" line="109"/>
         <source>%n package(s) will be removed:</source>
         <translation>
             <numerusform>%n package will be removed:</numerusform>
@@ -134,7 +134,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="86"/>
+        <location filename="../src/transaction.cpp" line="111"/>
         <source>%n package(s) will be installed (%1 to download):</source>
         <translation>
             <numerusform>%n package will be installed (%1 to download):</numerusform>
@@ -142,7 +142,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="303"/>
+        <location filename="../src/transaction.cpp" line="339"/>
         <source>%1 cannot be removed: %n installed package(s) depend on it.</source>
         <translation>
             <numerusform>%1 cannot be removed: %n installed package depends on it.</numerusform>
