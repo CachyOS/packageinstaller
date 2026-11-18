@@ -595,6 +595,8 @@ Item {
             Heading {
                 width: importBody.width
                 text: qsTr("Bring your AppImages along from %1?").arg(root.client.importTools)
+                // two programs make it longer than a line
+                wrapMode: Text.WordWrap
             }
 
             Muted {
