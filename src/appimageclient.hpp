@@ -78,6 +78,7 @@ struct AppImageImport {
     QString name;
     QString tool;    ///< the program, by name
     QString detail;  ///< for display: the program when the list has apps of two, the file, its size, where it is updated from
+    QString path;    ///< the file; what is moved is what the list showed
 
     bool operator==(const AppImageImport&) const = default;
 };

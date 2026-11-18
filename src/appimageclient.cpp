@@ -733,7 +733,7 @@ void removeTraces(const Import& app, const Entries& menu) {
 
 /// Adds every AppImage the other programs manage and takes it off their hands. One that
 /// cannot be added stays where it is, untouched.
-AppImageResult migrate(const Cancel& cancel) {
+AppImageResult migrate(const Cancel& cancel, const QStringList& shown) {
     QStringList failed;
     QStringList report;
     const auto menu = menuEntries();
@@ -743,6 +743,10 @@ AppImageResult migrate(const Cancel& cancel) {
         for (const auto& app : apps) {
             if (cancel->load()) {
                 break;
+            }
+            // only what the user agreed to: a file that turned up since waits for the next time
+            if (!shown.contains(app.path)) {
+                continue;
             }
             const QFileInfo before(app.path);
             const auto size     = before.size();
@@ -963,12 +967,19 @@ void AppImageClient::migrateImports() {
     }
     clearMessage();
     setBusy(true, tr("%n AppImage(s) from %1", nullptr, static_cast<int>(m_imports.size())).arg(importTools()));
-    m_watcher.setFuture(QtConcurrent::run(migrate, m_cancel));
+    QStringList shown;
+    for (const auto& app : std::as_const(m_imports)) {
+        shown << app.path;
+    }
+    m_watcher.setFuture(QtConcurrent::run(migrate, m_cancel, shown));
 }
 
 void AppImageClient::dismissImports() {
-    for (const auto& [importer, apps] : importable(managedEntries())) {
-        QSettings().setValue(dismissedKey(*importer), true);
+    // the programs the user was asked about, not one that has turned up since
+    for (const auto& importer : IMPORTERS) {
+        if (std::ranges::contains(m_imports, QString(importer.name), &AppImageImport::tool)) {
+            QSettings().setValue(dismissedKey(importer), true);
+        }
     }
     refresh();
 }
@@ -1276,7 +1287,7 @@ void AppImageClient::refresh() {
                 if (source) {
                     detail << u"github.com/"_s + source->slug();
                 }
-                imports << AppImageImport{.name = app.title, .tool = importer->name, .detail = detail.join(u" · "_s)};
+                imports << AppImageImport{.name = app.title, .tool = importer->name, .detail = detail.join(u" · "_s), .path = app.path};
             }
         }
     }
