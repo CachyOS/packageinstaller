@@ -703,7 +703,9 @@ Offered importable(const Entries& ours) {
             if (info.isSymLink() || !info.isFile() || !appimage::isAppImage(app.path) || insideInstallDirectory(info.canonicalFilePath())) {
                 continue;
             }
+            // the path too: the same file in two programs is moved once
             taken << keys;
+            taken.last().insert(appimage::PATH_KEY, app.path);
             apps << std::move(app);
         }
         if (!apps.isEmpty()) {
