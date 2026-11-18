@@ -1265,14 +1265,18 @@ void AppImageClient::refresh() {
 
     QList<AppImageImport> imports;
     if (!m_busy) {
-        for (const auto& [importer, offered] : importable(entries)) {
-            for (const auto& app : offered) {
+        const auto offered = importable(entries);
+        for (const auto& [importer, records] : offered) {
+            for (const auto& app : records) {
                 const auto source = appimage::sourceFromValue(app.tracking.source);
-                imports << AppImageImport{.name = app.title,
-                    .path                       = app.path,
-                    .size                       = QLocale().formattedDataSize(QFileInfo(app.path).size(), 1, QLocale::DataSizeIecFormat),
-                    .source                     = source ? source->slug() : QString(),
-                    .tool                       = importer->name};
+                QStringList detail{app.path, QLocale().formattedDataSize(QFileInfo(app.path).size(), 1, QLocale::DataSizeIecFormat)};
+                if (offered.size() > 1) {
+                    detail.prepend(importer->name);
+                }
+                if (source) {
+                    detail << u"github.com/"_s + source->slug();
+                }
+                imports << AppImageImport{.name = app.title, .tool = importer->name, .detail = detail.join(u" · "_s)};
             }
         }
     }

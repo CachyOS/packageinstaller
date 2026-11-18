@@ -629,9 +629,7 @@ Item {
 
                         Muted {
                             width: importedApp.width
-                            // the program only needs saying when the list has apps of two
-                            text: [importedApp.modelData.tool !== root.client.importTools ? importedApp.modelData.tool : "", importedApp.modelData.path,
-                                importedApp.modelData.size, root.origin(importedApp.modelData.source)].filter(part => part.length > 0).join(" · ")
+                            text: importedApp.modelData.detail
                             elide: Text.ElideMiddle
                         }
                     }

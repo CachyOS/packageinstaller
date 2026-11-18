@@ -72,17 +72,12 @@ struct AppImageImport {
     Q_GADGET
     QML_VALUE_TYPE(appImageImport)
     Q_PROPERTY(QString name MEMBER name FINAL)
-    Q_PROPERTY(QString path MEMBER path FINAL)
-    Q_PROPERTY(QString size MEMBER size FINAL)
-    Q_PROPERTY(QString source MEMBER source FINAL)
-    Q_PROPERTY(QString tool MEMBER tool FINAL)
+    Q_PROPERTY(QString detail MEMBER detail FINAL)
 
  public:
     QString name;
-    QString path;
-    QString size;    ///< for display
-    QString source;  ///< "owner/repo" on GitHub when the program updates it from there
     QString tool;    ///< the program, by name
+    QString detail;  ///< for display: the program when the list has apps of two, the file, its size, where it is updated from
 
     bool operator==(const AppImageImport&) const = default;
 };
