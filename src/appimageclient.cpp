@@ -661,6 +661,25 @@ QList<Import> gearLeverRecords() {
     return imports;
 }
 
+/// Changes whenever the AppImages to move over may have: the other programs' records,
+/// and the menu folder, which changes when an entry is added or removed by anyone.
+/// Cheaper than reading them all again on every reload.
+/// The folders of the files offered so far count too: one of them deleted by hand is no
+/// longer offered.
+QList<QDateTime> importStamp(const QList<AppImageImport>& offered) {
+    QStringList paths{configFile(appimage::SHELLY_DATABASE), configFile(appimage::SHELLY_CONFIG),
+        QDir::homePath() + u'/' + appimage::GEARLEVER_FLATPAK_CONFIG, configFile(appimage::GEARLEVER_CONFIG), menuDirectory()};
+    for (const auto& app : offered) {
+        paths << QFileInfo(app.path).absolutePath();
+    }
+    paths.removeDuplicates();
+    QList<QDateTime> stamp;
+    for (const auto& path : std::as_const(paths)) {
+        stamp << QFileInfo(path).lastModified();
+    }
+    return stamp;
+}
+
 constexpr std::array IMPORTERS{
     Importer{.id = "shelly"_L1, .name = "Shelly"_L1, .records = shellyRecords, .forget = forgetShelly},
     Importer{.id = "gearlever"_L1, .name = "Gear Lever"_L1, .records = gearLeverRecords, .forget = nullptr},
@@ -984,6 +1003,7 @@ void AppImageClient::dismissImports() {
             QSettings().setValue(dismissedKey(importer), true);
         }
     }
+    m_importStamp.clear();
     refresh();
 }
 
@@ -1277,6 +1297,12 @@ void AppImageClient::refresh() {
         emit appsChanged();
     }
 
+    // nothing is offered while files are being added; afterwards the list is made anew
+    auto stamp = m_busy ? QList<QDateTime>{} : importStamp(m_imports);
+    if (!stamp.isEmpty() && stamp == m_importStamp) {
+        return;
+    }
+    m_importStamp = std::move(stamp);
     QList<AppImageImport> imports;
     if (!m_busy) {
         const auto offered = importable(entries);
