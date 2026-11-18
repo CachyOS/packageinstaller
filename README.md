@@ -88,6 +88,31 @@ helper it runs `build/cachyos-pi-helper` through pkexec's generic prompt.
 
 Run the tests with `ctest --test-dir build`.
 
+## Translations
+
+The interface is translated with Qt's `.ts` files in `i18n/`. English is the
+source language; `cachyos-pi_en.ts` only carries the plural forms and is kept
+that way automatically.
+
+```sh
+cmake -S . -B build
+cmake --build build --target update_translations
+```
+
+After translating, a normal build compiles the `.qm` files and embeds them in
+the binary. The language is chosen in the settings and applied without a
+restart. To offer another language, add its code to
+`I18N_TRANSLATED_LANGUAGES` in `CMakeLists.txt`, add the matching `.ts` file,
+and add a button to the language row in `qml/SettingsPage.qml`. The C++ side
+finds any translation that is embedded.
+
+`Follow the system` asks Qt for the session's preferred UI languages
+(`QLocale::system().uiLanguages()`, which already covers `LANGUAGE`, `LC_ALL`,
+`LC_MESSAGES` and `LANG`), takes the first one we ship a catalogue for and
+falls back to English. It is resolved when the application starts, so a
+language change in the desktop's settings applies at the next start, as it does
+for other applications.
+
 ## Packaging
 
 `packaging/` holds two PKGBUILDs: `cachyos-packageinstaller` builds a tagged
@@ -132,6 +157,7 @@ the package database, so they are only done in the app.
 | `src/alpmdb.*` | read-only libalpm access |
 | `src/catalog.*` | AppStream catalog, merged into the package list |
 | `src/iconprovider.*` | `image://pkgicon/<name>` icon lookup |
+| `src/localization.*` | the chosen language, translation files and locale |
 | `src/packagemodel.*` | list model and search/category filter |
 | `src/aurclient.*` | AUR RPC search, details and PKGBUILD download |
 | `src/flatpakclient.*` | Flatpak catalogue, installed apps and updates |

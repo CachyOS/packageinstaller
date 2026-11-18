@@ -89,6 +89,7 @@ qt_add_executable(${PROJECT_NAME}
     src/aurclient.hpp src/aurclient.cpp
     src/flatpakclient.hpp src/flatpakclient.cpp
     src/appimageclient.hpp src/appimageclient.cpp
+    src/localization.hpp src/localization.cpp
     src/iconprovider.hpp src/iconprovider.cpp
     src/transaction.hpp src/transaction.cpp
     src/updatenotice.hpp src/updatenotice.cpp
