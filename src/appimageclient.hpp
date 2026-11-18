@@ -4,6 +4,7 @@
 #include "appimagesource.hpp"
 #include "catalog.hpp"
 
+#include <QDateTime>
 #include <QFutureWatcher>
 #include <QNetworkAccessManager>
 #include <QObject>
@@ -244,6 +245,8 @@ class AppImageClient : public QObject {
     QString m_error;
     QString m_added;
     QList<AppImageImport> m_imports;
+    /// When the files that `m_imports` was made from last changed; see importStamp().
+    QList<QDateTime> m_importStamp;
     bool m_importPrompted = false;
     QString m_subject;
     QString m_checkError;  ///< why the last look for newer releases failed
