@@ -20,6 +20,11 @@ sudo pacman -S rustup
 rustup default stable
 ```
 
+The package cache cleaner uses `paccache`, provided by `pacman-contrib`:
+```sh
+sudo pacman -S pacman-contrib
+```
+
 ### Cloning the Source Code
 ```sh
 git clone https://github.com/cachyos/packageinstaller.git
