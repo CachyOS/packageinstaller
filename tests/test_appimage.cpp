@@ -306,9 +306,18 @@ FILE_PATH = /home/u/AppImages/gitlab.appimage
 [app.fedcba9876543210fedcba9876543210.update_manager]
 repo = owner/project
 manager = GitlabUpdater
+
+[app.00000000000000000000000000000001]
+file_path = /home/u/AppImages/nightly.appimage
+
+[app.00000000000000000000000000000001.update_manager]
+repo = owner/nightly
+repo_filename = Nightly-*.AppImage
+allow_prereleases = True
+manager = GithubUpdater
 )");
         const auto apps = appimage::parseGearLeverConfig(config);
-        QCOMPARE(apps.size(), 3);
+        QCOMPARE(apps.size(), 4);
         QCOMPARE(apps.at(0).path, u"/home/u/AppImages/localsend.appimage"_s);
         QVERIFY(apps.at(0).source);
         QCOMPARE(apps.at(0).source->slug(), u"localsend/localsend"_s);
@@ -319,6 +328,9 @@ manager = GitlabUpdater
         QVERIFY(!apps.at(1).source);
         QCOMPARE(apps.at(2).path, u"/home/u/AppImages/gitlab.appimage"_s);
         QVERIFY(!apps.at(2).source);
+        // the newest release could be older than the pre-release it is on
+        QCOMPARE(apps.at(3).path, u"/home/u/AppImages/nightly.appimage"_s);
+        QVERIFY(!apps.at(3).source);
 
         QVERIFY(appimage::parseGearLeverConfig("").isEmpty());
         QVERIFY(appimage::parseGearLeverConfig("not an ini file\n[app.x]\nfile_path = /a\n").isEmpty());
