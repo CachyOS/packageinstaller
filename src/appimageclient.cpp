@@ -617,16 +617,23 @@ QList<Import> gearLeverRecords() {
         apps << appimage::parseGearLeverConfig(readBytes(config, MAX_IMPORT_BYTES));
     }
     // The files that were moved or deleted stay in the configuration. A file both
-    // installations know counts once, with the record that says where it is updated from.
-    std::ranges::stable_partition(apps, [](const appimage::GearLeverApp& app) { return app.source.has_value(); });
-    QSet<QString> seen;
-    erase_if(apps, [&seen](const appimage::GearLeverApp& app) {
-        if (seen.contains(app.path) || !QFileInfo(app.path).isFile()) {
-            return true;
+    // installations know counts once; when they disagree on where it is updated from, as
+    // when one follows pre-releases, it is updated from nowhere.
+    QHash<QString, appimage::GearLeverApp> byPath;
+    for (auto& app : apps) {
+        if (!QFileInfo(app.path).isFile()) {
+            continue;
         }
-        seen.insert(app.path);
-        return false;
-    });
+        const auto known = byPath.find(app.path);
+        if (known == byPath.end()) {
+            byPath.insert(app.path, std::move(app));
+        } else if (known->source.has_value() != app.source.has_value() || known->variant != app.variant
+            || (app.source && appimage::sourceValue(*known->source) != appimage::sourceValue(*app.source))) {
+            known->source.reset();
+            known->variant.clear();
+        }
+    }
+    apps = byPath.values();
     if (apps.isEmpty()) {
         return {};
     }

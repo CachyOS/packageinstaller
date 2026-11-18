@@ -67,6 +67,7 @@ struct GearLeverApp {
 
 /// The apps of gearlever.conf that name an absolute path. Whether Gear Lever still has
 /// them is for their menu entries to tell: the configuration keeps what it once saw.
+/// Where an app is updated from is left out when Gear Lever follows its pre-releases.
 QList<GearLeverApp> parseGearLeverConfig(const QByteArray& config);
 
 /// The key Gear Lever writes into its menu entries, with the name the file gives itself.

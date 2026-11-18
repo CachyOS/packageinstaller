@@ -25,6 +25,12 @@ bool plainFileName(QStringView name) {
     return !name.isEmpty() && !name.contains(u'/') && !name.contains(QChar::Null) && name != "."_L1 && name != ".."_L1;
 }
 
+/// A boolean as Python's configparser reads one.
+bool configBool(const QString& value) {
+    static const QStringList yes{u"1"_s, u"yes"_s, u"true"_s, u"on"_s};
+    return yes.contains(value.toLower());
+}
+
 }  // namespace
 
 namespace appimage {
@@ -127,8 +133,10 @@ QList<GearLeverApp> parseGearLeverConfig(const QByteArray& config) {
         if (!app.path.startsWith(u'/')) {
             continue;
         }
+        // The newest release is all that is looked at here. An app that follows pre-releases
+        // could be on one that cannot be put in order with it, and be offered a downgrade.
         const auto update = sections.value(name + u".update_manager"_s);
-        if (update.value(u"manager"_s) == "GithubUpdater"_L1) {
+        if (update.value(u"manager"_s) == "GithubUpdater"_L1 && !configBool(update.value(u"allow_prereleases"_s))) {
             app.source = parseSource(update.value(u"repo"_s));
             if (app.source) {
                 app.source->file.clear();
