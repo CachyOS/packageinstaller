@@ -43,6 +43,7 @@
 
 #include "about.hpp"
 #include "alpm_manager.hpp"
+#include "cachecleaner.hpp"
 #include "pacmancache.hpp"
 #include "utils.hpp"
 #include "versionnumber.hpp"
@@ -194,6 +195,7 @@ void MainWindow::setup() noexcept {
     });
 
     connect(m_ui->pushAbout, &QPushButton::clicked, this, &MainWindow::on_push_about);
+    connect(m_ui->pushCleanCache, &QPushButton::clicked, this, &MainWindow::on_push_clean_cache);
     connect(m_ui->pushInstall, &QPushButton::clicked, this, &MainWindow::on_push_install);
     connect(m_ui->pushUninstall, &QPushButton::clicked, this, &MainWindow::on_push_uninstall);
     connect(m_ui->pushRemoveUnused, &QPushButton::clicked, this, &MainWindow::on_push_remove_unused);
@@ -1965,6 +1967,31 @@ void MainWindow::on_push_force_update_repo() noexcept {
     m_ui->comboFilterRepo->setCurrentIndex(0);
     m_alpm_manager->refresh_alpm();
     buildPackageLists(true);
+}
+
+// Remove old package versions from the pacman cache
+void MainWindow::on_push_clean_cache() noexcept {
+    spdlog::debug("+++ {} +++", __PRETTY_FUNCTION__);
+
+    if (m_cmd.state() != QProcess::NotRunning) {
+        QMessageBox::warning(this, tr("Package manager is busy"), tr("Please wait for the current operation to finish."));
+        return;
+    }
+
+    if (QFile::exists(QStringLiteral("/var/lib/pacman/db.lck"))) {
+        QMessageBox::warning(this, tr("Package manager is busy"),
+            tr("Another package management application is running.\nPlease close it before cleaning the cache."));
+        return;
+    }
+
+    if (QStandardPaths::findExecutable(QStringLiteral("paccache")).isEmpty()) {
+        QMessageBox::critical(this, tr("Clean Package Cache"),
+            tr("The \"paccache\" utility was not found.\nInstall the \"pacman-contrib\" package to use this feature."));
+        return;
+    }
+
+    CacheCleaner dialog(this);
+    dialog.exec();
 }
 
 // Hide/unhide lib/-dev packages

@@ -112,6 +112,7 @@ qt_add_executable(${PROJECT_NAME}
     src/pacmancache.hpp src/pacmancache.cpp
     src/remotes.hpp src/remotes.cpp
     src/about.hpp src/about.cpp
+    src/cachecleaner.hpp src/cachecleaner.cpp
     src/cmd.hpp src/cmd.cpp
     src/mainwindow.hpp src/mainwindow.cpp
     src/mainwindow.ui

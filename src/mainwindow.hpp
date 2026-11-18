@@ -148,6 +148,7 @@ class MainWindow : public QDialog {
     void updateInterface() noexcept;
 
     void on_push_about() noexcept;
+    void on_push_clean_cache() noexcept;
     void on_push_install() noexcept;
     void on_push_uninstall() noexcept;
 

@@ -420,17 +420,21 @@
            </widget>
           </item>
           <item row="0" column="5">
-           <spacer name="horizontalSpacer_3">
-            <property name="orientation">
-             <enum>Qt::Horizontal</enum>
+           <widget class="QPushButton" name="pushCleanCache">
+            <property name="toolTip">
+             <string>Remove old package versions from the pacman cache</string>
             </property>
-            <property name="sizeHint" stdset="0">
-             <size>
-              <width>40</width>
-              <height>20</height>
-             </size>
+            <property name="text">
+             <string>Clean cache...</string>
             </property>
-           </spacer>
+            <property name="icon">
+             <iconset theme="edit-clear">
+              <normaloff>.</normaloff>.</iconset>
+            </property>
+            <property name="autoDefault">
+             <bool>false</bool>
+            </property>
+           </widget>
           </item>
          </layout>
         </widget>
