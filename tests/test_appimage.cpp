@@ -342,6 +342,12 @@ manager = GithubUpdater
             {u"X-AppImage-Name"_s, u"LocalSend"_s}, {u"Exec"_s, u"env DESKTOPINTEGRATION=1 "_s + path}};
         QCOMPARE(appimage::gearLeverIcon(entry, path), u"/home/u/AppImages/.icons/localsend"_s);
         QVERIFY(appimage::gearLeverIcon(entry, u"/home/u/AppImages/other.appimage"_s).isEmpty());
+        // named after the app, in whatever letters it has
+        auto named = entry;
+        for (const auto& icon : {u"/home/u/AppImages/.icons/äpfel_(beta).png"_s, u"/home/u/AppImages/.icons/録画.svg"_s}) {
+            named[u"Icon"_s] = icon;
+            QCOMPARE(appimage::gearLeverIcon(named, path), icon);
+        }
 
         // not copied by Gear Lever: no icon of its own next to the file
         auto other = entry;
