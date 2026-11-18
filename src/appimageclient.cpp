@@ -760,14 +760,15 @@ AppImageResult migrate(const Cancel& cancel, const QStringList& shown) {
             }
             // the other program may have put a newer file there in the meantime: that one stays,
             // along with what it needs
+            // and the program keeps its record of it
+            moved << result.name;
             if (const QFileInfo after(app.path); after.isSymLink() || after.size() != size || after.lastModified() != modified) {
                 failed << AppImageClient::tr("%1 changed while it was being moved, so it was left in %2.").arg(after.fileName(), after.absolutePath());
+            } else if (removeTraces(app, menu); !QFile::remove(app.path)) {
+                failed << AppImageClient::tr("%1 was copied, but could not be removed from %2.").arg(before.fileName(), before.absolutePath());
             } else {
-                removeTraces(app, menu);
-                QFile::remove(app.path);
+                done << app.key;
             }
-            moved << result.name;
-            done << app.key;
         }
         if (moved.isEmpty()) {
             continue;
