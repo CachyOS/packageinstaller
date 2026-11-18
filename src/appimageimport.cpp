@@ -19,6 +19,12 @@ bool fromGitHub(const QJsonValue& updateType) {
     return updateType.isString() ? updateType.toString() == "github"_L1 : updateType.toInt() == GITHUB;
 }
 
+/// A name that stays in the folder it is put into: whatever the other program called the
+/// app, as long as it is no way out of the folder.
+bool plainFileName(QStringView name) {
+    return !name.isEmpty() && !name.contains(u'/') && !name.contains(QChar::Null) && name != "."_L1 && name != ".."_L1;
+}
+
 }  // namespace
 
 namespace appimage {
@@ -45,7 +51,7 @@ QList<ShellyApp> parseShellyDatabase(const QByteArray& database, const QString& 
         if (app.title.isEmpty()) {
             app.title = app.name;
         }
-        if (app.path.isEmpty() && !installDirectory.isEmpty()) {
+        if (app.path.isEmpty() && !installDirectory.isEmpty() && plainFileName(app.name)) {
             app.path = installDirectory + u'/' + app.name + u".AppImage"_s;
         }
         if (app.name.isEmpty() || !app.path.startsWith(u'/')) {
