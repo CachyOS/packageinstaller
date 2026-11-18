@@ -8,13 +8,45 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QQmlEngine>
+#include <QRegularExpression>
 #include <QStandardPaths>
 #include <QtConcurrent/QtConcurrentRun>
+
+#include <algorithm>
+#include <optional>
+#include <utility>
 
 using namespace Qt::StringLiterals;
 
 namespace {
 Backend* s_instance = nullptr;
+
+struct CacheScan {
+    int count = 0;
+    QString size;
+};
+
+/// Reads the dry run of `paccache -v -d`. std::nullopt when it cannot be understood.
+auto parse_cache_dry_run(const QByteArray& output) -> std::optional<CacheScan> {
+    const auto text = QString::fromUtf8(output);
+    if (text.contains(u"no candidate packages found"_s)) {
+        return CacheScan{};
+    }
+    static const QRegularExpression finished(
+        uR"(finished dry run:\s*(\d+) candidates?(?: \(disk space saved: ([^)]+)\))?"_s);
+    for (const auto& raw : text.split(u'\n')) {
+        const auto line = raw.trimmed();
+        if (!line.startsWith(u"==> finished dry run:"_s)) {
+            continue;
+        }
+        const auto match = finished.match(line);
+        if (!match.hasMatch()) {
+            continue;
+        }
+        return CacheScan{match.captured(1).toInt(), match.captured(2).trimmed()};
+    }
+    return std::nullopt;
+}
 }  // namespace
 
 Backend::Backend(IconProvider* icons, QObject* parent)
@@ -25,14 +57,27 @@ Backend::Backend(IconProvider* icons, QObject* parent)
     m_flatpakEnabled = m_settings.value(u"flatpak/enabled"_s, false).toBool();
     m_appImagesEnabled = m_settings.value(u"appimage/enabled"_s, false).toBool();
     m_paruAvailable  = !QStandardPaths::findExecutable(u"paru"_s).isEmpty();
+    m_cacheKeepInstalled = std::clamp(m_settings.value(u"cache/keepInstalled"_s, 1).toInt(), 0, 999);
+    m_cacheKeepUninstalled = std::clamp(m_settings.value(u"cache/keepUninstalled"_s, 0).toInt(), 0, 999);
+
+    m_cacheScanDebounce.setSingleShot(true);
+    m_cacheScanDebounce.setInterval(300);
+    connect(&m_cacheScanDebounce, &QTimer::timeout, this, &Backend::scanCache);
 
     connect(&m_transaction, &Transaction::finished, this, [this](bool) {
         // a Flatpak operation leaves the pacman databases alone
         if (m_transaction.isFlatpak()) {
             m_flatpak.refresh();
-        } else if (m_transaction.kind() != Transaction::RateMirrors) {
-            // ranking the mirrors changes no package
+            return;
+        }
+        if (m_transaction.kind() == Transaction::CleanCacheInstalled || m_transaction.kind() == Transaction::CleanCacheUninstalled) {
+            scanCache();
+            return;
+        }
+        if (m_transaction.kind() != Transaction::RateMirrors) {
             reload();
+            // a package transaction may have installed or removed pacman-contrib
+            scanCache();
         }
     });
     connect(&m_flatpak, &FlatpakClient::iconsLoaded, this, [this](const IconIndex& index) { m_icons->setIndex(index, true); });
@@ -317,6 +362,118 @@ void Backend::rateMirrors() {
     if (canRateMirrors()) {
         m_transaction.prepare(Transaction::RateMirrors, {});
     }
+}
+
+bool Backend::canCleanCache() const {
+    return QFileInfo(QString::fromLatin1(helper::kPaccache)).isExecutable();
+}
+
+void Backend::setCacheKeepInstalled(int value) {
+    value = std::clamp(value, 0, 999);
+    if (m_cacheKeepInstalled == value) {
+        return;
+    }
+    m_cacheKeepInstalled = value;
+    m_settings.setValue(u"cache/keepInstalled"_s, value);
+    emit cacheKeepInstalledChanged();
+    m_cacheScanDebounce.start();
+}
+
+void Backend::setCacheKeepUninstalled(int value) {
+    value = std::clamp(value, 0, 999);
+    if (m_cacheKeepUninstalled == value) {
+        return;
+    }
+    m_cacheKeepUninstalled = value;
+    m_settings.setValue(u"cache/keepUninstalled"_s, value);
+    emit cacheKeepUninstalledChanged();
+    m_cacheScanDebounce.start();
+}
+
+void Backend::scanCache() {
+    if (!canCleanCache()) {
+        m_cachePending       = 0;
+        m_cacheRescan        = false;
+        m_cacheScanning      = false;
+        m_cacheScanned       = true;
+        m_cacheInstalledCount = 0;
+        m_cacheUninstalledCount = 0;
+        m_cacheInstalledSize.clear();
+        m_cacheUninstalledSize.clear();
+        m_cacheError.clear();
+        emit cacheChanged();
+        return;
+    }
+    if (m_cachePending > 0) {
+        m_cacheRescan = true;
+        return;
+    }
+    if (m_transaction.state() != Transaction::Idle) {
+        return;  // scanned when the transaction ends
+    }
+
+    m_cacheScanning = true;
+    m_cacheScanned  = false;
+    m_cacheRescan   = false;
+    m_cacheError.clear();
+    m_cachePending = 2;
+    emit cacheChanged();
+
+    const auto program     = QString::fromLatin1(helper::kPaccache);
+    const auto environment = plainEnvironment();
+    constexpr auto kMaxOutput = qsizetype{4 * 1024 * 1024};
+
+    readOutput(this, program, {u"-v"_s, u"-d"_s, u"-k"_s, QString::number(m_cacheKeepInstalled)}, environment, kMaxOutput,
+        [this](std::expected<QByteArray, OutputFailure> result) {
+            if (result) {
+                if (const auto scan = parse_cache_dry_run(*result)) {
+                    m_cacheInstalledCount = scan->count;
+                    m_cacheInstalledSize  = scan->size;
+                } else {
+                    m_cacheError = tr("The package cache could not be read.");
+                }
+            } else {
+                m_cacheError = tr("The package cache could not be read.");
+            }
+            cacheScanFinished();
+        });
+    readOutput(this, program, {u"-u"_s, u"-v"_s, u"-d"_s, u"-k"_s, QString::number(m_cacheKeepUninstalled)}, environment,
+        kMaxOutput, [this](std::expected<QByteArray, OutputFailure> result) {
+            if (result) {
+                if (const auto scan = parse_cache_dry_run(*result)) {
+                    m_cacheUninstalledCount = scan->count;
+                    m_cacheUninstalledSize  = scan->size;
+                } else {
+                    m_cacheError = tr("The package cache could not be read.");
+                }
+            } else {
+                m_cacheError = tr("The package cache could not be read.");
+            }
+            cacheScanFinished();
+        });
+}
+
+void Backend::cacheScanFinished() {
+    if (--m_cachePending > 0) {
+        return;
+    }
+    m_cacheScanning = false;
+    m_cacheScanned  = true;
+    emit cacheChanged();
+    if (std::exchange(m_cacheRescan, false)) {
+        scanCache();
+    }
+}
+
+void Backend::cleanCache(bool uninstalled) {
+    if (!canCleanCache() || m_transaction.state() != Transaction::Idle) {
+        return;
+    }
+    const auto count = uninstalled ? m_cacheUninstalledCount : m_cacheInstalledCount;
+    if (count <= 0) {
+        return;
+    }
+    m_transaction.prepareCacheClean(uninstalled, uninstalled ? m_cacheKeepUninstalled : m_cacheKeepInstalled);
 }
 
 void Backend::installFromAur(const QString& name) {

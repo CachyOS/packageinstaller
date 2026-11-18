@@ -29,7 +29,7 @@ optdepends=(
   'git: review and build packages from the AUR'
   'flatpak: install Flatpak apps'
   'fuse2: start most AppImages'
-  'pacman-contrib: see updates without refreshing the system databases'
+  'pacman-contrib: see updates without refreshing the system databases, and clean the package cache'
   'cachyos-rate-mirrors: rank the mirrors by speed from the settings'
 )
 source=("$pkgname-$pkgver.tar.gz::$url/archive/v$pkgver.tar.gz")

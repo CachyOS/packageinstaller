@@ -18,7 +18,8 @@ using namespace Qt::StringLiterals;
 
 namespace {
 
-constexpr std::array HELPER_KINDS{Transaction::Install, Transaction::Remove, Transaction::Upgrade, Transaction::RateMirrors};
+constexpr std::array HELPER_KINDS{Transaction::Install, Transaction::Remove, Transaction::Upgrade, Transaction::RateMirrors,
+    Transaction::CleanCacheInstalled, Transaction::CleanCacheUninstalled};
 constexpr std::array FLATPAK_KINDS{Transaction::FlatpakInstall, Transaction::FlatpakRemove, Transaction::FlatpakUpdate, Transaction::FlatpakSetup};
 
 /// What the helper is asked to do. No default: a new kind has to be named here.
@@ -28,6 +29,8 @@ QString helperVerb(Transaction::Kind kind) {
     case Transaction::Remove: return u"remove"_s;
     case Transaction::Upgrade: return u"upgrade"_s;
     case Transaction::RateMirrors: return u"rate-mirrors"_s;
+    case Transaction::CleanCacheInstalled:
+    case Transaction::CleanCacheUninstalled: return u"clean-cache"_s;
     case Transaction::AurInstall:
     case Transaction::FlatpakInstall:
     case Transaction::FlatpakRemove:
@@ -85,6 +88,8 @@ QString Transaction::title() const {
     case FlatpakUpdate: return tr("Update Flatpak apps");
     case FlatpakSetup: return tr("Add Flathub");
     case RateMirrors: return tr("Rank the mirrors");
+    case CleanCacheInstalled: return tr("Clean cached installed packages");
+    case CleanCacheUninstalled: return tr("Clean cached uninstalled packages");
     default:
         return m_targets.size() > 1 ? tr("Build %n package(s) from the AUR", "", static_cast<int>(m_targets.size()))
                                     : tr("Build %1 from the AUR").arg(target);
@@ -102,6 +107,10 @@ QString Transaction::summary() const {
     case Upgrade: return tr("The package databases will be refreshed and every available update installed.");
     case RateMirrors:
         return tr("The download speed of the Arch and CachyOS mirrors will be measured and the mirror lists rewritten to prefer the fast ones. This takes a minute or two; a copy of the current lists is kept until the next ranking.");
+    case CleanCacheInstalled:
+        return tr("Old versions of installed packages will be removed from the pacman cache; %n version(s) of each package will be kept.", "", m_cacheKeep);
+    case CleanCacheUninstalled:
+        return tr("Cached versions of packages that are no longer installed will be removed from the pacman cache; %n version(s) of each package will be kept.", "", m_cacheKeep);
     case AurInstall:
         return m_targets.size() > 1
             ? tr("paru will download the sources, build %1 as your user and then ask for permission to install them. This can take a while.").arg(m_targets.join(", "_L1))
@@ -121,6 +130,8 @@ QString Transaction::confirmLabel() const {
     case FlatpakUpdate: return tr("Update");
     case FlatpakSetup: return tr("Add");
     case RateMirrors: return tr("Rank");
+    case CleanCacheInstalled:
+    case CleanCacheUninstalled: return tr("Clean");
     default: return tr("Install");
     }
 }
@@ -220,6 +231,17 @@ void Transaction::prepareFlatpak(Kind kind, const QStringList& names, const QStr
     m_workingDirectory = u"/"_s;
     begin(kind, names);
     m_cleanupArgs = cleanup;
+}
+
+void Transaction::prepareCacheClean(bool uninstalled, int keep) {
+    if (m_state != Idle) {
+        return;
+    }
+    m_cacheKeep        = keep;
+    m_program          = u"pkexec"_s;
+    m_args             = {helperPath(), u"clean-cache"_s, uninstalled ? u"uninstalled"_s : u"installed"_s, QString::number(keep)};
+    m_workingDirectory = u"/"_s;
+    begin(uninstalled ? CleanCacheUninstalled : CleanCacheInstalled, {});
 }
 
 void Transaction::begin(Kind kind, const QStringList& targets) {

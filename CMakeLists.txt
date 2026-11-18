@@ -103,6 +103,7 @@ set(PI_QML_FILES
     qml/AppCard.qml
     qml/PackageRow.qml
     qml/PillButton.qml
+    qml/NumberStepper.qml
     qml/SourceBadge.qml
     qml/NavButton.qml
     qml/SearchField.qml

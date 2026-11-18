@@ -18,6 +18,7 @@ class TestHelper : public QObject {
         m_package = QFileInfo(package).canonicalFilePath();
         // the script names itself, so it stands in for both programs
         QVERIFY(QFile::copy(u"" TEST_DATA_DIR "/fake-pacman.sh"_s, m_dir.filePath(u"cachyos-rate-mirrors"_s)));
+        QVERIFY(QFile::copy(u"" TEST_DATA_DIR "/fake-pacman.sh"_s, m_dir.filePath(u"paccache"_s)));
     }
 
     void runsPacman_data() {
@@ -32,14 +33,18 @@ class TestHelper : public QObject {
                                       << u"--upgrade --noconfirm -- "_s + m_package;
         QTest::newRow("paru database") << QStringList{u"pacman"_s, u"--database"_s, u"--asdeps"_s, u"--"_s, u"foo"_s}
                                        << u"--database --asdeps -- foo"_s;
+        QTest::newRow("clean installed") << QStringList{u"clean-cache"_s, u"installed"_s, u"1"_s} << u"-r -k 1"_s;
+        QTest::newRow("clean uninstalled") << QStringList{u"clean-cache"_s, u"uninstalled"_s, u"0"_s} << u"-r -u -k 0"_s;
+        QTest::newRow("clean keeps three digits") << QStringList{u"clean-cache"_s, u"installed"_s, u"999"_s} << u"-r -k 999"_s;
     }
 
     void runsPacman() {
         QFETCH(QStringList, args);
         QFETCH(QString, pacman);
         const auto [exitCode, output] = run(args);
+        const auto program = args.value(0) == u"clean-cache"_s ? u"paccache"_s : u"pacman"_s;
         QCOMPARE(exitCode, 0);
-        QCOMPARE(output, u"fake pacman %1 sigpipe=ignored setsid=yes\n"_s.arg(pacman));
+        QCOMPARE(output, u"fake %1 %2 sigpipe=ignored setsid=yes\n"_s.arg(program, pacman));
     }
 
     void ranksMirrors() {
@@ -54,6 +59,12 @@ class TestHelper : public QObject {
         for (const auto& args : {QStringList{}, QStringList{u"unlock"_s}, QStringList{u"install"_s, u"-x"_s},
                  QStringList{u"upgrade"_s, u"foo"_s}, QStringList{u"remove"_s},
                  QStringList{u"rate-mirrors"_s, u"--help"_s}, QStringList{u"rate-mirrors"_s, QString()},
+                 QStringList{u"clean-cache"_s}, QStringList{u"clean-cache"_s, u"installed"_s},
+                 QStringList{u"clean-cache"_s, u"installed"_s, u"1000"_s},
+                 QStringList{u"clean-cache"_s, u"installed"_s, u"-1"_s},
+                 QStringList{u"clean-cache"_s, u"installed"_s, u"1a"_s},
+                 QStringList{u"clean-cache"_s, u"system"_s, u"1"_s},
+                 QStringList{u"clean-cache"_s, u"installed"_s, u"1"_s, u"extra"_s},
                  QStringList{u"pacman"_s, u"--remove"_s, u"--"_s, u"foo"_s},
                  QStringList{u"pacman"_s, u"--sync"_s, u"--overwrite"_s, u"--"_s, u"foo"_s},
                  QStringList{u"pacman"_s, u"--upgrade"_s, u"--"_s, u"/etc/passwd"_s}}) {
