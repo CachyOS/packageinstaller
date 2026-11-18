@@ -260,26 +260,25 @@ ApplicationWindow {
                 spacing: 4
 
                 Repeater {
-                    model: ListModel {
-                        ListElement { name: "home"; label: qsTr("Discover"); glyph: "M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" }
-                        ListElement { name: "browse"; label: qsTr("Browse"); glyph: "M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" }
-                        ListElement { name: "installed"; label: qsTr("Installed"); glyph: "M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0-18zM8 12l3 3l5-6" }
-                        ListElement { name: "updates"; label: qsTr("Updates"); glyph: "M12 4v11M7 11l5 5l5-5M5 20h14" }
-                        ListElement { name: "aur"; label: qsTr("AUR"); glyph: "M12 3 20 7.5v9L12 21l-8-4.5v-9zM4 7.5 12 12l8-4.5M12 12v9" }
-                        ListElement { name: "flatpak"; label: qsTr("Flatpak"); glyph: "M4 8l8-4l8 4v8l-8 4l-8-4zM4 8l8 4l8-4M12 12v8M8 6l8 4" }
-                        ListElement { name: "appimage"; label: qsTr("AppImage"); glyph: "M5 4h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zM12 8v8M8 12h8" }
-                    }
+                    model: [
+                        { name: "home", label: qsTr("Discover"), glyph: "M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" },
+                        { name: "browse", label: qsTr("Browse"), glyph: "M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z" },
+                        { name: "installed", label: qsTr("Installed"), glyph: "M12 3a9 9 0 1 0 0 18a9 9 0 0 0 0-18zM8 12l3 3l5-6" },
+                        { name: "updates", label: qsTr("Updates"), glyph: "M12 4v11M7 11l5 5l5-5M5 20h14" },
+                        { name: "aur", label: qsTr("AUR"), glyph: "M12 3 20 7.5v9L12 21l-8-4.5v-9zM4 7.5 12 12l8-4.5M12 12v9" },
+                        { name: "flatpak", label: qsTr("Flatpak"), glyph: "M4 8l8-4l8 4v8l-8 4l-8-4zM4 8l8 4l8-4M12 12v8M8 6l8 4" },
+                        { name: "appimage", label: qsTr("AppImage"), glyph: "M5 4h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zM12 8v8M8 12h8" }
+                    ]
 
                     NavButton {
-                        required property string name
-                        required property string label
-                        required glyph
+                        required property var modelData
 
                         width: nav.width
-                        text: label
-                        current: root.section === name
-                        badge: root.badge(name)
-                        onClicked: root.show(name)
+                        text: modelData.label
+                        glyph: modelData.glyph
+                        current: root.section === modelData.name
+                        badge: root.badge(modelData.name)
+                        onClicked: root.show(modelData.name)
                     }
                 }
             }
