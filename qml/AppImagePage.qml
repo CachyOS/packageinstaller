@@ -599,7 +599,7 @@ Item {
 
             Muted {
                 width: importBody.width
-                text: qsTr("You added these AppImages with %1. They can be moved to %2 and looked after by this app from now on:").arg(root.client.importTools, root.client.directory)
+                text: qsTr("You added these AppImages with %1. They can be moved to %2 and looked after by this app from now on:").arg(root.client.importTools).arg(root.client.directory)
                 font.pixelSize: Look.fontBody
                 lineHeight: 1.25
                 wrapMode: Text.WordWrap
