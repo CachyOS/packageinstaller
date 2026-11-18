@@ -41,7 +41,8 @@ QString shellyInstallDirectory(const QByteArray& config);
 
 /// The records of Shelly's list. A record without a path is taken to be
 /// "<name>.AppImage" in `installDirectory`, as Shelly does. Records without a name or
-/// with a path that is not absolute are left out.
+/// with a path that is not absolute are left out, and so are those without a path whose
+/// name would lead out of `installDirectory`.
 QList<ShellyApp> parseShellyDatabase(const QByteArray& database, const QString& installDirectory);
 
 /// The icon files Shelly made for `app`, below the user's data folder. None for a name

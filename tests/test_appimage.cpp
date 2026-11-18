@@ -209,6 +209,8 @@ class TestAppImage : public QObject {
           {"name": "Odd", "path": "/opt/o.AppImage", "update_type": "github", "repo_owner": "o/x", "repo_name": "../e"},
           {"name": "Relative", "path": "bin/r.AppImage"},
           {"path": "/opt/nameless.AppImage"},
+          {"name": "../../.config/autostart/x"},
+          {"name": ".."},
           "text", 7
         ])";
         const auto apps = appimage::parseShellyDatabase(database, u"/home/u/.local/bin"_s);
