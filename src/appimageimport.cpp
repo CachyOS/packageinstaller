@@ -152,9 +152,11 @@ QString gearLeverIcon(const QHash<QString, QString>& entry, const QString& path)
     if (entry.contains(PATH_KEY) || !entry.contains(GEARLEVER_NAME_KEY) || entry.value(u"TryExec"_s) != path || !path.startsWith(u'/')) {
         return {};
     }
-    // Gear Lever puts the icon into ".icons" in the folder of the file
-    const auto icon = entry.value(u"Icon"_s);
-    return isManagedPath(icon, path.first(path.lastIndexOf(u'/')) + u"/.icons"_s) ? icon : QString();
+    // Gear Lever puts the icon into ".icons" in the folder of the file, named after the app
+    // in any letters: only its place is checked
+    const auto icon   = entry.value(u"Icon"_s);
+    const auto folder = path.first(path.lastIndexOf(u'/')) + u"/.icons/"_s;
+    return icon.startsWith(folder) && plainFileName(QStringView(icon).sliced(folder.size())) ? icon : QString();
 }
 
 QString patternVariant(const QString& given) {
