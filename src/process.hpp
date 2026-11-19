@@ -4,6 +4,9 @@
 #include <QProcess>
 #include <QProcessEnvironment>
 #include <QStringList>
+#include <QTimer>
+
+#include <signal.h>
 
 #include <expected>
 #include <functional>
@@ -41,9 +44,10 @@ enum class OutputFailure { Failed, TooLarge };
 
 /// Starts `program` without waiting for it, with nothing on its standard input. Once it ended, `done` gets what it printed, unless it did not start, did not end
 /// with 0, or printed more than `maxSize` bytes; it is stopped then. What it writes to
-/// standard error is dropped.
+/// standard error is dropped. A `timeout` in milliseconds stops it after that long as well,
+/// together with every process it started.
 inline void readOutput(QObject* context, const QString& program, const QStringList& arguments, const QProcessEnvironment& env,
-    qsizetype maxSize, std::function<void(std::expected<QByteArray, OutputFailure>)> done) {
+    qsizetype maxSize, std::function<void(std::expected<QByteArray, OutputFailure>)> done, int timeout = 0) {
     struct Run {
         QByteArray output;
         bool tooLarge = false;
@@ -85,5 +89,14 @@ inline void readOutput(QObject* context, const QString& program, const QStringLi
             done(std::move(run->output));
         }
     });
+    if (timeout > 0) {
+        // a group of its own, so that the helpers it started are stopped with it
+        process->setUnixProcessParameters(QProcess::UnixProcessFlag::CreateNewSession);
+        QTimer::singleShot(timeout, process, [process] {
+            if (const auto pid = process->processId(); pid > 0) {
+                ::kill(-static_cast<pid_t>(pid), SIGKILL);
+            }
+        });
+    }
     process->start(program, arguments);
 }
