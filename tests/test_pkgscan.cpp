@@ -340,6 +340,129 @@ class TestPkgscan : public QObject {
         QCOMPARE(pkgscan::srcinfoVersion(u"pkgbase = a\n\tpkgrel = 1\n"_s), QString());
         QCOMPARE(pkgscan::srcinfoVersion(QString()), QString());
     }
+
+    void trackedGitSources() {
+        using pkgscan::GitSource;
+        const auto source = [](const QString& lines) { return pkgscan::trackedGitSource(u"pkgbase = a-git\n"_s + lines + u"\npkgname = a-git\n"_s); };
+        QCOMPARE(source(u"\tsource = luciole::git+https://github.com/noctalia-dev/luciole.git#branch=main"_s),
+            (GitSource{u"https://github.com/noctalia-dev/luciole.git"_s, u"refs/heads/main"_s}));
+        QCOMPARE(source(u"\tsource = git+https://gitlab.com/a/b.git"_s), (GitSource{u"https://gitlab.com/a/b.git"_s, u"HEAD"_s}));
+        QCOMPARE(source(u"\tsource = git+https://example.org/a.git?signed#branch=release/2.x"_s),
+            (GitSource{u"https://example.org/a.git"_s, u"refs/heads/release/2.x"_s}));
+        // plain downloads before it do not count
+        QCOMPARE(source(u"\tsource = https://example.org/patch.diff\n\tsource = git+https://example.org/a"_s),
+            (GitSource{u"https://example.org/a"_s, u"HEAD"_s}));
+        QCOMPARE(source(u"\tsource_x86_64 = git+https://example.org/a"_s), (GitSource{u"https://example.org/a"_s, u"HEAD"_s}));
+        QCOMPARE(source(u"\tsource_aarch64 = git+https://example.org/a"_s), std::nullopt);
+        // pinned, another protocol or system, or only the second source
+        QCOMPARE(source(u"\tsource = git+https://example.org/a#commit=0123abc"_s), std::nullopt);
+        QCOMPARE(source(u"\tsource = git+https://example.org/a#tag=v1.0"_s), std::nullopt);
+        QCOMPARE(source(u"\tsource = git://example.org/a"_s), std::nullopt);
+        QCOMPARE(source(u"\tsource = git+http://example.org/a"_s), std::nullopt);
+        QCOMPARE(source(u"\tsource = git+ssh://git@example.org/a"_s), std::nullopt);
+        QCOMPARE(source(u"\tsource = git+file:///home/a"_s), std::nullopt);
+        QCOMPARE(source(u"\tsource = svn+https://example.org/a\n\tsource = git+https://example.org/b"_s), std::nullopt);
+        QCOMPARE(source(u"\tsource = git+https://user:secret@example.org/a"_s), std::nullopt);
+        QCOMPARE(source(u"\tsource = git+https://example.org/a#branch=-x"_s), std::nullopt);
+        QCOMPARE(source(u"\tsource = git+https://example.org/a#branch=a/../b"_s), std::nullopt);
+        QCOMPARE(source(u"\tsource = https://example.org/a.tar.gz"_s), std::nullopt);
+        // the sources of a package after the base are not the base's
+        QCOMPARE(pkgscan::trackedGitSource(u"pkgbase = a\n\npkgname = a\n\tsource = git+https://example.org/a\n"_s), std::nullopt);
+    }
+
+    void versionCommits() {
+        const auto commits = [](QStringView version) { return pkgscan::versionCommits(version); };
+        QCOMPARE(commits(u"0.1.0.r352.gd8dd24274-1"), QStringList{u"d8dd24274"_s});
+        QCOMPARE(commits(u"1:0.1.0.r1613.c89f677-1"), QStringList{u"c89f677"_s});
+        QCOMPARE(commits(u"1.2.3+r45+gabc1234-2"), QStringList{u"abc1234"_s});
+        QCOMPARE(commits(u"r429.5782442-1"), QStringList{u"5782442"_s});  // all digits after the commit count
+        QCOMPARE(commits(u"1.2.r12.0123456-1"), QStringList{u"0123456"_s});
+        QCOMPARE(commits(u"r1234.g0123456-1"), QStringList{u"0123456"_s});
+        // mesa-git: the commit, then a checksum of the patches
+        QCOMPARE(commits(u"26.3.0_devel.231264.0ad3997b86e.d41d8cd-1"), (QStringList{u"0ad3997b86e"_s, u"d41d8cd"_s}));
+        QCOMPARE(commits(u"1.2.0123456-1"), QStringList());  // could be a number as well
+        QCOMPARE(commits(u"2.0.20240101-1"), QStringList());
+        QCOMPARE(commits(u"bar20.0123456-1"), QStringList());
+        QCOMPARE(commits(u"20240101-1"), QStringList());
+        QCOMPARE(commits(u"2.0.r12-1"), QStringList());
+        QCOMPARE(commits(u"1.0-1"), QStringList());
+        QCOMPARE(commits(u"1.0.beef12-1"), QStringList());  // six digits are too few
+        QCOMPARE(commits(u"1.0.ABCDEF12-1"), QStringList());
+    }
+
+    void followSources() {
+        const auto r1 = u"1111111111111111111111111111111111111111"_s;
+        const auto r2 = u"2222222222222222222222222222222222222222"_s;
+        const auto r3 = u"3333333333333333333333333333333333333333"_s;
+        const auto aaa = u"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"_s;
+        // one check after another, each starting from what the one before kept
+        QStringList record;
+        const auto check = [&](const QString& version, qint64 date, const QString& remote) {
+            const auto state = pkgscan::followSource(record, version, date, remote);
+            record           = state.record;
+            return state.behind;
+        };
+
+        // the version names the commit: behind until a build names the commit of the source
+        QVERIFY(!check(u"r10.aaaaaaa-1"_s, 100, aaa));
+        QVERIFY(record.isEmpty());
+        QVERIFY(check(u"r10.aaaaaaa-1"_s, 100, r1));
+        QVERIFY(check(u"r10.aaaaaaa-1"_s, 100, r1));
+        QVERIFY(!check(u"r11.1111111-1"_s, 200, r1));
+        QVERIFY(record.isEmpty());
+
+        // no commit in the version: counted from the first check of each build
+        record.clear();
+        QVERIFY(!check(u"r10-1"_s, 100, r1));
+        QVERIFY(!check(u"r10-1"_s, 100, r1));
+        QVERIFY(check(u"r10-1"_s, 100, r2));
+        QVERIFY(!check(u"r10-1"_s, 300, r2));  // rebuilt with the same version
+        QVERIFY(check(u"r10-1"_s, 300, r3));
+
+        // the version follows another source: after one rebuild it is counted as well
+        record.clear();
+        QVERIFY(check(u"r10.bbbbbbb-1"_s, 100, r1));
+        QVERIFY(!check(u"r10.ccccccc-1"_s, 200, r1));
+        QVERIFY(!check(u"r10.ccccccc-1"_s, 200, r1));
+        QVERIFY(check(u"r10.ccccccc-1"_s, 200, r2));
+        QVERIFY(!check(u"r11.ddddddd-1"_s, 300, r2));
+        QVERIFY(check(u"r11.ddddddd-1"_s, 300, r3));
+
+        // the source moved on again before the rebuild: still counted once that build is in
+        record.clear();
+        QVERIFY(check(u"r10.bbbbbbb-1"_s, 100, r1));
+        QVERIFY(check(u"r10.bbbbbbb-1"_s, 100, r2));
+        QVERIFY(!check(u"r11.ccccccc-1"_s, 200, r2));
+
+        // built at a newer commit than the check had seen: matches once the check sees it, and
+        // later builds are compared by their commit again
+        record.clear();
+        QVERIFY(check(u"r10.bbbbbbb-1"_s, 100, r1));
+        QVERIFY(!check(u"r12.2222222-1"_s, 200, r1));
+        QVERIFY(!check(u"r12.2222222-1"_s, 200, r2));
+        QVERIFY(record.isEmpty());
+        QVERIFY(check(u"r12.2222222-1"_s, 200, r3));
+
+        // a commit that is not the last part of the version, as with mesa-git
+        record.clear();
+        QVERIFY(!check(u"26.3.0_devel.231264.aaaaaaa.d41d8cd-1"_s, 100, aaa));
+        QVERIFY(record.isEmpty());
+        QVERIFY(check(u"26.3.0_devel.231264.aaaaaaa.d41d8cd-1"_s, 100, r2));
+
+        // what an older version of this check kept is not taken for anything
+        record = {u"r10-1"_s, u"100"_s, r1};
+        QVERIFY(!check(u"r10-1"_s, 100, r2));
+    }
+
+    void remoteCommits() {
+        const auto output = u"0b37f2cc760c241ce2cf78dbdc4744f18a5b66b7\trefs/heads/main\n"
+                            u"1111111111111111111111111111111111111111\tHEAD\n"_s;
+        QCOMPARE(pkgscan::remoteCommit(output, u"refs/heads/main"), u"0b37f2cc760c241ce2cf78dbdc4744f18a5b66b7"_s);
+        QCOMPARE(pkgscan::remoteCommit(output, u"HEAD"), u"1111111111111111111111111111111111111111"_s);
+        QCOMPARE(pkgscan::remoteCommit(output, u"refs/heads/dev"), QString());
+        QCOMPARE(pkgscan::remoteCommit(u"<html>\tHEAD\n"_s, u"HEAD"), QString());
+        QCOMPARE(pkgscan::remoteCommit(QString(), u"HEAD"), QString());
+    }
 };
 
 QTEST_APPLESS_MAIN(TestPkgscan)

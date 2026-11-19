@@ -109,6 +109,42 @@ struct LocalFiles {
 /// "[epoch:]pkgver-pkgrel". Empty when the file names none.
 [[nodiscard]] QString srcinfoVersion(QStringView srcinfo);
 
+/// The git repository a package that builds the newest source code follows, and its branch.
+struct GitSource {
+    QString url;
+    QString ref;  ///< "HEAD" for the default branch, else "refs/heads/<branch>"
+
+    bool operator==(const GitSource&) const = default;
+};
+
+/// The first version control source of the package base in a .SRCINFO, when it is a git
+/// repository on an https address that follows a branch. None when it is pinned to a commit
+/// or a tag, uses another version control system or another protocol, or there is none.
+[[nodiscard]] std::optional<GitSource> trackedGitSource(QStringView srcinfo, QStringView arch = u"x86_64");
+
+/// The parts of a version of a package that builds the newest source code that look like an
+/// abbreviated commit id, like "d8dd24274" in "0.1.0.r352.gd8dd24274-1" or "c89f677" in
+/// "1:0.1.0.r1613.c89f677-1". Usually the last part, but mesa-git ends in a checksum of its patches.
+[[nodiscard]] QStringList versionCommits(QStringView version);
+
+/// The commit of `ref` in what `git ls-remote` printed, or an empty string.
+[[nodiscard]] QString remoteCommit(QStringView lsRemote, QStringView ref);
+
+/// Whether a build of a package that builds the newest source code is behind its source.
+struct SourceState {
+    bool behind = false;
+    QStringList record;  ///< to keep for the next check; empty when there is nothing to keep
+};
+
+/// Compares the installed build `version`, installed at `installDate`, with the commit `remote`
+/// its source is at now. `record` is what the previous check kept.
+/// - A build whose version names a commit is behind until that commit is `remote`.
+/// - A build whose version names none counts from the commit its source was at when it was
+///   first checked, like `paru --gendb`, and is behind once the source moved on.
+/// - So does a build made after its version was found behind that still names another commit:
+///   its version follows another source than the first one, and would never match.
+[[nodiscard]] SourceState followSource(const QStringList& record, const QString& version, qint64 installDate, const QString& remote);
+
 /// Most severe first, then by file and line.
 void sort(QList<Finding>& findings);
 [[nodiscard]] QString severityName(Severity severity);

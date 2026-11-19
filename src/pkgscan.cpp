@@ -986,6 +986,134 @@ bool validPkgbase(QStringView name) {
     return plainName(name, false);
 }
 
+std::optional<GitSource> trackedGitSource(QStringView srcinfo, QStringView arch) {
+    const auto archKey = u"source_"_s + arch;
+    for (const auto line : srcinfo.tokenize(u'\n')) {
+        // the sources belong to the package base, which comes first
+        if (line.startsWith("pkgname"_L1)) {
+            break;
+        }
+        const auto separator = line.indexOf(u" = ");
+        if (separator < 0) {
+            continue;
+        }
+        const auto key = line.first(separator).trimmed();
+        if (key != "source"_L1 && key != archKey) {
+            continue;
+        }
+        auto [_, spec] = splitRename(line.sliced(separator + 3).trimmed().toString());
+        static const QRegularExpression vcs(u"^((git|svn|hg|bzr|fossil)\\+|git://)"_s);
+        if (!vcs.match(spec).hasMatch()) {
+            continue;  // a plain download
+        }
+        // only the first one: it is usually the one the version is made from
+        if (!spec.startsWith("git+https://"_L1)) {
+            return std::nullopt;
+        }
+        spec.remove(0, 4);
+        QString ref = u"HEAD"_s;
+        if (const auto hash = spec.indexOf(u'#'); hash >= 0) {
+            const auto fragment = spec.sliced(hash + 1);
+            spec.truncate(hash);
+            if (!fragment.startsWith("branch="_L1)) {
+                return std::nullopt;  // a commit or a tag never moves
+            }
+            const auto branch = fragment.sliced(7);
+            static const QRegularExpression name(u"^[A-Za-z0-9._][A-Za-z0-9._/-]{0,199}$"_s);
+            if (!name.match(branch).hasMatch() || branch.contains(".."_L1)) {
+                return std::nullopt;
+            }
+            ref = u"refs/heads/"_s + branch;
+        }
+        if (const auto query = spec.indexOf(u'?'); query >= 0) {
+            spec.truncate(query);  // "?signed"
+        }
+        const QUrl url(spec, QUrl::StrictMode);
+        if (!url.isValid() || url.scheme() != "https"_L1 || url.host().isEmpty() || !url.userInfo().isEmpty()
+            || std::ranges::any_of(spec, [](QChar c) { return c.isSpace() || c.unicode() < 0x20; })) {
+            return std::nullopt;
+        }
+        return GitSource{spec, ref};
+    }
+    return std::nullopt;
+}
+
+QStringList versionCommits(QStringView version) {
+    // without the epoch and the release
+    if (const auto colon = version.indexOf(u':'); colon >= 0) {
+        version = version.sliced(colon + 1);
+    }
+    if (const auto dash = version.lastIndexOf(u'-'); dash >= 0) {
+        version = version.first(dash);
+    }
+    static const QRegularExpression revision(u"^r[0-9]+$"_s);
+    const auto hex = [](QChar c) { return (c >= u'0' && c <= u'9') || (c >= u'a' && c <= u'f'); };
+    QList<QStringView> parts;
+    for (qsizetype start = 0, end = 0; end <= version.size(); ++end) {
+        if (end == version.size() || QStringView(u"._+").contains(version.at(end))) {
+            parts << version.sliced(start, end - start);
+            start = end + 1;
+        }
+    }
+    QStringList commits;
+    QStringView previous;
+    for (auto part : std::as_const(parts)) {
+        // "gd8dd24274" as git describe writes it, "r340.5782442" as the AUR guidelines suggest,
+        // or else "c89f677" with at least one letter, so that a date like "20240101" is no commit
+        const bool counted   = revision.matchView(previous).hasMatch();
+        const bool described = part.size() > 7 && part.front() == u'g';
+        previous             = part;
+        if (described) {
+            part = part.sliced(1);
+        }
+        const bool letter = std::ranges::any_of(part, [](QChar c) { return c >= u'a' && c <= u'f'; });
+        if (part.size() >= 7 && part.size() <= 64 && std::ranges::all_of(part, hex) && (described || counted || letter)) {
+            commits << part.toString();
+        }
+    }
+    return commits;
+}
+
+QString remoteCommit(QStringView lsRemote, QStringView ref) {
+    for (const auto line : lsRemote.tokenize(u'\n')) {
+        const auto tab = line.indexOf(u'\t');
+        if (tab < 0 || line.sliced(tab + 1).trimmed() != ref) {
+            continue;
+        }
+        const auto commit = line.first(tab);
+        const bool full   = (commit.size() == 40 || commit.size() == 64)
+            && std::ranges::all_of(commit, [](QChar c) { return (c >= u'0' && c <= u'9') || (c >= u'a' && c <= u'f'); });
+        return full ? commit.toString() : QString();
+    }
+    return {};
+}
+
+SourceState followSource(const QStringList& record, const QString& version, qint64 installDate, const QString& remote) {
+    // version, install date, a commit of the source and what it is: where the source was when
+    // this build was first checked, or what the commit named by its version was found behind.
+    // A rebuild has another install date, even when its version stayed the same.
+    static constexpr auto SEEN   = "seen"_L1;
+    static constexpr auto BEHIND = "behind"_L1;
+    const QStringList build{version, QString::number(installDate)};
+    const bool known     = record.size() == 4;
+    const bool sameBuild = known && record.first(2) == build;
+    const auto keep      = [&](QLatin1StringView what) { return build + QStringList{remote, what}; };
+
+    // any of them: some versions name more than the commit, like a checksum of the patches
+    const auto own = versionCommits(version);
+    if (std::ranges::any_of(own, [&](const QString& commit) { return remote.startsWith(commit); })) {
+        return {false, {}};
+    }
+    const bool counted = own.isEmpty() || (known && (record.at(3) == SEEN || (record.at(3) == BEHIND && !sameBuild && record.at(2) == remote)));
+    if (counted) {
+        if (!sameBuild || record.at(3) != SEEN) {
+            return {false, keep(SEEN)};
+        }
+        return {record.at(2) != remote, record};
+    }
+    return {true, sameBuild && record.at(2) == remote ? record : keep(BEHIND)};
+}
+
 void sort(QList<Finding>& findings) {
     // metadata first, then the PKGBUILD, then the other files
     std::ranges::stable_sort(findings, std::less{}, [](const Finding& f) {
