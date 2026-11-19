@@ -42,6 +42,8 @@ struct AurPackage {
     Q_PROPERTY(bool installed MEMBER installed FINAL)
     Q_PROPERTY(QString installedVersion MEMBER installedVersion FINAL)
     Q_PROPERTY(bool upgradable MEMBER upgradable FINAL)
+    /// An update to newer source code: see `newSource`.
+    Q_PROPERTY(bool newSource MEMBER newSource FINAL)
     Q_PROPERTY(bool heldBack MEMBER heldBack FINAL)
     Q_PROPERTY(bool inRepos MEMBER inRepos FINAL)
     /// AUR packages of a plan that need this one.
@@ -69,6 +71,9 @@ struct AurPackage {
     bool installed = false;
     QString installedVersion{};
     bool upgradable = false;
+    /// It builds the newest source code, and that has new commits since the installed version
+    /// was built, while the AUR names no newer version. Also sets `upgradable`.
+    bool newSource  = false;
     bool heldBack   = false;  ///< by IgnorePkg or IgnoreGroup in pacman.conf: not updated with the others
     bool inRepos    = false;  ///< a package of the same name in the repositories should be installed from there
     QStringList neededBy{};
@@ -221,8 +226,9 @@ class AurClient : public QObject {
     /// Runs git in isolation from the user's and the system's configuration.
     void git(const QStringList& arguments, std::function<void(bool ok)> done);
     using GitOutput = std::expected<QByteArray, OutputFailure>;
-    /// Like git(), passing on what it printed, unless it failed or printed more than `maxSize` bytes.
-    void gitRead(const QStringList& arguments, qsizetype maxSize, std::function<void(GitOutput)> done);
+    /// Like git(), passing on what it printed, unless it failed, printed more than `maxSize` bytes
+    /// or ran longer than a `timeout` in milliseconds.
+    void gitRead(const QStringList& arguments, qsizetype maxSize, std::function<void(GitOutput)> done, int timeout = 0);
     /// The installed version of `name` if it was built from the AUR, else an empty string.
     [[nodiscard]] QString installedAurVersion(const QString& name) const;
     /// Sets `changes` to what changed in the checkout in `directory` since `installed`.
@@ -240,6 +246,19 @@ class AurClient : public QObject {
     /// The changes of the checkout since `commit`, or why they cannot be shown.
     void diffSince(const QString& directory, const QString& commit, std::function<void(std::expected<git::Diff, QString>)> done);
     void setChanges(git::Diff changes, const QString& note);
+    struct SourceCheck;
+    /// Looks for new commits in the source of the installed packages that build the newest
+    /// source code, as `paru --devel` does, after the versions were compared in `installed`.
+    void checkSources(const QList<AurPackage>& installed, int generation);
+    void checkNextSource(const std::shared_ptr<SourceCheck>& check);
+    void finishSources(const std::shared_ptr<SourceCheck>& check);
+    /// The source that `pkgbase` follows, read from its .SRCINFO in the AUR, or none.
+    void fetchSource(const QString& pkgbase, qint64 lastModified, std::function<void(std::optional<pkgscan::GitSource>, bool failed)> done);
+    /// The commit `source` is at now, or an empty string when it cannot be reached. An answer
+    /// is reused for a while, but not one from before `builtAt` (seconds since the epoch).
+    void fetchRemoteCommit(const pkgscan::GitSource& source, qint64 builtAt, std::function<void(QString)> done);
+    /// Whether the installed `name` was built from an older commit than `remote`.
+    [[nodiscard]] bool behindSource(const QString& name, const QString& remote) const;
     void setError(const QString& error);
     void readCheckout(const QString& directory);
     void rescan();
@@ -294,6 +313,17 @@ class AurClient : public QObject {
     int m_detailsGeneration = 0;
 
     QList<AurPackage> m_installed;
+    struct KnownSource {
+        qint64 lastModified = 0;  ///< of the AUR record it was read from
+        std::optional<pkgscan::GitSource> source;
+    };
+    QHash<QString, KnownSource> m_sources;  ///< by package base
+    struct RemoteCommit {
+        QString commit;
+        QDateTime checked;
+    };
+    QHash<QString, RemoteCommit> m_remoteCommits;  ///< by address and reference; empty when it failed
+    QHash<QString, QString> m_behindSource;        ///< package name -> installed version older than its source
     int m_updateChecks      = 0;  ///< checks still running, including superseded ones
     int m_updatesGeneration = 0;
 };

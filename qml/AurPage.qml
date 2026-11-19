@@ -69,6 +69,8 @@ Item {
             summary: modelData.description
             source: "aur"
             trailing: modelData.upgradable && modelData.heldBack ? qsTr("%1, held back").arg(modelData.installedVersion)
+                // the AUR names no newer version, only its source has new commits
+                : modelData.newSource ? qsTr("%1 → newest commit").arg(modelData.installedVersion)
                 : modelData.upgradable ? modelData.installedVersion + " → " + modelData.version
                 : modelData.installed ? (root.searching ? qsTr("Installed") : modelData.installedVersion)
                 : modelData.inRepos ? qsTr("In the repositories")
@@ -78,6 +80,7 @@ Item {
                 ? Look.warning : Look.textMuted
             Accessible.description: modelData.upgradable && modelData.heldBack
                 ? qsTr("Version %1 is held back in pacman.conf").arg(modelData.version)
+                : modelData.newSource ? qsTr("Update from %1 to the newest commit of its source").arg(modelData.installedVersion)
                 : modelData.upgradable ? qsTr("Update from %1 to %2").arg(modelData.installedVersion).arg(modelData.version) : ""
             onClicked: root.openAur(modelData)
         }

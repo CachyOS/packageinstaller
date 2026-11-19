@@ -163,8 +163,10 @@ ScrollPage {
         source: "aur"
         link: root.info.pageUrl
         linkText: qsTr("AUR page")
-        byline: (root.info.upgradable ? root.info.installedVersion + " → " : root.info.installed ? qsTr("Installed") + " · " : "")
-            + qsTr("%1 · %n vote(s)", "", root.info.votes).arg(root.info.version)
+        // an update to newer source code names no version of the AUR: that one is older
+        byline: (root.info.newSource ? "" : root.info.upgradable ? root.info.installedVersion + " → " : root.info.installed ? qsTr("Installed") + " · " : "")
+            + qsTr("%1 · %n vote(s)", "", root.info.votes)
+                .arg(root.info.newSource ? qsTr("%1 → newest commit").arg(root.info.installedVersion) : root.info.version)
             + " · " + (root.info.maintainer.length > 0 ? root.info.maintainer : qsTr("orphaned"))
             + (Backend.aur.revision.length > 0 ? " · " + qsTr("revision %1").arg(Backend.aur.revision.substring(0, 7)) : "")
 
