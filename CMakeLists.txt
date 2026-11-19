@@ -105,7 +105,7 @@ target_link_libraries(pi-appimage PUBLIC Qt6::Core PRIVATE project_options proje
 ## GUI
 ##
 qt_add_executable(${PROJECT_NAME}
-    src/main.cpp src/files.hpp src/process.hpp src/memory.hpp
+    src/main.cpp src/files.hpp src/process.hpp src/qt_utils.hpp src/memory.hpp
     src/alpmdb.hpp src/alpmdb.cpp
     src/catalog.hpp src/catalog.cpp
     src/packagemodel.hpp src/packagemodel.cpp
