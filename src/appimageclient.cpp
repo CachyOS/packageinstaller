@@ -3,6 +3,8 @@
 #include "appimagedesktop.hpp"
 #include "appimageimport.hpp"
 
+#include "files.hpp"
+
 #include <QCryptographicHash>
 #include <QDateTime>
 #include <QDir>
@@ -56,8 +58,7 @@ QString lockPath() {
 }
 
 QByteArray readBytes(const QString& path, qint64 limit) {
-    QFile file(path);
-    return file.open(QIODevice::ReadOnly) && file.size() <= limit ? file.readAll() : QByteArray();
+    return readCapped(path, limit, pi::file_utils::Links::Follow).value_or(QByteArray());
 }
 
 QString readText(const QString& path, qint64 limit) {

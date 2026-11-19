@@ -12,6 +12,7 @@
 #include <memory>
 
 using namespace Qt::StringLiterals;
+using namespace std::chrono_literals;
 
 QString Package::source() const {
     if (foreign()) {
@@ -35,7 +36,7 @@ struct Config {
 Config readConfig() {
     Config config;
     bool options = false;
-    for (const auto& line : outputLines(u"pacman-conf"_s, {}, 10000)) {
+    for (const auto& line : outputLines(u"pacman-conf"_s, {}, 10s)) {
         if (line.startsWith(u'[') && line.endsWith(u']')) {
             const auto section = line.sliced(1, line.size() - 2);
             options            = section == "options"_L1;

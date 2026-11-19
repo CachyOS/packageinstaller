@@ -23,6 +23,7 @@
 #include <utility>
 
 using namespace Qt::StringLiterals;
+using namespace std::chrono_literals;
 
 namespace {
 
@@ -31,8 +32,8 @@ constexpr qsizetype MAX_RESULTS = 150;
 using Load = QPromise<FlatpakState>;
 
 /// Runs `flatpak` and returns its output split into rows of tab separated columns.
-/// Gives up when the load is cancelled or after `timeout` milliseconds.
-QList<QStringList> rows(const Load& load, const QString& program, const QStringList& arguments, int timeout = 30000) {
+/// Gives up when the load is cancelled or after `timeout`.
+QList<QStringList> rows(const Load& load, const QString& program, const QStringList& arguments, std::chrono::seconds timeout = 30s) {
     QList<QStringList> result;
     for (const auto& line : outputLines(program, arguments, timeout, [&] { return load.isCanceled(); })) {
         result << line.split(u'\t');
@@ -117,7 +118,7 @@ FlatpakState load(const Load& load) {
     }
     // QSysInfo says "arm64" where Flatpak says "aarch64"
     static const auto arch = [&] {
-        const auto out = rows(load, program, {u"--default-arch"_s}, 5000);
+        const auto out = rows(load, program, {u"--default-arch"_s}, 5s);
         return out.isEmpty() ? QSysInfo::currentCpuArchitecture().replace("arm64"_L1, "aarch64"_L1) : out.first().first().trimmed();
     }();
 
@@ -134,7 +135,7 @@ FlatpakState load(const Load& load) {
     for (const auto& remote : std::as_const(state.remotes)) {
         const QFileInfo catalogue(catalogueOf(remote, arch) + u"/appstream.xml.gz"_s);
         if (!catalogue.exists() || catalogue.lastModified() < stale) {
-            rows(load, program, {u"update"_s, u"--appstream"_s, u"--system"_s, u"--noninteractive"_s, remote}, 600000);
+            rows(load, program, {u"update"_s, u"--appstream"_s, u"--system"_s, u"--noninteractive"_s, remote}, 600s);
         }
         if (load.isCanceled()) {
             return state;

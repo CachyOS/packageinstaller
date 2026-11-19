@@ -9,6 +9,16 @@ the binaries.
 | - | - | - |
 | [rapidyaml](https://github.com/biojppm/rapidyaml) v0.16.0 | reading `pkglist.yaml` | MIT |
 | [backward-cpp](https://github.com/bombela/backward-cpp) v1.6 | stack traces on crashes (GUI and `cachyos-pi-scan`) | MIT |
+| [fmt](https://github.com/fmtlib/fmt) 12.2.0 | formatting in `libpi` | MIT |
+| [spdlog](https://github.com/gabime/spdlog) v1.17.0 | logging in `libpi` | MIT |
+| [doctest](https://github.com/doctest/doctest) v2.5.3 | `libpi` unit tests | MIT |
+
+## Bundled code
+
+| Code | Where | License |
+| - | - | - |
+| [subprocess.h](https://github.com/sheredom/subprocess.h) | `libpi/src/third_party/subprocess.h` | public domain |
+| [CachyOS GUCC](https://github.com/cachyos/new-cli-installer) | `libpi/`: files imported from gucc keep its copyright header | GPL-3.0-or-later |
 
 ## Colour palettes
 
