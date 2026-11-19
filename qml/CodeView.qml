@@ -58,7 +58,8 @@ Card {
 
             required property finding modelData
 
-            visible: root.text.length > 0
+            // Qt 6.12 can hand over an empty list bound from a function as one empty finding
+            visible: root.text.length > 0 && modelData.line > 0
             x: 1
             y: root.lineY(modelData.line)
             width: root.width - 2
