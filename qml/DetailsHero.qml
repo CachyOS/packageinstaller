@@ -14,7 +14,7 @@ Column {
     property string link
     property string linkText
     property alias status: statusText.text
-    property alias screenshots: strip.model
+    property alias screenshots: strip.urls
     property string description
     default property alias actions: actionColumn.data
 
