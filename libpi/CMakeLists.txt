@@ -11,6 +11,7 @@ add_library(pi::names ALIAS pi_names)
 target_include_directories(pi_names INTERFACE include)
 
 add_library(pi STATIC
+    include/pi/conf.hpp src/conf.cpp
     include/pi/error.hpp src/error.cpp
     include/pi/file_utils.hpp src/file_utils.cpp
     include/pi/process.hpp src/process.cpp
