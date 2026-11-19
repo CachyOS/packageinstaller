@@ -53,13 +53,18 @@ QStringList screenshotUrls(const AppStream::Component& component) {
         if (shot.mediaKind() != AppStream::Screenshot::MediaKindImage) {
             continue;
         }
+        // The widest image up to about 1300 px is plenty. The source image is usually listed
+        // first and can be several thousand pixels wide, or of unknown width: it is taken
+        // only when no image fits.
         QUrl best;
         uint bestWidth = 0;
+        bool bestFits  = false;
         for (const auto& image : shot.images()) {
-            // the largest thumbnail up to ~1250px is plenty; fall back to the source image
-            if (best.isEmpty() || (image.width() > bestWidth && image.width() <= 1300)) {
+            const bool fits = image.width() > 0 && image.width() <= 1300;
+            if (best.isEmpty() || (fits && (!bestFits || image.width() > bestWidth))) {
                 best      = image.url();
                 bestWidth = image.width();
+                bestFits  = fits;
             }
         }
         if (best.isValid() && (best.scheme() == "https"_L1 || best.scheme() == "http"_L1)) {
