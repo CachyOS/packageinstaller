@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "alpmdb.hpp"
+#include "qt_utils.hpp"
 
 #include "pi/pacman_conf.hpp"
 
@@ -11,7 +12,6 @@
 
 #include <functional>
 #include <memory>
-#include <ranges>
 
 using namespace Qt::StringLiterals;
 
@@ -112,8 +112,8 @@ std::expected<Databases, QString> load() {
     auto* handle = opened->get();
 
     Databases result{.packages = {},
-        .dbPath                = QString::fromStdString(config.db_path),
-        .repos                 = config.repos | std::views::transform(&QString::fromStdString) | std::ranges::to<QStringList>()};
+        .dbPath                = qt_utils::to_qstring(config.db_path),
+        .repos                 = qt_utils::to_qstring_list(config.repos)};
     auto& packages = result.packages;
     QHash<QString, qsizetype> index;
     QList<alpm_pkg_t*> candidates;  // the repository package behind each entry

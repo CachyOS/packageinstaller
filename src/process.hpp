@@ -3,6 +3,7 @@
 
 #include "pi/process.hpp"
 #include "pi/string_utils.hpp"
+#include "qt_utils.hpp"
 
 #include <cinttypes>
 
@@ -10,9 +11,6 @@
 #include <expected>
 #include <functional>
 #include <memory>
-#include <ranges>
-#include <string>
-#include <vector>
 
 #include <QProcess>
 #include <QProcessEnvironment>
@@ -28,19 +26,14 @@ inline QProcessEnvironment plainEnvironment() {
 /// The lines `program` printed, empty when it failed, timed out or `cancelled` said so.
 inline QStringList outputLines(const QString& program, const QStringList& arguments,
     std::chrono::seconds timeout = std::chrono::seconds{30}, std::function<bool()> cancelled = {}) {
-    std::vector argv{program.toStdString()};
-    argv.append_range(arguments | std::views::transform(&QString::toStdString));
+    const auto argv = qt_utils::to_std_strings(QStringList{program} + arguments);
 
     // pass it to gucc
     const auto result = pi::utils::run(argv, {.timeout = timeout, .cancel_requested = std::move(cancelled)});
     if (!result.ok()) {
         return {};
     }
-    QStringList lines;
-    for (const auto line : pi::utils::make_split_view(result.output)) {
-        lines << QString::fromUtf8(line);
-    }
-    return lines;
+    return qt_utils::to_qstring_list(pi::utils::make_split_view(result.output));
 }
 
 /// Why `readOutput()` passes on no output.
