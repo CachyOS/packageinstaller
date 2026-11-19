@@ -14,6 +14,7 @@ add_library(pi STATIC
     include/pi/conf.hpp src/conf.cpp
     include/pi/error.hpp src/error.cpp
     include/pi/file_utils.hpp src/file_utils.cpp
+    include/pi/pacman_conf.hpp src/pacman_conf.cpp
     include/pi/process.hpp src/process.cpp
     include/pi/string_utils.hpp src/string_utils.cpp)
 add_library(pi::pi ALIAS pi)
