@@ -11,10 +11,23 @@
 #include <QStandardPaths>
 #include <QtConcurrent/QtConcurrentRun>
 
+#include <array>
+
 using namespace Qt::StringLiterals;
 
 namespace {
 Backend* s_instance = nullptr;
+
+constexpr std::array kAppImageMimeTypes{"application/vnd.appimage", "application/x-iso9660-appimage"};
+
+auto queryDefaultHandler(const char* mime) -> QString {
+    QProcess process;
+    process.start(u"xdg-mime"_s, {u"query"_s, u"default"_s, QString::fromLatin1(mime)});
+    if (!process.waitForFinished(2000) || process.exitStatus() != QProcess::NormalExit || process.exitCode() != 0) {
+        return {};
+    }
+    return QString::fromUtf8(process.readAllStandardOutput()).trimmed();
+}
 }  // namespace
 
 Backend::Backend(IconProvider* icons, QObject* parent)
@@ -111,6 +124,45 @@ void Backend::setAppImagesEnabled(bool enabled) {
         m_appImages.refresh();
         m_appImages.checkUpdates(false);
     }
+}
+
+bool Backend::canSetDefaultAppImageHandler() const {
+    return !QStandardPaths::findExecutable(u"xdg-mime"_s).isEmpty();
+}
+
+void Backend::refreshAppImageHandler() {
+    bool isDefault = canSetDefaultAppImageHandler();
+    if (isDefault) {
+        for (const auto* mime : kAppImageMimeTypes) {
+            if (queryDefaultHandler(mime) != u"cachyos-pi.desktop"_s) {
+                isDefault = false;
+                break;
+            }
+        }
+    }
+    m_isDefaultAppImageHandler = isDefault;
+    emit appImageHandlerChanged();
+}
+
+bool Backend::setDefaultAppImageHandler() {
+    if (!canSetDefaultAppImageHandler()) {
+        return false;
+    }
+
+    bool ok = true;
+    for (const auto* mime : kAppImageMimeTypes) {
+        QProcess process;
+        process.start(u"xdg-mime"_s, {u"default"_s, u"cachyos-pi.desktop"_s, QString::fromLatin1(mime)});
+        const bool stepOk = process.waitForFinished(3000)
+            && process.exitStatus() == QProcess::NormalExit && process.exitCode() == 0;
+        ok = ok && stepOk;
+    }
+
+    refreshAppImageHandler();
+    if (!ok) {
+        emit notice(tr("Could not set the default AppImage handler."));
+    }
+    return ok;
 }
 
 QUrl Backend::takeStartupFile() {

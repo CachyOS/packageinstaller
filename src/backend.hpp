@@ -44,6 +44,10 @@ class Backend : public QObject {
     Q_PROPERTY(bool flatpakEnabled READ flatpakEnabled WRITE setFlatpakEnabled NOTIFY flatpakEnabledChanged FINAL)
     Q_PROPERTY(AppImageClient* appImages READ appImages CONSTANT FINAL)
     Q_PROPERTY(bool appImagesEnabled READ appImagesEnabled WRITE setAppImagesEnabled NOTIFY appImagesEnabledChanged FINAL)
+    /// xdg-mime is installed; the app can be made the default AppImage handler.
+    Q_PROPERTY(bool canSetDefaultAppImageHandler READ canSetDefaultAppImageHandler NOTIFY appImageHandlerChanged FINAL)
+    /// This app is the default handler for both AppImage MIME types.
+    Q_PROPERTY(bool isDefaultAppImageHandler READ isDefaultAppImageHandler NOTIFY appImageHandlerChanged FINAL)
     /// The app was started with an AppImage file to add.
     Q_PROPERTY(bool hasStartupFile READ hasStartupFile NOTIFY startupFileChanged FINAL)
 
@@ -75,6 +79,12 @@ class Backend : public QObject {
     AppImageClient* appImages() { return &m_appImages; }
     bool appImagesEnabled() const { return m_appImagesEnabled; }
     void setAppImagesEnabled(bool enabled);
+    bool canSetDefaultAppImageHandler() const;
+    bool isDefaultAppImageHandler() const { return m_isDefaultAppImageHandler; }
+    /// Re-reads the xdg-mime associations, for example when the settings page opens.
+    Q_INVOKABLE void refreshAppImageHandler();
+    /// Makes this app the default handler for both AppImage MIME types.
+    Q_INVOKABLE bool setDefaultAppImageHandler();
     bool hasStartupFile() const { return !m_startupFile.isEmpty(); }
     void setStartupFile(const QUrl& file) { m_startupFile = file; }
     /// The file from the command line; handed out once.
@@ -111,6 +121,7 @@ class Backend : public QObject {
     void paruAvailableChanged();
     void flatpakEnabledChanged();
     void appImagesEnabledChanged();
+    void appImageHandlerChanged();
     void startupFileChanged();
     /// Something the user asked for could not be done, and `text` says why.
     void notice(const QString& text);
@@ -150,6 +161,7 @@ class Backend : public QObject {
     bool m_aurEnabled      = false;
     bool m_flatpakEnabled  = false;
     bool m_appImagesEnabled = false;
+    bool m_isDefaultAppImageHandler = false;
     QUrl m_startupFile;
     bool m_paruAvailable   = false;
 };
