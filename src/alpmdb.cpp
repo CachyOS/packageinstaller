@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "alpmdb.hpp"
-#include "process.hpp"
+
+#include "pi/pacman_conf.hpp"
 
 #include <QCoreApplication>
 #include <QHash>
@@ -10,9 +11,9 @@
 
 #include <functional>
 #include <memory>
+#include <ranges>
 
 using namespace Qt::StringLiterals;
-using namespace std::chrono_literals;
 
 QString Package::source() const {
     if (foreign()) {
@@ -25,60 +26,23 @@ namespace {
 
 using Handle = std::unique_ptr<alpm_handle_t, decltype(&alpm_release)>;
 
-struct Config {
-    QString dbPath = u"/var/lib/pacman/"_s;
-    QStringList repos;
-    QStringList ignorePkg;
-    QStringList ignoreGroup;
-};
-
-/// The parts of pacman.conf in use, read with a single `pacman-conf` run.
-Config readConfig() {
-    Config config;
-    bool options = false;
-    for (const auto& line : outputLines(u"pacman-conf"_s, {}, 10s)) {
-        if (line.startsWith(u'[') && line.endsWith(u']')) {
-            const auto section = line.sliced(1, line.size() - 2);
-            options            = section == "options"_L1;
-            if (!options) {
-                config.repos << section;
-            }
-            continue;
-        }
-        const qsizetype eq = line.indexOf(u'=');
-        if (!options || eq < 0) {
-            continue;
-        }
-        const auto key   = QStringView(line).first(eq).trimmed();
-        const auto value = QStringView(line).sliced(eq + 1).trimmed().toString();
-        if (key == "DBPath"_L1) {
-            config.dbPath = value;
-        } else if (key == "IgnorePkg"_L1) {
-            config.ignorePkg << value;
-        } else if (key == "IgnoreGroup"_L1) {
-            config.ignoreGroup << value;
-        }
-    }
-    return config;
-}
-
 /// A handle with every sync repository registered, in pacman.conf order.
-std::expected<Handle, QString> open(const Config& config) {
+std::expected<Handle, QString> open(const pi::pacman_conf::Config& config) {
     alpm_errno_t err{};
-    Handle handle(alpm_initialize("/", config.dbPath.toUtf8().constData(), &err), &alpm_release);
+    Handle handle(alpm_initialize("/", config.db_path.c_str(), &err), &alpm_release);
     if (!handle) {
         return std::unexpected(QCoreApplication::translate("alpmdb", "Failed to open the pacman database: %1")
                                    .arg(QString::fromUtf8(alpm_strerror(err))));
     }
     for (const auto& repo : config.repos) {
-        alpm_register_syncdb(handle.get(), repo.toUtf8().constData(), ALPM_SIG_USE_DEFAULT);
+        alpm_register_syncdb(handle.get(), repo.c_str(), ALPM_SIG_USE_DEFAULT);
     }
     // let libalpm match the names, patterns and groups the way pacman does
-    for (const auto& pattern : config.ignorePkg) {
-        alpm_option_add_ignorepkg(handle.get(), pattern.toUtf8().constData());
+    for (const auto& pattern : config.ignore_pkg) {
+        alpm_option_add_ignorepkg(handle.get(), pattern.c_str());
     }
-    for (const auto& group : config.ignoreGroup) {
-        alpm_option_add_ignoregroup(handle.get(), group.toUtf8().constData());
+    for (const auto& group : config.ignore_group) {
+        alpm_option_add_ignoregroup(handle.get(), group.c_str());
     }
     return handle;
 }
@@ -121,7 +85,7 @@ int vercmp(const QString& a, const QString& b) {
 }
 
 QStringList unsatisfied(const QStringList& depends) {
-    const auto handle = open(readConfig());
+    const auto handle = open(pi::pacman_conf::read());
     if (!handle) {
         return depends;
     }
@@ -140,14 +104,16 @@ QStringList unsatisfied(const QStringList& depends) {
 }
 
 std::expected<Databases, QString> load() {
-    const auto config = readConfig();
+    const auto config = pi::pacman_conf::read();
     const auto opened = open(config);
     if (!opened) {
         return std::unexpected(opened.error());
     }
     auto* handle = opened->get();
 
-    Databases result{.packages = {}, .dbPath = config.dbPath, .repos = config.repos};
+    Databases result{.packages = {},
+        .dbPath                = QString::fromStdString(config.db_path),
+        .repos                 = config.repos | std::views::transform(&QString::fromStdString) | std::ranges::to<QStringList>()};
     auto& packages = result.packages;
     QHash<QString, qsizetype> index;
     QList<alpm_pkg_t*> candidates;  // the repository package behind each entry
