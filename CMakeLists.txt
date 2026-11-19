@@ -26,13 +26,30 @@ CPMAddPackage(
     NAME rapidyaml
     GITHUB_REPOSITORY biojppm/rapidyaml
     GIT_TAG v0.16.0
-    EXCLUDE_FROM_ALL YES)
+    EXCLUDE_FROM_ALL YES
+)
+CPMAddPackage(
+    NAME fmt
+    GITHUB_REPOSITORY fmtlib/fmt
+    GIT_TAG 12.2.0
+    EXCLUDE_FROM_ALL YES
+)
+CPMAddPackage(
+    NAME spdlog
+    GITHUB_REPOSITORY gabime/spdlog
+    GIT_TAG v1.17.0
+    EXCLUDE_FROM_ALL YES
+)
 # Only the header is used, its CMakeLists is too old for current CMake.
 CPMAddPackage(
     NAME backward
     GITHUB_REPOSITORY bombela/backward-cpp
     GIT_TAG v1.6
-    DOWNLOAD_ONLY YES)
+    DOWNLOAD_ONLY YES
+)
+
+# supress fmt&spdlog warnings
+set_target_properties(fmt spdlog PROPERTIES SYSTEM TRUE)
 
 add_library(backward INTERFACE)
 target_include_directories(backward SYSTEM INTERFACE "${backward_SOURCE_DIR}")
@@ -56,12 +73,18 @@ set_project_warnings(project_warnings)
 
 set(PI_HELPER_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/cachyos-pi")
 
+# import backend
+if(BUILD_TESTING)
+    include(CTest)
+endif()
+add_subdirectory(libpi)
+
 ##
 ## PKGBUILD scanner: text analysis only, shared by the GUI, the CLI and the tests.
 ##
-add_library(pi-scan STATIC src/pkgscan.hpp src/pkgscan.cpp src/gitoutput.hpp src/gitoutput.cpp)
+add_library(pi-scan STATIC src/files.hpp src/pkgscan.hpp src/pkgscan.cpp src/gitoutput.hpp src/gitoutput.cpp)
 target_include_directories(pi-scan PUBLIC src)
-target_link_libraries(pi-scan PUBLIC Qt6::Core PRIVATE project_options project_warnings)
+target_link_libraries(pi-scan PUBLIC Qt6::Core PRIVATE pi::pi project_options project_warnings)
 # the GUI registers Finding, ScriptFile and DiffRun for QML
 qt_extract_metatypes(pi-scan)
 
@@ -82,7 +105,7 @@ target_link_libraries(pi-appimage PUBLIC Qt6::Core PRIVATE project_options proje
 ## GUI
 ##
 qt_add_executable(${PROJECT_NAME}
-    src/main.cpp src/process.hpp src/memory.hpp
+    src/main.cpp src/files.hpp src/process.hpp src/memory.hpp
     src/alpmdb.hpp src/alpmdb.cpp
     src/catalog.hpp src/catalog.cpp
     src/packagemodel.hpp src/packagemodel.cpp
@@ -173,7 +196,7 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
     PI_HELPER_PATH="${PI_HELPER_DIR}/cachyos-pi-helper")
 target_include_directories(${PROJECT_NAME} PRIVATE src)
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    project_options project_warnings pi-scan pi-appimage
+    project_options project_warnings pi::pi pi-scan pi-appimage
     Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Qml Qt6::Quick Qt6::QuickControls2 Qt6::Network Qt6::Concurrent
     AppStreamQt PkgConfig::LIBALPM ryml::ryml backward)
 
@@ -186,7 +209,7 @@ set_source_files_properties(${pi_sources} TARGET_DIRECTORY ${PROJECT_NAME} PROPE
 ## Privileged helper: the only thing that runs as root (through pkexec).
 ##
 add_executable(cachyos-pi-helper src/helper/main.cpp src/helper/shared.hpp)
-target_link_libraries(cachyos-pi-helper PRIVATE project_options project_warnings)
+target_link_libraries(cachyos-pi-helper PRIVATE pi::names project_options project_warnings)
 
 ##
 ## Install
@@ -205,7 +228,6 @@ install(FILES icons/cachyos-pi.png DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hi
 ##
 ## Tests
 ##
-include(CTest)
 if(BUILD_TESTING)
     find_package(Qt6 6.10 REQUIRED COMPONENTS Test)
     qt_add_executable(test-pkgscan tests/test_pkgscan.cpp)
@@ -222,7 +244,7 @@ if(BUILD_TESTING)
         src/catalog.hpp src/catalog.cpp)
     target_compile_definitions(test-pkglist PRIVATE PKGLIST_FILE="${CMAKE_CURRENT_SOURCE_DIR}/pkglist.yaml")
     target_include_directories(test-pkglist PRIVATE src)
-    target_link_libraries(test-pkglist PRIVATE project_options project_warnings
+    target_link_libraries(test-pkglist PRIVATE project_options project_warnings pi::pi
         Qt6::Test Qt6::Qml AppStreamQt PkgConfig::LIBALPM ryml::ryml)
     add_test(NAME pkglist COMMAND test-pkglist)
 
@@ -236,7 +258,7 @@ if(BUILD_TESTING)
 
     add_executable(cachyos-pi-helper-test src/helper/main.cpp)
     target_compile_definitions(cachyos-pi-helper-test PRIVATE PI_HELPER_TESTING)
-    target_link_libraries(cachyos-pi-helper-test PRIVATE project_options project_warnings)
+    target_link_libraries(cachyos-pi-helper-test PRIVATE pi::names project_options project_warnings)
 
     qt_add_executable(test-helper tests/test_helper.cpp)
     target_compile_definitions(test-helper PRIVATE

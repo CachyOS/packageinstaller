@@ -1,13 +1,22 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #pragma once
 
-#include <QProcess>
-#include <QProcessEnvironment>
-#include <QStringList>
+#include "pi/process.hpp"
+#include "pi/string_utils.hpp"
 
+#include <cinttypes>
+
+#include <chrono>
 #include <expected>
 #include <functional>
 #include <memory>
+#include <ranges>
+#include <string>
+#include <vector>
+
+#include <QProcess>
+#include <QProcessEnvironment>
+#include <QStringList>
 
 /// The system environment with untranslated messages and UTF-8 output, for parsing.
 inline QProcessEnvironment plainEnvironment() {
@@ -16,28 +25,29 @@ inline QProcessEnvironment plainEnvironment() {
     return env;
 }
 
-/// Runs `program` in the plain environment and returns the lines it printed. The list is empty
-/// when it failed, ran longer than `timeout` milliseconds or `cancelled` said so meanwhile.
-inline QStringList outputLines(const QString& program, const QStringList& arguments, int timeout = 30000,
-    const std::function<bool()>& cancelled = {}) {
-    QProcess process;
-    process.setProcessEnvironment(plainEnvironment());
-    process.start(program, arguments);
-    for (int waited = 0; !process.waitForFinished(200) && process.state() != QProcess::NotRunning; waited += 200) {
-        if (waited >= timeout || (cancelled && cancelled())) {
-            process.kill();
-            process.waitForFinished(1000);
-            return {};
-        }
-    }
-    if (process.exitStatus() != QProcess::NormalExit || process.exitCode() != 0) {
+/// The lines `program` printed, empty when it failed, timed out or `cancelled` said so.
+inline QStringList outputLines(const QString& program, const QStringList& arguments,
+    std::chrono::seconds timeout = std::chrono::seconds{30}, std::function<bool()> cancelled = {}) {
+    std::vector argv{program.toStdString()};
+    argv.append_range(arguments | std::views::transform(&QString::toStdString));
+
+    // pass it to gucc
+    const auto result = pi::utils::run(argv, {.timeout = timeout, .cancel_requested = std::move(cancelled)});
+    if (!result.ok()) {
         return {};
     }
-    return QString::fromUtf8(process.readAllStandardOutput()).split(u'\n', Qt::SkipEmptyParts);
+    QStringList lines;
+    for (const auto line : pi::utils::make_split_view(result.output)) {
+        lines << QString::fromUtf8(line);
+    }
+    return lines;
 }
 
 /// Why `readOutput()` passes on no output.
-enum class OutputFailure { Failed, TooLarge };
+enum class OutputFailure : std::uint8_t {
+    Failed,
+    TooLarge,
+};
 
 /// Starts `program` without waiting for it, with nothing on its standard input. Once it ended, `done` gets what it printed, unless it did not start, did not end
 /// with 0, or printed more than `maxSize` bytes; it is stopped then. What it writes to

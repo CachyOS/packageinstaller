@@ -12,6 +12,8 @@
 
 #include "shared.hpp"
 
+#include "pi/names.hpp"
+
 #include <cerrno>   // for errno, EINTR
 #include <csignal>  // for signal
 #include <cstdio>   // for stderr
@@ -34,6 +36,10 @@
 #include <unistd.h>    // for fork, setsid, execve, _exit
 
 namespace fs = std::filesystem;
+using pi::utils::is_digit;
+using pi::utils::is_lower;
+using pi::utils::is_package_name;
+using pi::utils::is_repo_target;
 using namespace std::string_literals;
 using namespace std::string_view_literals;
 
@@ -63,27 +69,6 @@ struct Command {
     Args args;
 };
 
-constexpr auto is_lower_or_digit(char c) noexcept -> bool {
-    return (c >= 'a' && c <= 'z') || (c >= '0' && c <= '9');
-}
-
-constexpr auto is_package_name(std::string_view name) noexcept -> bool {
-    if (name.empty() || name.size() > 255 || name.front() == '-' || name.front() == '.') {
-        return false;
-    }
-    return std::ranges::all_of(name, [](char c) {
-        return is_lower_or_digit(c) || (c >= 'A' && c <= 'Z') || "@._+-"sv.contains(c);
-    });
-}
-
-constexpr auto is_repo_target(std::string_view target) noexcept -> bool {
-    const auto slash = target.find('/');
-    if (slash == std::string_view::npos) {
-        return is_package_name(target);
-    }
-    return is_package_name(target.substr(0, slash)) && is_package_name(target.substr(slash + 1));
-}
-
 constexpr auto is_package_file_name(std::string_view name) noexcept -> bool {
     constexpr auto kMarker = ".pkg.tar"sv;
     const auto marker      = name.rfind(kMarker);
@@ -93,7 +78,7 @@ constexpr auto is_package_file_name(std::string_view name) noexcept -> bool {
     const auto ending = name.substr(marker + kMarker.size());
     return ending.empty()
         || (ending.size() > 1 && ending.front() == '.'
-            && std::ranges::all_of(ending.substr(1), [](char c) { return is_lower_or_digit(c) || c == 'Z'; }));
+            && std::ranges::all_of(ending.substr(1), [](char c) { return is_lower(c) || is_digit(c) || c == 'Z'; }));
 }
 
 auto resolve_package_file(std::string_view given) noexcept -> std::optional<std::string> {
