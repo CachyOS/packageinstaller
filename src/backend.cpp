@@ -2,11 +2,13 @@
 #include "backend.hpp"
 #include "helper/shared.hpp"
 #include "iconprovider.hpp"
+#include "icontheme.hpp"
 #include "memory.hpp"
 #include "process.hpp"
 
 #include <QFile>
 #include <QFileInfo>
+#include <QIcon>
 #include <QQmlEngine>
 #include <QStandardPaths>
 #include <QtConcurrent/QtConcurrentRun>
@@ -152,9 +154,18 @@ void Backend::reload() {
     }
     m_loading = true;
     emit loadingChanged();
-    QtConcurrent::run(catalog::load).then(this, [this](std::expected<catalog::LoadResult, QString> result) {
-        onLoaded(std::move(result));
-    });
+    // build the theme index with the package list in the background,
+    // doesn't need to know context from GUI thread
+    const icontheme::Theme theme{
+        .name          = QIcon::themeName(),
+        .searchPaths   = QIcon::themeSearchPaths(),
+        .fallbackPaths = QIcon::fallbackSearchPaths(),
+    };
+    QtConcurrent::run([theme] { return std::pair{catalog::load(), icontheme::appIcons(theme)}; })
+        .then(this, [this](std::pair<std::expected<catalog::LoadResult, QString>, QHash<QString, QString>> loaded) {
+            m_icons->setThemeIndex(std::move(loaded.second));
+            onLoaded(std::move(loaded.first));
+        });
 }
 
 void Backend::onLoaded(std::expected<catalog::LoadResult, QString> result) {

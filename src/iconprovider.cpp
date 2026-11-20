@@ -3,7 +3,6 @@
 
 #include <QElapsedTimer>
 #include <QFileInfo>
-#include <QIcon>
 #include <QImageReader>
 #include <QPainter>
 #include <QPainterPath>
@@ -79,8 +78,12 @@ IconProvider::~IconProvider() {
 
 void IconProvider::setIndex(IconIndex index, bool flatpak) {
     (flatpak ? m_flatpak : m_index) = std::move(index);
+    m_decoded.clear();
+}
+
+void IconProvider::setThemeIndex(QHash<QString, QString> index) {
     // A reload follows an install or removal, which may have brought icons to the theme.
-    m_notInTheme.clear();
+    m_theme = std::move(index);
     m_decoded.clear();
 }
 
@@ -98,7 +101,7 @@ void IconProvider::setAppImageIndex(IconIndex index) {
 }
 
 QQuickImageResponse* IconProvider::requestImageResponse(const QString& id, const QSize& requestedSize) {
-    // the icon theme belong to the GUI thread.
+    // the indexes belong to the GUI thread
     auto request   = std::make_shared<IconRequest>(id, requestedSize.width() > 0 ? requestedSize.width() : 64, id);
     auto* response = new IconResponse(request);
     QMetaObject::invokeMethod(this, [this, request = std::move(request)] {
@@ -129,8 +132,7 @@ void IconProvider::drain() {
 }
 
 void IconProvider::resolve(const Request& request) {
-    const auto& id   = request->id;
-    const int extent = request->extent;
+    const auto& id = request->id;
     // The CachyOS kernels and their modules carry no icon; give them the Kernel Manager logo
     // instead of a letter tile.
     if ((id == "linux-cachyos"_L1 || id.startsWith("linux-cachyos-"_L1))
@@ -144,11 +146,9 @@ void IconProvider::resolve(const Request& request) {
         const auto ref = m_flatpak.value(app);
         // "org.mozilla.firefox": the last part names the app
         const auto tile = app.section(u'.', -1);
-        if (fromFile(request, ref.path, tile)) {
-            return;
+        if (!fromFile(request, ref.path, tile) && !fromFile(request, themed(ref, app), tile)) {
+            generate(request, tile);
         }
-        const auto image = themed(ref, app, extent);
-        request->finish(image.isNull() ? generated(tile, extent) : image);
         return;
     }
 
@@ -156,11 +156,9 @@ void IconProvider::resolve(const Request& request) {
         const auto app  = id.mid(9);
         const auto tile = app.section(u'.', -1);
         const auto ref  = m_appImages.value(app);
-        if (fromFile(request, ref.path, tile)) {
-            return;
+        if (!fromFile(request, ref.path, tile) && !fromFile(request, themed(ref, app), tile)) {
+            generate(request, tile);
         }
-        const auto image = themed(ref, app, extent);
-        request->finish(image.isNull() ? generated(tile, extent) : image);
         return;
     }
 
@@ -168,15 +166,11 @@ void IconProvider::resolve(const Request& request) {
     // name ("gimp-help", "gimp") so related packages share the application's icon.
     for (QString name = id; !name.isEmpty(); name.truncate(qMax<qsizetype>(name.lastIndexOf(u'-'), 0))) {
         const auto ref = m_index.value(name);
-        if (fromFile(request, ref.path, id)) {
-            return;
-        }
-        if (const auto image = themed(ref, name, extent); !image.isNull()) {
-            request->finish(image);
+        if (fromFile(request, ref.path, id) || fromFile(request, themed(ref, name), id)) {
             return;
         }
     }
-    request->finish(generated(id, extent));
+    generate(request, id);
 }
 
 bool IconProvider::fromFile(const Request& request, const QString& path, const QString& fallback) {
@@ -211,25 +205,23 @@ void IconProvider::decoded(const Key& key, const QImage& image) {
         m_decoded.insert(key, new QImage(image), qMax<qsizetype>(image.sizeInBytes(), 1));
     }
     for (const auto& request : m_waiting.take(key)) {
-        request->finish(image.isNull() ? generated(request->fallback, key.second) : image);
+        if (image.isNull()) {
+            generate(request, request->fallback);
+        } else {
+            request->finish(image);
+        }
     }
 }
 
-QImage IconProvider::themed(const IconRef& ref, const QString& name, int extent) {
-    for (const auto& themeName : {ref.stock, name}) {
-        if (themeName.isEmpty() || m_notInTheme.contains(themeName)) {
-            continue;
-        }
-        if (!QIcon::hasThemeIcon(themeName)) {
-            m_notInTheme.insert(themeName);
-            continue;
-        }
-        const auto pixmap = QIcon::fromTheme(themeName).pixmap(QSize(extent, extent), 1.0);  // extent is in pixels already
-        if (!pixmap.isNull()) {
-            return pixmap.toImage();
-        }
+QString IconProvider::themed(const IconRef& ref, const QString& name) const {
+    if (const auto stock = m_theme.constFind(ref.stock); !ref.stock.isEmpty() && stock != m_theme.cend()) {
+        return *stock;
     }
-    return {};
+    return m_theme.value(name);
+}
+
+void IconProvider::generate(const Request& request, const QString& name) {
+    m_pool.start([request, name] { request->finish(generated(name, request->extent)); });
 }
 
 QImage IconProvider::generated(const QString& name, int extent) {

@@ -113,6 +113,7 @@ qt_add_executable(${PROJECT_NAME}
     src/flatpakclient.hpp src/flatpakclient.cpp
     src/appimageclient.hpp src/appimageclient.cpp
     src/iconprovider.hpp src/iconprovider.cpp
+    src/icontheme.hpp src/icontheme.cpp
     src/transaction.hpp src/transaction.cpp
     src/updatenotice.hpp src/updatenotice.cpp
     src/backend.hpp src/backend.cpp)
@@ -271,4 +272,9 @@ if(BUILD_TESTING)
     qt_add_executable(test-appimage tests/test_appimage.cpp)
     target_link_libraries(test-appimage PRIVATE pi-appimage project_options Qt6::Test)
     add_test(NAME appimage COMMAND test-appimage)
+
+    qt_add_executable(test-icontheme tests/test_icontheme.cpp src/icontheme.hpp src/icontheme.cpp)
+    target_include_directories(test-icontheme PRIVATE src)
+    target_link_libraries(test-icontheme PRIVATE project_options project_warnings Qt6::Test)
+    add_test(NAME icontheme COMMAND test-icontheme)
 endif()

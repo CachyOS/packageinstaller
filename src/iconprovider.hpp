@@ -14,18 +14,15 @@ struct IconRequest;
 
 /// `image://pkgicon/<pkgname>`: an icon for every package.
 ///
-/// `image://pkgicon/flatpak/<app id>` is the same for Flatpak apps.
+/// `image://pkgicon/flatpak/<app id>` and `appimage/<id>` are the same for Flatpak apps and AppImages.
 ///
 /// Lookup order: the Kernel Manager logo for the CachyOS kernels, AppStream cached icon, AppStream stock icon / icon theme,
 /// the same again for shortened names ("foo-bar-bin" -> "foo-bar" -> "foo", which
 /// covers AUR variants and split packages), and finally a generated tile so
 /// nothing is ever blank.
 ///
-/// A list asks for dozens of icons at once, and neither source is quick: the AppStream icons
-/// are JPEG XL, milliseconds each to decode, and a name the icon theme does not have takes
-/// about as long to rule out. So files are decoded on worker threads and kept in memory, and
-/// the lookups, which need the GUI thread for the icon theme, run there a few at a time
-/// between other events, remembering what the theme lacks.
+/// A list asks for dozens of icons at once. Asking QIcon would search the
+/// theme directories and render SVGs on the GUI thread, a few milliseconds per name.
 class IconProvider : public QQuickAsyncImageProvider {
  public:
     IconProvider();
@@ -37,6 +34,8 @@ class IconProvider : public QQuickAsyncImageProvider {
     void setIndex(IconIndex index, bool flatpak = false);
     /// Icons of the AppImages the user added, asked for as `appimage/<id>`.
     void setAppImageIndex(IconIndex index);
+    /// The icon theme's application icons by name, from icontheme::appIcons().
+    void setThemeIndex(QHash<QString, QString> index);
 
  private:
     using Request = std::shared_ptr<IconRequest>;
@@ -48,15 +47,18 @@ class IconProvider : public QQuickAsyncImageProvider {
     /// Answers from the icon file, or returns false when there is none.
     bool fromFile(const Request& request, const QString& path, const QString& fallback);
     void decoded(const Key& key, const QImage& image);
-    QImage themed(const IconRef& ref, const QString& name, int extent);
+    /// The theme's file for the stock icon of `ref`, or for `name`.
+    [[nodiscard]] QString themed(const IconRef& ref, const QString& name) const;
+    /// Answers with a letter tile, painted on a worker thread.
+    void generate(const Request& request, const QString& name);
     static QImage generated(const QString& name, int extent);
 
     IconIndex m_index;
     IconIndex m_flatpak;
     IconIndex m_appImages;
+    QHash<QString, QString> m_theme;
     QList<Request> m_queue;
     bool m_draining = false;
-    QSet<QString> m_notInTheme;
     QCache<Key, QImage> m_decoded;
     QHash<Key, QList<Request>> m_waiting;  ///< requests waiting for the same file
     QThreadPool m_pool;
