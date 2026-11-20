@@ -85,7 +85,7 @@ struct AppStreamData {
 /// Newest modification time of the system catalog directories. A catalog update renames
 /// files into them, so this changes whenever the pool would read something new.
 qint64 catalogStamp() {
-    qint64 newest = 0;
+    qint64 newest    = 0;
     const auto touch = [&newest](const QFileInfo& info) {
         if (info.exists()) {
             newest = std::max(newest, info.lastModified().toMSecsSinceEpoch());
@@ -184,7 +184,12 @@ std::expected<LoadResult, QString> load() {
         pkg.categories      = found->categories;
         pkg.screenshots     = found->screenshots;
     }
-    return LoadResult{.packages = std::move(databases->packages), .dbPath = databases->dbPath, .repos = databases->repos, .icons = cache.icons};
+    return LoadResult{
+        .packages = PackageList(std::move(databases->packages)),
+        .dbPath   = databases->dbPath,
+        .repos    = databases->repos,
+        .icons    = cache.icons,
+    };
 }
 
 CuratedList loadCurated(QIODevice& device) {

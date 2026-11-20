@@ -108,6 +108,7 @@ qt_add_executable(${PROJECT_NAME}
     src/main.cpp src/files.hpp src/process.hpp src/qt_utils.hpp src/memory.hpp
     src/alpmdb.hpp src/alpmdb.cpp
     src/catalog.hpp src/catalog.cpp
+    src/packagelist.hpp src/packagelist.cpp
     src/packagemodel.hpp src/packagemodel.cpp
     src/aurclient.hpp src/aurclient.cpp
     src/flatpakclient.hpp src/flatpakclient.cpp
@@ -242,12 +243,22 @@ if(BUILD_TESTING)
 
     qt_add_executable(test-pkglist tests/test_pkglist.cpp
         src/alpmdb.hpp src/alpmdb.cpp
+        src/packagelist.hpp src/packagelist.cpp
         src/catalog.hpp src/catalog.cpp)
     target_compile_definitions(test-pkglist PRIVATE PKGLIST_FILE="${CMAKE_CURRENT_SOURCE_DIR}/pkglist.yaml")
     target_include_directories(test-pkglist PRIVATE src)
     target_link_libraries(test-pkglist PRIVATE project_options project_warnings pi::pi
         Qt6::Test Qt6::Qml AppStreamQt PkgConfig::LIBALPM ryml::ryml)
     add_test(NAME pkglist COMMAND test-pkglist)
+
+    qt_add_executable(test-packagemodel tests/test_packagemodel.cpp
+        src/alpmdb.hpp src/alpmdb.cpp
+        src/packagelist.hpp src/packagelist.cpp
+        src/packagemodel.hpp src/packagemodel.cpp)
+    target_include_directories(test-packagemodel PRIVATE src)
+    target_link_libraries(test-packagemodel PRIVATE project_options project_warnings
+        Qt6::Test Qt6::Qml PkgConfig::LIBALPM)
+    add_test(NAME packagemodel COMMAND test-packagemodel)
 
     qt_add_executable(test-updatenotice tests/test_updatenotice.cpp
         src/updatenotice.hpp src/updatenotice.cpp)

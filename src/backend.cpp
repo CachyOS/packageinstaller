@@ -20,7 +20,7 @@ Backend* s_instance = nullptr;
 }  // namespace
 
 Backend::Backend(IconProvider* icons, QObject* parent)
-  : QObject(parent), m_aur(&m_packages), m_icons(icons) {
+  : QObject(parent), m_aur(&m_list), m_icons(icons) {
     Q_ASSERT(s_instance == nullptr);
     s_instance       = this;
     m_aurEnabled     = m_settings.value(u"aur/enabled"_s, false).toBool();
@@ -170,17 +170,17 @@ void Backend::reload() {
 
 void Backend::onLoaded(std::expected<catalog::LoadResult, QString> result) {
     if (result) {
-        m_error = result->packages.isEmpty() ? tr("The pacman databases are empty. Refresh them with a system update.") : QString();
+        m_error = result->packages.packages().isEmpty() ? tr("The pacman databases are empty. Refresh them with a system update.") : QString();
         if (m_dbWatcher.directories().isEmpty()) {
             m_dbWatcher.addPaths({result->dbPath + u"/local"_s, result->dbPath + u"/sync"_s});
         }
         m_updateNotice.setDatabase(result->dbPath, result->repos);
         m_icons->setIndex(std::move(result->icons));
-        m_packages.reset(std::move(result->packages));
+        m_packages.replace([&] { m_list = std::move(result->packages); });
         applyKnownUpdates();
     } else {
         m_error = result.error();
-        m_packages.reset({});
+        m_packages.replace([&] { m_list = {}; });
     }
     // the databases as libalpm parsed them, and the previous package list
     releaseFreedMemory();
@@ -189,7 +189,7 @@ void Backend::onLoaded(std::expected<catalog::LoadResult, QString> result) {
     for (const auto& section : std::as_const(m_curatedList.sections)) {
         CuratedSection shown{.title = section.title, .names = {}};
         for (const auto& name : section.names) {
-            if (const auto* pkg = m_packages.find(name); pkg != nullptr && !pkg->foreign()) {
+            if (const auto* pkg = m_list.find(name); pkg != nullptr && !pkg->foreign()) {
                 shown.names << name;
             }
         }
@@ -221,11 +221,17 @@ void Backend::applyKnownUpdates() {
     // The sync databases only know what the last refresh saw. Until checkupdates has
     // answered again, its previous answer still holds for all that was not updated since.
     m_newVersions.removeIf([this](const std::pair<const QString&, QString&>& update) {
-        const auto* pkg = m_packages.find(update.first);
+        const auto* pkg = m_list.find(update.first);
         return pkg == nullptr || !pkg->installed() || alpmdb::vercmp(pkg->installedVersion, update.second) >= 0;
     });
     if (!m_newVersions.isEmpty()) {
-        m_packages.applyUpdates(m_newVersions);
+        markUpdates(m_newVersions);
+    }
+}
+
+void Backend::markUpdates(const QHash<QString, QString>& newVersions) {
+    if (const auto rows = m_list.applyUpdates(newVersions)) {
+        m_packages.updated(rows->first, rows->second);
     }
 }
 
@@ -289,21 +295,21 @@ void Backend::onUpdatesChecked(int exitCode, QProcess::ExitStatus status) {
             versions.insert(fields.at(0), fields.at(3));
         }
     }
-    m_packages.applyUpdates(versions);
+    markUpdates(versions);
     m_newVersions = std::move(versions);
     ++m_revision;
     emit revisionChanged();
 }
 
 Package Backend::package(const QString& name) const {
-    const auto* pkg = m_packages.find(name);
+    const auto* pkg = m_list.find(name);
     return pkg == nullptr ? Package{} : *pkg;
 }
 
 void Backend::install(const QString& name) {
     QStringList targets{name};
     for (const auto& companion : m_curatedList.companions.value(name)) {
-        if (const auto* pkg = m_packages.find(companion); pkg != nullptr && !pkg->foreign() && !pkg->installed()) {
+        if (const auto* pkg = m_list.find(companion); pkg != nullptr && !pkg->foreign() && !pkg->installed()) {
             targets << companion;
         }
     }

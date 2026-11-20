@@ -2,6 +2,7 @@
 #pragma once
 
 #include "alpmdb.hpp"
+#include "packagelist.hpp"
 
 #include <QHash>
 #include <QtQml/qqmlregistration.h>
@@ -40,7 +41,7 @@ class Component;
 namespace catalog {
 
 struct LoadResult {
-    QList<Package> packages;
+    PackageList packages;
     QString dbPath;
     QStringList repos;
     IconIndex icons;

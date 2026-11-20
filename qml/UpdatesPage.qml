@@ -45,16 +45,20 @@ Item {
         model: filter
 
         delegate: PackageRow {
-            required property packageInfo pkg
+            id: row
+
+            required property string name
+            required property string version
+            required property string installedVersion
+            required title
+            required summary
+            required source
 
             width: list.rowWidth
-            pkgName: pkg.name
-            title: pkg.title
-            summary: pkg.summary
-            source: pkg.source
-            trailing: pkg.installedVersion + "  →  " + pkg.version
+            pkgName: row.name
+            trailing: row.installedVersion + "  →  " + row.version
             trailingColor: Look.accent
-            onClicked: root.openPackage(pkg.name)
+            onClicked: root.openPackage(row.name)
         }
     }
 

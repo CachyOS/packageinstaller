@@ -2,7 +2,7 @@
 #include "aurclient.hpp"
 #include "gitoutput.hpp"
 #include "memory.hpp"
-#include "packagemodel.hpp"
+#include "packagelist.hpp"
 #include "process.hpp"
 
 #include <QCryptographicHash>
@@ -159,7 +159,7 @@ QUrl infoUrl(const QStringList& names) {
 
 }  // namespace
 
-AurClient::AurClient(const PackageModel* packages, QObject* parent) : QObject(parent), m_packages(packages) {
+AurClient::AurClient(const PackageList* packages, QObject* parent) : QObject(parent), m_packages(packages) {
     // Checkouts only live as long as the window they were reviewed in. Each window has a
     // directory of its own and holds a lock for it, so that a second window does not delete
     // what the first one is building; whatever no running window holds is left over.

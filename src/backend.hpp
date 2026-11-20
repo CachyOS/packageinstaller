@@ -62,7 +62,7 @@ class Backend : public QObject {
     /// The curated shelves, holding only the names the repositories have.
     QList<CuratedSection> curated() const { return m_curated; }
     int curatedCount() const { return static_cast<int>(m_curated.size()); }
-    int updateCount() const { return m_packages.upgradableCount(); }
+    int updateCount() const { return m_list.upgradableCount(); }
     bool checkingUpdates() const { return m_checkingUpdates; }
     bool aurEnabled() const { return m_aurEnabled; }
     void setAurEnabled(bool enabled);
@@ -123,10 +123,12 @@ class Backend : public QObject {
     void onUpdatesChecked(int exitCode, QProcess::ExitStatus status);
     /// Marks the updates checkupdates last listed again, after the package list was read anew.
     void applyKnownUpdates();
+    void markUpdates(const QHash<QString, QString>& newVersions);
     /// Stores a setting and announces it. Returns false when nothing changed.
     bool store(bool& member, bool value, const QString& key, void (Backend::*changed)());
 
-    PackageModel m_packages;
+    PackageList m_list;  ///< the only copy of the package data
+    PackageModel m_packages{m_list};
     AurClient m_aur;
     FlatpakClient m_flatpak;
     AppImageClient m_appImages;

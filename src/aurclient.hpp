@@ -17,7 +17,7 @@
 #include <functional>
 #include <memory>
 
-class PackageModel;
+class PackageList;
 
 /// One AUR package: the RPC record merged with its local state.
 struct AurPackage {
@@ -141,7 +141,7 @@ class AurClient : public QObject {
     Q_PROPERTY(QString changesNote READ changesNote NOTIFY changesChanged FINAL)
 
  public:
-    explicit AurClient(const PackageModel* packages, QObject* parent = nullptr);
+    explicit AurClient(const PackageList* packages, QObject* parent = nullptr);
     ~AurClient() override;
 
     QList<AurPackage> results() const { return m_results; }
@@ -257,7 +257,7 @@ class AurClient : public QObject {
     };
     [[nodiscard]] static bool intact(const Checkout& checkout, bool verifyContents = true);
 
-    const PackageModel* m_packages;
+    const PackageList* m_packages;
     QNetworkAccessManager m_network;
     QList<AurPackage> m_results;
     AurPackage m_details;

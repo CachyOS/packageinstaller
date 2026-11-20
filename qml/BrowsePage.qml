@@ -102,17 +102,19 @@ Item {
         WheelScroll {}
 
         delegate: AppCard {
-            required property packageInfo pkg
+            id: card
+
+            required property string name
+            required title
+            required summary
+            required source
+            required installed
+            required upgradable
 
             width: grid.cellWidth - Look.gutter
             height: grid.cellHeight - Look.gutter
-            pkgName: pkg.name
-            title: pkg.title
-            summary: pkg.summary
-            source: pkg.source
-            installed: pkg.installed
-            upgradable: pkg.upgradable
-            onClicked: root.openPackage(pkg.name)
+            pkgName: card.name
+            onClicked: root.openPackage(card.name)
         }
     }
 

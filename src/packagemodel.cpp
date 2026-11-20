@@ -4,7 +4,6 @@
 #include <QScopedValueRollback>
 
 #include <algorithm>
-#include <numeric>
 
 namespace {
 
@@ -15,98 +14,52 @@ bool isAscii(QStringView text) {
 }  // namespace
 
 int PackageModel::rowCount(const QModelIndex& parent) const {
-    return parent.isValid() ? 0 : static_cast<int>(m_packages.size());
+    return parent.isValid() ? 0 : static_cast<int>(m_list.size());
 }
 
 QVariant PackageModel::data(const QModelIndex& index, int role) const {
     if (!checkIndex(index, CheckIndexOption::IndexIsValid | CheckIndexOption::ParentIsInvalid)) {
         return {};
     }
-    const auto& pkg = m_packages.at(index.row());
+    const auto& pkg = m_list.at(index.row());
     switch (role) {
-    case PackageRole: return QVariant::fromValue(pkg);
-    case NameRole: return pkg.name;
-    default: return {};
+    case NameRole:
+        return pkg.name;
+    case TitleRole:
+        return pkg.title;
+    case SummaryRole:
+        return pkg.summary;
+    case SourceRole:
+        return pkg.source();
+    case InstalledRole:
+        return pkg.installed();
+    case UpgradableRole:
+        return pkg.upgradable;
+    case VersionRole:
+        return pkg.version;
+    case InstalledVersionRole:
+        return pkg.installedVersion;
+    default:
+        return {};
     }
 }
 
 QHash<int, QByteArray> PackageModel::roleNames() const {
-    static const QHash<int, QByteArray> roles{{PackageRole, "pkg"}, {NameRole, "name"}};
+    static const QHash<int, QByteArray> roles{
+        {NameRole, "name"},
+        {TitleRole, "title"},
+        {SummaryRole, "summary"},
+        {SourceRole, "source"},
+        {InstalledRole, "installed"},
+        {UpgradableRole, "upgradable"},
+        {VersionRole, "version"},
+        {InstalledVersionRole, "installedVersion"},
+    };
     return roles;
 }
 
-void PackageModel::reset(QList<Package> packages) {
-    beginResetModel();
-    m_packages = std::move(packages);
-    m_index.clear();
-    m_index.reserve(m_packages.size());
-    m_keys.clear();
-    m_keys.reserve(m_packages.size());
-    for (qsizetype i = 0; i < m_packages.size(); ++i) {
-        const auto& pkg = m_packages.at(i);
-        m_index.insert(pkg.name, i);
-        SearchKey key;
-        key.ascii = isAscii(pkg.name) && isAscii(pkg.title) && isAscii(pkg.summary) && isAscii(pkg.description);
-        if (key.ascii) {
-            key.name    = pkg.name.toLower();
-            key.title   = pkg.title.toLower();
-            key.summary = pkg.summary.toLower();
-            // a package without AppStream data repeats its description as the summary
-            if (pkg.description != pkg.summary) {
-                key.description = pkg.description.toLower();
-            }
-        }
-        m_keys.append(std::move(key));
-    }
-
-    // The order the filter would work out title by title, settled once here.
-    const auto byTitle = [this](qsizetype a, qsizetype b) {
-        return m_packages.at(a).title.compare(m_packages.at(b).title, Qt::CaseInsensitive);
-    };
-    QList<qsizetype> rows(m_packages.size());
-    std::iota(rows.begin(), rows.end(), 0);
-    std::ranges::stable_sort(rows, [&](qsizetype a, qsizetype b) { return byTitle(a, b) < 0; });
-    m_titleOrder.resize(m_packages.size());
-    for (qsizetype position = 0, order = 0; position < rows.size(); ++position) {
-        if (position > 0 && byTitle(rows.at(position - 1), rows.at(position)) != 0) {
-            ++order;
-        }
-        m_titleOrder[rows.at(position)] = order;
-    }
-    endResetModel();
-}
-
-void PackageModel::applyUpdates(const QHash<QString, QString>& newVersions) {
-    qsizetype first = -1;
-    qsizetype last  = -1;
-    for (qsizetype i = 0; i < m_packages.size(); ++i) {
-        auto& pkg             = m_packages[i];
-        const auto found      = newVersions.constFind(pkg.name);
-        const bool upgradable = found != newVersions.cend() && !pkg.ignored;
-        if (!upgradable && !pkg.upgradable) {
-            continue;
-        }
-        if (upgradable) {
-            pkg.version = *found;
-        }
-        pkg.upgradable = upgradable;
-        if (first < 0) {
-            first = i;
-        }
-        last = i;
-    }
-    if (first >= 0) {
-        emit dataChanged(index(static_cast<int>(first)), index(static_cast<int>(last)), {PackageRole});
-    }
-}
-
-const Package* PackageModel::find(const QString& name) const {
-    const auto found = m_index.constFind(name);
-    return found == m_index.cend() ? nullptr : &m_packages.at(*found);
-}
-
-int PackageModel::upgradableCount() const {
-    return static_cast<int>(std::ranges::count_if(m_packages, &Package::upgradable));
+void PackageModel::updated(qsizetype first, qsizetype last) {
+    emit dataChanged(index(static_cast<int>(first)), index(static_cast<int>(last)), {UpgradableRole, VersionRole});
 }
 
 PackageFilter::PackageFilter(QObject* parent) : QSortFilterProxyModel(parent) {
@@ -150,7 +103,8 @@ void PackageFilter::setQuery(const QString& query) {
     refilter([&] {
         m_query  = trimmed;
         m_needle = isAscii(trimmed) ? trimmed.toLower() : QString();
-    }, true);
+    },
+        true);
     emit queryChanged();
 }
 
@@ -171,7 +125,7 @@ void PackageFilter::setMode(Mode mode) {
 }
 
 /// 0 = no match; lower is better otherwise.
-int PackageFilter::rank(const Package& pkg, const PackageModel::SearchKey& key) const {
+int PackageFilter::rank(const Package& pkg, const PackageList::SearchKey& key) const {
     if (m_query.isEmpty()) {
         return 1;
     }
@@ -209,7 +163,8 @@ bool PackageFilter::filterAcceptsRow(int sourceRow, const QModelIndex& /*sourceP
     if (model == nullptr) {
         return false;
     }
-    const auto& pkg = model->at(sourceRow);
+    const auto& list = model->list();
+    const auto& pkg  = list.at(sourceRow);
     const bool shown = [&] {
         switch (m_mode) {
         case Apps: return pkg.isApp;
@@ -225,17 +180,17 @@ bool PackageFilter::filterAcceptsRow(int sourceRow, const QModelIndex& /*sourceP
     if (m_rank.size() != model->rowCount()) {
         m_rank.resize(model->rowCount());
     }
-    m_rank[sourceRow] = rank(pkg, model->searchKey(sourceRow));
+    m_rank[sourceRow] = rank(pkg, list.searchKey(sourceRow));
     return m_rank.at(sourceRow) != 0;
 }
 
 bool PackageFilter::lessThan(const QModelIndex& left, const QModelIndex& right) const {
-    const auto* model = static_cast<const PackageModel*>(sourceModel());
+    const auto& list = static_cast<const PackageModel*>(sourceModel())->list();
     if (const int ra = m_rank.value(left.row()), rb = m_rank.value(right.row()); ra != rb) {
         return ra < rb;
     }
-    if (const bool a = model->at(left.row()).isApp, b = model->at(right.row()).isApp; a != b) {
+    if (const bool a = list.at(left.row()).isApp, b = list.at(right.row()).isApp; a != b) {
         return a;
     }
-    return model->titleOrder(left.row()) < model->titleOrder(right.row());
+    return list.titleOrder(left.row()) < list.titleOrder(right.row());
 }
