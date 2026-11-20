@@ -28,6 +28,9 @@ ScrollPage {
     // Fresh RPC data once it arrives, the search result until then.
     readonly property aurPackage info: Backend.aur.details.name === item.name ? Backend.aur.details : item
     readonly property bool ready: Backend.aur.pkgbuild.length > 0 && !Backend.aur.loadingDetails
+    // An update shows what changed in every file since the installed version: reading
+    // that is enough, the rest is what was trusted before.
+    readonly property bool changesOnly: Backend.aur.changes.length > 0
 
     component Paragraph: PlainText {
         color: Look.textMuted
@@ -248,8 +251,12 @@ ScrollPage {
         Paragraph {
             width: checks.width
             text: Backend.aur.findingCount > 0
-                ? qsTr("An automatic check marked the points below. It only knows common tricks and cannot tell you that a package is safe, so read the script as well.")
-                : qsTr("The automatic check found nothing unusual. It only knows common tricks and cannot tell you that a package is safe, so still read the script.")
+                ? (root.changesOnly
+                    ? qsTr("An automatic check marked the points below. It only knows common tricks and cannot tell you that a package is safe, so read the changes as well.")
+                    : qsTr("An automatic check marked the points below. It only knows common tricks and cannot tell you that a package is safe, so read the script as well."))
+                : (root.changesOnly
+                    ? qsTr("The automatic check found nothing unusual. It only knows common tricks and cannot tell you that a package is safe, so still read the changes.")
+                    : qsTr("The automatic check found nothing unusual. It only knows common tricks and cannot tell you that a package is safe, so still read the script."))
         }
 
         Card {
@@ -360,7 +367,7 @@ ScrollPage {
         spacing: 10
 
         FileSection {
-            visible: Backend.aur.changes.length > 0
+            visible: root.changesOnly
             width: review.width
             name: qsTr("Changes since version %1").arg(root.info.installedVersion)
             note: qsTr("What changed in this package since the version you have installed. Only the recipe is compared: the source code it downloads can change without showing up here.")
@@ -374,11 +381,21 @@ ScrollPage {
             text: Backend.aur.changesNote
         }
 
+        // where the confirmation goes when only the changes need reading
+        Column {
+            id: earlyConfirm
+            visible: root.changesOnly
+            width: review.width
+            bottomPadding: 20
+        }
+
         FileSection {
             id: pkgbuild
             width: review.width
             name: "PKGBUILD"
-            note: qsTr("This script runs on your machine when the package is built. Read it before you continue.")
+            note: root.changesOnly
+                ? qsTr("The whole script as it is now, for reference. Only the changes above are new since version %1.").arg(root.info.installedVersion)
+                : qsTr("This script runs on your machine when the package is built. Read it before you continue.")
             text: Backend.aur.pkgbuild
             marks: root.marksFor("PKGBUILD")
             minimumHeight: 120
@@ -415,72 +432,81 @@ ScrollPage {
             }
         }
 
-        CheckBox {
-            id: reviewBox
-            visible: !root.info.inRepos
-            enabled: root.ready
-            text: Backend.aur.fileCount > 0 ? qsTr("I have read the PKGBUILD and the files above, and trust them")
-                : qsTr("I have read the PKGBUILD and trust it")
+        // after the whole recipe, or under the changes when they are all there is to read
+        Column {
+            id: confirmation
+            parent: root.changesOnly ? earlyConfirm : review
+            width: review.width
+            spacing: 10
 
-            contentItem: PlainText {
-                leftPadding: reviewBox.indicator.width + 10
-                text: reviewBox.text
-                verticalAlignment: Text.AlignVCenter
-            }
+            CheckBox {
+                id: reviewBox
+                visible: !root.info.inRepos
+                enabled: root.ready
+                text: root.changesOnly ? qsTr("I have read the changes and trust them")
+                    : Backend.aur.fileCount > 0 ? qsTr("I have read the PKGBUILD and the files above, and trust them")
+                    : qsTr("I have read the PKGBUILD and trust it")
 
-            indicator: Rectangle {
-                implicitWidth: 20
-                implicitHeight: 20
-                y: (reviewBox.height - height) / 2
-                radius: 5
-                color: reviewBox.checked ? Look.accent : Look.surface
-                border.width: reviewBox.checked ? 0 : (reviewBox.visualFocus ? 2 : 1)
-                border.color: reviewBox.visualFocus ? Look.accent : Look.textMuted
+                contentItem: PlainText {
+                    leftPadding: reviewBox.indicator.width + 10
+                    text: reviewBox.text
+                    verticalAlignment: Text.AlignVCenter
+                }
 
-                Glyph {
-                    anchors.centerIn: parent
-                    visible: reviewBox.checked
-                    size: 16
-                    strokeWidth: 2.6
-                    color: Look.onAccent
-                    path: "M5 12.5l4.5 4.5L19 7"
+                indicator: Rectangle {
+                    implicitWidth: 20
+                    implicitHeight: 20
+                    y: (reviewBox.height - height) / 2
+                    radius: 5
+                    color: reviewBox.checked ? Look.accent : Look.surface
+                    border.width: reviewBox.checked ? 0 : (reviewBox.visualFocus ? 2 : 1)
+                    border.color: reviewBox.visualFocus ? Look.accent : Look.textMuted
+
+                    Glyph {
+                        anchors.centerIn: parent
+                        visible: reviewBox.checked
+                        size: 16
+                        strokeWidth: 2.6
+                        color: Look.onAccent
+                        path: "M5 12.5l4.5 4.5L19 7"
+                    }
                 }
             }
-        }
 
-        Notice {
-            width: review.width
-            tone: Notice.Danger
-            text: root.blocked
-        }
-
-        Row {
-            spacing: 12
-
-            PillButton {
-                implicitWidth: Math.max(190, implicitContentWidth + 36)
-                size: "large"
-                visible: !root.info.inRepos
-                enabled: Backend.paruAvailable && reviewBox.checked && root.ready && (!root.last || !Backend.aur.resolving)
-                tone: Backend.aur.dangerous ? "danger" : "primary"
-                text: !root.last ? qsTr("Next package")
-                    : root.queued ? (root.updates ? qsTr("Build and update %n package(s)", "", root.accepted.length + 1)
-                        : qsTr("Build and install %n package(s)", "", root.accepted.length + 1))
-                    : root.info.upgradable ? qsTr("Build and update")
-                    : root.info.installed ? qsTr("Rebuild and reinstall") : qsTr("Build and install")
-                onClicked: root.advance(true)
+            Notice {
+                width: review.width
+                tone: Notice.Danger
+                text: root.blocked
             }
 
-            PillButton {
-                size: "large"
-                visible: root.queued
-                enabled: !root.last || Backend.paruAvailable || root.accepted.length === 0
-                tone: "soft"
-                text: !root.last ? qsTr("Skip this package")
-                    : root.accepted.length === 0 ? qsTr("Skip")
-                    : root.updates ? qsTr("Skip and update %n package(s)", "", root.accepted.length)
-                    : qsTr("Skip and install %n package(s)", "", root.accepted.length)
-                onClicked: root.advance(false)
+            Row {
+                spacing: 12
+
+                PillButton {
+                    implicitWidth: Math.max(190, implicitContentWidth + 36)
+                    size: "large"
+                    visible: !root.info.inRepos
+                    enabled: Backend.paruAvailable && reviewBox.checked && root.ready && (!root.last || !Backend.aur.resolving)
+                    tone: Backend.aur.dangerous ? "danger" : "primary"
+                    text: !root.last ? qsTr("Next package")
+                        : root.queued ? (root.updates ? qsTr("Build and update %n package(s)", "", root.accepted.length + 1)
+                            : qsTr("Build and install %n package(s)", "", root.accepted.length + 1))
+                        : root.info.upgradable ? qsTr("Build and update")
+                        : root.info.installed ? qsTr("Rebuild and reinstall") : qsTr("Build and install")
+                    onClicked: root.advance(true)
+                }
+
+                PillButton {
+                    size: "large"
+                    visible: root.queued
+                    enabled: !root.last || Backend.paruAvailable || root.accepted.length === 0
+                    tone: "soft"
+                    text: !root.last ? qsTr("Skip this package")
+                        : root.accepted.length === 0 ? qsTr("Skip")
+                        : root.updates ? qsTr("Skip and update %n package(s)", "", root.accepted.length)
+                        : qsTr("Skip and install %n package(s)", "", root.accepted.length)
+                    onClicked: root.advance(false)
+                }
             }
         }
     }
