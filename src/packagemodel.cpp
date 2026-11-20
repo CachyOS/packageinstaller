@@ -124,6 +124,31 @@ void PackageFilter::setMode(Mode mode) {
     emit modeChanged();
 }
 
+void PackageFilter::setNames(const QStringList& names) {
+    if (names == m_names) {
+        return;
+    }
+
+    auto functor = [&] {
+        m_names = names;
+        m_position.clear();
+        for (int i = 0; i < m_names.size(); ++i) {
+            m_position.insert(m_names.at(i), i);
+        }
+    };
+    refilter(std::move(functor), true);
+    emit namesChanged();
+}
+
+void PackageFilter::setLimit(int limit) {
+    if (limit == m_limit) {
+        return;
+    }
+    // rows change quite freq, the cards stay as they are
+    refilter([&] { m_limit = limit; }, false);
+    emit limitChanged();
+}
+
 /// 0 = no match; lower is better otherwise.
 int PackageFilter::rank(const Package& pkg, const PackageList::SearchKey& key) const {
     if (m_query.isEmpty()) {
@@ -165,12 +190,20 @@ bool PackageFilter::filterAcceptsRow(int sourceRow, const QModelIndex& /*sourceP
     }
     const auto& list = model->list();
     const auto& pkg  = list.at(sourceRow);
+    if (!m_names.isEmpty()) {
+        const int position = m_position.value(pkg.name, -1);
+        return position >= 0 && (m_limit < 0 || position < m_limit);
+    }
     const bool shown = [&] {
         switch (m_mode) {
-        case Apps: return pkg.isApp;
-        case Installed: return pkg.installed();
-        case Updates: return pkg.upgradable;
-        case All: break;
+        case Apps:
+            return pkg.isApp;
+        case Installed:
+            return pkg.installed();
+        case Updates:
+            return pkg.upgradable;
+        case All:
+            break;
         }
         return true;
     }();
@@ -186,6 +219,9 @@ bool PackageFilter::filterAcceptsRow(int sourceRow, const QModelIndex& /*sourceP
 
 bool PackageFilter::lessThan(const QModelIndex& left, const QModelIndex& right) const {
     const auto& list = static_cast<const PackageModel*>(sourceModel())->list();
+    if (!m_names.isEmpty()) {
+        return m_position.value(list.at(left.row()).name) < m_position.value(list.at(right.row()).name);
+    }
     if (const int ra = m_rank.value(left.row()), rb = m_rank.value(right.row()); ra != rb) {
         return ra < rb;
     }

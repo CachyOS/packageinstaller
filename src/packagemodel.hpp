@@ -47,6 +47,10 @@ class PackageFilter : public QSortFilterProxyModel {
     Q_PROPERTY(QString query READ query WRITE setQuery NOTIFY queryChanged FINAL)
     Q_PROPERTY(QString category READ category WRITE setCategory NOTIFY categoryChanged FINAL)
     Q_PROPERTY(Mode mode READ mode WRITE setMode NOTIFY modeChanged FINAL)
+    /// Only these packages, in this order, for the home page.
+    Q_PROPERTY(QStringList names READ names WRITE setNames NOTIFY namesChanged FINAL)
+    /// At most this many of names.
+    Q_PROPERTY(int limit READ limit WRITE setLimit NOTIFY limitChanged FINAL)
     Q_PROPERTY(int count READ count NOTIFY countChanged FINAL)
 
  public:
@@ -61,12 +65,18 @@ class PackageFilter : public QSortFilterProxyModel {
     void setCategory(const QString& category);
     Mode mode() const { return m_mode; }
     void setMode(Mode mode);
+    QStringList names() const { return m_names; }
+    void setNames(const QStringList& names);
+    int limit() const { return m_limit; }
+    void setLimit(int limit);
     int count() const { return rowCount(); }
 
  signals:
     void queryChanged();
     void categoryChanged();
     void modeChanged();
+    void namesChanged();
+    void limitChanged();
     void countChanged();
 
  protected:
@@ -83,6 +93,9 @@ class PackageFilter : public QSortFilterProxyModel {
     QString m_needle;  ///< the query in lower case; empty unless the query is plain ASCII
     QString m_category;
     Mode m_mode = All;
+    QStringList m_names;
+    QHash<QString, int> m_position;  ///< in `m_names`
+    int m_limit = -1;
     mutable QList<int> m_rank;  ///< search rank per source row, filled by filterAcceptsRow
     int m_count        = 0;
     bool m_refiltering = false;

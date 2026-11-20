@@ -260,6 +260,15 @@ if(BUILD_TESTING)
         Qt6::Test Qt6::Qml PkgConfig::LIBALPM)
     add_test(NAME packagemodel COMMAND test-packagemodel)
 
+    qt_add_executable(test-packagefilter tests/test_packagefilter.cpp
+        src/alpmdb.hpp src/alpmdb.cpp
+        src/packagelist.hpp src/packagelist.cpp
+        src/packagemodel.hpp src/packagemodel.cpp)
+    target_include_directories(test-packagefilter PRIVATE src)
+    target_link_libraries(test-packagefilter PRIVATE project_options project_warnings
+        Qt6::Test Qt6::Qml PkgConfig::LIBALPM)
+    add_test(NAME packagefilter COMMAND test-packagefilter)
+
     qt_add_executable(test-updatenotice tests/test_updatenotice.cpp
         src/updatenotice.hpp src/updatenotice.cpp)
     target_compile_definitions(test-updatenotice PRIVATE PI_VERSION="${PROJECT_VERSION}")

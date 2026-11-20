@@ -10,11 +10,6 @@ ScrollPage {
     signal browse
     signal showUpdates
 
-    // `revision` only makes the binding look the package up again after a reload.
-    function lookup(name: string, revision: int): packageInfo {
-        return Backend.package(name);
-    }
-
     spacing: 26
 
     Rectangle {
@@ -154,26 +149,35 @@ ScrollPage {
                 }
             }
 
+            // a new column count adds or removes cards at the end instead of rebuilding the shelf
+            PackageFilter {
+                id: cards
+                sourceModel: Backend.packages
+                names: shelf.modelData.names
+                limit: shelf.expanded ? -1 : shelf.limit
+            }
+
             Flow {
                 width: shelf.width
                 spacing: 12
 
                 Repeater {
-                    model: shelf.expanded ? shelf.modelData.names : shelf.modelData.names.slice(0, shelf.limit)
+                    model: cards
 
                     AppCard {
-                        required property string modelData
-                        readonly property packageInfo pkg: root.lookup(modelData, Backend.revision)
+                        id: card
+
+                        required property string name
+                        required title
+                        required summary
+                        required source
+                        required installed
+                        required upgradable
 
                         width: shelf.cardWidth
                         height: 104
-                        pkgName: modelData
-                        title: pkg.title
-                        summary: pkg.summary
-                        source: pkg.source
-                        installed: pkg.installed
-                        upgradable: pkg.upgradable
-                        onClicked: root.openPackage(modelData)
+                        pkgName: card.name
+                        onClicked: root.openPackage(card.name)
                     }
                 }
             }
