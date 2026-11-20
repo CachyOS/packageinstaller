@@ -310,12 +310,31 @@ QtObject {
             }
         }
     })
-    /// in the order the settings page shows them
-    readonly property var themeNames: ["classic", "midnight", "graphite", "aurora", "nord", "dracula", "catppuccin", "catppuccinmacchiato", "catppuccinfrappe",
+    /// The built-in themes, in the order the settings page shows them.
+    readonly property var builtinThemeNames: ["classic", "midnight", "graphite", "aurora", "nord", "dracula", "catppuccin", "catppuccinmacchiato", "catppuccinfrappe",
         "tokyonight", "solarized", "gruvbox", "rosepine", "everforest"]
 
-    // an unknown name in the settings file falls back to the classic look
-    readonly property var theme: themes[settings.theme] ?? themes["classic"]
+    // "wallpaper" is offered only while Event Horizon has rendered a palette for it.
+    readonly property var themeNames: WallpaperPalette.available
+        ? builtinThemeNames.concat(["wallpaper"]) : builtinThemeNames
+
+    /// The entry behind a theme name. "wallpaper" carries the colours the shell
+    /// derived from the desktop wallpaper; an unknown name still falls back to
+    /// the classic look.
+    function themeFor(name: string): var {
+        if (name === "wallpaper" && WallpaperPalette.available) {
+            return {
+                title: qsTr("Wallpaper"),
+                hint: qsTr("Colours taken from the desktop wallpaper"),
+                dark: WallpaperPalette.palette.dark,
+                light: WallpaperPalette.palette.light,
+                hero: WallpaperPalette.palette.hero
+            };
+        }
+        return themes[name] ?? themes["classic"];
+    }
+
+    readonly property var theme: themeFor(settings.theme)
     readonly property var palette: dark ? theme.dark : theme.light
 
     readonly property color window: palette.window

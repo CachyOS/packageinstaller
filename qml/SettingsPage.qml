@@ -72,7 +72,7 @@ ScrollPage {
                     id: card
 
                     required property string modelData
-                    readonly property var entry: Look.themes[modelData]
+                    readonly property var entry: Look.themeFor(modelData)
                     readonly property bool current: Look.settings.theme === modelData
 
                     width: Math.max(220, Math.min(300, (themeFlow.width - 14) / 2))
