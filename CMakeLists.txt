@@ -141,6 +141,7 @@ set(PI_QML_FILES
     qml/ThemePreview.qml
     qml/DetailsHero.qml
     qml/ScreenshotStrip.qml
+    qml/ScreenshotViewer.qml
     qml/FactsCard.qml
     qml/UpdatesPage.qml
     qml/UpdateNoticeBox.qml
