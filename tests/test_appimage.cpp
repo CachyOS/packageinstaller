@@ -375,6 +375,8 @@ manager = GithubUpdater
         QCOMPARE(appimage::patternVariant(u"App-2.0-x86_64.AppImage"_s), release);
         QCOMPARE(appimage::patternVariant(u"App-*-x86_64.AppImage.zsync"_s), release);
         QVERIFY(appimage::patternVariant(u"App-*-lite-x86_64.AppImage"_s) != release);
+        // the name of the app, not a version
+        QVERIFY(appimage::patternVariant(u"*-x86_64.AppImage.zsync"_s).isEmpty());
         // which file it is cannot be told
         QVERIFY(appimage::patternVariant(u"App*.AppImage"_s).isEmpty());
         QVERIFY(appimage::patternVariant(u"App-*x86_64.AppImage"_s).isEmpty());

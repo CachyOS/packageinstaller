@@ -165,8 +165,9 @@ QString patternVariant(const QString& given) {
     if (pattern.endsWith(".zsync"_L1, Qt::CaseInsensitive)) {
         pattern.chop(6);
     }
-    // "?" and "[...]" are rare in these patterns and not worth guessing at
-    if (pattern.contains(u'?') || pattern.contains(u'[')) {
+    // "?" and "[...]" are rare in these patterns and not worth guessing at, and a "*" at the
+    // start stands for the name of the app rather than for a version
+    if (pattern.contains(u'?') || pattern.contains(u'[') || pattern.startsWith(u'*')) {
         return {};
     }
     // a "*" that stands alone, or after a "v", is where the version goes; inside a word it could be anything
