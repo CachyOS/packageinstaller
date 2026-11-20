@@ -854,7 +854,8 @@ const appimage::Asset* newerAsset(const QHash<QString, appimage::Release>& relea
     if (release == releases.cend()) {
         return nullptr;
     }
-    const auto file = appimage::choose(release->assets, tracked.variant);
+    // a file this app never downloaded has the kind another program's records suggest
+    const auto file = appimage::choose(release->assets, tracked.variant, tracked.asset == 0);
     if (file < 0) {
         return nullptr;
     }

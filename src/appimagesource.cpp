@@ -171,7 +171,7 @@ QString variant(const QString& fileName) {
     return name.replace(version, u"#"_s);
 }
 
-qsizetype choose(const QList<Asset>& assets, const QString& variant) {
+qsizetype choose(const QList<Asset>& assets, const QString& variant, bool guessed) {
     qsizetype found = -1;
     int matches     = 0;
     for (qsizetype i = 0; i < assets.size(); ++i) {
@@ -183,8 +183,8 @@ qsizetype choose(const QList<Asset>& assets, const QString& variant) {
     if (matches == 1) {
         return found;
     }
-    // only a file whose kind was never known may be continued by whatever is there
-    return variant.isEmpty() && assets.size() == 1 ? 0 : -1;
+    // only a file whose kind was never known, or only guessed, may be continued by whatever is there
+    return (variant.isEmpty() || guessed) && assets.size() == 1 ? 0 : -1;
 }
 
 }  // namespace appimage

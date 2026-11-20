@@ -68,7 +68,8 @@ bool sameRelease(QStringView one, QStringView other);
 QString variant(const QString& fileName);
 
 /// The file of `assets` that continues `variant`: the one of that kind. For an empty
-/// `variant` the only file there is. -1 when that is not clear.
-qsizetype choose(const QList<Asset>& assets, const QString& variant);
+/// `variant` the only file there is, and so for a `guessed` one, which another program's
+/// records gave and which may name no file at all. -1 when that is not clear.
+qsizetype choose(const QList<Asset>& assets, const QString& variant, bool guessed = false);
 
 }  // namespace appimage

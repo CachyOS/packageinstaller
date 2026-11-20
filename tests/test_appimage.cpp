@@ -526,6 +526,17 @@ manager = GithubUpdater
         QCOMPARE(appimage::choose(assets.mid(0, 1), u"other-#.appimage"_s), -1);
         QCOMPARE(appimage::choose(assets.mid(0, 1), QString()), 0);
         QCOMPARE(appimage::choose({}, u"other-#.appimage"_s), -1);
+
+        // a kind another program's records suggest: the only file there is continues it too
+        QCOMPARE(appimage::choose(assets, appimage::variant(u"App-1.9-lite-x86_64.AppImage"_s), true), 1);
+        QCOMPARE(appimage::choose(assets, u"other-#.appimage"_s, true), -1);
+        QCOMPARE(appimage::choose({}, u"other-#.appimage"_s, true), -1);
+        // as for a file Shelly downloaded and named after the app
+        const auto localsend = appimage::parseRelease(releaseJson(u"v1.18.2"_s, {file(3, u"LocalSend-1.18.2-linux-x86-64.AppImage"_s)}))->assets;
+        for (const auto& name : {u"LocalSend.AppImage"_s, u"LocalSend-v1.17.0.AppImage"_s}) {
+            QCOMPARE(appimage::choose(localsend, appimage::variant(name)), -1);
+            QCOMPARE(appimage::choose(localsend, appimage::variant(name), true), 0);
+        }
     }
 };
 
