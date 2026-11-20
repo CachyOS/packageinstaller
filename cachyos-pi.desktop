@@ -95,4 +95,5 @@ Icon=cachyos-pi
 NoDisplay=false
 Terminal=false
 Categories=System
+Keywords=store;software;app store;apps;packages;package manager;installer;install;applications;repository;
 Type=Application
