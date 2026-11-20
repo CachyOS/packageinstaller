@@ -115,6 +115,7 @@ qt_add_executable(${PROJECT_NAME}
     src/appimageclient.hpp src/appimageclient.cpp
     src/iconprovider.hpp src/iconprovider.cpp
     src/icontheme.hpp src/icontheme.cpp
+    src/graphics.hpp src/graphics.cpp
     src/transaction.hpp src/transaction.cpp
     src/updatenotice.hpp src/updatenotice.cpp
     src/backend.hpp src/backend.cpp)

@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "backend.hpp"
+#include "graphics.hpp"
 #include "iconprovider.hpp"
 
 #include <QApplication>
@@ -31,8 +32,9 @@ int main(int argc, char** argv) {
         QCoreApplication::installTranslator(&translator);
     }
 
-    // The UI brings its own look; Basic is the style meant for customisation.
+    // We enforce the custom UI style.
     QQuickStyle::setStyle(u"Basic"_s);
+    graphics::selectBackend();
 
     auto* icons = new IconProvider;  // owned by the engine below
     Backend backend(icons);
