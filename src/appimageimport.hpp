@@ -33,6 +33,11 @@ struct ShellyApp {
     QString icon;     ///< name of the icon Shelly put into the user's icon theme
     std::optional<Source> source;  ///< the repository when Shelly updates it from GitHub
     QString release;  ///< the release Shelly installed, else the version the file gives; may lack the "v" of a tag
+    /// Which file of a release it is, from the file name pattern of the update information the
+    /// AppImage carries, else from the name of the file. A guess either way: Shelly names a file
+    /// it downloaded after the app, "<name>.AppImage", or "<name>-<version>.AppImage" once it
+    /// updated it. Empty when it is not updated from GitHub.
+    QString variant;
 };
 
 /// The folder Shelly's configuration (config.json) names for AppImages; empty when it

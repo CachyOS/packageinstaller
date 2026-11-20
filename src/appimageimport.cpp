@@ -25,6 +25,17 @@ bool plainFileName(QStringView name) {
     return !name.isEmpty() && !name.contains(u'/') && !name.contains(QChar::Null) && name != "."_L1 && name != ".."_L1;
 }
 
+/// The file name pattern of the update information an AppImage carries,
+/// "gh-releases-zsync|<owner>|<repo>|<tag>|<pattern>", when it is for `source`.
+QString releasePattern(const QString& updateInfo, const appimage::Source& source) {
+    const auto fields = updateInfo.trimmed().split(u'|');
+    if (fields.size() != 5 || fields.at(0).compare("gh-releases-zsync"_L1, Qt::CaseInsensitive) != 0
+        || fields.at(1).compare(source.owner, Qt::CaseInsensitive) != 0 || fields.at(2).compare(source.repo, Qt::CaseInsensitive) != 0) {
+        return {};
+    }
+    return fields.at(4);
+}
+
 /// A boolean as Python's configparser reads one.
 bool configBool(const QString& value) {
     static const QStringList yes{u"1"_s, u"yes"_s, u"true"_s, u"on"_s};
@@ -49,7 +60,8 @@ QList<ShellyApp> parseShellyDatabase(const QByteArray& database, const QString& 
             .path           = record.value("path"_L1).toString(),
             .icon           = record.value("icon_name"_L1).toString(),
             .source         = {},
-            .release        = record.value("release_tag"_L1).toString()};
+            .release        = record.value("release_tag"_L1).toString(),
+            .variant        = {}};
         // a file that was added by hand has no release; Shelly then goes by the version
         if (const auto version = record.value("version"_L1).toString(); app.release.isEmpty() && version != "Unknown"_L1) {
             app.release = version;
@@ -66,6 +78,14 @@ QList<ShellyApp> parseShellyDatabase(const QByteArray& database, const QString& 
         if (fromGitHub(record.value("update_type"_L1))) {
             const Source source{.owner = record.value("repo_owner"_L1).toString(), .repo = record.value("repo_name"_L1).toString(), .file = {}};
             app.source = sourceFromValue(sourceValue(source));
+            // Shelly keeps the name of a file it was given, but names one it downloaded after the
+            // app: the pattern the AppImage carries says better which file of a release it is
+            if (app.source) {
+                app.variant = patternVariant(releasePattern(record.value("raw_update_info"_L1).toString(), *app.source));
+                if (app.variant.isEmpty()) {
+                    app.variant = variant(app.path.sliced(app.path.lastIndexOf(u'/') + 1));
+                }
+            }
         }
         apps << app;
     }

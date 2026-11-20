@@ -586,7 +586,7 @@ QList<Import> shellyRecords() {
         Import import{.key = app.name,
             .title         = app.title,
             .path          = app.path,
-            .tracking      = takenOver(app.source, appimage::variant(QFileInfo(app.path).fileName()), app.release),
+            .tracking      = takenOver(app.source, app.variant, app.release),
             .leftovers     = {}};
         for (const auto& icon : appimage::shellyIconFiles(app)) {
             import.leftovers << data + u'/' + icon;

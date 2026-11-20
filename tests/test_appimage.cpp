@@ -207,6 +207,10 @@ class TestAppImage : public QObject {
           {"name": "Numbered", "path": "/opt/n.AppImage", "version": "1.18.2", "release_tag": null, "update_type": 2, "repo_owner": "o", "repo_name": "n"},
           {"name": "Elsewhere", "path": "/opt/e.AppImage", "update_type": "gitlab", "repo_owner": "o", "repo_name": "e"},
           {"name": "Odd", "path": "/opt/o.AppImage", "update_type": "github", "repo_owner": "o/x", "repo_name": "../e"},
+          {"name": "LocalSend", "path": "/opt/LocalSend-1.17.0.AppImage", "update_type": "github", "repo_owner": "localsend",
+           "repo_name": "localsend", "raw_update_info": "gh-releases-zsync|LocalSend|localsend|latest|LocalSend-*-linux-x86-64.AppImage.zsync"},
+          {"name": "Borrowed", "path": "/opt/b.AppImage", "update_type": "github", "repo_owner": "o", "repo_name": "b",
+           "raw_update_info": "gh-releases-zsync|someone|else|latest|B-*-x86_64.AppImage"},
           {"name": "Relative", "path": "bin/r.AppImage"},
           {"path": "/opt/nameless.AppImage"},
           {"name": "../../.config/autostart/x"},
@@ -214,7 +218,7 @@ class TestAppImage : public QObject {
           "text", 7
         ])";
         const auto apps = appimage::parseShellyDatabase(database, u"/home/u/.local/bin"_s);
-        QCOMPARE(apps.size(), 5);
+        QCOMPARE(apps.size(), 7);
         QCOMPARE(apps.at(0).name, u"Editor-1.2-x86_64"_s);
         QCOMPARE(apps.at(0).title, u"Editor"_s);
         QCOMPARE(apps.at(0).path, u"/home/u/.local/bin/Editor-1.2-x86_64.AppImage"_s);
@@ -223,7 +227,7 @@ class TestAppImage : public QObject {
         QCOMPARE(apps.at(0).source->slug(), u"owner/editor"_s);
         QCOMPARE(appimage::shellyIconFiles(apps.at(0)),
             QStringList({u"icons/hicolor/scalable/apps/editor.svg"_s, u"icons/hicolor/256x256/apps/editor.png"_s}));
-        QVERIFY(appimage::shellyIconFiles({.name = u"x"_s, .title = {}, .path = {}, .icon = u"../x"_s, .source = {}, .release = {}}).isEmpty());
+        QVERIFY(appimage::shellyIconFiles({.name = u"x"_s, .title = {}, .path = {}, .icon = u"../x"_s, .source = {}, .release = {}, .variant = {}}).isEmpty());
         QVERIFY(appimage::shellyIconFiles(apps.at(1)).isEmpty());
         // no path: where Shelly would look for it
         QCOMPARE(apps.at(1).title, u"Plain"_s);
@@ -234,6 +238,11 @@ class TestAppImage : public QObject {
         QCOMPARE(apps.at(2).release, u"1.18.2"_s);
         QVERIFY(!apps.at(3).source);  // only GitHub is followed here
         QVERIFY(!apps.at(4).source);  // not a repository
+        // the name of a file Shelly was given, else the pattern of the update information
+        QCOMPARE(apps.at(0).variant, appimage::variant(u"Editor-2.0-x86_64.AppImage"_s));
+        QCOMPARE(apps.at(5).variant, appimage::variant(u"LocalSend-1.18.2-linux-x86-64.AppImage"_s));
+        QCOMPARE(apps.at(6).variant, u"b.appimage"_s);  // the information of another repository
+        QVERIFY(apps.at(1).variant.isEmpty());          // not updated from GitHub
 
         QVERIFY(appimage::parseShellyDatabase("not json", u"/b"_s).isEmpty());
         QVERIFY(appimage::parseShellyDatabase("{}", u"/b"_s).isEmpty());
