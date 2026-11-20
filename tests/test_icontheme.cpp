@@ -62,6 +62,9 @@ Type=Fixed
         write(u"icons/hicolor/48x48/apps/browser.png"_s);
         write(u"icons/hicolor/128x128/apps/browser.png"_s);
 
+        write(u"icons/loose.svg"_s);
+        write(u"icons/terminal.png"_s);
+        write(u"pixmaps/loose.png"_s);
         write(u"pixmaps/browser.png"_s);
         write(u"pixmaps/legacy-tool.png"_s);
 
@@ -80,6 +83,7 @@ Type=Fixed
         QTest::newRow("from the inherited theme") << u"terminal"_s << u"icons/parent/256x256/apps/terminal.png"_s;
         QTest::newRow("largest bitmap of hicolor") << u"browser"_s << u"icons/hicolor/128x128/apps/browser.png"_s;
         QTest::newRow("fallback directory") << u"legacy-tool"_s << u"pixmaps/legacy-tool.png"_s;
+        QTest::newRow("loose in a search path, before the fallback") << u"loose"_s << u"icons/loose.svg"_s;
         QTest::newRow("not an application icon") << u"go-up"_s << QString();
         QTest::newRow("not an image") << u"notes"_s << QString();
         QTest::newRow("unknown") << u"nothing"_s << QString();

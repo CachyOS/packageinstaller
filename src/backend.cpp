@@ -156,10 +156,13 @@ void Backend::reload() {
     emit loadingChanged();
     // build the theme index with the package list in the background,
     // doesn't need to know context from GUI thread
+    // Plasma's platform theme gives no fallback paths, its own icon engine searches the pixmaps
+    auto fallbackPaths = QIcon::fallbackSearchPaths() + QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, u"pixmaps"_s, QStandardPaths::LocateDirectory);
+    fallbackPaths.removeDuplicates();
     const icontheme::Theme theme{
         .name          = QIcon::themeName(),
         .searchPaths   = QIcon::themeSearchPaths(),
-        .fallbackPaths = QIcon::fallbackSearchPaths(),
+        .fallbackPaths = fallbackPaths,
     };
     QtConcurrent::run([theme] { return std::pair{catalog::load(), icontheme::appIcons(theme)}; })
         .then(this, [this](std::pair<std::expected<catalog::LoadResult, QString>, QHash<QString, QString>> loaded) {

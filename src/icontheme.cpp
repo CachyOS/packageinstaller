@@ -101,7 +101,8 @@ auto appIcons(const Theme& theme) -> QHash<QString, QString> {
     addTheme(theme, theme.name, seen, icons);
     addTheme(theme, u"hicolor"_s, seen, icons);
 
-    for (const auto& dir : theme.fallbackPaths) {
+    // the icon theme spec also takes loose files next to the themes, e.g. /usr/share/icons/cachyos.svg
+    for (const auto& dir : theme.searchPaths + theme.fallbackPaths) {
         for (const auto& entry : QDirListing(dir, kImages, kListing)) {
             icons.tryEmplace(entry.completeBaseName(), entry.filePath());
         }
