@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [develop, fresh]
+  pull_request:
+    branches: [develop, fresh]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build and test
+    runs-on: ubuntu-latest
+    container: cachyos/cachyos:latest
+    env:
+      CPM_SOURCE_CACHE: ${{ github.workspace }}/.cpm
+      QT_QPA_PLATFORM: offscreen
+    steps:
+      # git first: checkout needs it for a real clone, CPM for its downloads.
+      # A container cannot isolate the network of pacman's hooks and scriptlets,
+      # and pacman refuses to run them without that.
+      - name: Install dependencies
+        run: |
+          sed -i '/^\[options\]/a DisableSandboxNetwork' /etc/pacman.conf
+          pacman -Syu --noconfirm --needed \
+            base-devel cmake ninja git pkgconf \
+            qt6-base qt6-declarative qt6-tools appstream-qt pacman elfutils
+
+      - uses: actions/checkout@v7
+
+      - uses: actions/cache@v6
+        with:
+          path: .cpm
+          key: cpm-${{ hashFiles('CMakeLists.txt', 'cmake/**', '**/CMakeLists.txt') }}
+          restore-keys: cpm-
+
+      - name: Configure
+        run: |
+          cmake -S . -B build -G Ninja \
+            -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+            -DBUILD_TESTING=ON
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure --no-tests=error
