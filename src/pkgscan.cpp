@@ -40,8 +40,9 @@ enum Group : unsigned { NoGroup = 0U,
     Net                         = 1U,
     Decode                      = 2U };
 
-QString tr(const char* text) {
-    return QCoreApplication::translate("pkgscan", text);
+// TOOD(vnepogodin): drop that legacy shit
+QString tr(const char* text, const char* disambiguation = nullptr, int n = -1) {
+    return QCoreApplication::translate("pkgscan", text, disambiguation, n);
 }
 
 /// Something at the position of a command, as opposed to an argument or a string.
@@ -847,15 +848,16 @@ QList<Finding> scanMetadata(const Metadata& meta, const QDateTime& now) {
     }
     if (ageDays >= 0 && ageDays < 30) {
         add("new-package", Severity::Warning, tr("This package is very new"),
-            tr("It was first submitted %1 day(s) ago, so few people have looked at it.").arg(ageDays));
+            tr("It was first submitted %n day(s) ago, so few people have looked at it.", nullptr, static_cast<int>(ageDays)));
     }
     if (editHours >= 0 && editHours < 72 && ageDays >= 30) {
         add("recent-change", Severity::Info, tr("This package changed very recently"),
-            tr("The last change is %1 hour(s) old. Malicious updates are usually found and removed within days.").arg(editHours));
+            tr("The last change is %n hour(s) old. Malicious updates are usually found and removed within days.", nullptr,
+                static_cast<int>(editHours)));
     }
     if (meta.votes < 3 && meta.popularity < 0.05) {
         add("few-users", Severity::Info, tr("Hardly anybody uses this package"),
-            tr("It has %1 vote(s). Problems in rarely used packages stay unnoticed for longer.").arg(meta.votes));
+            tr("It has %n vote(s). Problems in rarely used packages stay unnoticed for longer.", nullptr, meta.votes));
     }
     return findings;
 }

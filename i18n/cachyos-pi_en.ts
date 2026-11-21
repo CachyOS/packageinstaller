@@ -80,7 +80,7 @@
 <context>
     <name>BrowsePage</name>
     <message numerus="yes">
-        <location filename="../qml/BrowsePage.qml" line="48"/>
+        <location filename="../qml/BrowsePage.qml" line="49"/>
         <source>%n package(s)</source>
         <translation>
             <numerusform>%n package</numerusform>
@@ -161,6 +161,33 @@
         <translation>
             <numerusform>%n update available</numerusform>
             <numerusform>%n updates available</numerusform>
+        </translation>
+    </message>
+</context>
+<context>
+    <name>pkgscan</name>
+    <message numerus="yes">
+        <location filename="../src/pkgscan.cpp" line="850"/>
+        <source>It was first submitted %n day(s) ago, so few people have looked at it.</source>
+        <translation>
+            <numerusform>It was first submitted %n day ago, so few people have looked at it.</numerusform>
+            <numerusform>It was first submitted %n days ago, so few people have looked at it.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../src/pkgscan.cpp" line="854"/>
+        <source>The last change is %n hour(s) old. Malicious updates are usually found and removed within days.</source>
+        <translation>
+            <numerusform>The last change is %n hour old. Malicious updates are usually found and removed within days.</numerusform>
+            <numerusform>The last change is %n hours old. Malicious updates are usually found and removed within days.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../src/pkgscan.cpp" line="859"/>
+        <source>It has %n vote(s). Problems in rarely used packages stay unnoticed for longer.</source>
+        <translation>
+            <numerusform>It has %n vote. Problems in rarely used packages stay unnoticed for longer.</numerusform>
+            <numerusform>It has %n votes. Problems in rarely used packages stay unnoticed for longer.</numerusform>
         </translation>
     </message>
 </context>
