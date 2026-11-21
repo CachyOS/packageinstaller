@@ -4,7 +4,9 @@
   <id>org.cachyos.cachyos-pi</id>
   <launchable type="desktop-id">cachyos-pi.desktop</launchable>
   <name>CachyOS Package Installer</name>
+  <name xml:lang="pt_BR">Instalador de Pacotes do CachyOS</name>
   <summary>Install, remove and update apps and packages</summary>
+  <summary xml:lang="pt_BR">Instale, remova e atualize aplicativos e pacotes</summary>
   <metadata_license>CC0-1.0</metadata_license>
   <project_license>GPL-3.0-or-later</project_license>
   <developer id="org.cachyos">
