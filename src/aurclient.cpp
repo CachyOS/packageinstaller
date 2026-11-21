@@ -47,6 +47,14 @@ constexpr qsizetype MAX_CHANGES = 64 * 1024;
 constexpr int MAX_VERSIONS = 1000;
 /// The commit last accepted after review, and its version, per package base.
 constexpr auto REVIEWED_KEY = "aur/reviewed/%1"_L1;
+/// What pkgscan::followSource() remembers about the source of a build, per package name.
+constexpr auto SOURCE_KEY = "aur/source/%1"_L1;
+/// How long the commit of a source is taken as current; every reload checks for updates.
+constexpr qint64 REMOTE_SECONDS = 10 * 60;
+/// Sources asked at the same time.
+constexpr int PARALLEL_SOURCES = 4;
+/// How long one source may take to answer.
+constexpr int REMOTE_TIMEOUT = 30000;
 
 /// A full commit id, as git prints it.
 bool isObjectName(const QString& text) {
@@ -218,7 +226,10 @@ void AurClient::applyLocal(AurPackage& package) const {
     // a package of that name from a repository is not this one
     package.installed        = local != nullptr && local->installed() && local->foreign();
     package.installedVersion = package.installed ? local->installedVersion : QString();
-    package.upgradable       = package.installed && alpmdb::vercmp(package.installedVersion, package.version) < 0;
+    const bool newer         = package.installed && alpmdb::vercmp(package.installedVersion, package.version) < 0;
+    // found by checkSources() for this very version: a rebuild ends it
+    package.newSource        = package.installed && !newer && m_behindSource.value(package.name) == package.installedVersion;
+    package.upgradable       = newer || package.newSource;
     package.heldBack         = package.installed && local->ignored;
     package.inRepos          = local != nullptr && !local->foreign();
 }
@@ -281,7 +292,7 @@ void AurClient::git(const QStringList& arguments, std::function<void(bool)> done
     gitRead(arguments, MAX_GIT_OUTPUT, [done = std::move(done)](const GitOutput& output) { done(output.has_value()); });
 }
 
-void AurClient::gitRead(const QStringList& arguments, qsizetype maxSize, std::function<void(GitOutput)> done) {
+void AurClient::gitRead(const QStringList& arguments, qsizetype maxSize, std::function<void(GitOutput)> done, int timeout) {
     static const auto environment = [] {
         auto env = plainEnvironment();
         for (const auto& [key, value] : std::to_array<std::pair<QString, QString>>({{u"GIT_CONFIG_NOSYSTEM"_s, u"1"_s},
@@ -289,13 +300,17 @@ void AurClient::gitRead(const QStringList& arguments, qsizetype maxSize, std::fu
                  {u"GIT_HTTP_LOW_SPEED_LIMIT"_s, u"1000"_s}, {u"GIT_HTTP_LOW_SPEED_TIME"_s, u"30"_s}})) {
             env.insert(key, value);
         }
+        // a source that is gone or private answers with a request for a password, which the
+        // desktop's askpass program would show in a window at every check
+        env.remove(u"GIT_ASKPASS"_s);
+        env.remove(u"SSH_ASKPASS"_s);
         return env;
     }();
     // the .gitattributes of a package must not hide its changes, for example as binary
     readOutput(this, u"git"_s,
         QStringList{u"-c"_s, u"core.hooksPath=/dev/null"_s, u"-c"_s, u"core.quotePath=false"_s, u"--attr-source=%1"_s.arg(git::EMPTY_TREE)}
             + arguments,
-        environment, maxSize, std::move(done));
+        environment, maxSize, std::move(done), timeout);
 }
 
 void AurClient::search(const QString& query) {
@@ -782,11 +797,173 @@ void AurClient::checkUpdates() {
         // a check that could not reach the AUR keeps the previous list
         if (generation == m_updatesGeneration && !failed) {
             setInstalled(std::move(found));
+            checkSources(m_installed, generation);
         }
         if (--m_updateChecks == 0) {
             emit checkingUpdatesChanged();
         }
     });
+}
+
+struct AurClient::SourceCheck {
+    int generation = 0;
+    QStringList queue;                      ///< package bases still to ask
+    QHash<QString, qint64> lastModified;    ///< by package base
+    QHash<QString, QStringList> names;      ///< package base -> its installed packages
+    QHash<QString, bool> behind;            ///< package name -> verdict, for those that could be asked
+    int running = 0;
+};
+
+void AurClient::checkSources(const QList<AurPackage>& installed, int generation) {
+    auto check        = std::make_shared<SourceCheck>();
+    check->generation = generation;
+    for (const auto& package : installed) {
+        // a newer version in the AUR is an update already
+        if (!buildsNewestSource(package.pkgbase) || !pkgscan::validPkgbase(package.pkgbase)
+            || alpmdb::vercmp(package.installedVersion, package.version) < 0) {
+            continue;
+        }
+        if (!check->names.contains(package.pkgbase)) {
+            check->queue << package.pkgbase;
+        }
+        check->names[package.pkgbase] << package.name;
+        check->lastModified.insert(package.pkgbase, package.lastModified);
+    }
+    if (check->queue.isEmpty()) {
+        return;
+    }
+    if (m_updateChecks++ == 0) {
+        emit checkingUpdatesChanged();
+    }
+    checkNextSource(check);
+}
+
+void AurClient::checkNextSource(const std::shared_ptr<SourceCheck>& check) {
+    // a newer check, or the AUR turned off: what is still running only finishes
+    if (check->generation != m_updatesGeneration) {
+        check->queue.clear();
+    }
+    if (check->queue.isEmpty() && check->running == 0) {
+        finishSources(check);
+        return;
+    }
+    while (!check->queue.isEmpty() && check->running < PARALLEL_SOURCES) {
+        const auto pkgbase = check->queue.takeFirst();
+        ++check->running;
+        const auto finishOne = [this, check] {
+            --check->running;
+            checkNextSource(check);
+        };
+        fetchSource(pkgbase, check->lastModified.value(pkgbase),
+            [this, check, pkgbase, finishOne](const std::optional<pkgscan::GitSource>& source, bool failed) {
+                if (!source) {
+                    // nothing to follow; a failure keeps what was found before
+                    if (!failed) {
+                        for (const auto& name : check->names.value(pkgbase)) {
+                            check->behind.insert(name, false);
+                        }
+                    }
+                    finishOne();
+                    return;
+                }
+                // a commit asked before the newest of them was installed may be older than that build
+                qint64 built = 0;
+                for (const auto& name : check->names.value(pkgbase)) {
+                    if (const auto* local = m_packages->find(name); local != nullptr) {
+                        built = std::max(built, local->installDate);
+                    }
+                }
+                fetchRemoteCommit(*source, built, [this, check, pkgbase, finishOne](const QString& commit) {
+                    if (!commit.isEmpty()) {
+                        for (const auto& name : check->names.value(pkgbase)) {
+                            check->behind.insert(name, behindSource(name, commit));
+                        }
+                    }
+                    finishOne();
+                });
+            });
+    }
+}
+
+void AurClient::finishSources(const std::shared_ptr<SourceCheck>& check) {
+    if (check->generation == m_updatesGeneration) {
+        for (const auto& [name, behind] : check->behind.asKeyValueRange()) {
+            if (behind) {
+                m_behindSource.insert(name, installedAurVersion(name));
+            } else {
+                m_behindSource.remove(name);
+            }
+        }
+        setInstalled(m_installed);
+    }
+    if (--m_updateChecks == 0) {
+        emit checkingUpdatesChanged();
+    }
+}
+
+void AurClient::fetchSource(const QString& pkgbase, qint64 lastModified,
+    std::function<void(std::optional<pkgscan::GitSource>, bool)> done) {
+    if (const auto known = m_sources.constFind(pkgbase); known != m_sources.cend() && known->lastModified == lastModified) {
+        done(known->source, false);
+        return;
+    }
+    QUrl url(AUR_HOST + "/cgit/aur.git/plain/.SRCINFO"_L1);
+    // encoded, as a "+" in a query stands for a space
+    url.setQuery(u"h="_s + QString::fromLatin1(QUrl::toPercentEncoding(pkgbase)));
+    auto* reply = m_network.get(request(url));
+    connect(reply, &QNetworkReply::finished, this, [this, reply, pkgbase, lastModified, done] {
+        reply->deleteLater();
+        constexpr qint64 MAX_SRCINFO = 256 * 1024;
+        const auto text = reply->read(MAX_SRCINFO + 1);
+        if (reply->error() != QNetworkReply::NoError || text.size() > MAX_SRCINFO) {
+            done(std::nullopt, true);
+            return;
+        }
+        // a captive portal answers with a page that names no source: nothing is found then
+        auto source = pkgscan::trackedGitSource(QString::fromUtf8(text));
+        m_sources.insert(pkgbase, {lastModified, source});
+        done(std::move(source), false);
+    });
+}
+
+void AurClient::fetchRemoteCommit(const pkgscan::GitSource& source, qint64 builtAt, std::function<void(QString)> done) {
+    const auto key = source.url + u'\n' + source.ref;
+    const auto now = QDateTime::currentDateTimeUtc();
+    // a source that could not be reached is not asked again before the others either
+    if (const auto known = m_remoteCommits.constFind(key);
+        known != m_remoteCommits.cend() && known->checked.secsTo(now) < REMOTE_SECONDS && known->checked.toSecsSinceEpoch() > builtAt) {
+        done(known->commit);
+        return;
+    }
+    // The address comes from a recipe nobody reviewed: https only, so that no other transport
+    // runs anything, and after "--", so that it is never taken for an option. No repository,
+    // so that the configuration of one the app was started in does not apply.
+    gitRead({u"--git-dir=/dev/null"_s, u"-c"_s, u"protocol.allow=never"_s, u"-c"_s, u"protocol.https.allow=always"_s, u"ls-remote"_s,
+                u"--"_s, source.url, source.ref},
+        64 * 1024,
+        [this, key, ref = source.ref, done](const GitOutput& output) {
+            const auto commit = output ? pkgscan::remoteCommit(QString::fromUtf8(*output), ref) : QString();
+            m_remoteCommits.insert(key, {commit, QDateTime::currentDateTimeUtc()});
+            done(commit);
+        },
+        REMOTE_TIMEOUT);
+}
+
+bool AurClient::behindSource(const QString& name, const QString& remote) const {
+    const auto* local = m_packages->find(name);
+    if (local == nullptr || !local->installed()) {
+        return false;
+    }
+    QSettings settings;
+    const auto key    = SOURCE_KEY.arg(name);
+    const auto record = settings.value(key).toStringList();
+    const auto state  = pkgscan::followSource(record, local->installedVersion, local->installDate, remote);
+    if (state.record.isEmpty()) {
+        settings.remove(key);
+    } else if (state.record != record) {
+        settings.setValue(key, state.record);
+    }
+    return state.behind;
 }
 
 void AurClient::setInstalled(QList<AurPackage> installed) {

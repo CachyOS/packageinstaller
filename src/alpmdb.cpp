@@ -141,6 +141,7 @@ std::expected<Databases, QString> load() {
         if (const auto found = index.constFind(name); found != index.cend()) {
             auto& p            = packages[*found];
             p.installedVersion = version;
+            p.installDate      = static_cast<qint64>(alpm_pkg_get_installdate(pkg));
             // like pacman: held back when the installed package or its update is ignored,
             // which matters when a new version joins an ignored group
             p.ignored    = alpm_pkg_should_ignore(handle, pkg) != 0 || alpm_pkg_should_ignore(handle, candidates.at(*found)) != 0;
@@ -148,6 +149,7 @@ std::expected<Databases, QString> load() {
         } else {
             auto p             = fromAlpm(pkg, u"local"_s, interned);
             p.installedVersion = version;
+            p.installDate      = static_cast<qint64>(alpm_pkg_get_installdate(pkg));
             p.ignored          = alpm_pkg_should_ignore(handle, pkg) != 0;
             packages << p;
         }
