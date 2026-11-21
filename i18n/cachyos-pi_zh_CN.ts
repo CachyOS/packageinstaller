@@ -903,109 +903,109 @@
 <context>
     <name>BrowsePage</name>
     <message>
-        <location filename="../qml/BrowsePage.qml" line="27"/>
+        <location filename="../qml/BrowsePage.qml" line="28"/>
         <source>All</source>
         <translation>全部</translation>
     </message>
     <message>
-        <location filename="../qml/BrowsePage.qml" line="28"/>
+        <location filename="../qml/BrowsePage.qml" line="29"/>
         <source>Internet</source>
         <translation>互联网</translation>
     </message>
     <message>
-        <location filename="../qml/BrowsePage.qml" line="29"/>
+        <location filename="../qml/BrowsePage.qml" line="30"/>
         <source>Multimedia</source>
         <translation>多媒体</translation>
     </message>
     <message>
-        <location filename="../qml/BrowsePage.qml" line="30"/>
+        <location filename="../qml/BrowsePage.qml" line="31"/>
         <source>Graphics</source>
         <translation>图形</translation>
     </message>
     <message>
-        <location filename="../qml/BrowsePage.qml" line="31"/>
+        <location filename="../qml/BrowsePage.qml" line="32"/>
         <source>Games</source>
         <translation>游戏</translation>
     </message>
     <message>
-        <location filename="../qml/BrowsePage.qml" line="32"/>
+        <location filename="../qml/BrowsePage.qml" line="33"/>
         <source>Office</source>
         <translation>办公</translation>
     </message>
     <message>
-        <location filename="../qml/BrowsePage.qml" line="33"/>
+        <location filename="../qml/BrowsePage.qml" line="34"/>
         <source>Development</source>
         <translation>开发</translation>
     </message>
     <message>
-        <location filename="../qml/BrowsePage.qml" line="34"/>
+        <location filename="../qml/BrowsePage.qml" line="35"/>
         <source>Education</source>
         <translation>教育</translation>
     </message>
     <message>
-        <location filename="../qml/BrowsePage.qml" line="35"/>
+        <location filename="../qml/BrowsePage.qml" line="36"/>
         <source>Science</source>
         <translation>科学</translation>
     </message>
     <message>
-        <location filename="../qml/BrowsePage.qml" line="36"/>
+        <location filename="../qml/BrowsePage.qml" line="37"/>
         <source>System</source>
         <translation>系统</translation>
     </message>
     <message>
-        <location filename="../qml/BrowsePage.qml" line="37"/>
+        <location filename="../qml/BrowsePage.qml" line="38"/>
         <source>Utilities</source>
         <translation>工具</translation>
     </message>
     <message>
-        <location filename="../qml/BrowsePage.qml" line="43"/>
+        <location filename="../qml/BrowsePage.qml" line="44"/>
         <source>Results for “%1”</source>
         <translation>“%1”的搜索结果</translation>
     </message>
     <message>
-        <location filename="../qml/BrowsePage.qml" line="44"/>
+        <location filename="../qml/BrowsePage.qml" line="45"/>
         <source>Installed</source>
         <translation>已安装</translation>
     </message>
     <message>
-        <location filename="../qml/BrowsePage.qml" line="44"/>
+        <location filename="../qml/BrowsePage.qml" line="45"/>
         <source>Browse</source>
         <translation>浏览</translation>
     </message>
     <message numerus="yes">
-        <location filename="../qml/BrowsePage.qml" line="48"/>
+        <location filename="../qml/BrowsePage.qml" line="49"/>
         <source>%n package(s)</source>
         <translation>
             <numerusform>%n 个软件包</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../qml/BrowsePage.qml" line="54"/>
+        <location filename="../qml/BrowsePage.qml" line="55"/>
         <source>Show all packages</source>
         <translation>显示所有软件包</translation>
     </message>
     <message>
-        <location filename="../qml/BrowsePage.qml" line="54"/>
+        <location filename="../qml/BrowsePage.qml" line="55"/>
         <source>Show apps only</source>
         <translation>仅显示应用</translation>
     </message>
     <message>
-        <location filename="../qml/BrowsePage.qml" line="124"/>
+        <location filename="../qml/BrowsePage.qml" line="126"/>
         <source>Nothing here yet.</source>
         <translation>这里还没有内容。</translation>
     </message>
     <message>
-        <location filename="../qml/BrowsePage.qml" line="125"/>
+        <location filename="../qml/BrowsePage.qml" line="127"/>
         <source>No installed package matches “%1”.</source>
         <translation>没有与“%1”匹配的已安装软件包。</translation>
     </message>
     <message>
-        <location filename="../qml/BrowsePage.qml" line="125"/>
+        <location filename="../qml/BrowsePage.qml" line="127"/>
         <source>Nothing found in the repositories.</source>
         <translation>仓库中未找到任何内容。</translation>
     </message>
     <message>
-        <location filename="../qml/BrowsePage.qml" line="127"/>
+        <location filename="../qml/BrowsePage.qml" line="129"/>
         <source>Try the AUR tab for community packages.</source>
         <translation>试试 AUR 标签页中的社区软件包。</translation>
     </message>
@@ -1435,42 +1435,42 @@
         <translation>AppImage</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="296"/>
+        <location filename="../qml/Main.qml" line="297"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="304"/>
+        <location filename="../qml/Main.qml" line="305"/>
         <source>Version %1</source>
         <translation>版本 %1</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="322"/>
+        <location filename="../qml/Main.qml" line="323"/>
         <source>Search the AUR</source>
         <translation>搜索 AUR</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="323"/>
+        <location filename="../qml/Main.qml" line="324"/>
         <source>Search Flatpak apps</source>
         <translation>搜索 Flatpak 应用</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="323"/>
+        <location filename="../qml/Main.qml" line="324"/>
         <source>Search apps and packages</source>
         <translation>搜索应用和软件包</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="481"/>
+        <location filename="../qml/Main.qml" line="482"/>
         <source>A transaction is running</source>
         <translation>正在执行操作</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="487"/>
+        <location filename="../qml/Main.qml" line="488"/>
         <source>Interrupting it could leave the system in a broken state. The window can be closed once it has finished.</source>
         <translation>中断操作可能会使系统处于损坏状态。操作完成后即可关闭窗口。</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="495"/>
+        <location filename="../qml/Main.qml" line="496"/>
         <source>Keep running</source>
         <translation>继续运行</translation>
     </message>
@@ -1488,107 +1488,97 @@
         <translation>外观</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="40"/>
+        <location filename="../qml/SettingsPage.qml" line="39"/>
         <source>Follow the desktop</source>
         <translation>跟随桌面</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="41"/>
+        <location filename="../qml/SettingsPage.qml" line="40"/>
         <source>Light</source>
         <translation>浅色</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="42"/>
+        <location filename="../qml/SettingsPage.qml" line="41"/>
         <source>Dark</source>
         <translation>深色</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="60"/>
-        <source>Language</source>
-        <translation>语言</translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPage.qml" line="68"/>
-        <source>Follow the system</source>
-        <translation>跟随系统</translation>
-    </message>
-    <message>
-        <location filename="../qml/SettingsPage.qml" line="90"/>
+        <location filename="../qml/SettingsPage.qml" line="61"/>
         <source>Colours</source>
         <translation>配色</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="162"/>
+        <location filename="../qml/SettingsPage.qml" line="133"/>
         <source>Sources</source>
         <translation>软件源</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="166"/>
+        <location filename="../qml/SettingsPage.qml" line="137"/>
         <source>Arch User Repository (AUR)</source>
         <translation>Arch 用户仓库（AUR）</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="167"/>
+        <location filename="../qml/SettingsPage.qml" line="138"/>
         <source>Build recipes written by the community. They are not reviewed by CachyOS, are built on your machine and can run any code while doing so, so read the PKGBUILD before installing.</source>
         <translation>由社区编写的构建配方。它们未经 CachyOS 审查，会在您的机器上构建，并且构建过程中可以运行任意代码，因此安装前请阅读 PKGBUILD。</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="168"/>
+        <location filename="../qml/SettingsPage.qml" line="139"/>
         <source>Building AUR packages needs “paru”, which is not installed. You can still search and review packages.</source>
         <translation>构建 AUR 软件包需要“paru”，但当前未安装。您仍可以搜索和审查软件包。</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="175"/>
+        <location filename="../qml/SettingsPage.qml" line="146"/>
         <source>Flatpak</source>
         <translation>Flatpak</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="176"/>
+        <location filename="../qml/SettingsPage.qml" line="147"/>
         <source>Sandboxed apps from Flathub and other Flatpak remotes. They are packaged by their developers or the Flathub community, not by CachyOS, and bring their own libraries.</source>
         <translation>来自 Flathub 及其他 Flatpak 远程源的沙盒应用。它们由开发者或 Flathub 社区打包，而非 CachyOS，并自带运行库。</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="178"/>
+        <location filename="../qml/SettingsPage.qml" line="149"/>
         <source>Flatpak is not installed. You can install it from the Flatpak page.</source>
         <translation>未安装 Flatpak。您可以从 Flatpak 页面安装。</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="185"/>
+        <location filename="../qml/SettingsPage.qml" line="156"/>
         <source>AppImage</source>
         <translation>AppImage</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="186"/>
+        <location filename="../qml/SettingsPage.qml" line="157"/>
         <source>Single-file apps that you downloaded yourself. They get a menu entry and an icon. They are not checked or sandboxed, and they are not updated for you.</source>
         <translation>您自行下载的单文件应用。它们会获得菜单项和图标。它们未经检查、没有沙盒保护，也不会为您更新。</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="195"/>
+        <location filename="../qml/SettingsPage.qml" line="166"/>
         <source>Mirrors</source>
         <translation>镜像源</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="199"/>
+        <location filename="../qml/SettingsPage.qml" line="170"/>
         <source>Rank the mirrors by speed</source>
         <translation>按速度为镜像源排序</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="200"/>
+        <location filename="../qml/SettingsPage.qml" line="171"/>
         <source>Packages are downloaded from the first mirror that answers. Ranking measures the Arch and CachyOS mirrors from your connection and rewrites the mirror lists to prefer the fast ones. Worth doing when downloads are slow or fail.</source>
         <translation>软件包会从最先响应的镜像源下载。排序会测量您当前的网络连接对 Arch 和 CachyOS 镜像源的速度，并重写镜像列表以优先使用较快的镜像源。下载缓慢或失败时值得一试。</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="201"/>
+        <location filename="../qml/SettingsPage.qml" line="172"/>
         <source>Ranking needs the “cachyos-rate-mirrors” package, which is not installed.</source>
         <translation>排序需要“cachyos-rate-mirrors”软件包，但当前未安装。</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="205"/>
+        <location filename="../qml/SettingsPage.qml" line="176"/>
         <source>Rank mirrors</source>
         <translation>为镜像源排序</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="205"/>
+        <location filename="../qml/SettingsPage.qml" line="176"/>
         <source>Install cachyos-rate-mirrors</source>
         <translation>安装 cachyos-rate-mirrors</translation>
     </message>
@@ -2256,10 +2246,26 @@ The operation failed (exit code %1).
         <source>This package is very new</source>
         <translation>此软件包非常新</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../src/pkgscan.cpp" line="850"/>
-        <source>It was first submitted %1 day(s) ago, so few people have looked at it.</source>
-        <translation>它首次提交于 %1 天前，因此查看过的人很少。</translation>
+        <source>It was first submitted %n day(s) ago, so few people have looked at it.</source>
+        <translation>
+            <numerusform>它首次提交于 %n 天前，因此查看过的人很少。</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../src/pkgscan.cpp" line="854"/>
+        <source>The last change is %n hour(s) old. Malicious updates are usually found and removed within days.</source>
+        <translation>
+            <numerusform>最后一次更改发生在 %n 小时前。恶意更新通常会在几天内被发现并移除。</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../src/pkgscan.cpp" line="859"/>
+        <source>It has %n vote(s). Problems in rarely used packages stay unnoticed for longer.</source>
+        <translation>
+            <numerusform>它有 %n 票。很少使用的软件包中的问题会更久不被发现。</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../src/pkgscan.cpp" line="853"/>
@@ -2267,19 +2273,9 @@ The operation failed (exit code %1).
         <translation>此软件包最近刚刚更改</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="854"/>
-        <source>The last change is %1 hour(s) old. Malicious updates are usually found and removed within days.</source>
-        <translation>最后一次更改发生在 %1 小时前。恶意更新通常会在几天内被发现并移除。</translation>
-    </message>
-    <message>
-        <location filename="../src/pkgscan.cpp" line="857"/>
+        <location filename="../src/pkgscan.cpp" line="858"/>
         <source>Hardly anybody uses this package</source>
         <translation>几乎无人使用此软件包</translation>
-    </message>
-    <message>
-        <location filename="../src/pkgscan.cpp" line="858"/>
-        <source>It has %1 vote(s). Problems in rarely used packages stay unnoticed for longer.</source>
-        <translation>它有 %1 票。很少使用的软件包中的问题会更久不被发现。</translation>
     </message>
 </context>
 </TS>
