@@ -66,7 +66,9 @@ class Transaction : public QObject {
         FlatpakRemove,
         FlatpakUpdate,
         FlatpakSetup,
-        RateMirrors };
+        RateMirrors,
+        CleanCacheInstalled,
+        CleanCacheUninstalled };
     Q_ENUM(Kind)
 
     explicit Transaction(QObject* parent = nullptr);
@@ -99,6 +101,8 @@ class Transaction : public QObject {
     /// Runs `flatpak` with `arguments`; `names` is what the dialog calls the operation.
     /// `cleanup` is a second run that follows a successful first one and may fail.
     void prepareFlatpak(Kind kind, const QStringList& names, const QStringList& arguments, const QStringList& cleanup = {});
+    /// Removes old cached versions of installed or uninstalled packages with paccache.
+    void prepareCacheClean(bool uninstalled, int keep);
     Q_INVOKABLE void confirm();
     /// Aborts planning/confirmation, or interrupts a cancellable running operation.
     Q_INVOKABLE void cancel();
@@ -139,6 +143,7 @@ class Transaction : public QObject {
     QList<PlanEntry> m_plan;
     QString m_planError;
     qint64 m_downloadSize = 0;
+    int m_cacheKeep       = 0;  ///< versions kept by a cache clean, for its summary
     bool m_cleaning       = false;  ///< the cleanup run is the one that is running
     QStringListModel m_log;
     QStringDecoder m_decoder{QStringDecoder::Utf8};

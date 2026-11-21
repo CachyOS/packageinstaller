@@ -4,8 +4,9 @@
 /// What the root helper and the GUI have to agree on.
 namespace helper {
 
-/// The only program besides pacman that the helper starts.
+/// The only programs besides pacman that the helper starts.
 inline constexpr char kRateMirrors[] = "/usr/bin/cachyos-rate-mirrors";
+inline constexpr char kPaccache[]     = "/usr/bin/paccache";
 
 /// Printed before the helper hands over to pacman, followed by the command. Output
 /// without it means pkexec never started the helper.

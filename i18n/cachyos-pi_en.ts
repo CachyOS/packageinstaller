@@ -110,7 +110,7 @@
 <context>
     <name>Transaction</name>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="89"/>
+        <location filename="../src/transaction.cpp" line="94"/>
         <source>Build %n package(s) from the AUR</source>
         <translation>
             <numerusform>Build %n package from the AUR</numerusform>
@@ -118,7 +118,17 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="109"/>
+        <location filename="../src/transaction.cpp" line="111"/>
+        <source>Old versions of installed packages will be removed from the pacman cache; %n version(s) of each package will be kept.</source>
+        <translation><numerusform>Old versions of installed packages will be removed from the pacman cache; %n version of each package will be kept.</numerusform><numerusform>Old versions of installed packages will be removed from the pacman cache; %n versions of each package will be kept.</numerusform></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../src/transaction.cpp" line="113"/>
+        <source>Cached versions of packages that are no longer installed will be removed from the pacman cache; %n version(s) of each package will be kept.</source>
+        <translation><numerusform>Cached versions of packages that are no longer installed will be removed from the pacman cache; %n version of each package will be kept.</numerusform><numerusform>Cached versions of packages that are no longer installed will be removed from the pacman cache; %n versions of each package will be kept.</numerusform></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../src/transaction.cpp" line="118"/>
         <source>%n package(s) will be removed:</source>
         <translation>
             <numerusform>%n package will be removed:</numerusform>
@@ -126,7 +136,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="111"/>
+        <location filename="../src/transaction.cpp" line="120"/>
         <source>%n package(s) will be installed (%1 to download):</source>
         <translation>
             <numerusform>%n package will be installed (%1 to download):</numerusform>
@@ -134,7 +144,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="339"/>
+        <location filename="../src/transaction.cpp" line="361"/>
         <source>%1 cannot be removed: %n installed package(s) depend on it.</source>
         <translation>
             <numerusform>%1 cannot be removed: %n installed package depends on it.</numerusform>

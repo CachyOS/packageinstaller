@@ -39,6 +39,17 @@ class Backend : public QObject {
     Q_PROPERTY(bool paruAvailable READ paruAvailable NOTIFY paruAvailableChanged FINAL)
     /// cachyos-rate-mirrors is installed; looked up again after every database load
     Q_PROPERTY(bool canRateMirrors READ canRateMirrors NOTIFY revisionChanged FINAL)
+    /// paccache is installed; the cache cleaner needs it
+    Q_PROPERTY(bool canCleanCache READ canCleanCache NOTIFY cacheChanged FINAL)
+    Q_PROPERTY(int cacheKeepInstalled READ cacheKeepInstalled WRITE setCacheKeepInstalled NOTIFY cacheKeepInstalledChanged FINAL)
+    Q_PROPERTY(int cacheKeepUninstalled READ cacheKeepUninstalled WRITE setCacheKeepUninstalled NOTIFY cacheKeepUninstalledChanged FINAL)
+    Q_PROPERTY(int cacheInstalledCount READ cacheInstalledCount NOTIFY cacheChanged FINAL)
+    Q_PROPERTY(int cacheUninstalledCount READ cacheUninstalledCount NOTIFY cacheChanged FINAL)
+    Q_PROPERTY(QString cacheInstalledSize READ cacheInstalledSize NOTIFY cacheChanged FINAL)
+    Q_PROPERTY(QString cacheUninstalledSize READ cacheUninstalledSize NOTIFY cacheChanged FINAL)
+    Q_PROPERTY(bool cacheScanning READ cacheScanning NOTIFY cacheChanged FINAL)
+    Q_PROPERTY(bool cacheScanned READ cacheScanned NOTIFY cacheChanged FINAL)
+    Q_PROPERTY(QString cacheError READ cacheError NOTIFY cacheChanged FINAL)
     Q_PROPERTY(FlatpakClient* flatpak READ flatpak CONSTANT FINAL)
     Q_PROPERTY(UpdateNotice* updateNotice READ updateNotice CONSTANT FINAL)
     Q_PROPERTY(bool flatpakEnabled READ flatpakEnabled WRITE setFlatpakEnabled NOTIFY flatpakEnabledChanged FINAL)
@@ -68,6 +79,18 @@ class Backend : public QObject {
     void setAurEnabled(bool enabled);
     bool paruAvailable() const { return m_paruAvailable; }
     bool canRateMirrors() const;
+    bool canCleanCache() const;
+    int cacheKeepInstalled() const { return m_cacheKeepInstalled; }
+    void setCacheKeepInstalled(int value);
+    int cacheKeepUninstalled() const { return m_cacheKeepUninstalled; }
+    void setCacheKeepUninstalled(int value);
+    int cacheInstalledCount() const { return m_cacheInstalledCount; }
+    int cacheUninstalledCount() const { return m_cacheUninstalledCount; }
+    QString cacheInstalledSize() const { return m_cacheInstalledSize; }
+    QString cacheUninstalledSize() const { return m_cacheUninstalledSize; }
+    bool cacheScanning() const { return m_cacheScanning; }
+    bool cacheScanned() const { return m_cacheScanned; }
+    QString cacheError() const { return m_cacheError; }
     FlatpakClient* flatpak() { return &m_flatpak; }
     bool flatpakEnabled() const { return m_flatpakEnabled; }
     void setFlatpakEnabled(bool enabled);
@@ -90,6 +113,10 @@ class Backend : public QObject {
     Q_INVOKABLE void upgradeAll();
     /// Sorts the mirror lists by speed with cachyos-rate-mirrors.
     Q_INVOKABLE void rateMirrors();
+    /// Counts what paccache would remove for the current keep values.
+    Q_INVOKABLE void scanCache();
+    /// Removes old cached versions of installed or uninstalled packages.
+    Q_INVOKABLE void cleanCache(bool uninstalled);
     Q_INVOKABLE void installFromAur(const QString& name);
     /// Builds several reviewed AUR packages in one paru run.
     Q_INVOKABLE void installManyFromAur(const QStringList& names);
@@ -112,6 +139,9 @@ class Backend : public QObject {
     void flatpakEnabledChanged();
     void appImagesEnabledChanged();
     void startupFileChanged();
+    void cacheChanged();
+    void cacheKeepInstalledChanged();
+    void cacheKeepUninstalledChanged();
     /// Something the user asked for could not be done, and `text` says why.
     void notice(const QString& text);
 
@@ -121,6 +151,7 @@ class Backend : public QObject {
     void refreshSources();
     void checkUpdates();
     void onUpdatesChecked(int exitCode, QProcess::ExitStatus status);
+    void cacheScanFinished();
     /// Marks the updates checkupdates last listed again, after the package list was read anew.
     void applyKnownUpdates();
     void markUpdates(const QHash<QString, QString>& newVersions);
@@ -137,6 +168,7 @@ class Backend : public QObject {
     IconProvider* m_icons;
     QSettings m_settings;
     QProcess m_checkUpdates;
+    QTimer m_cacheScanDebounce;
     QFileSystemWatcher m_dbWatcher;  ///< notices pacman runs outside of this app
     QTimer m_dbChanged;
     catalog::CuratedList m_curatedList;
@@ -154,4 +186,15 @@ class Backend : public QObject {
     bool m_appImagesEnabled = false;
     QUrl m_startupFile;
     bool m_paruAvailable   = false;
+    int m_cacheKeepInstalled = 1;
+    int m_cacheKeepUninstalled = 0;
+    int m_cacheInstalledCount = 0;
+    int m_cacheUninstalledCount = 0;
+    QString m_cacheInstalledSize;
+    QString m_cacheUninstalledSize;
+    QString m_cacheError;
+    bool m_cacheScanning = false;
+    bool m_cacheScanned  = false;
+    bool m_cacheRescan   = false;
+    int m_cachePending   = 0;
 };

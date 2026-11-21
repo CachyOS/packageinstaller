@@ -9,6 +9,10 @@
 // that one authentication covers a whole build instead of one per step.
 //
 // One more verb ranks the mirrors with cachyos-rate-mirrors, which takes no arguments.
+//
+// The last verb removes old package versions from the pacman cache with paccache. It
+// takes the number of versions to keep and whether installed or uninstalled packages
+// are meant; both are validated here, so nothing reaches a shell.
 
 #include "shared.hpp"
 
@@ -81,6 +85,11 @@ constexpr auto is_package_file_name(std::string_view name) noexcept -> bool {
             && std::ranges::all_of(ending.substr(1), [](char c) { return is_lower(c) || is_digit(c) || c == 'Z'; }));
 }
 
+constexpr auto is_keep_value(std::string_view value) noexcept -> bool {
+    return !value.empty() && value.size() <= 3
+        && std::ranges::all_of(value, [](char c) { return c >= '0' && c <= '9'; });
+}
+
 auto resolve_package_file(std::string_view given) noexcept -> std::optional<std::string> {
     const fs::path path{given};
     if (!path.is_absolute()) {
@@ -97,6 +106,7 @@ auto resolve_package_file(std::string_view given) noexcept -> std::optional<std:
 
 auto usage() noexcept -> std::optional<Args> {
     std::println(stderr, "usage: cachyos-pi-helper install <pkg>... | remove <pkg>... | upgrade | rate-mirrors\n"
+                         "       cachyos-pi-helper clean-cache installed|uninstalled <keep>\n"
                          "       cachyos-pi-helper pacman --sync|--upgrade|--database [options] -- <target>...");
     return std::nullopt;
 }
@@ -160,6 +170,27 @@ auto pacman_for_paru(Arguments arguments) noexcept -> std::optional<Args> {
     return args;
 }
 
+auto clean_cache_args(Arguments arguments) noexcept -> std::optional<Args> {
+    // clean-cache installed|uninstalled <keep>
+    if (arguments.size() != 3) {
+        return usage();
+    }
+    const auto mode = arguments[1];
+    const auto keep = arguments[2];
+    if (!is_keep_value(keep)) {
+        return refuse("invalid keep value", keep);
+    }
+    Args args{"paccache", "-r"};
+    if (mode == "uninstalled"sv) {
+        args.emplace_back("-u");
+    } else if (mode != "installed"sv) {
+        return refuse("invalid cache mode", mode);
+    }
+    args.emplace_back("-k");
+    args.emplace_back(keep);
+    return args;
+}
+
 auto pacman_args(Arguments arguments) noexcept -> std::optional<Args> {
     if (arguments.empty()) {
         return usage();
@@ -184,6 +215,13 @@ auto pacman_args(Arguments arguments) noexcept -> std::optional<Args> {
 auto command_for(Arguments arguments) noexcept -> std::optional<Command> {
     if (arguments.size() == 1 && arguments.front() == "rate-mirrors"sv) {
         return Command{helper::kRateMirrors, {"cachyos-rate-mirrors"}};
+    }
+    if (!arguments.empty() && arguments.front() == "clean-cache"sv) {
+        auto args = clean_cache_args(arguments);
+        if (!args) {
+            return std::nullopt;
+        }
+        return Command{helper::kPaccache, std::move(*args)};
     }
     auto args = pacman_args(arguments);
     if (!args) {

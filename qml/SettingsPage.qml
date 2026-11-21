@@ -8,6 +8,8 @@ ScrollPage {
 
     inset: Look.pagePadding - 6
 
+    Component.onCompleted: Backend.scanCache()
+
     /// Scrolls to the switches for the AUR and Flatpak.
     function revealSources(): void {
         contentY = Math.max(0, Math.min(sources.y + inset - 16, contentHeight - height));
@@ -176,6 +178,94 @@ ScrollPage {
                 text: Backend.canRateMirrors ? qsTr("Rank mirrors") : qsTr("Install cachyos-rate-mirrors")
                 onClicked: Backend.canRateMirrors ? Backend.rateMirrors() : Backend.install("cachyos-rate-mirrors")
             }
+        }
+    }
+
+    Section {
+        id: cache
+        width: sources.width
+        title: qsTr("Package cache")
+
+        SettingCard {
+            width: cache.width
+            title: qsTr("Installed packages")
+            description: qsTr("Old versions of installed packages are kept in the pacman cache. Keeping fewer versions frees disk space.")
+            warning: Backend.canCleanCache ? "" : qsTr("Cleaning needs the “pacman-contrib” package, which is not installed.")
+
+            Row {
+                spacing: 10
+
+                Muted {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: qsTr("Keep")
+                }
+
+                NumberStepper {
+                    value: Backend.cacheKeepInstalled
+                    onValueModified: value => Backend.cacheKeepInstalled = value
+                }
+
+                PillButton {
+                    visible: Backend.canCleanCache
+                    tone: "soft"
+                    enabled: !Backend.cacheScanning && Backend.cacheInstalledCount > 0
+                    text: Backend.cacheScanning ? qsTr("Checking…")
+                        : Backend.cacheInstalledCount > 0 ? qsTr("Clean %1").arg(Backend.cacheInstalledSize)
+                        : qsTr("Nothing to clean")
+                    onClicked: Backend.cleanCache(false)
+                }
+
+                PillButton {
+                    visible: !Backend.canCleanCache
+                    tone: "soft"
+                    text: qsTr("Install pacman-contrib")
+                    onClicked: Backend.install("pacman-contrib")
+                }
+            }
+        }
+
+        SettingCard {
+            width: cache.width
+            title: qsTr("Uninstalled packages")
+            description: qsTr("Cached versions of packages that are no longer installed serve no purpose. They can be removed without keeping a version.")
+            warning: Backend.canCleanCache ? "" : qsTr("Cleaning needs the “pacman-contrib” package, which is not installed.")
+
+            Row {
+                spacing: 10
+
+                Muted {
+                    anchors.verticalCenter: parent.verticalCenter
+                    text: qsTr("Keep")
+                }
+
+                NumberStepper {
+                    value: Backend.cacheKeepUninstalled
+                    onValueModified: value => Backend.cacheKeepUninstalled = value
+                }
+
+                PillButton {
+                    visible: Backend.canCleanCache
+                    tone: "soft"
+                    enabled: !Backend.cacheScanning && Backend.cacheUninstalledCount > 0
+                    text: Backend.cacheScanning ? qsTr("Checking…")
+                        : Backend.cacheUninstalledCount > 0 ? qsTr("Clean %1").arg(Backend.cacheUninstalledSize)
+                        : qsTr("Nothing to clean")
+                    onClicked: Backend.cleanCache(true)
+                }
+
+                PillButton {
+                    visible: !Backend.canCleanCache
+                    tone: "soft"
+                    text: qsTr("Install pacman-contrib")
+                    onClicked: Backend.install("pacman-contrib")
+                }
+            }
+        }
+
+        Notice {
+            width: cache.width
+            tone: Notice.Warning
+            text: Backend.cacheError
         }
     }
 }
