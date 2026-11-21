@@ -4,7 +4,7 @@
 <context>
     <name>AppImageClient</name>
     <message numerus="yes">
-        <location filename="../src/appimageclient.cpp" line="991"/>
+        <location filename="../src/appimageclient.cpp" line="993"/>
         <source>%n AppImage(s) from %1</source>
         <translation>
             <numerusform>%n AppImage from %1</numerusform>

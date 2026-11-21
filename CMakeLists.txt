@@ -189,9 +189,11 @@ qt_add_qml_module(${PROJECT_NAME}
         icons/cachyos-kernel.png
         icons/cachyos-logo.png)
 
-# i18n/cachyos-pi_en.ts only carries the English plural forms ("1 package" / "2 packages").
-# Refresh the .ts files with: cmake --build build --target update_translations
-qt_add_translations(TARGETS ${PROJECT_NAME} SOURCE_TARGETS ${PROJECT_NAME} pi-scan TS_FILE_DIR i18n)
+# glob over all translations in the folder
+file(GLOB PI_TS_FILES CONFIGURE_DEPENDS i18n/cachyos-pi_*.ts)
+list(REMOVE_ITEM PI_TS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/i18n/cachyos-pi_en.ts)
+qt_add_translations(TARGETS ${PROJECT_NAME} SOURCE_TARGETS ${PROJECT_NAME} pi-scan
+    TS_FILES ${PI_TS_FILES} PLURALS_TS_FILE i18n/cachyos-pi_en.ts)
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE
     PI_VERSION="${PROJECT_VERSION}"
@@ -256,7 +258,7 @@ if(BUILD_TESTING)
         src/packagelist.hpp src/packagelist.cpp
         src/packagemodel.hpp src/packagemodel.cpp)
     target_include_directories(test-packagemodel PRIVATE src)
-    target_link_libraries(test-packagemodel PRIVATE project_options project_warnings
+    target_link_libraries(test-packagemodel PRIVATE project_options project_warnings pi::pi
         Qt6::Test Qt6::Qml PkgConfig::LIBALPM)
     add_test(NAME packagemodel COMMAND test-packagemodel)
 
@@ -265,7 +267,7 @@ if(BUILD_TESTING)
         src/packagelist.hpp src/packagelist.cpp
         src/packagemodel.hpp src/packagemodel.cpp)
     target_include_directories(test-packagefilter PRIVATE src)
-    target_link_libraries(test-packagefilter PRIVATE project_options project_warnings
+    target_link_libraries(test-packagefilter PRIVATE project_options project_warnings pi::pi
         Qt6::Test Qt6::Qml PkgConfig::LIBALPM)
     add_test(NAME packagefilter COMMAND test-packagefilter)
 
