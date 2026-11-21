@@ -137,16 +137,15 @@
     <message numerus="yes">
         <location filename="../src/appimageclient.cpp" line="993"/>
         <source>%n AppImage(s) from %1</source>
-        <translation><numerusform>%n AppImage de %1</numerusform><numerusform>%n AppImages de %1</numerusform></translation>
+        <translation>
+            <numerusform>%n AppImage de %1</numerusform>
+            <numerusform>%n AppImages de %1</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../src/appimageclient.cpp" line="606"/>
         <source>Shelly&apos;s own list could not be updated; it still names the apps that were moved.</source>
         <translation>A lista do Shelly não pôde ser atualizada; ela ainda indica os aplicativos que foram movidos.</translation>
-    </message>
-    <message>
-        <source>Moved from Shelly: %1.</source>
-        <translation type="vanished">Movido do Shelly: %1.</translation>
     </message>
     <message>
         <location filename="../src/appimageclient.cpp" line="835"/>
@@ -177,13 +176,6 @@
         <location filename="../src/appimageclient.cpp" line="954"/>
         <source>“%1” is not an AppImage.</source>
         <translation>“%1” não é um AppImage.</translation>
-    </message>
-    <message numerus="yes">
-        <source>%n AppImage(s) from Shelly</source>
-        <translation type="vanished">
-            <numerusform>%n AppImage do Shelly</numerusform>
-            <numerusform>%n AppImages do Shelly</numerusform>
-        </translation>
     </message>
     <message>
         <location filename="../src/appimageclient.cpp" line="1016"/>
@@ -304,20 +296,12 @@
         <translation>Instalar fuse2</translation>
     </message>
     <message numerus="yes">
-        <source>You have %n AppImage(s) in Shelly. You can bring them along to this app.</source>
-        <translation type="vanished">
-            <numerusform>Você tem %n AppImage no Shelly. Você pode trazê-lo para este aplicativo.</numerusform>
-            <numerusform>Você tem %n AppImages no Shelly. Você pode trazê-los para este aplicativo.</numerusform>
-        </translation>
-    </message>
-    <message>
-        <source>Move from Shelly…</source>
-        <translation type="vanished">Mover do Shelly…</translation>
-    </message>
-    <message numerus="yes">
         <location filename="../qml/AppImagePage.qml" line="187"/>
         <source>You have %n AppImage(s) in %1. You can bring them along to this app.</source>
-        <translation><numerusform>Você tem %n AppImage em %1. Você pode trazê-lo para este aplicativo.</numerusform><numerusform>Você tem %n AppImages em %1. Você pode trazê-los para este aplicativo.</numerusform></translation>
+        <translation>
+            <numerusform>Você tem %n AppImage em %1. Você pode trazê-lo para este aplicativo.</numerusform>
+            <numerusform>Você tem %n AppImages em %1. Você pode trazê-los para este aplicativo.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../qml/AppImagePage.qml" line="192"/>
@@ -481,18 +465,6 @@
         <location filename="../qml/AppImagePage.qml" line="643"/>
         <source>Each file gets a new menu entry and its old one is removed, so it shows up only once. Apps that are updated from GitHub keep getting their updates here. Other update sources, environment variables and extra arguments are not carried over. To read its name and icon each file is run right away.</source>
         <translation>Cada arquivo recebe uma nova entrada de menu e a antiga é removida, para aparecer apenas uma vez. Aplicativos atualizados pelo GitHub continuam recebendo suas atualizações aqui. Outras fontes de atualização, variáveis de ambiente e argumentos extras não são transferidos. Para ler seu nome e ícone, cada arquivo é executado imediatamente.</translation>
-    </message>
-    <message>
-        <source>Bring your AppImages along from Shelly?</source>
-        <translation type="vanished">Trazer seus AppImages do Shelly?</translation>
-    </message>
-    <message>
-        <source>You added these AppImages with Shelly. They can be moved to %1 and looked after by this app from now on:</source>
-        <translation type="vanished">Você adicionou estes AppImages com o Shelly. Eles podem ser movidos para %1 e cuidados por este aplicativo a partir de agora:</translation>
-    </message>
-    <message>
-        <source>Each file gets a new menu entry and is taken off Shelly&apos;s list, so it shows up only once. Apps that Shelly updates from GitHub keep getting their updates here. Other update sources, environment variables and extra arguments set in Shelly are not carried over. To read its name and icon each file is run right away.</source>
-        <translation type="vanished">Cada arquivo recebe uma nova entrada de menu e é removido da lista do Shelly, para aparecer apenas uma vez. Aplicativos que o Shelly atualiza do GitHub continuam recebendo suas atualizações aqui. Outras fontes de atualização, variáveis de ambiente e argumentos extras definidos no Shelly não são transferidos. Para ler seu nome e ícone, cada arquivo é executado imediatamente.</translation>
     </message>
     <message>
         <location filename="../qml/AppImagePage.qml" line="655"/>
@@ -2291,10 +2263,29 @@ A operação falhou (código de saída %1).
         <source>This package is very new</source>
         <translation>Este pacote é muito novo</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../src/pkgscan.cpp" line="850"/>
-        <source>It was first submitted %1 day(s) ago, so few people have looked at it.</source>
-        <translation>Ele foi enviado pela primeira vez há %1 dia(s), então poucas pessoas o viram.</translation>
+        <source>It was first submitted %n day(s) ago, so few people have looked at it.</source>
+        <translation>
+            <numerusform>Ele foi enviado pela primeira vez há %n dia, então poucas pessoas o viram.</numerusform>
+            <numerusform>Ele foi enviado pela primeira vez há %n dias, então poucas pessoas o viram.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../src/pkgscan.cpp" line="854"/>
+        <source>The last change is %n hour(s) old. Malicious updates are usually found and removed within days.</source>
+        <translation>
+            <numerusform>A última mudança foi há %n hora. Atualizações maliciosas geralmente são encontradas e removidas em poucos dias.</numerusform>
+            <numerusform>A última mudança foi há %n horas. Atualizações maliciosas geralmente são encontradas e removidas em poucos dias.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../src/pkgscan.cpp" line="859"/>
+        <source>It has %n vote(s). Problems in rarely used packages stay unnoticed for longer.</source>
+        <translation>
+            <numerusform>Ele tem %n voto. Problemas em pacotes raramente usados passam mais tempo despercebidos.</numerusform>
+            <numerusform>Ele tem %n votos. Problemas em pacotes raramente usados passam mais tempo despercebidos.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../src/pkgscan.cpp" line="853"/>
@@ -2302,19 +2293,9 @@ A operação falhou (código de saída %1).
         <translation>Este pacote mudou muito recentemente</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="854"/>
-        <source>The last change is %1 hour(s) old. Malicious updates are usually found and removed within days.</source>
-        <translation>A última mudança foi há %1 hora(s). Atualizações maliciosas geralmente são encontradas e removidas em poucos dias.</translation>
-    </message>
-    <message>
-        <location filename="../src/pkgscan.cpp" line="857"/>
+        <location filename="../src/pkgscan.cpp" line="858"/>
         <source>Hardly anybody uses this package</source>
         <translation>Quase ninguém usa este pacote</translation>
-    </message>
-    <message>
-        <location filename="../src/pkgscan.cpp" line="858"/>
-        <source>It has %1 vote(s). Problems in rarely used packages stay unnoticed for longer.</source>
-        <translation>Ele tem %1 voto(s). Problemas em pacotes raramente usados passam mais tempo despercebidos.</translation>
     </message>
 </context>
 </TS>
