@@ -80,7 +80,7 @@
 <context>
     <name>BrowsePage</name>
     <message numerus="yes">
-        <location filename="../qml/BrowsePage.qml" line="49"/>
+        <location filename="../qml/BrowsePage.qml" line="48"/>
         <source>%n package(s)</source>
         <translation>
             <numerusform>%n package</numerusform>

@@ -23,20 +23,19 @@ Item {
             : (root.appsOnly && root.query.length === 0) || root.category.length > 0 ? PackageFilter.Apps : PackageFilter.All
     }
 
-    ListModel {
-        id: categories
-        ListElement { category: ""; label: qsTr("All") }
-        ListElement { category: "Network"; label: qsTr("Internet") }
-        ListElement { category: "AudioVideo"; label: qsTr("Multimedia") }
-        ListElement { category: "Graphics"; label: qsTr("Graphics") }
-        ListElement { category: "Game"; label: qsTr("Games") }
-        ListElement { category: "Office"; label: qsTr("Office") }
-        ListElement { category: "Development"; label: qsTr("Development") }
-        ListElement { category: "Education"; label: qsTr("Education") }
-        ListElement { category: "Science"; label: qsTr("Science") }
-        ListElement { category: "System"; label: qsTr("System") }
-        ListElement { category: "Utility"; label: qsTr("Utilities") }
-    }
+    readonly property var categories: [
+        { category: "", label: qsTr("All") },
+        { category: "Network", label: qsTr("Internet") },
+        { category: "AudioVideo", label: qsTr("Multimedia") },
+        { category: "Graphics", label: qsTr("Graphics") },
+        { category: "Game", label: qsTr("Games") },
+        { category: "Office", label: qsTr("Office") },
+        { category: "Development", label: qsTr("Development") },
+        { category: "Education", label: qsTr("Education") },
+        { category: "Science", label: qsTr("Science") },
+        { category: "System", label: qsTr("System") },
+        { category: "Utility", label: qsTr("Utilities") }
+    ]
 
     PageHeader {
         id: pageHeader
@@ -62,17 +61,16 @@ Item {
             spacing: 8
 
             Repeater {
-                model: categories
+                model: root.categories
 
                 Chip {
                     id: chip
 
-                    required property string category
-                    required property string label
+                    required property var modelData
 
-                    text: chip.label
-                    current: root.category === chip.category
-                    onClicked: root.category = chip.category
+                    text: modelData.label
+                    current: root.category === modelData.category
+                    onClicked: root.category = modelData.category
                 }
             }
         }
