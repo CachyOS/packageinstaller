@@ -2263,10 +2263,29 @@ Der Vorgang ist fehlgeschlagen (Exit-Code %1).
         <source>This package is very new</source>
         <translation>Dieses Paket ist sehr neu</translation>
     </message>
-    <message>
+    <message numerus="yes">
         <location filename="../src/pkgscan.cpp" line="850"/>
-        <source>It was first submitted %1 day(s) ago, so few people have looked at it.</source>
-        <translation>Es wurde vor %1 Tag(en) erstmals eingereicht, daher haben es sich erst wenige Leute angesehen.</translation>
+        <source>It was first submitted %n day(s) ago, so few people have looked at it.</source>
+        <translation>
+            <numerusform>Es wurde vor %n Tag erstmals eingereicht, daher haben es sich erst wenige Leute angesehen.</numerusform>
+            <numerusform>Es wurde vor %n Tagen erstmals eingereicht, daher haben es sich erst wenige Leute angesehen.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../src/pkgscan.cpp" line="854"/>
+        <source>The last change is %n hour(s) old. Malicious updates are usually found and removed within days.</source>
+        <translation>
+            <numerusform>Die letzte Änderung ist %n Stunde alt. Schädliche Aktualisierungen werden meist innerhalb weniger Tage gefunden und entfernt.</numerusform>
+            <numerusform>Die letzte Änderung ist %n Stunden alt. Schädliche Aktualisierungen werden meist innerhalb weniger Tage gefunden und entfernt.</numerusform>
+        </translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../src/pkgscan.cpp" line="859"/>
+        <source>It has %n vote(s). Problems in rarely used packages stay unnoticed for longer.</source>
+        <translation>
+            <numerusform>Es hat %n Stimme. Probleme in selten genutzten Paketen bleiben länger unbemerkt.</numerusform>
+            <numerusform>Es hat %n Stimmen. Probleme in selten genutzten Paketen bleiben länger unbemerkt.</numerusform>
+        </translation>
     </message>
     <message>
         <location filename="../src/pkgscan.cpp" line="853"/>
@@ -2274,19 +2293,9 @@ Der Vorgang ist fehlgeschlagen (Exit-Code %1).
         <translation>Dieses Paket wurde vor Kurzem geändert</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="854"/>
-        <source>The last change is %1 hour(s) old. Malicious updates are usually found and removed within days.</source>
-        <translation>Die letzte Änderung ist %1 Stunde(n) alt. Schädliche Aktualisierungen werden meist innerhalb weniger Tage gefunden und entfernt.</translation>
-    </message>
-    <message>
-        <location filename="../src/pkgscan.cpp" line="857"/>
+        <location filename="../src/pkgscan.cpp" line="858"/>
         <source>Hardly anybody uses this package</source>
         <translation>Kaum jemand verwendet dieses Paket</translation>
-    </message>
-    <message>
-        <location filename="../src/pkgscan.cpp" line="858"/>
-        <source>It has %1 vote(s). Problems in rarely used packages stay unnoticed for longer.</source>
-        <translation>Es hat %1 Stimme(n). Probleme in selten genutzten Paketen bleiben länger unbemerkt.</translation>
     </message>
 </context>
 </TS>
