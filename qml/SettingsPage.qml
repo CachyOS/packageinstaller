@@ -8,6 +8,9 @@ ScrollPage {
 
     inset: Look.pagePadding - 6
 
+    Component.onCompleted: Backend.refreshAppImageHandler()
+    onVisibleChanged: if (visible) Backend.refreshAppImageHandler()
+
     /// Scrolls to the switches for the AUR and Flatpak.
     function revealSources(): void {
         contentY = Math.max(0, Math.min(sources.y + inset - 16, contentHeight - height));
@@ -157,6 +160,20 @@ ScrollPage {
             description: qsTr("Single-file apps that you downloaded yourself. They get a menu entry and an icon. They are not checked or sandboxed, and they are not updated for you.")
             active: Backend.appImagesEnabled
             onToggled: Backend.appImagesEnabled = !Backend.appImagesEnabled
+        }
+
+        SettingCard {
+            width: sources.width
+            title: qsTr("Open AppImages with this app")
+            description: qsTr("Double-clicking an AppImage opens it here so it can be added to your menu. This applies to your user.")
+            warning: Backend.canSetDefaultAppImageHandler ? "" : qsTr("Setting this needs the “xdg-utils” package.")
+
+            PillButton {
+                tone: "soft"
+                enabled: Backend.canSetDefaultAppImageHandler && !Backend.isDefaultAppImageHandler
+                text: Backend.isDefaultAppImageHandler ? qsTr("Default for AppImages") : qsTr("Set as default")
+                onClicked: Backend.setDefaultAppImageHandler()
+            }
         }
     }
 

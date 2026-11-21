@@ -73,7 +73,7 @@ Qt 6.10 or newer and a C++26 compiler (GCC 15+, Clang 20+) are required.
 Runtime: `qt6-declarative`, `appstream-qt`, `archlinux-appstream-data`, `polkit`, `elfutils` (if built with libdw),
 `kimageformats` (the Arch icon cache is JPEG XL). Optional: `paru` and `git` (AUR review and builds),
 `flatpak` (Flatpak apps), `fuse2` (most AppImages need it to start), `pacman-contrib` (`checkupdates`, to see updates without refreshing the system
-databases), `cachyos-rate-mirrors` (ranking the mirrors from the settings).
+databases), `cachyos-rate-mirrors` (ranking the mirrors from the settings), `xdg-utils` (setting this app as the default AppImage handler).
 
 ## Building
 
