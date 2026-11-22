@@ -16,8 +16,12 @@ class TestHelper : public QObject {
         QFile package(m_dir.filePath(u"foo-1-1-x86_64.pkg.tar.zst"_s));
         QVERIFY(package.open(QIODevice::WriteOnly));
         m_package = QFileInfo(package).canonicalFilePath();
-        // the script names itself, so it stands in for both programs
+        QFile snapFile(m_dir.filePath(u"a.snap"_s));
+        QVERIFY(snapFile.open(QIODevice::WriteOnly));
+        m_snap = QFileInfo(snapFile).canonicalFilePath();
+        // the script names itself, so it stands in for every program
         QVERIFY(QFile::copy(u"" TEST_DATA_DIR "/fake-pacman.sh"_s, m_dir.filePath(u"cachyos-rate-mirrors"_s)));
+        QVERIFY(QFile::copy(u"" TEST_DATA_DIR "/fake-pacman.sh"_s, m_dir.filePath(u"snap"_s)));
     }
 
     void runsPacman_data() {
@@ -42,6 +46,24 @@ class TestHelper : public QObject {
         QCOMPARE(output, u"fake pacman %1 sigpipe=ignored setsid=yes\n"_s.arg(pacman));
     }
 
+    void runsSnap_data() {
+        QTest::addColumn<QStringList>("args");
+        QTest::addColumn<QString>("snap");
+        QTest::newRow("install") << QStringList{u"snap"_s, u"install"_s, u"vlc"_s} << u"install -- vlc"_s;
+        QTest::newRow("install file") << QStringList{u"snap"_s, u"install"_s, m_snap} << u"install "_s + m_snap;
+        QTest::newRow("remove") << QStringList{u"snap"_s, u"remove"_s, u"vlc"_s} << u"remove -- vlc"_s;
+        QTest::newRow("refresh all") << QStringList{u"snap"_s, u"refresh"_s} << u"refresh"_s;
+        QTest::newRow("refresh one") << QStringList{u"snap"_s, u"refresh"_s, u"firefox"_s} << u"refresh -- firefox"_s;
+    }
+
+    void runsSnap() {
+        QFETCH(QStringList, args);
+        QFETCH(QString, snap);
+        const auto [exitCode, output] = run(args);
+        QCOMPARE(exitCode, 0);
+        QCOMPARE(output, u"fake snap %1 sigpipe=ignored setsid=yes\n"_s.arg(snap));
+    }
+
     void ranksMirrors() {
         const auto [exitCode, output] = run({u"rate-mirrors"_s});
         QCOMPARE(exitCode, 0);
@@ -56,7 +78,14 @@ class TestHelper : public QObject {
                  QStringList{u"rate-mirrors"_s, u"--help"_s}, QStringList{u"rate-mirrors"_s, QString()},
                  QStringList{u"pacman"_s, u"--remove"_s, u"--"_s, u"foo"_s},
                  QStringList{u"pacman"_s, u"--sync"_s, u"--overwrite"_s, u"--"_s, u"foo"_s},
-                 QStringList{u"pacman"_s, u"--upgrade"_s, u"--"_s, u"/etc/passwd"_s}}) {
+                 QStringList{u"pacman"_s, u"--upgrade"_s, u"--"_s, u"/etc/passwd"_s},
+                 QStringList{u"snap"_s, u"remove"_s, u"--channel=bad"_s},
+                 QStringList{u"snap"_s, u"install"_s, u"relative.snap"_s},
+                 QStringList{u"snap"_s, u"install"_s, u"/tmp/not-a-snap.txt"_s},
+                 QStringList{u"snap"_s, u"install"_s, m_dir.filePath(u"absent.snap"_s)},
+                 QStringList{u"snap"_s, u"install"_s, u"vlc"_s, u"firefox"_s},
+                 QStringList{u"snap"_s, u"set"_s, u"vlc"_s},
+                 QStringList{u"snap"_s}}) {
             const auto [exitCode, output] = run(args);
             QCOMPARE(exitCode, 2);
             QVERIFY(output.isEmpty());
@@ -79,6 +108,7 @@ class TestHelper : public QObject {
 
     QTemporaryDir m_dir;
     QString m_package;
+    QString m_snap;
     mutable QString m_errors;  ///< what the last run wrote to stderr
 };
 

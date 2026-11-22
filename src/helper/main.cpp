@@ -40,12 +40,14 @@ using pi::utils::is_digit;
 using pi::utils::is_lower;
 using pi::utils::is_package_name;
 using pi::utils::is_repo_target;
+using pi::utils::is_snap_name;
 using namespace std::string_literals;
 using namespace std::string_view_literals;
 
 namespace {
 
 constexpr auto kPacman = "/usr/bin/pacman";
+constexpr auto kSnap   = "/usr/bin/snap";
 
 // pkexec itself answers 126 and 127 when the user is not let through
 constexpr int kRefused    = 2;
@@ -95,9 +97,24 @@ auto resolve_package_file(std::string_view given) noexcept -> std::optional<std:
     return resolved.native();
 }
 
+auto resolve_snap_file(std::string_view given) noexcept -> std::optional<std::string> {
+    const fs::path path{given};
+    if (!path.is_absolute()) {
+        return std::nullopt;
+    }
+    // links and ".." are followed first, so the file that was checked is the one snap is given
+    std::error_code ec{};
+    const auto resolved = fs::canonical(path, ec);
+    if (ec || resolved.extension() != ".snap" || !fs::is_regular_file(resolved, ec)) {
+        return std::nullopt;
+    }
+    return resolved.native();
+}
+
 auto usage() noexcept -> std::optional<Args> {
     std::println(stderr, "usage: cachyos-pi-helper install <pkg>... | remove <pkg>... | upgrade | rate-mirrors\n"
-                         "       cachyos-pi-helper pacman --sync|--upgrade|--database [options] -- <target>...");
+                         "       cachyos-pi-helper pacman --sync|--upgrade|--database [options] -- <target>...\n"
+                         "       cachyos-pi-helper snap install|remove|refresh [<name>|<file.snap>]");
     return std::nullopt;
 }
 
@@ -160,6 +177,41 @@ auto pacman_for_paru(Arguments arguments) noexcept -> std::optional<Args> {
     return args;
 }
 
+auto snap_args(Arguments arguments) noexcept -> std::optional<Args> {
+    if (arguments.empty()) {
+        return usage();
+    }
+    const auto operation = arguments.front();
+    if (operation != "install"sv && operation != "remove"sv && operation != "refresh"sv) {
+        return refuse("snap operation is not allowed:", operation);
+    }
+    const auto rest = arguments.subspan(1);
+    Args args{"snap", std::string{operation}};
+    if (rest.empty()) {
+        // only refresh with no target is meaningful: it refreshes every installed snap
+        return operation == "refresh"sv ? std::optional<Args>{std::move(args)} : usage();
+    }
+    if (rest.size() != 1) {
+        return usage();
+    }
+    const auto target = rest.front();
+    // snap names cannot contain a dot, so a .snap suffix unambiguously marks a local file
+    if (target.ends_with(".snap")) {
+        auto file = resolve_snap_file(target);
+        if (!file) {
+            return refuse("invalid snap file", target);
+        }
+        args.emplace_back(std::move(*file));
+    } else {
+        if (!is_snap_name(target)) {
+            return refuse("invalid snap name", target);
+        }
+        args.emplace_back("--");
+        args.emplace_back(target);
+    }
+    return args;
+}
+
 auto pacman_args(Arguments arguments) noexcept -> std::optional<Args> {
     if (arguments.empty()) {
         return usage();
@@ -184,6 +236,13 @@ auto pacman_args(Arguments arguments) noexcept -> std::optional<Args> {
 auto command_for(Arguments arguments) noexcept -> std::optional<Command> {
     if (arguments.size() == 1 && arguments.front() == "rate-mirrors"sv) {
         return Command{helper::kRateMirrors, {"cachyos-rate-mirrors"}};
+    }
+    if (!arguments.empty() && arguments.front() == "snap"sv) {
+        auto snap = snap_args(arguments.subspan(1));
+        if (!snap) {
+            return std::nullopt;
+        }
+        return Command{kSnap, std::move(*snap)};
     }
     auto args = pacman_args(arguments);
     if (!args) {
