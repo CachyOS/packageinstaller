@@ -46,8 +46,9 @@ using namespace std::string_view_literals;
 
 namespace {
 
-constexpr auto kPacman = "/usr/bin/pacman";
-constexpr auto kSnap   = "/usr/bin/snap";
+constexpr auto kPacman    = "/usr/bin/pacman";
+constexpr auto kSnap      = "/usr/bin/snap";
+constexpr auto kSystemctl = "/usr/bin/systemctl";
 
 // pkexec itself answers 126 and 127 when the user is not let through
 constexpr int kRefused    = 2;
@@ -114,7 +115,8 @@ auto resolve_snap_file(std::string_view given) noexcept -> std::optional<std::st
 auto usage() noexcept -> std::optional<Args> {
     std::println(stderr, "usage: cachyos-pi-helper install <pkg>... | remove <pkg>... | upgrade | rate-mirrors\n"
                          "       cachyos-pi-helper pacman --sync|--upgrade|--database [options] -- <target>...\n"
-                         "       cachyos-pi-helper snap install|remove|refresh [<name>|<file.snap>]");
+                         "       cachyos-pi-helper snap install|remove|refresh [<name>|<file.snap>]\n"
+                         "       cachyos-pi-helper snapd-setup");
     return std::nullopt;
 }
 
@@ -212,6 +214,28 @@ auto snap_args(Arguments arguments) noexcept -> std::optional<Args> {
     return args;
 }
 
+auto apparmor_present() noexcept -> bool {
+#ifdef PI_HELPER_TESTING
+    // the tests force either AppArmor state without touching the host
+    if (const char* forced = std::getenv("CACHYOS_PI_APPARMOR_PRESENT"); forced != nullptr) {
+        return std::string_view{forced} == "1";
+    }
+#endif
+    std::error_code ec{};
+    return fs::exists("/sys/module/apparmor", ec);
+}
+
+auto snapd_setup_args(Arguments arguments) noexcept -> std::optional<Args> {
+    if (!arguments.empty()) {
+        return usage();
+    }
+    Args args{"systemctl", "enable", "--now", "snapd.socket"};
+    if (apparmor_present()) {
+        args.emplace_back("snapd.apparmor.service");
+    }
+    return args;
+}
+
 auto pacman_args(Arguments arguments) noexcept -> std::optional<Args> {
     if (arguments.empty()) {
         return usage();
@@ -243,6 +267,13 @@ auto command_for(Arguments arguments) noexcept -> std::optional<Command> {
             return std::nullopt;
         }
         return Command{kSnap, std::move(*snap)};
+    }
+    if (!arguments.empty() && arguments.front() == "snapd-setup"sv) {
+        auto setup = snapd_setup_args(arguments.subspan(1));
+        if (!setup) {
+            return std::nullopt;
+        }
+        return Command{kSystemctl, std::move(*setup)};
     }
     auto args = pacman_args(arguments);
     if (!args) {

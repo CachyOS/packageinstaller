@@ -22,6 +22,7 @@ class TestHelper : public QObject {
         // the script names itself, so it stands in for every program
         QVERIFY(QFile::copy(u"" TEST_DATA_DIR "/fake-pacman.sh"_s, m_dir.filePath(u"cachyos-rate-mirrors"_s)));
         QVERIFY(QFile::copy(u"" TEST_DATA_DIR "/fake-pacman.sh"_s, m_dir.filePath(u"snap"_s)));
+        QVERIFY(QFile::copy(u"" TEST_DATA_DIR "/fake-pacman.sh"_s, m_dir.filePath(u"systemctl"_s)));
     }
 
     void runsPacman_data() {
@@ -64,6 +65,21 @@ class TestHelper : public QObject {
         QCOMPARE(output, u"fake snap %1 sigpipe=ignored setsid=yes\n"_s.arg(snap));
     }
 
+    void runsSnapdSetup_data() {
+        QTest::addColumn<bool>("apparmor");
+        QTest::addColumn<QString>("systemctl");
+        QTest::newRow("no apparmor") << false << u"enable --now snapd.socket"_s;
+        QTest::newRow("apparmor") << true << u"enable --now snapd.socket snapd.apparmor.service"_s;
+    }
+
+    void runsSnapdSetup() {
+        QFETCH(bool, apparmor);
+        QFETCH(QString, systemctl);
+        const auto [exitCode, output] = run({u"snapd-setup"_s}, apparmor);
+        QCOMPARE(exitCode, 0);
+        QCOMPARE(output, u"fake systemctl %1 sigpipe=ignored setsid=yes\n"_s.arg(systemctl));
+    }
+
     void ranksMirrors() {
         const auto [exitCode, output] = run({u"rate-mirrors"_s});
         QCOMPARE(exitCode, 0);
@@ -85,7 +101,9 @@ class TestHelper : public QObject {
                  QStringList{u"snap"_s, u"install"_s, m_dir.filePath(u"absent.snap"_s)},
                  QStringList{u"snap"_s, u"install"_s, u"vlc"_s, u"firefox"_s},
                  QStringList{u"snap"_s, u"set"_s, u"vlc"_s},
-                 QStringList{u"snap"_s}}) {
+                 QStringList{u"snap"_s},
+                 QStringList{u"snapd-setup"_s, u"foo"_s},
+                 QStringList{u"snapd-setup"_s, u"--now"_s, u"evil"_s}}) {
             const auto [exitCode, output] = run(args);
             QCOMPARE(exitCode, 2);
             QVERIFY(output.isEmpty());
@@ -93,10 +111,12 @@ class TestHelper : public QObject {
     }
 
  private:
-    std::pair<int, QString> run(const QStringList& args) const {
+    std::pair<int, QString> run(const QStringList& args, bool apparmor = false) const {
         QProcess process;
         auto env = QProcessEnvironment::systemEnvironment();
         env.insert(u"CACHYOS_PI_HELPER_BINDIR"_s, m_dir.path());
+        // force the AppArmor branch for the helper's test build, independently of the host
+        env.insert(u"CACHYOS_PI_APPARMOR_PRESENT"_s, apparmor ? u"1"_s : u"0"_s);
         process.setProcessEnvironment(env);
         process.start(u"" HELPER ""_s, args);
         if (!process.waitForFinished() || process.exitStatus() != QProcess::NormalExit) {

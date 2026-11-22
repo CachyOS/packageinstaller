@@ -74,6 +74,19 @@
     <annotate key="org.freedesktop.policykit.exec.argv1">snap</annotate>
   </action>
 
+  <action id="org.cachyos.cachyos-pi.snapd-setup">
+    <description>Set up the Snap daemon</description>
+    <message>Authentication is required to set up the Snap daemon</message>
+    <icon_name>cachyos-pi</icon_name>
+    <defaults>
+      <allow_any>no</allow_any>
+      <allow_inactive>no</allow_inactive>
+      <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+    <annotate key="org.freedesktop.policykit.exec.path">@PI_HELPER_DIR@/cachyos-pi-helper</annotate>
+    <annotate key="org.freedesktop.policykit.exec.argv1">snapd-setup</annotate>
+  </action>
+
   <!-- what paru calls to install the packages it built -->
   <action id="org.cachyos.cachyos-pi.install-built">
     <description>Install packages that were built on this computer</description>
