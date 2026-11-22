@@ -208,9 +208,8 @@ class TestSnapClient : public QObject {
         QVERIFY(!client.installed().at(1).upgradable);
         QVERIFY(client.app(u"firefox"_s).installed);
 
-        QSignalSpy results(&client, &SnapClient::resultsChanged);
         client.search(u"vlc"_s);
-        QTRY_VERIFY(results.count() >= 1);
+        QTRY_VERIFY(client.results().size() == 1);
         QCOMPARE(client.results().size(), 1);
         QCOMPARE(client.results().at(0).name, u"vlc"_s);
         QCOMPARE(client.results().at(0).publisher, u"videolan✓"_s);
@@ -219,13 +218,12 @@ class TestSnapClient : public QObject {
 
         // a failing store lookup clears the results and exposes the error
         client.search(u"missing"_s);
-        QTRY_VERIFY(results.count() >= 2);
+        QTRY_VERIFY(!client.searchError().isEmpty());
         QVERIFY(client.results().isEmpty());
-        QVERIFY(!client.searchError().isEmpty());
 
         // a successful search clears the error again
         client.search(u"vlc"_s);
-        QTRY_VERIFY(results.count() >= 3);
+        QTRY_VERIFY(client.results().size() == 1);
         QVERIFY(client.searchError().isEmpty());
 
         // a failing `refresh --list` means "no updates", not an error
@@ -237,7 +235,8 @@ class TestSnapClient : public QObject {
         QTRY_VERIFY(changed.count() >= 2);
         QCOMPARE(client.updateCount(), 0);
         QVERIFY(client.searchError().isEmpty());
-        QCOMPARE(client.results().size(), 1);  // refresh re-ran the current query
+        QTRY_VERIFY(client.results().size() == 1);  // refresh re-ran the current query
+        QCOMPARE(client.results().size(), 1);
     }
 
     void storeSearch() {
@@ -249,9 +248,8 @@ class TestSnapClient : public QObject {
         qputenv("CACHYOS_PI_SNAP_STORE_URL", store.url().toString().toUtf8());
 
         SnapClient client;
-        QSignalSpy results(&client, &SnapClient::resultsChanged);
         client.search(u"vlc"_s);
-        QTRY_VERIFY(results.count() >= 1);
+        QTRY_VERIFY(client.results().size() == 1);
 
         QCOMPARE(client.results().size(), 1);
         const auto item = client.results().first();
@@ -276,9 +274,8 @@ class TestSnapClient : public QObject {
         qputenv("CACHYOS_PI_SNAP_STORE_URL", store.url().toString().toUtf8());
 
         SnapClient client;
-        QSignalSpy results(&client, &SnapClient::resultsChanged);
         client.search(u"vlc"_s);
-        QTRY_VERIFY(results.count() >= 1);
+        QTRY_VERIFY(client.results().size() == 1);
 
         QCOMPARE(client.results().size(), 1);
         const auto item = client.results().first();
@@ -300,11 +297,11 @@ class TestSnapClient : public QObject {
         qputenv("CACHYOS_PI_SNAP_STORE_URL", store.url().toString().toUtf8());
 
         SnapClient client;
-        QSignalSpy results(&client, &SnapClient::resultsChanged);
         client.search(u"vlc"_s);
         QTRY_VERIFY(store.requestCount() >= 1);  // the first request is out, its reply is still delayed
         client.search(u"firefox"_s);
-        QTRY_VERIFY(results.count() >= 1);
+        QTRY_VERIFY(store.requestCount() == 2);
+        QTRY_VERIFY(client.results().size() == 1 && client.results().first().name == u"firefox"_s);
         QCOMPARE(store.requestCount(), 2);
         QCOMPARE(client.results().size(), 1);
         QCOMPARE(client.results().first().name, u"firefox"_s);
@@ -322,11 +319,9 @@ class TestSnapClient : public QObject {
         qputenv("CACHYOS_PI_SNAP_STORE_URL", store.url().toString().toUtf8());
 
         SnapClient client;
-        QSignalSpy results(&client, &SnapClient::resultsChanged);
         client.search(u"vlc"_s);
-        QTRY_VERIFY(results.count() >= 1);
+        QTRY_VERIFY(!client.searchError().isEmpty());
         QVERIFY(client.results().isEmpty());
-        QVERIFY(!client.searchError().isEmpty());
     }
 
     void malformedStoreItem() {
@@ -336,9 +331,8 @@ class TestSnapClient : public QObject {
         qputenv("CACHYOS_PI_SNAP_STORE_URL", store.url().toString().toUtf8());
 
         SnapClient client;
-        QSignalSpy results(&client, &SnapClient::resultsChanged);
         client.search(u"vlc"_s);
-        QTRY_VERIFY(results.count() >= 1);
+        QTRY_VERIFY(client.results().size() == 1);
         QCOMPARE(client.results().size(), 1);
         QCOMPARE(client.results().first().name, u"odd"_s);
         QVERIFY(client.results().first().version.isEmpty());
