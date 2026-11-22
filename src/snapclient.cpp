@@ -80,13 +80,20 @@ QList<snapcli::SnapApp> parseStore(const QByteArray& data) {
     QList<snapcli::SnapApp> apps;
     for (const auto& value : document.object().value(u"results"_s).toArray()) {
         const auto object    = value.toObject();
-        const auto publisher = object.value(u"publisher"_s).toObject();
+        const auto snap      = object.value(u"snap"_s).toObject();
+        const auto publisher = snap.value(u"publisher"_s).toObject();
+        const auto topPub    = object.value(u"publisher"_s).toObject();
+        const auto pubName   = publisher.value(u"display-name"_s).toString();
+        const auto summary   = snap.value(u"summary"_s).toString();
         apps << snapcli::SnapApp{
             .name      = object.value(u"name"_s).toString(),
             .version   = object.value(u"revision"_s).toObject().value(u"version"_s).toString(),
-            .publisher = publisher.value(u"display-name"_s).toString(),
-            .notes     = {},
-            .summary   = object.value(u"summary"_s).toString(),
+            .publisher = pubName.isEmpty() ? topPub.value(u"display-name"_s).toString() : pubName,
+            .notes     = (publisher.value(u"validation"_s).toString() == u"verified"_s
+                             || topPub.value(u"validation"_s).toString() == u"verified"_s)
+                ? u"verified"_s
+                : QString(),
+            .summary   = summary.isEmpty() ? object.value(u"summary"_s).toString() : summary,
         };
     }
     return apps;

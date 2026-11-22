@@ -266,6 +266,30 @@ class TestSnapClient : public QObject {
         QCOMPARE(store.request(0).headers.value(u"snap-device-series"_s), u"16"_s);
     }
 
+    void nestedStoreShape() {
+        StoreServer store;
+        QVERIFY(store.isListening());
+        // Real V2 response: summary/publisher live under "snap", not at the top level.
+        store.respondWith([](const QString&) -> StoreReply {
+            return {200, R"({"results":[{"name":"vlc","revision":{"version":"3.0.24-rc1"},"snap":{"summary":"The ultimate media player","publisher":{"display-name":"VideoLAN","validation":"verified"},"media":[]}}]})"};
+        });
+        qputenv("CACHYOS_PI_SNAP_STORE_URL", store.url().toString().toUtf8());
+
+        SnapClient client;
+        QSignalSpy results(&client, &SnapClient::resultsChanged);
+        client.search(u"vlc"_s);
+        QTRY_VERIFY(results.count() >= 1);
+
+        QCOMPARE(client.results().size(), 1);
+        const auto item = client.results().first();
+        QCOMPARE(item.name, u"vlc"_s);
+        QCOMPARE(item.version, u"3.0.24-rc1"_s);
+        QCOMPARE(item.summary, u"The ultimate media player"_s);
+        QCOMPARE(item.publisher, u"VideoLAN"_s);
+        QCOMPARE(item.notes, u"verified"_s);
+        QVERIFY(client.searchError().isEmpty());
+    }
+
     void staleStoreReply() {
         StoreServer store;
         QVERIFY(store.isListening());
