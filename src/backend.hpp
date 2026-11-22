@@ -6,6 +6,7 @@
 #include "catalog.hpp"
 #include "flatpakclient.hpp"
 #include "packagemodel.hpp"
+#include "snapclient.hpp"
 #include "transaction.hpp"
 #include "updatenotice.hpp"
 
@@ -42,6 +43,8 @@ class Backend : public QObject {
     Q_PROPERTY(FlatpakClient* flatpak READ flatpak CONSTANT FINAL)
     Q_PROPERTY(UpdateNotice* updateNotice READ updateNotice CONSTANT FINAL)
     Q_PROPERTY(bool flatpakEnabled READ flatpakEnabled WRITE setFlatpakEnabled NOTIFY flatpakEnabledChanged FINAL)
+    Q_PROPERTY(SnapClient* snap READ snap CONSTANT FINAL)
+    Q_PROPERTY(bool snapEnabled READ snapEnabled WRITE setSnapEnabled NOTIFY snapEnabledChanged FINAL)
     Q_PROPERTY(AppImageClient* appImages READ appImages CONSTANT FINAL)
     Q_PROPERTY(bool appImagesEnabled READ appImagesEnabled WRITE setAppImagesEnabled NOTIFY appImagesEnabledChanged FINAL)
     /// The app was started with an AppImage file to add.
@@ -71,6 +74,9 @@ class Backend : public QObject {
     FlatpakClient* flatpak() { return &m_flatpak; }
     bool flatpakEnabled() const { return m_flatpakEnabled; }
     void setFlatpakEnabled(bool enabled);
+    SnapClient* snap() { return &m_snap; }
+    bool snapEnabled() const { return m_snapEnabled; }
+    void setSnapEnabled(bool enabled);
     UpdateNotice* updateNotice() { return &m_updateNotice; }
     AppImageClient* appImages() { return &m_appImages; }
     bool appImagesEnabled() const { return m_appImagesEnabled; }
@@ -102,6 +108,13 @@ class Backend : public QObject {
     /// Sets up Flathub as a system-wide remote.
     Q_INVOKABLE void addFlathub();
 
+    Q_INVOKABLE void installSnap(const QString& name);
+    Q_INVOKABLE void removeSnap(const QString& name);
+    /// Updates every installed snap.
+    Q_INVOKABLE void refreshSnaps();
+    /// Installs a local .snap file picked by the user.
+    Q_INVOKABLE void installSnapFile(const QUrl& url);
+
  signals:
     void loadingChanged();
     void revisionChanged();
@@ -110,6 +123,7 @@ class Backend : public QObject {
     void aurEnabledChanged();
     void paruAvailableChanged();
     void flatpakEnabledChanged();
+    void snapEnabledChanged();
     void appImagesEnabledChanged();
     void startupFileChanged();
     /// Something the user asked for could not be done, and `text` says why.
@@ -131,6 +145,7 @@ class Backend : public QObject {
     PackageModel m_packages{m_list};
     AurClient m_aur;
     FlatpakClient m_flatpak;
+    SnapClient m_snap;
     AppImageClient m_appImages;
     Transaction m_transaction;
     UpdateNotice m_updateNotice;
@@ -151,6 +166,7 @@ class Backend : public QObject {
     bool m_checkOutdated   = false;  ///< the databases were reloaded while checkupdates was running
     bool m_aurEnabled      = false;
     bool m_flatpakEnabled  = false;
+    bool m_snapEnabled     = false;
     bool m_appImagesEnabled = false;
     QUrl m_startupFile;
     bool m_paruAvailable   = false;

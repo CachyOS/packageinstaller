@@ -17,6 +17,11 @@ using namespace Qt::StringLiterals;
 
 namespace {
 Backend* s_instance = nullptr;
+
+bool isSnap(Transaction::Kind kind) {
+    return kind == Transaction::SnapInstall || kind == Transaction::SnapRemove || kind == Transaction::SnapRefresh ||
+        kind == Transaction::SnapFileInstall;
+}
 }  // namespace
 
 Backend::Backend(IconProvider* icons, QObject* parent)
@@ -25,13 +30,16 @@ Backend::Backend(IconProvider* icons, QObject* parent)
     s_instance       = this;
     m_aurEnabled     = m_settings.value(u"aur/enabled"_s, false).toBool();
     m_flatpakEnabled = m_settings.value(u"flatpak/enabled"_s, false).toBool();
+    m_snapEnabled = m_settings.value(u"snap/enabled"_s, false).toBool();
     m_appImagesEnabled = m_settings.value(u"appimage/enabled"_s, false).toBool();
     m_paruAvailable  = !QStandardPaths::findExecutable(u"paru"_s).isEmpty();
 
     connect(&m_transaction, &Transaction::finished, this, [this](bool) {
-        // a Flatpak operation leaves the pacman databases alone
+        // Flatpak and Snap operations leave the pacman databases alone
         if (m_transaction.isFlatpak()) {
             m_flatpak.refresh();
+        } else if (isSnap(m_transaction.kind())) {
+            m_snap.refresh();
         } else if (m_transaction.kind() != Transaction::RateMirrors) {
             // ranking the mirrors changes no package
             reload();
@@ -108,6 +116,13 @@ void Backend::setFlatpakEnabled(bool enabled) {
     }
 }
 
+void Backend::setSnapEnabled(bool enabled) {
+    // SnapClient has no clear(): disabling just persists the opt-out.
+    if (store(m_snapEnabled, enabled, u"snap/enabled"_s, &Backend::snapEnabledChanged) && enabled) {
+        m_snap.refresh();
+    }
+}
+
 void Backend::setAppImagesEnabled(bool enabled) {
     if (store(m_appImagesEnabled, enabled, u"appimage/enabled"_s, &Backend::appImagesEnabledChanged) && enabled) {
         m_appImages.refresh();
@@ -145,6 +160,36 @@ void Backend::addFlathub() {
         m_transaction.prepareFlatpak(Transaction::FlatpakSetup, {u"Flathub"_s},
             {u"remote-add"_s, u"--system"_s, u"--if-not-exists"_s, u"flathub"_s, u"https://dl.flathub.org/repo/flathub.flatpakrepo"_s});
     }
+}
+
+void Backend::installSnap(const QString& name) {
+    if (m_snapEnabled) {
+        m_transaction.prepare(Transaction::SnapInstall, {name});
+    }
+}
+
+void Backend::removeSnap(const QString& name) {
+    if (m_snapEnabled) {
+        m_transaction.prepare(Transaction::SnapRemove, {name});
+    }
+}
+
+void Backend::refreshSnaps() {
+    if (m_snapEnabled) {
+        m_transaction.prepare(Transaction::SnapRefresh, {});
+    }
+}
+
+void Backend::installSnapFile(const QUrl& url) {
+    if (!m_snapEnabled) {
+        return;
+    }
+    const QString path = url.toLocalFile();
+    if (path.isEmpty()) {
+        return;
+    }
+    // Transaction::title() derives the dialog title from QFileInfo(path).fileName().
+    m_transaction.prepare(Transaction::SnapFileInstall, {path});
 }
 
 void Backend::reload() {
