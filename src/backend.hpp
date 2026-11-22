@@ -114,6 +114,8 @@ class Backend : public QObject {
     Q_INVOKABLE void refreshSnaps();
     /// Installs a local .snap file picked by the user.
     Q_INVOKABLE void installSnapFile(const QUrl& url);
+    /// Enables and starts the snapd socket (and AppArmor service when present).
+    Q_INVOKABLE void setUpSnapd();
 
  signals:
     void loadingChanged();

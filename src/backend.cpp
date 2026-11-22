@@ -20,7 +20,7 @@ Backend* s_instance = nullptr;
 
 bool isSnap(Transaction::Kind kind) {
     return kind == Transaction::SnapInstall || kind == Transaction::SnapRemove || kind == Transaction::SnapRefresh ||
-        kind == Transaction::SnapFileInstall;
+        kind == Transaction::SnapFileInstall || kind == Transaction::SnapdSetup;
 }
 }  // namespace
 
@@ -192,6 +192,12 @@ void Backend::installSnapFile(const QUrl& url) {
     m_transaction.prepare(Transaction::SnapFileInstall, {path});
 }
 
+void Backend::setUpSnapd() {
+    if (m_snapEnabled) {
+        m_transaction.prepare(Transaction::SnapdSetup, {});
+    }
+}
+
 void Backend::reload() {
     if (m_loading) {
         m_reloadQueued = true;
@@ -294,6 +300,11 @@ void Backend::refreshSources() {
     const bool flatpakChanged = m_flatpak.available() == QStandardPaths::findExecutable(u"flatpak"_s).isEmpty();
     if (m_flatpakEnabled && !m_flatpak.loading() && (first || flatpakChanged)) {
         m_flatpak.refresh();
+    }
+    // snap may have been installed by the setup transaction that just finished
+    const bool snapChanged = m_snap.available() == QStandardPaths::findExecutable(u"snap"_s).isEmpty();
+    if (m_snapEnabled && !m_snap.loading() && (first || snapChanged)) {
+        m_snap.refresh();
     }
     if (m_appImagesEnabled) {
         m_appImages.refresh();  // cheap, and notices fuse2 being installed

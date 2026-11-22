@@ -70,6 +70,7 @@ class Transaction : public QObject {
         SnapRemove,
         SnapRefresh,
         SnapFileInstall,
+        SnapdSetup,
         RateMirrors };
     Q_ENUM(Kind)
 

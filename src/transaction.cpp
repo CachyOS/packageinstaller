@@ -19,7 +19,7 @@ using namespace Qt::StringLiterals;
 namespace {
 
 constexpr std::array HELPER_KINDS{Transaction::Install, Transaction::Remove, Transaction::Upgrade, Transaction::RateMirrors,
-    Transaction::SnapInstall, Transaction::SnapRemove, Transaction::SnapRefresh, Transaction::SnapFileInstall};
+    Transaction::SnapInstall, Transaction::SnapRemove, Transaction::SnapRefresh, Transaction::SnapFileInstall, Transaction::SnapdSetup};
 constexpr std::array FLATPAK_KINDS{Transaction::FlatpakInstall, Transaction::FlatpakRemove, Transaction::FlatpakUpdate, Transaction::FlatpakSetup};
 constexpr std::array SNAP_KINDS{Transaction::SnapInstall, Transaction::SnapRemove, Transaction::SnapRefresh, Transaction::SnapFileInstall};
 
@@ -34,6 +34,7 @@ QString helperVerb(Transaction::Kind kind) {
     case Transaction::SnapRemove:
     case Transaction::SnapRefresh:
     case Transaction::SnapFileInstall: return u"snap"_s;
+    case Transaction::SnapdSetup: return u"snapd-setup"_s;
     case Transaction::AurInstall:
     case Transaction::FlatpakInstall:
     case Transaction::FlatpakRemove:
@@ -105,6 +106,7 @@ QString Transaction::title() const {
     case FlatpakUpdate: return tr("Update Flatpak apps");
     case FlatpakSetup: return tr("Add Flathub");
     case SnapRefresh: return tr("Refresh Snap apps");
+    case SnapdSetup: return tr("Set up snapd");
     case RateMirrors: return tr("Rank the mirrors");
     default:
         return m_targets.size() > 1 ? tr("Build %n package(s) from the AUR", "", static_cast<int>(m_targets.size()))
@@ -124,6 +126,7 @@ QString Transaction::summary() const {
     case SnapFileInstall: return tr("snapd will install the app system-wide and needs your permission to do so.");
     case SnapRemove: return tr("snapd will remove the app from the system and needs your permission to do so.");
     case SnapRefresh: return tr("snapd will update the installed apps and needs your permission to do so.");
+    case SnapdSetup: return tr("The snapd socket will be enabled and started now and at boot. The AppArmor service will also be enabled when AppArmor is present.");
     case Upgrade: return tr("The package databases will be refreshed and every available update installed.");
     case RateMirrors:
         return tr("The download speed of the Arch and CachyOS mirrors will be measured and the mirror lists rewritten to prefer the fast ones. This takes a minute or two; a copy of the current lists is kept until the next ranking.");
@@ -147,6 +150,7 @@ QString Transaction::confirmLabel() const {
     case FlatpakUpdate: return tr("Update");
     case SnapRefresh: return tr("Refresh");
     case FlatpakSetup: return tr("Add");
+    case SnapdSetup: return tr("Set up");
     case RateMirrors: return tr("Rank");
     default: return tr("Install");
     }
