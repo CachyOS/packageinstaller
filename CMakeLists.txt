@@ -246,6 +246,12 @@ if(BUILD_TESTING)
     target_link_libraries(test-snapcli PRIVATE pi-snapcli Qt6::Test)
     add_test(NAME snapcli COMMAND test-snapcli)
 
+    qt_add_executable(test-snapclient tests/test_snapclient.cpp src/snapclient.hpp src/snapclient.cpp)
+    target_include_directories(test-snapclient PRIVATE src)
+    target_link_libraries(test-snapclient PRIVATE pi-snapcli pi::pi project_options project_warnings
+        Qt6::Test Qt6::Concurrent Qt6::Qml)
+    add_test(NAME snapclient COMMAND test-snapclient)
+
     qt_add_executable(test-pkgscan tests/test_pkgscan.cpp)
     target_compile_definitions(test-pkgscan PRIVATE TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/tests/data")
     target_link_libraries(test-pkgscan PRIVATE pi-scan project_options Qt6::Test)
