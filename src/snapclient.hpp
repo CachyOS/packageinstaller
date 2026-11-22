@@ -5,9 +5,13 @@
 
 #include <QFutureWatcher>
 #include <QList>
+#include <QNetworkAccessManager>
 #include <QObject>
 #include <QString>
+#include <QUrl>
 #include <QtQml/qqmlregistration.h>
+
+class QNetworkReply;
 
 /// One snap as QML sees it: a store result, an installed copy, or both.
 struct SnapItem {
@@ -43,15 +47,8 @@ struct SnapLoad {
     QList<snapcli::SnapUpdate> updates;
 };
 
-/// What one `snap find` found, tagged with the search generation it belongs to.
-struct SnapFind {
-    int generation = 0;
-    bool ok        = false;
-    QList<snapcli::SnapApp> apps;
-};
-
-/// Snaps, driven through the unprivileged `snap` command. Store search runs a live `snap find`
-/// for each query; there is no local catalogue to filter.
+/// Snaps: store search goes straight to the Snap Store over HTTP; the installed snaps and their
+/// updates still come from the unprivileged `snap` command.
 class SnapClient : public QObject {
     Q_OBJECT
     QML_ELEMENT
@@ -99,7 +96,6 @@ class SnapClient : public QObject {
 
  private:
     void onLoaded();
-    void onFound();
 
     QString m_program;
     QString m_query;
@@ -108,7 +104,9 @@ class SnapClient : public QObject {
     QList<SnapItem> m_installed;
     QList<snapcli::SnapUpdate> m_updates;
     QFutureWatcher<SnapLoad> m_loadWatcher;
-    QFutureWatcher<SnapFind> m_findWatcher;
+    QNetworkAccessManager m_store;
+    QNetworkReply* m_searchReply = nullptr;
+    QUrl m_storeUrl;
     int m_searchGeneration = 0;
     int m_revision         = 0;
     bool m_daemonRunning   = false;

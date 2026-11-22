@@ -2,8 +2,16 @@
 #include "snapclient.hpp"
 #include "process.hpp"
 
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 #include <QPromise>
 #include <QStandardPaths>
+#include <QSysInfo>
+#include <QUrlQuery>
+#include <QUuid>
 #include <QtConcurrent/QtConcurrentRun>
 
 #include <algorithm>
@@ -17,6 +25,7 @@ using namespace std::chrono_literals;
 namespace {
 
 const QStringList TABLE_OPTIONS{u"--color=never"_s, u"--unicode=never"_s};
+constexpr auto STORE_URL = "https://api.snapcraft.io/v2/snaps/find"_L1;
 
 struct Output {
     bool ok = false;
@@ -53,38 +62,54 @@ SnapLoad load(const QPromise<SnapLoad>& promise) {
     return state;
 }
 
-SnapFind find(const QString& program, const QString& query, int generation, const QPromise<SnapFind>& promise) {
-    SnapFind result;
-    result.generation = generation;
-    if (program.isEmpty() || query.size() < 2) {
-        return result;
+/// The V2 store needs device headers; a different device id per process is enough here.
+QNetworkRequest storeRequest(const QUrl& url) {
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::UserAgentHeader, u"cachyos-pi/" PI_VERSION ""_s);
+    request.setRawHeader("Snap-Device-Series", "16");
+    request.setRawHeader("Snap-Device-Architecture", QSysInfo::currentCpuArchitecture().replace(u"arm64"_s, u"aarch64"_s).toUtf8());
+    static const auto deviceId = QUuid::createUuid().toByteArray(QUuid::WithoutBraces);
+    request.setRawHeader("X-Device-Id", deviceId);
+    request.setTransferTimeout(20000);
+    return request;
+}
+
+/// Only the fields shown by the page are read; a missing or wrongly typed field stays empty.
+QList<snapcli::SnapApp> parseStore(const QByteArray& data) {
+    const auto document = QJsonDocument::fromJson(data);
+    QList<snapcli::SnapApp> apps;
+    for (const auto& value : document.object().value(u"results"_s).toArray()) {
+        const auto object    = value.toObject();
+        const auto publisher = object.value(u"publisher"_s).toObject();
+        apps << snapcli::SnapApp{
+            .name      = object.value(u"name"_s).toString(),
+            .version   = object.value(u"revision"_s).toObject().value(u"version"_s).toString(),
+            .publisher = publisher.value(u"display-name"_s).toString(),
+            .notes     = {},
+            .summary   = object.value(u"summary"_s).toString(),
+        };
     }
-    QStringList arguments{u"find"_s};
-    arguments += TABLE_OPTIONS;
-    arguments += query;
-    const auto out = read(program, arguments, [&] { return promise.isCanceled(); });
-    result.ok      = out.ok;
-    if (out.ok) {
-        result.apps = snapcli::parseFind(out.lines);
-    }
-    return result;
+    return apps;
 }
 
 }  // namespace
 
 SnapClient::SnapClient(QObject* parent) : QObject(parent) {
     connect(&m_loadWatcher, &QFutureWatcher<SnapLoad>::finished, this, &SnapClient::onLoaded);
-    connect(&m_findWatcher, &QFutureWatcher<SnapFind>::finished, this, &SnapClient::onFound);
+    const auto overrideUrl = QString::fromLocal8Bit(qgetenv("CACHYOS_PI_SNAP_STORE_URL"));
+    m_storeUrl             = overrideUrl.isEmpty() ? QUrl(STORE_URL) : QUrl(overrideUrl);
 }
 
 SnapClient::~SnapClient() {
-    // Stop both before the members are destroyed: a destroyed watcher reports "finished".
+    if (m_searchReply != nullptr) {
+        m_searchReply->disconnect(this);
+        m_searchReply->abort();
+        m_searchReply->deleteLater();
+    }
+    // Stop the read before the watcher is destroyed: a destroyed watcher reports "finished".
     m_loadWatcher.disconnect(this);
     m_loadWatcher.cancel();
     m_loadWatcher.waitForFinished();
-    m_findWatcher.disconnect(this);
-    m_findWatcher.cancel();
-    m_findWatcher.waitForFinished();
 }
 
 void SnapClient::refresh() {
@@ -140,59 +165,73 @@ void SnapClient::search(const QString& query) {
     const int generation = ++m_searchGeneration;
     m_searchError.clear();
 
-    if (m_program.isEmpty() || m_query.size() < 2) {
+    if (m_searchReply != nullptr) {
+        m_searchReply->disconnect(this);
+        m_searchReply->abort();
+        m_searchReply->deleteLater();
+        m_searchReply = nullptr;
+    }
+
+    if (m_query.size() < 2) {
         m_results.clear();
         m_searching = false;
         emit resultsChanged();
         emit loadingChanged();
         return;
     }
-    const auto program = m_program;
-    const auto text    = m_query;
-    using Promise      = QPromise<SnapFind>;
+
+    QUrl url = m_storeUrl;
+    QUrlQuery parameters;
+    parameters.addQueryItem(u"q"_s, m_query);
+    parameters.addQueryItem(u"fields"_s, u"version,summary,publisher,title,media"_s);
+    url.setQuery(parameters);
+
     m_searching = true;
     emit loadingChanged();
-    m_findWatcher.setFuture(QtConcurrent::run([program, text, generation](Promise& promise) {
-        promise.addResult(find(program, text, generation, promise));
-    }));
-}
-
-void SnapClient::onFound() {
-    m_searching = false;
-    emit loadingChanged();
-    if (m_findWatcher.isCanceled()) {
-        return;
-    }
-    const auto result = m_findWatcher.result();
-    if (result.generation != m_searchGeneration) {
-        return;  // a newer query has taken over
-    }
-
-    m_results.clear();
-    m_searchError.clear();
-    if (!result.ok) {
-        m_searchError = tr("Could not search the Snap Store. Check the snapd connection and try again.");
-    } else {
-        for (const auto& app : result.apps) {
-            SnapItem item;
-            item.name      = app.name;
-            item.version   = app.version;
-            item.publisher = app.publisher;
-            item.notes     = app.notes;
-            item.summary   = app.summary;
-            for (const auto& installed : m_installed) {
-                if (installed.name == app.name) {
-                    item.revision   = installed.revision;
-                    item.channel    = installed.channel;
-                    item.installed  = true;
-                    item.upgradable = installed.upgradable;
-                    break;
-                }
-            }
-            m_results << item;
+    auto* reply   = m_store.get(storeRequest(url));
+    m_searchReply = reply;
+    connect(reply, &QNetworkReply::finished, this, [this, reply, generation] {
+        if (reply != m_searchReply) {
+            reply->deleteLater();
+            return;
         }
-    }
-    emit resultsChanged();
+        m_searchReply = nullptr;
+        reply->deleteLater();
+
+        m_searching = false;
+        emit loadingChanged();
+        if (generation != m_searchGeneration) {
+            return;  // a newer query has taken over
+        }
+
+        const auto status = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+        const bool failed = reply->error() != QNetworkReply::NoError || (status != 0 && status != 200);
+        m_results.clear();
+        m_searchError.clear();
+        if (failed) {
+            m_searchError = tr("Could not search the Snap Store. Check your connection and try again.");
+        } else {
+            for (const auto& app : parseStore(reply->readAll())) {
+                SnapItem item;
+                item.name      = app.name;
+                item.version   = app.version;
+                item.publisher = app.publisher;
+                item.notes     = app.notes;
+                item.summary   = app.summary;
+                for (const auto& installed : m_installed) {
+                    if (installed.name == app.name) {
+                        item.revision   = installed.revision;
+                        item.channel    = installed.channel;
+                        item.installed  = true;
+                        item.upgradable = installed.upgradable;
+                        break;
+                    }
+                }
+                m_results << item;
+            }
+        }
+        emit resultsChanged();
+    });
 }
 
 SnapItem SnapClient::app(const QString& name) const {
