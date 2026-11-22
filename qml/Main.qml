@@ -6,7 +6,7 @@ import CachyOS.PackageInstaller
 ApplicationWindow {
     id: root
 
-    // "home", "browse", "installed", "updates", "aur", "flatpak", "appimage" or "settings"
+    // "home", "browse", "installed", "updates", "aur", "flatpak", "snap", "appimage" or "settings"
     property string section: "home"
 
     // History for the back and forward buttons. Pages on top of a section live in the
@@ -54,6 +54,7 @@ ApplicationWindow {
         case "updates": return updatesPage;
         case "aur": return aurPage;
         case "flatpak": return flatpakPage;
+        case "snap": return snapPage;
         case "appimage": return appImagePage;
         case "settings": return settingsPage;
         default: return homePage;
@@ -62,7 +63,7 @@ ApplicationWindow {
 
     // Sections with a list that the search field filters.
     function searchable(name: string): bool {
-        return name === "browse" || name === "installed" || name === "aur" || name === "flatpak";
+        return name === "browse" || name === "installed" || name === "aur" || name === "flatpak" || name === "snap";
     }
 
     function badge(name: string): int {
@@ -70,6 +71,7 @@ ApplicationWindow {
         case "updates": return Backend.updateCount;
         case "aur": return Backend.aur.updateCount;
         case "flatpak": return Backend.flatpak.updateCount;
+        case "snap": return Backend.snapEnabled ? Backend.snap.updateCount : 0;
         case "appimage": return Backend.appImagesEnabled ? Backend.appImages.updateCount : 0;
         default: return 0;
         }
@@ -267,6 +269,7 @@ ApplicationWindow {
                         ListElement { name: "updates"; label: qsTr("Updates"); glyph: "M12 4v11M7 11l5 5l5-5M5 20h14" }
                         ListElement { name: "aur"; label: qsTr("AUR"); glyph: "M12 3 20 7.5v9L12 21l-8-4.5v-9zM4 7.5 12 12l8-4.5M12 12v9" }
                         ListElement { name: "flatpak"; label: qsTr("Flatpak"); glyph: "M4 8l8-4l8 4v8l-8 4l-8-4zM4 8l8 4l8-4M12 12v8M8 6l8 4" }
+                        ListElement { name: "snap"; label: qsTr("Snap"); glyph: "M6 8h12l1 12H5zM9 8V6a3 3 0 0 1 6 0v2" }
                         ListElement { name: "appimage"; label: qsTr("AppImage"); glyph: "M5 4h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zM12 8v8M8 12h8" }
                     }
 
@@ -321,7 +324,8 @@ ApplicationWindow {
             anchors.verticalCenter: topBar.verticalCenter
             width: Math.min(topBar.width - 2 * Look.pagePadding, 520)
             placeholderText: root.section === "aur" ? qsTr("Search the AUR")
-                : root.section === "flatpak" ? qsTr("Search Flatpak apps") : qsTr("Search apps and packages")
+                : root.section === "flatpak" ? qsTr("Search Flatpak apps")
+                : root.section === "snap" ? qsTr("Search Snap apps") : qsTr("Search apps and packages")
             Accessible.name: placeholderText
 
             // the searchable pages bind their query to the text
@@ -420,6 +424,20 @@ ApplicationWindow {
     Component {
         id: flatpakDetailsPage
         FlatpakDetailsPage {
+            onBack: root.back()
+        }
+    }
+    Component {
+        id: snapPage
+        SnapPage {
+            query: search.text
+            onOpenSettings: root.showSources()
+            onOpenApp: name => root.openPage(snapDetailsPage, {"name": name})
+        }
+    }
+    Component {
+        id: snapDetailsPage
+        SnapDetailsPage {
             onBack: root.back()
         }
     }

@@ -153,6 +153,17 @@ ScrollPage {
 
         SourceCard {
             width: sources.width
+            title: qsTr("Snap")
+            description: qsTr("Confined apps from the Snap Store. They need snapd and AppArmor and are packaged by their developers, not by CachyOS.")
+            warning: Backend.snapEnabled && !Backend.snap.loading
+                && (!Backend.snap.available || !Backend.snap.daemonRunning)
+                ? qsTr("Snaps need the “snapd” package from the AUR and a running socket. You can still open the Snap page to try again.") : ""
+            active: Backend.snapEnabled
+            onToggled: Backend.snapEnabled = !Backend.snapEnabled
+        }
+
+        SourceCard {
+            width: sources.width
             title: qsTr("AppImage")
             description: qsTr("Single-file apps that you downloaded yourself. They get a menu entry and an icon. They are not checked or sandboxed, and they are not updated for you.")
             active: Backend.appImagesEnabled

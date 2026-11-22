@@ -120,6 +120,7 @@ qt_add_executable(${PROJECT_NAME}
     src/aurclient.hpp src/aurclient.cpp
     src/flatpakclient.hpp src/flatpakclient.cpp
     src/appimageclient.hpp src/appimageclient.cpp
+    src/snapclient.hpp src/snapclient.cpp
     src/iconprovider.hpp src/iconprovider.cpp
     src/icontheme.hpp src/icontheme.cpp
     src/graphics.hpp src/graphics.cpp
@@ -156,6 +157,8 @@ set(PI_QML_FILES
     qml/AurDetailsPage.qml
     qml/FlatpakPage.qml
     qml/FlatpakDetailsPage.qml
+    qml/SnapPage.qml
+    qml/SnapDetailsPage.qml
     qml/AppImagePage.qml
     qml/Toggle.qml
     qml/InfoItem.qml
@@ -208,7 +211,7 @@ target_compile_definitions(${PROJECT_NAME} PRIVATE
     PI_HELPER_PATH="${PI_HELPER_DIR}/cachyos-pi-helper")
 target_include_directories(${PROJECT_NAME} PRIVATE src)
 target_link_libraries(${PROJECT_NAME} PRIVATE
-    project_options project_warnings pi::pi pi-scan pi-appimage
+    project_options project_warnings pi::pi pi-scan pi-appimage pi-snapcli
     Qt6::Core Qt6::Gui Qt6::Widgets Qt6::Qml Qt6::Quick Qt6::QuickControls2 Qt6::Network Qt6::Concurrent
     AppStreamQt PkgConfig::LIBALPM ryml::ryml backward)
 
