@@ -18,6 +18,7 @@ Item {
     readonly property bool needsSnapd: !snap.available || !snap.daemonRunning
 
     signal openApp(string name)
+    signal openAur(string name)
     signal openSettings
 
     onQueryChanged: debounce.restart()
@@ -87,7 +88,8 @@ Item {
                 tone: "soft"
                 text: qsTr("Install snapd")
                 enabled: Backend.aurEnabled && Backend.paruAvailable
-                onClicked: Backend.installFromAur("snapd")
+                // AUR recipes must be reviewed before they are built, like anywhere else in the app.
+                onClicked: root.openAur("snapd")
             }
 
             PillButton {

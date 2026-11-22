@@ -91,6 +91,16 @@ ApplicationWindow {
         openPage(detailsPage, {"pkgName": name});
     }
 
+    // AurDetailsPage needs a real aurPackage value, not a plain JS object.
+    property aurPackage aurSeed
+
+    function openAurPackage(name: string): void {
+        aurSeed.name = name;
+        aurSeed.pkgbase = name;
+        aurSeed.upgradable = false;
+        openPage(aurDetailsPage, {"item": aurSeed});
+    }
+
     function back(): void {
         if (stack.depth > 1) {
             const page = trail.pop();
@@ -433,6 +443,7 @@ ApplicationWindow {
             query: search.text
             onOpenSettings: root.showSources()
             onOpenApp: name => root.openPage(snapDetailsPage, {"name": name})
+            onOpenAur: name => root.openAurPackage(name)
         }
     }
     Component {
