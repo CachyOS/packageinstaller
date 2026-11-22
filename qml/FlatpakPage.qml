@@ -1,5 +1,7 @@
 pragma ComponentBehavior: Bound
+import QtCore
 import QtQuick
+import QtQuick.Dialogs
 import CachyOS.PackageInstaller
 
 Item {
@@ -29,6 +31,14 @@ Item {
         onTriggered: root.flatpak.search(root.query)
     }
 
+    FileDialog {
+        id: fileDialog
+        title: qsTr("Choose a Flatpak file")
+        currentFolder: StandardPaths.writableLocation(StandardPaths.DownloadLocation)
+        nameFilters: [qsTr("Flatpak files (*.flatpak *.flatpakref)"), qsTr("All files (*)")]
+        onAccepted: Backend.installFlatpakFile(selectedFile)
+    }
+
     EmptyState {
         visible: !root.ready
         anchors.centerIn: root
@@ -55,6 +65,13 @@ Item {
         visible: root.ready
         title: qsTr("Flatpak")
         subtitle: qsTr("Sandboxed apps from Flathub. Not packaged by CachyOS.")
+        actions: [
+            PillButton {
+                tone: "soft"
+                text: qsTr("Install from file…")
+                onClicked: fileDialog.open()
+            }
+        ]
 
         UpdatesBanner {
             visible: !root.searching && count > 0
