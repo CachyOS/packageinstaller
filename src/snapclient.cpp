@@ -171,6 +171,7 @@ void SnapClient::search(const QString& query) {
     m_query              = query.trimmed();
     const int generation = ++m_searchGeneration;
     m_searchError.clear();
+    emit resultsChanged();
 
     if (m_searchReply != nullptr) {
         m_searchReply->disconnect(this);

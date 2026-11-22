@@ -162,6 +162,12 @@ void IconProvider::resolve(const Request& request) {
         return;
     }
 
+    // Snaps have no local icon index: tile per app name, not per "snap/" prefix.
+    if (id.startsWith("snap/"_L1)) {
+        generate(request, id.mid(5));
+        return;
+    }
+
     // "gimp-help-de" and "firefox-esr-bin" have no icon of their own: walk up the
     // name ("gimp-help", "gimp") so related packages share the application's icon.
     for (QString name = id; !name.isEmpty(); name.truncate(qMax<qsizetype>(name.lastIndexOf(u'-'), 0))) {
