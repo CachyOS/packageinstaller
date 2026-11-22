@@ -157,7 +157,7 @@ ScrollPage {
             description: qsTr("Confined apps from the Snap Store. They need snapd and AppArmor and are packaged by their developers, not by CachyOS.")
             warning: Backend.snapEnabled && !Backend.snap.loading
                 && (!Backend.snap.available || !Backend.snap.daemonRunning)
-                ? qsTr("Snaps need the “snapd” package from the AUR and a running socket. You can still open the Snap page to try again.") : ""
+                ? qsTr("Snaps need the “snapd” package from the AUR and a running socket. Open the Snap page to install or start it; building it needs the AUR source turned on and “paru” installed.") : ""
             active: Backend.snapEnabled
             onToggled: Backend.snapEnabled = !Backend.snapEnabled
         }

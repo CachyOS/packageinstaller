@@ -75,7 +75,28 @@ Item {
         Notice {
             width: pageHeader.width
             tone: Notice.Warning
-            text: root.needsSnapd ? qsTr("Browsing and searching the Snap Store works without snapd. Installing snaps needs the “snapd” package from the AUR, with snapd.socket running and AppArmor set up.") : ""
+            text: !root.needsSnapd ? ""
+                : qsTr("Browsing and searching the Snap Store works without snapd. Installing snaps needs the “snapd” package from the AUR, with snapd.socket running and AppArmor set up.")
+                  + (!root.snap.available && (!Backend.aurEnabled || !Backend.paruAvailable)
+                     ? " " + qsTr("To build it, turn on the AUR source and install “paru” in Settings → Sources first.")
+                     : "")
+
+            PillButton {
+                visible: !root.snap.available
+                size: "small"
+                tone: "soft"
+                text: qsTr("Install snapd")
+                enabled: Backend.aurEnabled && Backend.paruAvailable
+                onClicked: Backend.installFromAur("snapd")
+            }
+
+            PillButton {
+                visible: root.snap.available && !root.snap.daemonRunning
+                size: "small"
+                text: qsTr("Start snapd")
+                enabled: Backend.snapEnabled
+                onClicked: Backend.setUpSnapd()
+            }
         }
 
         UpdatesBanner {
