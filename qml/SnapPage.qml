@@ -22,8 +22,11 @@ Item {
     signal openSettings
 
     onQueryChanged: debounce.restart()
-    // Read the installed snaps and updates on the first visit too.
-    Component.onCompleted: snap.refresh()
+    // Read the installed snaps and updates on the first visit too, and seed the client's query.
+    Component.onCompleted: {
+        snap.refresh()
+        snap.search(root.query)
+    }
 
     Timer {
         id: debounce

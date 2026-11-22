@@ -77,7 +77,7 @@ class SnapClient : public QObject {
 
     bool available() const { return !m_program.isEmpty(); }
     bool daemonRunning() const { return m_daemonRunning; }
-    bool loading() const { return m_loading; }
+    bool loading() const { return m_loading || m_searching; }
     int appCount() const { return static_cast<int>(m_installed.size()); }
     int revision() const { return m_revision; }
     QList<SnapItem> results() const { return m_results; }
@@ -113,5 +113,6 @@ class SnapClient : public QObject {
     int m_revision         = 0;
     bool m_daemonRunning   = false;
     bool m_loading         = false;
+    bool m_searching       = false;
     bool m_reloadQueued    = false;
 };

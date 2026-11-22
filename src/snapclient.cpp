@@ -8,6 +8,7 @@
 
 #include <algorithm>
 #include <chrono>
+#include <functional>
 #include <utility>
 
 using namespace Qt::StringLiterals;
@@ -23,14 +24,15 @@ struct Output {
 };
 
 /// Runs `snap` as the user with untranslated output, keeping the exit status so a stopped
-/// daemon and a failed search can be told apart from an empty table.
-Output read(const QString& program, const QStringList& arguments, std::chrono::seconds timeout = 30s) {
+/// daemon and a failed search can be told apart from an empty table. Gives up on cancellation.
+Output read(const QString& program, const QStringList& arguments, std::function<bool()> cancel_requested,
+    std::chrono::seconds timeout = 30s) {
     const auto argv   = qt_utils::to_std_strings(QStringList{program} + arguments);
-    const auto result = pi::utils::run(argv, {.timeout = timeout});
+    const auto result = pi::utils::run(argv, {.timeout = timeout, .cancel_requested = std::move(cancel_requested)});
     return {.ok = result.ok(), .lines = qt_utils::to_qstring_list(pi::utils::make_split_view(result.output))};
 }
 
-SnapLoad load() {
+SnapLoad load(const QPromise<SnapLoad>& promise) {
     SnapLoad state;
     const auto program = QStandardPaths::findExecutable(u"snap"_s);
     if (program.isEmpty()) {
@@ -38,19 +40,20 @@ SnapLoad load() {
     }
     state.program = program;
 
-    const auto listed   = read(program, QStringList{u"list"_s} + TABLE_OPTIONS);
+    const auto cancel   = [&] { return promise.isCanceled(); };
+    const auto listed   = read(program, QStringList{u"list"_s} + TABLE_OPTIONS, cancel);
     state.daemonRunning = listed.ok;
     state.installed     = snapcli::parseList(listed.lines);
 
     // A non-zero `refresh --list` means "no updates/unavailable", not an app error.
-    const auto updates = read(program, QStringList{u"refresh"_s, u"--list"_s} + TABLE_OPTIONS);
+    const auto updates = read(program, QStringList{u"refresh"_s, u"--list"_s} + TABLE_OPTIONS, cancel);
     if (updates.ok) {
         state.updates = snapcli::parseUpdates(updates.lines);
     }
     return state;
 }
 
-SnapFind find(const QString& program, const QString& query, int generation) {
+SnapFind find(const QString& program, const QString& query, int generation, const QPromise<SnapFind>& promise) {
     SnapFind result;
     result.generation = generation;
     if (program.isEmpty() || query.size() < 2) {
@@ -59,7 +62,7 @@ SnapFind find(const QString& program, const QString& query, int generation) {
     QStringList arguments{u"find"_s};
     arguments += TABLE_OPTIONS;
     arguments += query;
-    const auto out = read(program, arguments);
+    const auto out = read(program, arguments, [&] { return promise.isCanceled(); });
     result.ok      = out.ok;
     if (out.ok) {
         result.apps = snapcli::parseFind(out.lines);
@@ -92,7 +95,7 @@ void SnapClient::refresh() {
     m_loading = true;
     emit loadingChanged();
     using Promise = QPromise<SnapLoad>;
-    m_loadWatcher.setFuture(QtConcurrent::run([](Promise& promise) { promise.addResult(load()); }));
+    m_loadWatcher.setFuture(QtConcurrent::run([](Promise& promise) { promise.addResult(load(promise)); }));
 }
 
 void SnapClient::onLoaded() {
@@ -139,18 +142,24 @@ void SnapClient::search(const QString& query) {
 
     if (m_program.isEmpty() || m_query.size() < 2) {
         m_results.clear();
+        m_searching = false;
         emit resultsChanged();
+        emit loadingChanged();
         return;
     }
     const auto program = m_program;
     const auto text    = m_query;
     using Promise      = QPromise<SnapFind>;
+    m_searching = true;
+    emit loadingChanged();
     m_findWatcher.setFuture(QtConcurrent::run([program, text, generation](Promise& promise) {
-        promise.addResult(find(program, text, generation));
+        promise.addResult(find(program, text, generation, promise));
     }));
 }
 
 void SnapClient::onFound() {
+    m_searching = false;
+    emit loadingChanged();
     if (m_findWatcher.isCanceled()) {
         return;
     }
