@@ -15,6 +15,7 @@ Item {
     property appImageCandidate candidate
     // The app that is waiting to be removed
     property appImageItem doomed
+    property appImageItem inspected
 
     signal openSettings
 
@@ -56,6 +57,16 @@ Item {
         function onImportsChanged(): void {
             root.offerImports();
         }
+
+        function onAppsChanged(): void {
+            if (!optionsDialog.visible)
+                return;
+            const fresh = root.client.apps.find(app => app.id === root.inspected.id);
+            if (fresh)
+                root.inspected = fresh;
+            else
+                optionsDialog.close();
+        }
     }
 
     component Sheet: Dialog {
@@ -86,6 +97,96 @@ Item {
             id: column
             width: parent.width
         }
+    }
+
+    component OptionRow: Item {
+        id: optionRow
+
+        property string label
+        property string value
+        property bool link: false
+        property string buttonGlyph
+        property string buttonName
+        signal buttonClicked
+
+        implicitHeight: Math.max(58, texts.implicitHeight + 24)
+
+        Rectangle {
+            visible: optionRow.y > 0
+            width: optionRow.width
+            height: 1
+            color: Look.border
+        }
+
+        Column {
+            id: texts
+            x: 16
+            anchors.verticalCenter: optionRow.verticalCenter
+            width: optionRow.width - 32 - (optionButton.visible ? optionButton.width + 12 : 0)
+            spacing: 2
+
+            Muted {
+                width: texts.width
+                text: optionRow.label
+                font.pixelSize: Look.fontSmall
+            }
+
+            PlainText {
+                visible: !optionRow.link
+                width: texts.width
+                text: optionRow.value
+                elide: Text.ElideMiddle
+            }
+
+            WebLink {
+                width: texts.width
+                url: optionRow.link ? optionRow.value : ""
+            }
+        }
+
+        PillButton {
+            id: optionButton
+            visible: optionRow.buttonGlyph.length > 0
+            anchors.right: optionRow.right
+            anchors.rightMargin: 12
+            anchors.verticalCenter: optionRow.verticalCenter
+            size: "small"
+            tone: "soft"
+            leftPadding: 10
+            rightPadding: 10
+            Accessible.name: optionRow.buttonName
+            onClicked: optionRow.buttonClicked()
+
+            contentItem: Glyph {
+                path: optionRow.buttonGlyph
+                size: 16
+            }
+        }
+    }
+
+    component OptionGroup: Rectangle {
+        default property alias rows: column.data
+
+        implicitHeight: column.height
+        radius: Look.radius
+        color: Look.surfaceAlt
+        border.width: 1
+        border.color: Look.border
+
+        Column {
+            id: column
+            width: parent.width
+        }
+    }
+
+    function folderOf(path: string): url {
+        const cut = path.lastIndexOf("/");
+        return "file://" + encodeURI(cut > 0 ? path.substring(0, cut) : "/");
+    }
+
+    function showOptions(app: appImageItem): void {
+        inspected = app;
+        optionsDialog.open();
     }
 
     function origin(source: string): string {
@@ -252,6 +353,25 @@ Item {
 
             width: list.rowWidth
             height: 72
+            hovered: open.containsMouse
+            focused: row.activeFocus
+            activeFocusOnTab: true
+            Accessible.role: Accessible.Button
+            Accessible.name: qsTr("Options of %1").arg(modelData.name)
+            Keys.onReturnPressed: root.showOptions(modelData)
+            Keys.onEnterPressed: root.showOptions(modelData)
+            Keys.onSpacePressed: root.showOptions(modelData)
+
+            MouseArea {
+                id: open
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onClicked: {
+                    row.forceActiveFocus(Qt.MouseFocusReason);
+                    root.showOptions(row.modelData);
+                }
+            }
 
             AppIcon {
                 id: icon
@@ -673,6 +793,130 @@ Item {
                         importDialog.close();
                         root.client.migrateImports();
                     }
+                }
+            }
+        }
+    }
+
+    Sheet {
+        id: optionsDialog
+        firstButton: optionsClose
+        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+        maxWidth: 620
+
+        readonly property bool hasSource: root.inspected.source.length > 0
+
+        contentItem: Column {
+            id: optionsBody
+            spacing: 16
+
+            Row {
+                width: optionsBody.width
+                spacing: 14
+
+                AppIcon {
+                    id: optionsIcon
+                    pkgName: "appimage/" + root.inspected.id
+                    size: 56
+                }
+
+                Column {
+                    anchors.verticalCenter: optionsIcon.verticalCenter
+                    width: optionsBody.width - optionsIcon.width - 14
+                    spacing: 2
+
+                    Heading {
+                        width: parent.width
+                        text: root.inspected.name
+                        elide: Text.ElideRight
+                    }
+
+                    Muted {
+                        width: parent.width
+                        text: [root.inspected.version, root.inspected.size].filter(part => part.length > 0).join(" · ")
+                        visible: text.length > 0
+                        elide: Text.ElideRight
+                    }
+                }
+            }
+
+            Notice {
+                width: optionsBody.width
+                text: root.inspected.missing ? qsTr("The file is gone. Remove this entry or add the AppImage again.") : ""
+                tone: Notice.Warning
+            }
+
+            OptionGroup {
+                width: optionsBody.width
+
+                OptionRow {
+                    width: parent.width
+                    label: qsTr("Path")
+                    value: root.inspected.path
+                    buttonGlyph: "M10 5H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5M14 4h6v6M20 4l-9 9"
+                    buttonName: qsTr("Show in file manager")
+                    onButtonClicked: Qt.openUrlExternally(root.folderOf(root.inspected.path))
+                }
+            }
+
+            Muted {
+                width: optionsBody.width
+                text: qsTr("Update management")
+                font.weight: Font.DemiBold
+                visible: optionsDialog.hasSource
+            }
+
+            OptionGroup {
+                width: optionsBody.width
+                visible: optionsDialog.hasSource
+
+                OptionRow {
+                    width: parent.width
+                    label: qsTr("Source")
+                    value: qsTr("GitHub")
+                }
+
+                OptionRow {
+                    width: parent.width
+                    label: qsTr("Repository")
+                    value: "https://" + root.origin(root.inspected.source)
+                    link: true
+                }
+
+                OptionRow {
+                    width: parent.width
+                    visible: root.inspected.update.length > 0
+                    label: qsTr("Newer release")
+                    value: root.inspected.update
+                }
+            }
+
+            Row {
+                anchors.right: optionsBody.right
+                spacing: 10
+
+                PillButton {
+                    tone: "danger"
+                    enabled: !root.client.busy
+                    text: qsTr("Remove")
+                    onClicked: {
+                        optionsDialog.close();
+                        root.doomed = root.inspected;
+                        removeDialog.open();
+                    }
+                }
+
+                PillButton {
+                    visible: !root.inspected.missing && !root.inspected.terminal && root.inspected.owned
+                    tone: "soft"
+                    text: qsTr("Open")
+                    onClicked: root.client.launch(root.inspected.id)
+                }
+
+                PillButton {
+                    id: optionsClose
+                    text: qsTr("Close")
+                    onClicked: optionsDialog.close()
                 }
             }
         }
