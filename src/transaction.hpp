@@ -66,6 +66,10 @@ class Transaction : public QObject {
         FlatpakRemove,
         FlatpakUpdate,
         FlatpakSetup,
+        SnapInstall,
+        SnapRemove,
+        SnapRefresh,
+        SnapFileInstall,
         RateMirrors };
     Q_ENUM(Kind)
 

@@ -18,8 +18,10 @@ using namespace Qt::StringLiterals;
 
 namespace {
 
-constexpr std::array HELPER_KINDS{Transaction::Install, Transaction::Remove, Transaction::Upgrade, Transaction::RateMirrors};
+constexpr std::array HELPER_KINDS{Transaction::Install, Transaction::Remove, Transaction::Upgrade, Transaction::RateMirrors,
+    Transaction::SnapInstall, Transaction::SnapRemove, Transaction::SnapRefresh, Transaction::SnapFileInstall};
 constexpr std::array FLATPAK_KINDS{Transaction::FlatpakInstall, Transaction::FlatpakRemove, Transaction::FlatpakUpdate, Transaction::FlatpakSetup};
+constexpr std::array SNAP_KINDS{Transaction::SnapInstall, Transaction::SnapRemove, Transaction::SnapRefresh, Transaction::SnapFileInstall};
 
 /// What the helper is asked to do. No default: a new kind has to be named here.
 QString helperVerb(Transaction::Kind kind) {
@@ -28,6 +30,10 @@ QString helperVerb(Transaction::Kind kind) {
     case Transaction::Remove: return u"remove"_s;
     case Transaction::Upgrade: return u"upgrade"_s;
     case Transaction::RateMirrors: return u"rate-mirrors"_s;
+    case Transaction::SnapInstall:
+    case Transaction::SnapRemove:
+    case Transaction::SnapRefresh:
+    case Transaction::SnapFileInstall: return u"snap"_s;
     case Transaction::AurInstall:
     case Transaction::FlatpakInstall:
     case Transaction::FlatpakRemove:
@@ -35,6 +41,17 @@ QString helperVerb(Transaction::Kind kind) {
     case Transaction::FlatpakSetup: break;
     }
     return {};
+}
+
+/// The snap subcommand. A local .snap file uses the same verb as a store name.
+QString snapOperation(Transaction::Kind kind) {
+    switch (kind) {
+    case Transaction::SnapInstall:
+    case Transaction::SnapFileInstall: return u"install"_s;
+    case Transaction::SnapRemove: return u"remove"_s;
+    case Transaction::SnapRefresh: return u"refresh"_s;
+    default: return {};
+    }
 }
 
 /// Operations on named repository packages: `pacman --print` can say what they change.
@@ -78,12 +95,16 @@ QString Transaction::title() const {
     const auto target = m_targets.value(0);
     switch (m_kind) {
     case Install:
-    case FlatpakInstall: return tr("Install %1").arg(target);
+    case FlatpakInstall:
+    case SnapInstall: return tr("Install %1").arg(target);
+    case SnapFileInstall: return tr("Install %1").arg(QFileInfo(target).fileName());
     case Remove:
-    case FlatpakRemove: return tr("Remove %1").arg(target);
+    case FlatpakRemove:
+    case SnapRemove: return tr("Remove %1").arg(target);
     case Upgrade: return tr("Update the system");
     case FlatpakUpdate: return tr("Update Flatpak apps");
     case FlatpakSetup: return tr("Add Flathub");
+    case SnapRefresh: return tr("Refresh Snap apps");
     case RateMirrors: return tr("Rank the mirrors");
     default:
         return m_targets.size() > 1 ? tr("Build %n package(s) from the AUR", "", static_cast<int>(m_targets.size()))
@@ -99,6 +120,10 @@ QString Transaction::summary() const {
         return tr("The app will be removed, and with it the runtimes that no other app needs. Its data in your home directory is kept.");
     case FlatpakUpdate: return tr("Every installed Flatpak app and runtime will be updated.");
     case FlatpakSetup: return tr("Flathub will be added as an app source for all users.");
+    case SnapInstall:
+    case SnapFileInstall: return tr("snapd will install the app system-wide and needs your permission to do so.");
+    case SnapRemove: return tr("snapd will remove the app from the system and needs your permission to do so.");
+    case SnapRefresh: return tr("snapd will update the installed apps and needs your permission to do so.");
     case Upgrade: return tr("The package databases will be refreshed and every available update installed.");
     case RateMirrors:
         return tr("The download speed of the Arch and CachyOS mirrors will be measured and the mirror lists rewritten to prefer the fast ones. This takes a minute or two; a copy of the current lists is kept until the next ranking.");
@@ -116,9 +141,11 @@ QString Transaction::summary() const {
 QString Transaction::confirmLabel() const {
     switch (m_kind) {
     case Remove:
-    case FlatpakRemove: return tr("Remove");
+    case FlatpakRemove:
+    case SnapRemove: return tr("Remove");
     case Upgrade:
     case FlatpakUpdate: return tr("Update");
+    case SnapRefresh: return tr("Refresh");
     case FlatpakSetup: return tr("Add");
     case RateMirrors: return tr("Rank");
     default: return tr("Install");
@@ -186,7 +213,9 @@ void Transaction::prepare(Kind kind, const QStringList& targets) {
     }
     m_program = u"pkexec"_s;
     m_args    = {helperPath(), helperVerb(kind)};
-    if (plannable(kind)) {
+    if (std::ranges::contains(SNAP_KINDS, kind)) {
+        m_args << snapOperation(kind) << targets;
+    } else if (plannable(kind)) {
         m_args << targets;
     }
     m_workingDirectory = u"/"_s;
