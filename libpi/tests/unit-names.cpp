@@ -10,6 +10,7 @@ using namespace std::string_view_literals;
 using pi::utils::is_package_name;
 using pi::utils::is_plain_name;
 using pi::utils::is_repo_target;
+using pi::utils::is_snap_name;
 using pi::utils::kLocalFileName;
 using pi::utils::kPackageName;
 using pi::utils::kPkgbase;
@@ -109,5 +110,28 @@ TEST_CASE("is_repo_target")
     }
 }
 
+TEST_CASE("is_snap_name")
+{
+    SECTION("accepted")
+    {
+        CHECK(is_snap_name("vlc"sv));
+        CHECK(is_snap_name("get-iplayer"sv));
+        CHECK(is_snap_name("core22"sv));
+        CHECK(is_snap_name(std::string(40, 'a')));
+    }
+    SECTION("refused")
+    {
+        CHECK_FALSE(is_snap_name(""sv));
+        CHECK_FALSE(is_snap_name("-vlc"sv));
+        CHECK_FALSE(is_snap_name("vlc-"sv));
+        CHECK_FALSE(is_snap_name("VLC"sv));
+        CHECK_FALSE(is_snap_name("vlc--x"sv));
+        CHECK_FALSE(is_snap_name("--channel=bad"sv));
+        CHECK_FALSE(is_snap_name("foo/bar"sv));
+        CHECK_FALSE(is_snap_name(std::string(41, 'a')));
+    }
+}
+
 static_assert(is_repo_target("extra/firefox"));
 static_assert(!is_package_name("-x"));
+static_assert(is_snap_name("vlc"));

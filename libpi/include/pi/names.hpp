@@ -34,6 +34,14 @@ inline constexpr NameRules kLocalFileName{.max_size = 128, .upper = true};
     return is_plain_name(name, kPackageName);
 }
 
+/// Lowercase letters and digits with single internal dashes, at most 40 characters.
+[[nodiscard]] constexpr auto is_snap_name(std::string_view name) noexcept -> bool {
+    const auto alnum = [](char ch) { return is_lower(ch) || is_digit(ch); };
+    return !name.empty() && name.size() <= 40 && alnum(name.front()) && alnum(name.back())
+        && std::ranges::all_of(name, [](char ch) { return is_lower(ch) || is_digit(ch) || ch == '-'; })
+        && std::ranges::adjacent_find(name, [](char a, char b) { return a == '-' && b == '-'; }) == name.end();
+}
+
 /// "name" or "repo/name".
 [[nodiscard]] constexpr auto is_repo_target(std::string_view target) noexcept -> bool {
     const auto slash = target.find('/');
