@@ -102,6 +102,13 @@ target_include_directories(pi-appimage PUBLIC src)
 target_link_libraries(pi-appimage PUBLIC Qt6::Core PRIVATE project_options project_warnings)
 
 ##
+## snap CLI output: text handling only, shared by the GUI and the tests.
+##
+add_library(pi-snapcli STATIC src/snapcli.hpp src/snapcli.cpp)
+target_include_directories(pi-snapcli PUBLIC src)
+target_link_libraries(pi-snapcli PUBLIC Qt6::Core PRIVATE project_options project_warnings)
+
+##
 ## GUI
 ##
 qt_add_executable(${PROJECT_NAME}
@@ -235,6 +242,10 @@ install(FILES icons/cachyos-pi.png DESTINATION ${CMAKE_INSTALL_DATADIR}/icons/hi
 ##
 if(BUILD_TESTING)
     find_package(Qt6 6.10 REQUIRED COMPONENTS Test)
+    qt_add_executable(test-snapcli tests/test_snapcli.cpp)
+    target_link_libraries(test-snapcli PRIVATE pi-snapcli Qt6::Test)
+    add_test(NAME snapcli COMMAND test-snapcli)
+
     qt_add_executable(test-pkgscan tests/test_pkgscan.cpp)
     target_compile_definitions(test-pkgscan PRIVATE TEST_DATA_DIR="${CMAKE_CURRENT_SOURCE_DIR}/tests/data")
     target_link_libraries(test-pkgscan PRIVATE pi-scan project_options Qt6::Test)
