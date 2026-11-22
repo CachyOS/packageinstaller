@@ -97,7 +97,9 @@ Item {
         reuseItems: true
         clip: true
 
-        ScrollBar.vertical: ScrollBar {}
+        ScrollBar.vertical: ScrollBar {
+            policy: grid.contentHeight > grid.height ? ScrollBar.AlwaysOn : ScrollBar.AlwaysOff
+        }
 
         WheelScroll {}
 
