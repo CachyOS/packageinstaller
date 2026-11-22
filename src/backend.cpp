@@ -127,6 +127,16 @@ void Backend::installFlatpak(const QString& id) {
     }
 }
 
+void Backend::installFlatpakFile(const QUrl& url) {
+    const QString path = url.toLocalFile();
+    if (!m_flatpakEnabled || path.isEmpty()) {
+        return;
+    }
+    const QString fileName = QFileInfo(path).fileName();
+    m_transaction.prepareFlatpak(Transaction::FlatpakInstall, {fileName},
+        {u"install"_s, u"--system"_s, u"--noninteractive"_s, path});
+}
+
 void Backend::removeFlatpak(const QString& key) {
     if (m_flatpakEnabled) {
         m_transaction.prepareFlatpak(Transaction::FlatpakRemove, {m_flatpak.installedTitle(key)}, m_flatpak.removeArguments(key),

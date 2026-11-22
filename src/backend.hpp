@@ -95,6 +95,8 @@ class Backend : public QObject {
     Q_INVOKABLE void installManyFromAur(const QStringList& names);
 
     Q_INVOKABLE void installFlatpak(const QString& id);
+    /// `url` names a local `.flatpak` or `.flatpakref` file.
+    Q_INVOKABLE void installFlatpakFile(const QUrl& url);
     /// Removes one installed copy, named by its `key`.
     Q_INVOKABLE void removeFlatpak(const QString& key);
     /// Updates every installed Flatpak app and runtime.
