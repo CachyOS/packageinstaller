@@ -11,13 +11,15 @@ ScrollPage {
 
     signal back
 
-    readonly property snapItem app: lookup(name, Backend.snap.revision)
+    readonly property snapItem app: lookup(name, Backend.snap.revision, Backend.snap.results, Backend.snap.installed)
     readonly property bool known: app.name.length > 0
     /// The store can be browsed without snapd; installing a snap cannot.
     readonly property bool needsSnapd: !Backend.snap.available || !Backend.snap.daemonRunning
 
-    // `revision` only makes the binding look the app up again after a reload.
-    function lookup(name: string, revision: int): snapItem {
+    // The arguments after `name` only make the binding re-run when data changes. `results` and
+    // `installed` are needed because a refresh replaces the store results after `changed()`
+    // has already run this binding with the old store item.
+    function lookup(name: string, revision: int, results: var, installed: var): snapItem {
         return Backend.snap.app(name)
     }
 

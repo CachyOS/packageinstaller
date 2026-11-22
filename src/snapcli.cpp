@@ -36,25 +36,6 @@ namespace {
 
 }  // namespace
 
-QList<SnapApp> parseFind(const QList<QString>& lines) {
-    QList<SnapApp> apps;
-    for (const auto& line : lines) {
-        const auto c = columns(line);
-        if (isHeader(c) || c.size() < 5) {
-            continue;
-        }
-        QString summary;
-        for (qsizetype i = 4; i < c.size(); ++i) {
-            if (!summary.isEmpty()) {
-                summary += u' ';
-            }
-            summary += c[i];
-        }
-        apps << SnapApp{.name = c[0], .version = c[1], .publisher = c[2], .notes = c[3], .summary = summary};
-    }
-    return apps;
-}
-
 QList<SnapInstalled> parseList(const QList<QString>& lines) {
     QList<SnapInstalled> snaps;
     for (const auto& line : lines) {

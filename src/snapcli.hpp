@@ -32,7 +32,6 @@ struct SnapUpdate {
     QString notes;
 };
 
-[[nodiscard]] QList<SnapApp> parseFind(const QList<QString>& lines);
 [[nodiscard]] QList<SnapInstalled> parseList(const QList<QString>& lines);
 [[nodiscard]] QList<SnapUpdate> parseUpdates(const QList<QString>& lines);
 

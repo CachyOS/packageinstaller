@@ -214,15 +214,18 @@ auto snap_args(Arguments arguments) noexcept -> std::optional<Args> {
     return args;
 }
 
-auto apparmor_present() noexcept -> bool {
+auto apparmor_service_present() noexcept -> bool {
 #ifdef PI_HELPER_TESTING
-    // the tests force either AppArmor state without touching the host
+    // the tests force either AppArmor service state without touching the host
     if (const char* forced = std::getenv("CACHYOS_PI_APPARMOR_PRESENT"); forced != nullptr) {
         return std::string_view{forced} == "1";
     }
 #endif
+    // The module can be built in while the service unit is absent; enabling a missing unit
+    // would fail the whole transaction after the socket had already been enabled.
     std::error_code ec{};
-    return fs::exists("/sys/module/apparmor", ec);
+    return fs::exists("/usr/lib/systemd/system/snapd.apparmor.service", ec)
+        || fs::exists("/lib/systemd/system/snapd.apparmor.service", ec);
 }
 
 auto snapd_setup_args(Arguments arguments) noexcept -> std::optional<Args> {
@@ -230,7 +233,7 @@ auto snapd_setup_args(Arguments arguments) noexcept -> std::optional<Args> {
         return usage();
     }
     Args args{"systemctl", "enable", "--now", "snapd.socket"};
-    if (apparmor_present()) {
+    if (apparmor_service_present()) {
         args.emplace_back("snapd.apparmor.service");
     }
     return args;

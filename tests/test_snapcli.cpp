@@ -9,25 +9,6 @@ class TestSnapCli : public QObject {
     Q_OBJECT
 
  private slots:
-    void find() {
-        const auto apps = snapcli::parseFind({
-            u"Name  Version  Developer  Notes  Summary"_s,
-            u"vlc   3.0.4   videolan✓   -   The ultimate media player."_s,
-            u"powershell 7.4 powershell✓ classic Microsoft PowerShell"_s,
-            u"vlc 3.0.4 videolan✓"_s,  // 3 columns: too few to be a row
-        });
-        QCOMPARE(apps.size(), 2);
-        QCOMPARE(apps[0].name, u"vlc"_s);
-        QCOMPARE(apps[0].version, u"3.0.4"_s);
-        QCOMPARE(apps[0].publisher, u"videolan✓"_s);
-        QCOMPARE(apps[0].notes, u"-"_s);
-        QCOMPARE(apps[0].summary, u"The ultimate media player."_s);
-        QCOMPARE(apps[1].name, u"powershell"_s);
-        QCOMPARE(apps[1].publisher, u"powershell✓"_s);
-        QCOMPARE(apps[1].notes, u"classic"_s);
-        QCOMPARE(apps[1].summary, u"Microsoft PowerShell"_s);
-    }
-
     void list() {
         const auto snaps = snapcli::parseList({
             u"Name  Version  Rev  Tracking  Publisher  Notes"_s,

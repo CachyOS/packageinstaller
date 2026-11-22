@@ -78,7 +78,7 @@ Item {
             text: !root.needsSnapd ? ""
                 : qsTr("Browsing and searching the Snap Store works without snapd. Installing snaps needs the “snapd” package from the AUR, with snapd.socket running and AppArmor set up.")
                   + (!root.snap.available && (!Backend.aurEnabled || !Backend.paruAvailable)
-                     ? " " + qsTr("To build it, turn on the AUR source and install “paru” in Settings → Sources first.")
+                     ? " " + qsTr("To build it, install “paru” from a terminal or another AUR helper, then turn on the AUR source in Settings → Sources.")
                      : "")
 
             PillButton {

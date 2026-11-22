@@ -66,16 +66,16 @@ class TestHelper : public QObject {
     }
 
     void runsSnapdSetup_data() {
-        QTest::addColumn<bool>("apparmor");
+        QTest::addColumn<bool>("apparmorService");
         QTest::addColumn<QString>("systemctl");
-        QTest::newRow("no apparmor") << false << u"enable --now snapd.socket"_s;
-        QTest::newRow("apparmor") << true << u"enable --now snapd.socket snapd.apparmor.service"_s;
+        QTest::newRow("no apparmor service") << false << u"enable --now snapd.socket"_s;
+        QTest::newRow("apparmor service") << true << u"enable --now snapd.socket snapd.apparmor.service"_s;
     }
 
     void runsSnapdSetup() {
-        QFETCH(bool, apparmor);
+        QFETCH(bool, apparmorService);
         QFETCH(QString, systemctl);
-        const auto [exitCode, output] = run({u"snapd-setup"_s}, apparmor);
+        const auto [exitCode, output] = run({u"snapd-setup"_s}, apparmorService);
         QCOMPARE(exitCode, 0);
         QCOMPARE(output, u"fake systemctl %1 sigpipe=ignored setsid=yes\n"_s.arg(systemctl));
     }
@@ -111,12 +111,12 @@ class TestHelper : public QObject {
     }
 
  private:
-    std::pair<int, QString> run(const QStringList& args, bool apparmor = false) const {
+    std::pair<int, QString> run(const QStringList& args, bool apparmorService = false) const {
         QProcess process;
         auto env = QProcessEnvironment::systemEnvironment();
         env.insert(u"CACHYOS_PI_HELPER_BINDIR"_s, m_dir.path());
-        // force the AppArmor branch for the helper's test build, independently of the host
-        env.insert(u"CACHYOS_PI_APPARMOR_PRESENT"_s, apparmor ? u"1"_s : u"0"_s);
+        // force the AppArmor service-unit branch for the helper's test build, independently of the host
+        env.insert(u"CACHYOS_PI_APPARMOR_PRESENT"_s, apparmorService ? u"1"_s : u"0"_s);
         process.setProcessEnvironment(env);
         process.start(u"" HELPER ""_s, args);
         if (!process.waitForFinished() || process.exitStatus() != QProcess::NormalExit) {
