@@ -11,12 +11,11 @@ Item {
 
     readonly property SnapClient snap: Backend.snap
     readonly property bool searching: query.trim().length >= 2
-    // What stands in the way of listing snaps: "off", "missing", "no-daemon" or "".
-    readonly property string obstacle: !Backend.snapEnabled ? "off"
-        : snap.loading && !snap.available ? ""  // being found out
-        : !snap.available ? "missing"
-        : !snap.daemonRunning ? "no-daemon" : ""
+    // Only the source switch blocks the page; the store is searched over HTTP, without snapd.
+    readonly property string obstacle: !Backend.snapEnabled ? "off" : ""
     readonly property bool ready: obstacle === ""
+    /// Installing and managing snaps needs snapd; browsing and searching do not.
+    readonly property bool needsSnapd: !snap.available || !snap.daemonRunning
 
     signal openApp(string name)
     signal openSettings
@@ -46,19 +45,11 @@ Item {
         visible: !root.ready
         anchors.centerIn: root
         glyph: "M4 8l8-4l8 4v8l-8 4l-8-4zM4 8l8 4l8-4M12 12v8M8 6l8 4"
-        title: root.obstacle === "off" ? qsTr("Snap is turned off")
-            : root.obstacle === "missing" ? qsTr("Snap is not installed") : qsTr("The Snap daemon is not running")
-        text: root.obstacle === "off" ? qsTr("Turn it on in the settings to search for and install snaps.")
-            : root.obstacle === "missing" ? qsTr("Snaps need the “snapd” package from the AUR on CachyOS, with snapd.socket running and AppArmor set up.")
-            : qsTr("snapd needs its socket running and AppArmor set up to confine snaps on CachyOS. Start snapd and check AppArmor, then try again.")
-        action: root.obstacle === "off" ? qsTr("Open settings") : qsTr("Try again")
+        title: qsTr("Snap is turned off")
+        text: qsTr("Turn it on in the settings to search for and install snaps.")
+        action: qsTr("Open settings")
         actionTone: "soft"
-        onTriggered: {
-            if (root.obstacle === "off")
-                root.openSettings();
-            else
-                root.snap.refresh();
-        }
+        onTriggered: root.openSettings()
     }
 
     PageHeader {
@@ -68,18 +59,28 @@ Item {
         subtitle: qsTr("Confined apps from the Snap Store. Not packaged by CachyOS.")
         actions: [
             PillButton {
+                enabled: !root.needsSnapd
                 tone: "soft"
                 text: qsTr("Refresh all")
                 onClicked: root.snap.refresh()
             },
             PillButton {
+                enabled: !root.needsSnapd
                 text: qsTr("Install from file…")
                 onClicked: fileDialog.open()
             }
         ]
 
+        // Browsing the store is over HTTP; only installing and managing snaps needs snapd.
+        Notice {
+            width: pageHeader.width
+            tone: Notice.Warning
+            text: root.needsSnapd ? qsTr("Browsing and searching the Snap Store works without snapd. Installing snaps needs the “snapd” package from the AUR, with snapd.socket running and AppArmor set up.") : ""
+        }
+
         UpdatesBanner {
             visible: !root.searching && count > 0
+            enabled: !root.needsSnapd
             width: pageHeader.width - Look.gutter
             count: root.snap.updateCount
             action: qsTr("Update all")

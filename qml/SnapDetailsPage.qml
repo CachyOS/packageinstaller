@@ -13,6 +13,8 @@ ScrollPage {
 
     readonly property snapItem app: lookup(name, Backend.snap.revision)
     readonly property bool known: app.name.length > 0
+    /// The store can be browsed without snapd; installing a snap cannot.
+    readonly property bool needsSnapd: !Backend.snap.available || !Backend.snap.daemonRunning
 
     // `revision` only makes the binding look the app up again after a reload.
     function lookup(name: string, revision: int): snapItem {
@@ -31,6 +33,7 @@ ScrollPage {
 
         PillButton {
             visible: !root.app.installed && root.known
+            enabled: !root.needsSnapd
             implicitWidth: 150
             size: "large"
             text: qsTr("Install")
