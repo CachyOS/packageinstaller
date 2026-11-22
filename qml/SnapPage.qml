@@ -46,16 +46,13 @@ Item {
         title: root.obstacle === "off" ? qsTr("Snap is turned off")
             : root.obstacle === "missing" ? qsTr("Snap is not installed") : qsTr("The Snap daemon is not running")
         text: root.obstacle === "off" ? qsTr("Turn it on in the settings to search for and install snaps.")
-            : root.obstacle === "missing" ? qsTr("Snaps need the “snapd” package from the AUR on CachyOS.")
+            : root.obstacle === "missing" ? qsTr("Snaps need the “snapd” package from the AUR on CachyOS, with snapd.socket running and AppArmor set up.")
             : qsTr("snapd needs its socket running and AppArmor set up to confine snaps on CachyOS. Start snapd and check AppArmor, then try again.")
-        action: root.obstacle === "off" ? qsTr("Open settings")
-            : root.obstacle === "missing" ? qsTr("Install snapd") : qsTr("Try again")
+        action: root.obstacle === "off" ? qsTr("Open settings") : qsTr("Try again")
         actionTone: "soft"
         onTriggered: {
             if (root.obstacle === "off")
                 root.openSettings();
-            else if (root.obstacle === "missing")
-                Backend.install("snapd");
             else
                 root.snap.refresh();
         }
