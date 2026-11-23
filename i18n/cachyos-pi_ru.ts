@@ -1033,12 +1033,12 @@
     <message>
         <location filename="../qml/CpakDetailsPage.qml" line="32"/>
         <source>Permissions it asks for</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Запрашиваемые разрешения</translation>
     </message>
     <message>
         <location filename="../qml/CpakDetailsPage.qml" line="49"/>
         <source>“%1” is not in the cpak catalogue and not installed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">«%1» нет в каталоге cpak, и приложение не установлено.</translation>
     </message>
     <message>
         <location filename="../qml/CpakDetailsPage.qml" line="57"/>
@@ -1076,22 +1076,22 @@
     <message>
         <location filename="../qml/CpakPage.qml" line="40"/>
         <source>cpak is turned off</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak отключён</translation>
     </message>
     <message>
         <location filename="../qml/CpakPage.qml" line="40"/>
         <source>cpak is not installed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak не установлен</translation>
     </message>
     <message>
         <location filename="../qml/CpakPage.qml" line="41"/>
         <source>Turn it on in the settings to search and install cpak apps.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Включите его в настройках, чтобы искать и устанавливать приложения cpak.</translation>
     </message>
     <message>
         <location filename="../qml/CpakPage.qml" line="42"/>
         <source>The “cpak” command is needed to install and run these apps. See cpak.it/docs for how to install it.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Для установки и запуска этих приложений нужна команда «cpak». Как её установить, см. на cpak.it/docs.</translation>
     </message>
     <message>
         <location filename="../qml/CpakPage.qml" line="43"/>
@@ -1101,12 +1101,12 @@
     <message>
         <location filename="../qml/CpakPage.qml" line="50"/>
         <source>cpak</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak</translation>
     </message>
     <message>
         <location filename="../qml/CpakPage.qml" line="51"/>
         <source>Apps that run in a sandbox of their own. Not packaged by CachyOS.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Приложения в собственной изолированной среде. Не упакованы CachyOS.</translation>
     </message>
     <message>
         <location filename="../qml/CpakPage.qml" line="57"/>
@@ -1116,7 +1116,7 @@
     <message>
         <location filename="../qml/CpakPage.qml" line="58"/>
         <source>An update that asks for more permissions is skipped; open the app to update it.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Обновление, которое запрашивает больше разрешений, пропускается; откройте приложение, чтобы обновить его.</translation>
     </message>
     <message>
         <location filename="../qml/CpakPage.qml" line="75"/>
@@ -1141,15 +1141,15 @@
     <message>
         <location filename="../qml/CpakPage.qml" line="98"/>
         <source>No cpak apps match “%1”.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Нет приложений cpak, соответствующих «%1».</translation>
     </message>
     <message numerus="yes">
         <location filename="../qml/CpakPage.qml" line="99"/>
         <source>Type in the search field to find one of %n cpak app(s).</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+            <numerusform>Введите запрос в поле поиска, чтобы найти одно из %n приложения cpak.</numerusform>
+            <numerusform>Введите запрос в поле поиска, чтобы найти одно из %n приложений cpak.</numerusform>
+            <numerusform>Введите запрос в поле поиска, чтобы найти одно из %n приложений cpak.</numerusform>
         </translation>
     </message>
     <message>
@@ -1249,12 +1249,12 @@
     <message>
         <location filename="../qml/FlatpakDetailsPage.qml" line="55"/>
         <source>Install with cpak</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Установить через cpak</translation>
     </message>
     <message>
         <location filename="../qml/FlatpakDetailsPage.qml" line="64"/>
         <source>Remove (cpak)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Удалить (cpak)</translation>
     </message>
     <message>
         <location filename="../qml/FlatpakDetailsPage.qml" line="72"/>
@@ -1309,7 +1309,7 @@
     <message>
         <location filename="../qml/FlatpakDetailsPage.qml" line="115"/>
         <source>Installed with cpak</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Установлено через cpak</translation>
     </message>
     <message>
         <location filename="../qml/FlatpakDetailsPage.qml" line="119"/>
@@ -1599,7 +1599,7 @@
     <message>
         <location filename="../qml/Main.qml" line="273"/>
         <source>cpak</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak</translation>
     </message>
     <message>
         <location filename="../qml/Main.qml" line="272"/>
@@ -1634,7 +1634,7 @@
     <message>
         <location filename="../qml/Main.qml" line="328"/>
         <source>Search cpak apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Поиск приложений cpak</translation>
     </message>
     <message>
         <location filename="../qml/Main.qml" line="500"/>
@@ -1722,7 +1722,7 @@
     <message>
         <location filename="../qml/SettingsPage.qml" line="164"/>
         <source>cpak</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="156"/>
@@ -1737,17 +1737,17 @@
     <message>
         <location filename="../qml/SettingsPage.qml" line="165"/>
         <source>Sandboxed apps from cpak&apos;s signed catalogue, and Flatpak apps run in cpak&apos;s sandbox. They are packaged by their developers, not by CachyOS, and run with the permissions shown on their page.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Изолированные приложения из подписанного каталога cpak и приложения Flatpak, работающие в изолированной среде cpak. Их упаковывают сами разработчики, а не CachyOS, и они запускаются с разрешениями, которые показаны на их странице.</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="167"/>
         <source>cpak is not installed. See cpak.it/docs for how to install it.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak не установлен. Как его установить, см. на cpak.it/docs.</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="168"/>
         <source>cpak&apos;s catalogue could not be read. Check your connection.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Не удалось прочитать каталог cpak. Проверьте подключение.</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="177"/>
@@ -1805,7 +1805,7 @@
     <message>
         <location filename="../qml/SourceBadge.qml" line="13"/>
         <source>cpak</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak</translation>
     </message>
     <message>
         <location filename="../qml/SourceBadge.qml" line="14"/>
@@ -1843,7 +1843,7 @@
     <message>
         <location filename="../src/transaction.cpp" line="98"/>
         <source>Update cpak apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Обновить приложения cpak</translation>
     </message>
     <message>
         <location filename="../src/transaction.cpp" line="99"/>
@@ -1887,22 +1887,22 @@
     <message>
         <location filename="../src/transaction.cpp" line="115"/>
         <source>cpak will download the app and install it for your user. It runs in a sandbox of its own, with the permissions listed on the app&apos;s page.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak загрузит приложение и установит его для вашего пользователя. Оно работает в собственной изолированной среде с разрешениями, перечисленными на странице приложения.</translation>
     </message>
     <message>
         <location filename="../src/transaction.cpp" line="117"/>
         <source>cpak will download the Flatpak app and install it for your user, in cpak&apos;s sandbox instead of Flatpak&apos;s. The output lists the permissions cpak grants and the ones it refuses; change them later with “cpak override”.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak загрузит приложение Flatpak и установит его для вашего пользователя в изолированной среде cpak, а не Flatpak. В выводе перечислены разрешения, которые cpak предоставляет и которые отклоняет; позже их можно изменить командой «cpak override».</translation>
     </message>
     <message>
         <location filename="../src/transaction.cpp" line="118"/>
         <source>The app will be removed. Its data in your home directory is kept.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Приложение будет удалено. Его данные в домашнем каталоге сохранятся.</translation>
     </message>
     <message>
         <location filename="../src/transaction.cpp" line="120"/>
         <source>Every installed cpak app will be updated. An app whose update asks for more permissions than it has is skipped; update it on its own after reading them.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Все установленные приложения cpak будут обновлены. Приложение, обновление которого запрашивает больше разрешений, чем у него есть, пропускается; обновите его отдельно, прочитав эти разрешения.</translation>
     </message>
     <message>
         <location filename="../src/transaction.cpp" line="121"/>
@@ -2033,7 +2033,7 @@ The unused runtimes could not be removed (exit code %1).
     <message>
         <location filename="../src/transaction.cpp" line="416"/>
         <source>Stopped before it finished. Nothing was installed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Остановлено до завершения. Ничего не было установлено.</translation>
     </message>
     <message>
         <location filename="../src/transaction.cpp" line="418"/>

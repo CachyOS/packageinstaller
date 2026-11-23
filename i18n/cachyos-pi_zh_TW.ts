@@ -1015,12 +1015,12 @@
     <message>
         <location filename="../qml/CpakDetailsPage.qml" line="32"/>
         <source>Permissions it asks for</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">要求的權限</translation>
     </message>
     <message>
         <location filename="../qml/CpakDetailsPage.qml" line="49"/>
         <source>“%1” is not in the cpak catalogue and not installed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">“%1”不在 cpak 目錄中，也未安裝。</translation>
     </message>
     <message>
         <location filename="../qml/CpakDetailsPage.qml" line="57"/>
@@ -1035,7 +1035,7 @@
     <message>
         <location filename="../qml/CpakDetailsPage.qml" line="73"/>
         <source>Remove</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">解除安裝</translation>
     </message>
     <message>
         <location filename="../qml/CpakDetailsPage.qml" line="83"/>
@@ -1058,22 +1058,22 @@
     <message>
         <location filename="../qml/CpakPage.qml" line="40"/>
         <source>cpak is turned off</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak 已關閉</translation>
     </message>
     <message>
         <location filename="../qml/CpakPage.qml" line="40"/>
         <source>cpak is not installed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">未安裝 cpak</translation>
     </message>
     <message>
         <location filename="../qml/CpakPage.qml" line="41"/>
         <source>Turn it on in the settings to search and install cpak apps.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">請在設定中開啟，以搜尋並安裝 cpak 應用。</translation>
     </message>
     <message>
         <location filename="../qml/CpakPage.qml" line="42"/>
         <source>The “cpak” command is needed to install and run these apps. See cpak.it/docs for how to install it.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">安裝和執行這些應用需要“cpak”指令。安裝方法請參閱 cpak.it/docs。</translation>
     </message>
     <message>
         <location filename="../qml/CpakPage.qml" line="43"/>
@@ -1083,12 +1083,12 @@
     <message>
         <location filename="../qml/CpakPage.qml" line="50"/>
         <source>cpak</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak</translation>
     </message>
     <message>
         <location filename="../qml/CpakPage.qml" line="51"/>
         <source>Apps that run in a sandbox of their own. Not packaged by CachyOS.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">在各自沙盒中執行的應用，並非由 CachyOS 打包。</translation>
     </message>
     <message>
         <location filename="../qml/CpakPage.qml" line="57"/>
@@ -1098,7 +1098,7 @@
     <message>
         <location filename="../qml/CpakPage.qml" line="58"/>
         <source>An update that asks for more permissions is skipped; open the app to update it.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">要求更多權限的更新會被略過；請開啟該應用來更新它。</translation>
     </message>
     <message>
         <location filename="../qml/CpakPage.qml" line="75"/>
@@ -1123,13 +1123,13 @@
     <message>
         <location filename="../qml/CpakPage.qml" line="98"/>
         <source>No cpak apps match “%1”.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">沒有與“%1”匹配的 cpak 應用。</translation>
     </message>
     <message numerus="yes">
         <location filename="../qml/CpakPage.qml" line="99"/>
         <source>Type in the search field to find one of %n cpak app(s).</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
+            <numerusform>在搜尋框中輸入，以查詢 %n 個 cpak 應用中的某一個。</numerusform>
         </translation>
     </message>
     <message>
@@ -1229,12 +1229,12 @@
     <message>
         <location filename="../qml/FlatpakDetailsPage.qml" line="55"/>
         <source>Install with cpak</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">使用 cpak 安裝</translation>
     </message>
     <message>
         <location filename="../qml/FlatpakDetailsPage.qml" line="64"/>
         <source>Remove (cpak)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">解除安裝（cpak）</translation>
     </message>
     <message>
         <location filename="../qml/FlatpakDetailsPage.qml" line="72"/>
@@ -1289,7 +1289,7 @@
     <message>
         <location filename="../qml/FlatpakDetailsPage.qml" line="115"/>
         <source>Installed with cpak</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">已透過 cpak 安裝</translation>
     </message>
     <message>
         <location filename="../qml/FlatpakDetailsPage.qml" line="119"/>
@@ -1575,7 +1575,7 @@
     <message>
         <location filename="../qml/Main.qml" line="273"/>
         <source>cpak</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak</translation>
     </message>
     <message>
         <location filename="../qml/Main.qml" line="272"/>
@@ -1610,7 +1610,7 @@
     <message>
         <location filename="../qml/Main.qml" line="328"/>
         <source>Search cpak apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">搜尋 cpak 應用</translation>
     </message>
     <message>
         <location filename="../qml/Main.qml" line="500"/>
@@ -1698,7 +1698,7 @@
     <message>
         <location filename="../qml/SettingsPage.qml" line="164"/>
         <source>cpak</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="156"/>
@@ -1713,17 +1713,17 @@
     <message>
         <location filename="../qml/SettingsPage.qml" line="165"/>
         <source>Sandboxed apps from cpak&apos;s signed catalogue, and Flatpak apps run in cpak&apos;s sandbox. They are packaged by their developers, not by CachyOS, and run with the permissions shown on their page.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">來自 cpak 簽署目錄的沙盒應用，以及在 cpak 沙盒中執行的 Flatpak 應用。它們由開發者打包，並非由 CachyOS 打包，並以其頁面上顯示的權限執行。</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="167"/>
         <source>cpak is not installed. See cpak.it/docs for how to install it.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">未安裝 cpak。安裝方法請參閱 cpak.it/docs。</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="168"/>
         <source>cpak&apos;s catalogue could not be read. Check your connection.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">無法讀取 cpak 的目錄。請檢查網路連線。</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="177"/>
@@ -1781,7 +1781,7 @@
     <message>
         <location filename="../qml/SourceBadge.qml" line="13"/>
         <source>cpak</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak</translation>
     </message>
     <message>
         <location filename="../qml/SourceBadge.qml" line="14"/>
@@ -1819,7 +1819,7 @@
     <message>
         <location filename="../src/transaction.cpp" line="98"/>
         <source>Update cpak apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">更新 cpak 應用</translation>
     </message>
     <message>
         <location filename="../src/transaction.cpp" line="99"/>
@@ -1861,22 +1861,22 @@
     <message>
         <location filename="../src/transaction.cpp" line="115"/>
         <source>cpak will download the app and install it for your user. It runs in a sandbox of its own, with the permissions listed on the app&apos;s page.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak 將下載該應用，並為您的使用者安裝。它在自己的沙盒中執行，權限列在該應用的頁面上。</translation>
     </message>
     <message>
         <location filename="../src/transaction.cpp" line="117"/>
         <source>cpak will download the Flatpak app and install it for your user, in cpak&apos;s sandbox instead of Flatpak&apos;s. The output lists the permissions cpak grants and the ones it refuses; change them later with “cpak override”.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak 將下載該 Flatpak 應用，並為您的使用者安裝到 cpak 的沙盒中，而不是 Flatpak 的沙盒。輸出中會列出 cpak 授予和拒絕的權限；之後可用“cpak override”變更。</translation>
     </message>
     <message>
         <location filename="../src/transaction.cpp" line="118"/>
         <source>The app will be removed. Its data in your home directory is kept.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">將解除安裝該應用。您主目錄中的資料會保留。</translation>
     </message>
     <message>
         <location filename="../src/transaction.cpp" line="120"/>
         <source>Every installed cpak app will be updated. An app whose update asks for more permissions than it has is skipped; update it on its own after reading them.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">將更新所有已安裝的 cpak 應用。更新要求的權限超出其現有權限的應用會被略過；請閱讀這些權限後單獨更新它。</translation>
     </message>
     <message>
         <location filename="../src/transaction.cpp" line="121"/>
@@ -2001,7 +2001,7 @@ The unused runtimes could not be removed (exit code %1).
     <message>
         <location filename="../src/transaction.cpp" line="416"/>
         <source>Stopped before it finished. Nothing was installed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">未完成即已停止。未安裝任何內容。</translation>
     </message>
     <message>
         <location filename="../src/transaction.cpp" line="418"/>

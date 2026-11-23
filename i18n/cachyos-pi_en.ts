@@ -93,9 +93,9 @@
     <message numerus="yes">
         <location filename="../qml/CpakPage.qml" line="99"/>
         <source>Type in the search field to find one of %n cpak app(s).</source>
-        <translation type="unfinished">
-            <numerusform></numerusform>
-            <numerusform></numerusform>
+        <translation>
+            <numerusform>Type in the search field to find the %n cpak app.</numerusform>
+            <numerusform>Type in the search field to find one of %n cpak apps.</numerusform>
         </translation>
     </message>
 </context>

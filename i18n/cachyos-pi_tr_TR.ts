@@ -1015,12 +1015,12 @@
     <message>
         <location filename="../qml/CpakDetailsPage.qml" line="32"/>
         <source>Permissions it asks for</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">İstediği izinler</translation>
     </message>
     <message>
         <location filename="../qml/CpakDetailsPage.qml" line="49"/>
         <source>“%1” is not in the cpak catalogue and not installed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&quot;%1&quot; cpak kataloğunda yok ve yüklü değil.</translation>
     </message>
     <message>
         <location filename="../qml/CpakDetailsPage.qml" line="57"/>
@@ -1030,7 +1030,7 @@
     <message>
         <location filename="../qml/CpakDetailsPage.qml" line="65"/>
         <source>Update all</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hepsini güncelle</translation>
     </message>
     <message>
         <location filename="../qml/CpakDetailsPage.qml" line="73"/>
@@ -1058,22 +1058,22 @@
     <message>
         <location filename="../qml/CpakPage.qml" line="40"/>
         <source>cpak is turned off</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak kapalı</translation>
     </message>
     <message>
         <location filename="../qml/CpakPage.qml" line="40"/>
         <source>cpak is not installed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak yüklü değil</translation>
     </message>
     <message>
         <location filename="../qml/CpakPage.qml" line="41"/>
         <source>Turn it on in the settings to search and install cpak apps.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak uygulamalarını aramak ve yüklemek için ayarlardan açın.</translation>
     </message>
     <message>
         <location filename="../qml/CpakPage.qml" line="42"/>
         <source>The “cpak” command is needed to install and run these apps. See cpak.it/docs for how to install it.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bu uygulamaları yüklemek ve çalıştırmak için &quot;cpak&quot; komutu gereklidir. Nasıl yükleneceği için cpak.it/docs adresine bakın.</translation>
     </message>
     <message>
         <location filename="../qml/CpakPage.qml" line="43"/>
@@ -1083,22 +1083,22 @@
     <message>
         <location filename="../qml/CpakPage.qml" line="50"/>
         <source>cpak</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak</translation>
     </message>
     <message>
         <location filename="../qml/CpakPage.qml" line="51"/>
         <source>Apps that run in a sandbox of their own. Not packaged by CachyOS.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kendi yalıtılmış ortamında çalışan uygulamalar. CachyOS tarafından paketlenmemiştir.</translation>
     </message>
     <message>
         <location filename="../qml/CpakPage.qml" line="57"/>
         <source>Update all</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Hepsini güncelle</translation>
     </message>
     <message>
         <location filename="../qml/CpakPage.qml" line="58"/>
         <source>An update that asks for more permissions is skipped; open the app to update it.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Daha fazla izin isteyen bir güncelleme atlanır; güncellemek için uygulamayı açın.</translation>
     </message>
     <message>
         <location filename="../qml/CpakPage.qml" line="75"/>
@@ -1108,7 +1108,7 @@
     <message>
         <location filename="../qml/CpakPage.qml" line="85"/>
         <source>Installed</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Yüklendi</translation>
     </message>
     <message>
         <location filename="../qml/CpakPage.qml" line="96"/>
@@ -1123,13 +1123,13 @@
     <message>
         <location filename="../qml/CpakPage.qml" line="98"/>
         <source>No cpak apps match “%1”.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">&quot;%1&quot; ile eşleşen cpak uygulaması yok.</translation>
     </message>
     <message numerus="yes">
         <location filename="../qml/CpakPage.qml" line="99"/>
         <source>Type in the search field to find one of %n cpak app(s).</source>
         <translation type="unfinished">
-            <numerusform></numerusform>
+            <numerusform>%n cpak uygulamasından birini bulmak için arama çubuğuna yazın.</numerusform>
         </translation>
     </message>
     <message>
@@ -1229,12 +1229,12 @@
     <message>
         <location filename="../qml/FlatpakDetailsPage.qml" line="55"/>
         <source>Install with cpak</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak ile yükle</translation>
     </message>
     <message>
         <location filename="../qml/FlatpakDetailsPage.qml" line="64"/>
         <source>Remove (cpak)</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Kaldır (cpak)</translation>
     </message>
     <message>
         <location filename="../qml/FlatpakDetailsPage.qml" line="72"/>
@@ -1289,7 +1289,7 @@
     <message>
         <location filename="../qml/FlatpakDetailsPage.qml" line="115"/>
         <source>Installed with cpak</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak ile yüklendi</translation>
     </message>
     <message>
         <location filename="../qml/FlatpakDetailsPage.qml" line="119"/>
@@ -1575,7 +1575,7 @@
     <message>
         <location filename="../qml/Main.qml" line="273"/>
         <source>cpak</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak</translation>
     </message>
     <message>
         <location filename="../qml/Main.qml" line="272"/>
@@ -1610,7 +1610,7 @@
     <message>
         <location filename="../qml/Main.qml" line="328"/>
         <source>Search cpak apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak uygulamalarını ara</translation>
     </message>
     <message>
         <location filename="../qml/Main.qml" line="500"/>
@@ -1698,7 +1698,7 @@
     <message>
         <location filename="../qml/SettingsPage.qml" line="164"/>
         <source>cpak</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="156"/>
@@ -1713,17 +1713,17 @@
     <message>
         <location filename="../qml/SettingsPage.qml" line="165"/>
         <source>Sandboxed apps from cpak&apos;s signed catalogue, and Flatpak apps run in cpak&apos;s sandbox. They are packaged by their developers, not by CachyOS, and run with the permissions shown on their page.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak&apos;ın imzalı kataloğundaki yalıtılmış uygulamalar ve cpak&apos;ın yalıtılmış ortamında çalışan Flatpak uygulamaları. Geliştiricileri tarafından paketlenmişlerdir, CachyOS tarafından değil, ve sayfalarında gösterilen izinlerle çalışırlar.</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="167"/>
         <source>cpak is not installed. See cpak.it/docs for how to install it.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak yüklü değil. Nasıl yükleneceği için cpak.it/docs adresine bakın.</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="168"/>
         <source>cpak&apos;s catalogue could not be read. Check your connection.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak kataloğu okunamadı. Bağlantınızı kontrol edin.</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="177"/>
@@ -1781,7 +1781,7 @@
     <message>
         <location filename="../qml/SourceBadge.qml" line="13"/>
         <source>cpak</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak</translation>
     </message>
     <message>
         <location filename="../qml/SourceBadge.qml" line="14"/>
@@ -1819,7 +1819,7 @@
     <message>
         <location filename="../src/transaction.cpp" line="98"/>
         <source>Update cpak apps</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak uygulamalarını güncelle</translation>
     </message>
     <message>
         <location filename="../src/transaction.cpp" line="99"/>
@@ -1861,22 +1861,22 @@
     <message>
         <location filename="../src/transaction.cpp" line="115"/>
         <source>cpak will download the app and install it for your user. It runs in a sandbox of its own, with the permissions listed on the app&apos;s page.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak uygulamayı indirip kullanıcınız için yükleyecektir. Uygulama kendi yalıtılmış ortamında, uygulamanın sayfasında listelenen izinlerle çalışır.</translation>
     </message>
     <message>
         <location filename="../src/transaction.cpp" line="117"/>
         <source>cpak will download the Flatpak app and install it for your user, in cpak&apos;s sandbox instead of Flatpak&apos;s. The output lists the permissions cpak grants and the ones it refuses; change them later with “cpak override”.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">cpak, Flatpak uygulamasını indirip kullanıcınız için Flatpak&apos;ın yerine cpak&apos;ın yalıtılmış ortamında yükleyecektir. Çıktıda cpak&apos;ın verdiği ve reddettiği izinler listelenir; bunları daha sonra &quot;cpak override&quot; ile değiştirebilirsiniz.</translation>
     </message>
     <message>
         <location filename="../src/transaction.cpp" line="118"/>
         <source>The app will be removed. Its data in your home directory is kept.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Uygulama kaldırılacak. Ana dizininizdeki verileri korunur.</translation>
     </message>
     <message>
         <location filename="../src/transaction.cpp" line="120"/>
         <source>Every installed cpak app will be updated. An app whose update asks for more permissions than it has is skipped; update it on its own after reading them.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Yüklü tüm cpak uygulamaları güncellenecek. Güncellemesi sahip olduğundan daha fazla izin isteyen bir uygulama atlanır; izinleri okuduktan sonra onu ayrıca güncelleyin.</translation>
     </message>
     <message>
         <location filename="../src/transaction.cpp" line="121"/>
@@ -1999,7 +1999,7 @@ The unused runtimes could not be removed (exit code %1).
     <message>
         <location filename="../src/transaction.cpp" line="416"/>
         <source>Stopped before it finished. Nothing was installed.</source>
-        <translation type="unfinished"></translation>
+        <translation type="unfinished">Bitmeden durduruldu. Hiçbir şey yüklenmedi.</translation>
     </message>
     <message>
         <location filename="../src/transaction.cpp" line="418"/>
