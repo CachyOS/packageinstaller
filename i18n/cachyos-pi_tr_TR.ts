@@ -895,7 +895,7 @@
 <context>
     <name>Backend</name>
     <message>
-        <location filename="../src/backend.cpp" line="176"/>
+        <location filename="../src/backend.cpp" line="215"/>
         <source>The pacman databases are empty. Refresh them with a system update.</source>
         <translation>Pacman veritabanları boş. Sistem güncellemesiyle tazeleyin.</translation>
     </message>
@@ -1011,6 +1011,134 @@
     </message>
 </context>
 <context>
+    <name>CpakDetailsPage</name>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="32"/>
+        <source>Permissions it asks for</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="49"/>
+        <source>“%1” is not in the cpak catalogue and not installed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="57"/>
+        <source>Install</source>
+        <translation type="unfinished">Yükle</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="65"/>
+        <source>Update all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="73"/>
+        <source>Remove</source>
+        <translation type="unfinished">Kaldır</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="83"/>
+        <source>Repository</source>
+        <translation type="unfinished">Depo</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="89"/>
+        <source>Version</source>
+        <translation type="unfinished">Sürüm</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="93"/>
+        <source>Installed version</source>
+        <translation type="unfinished">Yüklenmiş sürüm</translation>
+    </message>
+</context>
+<context>
+    <name>CpakPage</name>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="40"/>
+        <source>cpak is turned off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="40"/>
+        <source>cpak is not installed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="41"/>
+        <source>Turn it on in the settings to search and install cpak apps.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="42"/>
+        <source>The “cpak” command is needed to install and run these apps. See cpak.it/docs for how to install it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="43"/>
+        <source>Open settings</source>
+        <translation type="unfinished">Ayarları aç</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="50"/>
+        <source>cpak</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="51"/>
+        <source>Apps that run in a sandbox of their own. Not packaged by CachyOS.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="57"/>
+        <source>Update all</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="58"/>
+        <source>An update that asks for more permissions is skipped; open the app to update it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="75"/>
+        <source>Update</source>
+        <translation type="unfinished">Güncelle</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="85"/>
+        <source>Installed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="96"/>
+        <source>Loading the app catalogue…</source>
+        <translation type="unfinished">Uygulama kataloğu yükleniyor...</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="97"/>
+        <source>The app catalogue could not be loaded.</source>
+        <translation type="unfinished">Uygulama kataloğu yüklenemedi.</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="98"/>
+        <source>No cpak apps match “%1”.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../qml/CpakPage.qml" line="99"/>
+        <source>Type in the search field to find one of %n cpak app(s).</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="100"/>
+        <source>Try again</source>
+        <translation type="unfinished">Tekrar deneyin</translation>
+    </message>
+</context>
+<context>
     <name>DetailsHero</name>
     <message>
         <location filename="../qml/DetailsHero.qml" line="32"/>
@@ -1089,77 +1217,92 @@
 <context>
     <name>FlatpakDetailsPage</name>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="31"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="38"/>
         <source>“%1” is not available as a Flatpak.</source>
         <translation>“%1” Flatpak olarak yok.</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="40"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="47"/>
         <source>Install</source>
         <translation>Yükle</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="48"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="55"/>
+        <source>Install with cpak</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="64"/>
+        <source>Remove (cpak)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="72"/>
         <source>Update all</source>
         <translation>Hepsini güncelle</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="56"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="80"/>
         <source>Remove</source>
         <translation>Kaldır</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="66"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="90"/>
         <source>App ID</source>
         <translation>Uygulama kimliği</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="70"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="94"/>
         <source>Version</source>
         <translation>Sürüm</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="74"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="98"/>
         <source>Installed version</source>
         <translation>Yüklenmiş sürüm</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="78"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="102"/>
         <source>Source</source>
         <translation>Kaynak</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="82"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="106"/>
         <source>Installed size</source>
         <translation>Yüklenmiş boyut</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="86"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="110"/>
         <source>Installed for</source>
         <translation>Yükleme kapsamı</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="87"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="111"/>
         <source>Your user only</source>
         <translation>Yalnızca mevcut kullanıcı</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="88"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="112"/>
         <source>All users</source>
         <translation>Tüm kullanıcılar</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="91"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="115"/>
+        <source>Installed with cpak</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="119"/>
         <source>Branch</source>
         <translation>Dal</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="95"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="123"/>
         <source>License</source>
         <translation>Lisans</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="99"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="127"/>
         <source>Website</source>
         <translation>İnternet sitesi</translation>
     </message>
@@ -1385,92 +1528,102 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../qml/Main.qml" line="166"/>
+        <location filename="../qml/Main.qml" line="168"/>
         <source>CachyOS Package Installer</source>
         <translation>CachyOS Paket Yükleyici</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="242"/>
+        <location filename="../qml/Main.qml" line="244"/>
         <source>CachyOS</source>
         <translation>CachyOS</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="248"/>
+        <location filename="../qml/Main.qml" line="250"/>
         <source>Package Installer</source>
         <translation>Paket Yükleyici</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="264"/>
+        <location filename="../qml/Main.qml" line="266"/>
         <source>Discover</source>
         <translation>Keşfet</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="265"/>
+        <location filename="../qml/Main.qml" line="267"/>
         <source>Browse</source>
         <translation>Göz at</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="266"/>
+        <location filename="../qml/Main.qml" line="268"/>
         <source>Installed</source>
         <translation>Yüklenenler</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="267"/>
+        <location filename="../qml/Main.qml" line="269"/>
         <source>Updates</source>
         <translation>Güncellemeler</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="268"/>
+        <location filename="../qml/Main.qml" line="270"/>
         <source>AUR</source>
         <translation>AUR</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="269"/>
+        <location filename="../qml/Main.qml" line="271"/>
         <source>Flatpak</source>
         <translation>Flatpak</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="270"/>
+        <location filename="../qml/Main.qml" line="273"/>
+        <source>cpak</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="272"/>
         <source>AppImage</source>
         <translation>AppImage</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="297"/>
+        <location filename="../qml/Main.qml" line="300"/>
         <source>Settings</source>
         <translation>Ayarlar</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="305"/>
+        <location filename="../qml/Main.qml" line="308"/>
         <source>Version %1</source>
         <translation>Sürüm %1</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="323"/>
+        <location filename="../qml/Main.qml" line="326"/>
         <source>Search the AUR</source>
         <translation>AUR&apos;da ara</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="324"/>
+        <location filename="../qml/Main.qml" line="327"/>
         <source>Search Flatpak apps</source>
         <translation>Flatpak uygulamalarını ara</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="324"/>
+        <location filename="../qml/Main.qml" line="328"/>
         <source>Search apps and packages</source>
         <translation>Uygulamaları ve paketleri ara</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="482"/>
+        <location filename="../qml/Main.qml" line="328"/>
+        <source>Search cpak apps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="500"/>
         <source>A transaction is running</source>
         <translation>Bir işlem sürüyor</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="488"/>
+        <location filename="../qml/Main.qml" line="506"/>
         <source>Interrupting it could leave the system in a broken state. The window can be closed once it has finished.</source>
         <translation>Bunun yarıda kesilmesi, sistemin bozuk bir durumda kalmasına yol açabilir. İşlem tamamlandığında pencere kapatılabilir.</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="496"/>
+        <location filename="../qml/Main.qml" line="514"/>
         <source>Keep running</source>
         <translation>Devam ettir</translation>
     </message>
@@ -1543,6 +1696,11 @@
         <translation>Flatpak yüklü değil. Flatpak sayfasından yükleyebilirsiniz.</translation>
     </message>
     <message>
+        <location filename="../qml/SettingsPage.qml" line="164"/>
+        <source>cpak</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qml/SettingsPage.qml" line="156"/>
         <source>AppImage</source>
         <translation>AppImage</translation>
@@ -1553,32 +1711,47 @@
         <translation>Kendi başınıza indirdiğiniz, tek dosyadan oluşan uygulamalar. Bunlar için bir menü girişi ve simge oluşturulur. Bu uygulamalar denetimden geçirilmez, yalıtılmış olarak çalıştırılmaz ve otomatik güncellenmezler.</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="166"/>
+        <location filename="../qml/SettingsPage.qml" line="165"/>
+        <source>Sandboxed apps from cpak&apos;s signed catalogue, and Flatpak apps run in cpak&apos;s sandbox. They are packaged by their developers, not by CachyOS, and run with the permissions shown on their page.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="167"/>
+        <source>cpak is not installed. See cpak.it/docs for how to install it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="168"/>
+        <source>cpak&apos;s catalogue could not be read. Check your connection.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="177"/>
         <source>Mirrors</source>
         <translation>Yansılar</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="170"/>
+        <location filename="../qml/SettingsPage.qml" line="181"/>
         <source>Rank the mirrors by speed</source>
         <translation>Yansıları hıza göre sırala</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="171"/>
+        <location filename="../qml/SettingsPage.qml" line="182"/>
         <source>Packages are downloaded from the first mirror that answers. Ranking measures the Arch and CachyOS mirrors from your connection and rewrites the mirror lists to prefer the fast ones. Worth doing when downloads are slow or fail.</source>
         <translation>Paketler, yanıt veren ilk yansı sunucusundan indirilir. Sıralama işlemi, Arch ve CachyOS yansı sunucularını bağlantınız üzerinden değerlendirir ve yansı listelerini, hızlı olanlara öncelik verecek şekilde yeniden düzenler. İndirme işlemleri yavaş olduğunda veya başarısız olduğunda yapılması faydalıdır.</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="172"/>
+        <location filename="../qml/SettingsPage.qml" line="183"/>
         <source>Ranking needs the “cachyos-rate-mirrors” package, which is not installed.</source>
         <translation>Yansı sıralaması, şu anda yüklü olmayan “cachyos-rate-mirrors” paketini gerektirir.</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="176"/>
+        <location filename="../qml/SettingsPage.qml" line="187"/>
         <source>Rank mirrors</source>
         <translation>Yansıları sırala</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="176"/>
+        <location filename="../qml/SettingsPage.qml" line="187"/>
         <source>Install cachyos-rate-mirrors</source>
         <translation>cachyos-rate-mirrors yükle</translation>
     </message>
@@ -1607,11 +1780,16 @@
     </message>
     <message>
         <location filename="../qml/SourceBadge.qml" line="13"/>
+        <source>cpak</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SourceBadge.qml" line="14"/>
         <source>AppImage</source>
         <translation>AppImage</translation>
     </message>
     <message>
-        <location filename="../qml/SourceBadge.qml" line="14"/>
+        <location filename="../qml/SourceBadge.qml" line="15"/>
         <source>Local</source>
         <translation>Yerel</translation>
     </message>
@@ -1619,182 +1797,212 @@
 <context>
     <name>Transaction</name>
     <message>
-        <location filename="../src/transaction.cpp" line="81"/>
+        <location filename="../src/transaction.cpp" line="92"/>
         <source>Install %1</source>
         <translation>%1 yükle</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="83"/>
+        <location filename="../src/transaction.cpp" line="95"/>
         <source>Remove %1</source>
         <translation>%1 kaldır</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="84"/>
+        <location filename="../src/transaction.cpp" line="96"/>
         <source>Update the system</source>
         <translation>Sistemi güncelle</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="85"/>
+        <location filename="../src/transaction.cpp" line="97"/>
         <source>Update Flatpak apps</source>
         <translation>Flatpak uygulamalarını güncelle</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="86"/>
+        <location filename="../src/transaction.cpp" line="98"/>
+        <source>Update cpak apps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/transaction.cpp" line="99"/>
         <source>Add Flathub</source>
         <translation>Flathub&apos;ı ekle</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="87"/>
+        <location filename="../src/transaction.cpp" line="100"/>
         <source>Rank the mirrors</source>
         <translation>Yansıları sırala</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="89"/>
+        <location filename="../src/transaction.cpp" line="102"/>
         <source>Build %n package(s) from the AUR</source>
         <translation>
             <numerusform>AUR&apos;dan %n paketi derle</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="90"/>
+        <location filename="../src/transaction.cpp" line="103"/>
         <source>Build %1 from the AUR</source>
         <translation>AUR&apos;dan %1 derle</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="97"/>
+        <location filename="../src/transaction.cpp" line="110"/>
         <source>Flatpak will download the app and the runtime it needs, and install them for all users. It asks for permission itself if that is required.</source>
         <translation>Flatpak, uygulamayı ve ihtiyaç duyduğu çalışma zamanını indirip tüm kullanıcılar için yükleyecektir. Gerekli durumlarda ise kendiliğinden izin isteyecektir.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="99"/>
+        <location filename="../src/transaction.cpp" line="112"/>
         <source>The app will be removed, and with it the runtimes that no other app needs. Its data in your home directory is kept.</source>
         <translation>Uygulama kaldırılacak ve beraberinde başka hiçbir uygulamanın ihtiyaç duymadığı çalışma zamanları da kaldırılacaktır. Ana dizininizdeki verileri ise korunacaktır.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="100"/>
+        <location filename="../src/transaction.cpp" line="113"/>
         <source>Every installed Flatpak app and runtime will be updated.</source>
         <translation>Yüklü olan tüm Flatpak uygulamaları ve çalışma zamanları güncellenecektir.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="101"/>
+        <location filename="../src/transaction.cpp" line="115"/>
+        <source>cpak will download the app and install it for your user. It runs in a sandbox of its own, with the permissions listed on the app&apos;s page.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/transaction.cpp" line="117"/>
+        <source>cpak will download the Flatpak app and install it for your user, in cpak&apos;s sandbox instead of Flatpak&apos;s. The output lists the permissions cpak grants and the ones it refuses; change them later with “cpak override”.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/transaction.cpp" line="118"/>
+        <source>The app will be removed. Its data in your home directory is kept.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/transaction.cpp" line="120"/>
+        <source>Every installed cpak app will be updated. An app whose update asks for more permissions than it has is skipped; update it on its own after reading them.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/transaction.cpp" line="121"/>
         <source>Flathub will be added as an app source for all users.</source>
         <translation>Flathub tüm kullanıcılar için bir uygulama kaynağı olarak eklenecektir.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="102"/>
+        <location filename="../src/transaction.cpp" line="122"/>
         <source>The package databases will be refreshed and every available update installed.</source>
         <translation>Paket veritabanları yenilenecek ve mevcut tüm güncellemeler yüklenecektir.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="104"/>
+        <location filename="../src/transaction.cpp" line="124"/>
         <source>The download speed of the Arch and CachyOS mirrors will be measured and the mirror lists rewritten to prefer the fast ones. This takes a minute or two; a copy of the current lists is kept until the next ranking.</source>
         <translation>Arch ve CachyOS yansılarının indirme hızları ölçülecek ve yansı listeleri, daha hızlı olanları öncelikli kılacak şekilde yeniden düzenlenecektir. Bu işlem bir veya iki dakika sürer; bir sonraki sıralama yapılana kadar mevcut listelerin bir kopyası saklanır.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="107"/>
+        <location filename="../src/transaction.cpp" line="127"/>
         <source>paru will download the sources, build %1 as your user and then ask for permission to install them. This can take a while.</source>
         <translation>paru, kaynakları indirecek, %1&apos;i kullanıcı hesabınızla derleyecek ve ardından bunları kurmak için izin isteyecektir. Bu işlem biraz zaman alabilir.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="108"/>
+        <location filename="../src/transaction.cpp" line="128"/>
         <source>paru will download the sources, build the package as your user and then ask for permission to install it. This can take a while.</source>
         <translation>paru, kaynakları indirecek, paketi kullanıcı hesabınızla derleyecek ve ardından bunları kurmak için izin isteyecektir. Bu işlem biraz zaman alabilir.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="109"/>
+        <location filename="../src/transaction.cpp" line="129"/>
         <source>%n package(s) will be removed:</source>
         <translation>
             <numerusform>%n paket kaldırılacak:</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="111"/>
+        <location filename="../src/transaction.cpp" line="131"/>
         <source>%n package(s) will be installed (%1 to download):</source>
         <translation>
             <numerusform>%n paket yüklenecek (%1 indirilecek):</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="119"/>
+        <location filename="../src/transaction.cpp" line="140"/>
         <source>Remove</source>
         <translation>Kaldır</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="121"/>
+        <location filename="../src/transaction.cpp" line="143"/>
         <source>Update</source>
         <translation>Güncelle</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="122"/>
+        <location filename="../src/transaction.cpp" line="144"/>
         <source>Add</source>
         <translation>Ekle</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="123"/>
+        <location filename="../src/transaction.cpp" line="145"/>
         <source>Rank</source>
         <translation>Sırala</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="124"/>
+        <location filename="../src/transaction.cpp" line="146"/>
         <source>Install</source>
         <translation>Yükle</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="243"/>
+        <location filename="../src/transaction.cpp" line="276"/>
         <source>%1 is missing. Reinstall the package installer.</source>
         <translation>%1 eksik. Paket yükleyicisini yeniden yükleyin.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="296"/>
+        <location filename="../src/transaction.cpp" line="329"/>
         <source>Could not start %1</source>
         <translation>%1 başlatılamadı</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="339"/>
+        <location filename="../src/transaction.cpp" line="373"/>
         <source>%1 cannot be removed: %n installed package(s) depend on it.</source>
         <translation>
             <numerusform>%1 kaldırılamaz: %n yüklü paket buna bağımlıdır.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="340"/>
+        <location filename="../src/transaction.cpp" line="374"/>
         <source>Among them: %1, …</source>
         <translation>Bunların arasında: %1, ...</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="340"/>
+        <location filename="../src/transaction.cpp" line="374"/>
         <source>Needed by: %1</source>
         <translation>İhtiyaç duyan: %1</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="342"/>
+        <location filename="../src/transaction.cpp" line="376"/>
         <source>pacman could not resolve this operation.</source>
         <translation>pacman bu işlemi gerçekleştiremedi.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="345"/>
+        <location filename="../src/transaction.cpp" line="379"/>
         <source>Already installed and up to date.</source>
         <translation>Zaten yüklenmiş ve güncel.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="345"/>
+        <location filename="../src/transaction.cpp" line="379"/>
         <source>Nothing to do.</source>
         <translation>Yapılacak bir şey yok.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="366"/>
+        <location filename="../src/transaction.cpp" line="400"/>
         <source>
 The unused runtimes could not be removed (exit code %1).
 </source>
         <translation>Kullanılmayan çalışma zamanları kaldırılamadı (çıkış kodu %1).</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="380"/>
+        <location filename="../src/transaction.cpp" line="414"/>
         <source>Authentication was cancelled or denied. Nothing was changed.</source>
         <translation>Doğrulamada iptal edildi ya da reddedildi. Hiçbir şey değişmedi.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="382"/>
+        <location filename="../src/transaction.cpp" line="416"/>
+        <source>Stopped before it finished. Nothing was installed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/transaction.cpp" line="418"/>
         <source>
 The operation failed (exit code %1).
 </source>
@@ -1933,343 +2141,343 @@ The operation failed (exit code %1).
 <context>
     <name>pkgscan</name>
     <message>
-        <location filename="../src/pkgscan.cpp" line="66"/>
+        <location filename="../src/pkgscan.cpp" line="67"/>
         <source>Downloads a script and runs it directly</source>
         <translation>Bir betik indirir ve doğrudan çalıştırır</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="67"/>
+        <location filename="../src/pkgscan.cpp" line="68"/>
         <source>The downloaded code is executed without being stored or verified, so it can change at any time.</source>
         <translation>İndirilen kod, depolanmadan veya doğrulanmadan çalıştırılır; bu nedenle herhangi bir anda değişebilir.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="70"/>
+        <location filename="../src/pkgscan.cpp" line="71"/>
         <source>Downloads something outside the source list</source>
         <translation>Kaynak listesinin dışında bir şeyi indirir</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="71"/>
+        <location filename="../src/pkgscan.cpp" line="72"/>
         <source>Only files listed in source=() are checked against a checksum. This download is not.</source>
         <translation>Yalnızca source=() içinde listelenen dosyalar sağlama toplamı kontrolünden geçirilir. Bu indirme ise kontrol edilmez.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="74"/>
+        <location filename="../src/pkgscan.cpp" line="75"/>
         <source>Decodes hidden text and runs it</source>
         <translation>Gizli metni çözer ve çalıştırır</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="75"/>
+        <location filename="../src/pkgscan.cpp" line="76"/>
         <source>Encoding a command before running it has no purpose other than hiding what it does.</source>
         <translation>Bir komutu çalıştırmadan önce şifrelemek, ne işe yaradığını gizlemekten başka bir amaca hizmet etmez.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="78"/>
+        <location filename="../src/pkgscan.cpp" line="79"/>
         <source>Decodes encoded data</source>
         <translation>Şifrelenmiş veriyi çözer</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="79"/>
+        <location filename="../src/pkgscan.cpp" line="80"/>
         <source>Check what the decoded data is and what happens with it.</source>
         <translation>Çözülmüş verinin ne olduğuna ve onunla ne yapıldığını kontrol edin.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="82"/>
+        <location filename="../src/pkgscan.cpp" line="83"/>
         <source>Opens a network connection from the shell</source>
         <translation>Kabuk üzerinden bir ağ bağlantısı açar</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="83"/>
+        <location filename="../src/pkgscan.cpp" line="84"/>
         <source>This is how remote-control backdoors are started. A build or install script has no reason to do this.</source>
         <translation>Uzaktan kontrol arka kapıları işte bu şekilde başlatılır. Bir derleme veya yükleme betiğinin bunu yapması için hiçbir neden yoktur.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="87"/>
+        <location filename="../src/pkgscan.cpp" line="88"/>
         <source>Accesses keys, passwords or browser data</source>
         <translation>Erişim anahtarlarına, şifrelere veya tarayıcı verilerine erişir</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="88"/>
+        <location filename="../src/pkgscan.cpp" line="89"/>
         <source>These files hold your logins. Building or installing a package never needs them.</source>
         <translation>Bu dosyalar giriş bilgilerinizi içerir. Bir paketi derlerken veya yüklerken bunlara asla ihtiyaç duyulmaz.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="91"/>
+        <location filename="../src/pkgscan.cpp" line="92"/>
         <source>Changes who may become administrator</source>
         <translation>Kimlerin yönetici olabileceğini değiştirir</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="92"/>
+        <location filename="../src/pkgscan.cpp" line="93"/>
         <source>Editing sudo, polkit, PAM or the library preload list can give lasting, silent root access.</source>
         <translation>sudo, polkit, PAM veya kütüphane ön yükleme listesini düzenlemek, kalıcı ve gizli bir kök erişimi sağlayabilir.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="95"/>
+        <location filename="../src/pkgscan.cpp" line="96"/>
         <source>Deletes a whole directory tree</source>
         <translation>Tüm dizin ağacını siler</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="96"/>
+        <location filename="../src/pkgscan.cpp" line="97"/>
         <source>This removes the root or home directory.</source>
         <translation>Bu, kök dizinini veya ev dizinini kaldırır.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="99"/>
+        <location filename="../src/pkgscan.cpp" line="100"/>
         <source>Contains text hidden as escape codes</source>
         <translation>Kaçış kodları şeklinde gizlenmiş metin içerir</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="100"/>
+        <location filename="../src/pkgscan.cpp" line="101"/>
         <source>Readable scripts do not need to spell out text byte by byte.</source>
         <translation>Okunabilir betikler, metni bayt bayt açıkça belirtmek zorunda değildir.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="103"/>
+        <location filename="../src/pkgscan.cpp" line="104"/>
         <source>Runs text that is put together at run time</source>
         <translation>Çalışma zamanında bir araya getirilen metni çalıştırır</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="104"/>
+        <location filename="../src/pkgscan.cpp" line="105"/>
         <source>With eval the command that really runs is not visible in the script. Check where its input comes from.</source>
         <translation>`eval` kullanıldığında, gerçekte çalıştırılan komut betik içinde görünmez. Bu komutun girdisinin nereden geldiğini kontrol edin.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="107"/>
+        <location filename="../src/pkgscan.cpp" line="108"/>
         <source>Asks for administrator rights while building</source>
         <translation>Derleme sırasında yönetici hakları ister</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="108"/>
+        <location filename="../src/pkgscan.cpp" line="109"/>
         <source>A build runs as your user and must not need root.</source>
         <translation>Bir derleme işlemi sizin kullanıcı hesabınızla çalışır ve kök yetkisine ihtiyaç duymamalıdır.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="111"/>
+        <location filename="../src/pkgscan.cpp" line="112"/>
         <source>Touches a home directory</source>
         <translation>Ev dizinine yazar</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="112"/>
+        <location filename="../src/pkgscan.cpp" line="113"/>
         <source>Packages install into system directories. Check what is read from or written to the home directory.</source>
         <translation>Paketler sistem dizinlerine kurulur. Ev dizininden nelerin okunduğunu veya ev dizinine nelerin yazıldığını kontrol edin.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="115"/>
+        <location filename="../src/pkgscan.cpp" line="116"/>
         <source>Sets something up to run automatically</source>
         <translation>Bir şeyin otomatik olarak çalışmasını ayarlar</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="116"/>
+        <location filename="../src/pkgscan.cpp" line="117"/>
         <source>Cron jobs, autostart entries and shell start-up files keep running after the installation.</source>
         <translation>Cron görevleri, otomatik başlatma kayıtları ve kabuk başlatma dosyaları, kurulumdan sonra da çalışmaya devam eder.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="119"/>
+        <location filename="../src/pkgscan.cpp" line="120"/>
         <source>Enables or starts a service</source>
         <translation>Bir servis etkinleştirir ya da başlatır</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="120"/>
+        <location filename="../src/pkgscan.cpp" line="121"/>
         <source>Packages should leave it to you to enable their services.</source>
         <translation>Paketler, hizmetlerini etkinleştirme işini size bırakmalıdır.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="123"/>
+        <location filename="../src/pkgscan.cpp" line="124"/>
         <source>Gives a program elevated rights</source>
         <translation>Bir programa yönetici ayrıcalıkları verir</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="124"/>
+        <location filename="../src/pkgscan.cpp" line="125"/>
         <source>A setuid bit or capability lets the program act with more rights than the user who starts it.</source>
         <translation>Bir setuid biti veya yeteneği, programın onu başlatan kullanıcıdan daha fazla hakla hareket etmesini sağlar.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="127"/>
+        <location filename="../src/pkgscan.cpp" line="128"/>
         <source>Turns off the check of the server&apos;s identity</source>
         <translation>Sunucunun kimliğinin doğrulanmasını devre dışı bırakır</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="128"/>
+        <location filename="../src/pkgscan.cpp" line="129"/>
         <source>Without certificate checks anybody on the network can replace the download.</source>
         <translation>Sertifika kontrolleri olmadığında, ağ üzerindeki herhangi biri indirilen dosyayı değiştirebilir.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="131"/>
+        <location filename="../src/pkgscan.cpp" line="132"/>
         <source>Changes the system while building</source>
         <translation>Derleme sırasında sistemi değiştirir</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="132"/>
+        <location filename="../src/pkgscan.cpp" line="133"/>
         <source>A build only creates files inside its own directory.</source>
         <translation>Bir derleme, yalnızca kendi dizini içinde dosyalar oluşturur.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="135"/>
+        <location filename="../src/pkgscan.cpp" line="136"/>
         <source>Runs an inline script in another language</source>
         <translation>Başka bir dilde yazılmış bir satır içi betiği çalıştırır</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="136"/>
+        <location filename="../src/pkgscan.cpp" line="137"/>
         <source>Read the embedded code as carefully as the rest.</source>
         <translation>Gömülü kodu da diğer kısımlar kadar dikkatli bir şekilde okuyun.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="233"/>
+        <location filename="../src/pkgscan.cpp" line="234"/>
         <source>Contains a long block of encoded data</source>
         <translation>Şifrelenmiş verilerden oluşan uzun bir blok içerir</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="234"/>
+        <location filename="../src/pkgscan.cpp" line="235"/>
         <source>Encoded blocks can hide a program or script. Check what it is decoded into.</source>
         <translation>Şifrelenmiş bloklar bir programı veya betiği gizleyebilir. Şifresinin çözüldüğünde neye dönüştüğünü kontrol edin.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="442"/>
+        <location filename="../src/pkgscan.cpp" line="443"/>
         <source>The PKGBUILD downloads something .SRCINFO does not list</source>
         <translation>PKGBUILD, .SRCINFO dosyasında listelenmeyen bir şeyi indiriyor</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="443"/>
+        <location filename="../src/pkgscan.cpp" line="444"/>
         <source>The AUR shows the sources from .SRCINFO, but makepkg downloads what the PKGBUILD says.</source>
         <translation>AUR, .SRCINFO dosyasındaki kaynakları gösterir ancak makepkg, PKGBUILD dosyasında belirtilenleri indirir.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="594"/>
+        <location filename="../src/pkgscan.cpp" line="595"/>
         <source>Download address is put together from variables</source>
         <translation>İndirme adresi değişkenlerden oluşturulur</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="594"/>
+        <location filename="../src/pkgscan.cpp" line="595"/>
         <source>Work out where this source really comes from.</source>
         <translation>Bu kaynağın gerçekte nereden geldiğini araştırın.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="600"/>
+        <location filename="../src/pkgscan.cpp" line="601"/>
         <source>Downloads from a bare IP address</source>
         <translation>Dümdüz IP adresinden yapılan indirmeler</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="601"/>
+        <location filename="../src/pkgscan.cpp" line="602"/>
         <source>Real projects publish their files under a name. %1 cannot be traced to anybody.</source>
         <translation>Gerçek projeler, dosyalarını bir isim altında yayımlar. %1 ise hiç kimseyle ilişkilendirilemez.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="603"/>
+        <location filename="../src/pkgscan.cpp" line="604"/>
         <source>Downloads from a file-sharing, paste or link-shortening service</source>
         <translation>Dosya paylaşım, metin paylaşım veya bağlantı kısaltma hizmetlerinden yapılan indirmeler</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="604"/>
+        <location filename="../src/pkgscan.cpp" line="605"/>
         <source>Anybody can upload to %1 anonymously and replace the file later.</source>
         <translation>Herkes %1&apos;e anonim olarak dosya yükleyebilir ve daha sonra bu dosyayı değiştirebilir.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="610"/>
+        <location filename="../src/pkgscan.cpp" line="611"/>
         <source>Builds whatever is in the repository at that moment</source>
         <translation>O an depoda ne varsa onu derler</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="611"/>
+        <location filename="../src/pkgscan.cpp" line="612"/>
         <source>The source is not pinned to a commit or tag, so the code can differ from what the maintainer tested.</source>
         <translation>Kaynak, herhangi bir commit veya etikete sabitlenmemiştir; bu nedenle kod, bakım sorumlusunun test ettiği halinden farklı olabilir.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="625"/>
+        <location filename="../src/pkgscan.cpp" line="626"/>
         <source>Download is not verified</source>
         <translation>İndirme doğrulanmamış</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="626"/>
+        <location filename="../src/pkgscan.cpp" line="627"/>
         <source>This file has no checksum and is fetched without encryption, so anybody on the network can replace it.</source>
         <translation>Bu dosyanın sağlama toplamı yoktur ve şifrelenmeden indirilir; bu nedenle ağdaki herhangi bir kişi dosyayı değiştirebilir.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="627"/>
+        <location filename="../src/pkgscan.cpp" line="628"/>
         <source>This file has no checksum (SKIP), so whatever the server sends is accepted.</source>
         <translation>Bu dosyada sağlama toplamı bulunmamaktadır (SKIP); dolayısıyla sunucunun gönderdiği her şey kabul edilir.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="629"/>
+        <location filename="../src/pkgscan.cpp" line="630"/>
         <source>Download is only verified with an outdated checksum</source>
         <translation>İndirme işlemi yalnızca güncel olmayan bir sağlama toplamı ile doğrulanmaktadır</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="630"/>
+        <location filename="../src/pkgscan.cpp" line="631"/>
         <source>MD5 and SHA-1 can be forged. Current packages use SHA-256 or BLAKE2.</source>
         <translation>MD5 ve SHA-1 oynanabilir. Güncel paketler SHA-256 veya BLAKE2 kullanır.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="800"/>
+        <location filename="../src/pkgscan.cpp" line="801"/>
         <source>Runs a command as soon as the PKGBUILD is read</source>
         <translation>PKGBUILD okunduğu anda bir komut çalıştırır</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="801"/>
+        <location filename="../src/pkgscan.cpp" line="802"/>
         <source>Code outside of the build functions already runs when package information is generated, before anything is built.</source>
         <translation>Derleme işlevlerinin dışındaki kod, herhangi bir şey derlenmeden önce, paket bilgileri oluşturulduğu sırada çalışır.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="812"/>
+        <location filename="../src/pkgscan.cpp" line="813"/>
         <source>Writes outside the package directory</source>
         <translation>Paket dizininin dışına yazar</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="813"/>
+        <location filename="../src/pkgscan.cpp" line="814"/>
         <source>A build may only create files below $pkgdir and $srcdir. This line changes the running system directly.</source>
         <translation>Bir derleme işlemi yalnızca $pkgdir ve $srcdir dizinlerinin altında dosya oluşturabilir. Bu satır, çalışan sistemi doğrudan değiştirir.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="842"/>
+        <location filename="../src/pkgscan.cpp" line="843"/>
         <source>Nobody maintains this package</source>
         <translation>Bu paketin bakımını kimse yapmıyor</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="843"/>
+        <location filename="../src/pkgscan.cpp" line="844"/>
         <source>Orphaned packages can be adopted by anyone, and nobody is watching for problems.</source>
         <translation>Yetim paketler herkes tarafından sahiplenilebilir; üstelik sorun çıkıp çıkmadığını gözeten kimse de yoktur.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="845"/>
+        <location filename="../src/pkgscan.cpp" line="846"/>
         <source>The maintainer has changed</source>
         <translation>Bakım sorumlusu değişti</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="846"/>
+        <location filename="../src/pkgscan.cpp" line="847"/>
         <source>Submitted by %1, now maintained by %2. Taking over an abandoned package is a known way to slip in malware.</source>
         <translation>%1 tarafından gönderilmiş, şu anda %2 tarafından bakılmaktadır. Terk edilmiş bir paketi devralmak, kötü amaçlı yazılım sızdırmanın bilinen bir yöntemidir.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="849"/>
+        <location filename="../src/pkgscan.cpp" line="850"/>
         <source>This package is very new</source>
         <translation>Bu paket çok yeni</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/pkgscan.cpp" line="850"/>
+        <location filename="../src/pkgscan.cpp" line="851"/>
         <source>It was first submitted %n day(s) ago, so few people have looked at it.</source>
         <translation>
             <numerusform>Bu, %n gün önce ilk kez gönderildi, bu yüzden henüz çok az kişi tarafından incelenmiş.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/pkgscan.cpp" line="854"/>
+        <location filename="../src/pkgscan.cpp" line="855"/>
         <source>The last change is %n hour(s) old. Malicious updates are usually found and removed within days.</source>
         <translation>
             <numerusform>Son değişiklik %n saat önce yapıldı. Zararlı güncellemeler genellikle birkaç gün içinde tespit edilip kaldırılır.</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/pkgscan.cpp" line="859"/>
+        <location filename="../src/pkgscan.cpp" line="860"/>
         <source>It has %n vote(s). Problems in rarely used packages stay unnoticed for longer.</source>
         <translation>
             <numerusform>%n oyu var. Nadiren kullanılan paketlerdeki sorunlar daha uzun süre fark edilmeden kalır.</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="853"/>
+        <location filename="../src/pkgscan.cpp" line="854"/>
         <source>This package changed very recently</source>
         <translation>Bu paket çok yakın zamanda değişmiş</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="858"/>
+        <location filename="../src/pkgscan.cpp" line="859"/>
         <source>Hardly anybody uses this package</source>
         <translation>Bu paketi neredeyse hiç kimse kullanmıyor</translation>
     </message>

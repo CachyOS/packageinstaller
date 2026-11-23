@@ -895,7 +895,7 @@
 <context>
     <name>Backend</name>
     <message>
-        <location filename="../src/backend.cpp" line="176"/>
+        <location filename="../src/backend.cpp" line="215"/>
         <source>The pacman databases are empty. Refresh them with a system update.</source>
         <translation>pacman 数据库为空。请通过系统更新刷新它们。</translation>
     </message>
@@ -1011,6 +1011,134 @@
     </message>
 </context>
 <context>
+    <name>CpakDetailsPage</name>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="32"/>
+        <source>Permissions it asks for</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="49"/>
+        <source>“%1” is not in the cpak catalogue and not installed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="57"/>
+        <source>Install</source>
+        <translation type="unfinished">安装</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="65"/>
+        <source>Update all</source>
+        <translation type="unfinished">全部更新</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="73"/>
+        <source>Remove</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="83"/>
+        <source>Repository</source>
+        <translation type="unfinished">仓库</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="89"/>
+        <source>Version</source>
+        <translation type="unfinished">版本</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="93"/>
+        <source>Installed version</source>
+        <translation type="unfinished">已安装版本</translation>
+    </message>
+</context>
+<context>
+    <name>CpakPage</name>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="40"/>
+        <source>cpak is turned off</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="40"/>
+        <source>cpak is not installed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="41"/>
+        <source>Turn it on in the settings to search and install cpak apps.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="42"/>
+        <source>The “cpak” command is needed to install and run these apps. See cpak.it/docs for how to install it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="43"/>
+        <source>Open settings</source>
+        <translation type="unfinished">打开设置</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="50"/>
+        <source>cpak</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="51"/>
+        <source>Apps that run in a sandbox of their own. Not packaged by CachyOS.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="57"/>
+        <source>Update all</source>
+        <translation type="unfinished">全部更新</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="58"/>
+        <source>An update that asks for more permissions is skipped; open the app to update it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="75"/>
+        <source>Update</source>
+        <translation type="unfinished">更新</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="85"/>
+        <source>Installed</source>
+        <translation type="unfinished">已安装</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="96"/>
+        <source>Loading the app catalogue…</source>
+        <translation type="unfinished">正在加载应用目录…</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="97"/>
+        <source>The app catalogue could not be loaded.</source>
+        <translation type="unfinished">无法加载应用目录。</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="98"/>
+        <source>No cpak apps match “%1”.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../qml/CpakPage.qml" line="99"/>
+        <source>Type in the search field to find one of %n cpak app(s).</source>
+        <translation type="unfinished">
+            <numerusform></numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="100"/>
+        <source>Try again</source>
+        <translation type="unfinished">重试</translation>
+    </message>
+</context>
+<context>
     <name>DetailsHero</name>
     <message>
         <location filename="../qml/DetailsHero.qml" line="32"/>
@@ -1089,77 +1217,92 @@
 <context>
     <name>FlatpakDetailsPage</name>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="31"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="38"/>
         <source>“%1” is not available as a Flatpak.</source>
         <translation>“%1”没有可用的 Flatpak 版本。</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="40"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="47"/>
         <source>Install</source>
         <translation>安装</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="48"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="55"/>
+        <source>Install with cpak</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="64"/>
+        <source>Remove (cpak)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="72"/>
         <source>Update all</source>
         <translation>全部更新</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="56"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="80"/>
         <source>Remove</source>
         <translation>卸载</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="66"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="90"/>
         <source>App ID</source>
         <translation>应用 ID</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="70"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="94"/>
         <source>Version</source>
         <translation>版本</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="74"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="98"/>
         <source>Installed version</source>
         <translation>已安装版本</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="78"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="102"/>
         <source>Source</source>
         <translation>来源</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="82"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="106"/>
         <source>Installed size</source>
         <translation>已安装大小</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="86"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="110"/>
         <source>Installed for</source>
         <translation>安装范围</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="87"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="111"/>
         <source>Your user only</source>
         <translation>仅当前用户</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="88"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="112"/>
         <source>All users</source>
         <translation>所有用户</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="91"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="115"/>
+        <source>Installed with cpak</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="119"/>
         <source>Branch</source>
         <translation>分支</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="95"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="123"/>
         <source>License</source>
         <translation>许可证</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="99"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="127"/>
         <source>Website</source>
         <translation>网站</translation>
     </message>
@@ -1385,92 +1528,102 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../qml/Main.qml" line="166"/>
+        <location filename="../qml/Main.qml" line="168"/>
         <source>CachyOS Package Installer</source>
         <translation>CachyOS 软件包安装器</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="242"/>
+        <location filename="../qml/Main.qml" line="244"/>
         <source>CachyOS</source>
         <translation>CachyOS</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="248"/>
+        <location filename="../qml/Main.qml" line="250"/>
         <source>Package Installer</source>
         <translation>软件包安装器</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="264"/>
+        <location filename="../qml/Main.qml" line="266"/>
         <source>Discover</source>
         <translation>发现</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="265"/>
+        <location filename="../qml/Main.qml" line="267"/>
         <source>Browse</source>
         <translation>浏览</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="266"/>
+        <location filename="../qml/Main.qml" line="268"/>
         <source>Installed</source>
         <translation>已安装</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="267"/>
+        <location filename="../qml/Main.qml" line="269"/>
         <source>Updates</source>
         <translation>更新</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="268"/>
+        <location filename="../qml/Main.qml" line="270"/>
         <source>AUR</source>
         <translation>AUR</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="269"/>
+        <location filename="../qml/Main.qml" line="271"/>
         <source>Flatpak</source>
         <translation>Flatpak</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="270"/>
+        <location filename="../qml/Main.qml" line="273"/>
+        <source>cpak</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="272"/>
         <source>AppImage</source>
         <translation>AppImage</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="297"/>
+        <location filename="../qml/Main.qml" line="300"/>
         <source>Settings</source>
         <translation>设置</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="305"/>
+        <location filename="../qml/Main.qml" line="308"/>
         <source>Version %1</source>
         <translation>版本 %1</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="323"/>
+        <location filename="../qml/Main.qml" line="326"/>
         <source>Search the AUR</source>
         <translation>搜索 AUR</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="324"/>
+        <location filename="../qml/Main.qml" line="327"/>
         <source>Search Flatpak apps</source>
         <translation>搜索 Flatpak 应用</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="324"/>
+        <location filename="../qml/Main.qml" line="328"/>
         <source>Search apps and packages</source>
         <translation>搜索应用和软件包</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="482"/>
+        <location filename="../qml/Main.qml" line="328"/>
+        <source>Search cpak apps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="500"/>
         <source>A transaction is running</source>
         <translation>正在执行操作</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="488"/>
+        <location filename="../qml/Main.qml" line="506"/>
         <source>Interrupting it could leave the system in a broken state. The window can be closed once it has finished.</source>
         <translation>中断操作可能会使系统处于损坏状态。操作完成后即可关闭窗口。</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="496"/>
+        <location filename="../qml/Main.qml" line="514"/>
         <source>Keep running</source>
         <translation>继续运行</translation>
     </message>
@@ -1543,6 +1696,11 @@
         <translation>未安装 Flatpak。您可以从 Flatpak 页面安装。</translation>
     </message>
     <message>
+        <location filename="../qml/SettingsPage.qml" line="164"/>
+        <source>cpak</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../qml/SettingsPage.qml" line="156"/>
         <source>AppImage</source>
         <translation>AppImage</translation>
@@ -1553,32 +1711,47 @@
         <translation>您自行下载的单文件应用。它们会获得菜单项和图标。它们未经检查、没有沙盒保护，也不会为您更新。</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="166"/>
+        <location filename="../qml/SettingsPage.qml" line="165"/>
+        <source>Sandboxed apps from cpak&apos;s signed catalogue, and Flatpak apps run in cpak&apos;s sandbox. They are packaged by their developers, not by CachyOS, and run with the permissions shown on their page.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="167"/>
+        <source>cpak is not installed. See cpak.it/docs for how to install it.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="168"/>
+        <source>cpak&apos;s catalogue could not be read. Check your connection.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="177"/>
         <source>Mirrors</source>
         <translation>镜像源</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="170"/>
+        <location filename="../qml/SettingsPage.qml" line="181"/>
         <source>Rank the mirrors by speed</source>
         <translation>按速度为镜像源排序</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="171"/>
+        <location filename="../qml/SettingsPage.qml" line="182"/>
         <source>Packages are downloaded from the first mirror that answers. Ranking measures the Arch and CachyOS mirrors from your connection and rewrites the mirror lists to prefer the fast ones. Worth doing when downloads are slow or fail.</source>
         <translation>软件包会从最先响应的镜像源下载。排序会测量您当前的网络连接对 Arch 和 CachyOS 镜像源的速度，并重写镜像列表以优先使用较快的镜像源。下载缓慢或失败时值得一试。</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="172"/>
+        <location filename="../qml/SettingsPage.qml" line="183"/>
         <source>Ranking needs the “cachyos-rate-mirrors” package, which is not installed.</source>
         <translation>排序需要“cachyos-rate-mirrors”软件包，但当前未安装。</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="176"/>
+        <location filename="../qml/SettingsPage.qml" line="187"/>
         <source>Rank mirrors</source>
         <translation>为镜像源排序</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="176"/>
+        <location filename="../qml/SettingsPage.qml" line="187"/>
         <source>Install cachyos-rate-mirrors</source>
         <translation>安装 cachyos-rate-mirrors</translation>
     </message>
@@ -1607,11 +1780,16 @@
     </message>
     <message>
         <location filename="../qml/SourceBadge.qml" line="13"/>
+        <source>cpak</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../qml/SourceBadge.qml" line="14"/>
         <source>AppImage</source>
         <translation>AppImage</translation>
     </message>
     <message>
-        <location filename="../qml/SourceBadge.qml" line="14"/>
+        <location filename="../qml/SourceBadge.qml" line="15"/>
         <source>Local</source>
         <translation>本地</translation>
     </message>
@@ -1619,170 +1797,195 @@
 <context>
     <name>Transaction</name>
     <message>
-        <location filename="../src/transaction.cpp" line="81"/>
+        <location filename="../src/transaction.cpp" line="92"/>
         <source>Install %1</source>
         <translation>安装 %1</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="83"/>
+        <location filename="../src/transaction.cpp" line="95"/>
         <source>Remove %1</source>
         <translation>卸载 %1</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="84"/>
+        <location filename="../src/transaction.cpp" line="96"/>
         <source>Update the system</source>
         <translation>更新系统</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="85"/>
+        <location filename="../src/transaction.cpp" line="97"/>
         <source>Update Flatpak apps</source>
         <translation>更新 Flatpak 应用</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="86"/>
+        <location filename="../src/transaction.cpp" line="98"/>
+        <source>Update cpak apps</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/transaction.cpp" line="99"/>
         <source>Add Flathub</source>
         <translation>添加 Flathub</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="87"/>
+        <location filename="../src/transaction.cpp" line="100"/>
         <source>Rank the mirrors</source>
         <translation>为镜像源排序</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="89"/>
+        <location filename="../src/transaction.cpp" line="102"/>
         <source>Build %n package(s) from the AUR</source>
         <translation>
             <numerusform>从 AUR 构建 %n 个软件包</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="90"/>
+        <location filename="../src/transaction.cpp" line="103"/>
         <source>Build %1 from the AUR</source>
         <translation>从 AUR 构建 %1</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="97"/>
+        <location filename="../src/transaction.cpp" line="110"/>
         <source>Flatpak will download the app and the runtime it needs, and install them for all users. It asks for permission itself if that is required.</source>
         <translation>Flatpak 将下载该应用及其所需的运行时，并为所有用户安装。如需要，它会自行请求权限。</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="99"/>
+        <location filename="../src/transaction.cpp" line="112"/>
         <source>The app will be removed, and with it the runtimes that no other app needs. Its data in your home directory is kept.</source>
         <translation>将卸载该应用，同时移除没有其他应用需要的运行时。您主目录中的数据会保留。</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="100"/>
+        <location filename="../src/transaction.cpp" line="113"/>
         <source>Every installed Flatpak app and runtime will be updated.</source>
         <translation>将更新所有已安装的 Flatpak 应用和运行时。</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="101"/>
+        <location filename="../src/transaction.cpp" line="115"/>
+        <source>cpak will download the app and install it for your user. It runs in a sandbox of its own, with the permissions listed on the app&apos;s page.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/transaction.cpp" line="117"/>
+        <source>cpak will download the Flatpak app and install it for your user, in cpak&apos;s sandbox instead of Flatpak&apos;s. The output lists the permissions cpak grants and the ones it refuses; change them later with “cpak override”.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/transaction.cpp" line="118"/>
+        <source>The app will be removed. Its data in your home directory is kept.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/transaction.cpp" line="120"/>
+        <source>Every installed cpak app will be updated. An app whose update asks for more permissions than it has is skipped; update it on its own after reading them.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/transaction.cpp" line="121"/>
         <source>Flathub will be added as an app source for all users.</source>
         <translation>将把 Flathub 添加为所有用户的应用源。</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="102"/>
+        <location filename="../src/transaction.cpp" line="122"/>
         <source>The package databases will be refreshed and every available update installed.</source>
         <translation>将刷新软件包数据库并安装所有可用更新。</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="104"/>
+        <location filename="../src/transaction.cpp" line="124"/>
         <source>The download speed of the Arch and CachyOS mirrors will be measured and the mirror lists rewritten to prefer the fast ones. This takes a minute or two; a copy of the current lists is kept until the next ranking.</source>
         <translation>将测量 Arch 和 CachyOS 镜像源的下载速度，并重写镜像列表以优先使用较快的镜像源。这需要一两分钟；当前列表的副本会保留到下次排序。</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="107"/>
+        <location filename="../src/transaction.cpp" line="127"/>
         <source>paru will download the sources, build %1 as your user and then ask for permission to install them. This can take a while.</source>
         <translation>paru 将下载源代码，以您的用户身份构建 %1，然后请求安装权限。这可能需要一段时间。</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="108"/>
+        <location filename="../src/transaction.cpp" line="128"/>
         <source>paru will download the sources, build the package as your user and then ask for permission to install it. This can take a while.</source>
         <translation>paru 将下载源代码，以您的用户身份构建软件包，然后请求安装权限。这可能需要一段时间。</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="109"/>
+        <location filename="../src/transaction.cpp" line="129"/>
         <source>%n package(s) will be removed:</source>
         <translation>
             <numerusform>将卸载 %n 个软件包：</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="111"/>
+        <location filename="../src/transaction.cpp" line="131"/>
         <source>%n package(s) will be installed (%1 to download):</source>
         <translation>
             <numerusform>将安装 %n 个软件包（需下载 %1）：</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="119"/>
+        <location filename="../src/transaction.cpp" line="140"/>
         <source>Remove</source>
         <translation>卸载</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="121"/>
+        <location filename="../src/transaction.cpp" line="143"/>
         <source>Update</source>
         <translation>更新</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="122"/>
+        <location filename="../src/transaction.cpp" line="144"/>
         <source>Add</source>
         <translation>添加</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="123"/>
+        <location filename="../src/transaction.cpp" line="145"/>
         <source>Rank</source>
         <translation>排序</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="124"/>
+        <location filename="../src/transaction.cpp" line="146"/>
         <source>Install</source>
         <translation>安装</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="243"/>
+        <location filename="../src/transaction.cpp" line="276"/>
         <source>%1 is missing. Reinstall the package installer.</source>
         <translation>缺少 %1。请重新安装软件包安装器。</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="296"/>
+        <location filename="../src/transaction.cpp" line="329"/>
         <source>Could not start %1</source>
         <translation>无法启动 %1</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="339"/>
+        <location filename="../src/transaction.cpp" line="373"/>
         <source>%1 cannot be removed: %n installed package(s) depend on it.</source>
         <translation>
             <numerusform>无法卸载 %1：有 %n 个已安装的软件包依赖它。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="340"/>
+        <location filename="../src/transaction.cpp" line="374"/>
         <source>Among them: %1, …</source>
         <translation>其中包括：%1、…</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="340"/>
+        <location filename="../src/transaction.cpp" line="374"/>
         <source>Needed by: %1</source>
         <translation>被以下软件包需要：%1</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="342"/>
+        <location filename="../src/transaction.cpp" line="376"/>
         <source>pacman could not resolve this operation.</source>
         <translation>pacman 无法解析此操作。</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="345"/>
+        <location filename="../src/transaction.cpp" line="379"/>
         <source>Already installed and up to date.</source>
         <translation>已安装且为最新版本。</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="345"/>
+        <location filename="../src/transaction.cpp" line="379"/>
         <source>Nothing to do.</source>
         <translation>无需执行任何操作。</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="366"/>
+        <location filename="../src/transaction.cpp" line="400"/>
         <source>
 The unused runtimes could not be removed (exit code %1).
 </source>
@@ -1791,12 +1994,17 @@ The unused runtimes could not be removed (exit code %1).
 </translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="380"/>
+        <location filename="../src/transaction.cpp" line="414"/>
         <source>Authentication was cancelled or denied. Nothing was changed.</source>
         <translation>身份验证已取消或被拒绝，未更改任何内容。</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="382"/>
+        <location filename="../src/transaction.cpp" line="416"/>
+        <source>Stopped before it finished. Nothing was installed.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../src/transaction.cpp" line="418"/>
         <source>
 The operation failed (exit code %1).
 </source>
@@ -1937,343 +2145,343 @@ The operation failed (exit code %1).
 <context>
     <name>pkgscan</name>
     <message>
-        <location filename="../src/pkgscan.cpp" line="66"/>
+        <location filename="../src/pkgscan.cpp" line="67"/>
         <source>Downloads a script and runs it directly</source>
         <translation>下载脚本并直接运行</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="67"/>
+        <location filename="../src/pkgscan.cpp" line="68"/>
         <source>The downloaded code is executed without being stored or verified, so it can change at any time.</source>
         <translation>下载的代码未经保存或验证便被执行，因此内容可能随时改变。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="70"/>
+        <location filename="../src/pkgscan.cpp" line="71"/>
         <source>Downloads something outside the source list</source>
         <translation>下载源列表之外的资源</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="71"/>
+        <location filename="../src/pkgscan.cpp" line="72"/>
         <source>Only files listed in source=() are checked against a checksum. This download is not.</source>
         <translation>只有 source=() 中列出的文件才会进行校验和检查，此下载不在其中。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="74"/>
+        <location filename="../src/pkgscan.cpp" line="75"/>
         <source>Decodes hidden text and runs it</source>
         <translation>解码隐藏文本并运行</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="75"/>
+        <location filename="../src/pkgscan.cpp" line="76"/>
         <source>Encoding a command before running it has no purpose other than hiding what it does.</source>
         <translation>在运行命令前对其进行编码，除了隐藏其用途外没有其他目的。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="78"/>
+        <location filename="../src/pkgscan.cpp" line="79"/>
         <source>Decodes encoded data</source>
         <translation>解码已编码的数据</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="79"/>
+        <location filename="../src/pkgscan.cpp" line="80"/>
         <source>Check what the decoded data is and what happens with it.</source>
         <translation>请检查解码后的内容以及它的用途。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="82"/>
+        <location filename="../src/pkgscan.cpp" line="83"/>
         <source>Opens a network connection from the shell</source>
         <translation>从 shell 打开网络连接</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="83"/>
+        <location filename="../src/pkgscan.cpp" line="84"/>
         <source>This is how remote-control backdoors are started. A build or install script has no reason to do this.</source>
         <translation>远程控制后门通常就是这样启动的。构建或安装脚本没有理由这样做。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="87"/>
+        <location filename="../src/pkgscan.cpp" line="88"/>
         <source>Accesses keys, passwords or browser data</source>
         <translation>访问密钥、密码或浏览器数据</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="88"/>
+        <location filename="../src/pkgscan.cpp" line="89"/>
         <source>These files hold your logins. Building or installing a package never needs them.</source>
         <translation>这些文件保存着您的登录信息。构建或安装软件包从不需要它们。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="91"/>
+        <location filename="../src/pkgscan.cpp" line="92"/>
         <source>Changes who may become administrator</source>
         <translation>更改谁可以成为管理员</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="92"/>
+        <location filename="../src/pkgscan.cpp" line="93"/>
         <source>Editing sudo, polkit, PAM or the library preload list can give lasting, silent root access.</source>
         <translation>修改 sudo、polkit、PAM 或库预加载列表，可能会留下持久且隐蔽的 root 访问权限。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="95"/>
+        <location filename="../src/pkgscan.cpp" line="96"/>
         <source>Deletes a whole directory tree</source>
         <translation>删除整个目录树</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="96"/>
+        <location filename="../src/pkgscan.cpp" line="97"/>
         <source>This removes the root or home directory.</source>
         <translation>这会删除根目录或主目录。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="99"/>
+        <location filename="../src/pkgscan.cpp" line="100"/>
         <source>Contains text hidden as escape codes</source>
         <translation>包含以转义码隐藏的文本</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="100"/>
+        <location filename="../src/pkgscan.cpp" line="101"/>
         <source>Readable scripts do not need to spell out text byte by byte.</source>
         <translation>可读的脚本不需要逐字节拼写文本。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="103"/>
+        <location filename="../src/pkgscan.cpp" line="104"/>
         <source>Runs text that is put together at run time</source>
         <translation>运行在运行时拼接出来的文本</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="104"/>
+        <location filename="../src/pkgscan.cpp" line="105"/>
         <source>With eval the command that really runs is not visible in the script. Check where its input comes from.</source>
         <translation>使用 eval 时，真正执行的命令在脚本中不可见。请检查它的输入来自哪里。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="107"/>
+        <location filename="../src/pkgscan.cpp" line="108"/>
         <source>Asks for administrator rights while building</source>
         <translation>在构建时请求管理员权限</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="108"/>
+        <location filename="../src/pkgscan.cpp" line="109"/>
         <source>A build runs as your user and must not need root.</source>
         <translation>构建过程以您的用户身份运行，不应需要 root 权限。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="111"/>
+        <location filename="../src/pkgscan.cpp" line="112"/>
         <source>Touches a home directory</source>
         <translation>访问主目录</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="112"/>
+        <location filename="../src/pkgscan.cpp" line="113"/>
         <source>Packages install into system directories. Check what is read from or written to the home directory.</source>
         <translation>软件包应安装到系统目录。请检查它从主目录读取或写入了什么。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="115"/>
+        <location filename="../src/pkgscan.cpp" line="116"/>
         <source>Sets something up to run automatically</source>
         <translation>设置自动运行的内容</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="116"/>
+        <location filename="../src/pkgscan.cpp" line="117"/>
         <source>Cron jobs, autostart entries and shell start-up files keep running after the installation.</source>
         <translation>Cron 任务、自启动项和 shell 启动文件会在安装后继续运行。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="119"/>
+        <location filename="../src/pkgscan.cpp" line="120"/>
         <source>Enables or starts a service</source>
         <translation>启用或启动服务</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="120"/>
+        <location filename="../src/pkgscan.cpp" line="121"/>
         <source>Packages should leave it to you to enable their services.</source>
         <translation>软件包应把启用服务的决定留给您。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="123"/>
+        <location filename="../src/pkgscan.cpp" line="124"/>
         <source>Gives a program elevated rights</source>
         <translation>赋予程序更高权限</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="124"/>
+        <location filename="../src/pkgscan.cpp" line="125"/>
         <source>A setuid bit or capability lets the program act with more rights than the user who starts it.</source>
         <translation>setuid 位或 capability 可让程序以高于启动它的用户的权限运行。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="127"/>
+        <location filename="../src/pkgscan.cpp" line="128"/>
         <source>Turns off the check of the server&apos;s identity</source>
         <translation>关闭服务器身份验证</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="128"/>
+        <location filename="../src/pkgscan.cpp" line="129"/>
         <source>Without certificate checks anybody on the network can replace the download.</source>
         <translation>没有证书校验，网络上的任何人都可以替换下载内容。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="131"/>
+        <location filename="../src/pkgscan.cpp" line="132"/>
         <source>Changes the system while building</source>
         <translation>在构建时修改系统</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="132"/>
+        <location filename="../src/pkgscan.cpp" line="133"/>
         <source>A build only creates files inside its own directory.</source>
         <translation>构建只应在自己的目录内创建文件。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="135"/>
+        <location filename="../src/pkgscan.cpp" line="136"/>
         <source>Runs an inline script in another language</source>
         <translation>运行另一种语言的内联脚本</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="136"/>
+        <location filename="../src/pkgscan.cpp" line="137"/>
         <source>Read the embedded code as carefully as the rest.</source>
         <translation>请像对待其余部分一样仔细阅读嵌入的代码。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="233"/>
+        <location filename="../src/pkgscan.cpp" line="234"/>
         <source>Contains a long block of encoded data</source>
         <translation>包含一大段编码数据</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="234"/>
+        <location filename="../src/pkgscan.cpp" line="235"/>
         <source>Encoded blocks can hide a program or script. Check what it is decoded into.</source>
         <translation>编码块可能隐藏程序或脚本。请检查它解码后的内容。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="442"/>
+        <location filename="../src/pkgscan.cpp" line="443"/>
         <source>The PKGBUILD downloads something .SRCINFO does not list</source>
         <translation>PKGBUILD 下载了 .SRCINFO 未列出的内容</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="443"/>
+        <location filename="../src/pkgscan.cpp" line="444"/>
         <source>The AUR shows the sources from .SRCINFO, but makepkg downloads what the PKGBUILD says.</source>
         <translation>AUR 显示的是 .SRCINFO 中的源，但 makepkg 实际下载的是 PKGBUILD 指定的内容。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="594"/>
+        <location filename="../src/pkgscan.cpp" line="595"/>
         <source>Download address is put together from variables</source>
         <translation>下载地址由变量拼接而成</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="594"/>
+        <location filename="../src/pkgscan.cpp" line="595"/>
         <source>Work out where this source really comes from.</source>
         <translation>请查明此源的真实来源。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="600"/>
+        <location filename="../src/pkgscan.cpp" line="601"/>
         <source>Downloads from a bare IP address</source>
         <translation>从裸 IP 地址下载</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="601"/>
+        <location filename="../src/pkgscan.cpp" line="602"/>
         <source>Real projects publish their files under a name. %1 cannot be traced to anybody.</source>
         <translation>正规项目会以名称发布文件。%1 无法追溯到任何人。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="603"/>
+        <location filename="../src/pkgscan.cpp" line="604"/>
         <source>Downloads from a file-sharing, paste or link-shortening service</source>
         <translation>从文件分享、粘贴或短链接服务下载</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="604"/>
+        <location filename="../src/pkgscan.cpp" line="605"/>
         <source>Anybody can upload to %1 anonymously and replace the file later.</source>
         <translation>任何人都可以向 %1 匿名上传，并在之后替换文件。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="610"/>
+        <location filename="../src/pkgscan.cpp" line="611"/>
         <source>Builds whatever is in the repository at that moment</source>
         <translation>构建仓库当时的内容</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="611"/>
+        <location filename="../src/pkgscan.cpp" line="612"/>
         <source>The source is not pinned to a commit or tag, so the code can differ from what the maintainer tested.</source>
         <translation>源未固定到某个提交或标签，因此代码可能与维护者测试的内容不同。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="625"/>
+        <location filename="../src/pkgscan.cpp" line="626"/>
         <source>Download is not verified</source>
         <translation>下载内容未经校验</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="626"/>
+        <location filename="../src/pkgscan.cpp" line="627"/>
         <source>This file has no checksum and is fetched without encryption, so anybody on the network can replace it.</source>
         <translation>此文件没有校验和，且通过未加密方式获取，网络上的任何人都可以替换它。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="627"/>
+        <location filename="../src/pkgscan.cpp" line="628"/>
         <source>This file has no checksum (SKIP), so whatever the server sends is accepted.</source>
         <translation>此文件没有校验和（SKIP），因此服务器发送的任何内容都会被接受。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="629"/>
+        <location filename="../src/pkgscan.cpp" line="630"/>
         <source>Download is only verified with an outdated checksum</source>
         <translation>仅使用过时的校验和验证下载</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="630"/>
+        <location filename="../src/pkgscan.cpp" line="631"/>
         <source>MD5 and SHA-1 can be forged. Current packages use SHA-256 or BLAKE2.</source>
         <translation>MD5 和 SHA-1 可以被伪造。当前软件包使用 SHA-256 或 BLAKE2。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="800"/>
+        <location filename="../src/pkgscan.cpp" line="801"/>
         <source>Runs a command as soon as the PKGBUILD is read</source>
         <translation>读取 PKGBUILD 时立即运行命令</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="801"/>
+        <location filename="../src/pkgscan.cpp" line="802"/>
         <source>Code outside of the build functions already runs when package information is generated, before anything is built.</source>
         <translation>构建函数之外的代码会在生成软件包信息时、构建开始之前就运行。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="812"/>
+        <location filename="../src/pkgscan.cpp" line="813"/>
         <source>Writes outside the package directory</source>
         <translation>写入软件包目录之外</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="813"/>
+        <location filename="../src/pkgscan.cpp" line="814"/>
         <source>A build may only create files below $pkgdir and $srcdir. This line changes the running system directly.</source>
         <translation>构建只能在 $pkgdir 和 $srcdir 下创建文件。此行会直接修改正在运行的系统。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="842"/>
+        <location filename="../src/pkgscan.cpp" line="843"/>
         <source>Nobody maintains this package</source>
         <translation>此软件包无人维护</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="843"/>
+        <location filename="../src/pkgscan.cpp" line="844"/>
         <source>Orphaned packages can be adopted by anyone, and nobody is watching for problems.</source>
         <translation>无人维护的软件包可能被任何人接手，也没有人留意问题。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="845"/>
+        <location filename="../src/pkgscan.cpp" line="846"/>
         <source>The maintainer has changed</source>
         <translation>维护者已变更</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="846"/>
+        <location filename="../src/pkgscan.cpp" line="847"/>
         <source>Submitted by %1, now maintained by %2. Taking over an abandoned package is a known way to slip in malware.</source>
         <translation>由 %1 提交，现由 %2 维护。接管被放弃的软件包是植入恶意软件的常见手法。</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="849"/>
+        <location filename="../src/pkgscan.cpp" line="850"/>
         <source>This package is very new</source>
         <translation>此软件包非常新</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/pkgscan.cpp" line="850"/>
+        <location filename="../src/pkgscan.cpp" line="851"/>
         <source>It was first submitted %n day(s) ago, so few people have looked at it.</source>
         <translation>
             <numerusform>它首次提交于 %n 天前，因此查看过的人很少。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/pkgscan.cpp" line="854"/>
+        <location filename="../src/pkgscan.cpp" line="855"/>
         <source>The last change is %n hour(s) old. Malicious updates are usually found and removed within days.</source>
         <translation>
             <numerusform>最后一次更改发生在 %n 小时前。恶意更新通常会在几天内被发现并移除。</numerusform>
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/pkgscan.cpp" line="859"/>
+        <location filename="../src/pkgscan.cpp" line="860"/>
         <source>It has %n vote(s). Problems in rarely used packages stay unnoticed for longer.</source>
         <translation>
             <numerusform>它有 %n 票。很少使用的软件包中的问题会更久不被发现。</numerusform>
         </translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="853"/>
+        <location filename="../src/pkgscan.cpp" line="854"/>
         <source>This package changed very recently</source>
         <translation>此软件包最近刚刚更改</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="858"/>
+        <location filename="../src/pkgscan.cpp" line="859"/>
         <source>Hardly anybody uses this package</source>
         <translation>几乎无人使用此软件包</translation>
     </message>
