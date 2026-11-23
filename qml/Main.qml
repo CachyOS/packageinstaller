@@ -156,7 +156,13 @@ ApplicationWindow {
         }
     }
 
-    Component.onCompleted: if (Backend.hasStartupFile) show("appimage")
+    // Typing works right away; a startup file keeps the AppImage page's own focus.
+    Component.onCompleted: {
+        if (Backend.hasStartupFile)
+            show("appimage")
+        else
+            search.forceActiveFocus()
+    }
 
     width: 1220
     height: 800
