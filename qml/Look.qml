@@ -351,6 +351,8 @@ QtObject {
     readonly property int radiusSmall: 8
     readonly property int radiusLarge: radius + 4
     readonly property int pagePadding: 28
+    /// Top of a page's content, level with the first entry of the sidebar
+    readonly property int contentTop: 17
     /// room kept free for a vertical scroll bar
     readonly property int gutter: 12
     readonly property int textMaxWidth: 820

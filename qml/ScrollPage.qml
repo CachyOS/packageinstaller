@@ -7,7 +7,7 @@ Flickable {
     default property alias content: column.data
     property alias spacing: column.spacing
     /// distance of the first item from the top
-    property real inset: Look.pagePadding
+    property real inset: Look.contentTop
 
     contentWidth: width
     contentHeight: column.height + inset + Look.pagePadding
