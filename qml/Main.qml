@@ -6,7 +6,7 @@ import CachyOS.PackageInstaller
 ApplicationWindow {
     id: root
 
-    // "home", "browse", "installed", "updates", "aur", "flatpak", "appimage" or "settings"
+    // "home", "browse", "installed", "updates", "aur", "flatpak", "cpak", "appimage" or "settings"
     property string section: "home"
 
     // History for the back and forward buttons. Pages on top of a section live in the
@@ -54,6 +54,7 @@ ApplicationWindow {
         case "updates": return updatesPage;
         case "aur": return aurPage;
         case "flatpak": return flatpakPage;
+        case "cpak": return cpakPage;
         case "appimage": return appImagePage;
         case "settings": return settingsPage;
         default: return homePage;
@@ -62,7 +63,7 @@ ApplicationWindow {
 
     // Sections with a list that the search field filters.
     function searchable(name: string): bool {
-        return name === "browse" || name === "installed" || name === "aur" || name === "flatpak";
+        return name === "browse" || name === "installed" || name === "aur" || name === "flatpak" || name === "cpak";
     }
 
     function badge(name: string): int {
@@ -70,6 +71,7 @@ ApplicationWindow {
         case "updates": return Backend.updateCount;
         case "aur": return Backend.aur.updateCount;
         case "flatpak": return Backend.flatpak.updateCount;
+        case "cpak": return Backend.cpakEnabled ? Backend.cpak.updateCount : 0;
         case "appimage": return Backend.appImagesEnabled ? Backend.appImages.updateCount : 0;
         default: return 0;
         }
@@ -268,6 +270,7 @@ ApplicationWindow {
                         ListElement { name: "aur"; label: qsTr("AUR"); glyph: "M12 3 20 7.5v9L12 21l-8-4.5v-9zM4 7.5 12 12l8-4.5M12 12v9" }
                         ListElement { name: "flatpak"; label: qsTr("Flatpak"); glyph: "M4 8l8-4l8 4v8l-8 4l-8-4zM4 8l8 4l8-4M12 12v8M8 6l8 4" }
                         ListElement { name: "appimage"; label: qsTr("AppImage"); glyph: "M5 4h14a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1zM12 8v8M8 12h8" }
+                        ListElement { name: "cpak"; label: qsTr("cpak"); glyph: "M12 3 20 7.5v9L12 21l-8-4.5v-9zM9 10.5a3 3 0 1 1 0 3" }
                     }
 
                     NavButton {
@@ -321,7 +324,8 @@ ApplicationWindow {
             anchors.verticalCenter: topBar.verticalCenter
             width: Math.min(topBar.width - 2 * Look.pagePadding, 520)
             placeholderText: root.section === "aur" ? qsTr("Search the AUR")
-                : root.section === "flatpak" ? qsTr("Search Flatpak apps") : qsTr("Search apps and packages")
+                : root.section === "flatpak" ? qsTr("Search Flatpak apps")
+                : root.section === "cpak" ? qsTr("Search cpak apps") : qsTr("Search apps and packages")
             Accessible.name: placeholderText
 
             // the searchable pages bind their query to the text
@@ -415,6 +419,20 @@ ApplicationWindow {
             query: search.text
             onOpenSettings: root.showSources()
             onOpenApp: (appId, copy) => root.openPage(flatpakDetailsPage, {"appId": appId, "copy": copy})
+        }
+    }
+    Component {
+        id: cpakPage
+        CpakPage {
+            query: search.text
+            onOpenSettings: root.showSources()
+            onOpenApp: origin => root.openPage(cpakDetailsPage, {"origin": origin})
+        }
+    }
+    Component {
+        id: cpakDetailsPage
+        CpakDetailsPage {
+            onBack: root.back()
         }
     }
     Component {

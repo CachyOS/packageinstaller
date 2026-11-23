@@ -26,7 +26,7 @@ struct PlanEntry {
 ///
 /// Repository operations and the mirror ranking run through the pkexec helper; AUR installs are
 /// delegated to paru, which runs as the user and elevates through the helper too.
-/// Flatpak operations run the flatpak command as the user.
+/// Flatpak and cpak operations run their command as the user.
 ///
 /// pacman is never interrupted once it runs. Only work done as the user (planning, paru
 /// builds, flatpak) can be stopped, the way Ctrl+C in a terminal stops it: SIGINT to its
@@ -50,6 +50,7 @@ class Transaction : public QObject {
     Q_PROPERTY(QString failureReason READ failureReason NOTIFY stateChanged FINAL)
     Q_PROPERTY(bool cancellable READ cancellable NOTIFY stateChanged FINAL)
     Q_PROPERTY(bool isFlatpak READ isFlatpak NOTIFY stateChanged FINAL)
+    Q_PROPERTY(bool isCpak READ isCpak NOTIFY stateChanged FINAL)
 
  public:
     enum State { Idle,
@@ -66,6 +67,10 @@ class Transaction : public QObject {
         FlatpakRemove,
         FlatpakUpdate,
         FlatpakSetup,
+        CpakInstall,
+        CpakFlatpakInstall,
+        CpakRemove,
+        CpakUpdate,
         RateMirrors };
     Q_ENUM(Kind)
 
@@ -88,8 +93,13 @@ class Transaction : public QObject {
     QString failureReason() const { return m_failureReason; }
     /// A flatpak operation; it runs as the user and Flatpak asks for permission itself.
     bool isFlatpak() const;
+    /// A cpak operation; it runs as the user as well.
+    bool isCpak() const;
     /// Only work done as the user can be stopped; pacman is never interrupted.
-    bool cancellable() const { return m_state == Running && (m_kind == AurInstall || isFlatpak()); }
+    /// A cpak install can be stopped; a removal or an update runs to the end.
+    bool cancellable() const {
+        return m_state == Running && (m_kind == AurInstall || isFlatpak() || m_kind == CpakInstall || m_kind == CpakFlatpakInstall);
+    }
 
     /// Starts a new operation and computes what it would do. Ignored while one is active.
     Q_INVOKABLE void prepare(Kind kind, const QStringList& targets);
@@ -99,6 +109,8 @@ class Transaction : public QObject {
     /// Runs `flatpak` with `arguments`; `names` is what the dialog calls the operation.
     /// `cleanup` is a second run that follows a successful first one and may fail.
     void prepareFlatpak(Kind kind, const QStringList& names, const QStringList& arguments, const QStringList& cleanup = {});
+    /// Runs `cpak` with `arguments`; `names` is what the dialog calls the operation.
+    void prepareCpak(Kind kind, const QStringList& names, const QStringList& arguments);
     Q_INVOKABLE void confirm();
     /// Aborts planning/confirmation, or interrupts a cancellable running operation.
     Q_INVOKABLE void cancel();
@@ -144,6 +156,7 @@ class Transaction : public QObject {
     QStringDecoder m_decoder{QStringDecoder::Utf8};
     QString m_partial;  ///< the line being written, before its '\n'
     QString m_lastLine;
+    bool m_stopped       = false;  ///< the user stopped a cpak install that is running
     bool m_helperStarted = false;  ///< pkexec let the helper through: a 126 or 127 is then not a refusal
     QString m_failureReason;
     bool m_success                = false;

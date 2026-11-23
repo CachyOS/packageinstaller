@@ -112,6 +112,7 @@ qt_add_executable(${PROJECT_NAME}
     src/packagemodel.hpp src/packagemodel.cpp
     src/aurclient.hpp src/aurclient.cpp
     src/flatpakclient.hpp src/flatpakclient.cpp
+    src/cpakclient.hpp src/cpakclient.cpp
     src/appimageclient.hpp src/appimageclient.cpp
     src/iconprovider.hpp src/iconprovider.cpp
     src/icontheme.hpp src/icontheme.cpp
@@ -149,6 +150,8 @@ set(PI_QML_FILES
     qml/AurDetailsPage.qml
     qml/FlatpakPage.qml
     qml/FlatpakDetailsPage.qml
+    qml/CpakPage.qml
+    qml/CpakDetailsPage.qml
     qml/AppImagePage.qml
     qml/Toggle.qml
     qml/InfoItem.qml
@@ -271,6 +274,13 @@ if(BUILD_TESTING)
     target_link_libraries(test-packagefilter PRIVATE project_options project_warnings pi::pi
         Qt6::Test Qt6::Qml PkgConfig::LIBALPM)
     add_test(NAME packagefilter COMMAND test-packagefilter)
+
+    qt_add_executable(test-cpak tests/test_cpak.cpp
+        src/cpakclient.hpp src/cpakclient.cpp)
+    target_include_directories(test-cpak PRIVATE src)
+    target_link_libraries(test-cpak PRIVATE project_options project_warnings pi::pi
+        Qt6::Test Qt6::Qml Qt6::Concurrent)
+    add_test(NAME cpak COMMAND test-cpak)
 
     qt_add_executable(test-updatenotice tests/test_updatenotice.cpp
         src/updatenotice.hpp src/updatenotice.cpp)

@@ -9,7 +9,7 @@ Dialog {
     readonly property Transaction tx: Backend.transaction
     readonly property int phase: tx.state
     readonly property bool hasPlanError: tx.planError.length > 0
-    readonly property bool removes: tx.kind === Transaction.Remove || tx.kind === Transaction.FlatpakRemove
+    readonly property bool removes: tx.kind === Transaction.Remove || tx.kind === Transaction.FlatpakRemove || tx.kind === Transaction.CpakRemove
     /// pacman accepts an update notice by itself, so an upgrade waits until it can be read here
     readonly property bool upgrade: tx.kind === Transaction.Upgrade
     readonly property bool awaitsNotice: upgrade && Backend.updateNotice.checking

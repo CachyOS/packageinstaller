@@ -158,6 +158,17 @@ ScrollPage {
             active: Backend.appImagesEnabled
             onToggled: Backend.appImagesEnabled = !Backend.appImagesEnabled
         }
+
+        SourceCard {
+            width: sources.width
+            title: qsTr("cpak")
+            description: qsTr("Sandboxed apps from cpak's signed catalogue, and Flatpak apps run in cpak's sandbox. They are packaged by their developers, not by CachyOS, and run with the permissions shown on their page.")
+            warning: Backend.cpakEnabled && !Backend.cpak.loading && !Backend.cpak.available
+                ? qsTr("cpak is not installed. See cpak.it/docs for how to install it.")
+                : Backend.cpakEnabled && !Backend.cpak.loading && Backend.cpak.failed ? qsTr("cpak's catalogue could not be read. Check your connection.") : ""
+            active: Backend.cpakEnabled
+            onToggled: Backend.cpakEnabled = !Backend.cpakEnabled
+        }
     }
 
     Section {
