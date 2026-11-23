@@ -93,6 +93,14 @@ ScrollPage {
             value: root.size(root.pkg.installSize)
         }
         InfoItem {
+            label: qsTr("Build date")
+            value: Qt.formatDate(root.pkg.buildDate)
+        }
+        InfoItem {
+            label: qsTr("Installed date")
+            value: Qt.formatDate(root.pkg.installDate)
+        }
+        InfoItem {
             label: qsTr("License")
             value: root.pkg.licenses.join(", ")
         }
