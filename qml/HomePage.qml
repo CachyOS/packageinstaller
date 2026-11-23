@@ -54,7 +54,8 @@ ScrollPage {
             }
 
             PlainText {
-                width: heroText.width
+                // the room up to the hero's right edge: one line when it fits, wrapped when the window is narrow
+                width: hero.width - 64
                 text: qsTr("Optimised packages from the CachyOS and Arch repositories, plus the AUR when you want it.")
                 color: Look.heroSub
                 font.pixelSize: Look.fontLead
