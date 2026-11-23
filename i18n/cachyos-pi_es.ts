@@ -25,7 +25,7 @@
         <location filename="../src/appimageclient.cpp" line="350"/>
         <location filename="../src/appimageclient.cpp" line="364"/>
         <source>Adding the AppImage was stopped.</source>
-        <translation>Se detuvo la adición del AppImage.</translation>
+        <translation>Se detuvo el proceso para añadir el AppImage.</translation>
     </message>
     <message>
         <location filename="../src/appimageclient.cpp" line="353"/>
@@ -180,7 +180,7 @@
     <message>
         <location filename="../src/appimageclient.cpp" line="1016"/>
         <source>This is not a link to a project on GitHub. One looks like https://github.com/owner/project.</source>
-        <translation>Esto no es un enlace a un proyecto de GitHub. Uno tiene este aspecto: https://github.com/propietario/proyecto.</translation>
+        <translation>Esto no es un enlace a un proyecto de GitHub. Un enlace válido tiene este aspecto: https://github.com/propietario/proyecto.</translation>
     </message>
     <message>
         <location filename="../src/appimageclient.cpp" line="1040"/>
@@ -377,7 +377,7 @@
     <message>
         <location filename="../qml/AppImagePage.qml" line="347"/>
         <source>Drop an AppImage file here, choose one with “Add AppImage…” or take one from a project on GitHub. It is copied to %1 and gets a menu entry.</source>
-        <translation>Suelta aquí un archivo AppImage, elige uno con «Añadir AppImage…» o tómalo de un proyecto de GitHub. Se copia a %1 y recibe una entrada de menú.</translation>
+        <translation>Suelta aquí un archivo AppImage, elige uno con «Añadir AppImage…» u obtén uno de un proyecto de GitHub. Se copia en %1 y se añade una entrada al menú.</translation>
     </message>
     <message>
         <location filename="../qml/AppImagePage.qml" line="360"/>
@@ -583,7 +583,7 @@
     <message>
         <location filename="../src/aurclient.cpp" line="760"/>
         <source>“%1” is a package in the repositories. Make sure that this is not an imitation with a misspelled name.</source>
-        <translation>«%1» es un paquete de los repositorios. Asegúrate de que no se trata de una imitación con el nombre mal escrito.</translation>
+        <translation>«%1» es un paquete de los repositorios. Asegúrate de que no se trate de una imitación con el nombre mal escrito.</translation>
     </message>
 </context>
 <context>
@@ -679,7 +679,7 @@
     <message>
         <location filename="../qml/AurDetailsPage.qml" line="245"/>
         <source>Things to check</source>
-        <translation>Puntos a revisar</translation>
+        <translation>Puntos que revisar</translation>
     </message>
     <message>
         <location filename="../qml/AurDetailsPage.qml" line="251"/>
@@ -905,7 +905,7 @@
     <message>
         <location filename="../src/backend.cpp" line="176"/>
         <source>The pacman databases are empty. Refresh them with a system update.</source>
-        <translation>Las bases de datos de pacman están vacías. Actualízalas con una actualización del sistema.</translation>
+        <translation>Las bases de datos de pacman están vacías. Recárgalas con una actualización del sistema.</translation>
     </message>
 </context>
 <context>
@@ -1229,7 +1229,7 @@
     <message>
         <location filename="../qml/FlatpakPage.qml" line="57"/>
         <source>Sandboxed apps from Flathub. Not packaged by CachyOS.</source>
-        <translation>Apps aisladas en un sandbox, desde Flathub. No las empaqueta CachyOS.</translation>
+        <translation>Apps de Flathub aisladas en un sandbox. No las empaqueta CachyOS.</translation>
     </message>
     <message>
         <location filename="../qml/FlatpakPage.qml" line="63"/>
@@ -1398,7 +1398,7 @@
     <message>
         <location filename="../qml/Main.qml" line="166"/>
         <source>CachyOS Package Installer</source>
-        <translation>CachyOS Package Installer</translation>
+        <translation>Instalador de paquetes de CachyOS</translation>
     </message>
     <message>
         <location filename="../qml/Main.qml" line="242"/>
@@ -1408,7 +1408,7 @@
     <message>
         <location filename="../qml/Main.qml" line="248"/>
         <source>Package Installer</source>
-        <translation>Package Installer</translation>
+        <translation>Instalador de paquetes</translation>
     </message>
     <message>
         <location filename="../qml/Main.qml" line="264"/>
@@ -1546,7 +1546,7 @@
     <message>
         <location filename="../qml/SettingsPage.qml" line="147"/>
         <source>Sandboxed apps from Flathub and other Flatpak remotes. They are packaged by their developers or the Flathub community, not by CachyOS, and bring their own libraries.</source>
-        <translation>Apps aisladas en un sandbox, desde Flathub y otros orígenes de Flatpak. Las empaquetan sus desarrolladores o la comunidad de Flathub, no CachyOS, y traen sus propias bibliotecas.</translation>
+        <translation>Apps de Flathub y otros orígenes de Flatpak aisladas en un sandbox. Las empaquetan sus desarrolladores o la comunidad de Flathub, no CachyOS, y traen sus propias bibliotecas.</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="149"/>
@@ -1571,22 +1571,22 @@
     <message>
         <location filename="../qml/SettingsPage.qml" line="170"/>
         <source>Rank the mirrors by speed</source>
-        <translation>Clasificar los servidores espejo por velocidad</translation>
+        <translation>Ordenar los servidores espejo por velocidad</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="171"/>
         <source>Packages are downloaded from the first mirror that answers. Ranking measures the Arch and CachyOS mirrors from your connection and rewrites the mirror lists to prefer the fast ones. Worth doing when downloads are slow or fail.</source>
-        <translation>Los paquetes se descargan del primer servidor espejo que responde. La clasificación mide los servidores espejo de Arch y CachyOS desde tu conexión y reescribe las listas de servidores espejo para preferir los rápidos. Vale la pena cuando las descargas son lentas o fallan.</translation>
+        <translation>Los paquetes se descargan del primer servidor espejo que responde. Al ordenarlos, se mide la velocidad de los servidores espejo de Arch y CachyOS desde tu conexión y se reescriben sus listas para preferir los más rápidos. Vale la pena cuando las descargas son lentas o fallan.</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="172"/>
         <source>Ranking needs the “cachyos-rate-mirrors” package, which is not installed.</source>
-        <translation>Para la clasificación se necesita el paquete «cachyos-rate-mirrors», que no está instalado.</translation>
+        <translation>Para ordenarlos se necesita el paquete «cachyos-rate-mirrors», que no está instalado.</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="176"/>
         <source>Rank mirrors</source>
-        <translation>Clasificar servidores espejo</translation>
+        <translation>Ordenar servidores espejo</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="176"/>
@@ -1657,7 +1657,7 @@
     <message>
         <location filename="../src/transaction.cpp" line="87"/>
         <source>Rank the mirrors</source>
-        <translation>Clasificar los servidores espejo</translation>
+        <translation>Ordenar los servidores espejo</translation>
     </message>
     <message numerus="yes">
         <location filename="../src/transaction.cpp" line="89"/>
@@ -1685,7 +1685,7 @@
     <message>
         <location filename="../src/transaction.cpp" line="100"/>
         <source>Every installed Flatpak app and runtime will be updated.</source>
-        <translation>Se actualizarán todas las apps y entornos de ejecución Flatpak instalados.</translation>
+        <translation>Se actualizarán todas las apps y todos los entornos de ejecución Flatpak instalados.</translation>
     </message>
     <message>
         <location filename="../src/transaction.cpp" line="101"/>
@@ -1700,7 +1700,7 @@
     <message>
         <location filename="../src/transaction.cpp" line="104"/>
         <source>The download speed of the Arch and CachyOS mirrors will be measured and the mirror lists rewritten to prefer the fast ones. This takes a minute or two; a copy of the current lists is kept until the next ranking.</source>
-        <translation>Se medirá la velocidad de descarga de los servidores espejo de Arch y CachyOS y se reescribirán las listas de servidores espejo para preferir los rápidos. Esto tarda uno o dos minutos; se guarda una copia de las listas actuales hasta la próxima clasificación.</translation>
+        <translation>Se medirá la velocidad de descarga de los servidores espejo de Arch y CachyOS y se reescribirán sus listas para preferir los más rápidos. Esto tarda uno o dos minutos; se guarda una copia de las listas actuales hasta la próxima vez que los ordenes.</translation>
     </message>
     <message>
         <location filename="../src/transaction.cpp" line="107"/>
@@ -1746,7 +1746,7 @@
     <message>
         <location filename="../src/transaction.cpp" line="123"/>
         <source>Rank</source>
-        <translation>Clasificar</translation>
+        <translation>Ordenar</translation>
     </message>
     <message>
         <location filename="../src/transaction.cpp" line="124"/>
@@ -1756,7 +1756,7 @@
     <message>
         <location filename="../src/transaction.cpp" line="243"/>
         <source>%1 is missing. Reinstall the package installer.</source>
-        <translation>Falta %1. Reinstala Package Installer.</translation>
+        <translation>Falta %1. Reinstala el instalador de paquetes.</translation>
     </message>
     <message>
         <location filename="../src/transaction.cpp" line="296"/>
@@ -2166,7 +2166,7 @@ La operación falló (código de salida %1).
     <message>
         <location filename="../src/pkgscan.cpp" line="601"/>
         <source>Downloads from a bare IP address</source>
-        <translation>Descarga desde una dirección IP sin nombre</translation>
+        <translation>Descarga directamente desde una dirección IP</translation>
     </message>
     <message>
         <location filename="../src/pkgscan.cpp" line="602"/>
@@ -2176,7 +2176,7 @@ La operación falló (código de salida %1).
     <message>
         <location filename="../src/pkgscan.cpp" line="604"/>
         <source>Downloads from a file-sharing, paste or link-shortening service</source>
-        <translation>Descarga desde un servicio para compartir archivos, de pegado de texto o de acortamiento de enlaces</translation>
+        <translation>Descarga desde un servicio para compartir archivos, publicar texto (pastebin) o acortar enlaces</translation>
     </message>
     <message>
         <location filename="../src/pkgscan.cpp" line="605"/>
@@ -2280,8 +2280,8 @@ La operación falló (código de salida %1).
         <location filename="../src/pkgscan.cpp" line="855"/>
         <source>The last change is %n hour(s) old. Malicious updates are usually found and removed within days.</source>
         <translation>
-            <numerusform>El último cambio tiene %n hora. Las actualizaciones maliciosas suelen detectarse y eliminarse en pocos días.</numerusform>
-            <numerusform>El último cambio tiene %n horas. Las actualizaciones maliciosas suelen detectarse y eliminarse en pocos días.</numerusform>
+            <numerusform>El último cambio es de hace %n hora. Las actualizaciones maliciosas suelen detectarse y eliminarse en pocos días.</numerusform>
+            <numerusform>El último cambio es de hace %n horas. Las actualizaciones maliciosas suelen detectarse y eliminarse en pocos días.</numerusform>
         </translation>
     </message>
     <message>
