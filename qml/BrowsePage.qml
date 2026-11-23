@@ -48,12 +48,23 @@ Item {
                 anchors.verticalCenter: parent?.verticalCenter
                 text: qsTr("%n package(s)", "", filter.count)
             },
-            PillButton {
+            Row {
+                // the two views of the list: the chip that is filled is the one shown
                 visible: !root.installedOnly && root.query.length === 0 && root.category.length === 0
-                tone: "soft"
-                implicitHeight: 30
-                text: root.appsOnly ? qsTr("Show all packages") : qsTr("Show apps only")
-                onClicked: root.appsOnly = !root.appsOnly
+                anchors.verticalCenter: parent?.verticalCenter
+                spacing: 8
+
+                Chip {
+                    text: qsTr("Apps only")
+                    current: root.appsOnly
+                    onClicked: root.appsOnly = true
+                }
+
+                Chip {
+                    text: qsTr("All packages")
+                    current: !root.appsOnly
+                    onClicked: root.appsOnly = false
+                }
             }
         ]
 
