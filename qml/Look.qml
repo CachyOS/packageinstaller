@@ -318,11 +318,30 @@ QtObject {
     readonly property var theme: themes[settings.theme] ?? themes["classic"]
     readonly property var palette: dark ? theme.dark : theme.light
 
-    readonly property color window: palette.window
-    readonly property color sidebar: palette.sidebar
-    readonly property color surface: palette.surface
-    readonly property color surfaceHover: palette.surfaceHover
-    readonly property color surfaceAlt: palette.surfaceAlt
+    readonly property real minimumOpacity: 0.3
+    /// the opacity set on the settings page, kept in a range where text stays readable
+    readonly property real chosenOpacity: Math.max(minimumOpacity, Math.min(1, settings.backgroundOpacity))
+    /// Whether the window has an alpha channel, set by Main.qml from main.cpp. It gets one only
+    /// when transparency was on at start, so turning transparency on takes effect after a restart.
+    property bool alphaChannel: false
+    readonly property bool needsRestart: settings.translucent && !alphaChannel
+    readonly property bool translucent: settings.translucent && alphaChannel
+    readonly property real backgroundOpacity: translucent ? chosenOpacity : 1
+    /// cards sit on the background, so they keep half of the remaining opacity to stand out from it
+    readonly property real surfaceOpacity: backgroundOpacity + (1 - backgroundOpacity) / 2
+
+    function withAlpha(c: color, alpha: real): color {
+        return Qt.rgba(c.r, c.g, c.b, alpha)
+    }
+
+    readonly property color window: withAlpha(palette.window, backgroundOpacity)
+    readonly property color sidebar: withAlpha(palette.sidebar, backgroundOpacity)
+    readonly property color surface: withAlpha(palette.surface, surfaceOpacity)
+    readonly property color surfaceHover: withAlpha(palette.surfaceHover, surfaceOpacity)
+    readonly property color surfaceAlt: withAlpha(palette.surfaceAlt, surfaceOpacity)
+    /// for dialogs and popups, which cover the page and must not show it through
+    readonly property color windowSolid: palette.window
+    readonly property color surfaceSolid: palette.surface
     readonly property color border: palette.border
     readonly property color text: palette.text
     readonly property color textMuted: palette.textMuted

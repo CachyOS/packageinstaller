@@ -54,6 +54,153 @@ ScrollPage {
                 }
             }
         }
+
+        SettingCard {
+            id: transparency
+            width: Math.min(parent.width, 914)
+            title: qsTr("Transparent background")
+            description: qsTr("Lets the desktop show through the window background. Text, icons and dialogs stay solid. Whether the background is blurred is up to your compositor.")
+            warning: Look.needsRestart ? qsTr("Restart the app to turn transparency on.") : ""
+
+            Row {
+                spacing: 8
+
+                Repeater {
+                    model: ListModel {
+                        ListElement { enable: false; label: qsTr("Off") }
+                        ListElement { enable: true; label: qsTr("On") }
+                    }
+
+                    PillButton {
+                        required property bool enable
+                        required property string label
+                        readonly property bool current: Look.settings.translucent === enable
+
+                        text: label
+                        tone: current ? "primary" : "soft"
+                        Accessible.role: Accessible.RadioButton
+                        Accessible.checkable: true
+                        Accessible.checked: current
+                        onClicked: Look.settings.translucent = enable
+                    }
+                }
+            }
+        }
+
+        SettingCard {
+            width: transparency.width
+            enabled: Look.settings.translucent
+            opacity: enabled ? 1 : 0.5
+            title: qsTr("Background opacity")
+            description: qsTr("Lower values show more of the desktop. Drag the slider or type a percentage.")
+
+            Row {
+                spacing: 12
+
+                Slider {
+                    id: opacitySlider
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: 220
+                    from: Look.minimumOpacity
+                    to: 1
+                    stepSize: 0.01
+                    value: Look.chosenOpacity
+                    Accessible.name: qsTr("Background opacity")
+                    onMoved: Look.settings.backgroundOpacity = value
+
+                    HoverHandler {
+                        cursorShape: Qt.PointingHandCursor
+                    }
+
+                    background: Rectangle {
+                        x: opacitySlider.leftPadding
+                        y: opacitySlider.topPadding + (opacitySlider.availableHeight - height) / 2
+                        width: opacitySlider.availableWidth
+                        height: 6
+                        radius: 3
+                        color: Look.surfaceAlt
+                        border.width: 1
+                        border.color: Look.border
+
+                        Rectangle {
+                            width: opacitySlider.visualPosition * parent.width
+                            height: parent.height
+                            radius: 3
+                            color: Look.accent
+                        }
+                    }
+
+                    handle: Rectangle {
+                        x: opacitySlider.leftPadding + opacitySlider.visualPosition * (opacitySlider.availableWidth - width)
+                        y: opacitySlider.topPadding + (opacitySlider.availableHeight - height) / 2
+                        width: 18
+                        height: 18
+                        radius: 9
+                        color: opacitySlider.pressed ? Look.accentHover : Look.accent
+                        border.width: opacitySlider.visualFocus ? 2 : 0
+                        border.color: Look.text
+                    }
+                }
+
+                TextField {
+                    id: percentField
+
+                    function show(): void {
+                        text = Math.round(Look.chosenOpacity * 100);
+                    }
+
+                    // Takes the typed percentage; anything outside the range is clamped.
+                    function apply(): void {
+                        const percent = parseInt(text, 10);
+                        if (!isNaN(percent))
+                            Look.settings.backgroundOpacity = Math.max(Look.minimumOpacity, Math.min(1, percent / 100));
+                        show();
+                    }
+
+                    anchors.verticalCenter: parent.verticalCenter
+                    width: 64
+                    implicitHeight: 34
+                    rightPadding: 24
+                    horizontalAlignment: TextInput.AlignRight
+                    font.pixelSize: Look.fontBody
+                    color: Look.text
+                    selectionColor: Look.accent
+                    selectedTextColor: Look.onAccent
+                    selectByMouse: true
+                    inputMethodHints: Qt.ImhDigitsOnly
+                    // up to three digits; the range is enforced in apply()
+                    validator: RegularExpressionValidator { regularExpression: /[0-9]{0,3}/ }
+                    Accessible.name: qsTr("Background opacity in percent")
+                    Component.onCompleted: show()
+                    onEditingFinished: apply()
+                    Keys.onUpPressed: { text = (parseInt(text, 10) || 0) + 1; apply(); }
+                    Keys.onDownPressed: { text = (parseInt(text, 10) || 0) - 1; apply(); }
+
+                    Connections {
+                        target: Look
+                        function onChosenOpacityChanged(): void {
+                            if (!percentField.activeFocus)
+                                percentField.show();
+                        }
+                    }
+
+                    background: Rectangle {
+                        radius: Look.radiusSmall
+                        color: Look.surface
+                        border.width: percentField.activeFocus ? 2 : 1
+                        border.color: percentField.activeFocus ? Look.accent : Look.border
+
+                        Muted {
+                            anchors.right: parent.right
+                            anchors.rightMargin: 10
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: "%"
+                            font.pixelSize: Look.fontBody
+                        }
+                    }
+                }
+            }
+        }
     }
 
     Section {

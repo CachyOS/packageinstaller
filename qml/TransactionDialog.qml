@@ -213,7 +213,7 @@ Dialog {
                 width: progressArea.width
                 height: 240
                 radius: Look.radiusSmall
-                color: Look.window
+                color: Look.windowSolid
                 border.width: 1
                 border.color: Look.border
 
