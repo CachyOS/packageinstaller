@@ -93,6 +93,28 @@ QHash<QString, QString> mainGroup(const QString& desktopFile) {
     return {};
 }
 
+QStringList launcherPaths(const QString& desktopFile) {
+    const auto groups = parse(desktopFile);
+    const auto main   = std::ranges::find(groups, "Desktop Entry"_L1, &Group::name);
+    if (main == groups.cend()) {
+        return {};
+    }
+    auto paths = commandLine(main->values.value(u"Exec"_s));
+    for (const auto& key : {PATH_KEY, "TryExec"_L1}) {
+        if (const auto path = main->values.value(key); !path.isEmpty()) {
+            paths << path;
+        }
+    }
+    const auto actions = main->values.value(u"Actions"_s).split(u';', Qt::SkipEmptyParts);
+    for (const auto& action : actions) {
+        const auto group = std::ranges::find(groups, u"Desktop Action "_s + action, &Group::name);
+        if (group != groups.cend()) {
+            paths += commandLine(group->values.value(u"Exec"_s));
+        }
+    }
+    return paths;
+}
+
 QString quoteExec(const QString& path) {
     static const QRegularExpression plain(u"^[A-Za-z0-9_./+@:-]+$"_s);
     if (plain.match(path).hasMatch()) {

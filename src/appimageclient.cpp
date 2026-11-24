@@ -222,15 +222,15 @@ bool startsForeign(const QHash<QString, QString>& keys, const QString& file) {
 
 /// A launcher in any applications directory may still need this file.
 bool hasLauncher(const QString& file) {
-    const auto refersToFile = [&file](const QString& path) {
-        return path.startsWith(u'/') && QDir::cleanPath(path) == file;
+    const auto canonical    = QFileInfo(file).canonicalFilePath();
+    const auto refersToFile = [&file, &canonical](const QString& path) {
+        return path.startsWith(u'/') && (QDir::cleanPath(path) == file || (!canonical.isEmpty() && QFileInfo(path).canonicalFilePath() == canonical));
     };
     for (const auto& directory : QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation)) {
         QDirIterator launchers(directory, {u"*.desktop"_s}, QDir::Files, QDirIterator::Subdirectories);
         while (launchers.hasNext()) {
-            const auto keys = appimage::mainGroup(readText(launchers.next(), appimage::MAX_ENTRY_BYTES));
-            if (refersToFile(keys.value(appimage::PATH_KEY)) || refersToFile(keys.value(u"TryExec"_s))
-                || std::ranges::any_of(appimage::commandLine(keys.value(u"Exec"_s)), refersToFile)) {
+            const auto entry = readText(launchers.next(), appimage::MAX_ENTRY_BYTES);
+            if (std::ranges::any_of(appimage::launcherPaths(entry), refersToFile)) {
                 return true;
             }
         }
