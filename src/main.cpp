@@ -56,8 +56,16 @@ int main(int argc, char** argv) {
     auto* icons = new IconProvider;  // owned by the engine below
     Backend backend(icons);
     // "cachyos-pi some.AppImage" offers to add that file
-    if (const auto arguments = QCoreApplication::arguments(); arguments.size() > 1 && QFileInfo(arguments.at(1)).isFile()) {
-        backend.setStartupFile(QUrl::fromLocalFile(QFileInfo(arguments.at(1)).absoluteFilePath()));
+    // "cachyos-pi appstream://<component-id>" opens the package page (x-scheme-handler/appstream)
+    if (const auto arguments = QCoreApplication::arguments(); arguments.size() > 1) {
+        const auto& arg = arguments.at(1);
+        if (QFileInfo(arg).isFile()) {
+            backend.setStartupFile(QUrl::fromLocalFile(QFileInfo(arg).absoluteFilePath()));
+        } else if (arg.startsWith(u"appstream://"_s)) {
+            const QUrl url(arg);
+            const auto id = url.host() + url.path().remove(u"/"_s);
+            backend.setStartupAppstreamId(id);
+        }
     }
 
     QQmlApplicationEngine engine;

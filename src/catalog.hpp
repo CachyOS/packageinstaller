@@ -45,6 +45,8 @@ struct LoadResult {
     QString dbPath;
     QStringList repos;
     IconIndex icons;
+    /// AppStream component id -> the package that provides it, for appstream:// URLs.
+    QHash<QString, QString> appstreamIds;
 };
 
 /// pkglist.yaml: the curated sections, and the companions installed together with an

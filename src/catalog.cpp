@@ -80,6 +80,8 @@ namespace {
 struct AppStreamData {
     QHash<QString, Package> apps;
     IconIndex icons;
+    /// Component id -> package name, for resolving appstream:// URLs.
+    QHash<QString, QString> appstreamIds;
 };
 
 /// Newest modification time of the system catalog directories. A catalog update renames
@@ -130,6 +132,7 @@ AppStreamData readAppStream() {
 
         for (const auto& pkgname : component.packageNames()) {
             // A package can ship several components (e.g. a suite); keep the desktop app with an icon.
+            data.appstreamIds.insert(component.id(), pkgname);
             if (data.apps.contains(pkgname) && (!data.icons.value(pkgname).path.isEmpty() || icon.path.isEmpty())) {
                 continue;
             }
@@ -187,8 +190,9 @@ std::expected<LoadResult, QString> load() {
     return LoadResult{
         .packages = PackageList(std::move(databases->packages)),
         .dbPath   = databases->dbPath,
-        .repos    = databases->repos,
-        .icons    = cache.icons,
+        .repos        = databases->repos,
+        .icons        = cache.icons,
+        .appstreamIds = cache.appstreamIds,
     };
 }
 

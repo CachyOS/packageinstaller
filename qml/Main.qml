@@ -158,6 +158,16 @@ ApplicationWindow {
 
     Component.onCompleted: if (Backend.hasStartupFile) show("appimage")
 
+    // "cachyos-pi appstream://<id>": open the package page once the catalog has resolved the id.
+    Connections {
+        target: Backend
+        function onStartupPackageChanged(): void {
+            const name = Backend.takeStartupPackage();
+            if (name !== "")
+                root.openPackage(name);
+        }
+    }
+
     width: 1220
     height: 800
     minimumWidth: 760

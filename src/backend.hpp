@@ -80,6 +80,16 @@ class Backend : public QObject {
     /// The file from the command line; handed out once.
     Q_INVOKABLE QUrl takeStartupFile();
 
+    /// Resolve an appstream:// component id to a package name, or an empty string.
+    Q_INVOKABLE QString packageForAppstreamId(const QString& id) const;
+    /// Remember an appstream:// id from the command line; resolved once the catalog is loaded.
+    void setStartupAppstreamId(const QString& id) { m_startupAppstreamId = id; }
+    /// The package to open from an appstream:// URL passed on the command line.
+    Q_PROPERTY(QString startupPackage READ startupPackage NOTIFY startupPackageChanged FINAL)
+    void setStartupPackage(const QString& name) { m_startupPackage = name; }
+    QString startupPackage() const { return m_startupPackage; }
+    Q_INVOKABLE QString takeStartupPackage();
+
     /// Re-reads the pacman databases and the AppStream catalog in the background.
     Q_INVOKABLE void reload();
     /// Everything known about one package. `name` is empty if it is not in the databases.
@@ -112,6 +122,7 @@ class Backend : public QObject {
     void flatpakEnabledChanged();
     void appImagesEnabledChanged();
     void startupFileChanged();
+    void startupPackageChanged();
     /// Something the user asked for could not be done, and `text` says why.
     void notice(const QString& text);
 
@@ -153,5 +164,8 @@ class Backend : public QObject {
     bool m_flatpakEnabled  = false;
     bool m_appImagesEnabled = false;
     QUrl m_startupFile;
+    QString m_startupPackage;
+    QString m_startupAppstreamId;  ///< appstream:// component id awaiting a catalog load
+    QHash<QString, QString> m_appstreamIds;  ///< component id -> package name
     bool m_paruAvailable   = false;
 };

@@ -121,6 +121,25 @@ QUrl Backend::takeStartupFile() {
     return file;
 }
 
+QString Backend::packageForAppstreamId(const QString& id) const {
+    if (const auto it = m_appstreamIds.constFind(id); it != m_appstreamIds.cend()) {
+        return it.value();
+    }
+    // AppStream ids often end in .desktop; accept the bare id too.
+    if (id.endsWith(u".desktop"_s)) {
+        if (const auto it = m_appstreamIds.constFind(id.chopped(8)); it != m_appstreamIds.cend()) {
+            return it.value();
+        }
+    }
+    return {};
+}
+
+QString Backend::takeStartupPackage() {
+    const auto name = std::exchange(m_startupPackage, QString());
+    emit startupPackageChanged();
+    return name;
+}
+
 void Backend::installFlatpak(const QString& id) {
     if (m_flatpakEnabled) {
         m_transaction.prepareFlatpak(Transaction::FlatpakInstall, {m_flatpak.title(id)}, m_flatpak.installArguments(id));
@@ -178,8 +197,18 @@ void Backend::onLoaded(std::expected<catalog::LoadResult, QString> result) {
             m_dbWatcher.addPaths({result->dbPath + u"/local"_s, result->dbPath + u"/sync"_s});
         }
         m_updateNotice.setDatabase(result->dbPath, result->repos);
+        m_appstreamIds = std::move(result->appstreamIds);
         m_icons->setIndex(std::move(result->icons));
         m_packages.replace([&] { m_list = std::move(result->packages); });
+        // An appstream:// URL was passed before the catalog was loaded: resolve it now.
+        if (!m_startupAppstreamId.isEmpty()) {
+            const auto name = packageForAppstreamId(m_startupAppstreamId);
+            m_startupAppstreamId.clear();
+            if (!name.isEmpty()) {
+                m_startupPackage = name;
+                emit startupPackageChanged();
+            }
+        }
         applyKnownUpdates();
     } else {
         m_error = result.error();
