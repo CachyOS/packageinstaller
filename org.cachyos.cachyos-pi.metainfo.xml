@@ -4,9 +4,11 @@
   <id>org.cachyos.cachyos-pi</id>
   <launchable type="desktop-id">cachyos-pi.desktop</launchable>
   <name>CachyOS Package Installer</name>
+  <name xml:lang="es">Instalador de paquetes de CachyOS</name>
   <name xml:lang="pt_BR">Instalador de Pacotes do CachyOS</name>
   <name xml:lang="zh_CN">CachyOS 软件包安装器</name>
   <summary>Install, remove and update apps and packages</summary>
+  <summary xml:lang="es">Instala, quita y actualiza apps y paquetes</summary>
   <summary xml:lang="pt_BR">Instale, remova e atualize aplicativos e pacotes</summary>
   <summary xml:lang="zh_CN">安装、卸载和更新应用及软件包</summary>
   <metadata_license>CC0-1.0</metadata_license>
@@ -50,6 +52,15 @@
   </supports>
   <content_rating type="oars-1.1"/>
   <releases>
+    <release version="2.0.1" date="2026-11-24" type="development">
+      <description>
+        <p>Bug fixes and new translations.</p>
+        <ul>
+          <li>Fix the missing title bar and window controls on GNOME</li>
+          <li>New Catalan, Italian, Portuguese (Portugal), Spanish and Turkish translations</li>
+        </ul>
+      </description>
+    </release>
     <release version="2.0.0" date="2026-11-12" type="development">
       <description>
         <p>Rewritten as a QML application with AUR support and a PKGBUILD check.</p>
