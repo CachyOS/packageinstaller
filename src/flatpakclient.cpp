@@ -112,6 +112,10 @@ void loadCatalogue(FlatpakState& state, QHash<QString, qsizetype>& positions, co
         }
         app.haystack = (app.title + u'\n' + app.id + u'\n' + app.summary + u'\n' + component.keywords().join(u' ')).toLower();
 
+        if (const auto key = std::pair(app.ref, app.remote); installed.contains(key)) {
+            state.installedOffers.tryEmplace(key, app);
+        }
+
         const auto known = positions.constFind(app.id);
         if (known != positions.cend() && !preferred(app, state.apps.at(*known), installed)) {
             return;
@@ -374,7 +378,7 @@ void FlatpakClient::rebuild() {
     m_installed.clear();
     for (const auto& entry : std::as_const(m_state.installed)) {
         if (entry.isApp) {
-            m_installed << toItem(find(entry.id), &entry);
+            m_installed << toItem(findOffer(entry), &entry);
         }
     }
     emit changed();
@@ -410,6 +414,16 @@ void FlatpakClient::search(const QString& query) {
 const FlatpakApp* FlatpakClient::find(const QString& id) const {
     const auto found = m_index.constFind(id);
     return found == m_index.cend() ? nullptr : &m_state.apps.at(*found);
+}
+
+const FlatpakApp* FlatpakClient::findOffer(const FlatpakInstalled& copy) const {
+    if (copy.installation == "system"_L1) {
+        const auto offer = m_state.installedOffers.constFind({copy.ref, copy.remote});
+        if (offer != m_state.installedOffers.cend()) {
+            return &offer.value();
+        }
+    }
+    return find(copy.id);
 }
 
 const FlatpakInstalled* FlatpakClient::findCopy(const QString& key) const {
@@ -473,11 +487,11 @@ FlatpakItem FlatpakClient::toItem(const FlatpakApp* app, const FlatpakInstalled*
 }
 
 FlatpakItem FlatpakClient::app(const QString& id, const QString& key) const {
-    const auto* app  = find(id);
     const auto* copy = key.isEmpty() ? nullptr : findCopy(key);
     if (copy == nullptr) {  // none asked for, or it has just been removed
         copy = bestCopy(id);
     }
+    const auto* app = copy == nullptr ? find(id) : findOffer(*copy);
     return app == nullptr && copy == nullptr ? FlatpakItem{} : toItem(app, copy);
 }
 
@@ -491,7 +505,7 @@ QString FlatpakClient::installedTitle(const QString& key) const {
     if (copy == nullptr) {
         return {};
     }
-    const auto* found = find(copy->id);
+    const auto* found = findOffer(*copy);
     return found != nullptr ? found->title : copy->name.isEmpty() ? copy->id : copy->name;
 }
 

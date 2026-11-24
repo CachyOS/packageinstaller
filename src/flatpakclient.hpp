@@ -89,6 +89,7 @@ struct FlatpakState {
     QStringList remotes;     ///< system-wide remotes
     QList<FlatpakApp> apps;
     QList<FlatpakInstalled> installed;
+    QHash<std::pair<QString, QString>, FlatpakApp> installedOffers;  ///< exact system ref and remote
     IconIndex icons;
 };
 
@@ -169,6 +170,7 @@ class FlatpakClient : public QObject {
     void rebuild();
     [[nodiscard]] FlatpakItem toItem(const FlatpakApp* app, const FlatpakInstalled* copy) const;
     [[nodiscard]] const FlatpakApp* find(const QString& id) const;
+    [[nodiscard]] const FlatpakApp* findOffer(const FlatpakInstalled& copy) const;
     [[nodiscard]] const FlatpakInstalled* findCopy(const QString& key) const;
     /// The installed copy to show for an app from the catalogue.
     [[nodiscard]] const FlatpakInstalled* bestCopy(const QString& id) const;
