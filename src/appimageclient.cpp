@@ -463,10 +463,18 @@ AppImageResult install(const QString& source, const Cancel& cancel, const Fetche
     if (!ownedFile(previous) || !QFileInfo::exists(previous)) {
         previous.clear();
     }
-    const auto destination = freeDestination(fileName, previous);
+    // A local file already in the install folder may have lost its menu entry.
+    // Restore the entry at its existing path instead of adding another copy.
+    const auto localPath    = QDir::cleanPath(sourceInfo.absoluteFilePath());
+    const bool restoreEntry = !downloaded && !fetched.takesOver && previous.isEmpty() && ownedFile(localPath)
+        && std::ranges::none_of(menuEntries(), [&localPath](const auto& entry) {
+               return entry.value(appimage::PATH_KEY) == localPath || startsForeign(entry, localPath);
+           });
+    const auto destination = restoreEntry ? localPath : freeDestination(fileName, previous);
     if (destination.isEmpty()) {
         return {AppImageClient::tr("Could not find a free file name in %1.").arg(installDirectory()), {}};
     }
+    const bool keepFile = restoreEntry && QFileInfo(destination).isExecutable();
 
     // The new icon waits next to its place until the entry that names it is written.
     QString iconPath;
@@ -497,22 +505,27 @@ AppImageResult install(const QString& source, const Cancel& cancel, const Fetche
     // not deleted, until the new entry is written, and is put back if anything fails.
     QString backup;
     const auto restore = [&] {
+        if (keepFile) {
+            return;
+        }
         QFile::remove(destination);
         if (!backup.isEmpty()) {
             QFile::rename(backup, destination);
         }
     };
-    if (occupied(destination)) {  // only ever `previous`, see freeDestination()
-        backup = privatePath("bak"_L1);
-        if (!QFile::rename(destination, backup)) {
-            return {AppImageClient::tr("Could not replace the earlier copy in %1.").arg(installDirectory()), {}};
+    if (!keepFile) {
+        if (occupied(destination)) {
+            backup = privatePath("bak"_L1);
+            if (!QFile::rename(destination, backup)) {
+                return {AppImageClient::tr("Could not replace the earlier copy in %1.").arg(installDirectory()), {}};
+            }
         }
+        if (!QFile::rename(stagingPath, destination)) {
+            restore();
+            return {AppImageClient::tr("Could not move the AppImage into %1.").arg(installDirectory()), {}};
+        }
+        working.path.clear();
     }
-    if (!QFile::rename(stagingPath, destination)) {
-        restore();
-        return {AppImageClient::tr("Could not move the AppImage into %1.").arg(installDirectory()), {}};
-    }
-    working.path.clear();
     QSaveFile menuEntry(menuDirectory() + u'/' + desktopName);
     if (!menuEntry.open(QIODevice::WriteOnly) || menuEntry.write(entry.toUtf8()) < 0 || !menuEntry.commit()) {
         restore();
