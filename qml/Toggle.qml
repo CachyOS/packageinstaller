@@ -37,7 +37,7 @@ AbstractButton {
             width: 18
             height: 18
             radius: height / 2
-            color: root.active ? Look.onAccent : Look.textMuted
+            color: root.active ? Look.accentInk : Look.textMuted
 
             Behavior on x {
                 NumberAnimation { duration: 120; easing.type: Easing.OutCubic }

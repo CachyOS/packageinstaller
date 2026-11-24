@@ -11,7 +11,7 @@ TextField {
     color: Look.text
     placeholderTextColor: Look.textMuted
     selectionColor: Look.accent
-    selectedTextColor: Look.onAccent
+    selectedTextColor: Look.accentInk
     selectByMouse: true
 
     background: Rectangle {

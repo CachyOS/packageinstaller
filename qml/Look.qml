@@ -329,7 +329,9 @@ QtObject {
     readonly property color accent: palette.accent
     readonly property color accentHover: palette.accentHover
     readonly property color accentSoft: palette.accentSoft
-    readonly property color onAccent: palette.onAccent
+    /// Text on the accent. Not named "onAccent": a property name of "on" and a capital letter
+    /// reads as a signal handler, and the property was always black.
+    readonly property color accentInk: palette.onAccent
     readonly property color danger: palette.danger ?? (dark ? "#ff7a7a" : "#c62f2f")
     readonly property color dangerSoft: palette.dangerSoft ?? (dark ? "#3a1c1e" : "#fbe3e3")
     readonly property color warning: palette.warning ?? (dark ? "#f4c05a" : "#9a6400")

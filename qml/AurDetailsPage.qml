@@ -442,7 +442,7 @@ ScrollPage {
                     visible: reviewBox.checked
                     size: 16
                     strokeWidth: 2.6
-                    color: Look.onAccent
+                    color: Look.accentInk
                     path: "M5 12.5l4.5 4.5L19 7"
                 }
             }

@@ -444,7 +444,7 @@ Item {
                     placeholderText: "https://github.com/owner/project"
                     placeholderTextColor: Look.textMuted
                     selectionColor: Look.accent
-                    selectedTextColor: Look.onAccent
+                    selectedTextColor: Look.accentInk
                     selectByMouse: true
                     Accessible.name: qsTr("Link of the project on GitHub")
                     onAccepted: if (lookUp.enabled) lookUp.clicked()

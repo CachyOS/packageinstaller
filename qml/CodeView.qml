@@ -144,7 +144,7 @@ Card {
             text: root.text
             color: Look.text
             selectionColor: Look.accent
-            selectedTextColor: Look.onAccent
+            selectedTextColor: Look.accentInk
             font.family: "monospace"
             font.pixelSize: Look.fontLabel
             padding: root.padding
