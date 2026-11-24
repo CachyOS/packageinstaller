@@ -25,8 +25,8 @@ struct FlatpakApp {
     Q_PROPERTY(QStringList screenshots MEMBER screenshots FINAL)
 
  public:
-    QString id;      ///< "org.mozilla.firefox"
-    QString ref;     ///< "org.mozilla.firefox/x86_64/stable"
+    QString id;   ///< "org.mozilla.firefox"
+    QString ref;  ///< "org.mozilla.firefox/x86_64/stable"
     QString branch;
     QString remote;  ///< "flathub"
     QString title;
@@ -49,6 +49,7 @@ struct FlatpakInstalled {
     QString remote;
     QString installation;  ///< "system", "user" or the name of another system-wide installation
     QString size;
+    QString active;  ///< deployed ostree commit from `flatpak list`
     bool isApp = false;
 
     /// An app can be installed more than once (per user and system-wide, several branches);
@@ -72,7 +73,7 @@ struct FlatpakItem : FlatpakApp {
     Q_PROPERTY(QString newVersion MEMBER newVersion FINAL)
 
  public:
-    QString key;  ///< names one installed copy, empty for an app that is not installed
+    QString key;             ///< names one installed copy, empty for an app that is not installed
     bool available = false;  ///< a remote offers it
     bool installed = false;
     QString installedVersion;
@@ -85,8 +86,8 @@ struct FlatpakItem : FlatpakApp {
 };
 
 struct FlatpakState {
-    QString program;         ///< the flatpak command, empty when it is not installed
-    QStringList remotes;     ///< system-wide remotes
+    QString program;      ///< the flatpak command, empty when it is not installed
+    QStringList remotes;  ///< system-wide remotes
     QList<FlatpakApp> apps;
     QList<FlatpakInstalled> installed;
     IconIndex icons;
