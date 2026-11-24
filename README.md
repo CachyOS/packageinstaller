@@ -42,7 +42,8 @@ Flatpak apps and add AppImage files to the menu.
 - **Appearance**: the settings page switches between colour themes (four of our
   own plus Nord, Dracula, three flavours of Catppuccin, Tokyo Night, Solarized,
   Gruvbox, Rosé Pine and Everforest, credited in `THIRD-PARTY.md`) and between light, dark and following the desktop.
-  The "Desktop" theme takes the colours of the desktop's colour scheme.
+  The "Desktop" theme takes the colours of the desktop's colour scheme, and your
+  own themes are read from JSON files (see [Theme files](#theme-files)).
 - **Privileges**: the GUI runs as the user. Package operations go through
   `cachyos-pi-helper`, a tiny pkexec helper that only accepts
   `install`, `remove`, `upgrade` and `rate-mirrors` (which runs
@@ -52,6 +53,38 @@ Flatpak apps and add AppImage files to the menu.
   action and prompt: being allowed to install from the repositories does not
   allow installing a package file. pacman runs in a session of its own and is
   never interrupted.
+
+## Theme files
+
+Every `*.json` file in `~/.config/CachyOS/cachyos-pi/themes` is offered as a
+colour theme on the settings page. The folder is watched: a file that is
+written or replaced is applied at once, so a tool that makes themes from the
+wallpaper (for example the Noctalia `cachyos-pi` template) can keep one up to
+date while the app is open.
+
+```json
+{
+    "name": "My theme",
+    "description": "Shown under the name",
+    "dark":  { "window": "#1e1e2e", "text": "#cdd6f4", "accent": "#cba6f7" },
+    "light": { "window": "#eff1f5", "text": "#4c4f69", "accent": "#8839ef" }
+}
+```
+
+- `name` and one palette are required. `colors` in place of `dark` and
+  `light` is used for both; with only one of them, it is used for both as well.
+- A palette needs `window`, `text` and `accent`. These may be added, and are
+  otherwise blended from the three: `sidebar`, `surface`, `surfaceHover`,
+  `surfaceAlt`, `border`, `textMuted`, `accentHover`, `accentSoft`, `onAccent`,
+  `arch`, `archSoft`, `danger`, `dangerSoft`, `warning`, `warningSoft`.
+- `hero` sets the banner on the start page: `stops` (three colours), `text`,
+  `sub`, `button`, `buttonHover` and `ink`, all of them or none.
+- `accent`, `arch`, `danger` and `warning` are also used as text on the cards.
+  When one of them is too faint there (below a 4.5:1 contrast), it is moved
+  towards `text` until it can be read; `onAccent` likewise becomes black or
+  white when it cannot be read on the accent.
+- Colours are anything Qt reads as a colour, such as `#rrggbb`. A file that is
+  not a theme is skipped with a warning on the terminal.
 
 ## Screenshots
 

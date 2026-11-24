@@ -116,12 +116,12 @@ QtObject {
         });
     }
 
-    /// a theme with some colours left out made whole
+    /// a theme with some colours left out, for example from a file, made whole
     function completeTheme(given: var): var {
         const dark = completePalette(given.dark);
         const light = completePalette(given.light);
         const hero = given.hero ? Object.assign({ image: "icons/cachyos-logo.png" }, given.hero) : heroFor(dark);
-        return { title: given.title, hint: given.hint, dark: dark, light: light, hero: hero };
+        return { title: given.title, hint: given.hint || qsTr("A theme file of yours"), dark: dark, light: light, hero: hero };
     }
 
     readonly property var desktopTheme: {
@@ -131,7 +131,15 @@ QtObject {
         return completeTheme({ title: qsTr("Desktop"), hint: qsTr("The colours of your desktop's colour scheme"), dark: colours, light: colours });
     }
 
-    readonly property var themes: Object.assign({ "desktop": desktopTheme }, builtinThemes)
+    /// the themes in the user's theme folder, see UserThemes
+    readonly property var userThemes: {
+        const themes = {};
+        for (const [id, theme] of Object.entries(UserThemes.themes))
+            themes[id] = completeTheme(theme);
+        return themes;
+    }
+
+    readonly property var themes: Object.assign({ "desktop": desktopTheme }, userThemes, builtinThemes)
 
     // The colour themes offered on the settings page, each for dark and light desktops.
     // `hero` is the banner on the start page: gradient, text, button and picture.
@@ -427,7 +435,7 @@ QtObject {
         }
     })
     /// in the order the settings page shows them
-    readonly property var themeNames: ["desktop", ...builtinThemeNames]
+    readonly property var themeNames: ["desktop", ...Object.keys(userThemes).sort(), ...builtinThemeNames]
     readonly property var builtinThemeNames: ["classic", "midnight", "graphite", "aurora", "nord", "dracula", "catppuccin", "catppuccinmacchiato", "catppuccinfrappe",
         "tokyonight", "solarized", "gruvbox", "rosepine", "everforest"]
 
