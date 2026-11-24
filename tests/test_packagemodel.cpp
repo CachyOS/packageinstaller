@@ -45,6 +45,22 @@ class TestPackageModel : public QObject {
         }
     }
 
+    void sources() {
+        const auto source = [](const char* repo) {
+            Package pkg;
+            pkg.repo = QString::fromLatin1(repo);
+            return pkg.source();
+        };
+        QCOMPARE(source("core"), u"arch"_s);
+        QCOMPARE(source("extra"), u"arch"_s);
+        QCOMPARE(source("multilib"), u"arch"_s);
+        QCOMPARE(source("cachyos"), u"cachyos"_s);
+        QCOMPARE(source("cachyos-v3"), u"cachyos"_s);
+        QCOMPARE(source("cachyos-extra-znver4"), u"cachyos"_s);
+        QCOMPARE(source("chaotic-aur"), u"chaotic-aur"_s);
+        QCOMPARE(source("local"), u"local"_s);
+    }
+
     void lookups() {
         QCOMPARE(m_list.find(u"beta"_s)->title, u"Alpha"_s);
         QCOMPARE(m_list.find(u"missing"_s), nullptr);

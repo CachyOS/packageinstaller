@@ -64,7 +64,7 @@ struct Package {
         using namespace Qt::StringLiterals;
         return repo == "local"_L1;
     }
-    /// "local", "cachyos" or "arch".
+    /// "local", "cachyos", "chaotic-aur" or "arch".
     QString source() const;
 };
 

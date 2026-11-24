@@ -19,6 +19,9 @@ QString Package::source() const {
     if (foreign()) {
         return u"local"_s;
     }
+    if (repo == "chaotic-aur"_L1) {
+        return u"chaotic-aur"_s;
+    }
     return repo.startsWith("cachyos"_L1) ? u"cachyos"_s : u"arch"_s;
 }
 
