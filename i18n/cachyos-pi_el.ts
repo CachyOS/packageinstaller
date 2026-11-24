@@ -62,7 +62,7 @@
     <message>
         <location filename="../src/appimageclient.cpp" line="426"/>
         <source>The AppImage could not be read. It may be damaged, or built for another kind of computer.</source>
-        <translation>Δεν ήταν δυνατή η ανάγνωση του AppImage. Μπορεί να είναι κατεστραμμένο ή φτιαγμένο για άλλο είδος υπολογιστή.</translation>
+        <translation>Δεν ήταν δυνατή η ανάγνωση του AppImage. Μπορεί να είναι κατεστραμμένο ή σχεδιασμένο για άλλον τύπο υπολογιστή.</translation>
     </message>
     <message>
         <location filename="../src/appimageclient.cpp" line="433"/>
@@ -147,7 +147,7 @@
     <message>
         <location filename="../src/appimageclient.cpp" line="838"/>
         <source>GitHub answers only a limited number of questions per hour, and that limit is reached. Try again later.</source>
-        <translation>Το GitHub απαντά μόνο σε περιορισμένο αριθμό ερωτημάτων ανά ώρα και το όριο αυτό έχει εξαντληθεί. Δοκιμάστε ξανά αργότερα.</translation>
+        <translation>Το GitHub απαντά μόνο σε περιορισμένο αριθμό αιτημάτων ανά ώρα και το όριο αυτό έχει εξαντληθεί. Δοκιμάστε ξανά αργότερα.</translation>
     </message>
     <message>
         <location filename="../src/appimageclient.cpp" line="840"/>
@@ -157,7 +157,7 @@
     <message>
         <location filename="../src/appimageclient.cpp" line="848"/>
         <source>GitHub gave an answer about %1 that could not be read.</source>
-        <translation>Το GitHub έδωσε για το %1 μια απάντηση που δεν ήταν δυνατό να διαβαστεί.</translation>
+        <translation>Το GitHub επέστρεψε μια απάντηση για το %1 που δεν ήταν δυνατό να αναγνωστεί.</translation>
     </message>
     <message>
         <location filename="../src/appimageclient.cpp" line="952"/>
@@ -434,7 +434,7 @@
     <message>
         <location filename="../qml/AppImagePage.qml" line="481"/>
         <source>Asking GitHub…</source>
-        <translation>Ερώτημα στο GitHub…</translation>
+        <translation>Επικοινωνία με το GitHub…</translation>
     </message>
     <message>
         <location filename="../qml/AppImagePage.qml" line="500"/>
@@ -527,7 +527,7 @@
     <message>
         <location filename="../src/aurclient.cpp" line="592"/>
         <source>The AUR could not be asked about dependencies, so nothing can be built right now.</source>
-        <translation>Δεν ήταν δυνατό να ερωτηθεί το AUR για τις εξαρτήσεις, γι’ αυτό δεν μπορεί να μεταγλωττιστεί τίποτα αυτή τη στιγμή.</translation>
+        <translation>Δεν ήταν δυνατός ο έλεγχος εξαρτήσεων στο AUR, γι’ αυτό δεν μπορεί να μεταγλωττιστεί τίποτα αυτή τη στιγμή.</translation>
     </message>
     <message>
         <location filename="../src/aurclient.cpp" line="640"/>
@@ -639,7 +639,7 @@
     <message>
         <location filename="../qml/AurDetailsPage.qml" line="190"/>
         <source>Checking which other AUR packages are needed…</source>
-        <translation>Έλεγχος για άλλα πακέτα του AUR που χρειάζονται…</translation>
+        <translation>Έλεγχος για άλλα απαιτούμενα πακέτα του AUR…</translation>
     </message>
     <message>
         <location filename="../qml/AurDetailsPage.qml" line="192"/>
@@ -1229,7 +1229,7 @@
     <message>
         <location filename="../qml/FlatpakPage.qml" line="57"/>
         <source>Sandboxed apps from Flathub. Not packaged by CachyOS.</source>
-        <translation>Απομονωμένες εφαρμογές (sandbox) από το Flathub. Τα πακέτα τους δεν φτιάχνονται από το CachyOS.</translation>
+        <translation>Απομονωμένες εφαρμογές (sandbox) από το Flathub. Τα πακέτα τους δεν δημιουργούνται από το CachyOS.</translation>
     </message>
     <message>
         <location filename="../qml/FlatpakPage.qml" line="63"/>
@@ -1318,7 +1318,7 @@
     <message>
         <location filename="../qml/HomePage.qml" line="146"/>
         <source>Show all %1</source>
-        <translation>Εμφάνιση όλων των %1</translation>
+        <translation>Εμφάνιση όλων (%1)</translation>
     </message>
 </context>
 <context>
@@ -1546,7 +1546,7 @@
     <message>
         <location filename="../qml/SettingsPage.qml" line="147"/>
         <source>Sandboxed apps from Flathub and other Flatpak remotes. They are packaged by their developers or the Flathub community, not by CachyOS, and bring their own libraries.</source>
-        <translation>Απομονωμένες εφαρμογές (sandbox) από το Flathub και άλλα απομακρυσμένα αποθετήρια Flatpak. Τα πακέτα τους φτιάχνονται από τους προγραμματιστές τους ή την κοινότητα του Flathub, όχι από το CachyOS, και περιλαμβάνουν τις δικές τους βιβλιοθήκες.</translation>
+        <translation>Απομονωμένες εφαρμογές (sandbox) από το Flathub και άλλα απομακρυσμένα αποθετήρια Flatpak. Τα πακέτα τους δημιουργούνται από τους προγραμματιστές τους ή την κοινότητα του Flathub, όχι από το CachyOS, και περιλαμβάνουν τις δικές τους βιβλιοθήκες.</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="149"/>
@@ -1576,7 +1576,7 @@
     <message>
         <location filename="../qml/SettingsPage.qml" line="171"/>
         <source>Packages are downloaded from the first mirror that answers. Ranking measures the Arch and CachyOS mirrors from your connection and rewrites the mirror lists to prefer the fast ones. Worth doing when downloads are slow or fail.</source>
-        <translation>Τα πακέτα λαμβάνονται από το πρώτο κάτοπτρο που αποκρίνεται. Η κατάταξη μετρά τα κάτοπτρα του Arch και του CachyOS από τη σύνδεσή σας και ξαναγράφει τις λίστες κατόπτρων ώστε να προτιμώνται τα γρήγορα. Αξίζει να γίνει όταν οι λήψεις είναι αργές ή αποτυγχάνουν.</translation>
+        <translation>Τα πακέτα λαμβάνονται από το πρώτο κάτοπτρο που αποκρίνεται. Η κατάταξη μετρά τα κάτοπτρα του Arch και του CachyOS από τη σύνδεσή σας και επανεγγράφει τις λίστες κατόπτρων ώστε να προτιμώνται τα γρήγορα. Αξίζει να γίνει όταν οι λήψεις είναι αργές ή αποτυγχάνουν.</translation>
     </message>
     <message>
         <location filename="../qml/SettingsPage.qml" line="172"/>
@@ -1700,7 +1700,7 @@
     <message>
         <location filename="../src/transaction.cpp" line="104"/>
         <source>The download speed of the Arch and CachyOS mirrors will be measured and the mirror lists rewritten to prefer the fast ones. This takes a minute or two; a copy of the current lists is kept until the next ranking.</source>
-        <translation>Θα μετρηθεί η ταχύτητα λήψης από τα κάτοπτρα του Arch και του CachyOS και οι λίστες κατόπτρων θα ξαναγραφτούν ώστε να προτιμώνται τα γρήγορα. Αυτό διαρκεί ένα με δύο λεπτά· ένα αντίγραφο των τρεχουσών λιστών διατηρείται μέχρι την επόμενη κατάταξη.</translation>
+        <translation>Θα μετρηθεί η ταχύτητα λήψης από τα κάτοπτρα του Arch και του CachyOS και οι λίστες κατόπτρων θα επανεγγραφούν ώστε να προτιμώνται τα γρήγορα. Αυτό διαρκεί ένα με δύο λεπτά· ένα αντίγραφο των τρεχουσών λιστών διατηρείται μέχρι την επόμενη κατάταξη.</translation>
     </message>
     <message>
         <location filename="../src/transaction.cpp" line="107"/>
@@ -1816,7 +1816,7 @@ The unused runtimes could not be removed (exit code %1).
 The operation failed (exit code %1).
 </source>
         <translation>
-Η λειτουργία απέτυχε (κωδικός εξόδου %1).
+Η ενέργεια απέτυχε (κωδικός εξόδου %1).
 </translation>
     </message>
 </context>
@@ -1845,7 +1845,7 @@ The operation failed (exit code %1).
     <message>
         <location filename="../qml/TransactionDialog.qml" line="196"/>
         <source>The operation did not complete.</source>
-        <translation>Η λειτουργία δεν ολοκληρώθηκε.</translation>
+        <translation>Η ενέργεια δεν ολοκληρώθηκε.</translation>
     </message>
     <message>
         <location filename="../qml/TransactionDialog.qml" line="258"/>
@@ -2236,7 +2236,7 @@ The operation failed (exit code %1).
     <message>
         <location filename="../src/pkgscan.cpp" line="814"/>
         <source>A build may only create files below $pkgdir and $srcdir. This line changes the running system directly.</source>
-        <translation>Η μεταγλώττιση επιτρέπεται να δημιουργεί αρχεία μόνο κάτω από τα $pkgdir και $srcdir. Αυτή η γραμμή αλλάζει απευθείας το σύστημα που εκτελείται.</translation>
+        <translation>Η μεταγλώττιση επιτρέπεται να δημιουργεί αρχεία μόνο μέσα στους καταλόγους $pkgdir και $srcdir. Αυτή η γραμμή αλλάζει απευθείας το ενεργό σύστημα.</translation>
     </message>
     <message>
         <location filename="../src/pkgscan.cpp" line="843"/>
