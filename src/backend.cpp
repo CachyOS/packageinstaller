@@ -121,6 +121,12 @@ QUrl Backend::takeStartupFile() {
     return file;
 }
 
+QUrl Backend::takeStartupLocalPackage() {
+    const auto file = std::exchange(m_startupLocalPackage, QUrl());
+    emit startupLocalPackageChanged();
+    return file;
+}
+
 void Backend::installFlatpak(const QString& id) {
     if (m_flatpakEnabled) {
         m_transaction.prepareFlatpak(Transaction::FlatpakInstall, {m_flatpak.title(id)}, m_flatpak.installArguments(id));
@@ -307,6 +313,10 @@ void Backend::onUpdatesChecked(int exitCode, QProcess::ExitStatus status) {
 Package Backend::package(const QString& name) const {
     const auto* pkg = m_list.find(name);
     return pkg == nullptr ? Package{} : *pkg;
+}
+
+void Backend::installLocalPackage(const QUrl& url) {
+    m_transaction.prepareLocalPackage(url.toLocalFile());
 }
 
 void Backend::install(const QString& name) {

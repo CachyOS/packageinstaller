@@ -156,7 +156,13 @@ ApplicationWindow {
         }
     }
 
-    Component.onCompleted: if (Backend.hasStartupFile) show("appimage")
+    Component.onCompleted: {
+        if (Backend.hasStartupFile)
+            show("appimage");
+        // "cachyos-pi file.pkg.tar.zst": offer to install the local package.
+        if (Backend.hasStartupLocalPackage)
+            Backend.installLocalPackage(Backend.takeStartupLocalPackage());
+    }
 
     width: 1220
     height: 800

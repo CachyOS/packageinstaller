@@ -55,9 +55,17 @@ int main(int argc, char** argv) {
 
     auto* icons = new IconProvider;  // owned by the engine below
     Backend backend(icons);
-    // "cachyos-pi some.AppImage" offers to add that file
-    if (const auto arguments = QCoreApplication::arguments(); arguments.size() > 1 && QFileInfo(arguments.at(1)).isFile()) {
-        backend.setStartupFile(QUrl::fromLocalFile(QFileInfo(arguments.at(1)).absoluteFilePath()));
+    // "cachyos-pi some.AppImage" offers to add that file;
+    // "cachyos-pi some.pkg.tar.zst" offers to install it with pacman -U
+    if (const auto arguments = QCoreApplication::arguments(); arguments.size() > 1) {
+        const auto path = QFileInfo(arguments.at(1)).absoluteFilePath();
+        if (QFileInfo::exists(path)) {
+            if (path.endsWith(u".pkg.tar.zst"_s) || path.endsWith(u".pkg.tar.xz"_s)) {
+                backend.setStartupLocalPackage(QUrl::fromLocalFile(path));
+            } else {
+                backend.setStartupFile(QUrl::fromLocalFile(path));
+            }
+        }
     }
 
     QQmlApplicationEngine engine;

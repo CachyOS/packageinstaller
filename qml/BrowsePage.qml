@@ -1,6 +1,8 @@
 pragma ComponentBehavior: Bound
+import QtCore
 import QtQuick
 import QtQuick.Controls.Basic
+import QtQuick.Dialogs
 import CachyOS.PackageInstaller
 
 Item {
@@ -12,6 +14,14 @@ Item {
     property bool appsOnly: true
 
     signal openPackage(string name)
+
+    FileDialog {
+        id: localPackageDialog
+        title: qsTr("Choose a package file")
+        currentFolder: StandardPaths.writableLocation(StandardPaths.DownloadLocation)
+        nameFilters: [qsTr("Package files (*.pkg.tar.zst *.pkg.tar.xz)"), qsTr("All files (*)")]
+        onAccepted: Backend.installLocalPackage(selectedFile)
+    }
 
     PackageFilter {
         id: filter
@@ -54,6 +64,13 @@ Item {
                 implicitHeight: 30
                 text: root.appsOnly ? qsTr("Show all packages") : qsTr("Show apps only")
                 onClicked: root.appsOnly = !root.appsOnly
+            },
+            PillButton {
+                visible: root.installedOnly
+                tone: "soft"
+                implicitHeight: 30
+                text: qsTr("Install local package…")
+                onClicked: localPackageDialog.open()
             }
         ]
 

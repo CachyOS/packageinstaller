@@ -18,13 +18,17 @@ using namespace Qt::StringLiterals;
 
 namespace {
 
-constexpr std::array HELPER_KINDS{Transaction::Install, Transaction::Remove, Transaction::Upgrade, Transaction::RateMirrors};
+constexpr std::array HELPER_KINDS{Transaction::Install, Transaction::LocalInstall, Transaction::Remove,
+    Transaction::Upgrade, Transaction::RateMirrors};
 constexpr std::array FLATPAK_KINDS{Transaction::FlatpakInstall, Transaction::FlatpakRemove, Transaction::FlatpakUpdate, Transaction::FlatpakSetup};
 
 /// What the helper is asked to do. No default: a new kind has to be named here.
 QString helperVerb(Transaction::Kind kind) {
     switch (kind) {
     case Transaction::Install: return u"install"_s;
+    // The helper's "pacman --upgrade" verb installs a local package file; the
+    // existing install-built polkit action (argv1 = pacman) authorizes it.
+    case Transaction::LocalInstall: return u"pacman"_s;
     case Transaction::Remove: return u"remove"_s;
     case Transaction::Upgrade: return u"upgrade"_s;
     case Transaction::RateMirrors: return u"rate-mirrors"_s;
@@ -78,6 +82,7 @@ QString Transaction::title() const {
     const auto target = m_targets.value(0);
     switch (m_kind) {
     case Install:
+    case LocalInstall:
     case FlatpakInstall: return tr("Install %1").arg(target);
     case Remove:
     case FlatpakRemove: return tr("Remove %1").arg(target);
@@ -93,6 +98,8 @@ QString Transaction::title() const {
 
 QString Transaction::summary() const {
     switch (m_kind) {
+    case LocalInstall:
+        return tr("The local package file will be installed with pacman. Its dependencies must already be available in the configured repositories.");
     case FlatpakInstall:
         return tr("Flatpak will download the app and the runtime it needs, and install them for all users. It asks for permission itself if that is required.");
     case FlatpakRemove:
@@ -191,6 +198,19 @@ void Transaction::prepare(Kind kind, const QStringList& targets) {
     }
     m_workingDirectory = u"/"_s;
     begin(kind, targets);
+}
+
+void Transaction::prepareLocalPackage(const QString& path) {
+    if (m_state != Idle || path.isEmpty() || !QFileInfo(path).isFile()) {
+        return;
+    }
+    // The helper validates the file name and canonicalises the path before it
+    // runs `pacman --upgrade` as root. No unprivileged preview is possible for a
+    // local file, so the dialog shows the file name and confirms directly.
+    m_program = u"pkexec"_s;
+    m_args    = QStringList{helperPath(), u"pacman"_s, u"--upgrade"_s, u"--noconfirm"_s, u"--"_s, path};
+    m_workingDirectory = u"/"_s;
+    begin(LocalInstall, {QFileInfo(path).fileName()});
 }
 
 void Transaction::prepareAur(const QStringList& names, const QStringList& directories, const QString& workingDirectory) {

@@ -59,6 +59,7 @@ class Transaction : public QObject {
         Finished };
     Q_ENUM(State)
     enum Kind { Install,
+        LocalInstall,
         Remove,
         Upgrade,
         AurInstall,
@@ -93,6 +94,8 @@ class Transaction : public QObject {
 
     /// Starts a new operation and computes what it would do. Ignored while one is active.
     Q_INVOKABLE void prepare(Kind kind, const QStringList& targets);
+    /// Installs a local package file with `pacman -U` through the helper.
+    void prepareLocalPackage(const QString& path);
     /// Builds reviewed AUR checkouts. `directories` hold the PKGBUILDs of `names`;
     /// `workingDirectory` must be empty, paru also looks for PKGBUILDs below it.
     void prepareAur(const QStringList& names, const QStringList& directories, const QString& workingDirectory);

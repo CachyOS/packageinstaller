@@ -80,12 +80,20 @@ class Backend : public QObject {
     /// The file from the command line; handed out once.
     Q_INVOKABLE QUrl takeStartupFile();
 
+    /// A local package file passed on the command line to install with pacman -U.
+    Q_PROPERTY(bool hasStartupLocalPackage READ hasStartupLocalPackage NOTIFY startupLocalPackageChanged FINAL)
+    bool hasStartupLocalPackage() const { return !m_startupLocalPackage.isEmpty(); }
+    void setStartupLocalPackage(const QUrl& file) { m_startupLocalPackage = file; }
+    Q_INVOKABLE QUrl takeStartupLocalPackage();
+
     /// Re-reads the pacman databases and the AppStream catalog in the background.
     Q_INVOKABLE void reload();
     /// Everything known about one package. `name` is empty if it is not in the databases.
     Q_INVOKABLE Package package(const QString& name) const;
 
     Q_INVOKABLE void install(const QString& name);
+    /// `url` names a local .pkg.tar.* file to install with pacman -U.
+    Q_INVOKABLE void installLocalPackage(const QUrl& url);
     Q_INVOKABLE void remove(const QString& name);
     Q_INVOKABLE void upgradeAll();
     /// Sorts the mirror lists by speed with cachyos-rate-mirrors.
@@ -112,6 +120,7 @@ class Backend : public QObject {
     void flatpakEnabledChanged();
     void appImagesEnabledChanged();
     void startupFileChanged();
+    void startupLocalPackageChanged();
     /// Something the user asked for could not be done, and `text` says why.
     void notice(const QString& text);
 
@@ -153,5 +162,6 @@ class Backend : public QObject {
     bool m_flatpakEnabled  = false;
     bool m_appImagesEnabled = false;
     QUrl m_startupFile;
+    QUrl m_startupLocalPackage;
     bool m_paruAvailable   = false;
 };
