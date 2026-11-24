@@ -1,10 +1,14 @@
 pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Controls.Basic
+import QtQuick.Window
 import CachyOS.PackageInstaller
 
 ApplicationWindow {
     id: root
+
+    // Start maximized when the saved preference asks for it.
+    visibility: Look.settings.startMaximized ? Window.Maximized : Window.Windowed
 
     // "home", "browse", "installed", "updates", "aur", "flatpak", "appimage" or "settings"
     property string section: "home"

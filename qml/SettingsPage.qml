@@ -54,6 +54,18 @@ ScrollPage {
                 }
             }
         }
+
+        SettingCard {
+            width: Math.min(root.width - 2 * Look.pagePadding, 650)
+            title: qsTr("Start maximized")
+            description: qsTr("Open the window maximized instead of using the saved size. Takes effect on the next start.")
+
+            Toggle {
+                active: Look.settings.startMaximized
+                name: qsTr("Start maximized")
+                onClicked: Look.settings.startMaximized = !Look.settings.startMaximized
+            }
+        }
     }
 
     Section {
