@@ -15,10 +15,12 @@
 #include <QFileInfo>
 #include <QHash>
 #include <QPromise>
+#include <QSet>
 #include <QStandardPaths>
 #include <QSysInfo>
 #include <QtConcurrent/QtConcurrentRun>
 
+#include <algorithm>
 #include <tuple>
 #include <utility>
 
@@ -30,6 +32,7 @@ namespace {
 constexpr qsizetype MAX_RESULTS = 150;
 
 using Load = QPromise<FlatpakState>;
+using InstalledOffers = QHash<std::pair<QString, QString>, int>;  // ref and remote
 
 /// Runs `flatpak` and returns its output split into rows of tab separated columns.
 /// Gives up when the load is cancelled or after `timeout`.
@@ -48,16 +51,17 @@ QString catalogueOf(const QString& remote, const QString& arch) {
 
 /// Which of two offers of the same app is shown: Flathub before other remotes, the stable
 /// branch before others, then by name so the choice never depends on the order of loading.
-bool preferred(const FlatpakApp& a, const FlatpakApp& b) {
-    const auto rank = [](const FlatpakApp& app) {
-        return std::tuple(app.remote != "flathub"_L1, app.branch != "stable"_L1, app.remote, app.branch);
+bool preferred(const FlatpakApp& a, const FlatpakApp& b, const InstalledOffers& installed) {
+    // An installed ref from the same origin takes precedence over those preferences.
+    const auto rank = [&installed](const FlatpakApp& app) {
+        return std::tuple(-installed.value({app.ref, app.remote}), app.remote != "flathub"_L1, app.branch != "stable"_L1, app.remote, app.branch);
     };
     return rank(a) < rank(b);
 }
 
 /// Reads the catalogue of one system-wide remote. Only that directory is loaded, so a
 /// remote of the same name in the user's own installation cannot contribute anything.
-void loadCatalogue(FlatpakState& state, QHash<QString, qsizetype>& positions, const QString& remote, const QString& arch) {
+void loadCatalogue(FlatpakState& state, QHash<QString, qsizetype>& positions, const InstalledOffers& installed, const QString& remote, const QString& arch) {
     AppStream::Pool pool;
     pool.setFlags(AppStream::Pool::FlagNone);
     pool.setLoadStdDataLocations(false);
@@ -93,7 +97,7 @@ void loadCatalogue(FlatpakState& state, QHash<QString, qsizetype>& positions, co
         app.haystack = (app.title + u'\n' + app.id + u'\n' + app.summary + u'\n' + component.keywords().join(u' ')).toLower();
 
         const auto known = positions.constFind(app.id);
-        if (known != positions.cend() && !preferred(app, state.apps.at(*known))) {
+        if (known != positions.cend() && !preferred(app, state.apps.at(*known), installed)) {
             continue;
         }
         if (const auto icon = catalog::iconOf(component); !icon.path.isEmpty() || !icon.stock.isEmpty()) {
@@ -131,7 +135,6 @@ FlatpakState load(const Load& load) {
     // Fetch the catalogue when a remote has none yet or it is older than a day. Flatpak's
     // policy allows this without authentication. The first download takes minutes on a slow line.
     const auto stale = QDateTime::currentDateTime().addDays(-1);
-    QHash<QString, qsizetype> positions;
     for (const auto& remote : std::as_const(state.remotes)) {
         const QFileInfo catalogue(catalogueOf(remote, arch) + u"/appstream.xml.gz"_s);
         if (!catalogue.exists() || catalogue.lastModified() < stale) {
@@ -140,13 +143,7 @@ FlatpakState load(const Load& load) {
         if (load.isCanceled()) {
             return state;
         }
-        if (QFileInfo::exists(catalogueOf(remote, arch))) {
-            loadCatalogue(state, positions, remote, arch);
-        }
     }
-    std::ranges::sort(state.apps, [](const FlatpakApp& a, const FlatpakApp& b) {
-        return a.title.compare(b.title, Qt::CaseInsensitive) < 0;
-    });
 
     // --all: locale and debug extensions are updated too, so they count as installed
     QSet<QString> apps;
@@ -163,6 +160,28 @@ FlatpakState load(const Load& load) {
         entry.isApp = apps.contains(entry.key());
         state.installed << entry;
     }
+
+    InstalledOffers installed;
+    for (const auto& entry : std::as_const(state.installed)) {
+        if (entry.isApp) {
+            // The catalogue is system-wide, so prefer a match in that installation.
+            auto& priority = installed[{entry.ref, entry.remote}];
+            priority       = std::max(priority, entry.installation == "system"_L1 ? 2 : 1);
+        }
+    }
+    QHash<QString, qsizetype> positions;
+    for (const auto& remote : std::as_const(state.remotes)) {
+        if (load.isCanceled()) {
+            return state;
+        }
+        if (QFileInfo::exists(catalogueOf(remote, arch))) {
+            loadCatalogue(state, positions, installed, remote, arch);
+        }
+    }
+    std::ranges::sort(state.apps, [](const FlatpakApp& a, const FlatpakApp& b) {
+        return a.title.compare(b.title, Qt::CaseInsensitive) < 0;
+    });
+
     return state;
 }
 
@@ -369,8 +388,9 @@ const FlatpakInstalled* FlatpakClient::bestCopy(const QString& id) const {
         if (!entry.isApp || entry.id != id) {
             continue;
         }
-        // the copy the catalogue entry stands for: same branch, system-wide
-        const int score = (app != nullptr && entry.ref == app->ref ? 2 : 0) + (entry.installation == "system"_L1 ? 1 : 0);
+        // the copy the catalogue entry stands for: same ref and origin, system-wide
+        const int score = (app != nullptr && entry.ref == app->ref && entry.remote == app->remote ? 2 : 0)
+            + (entry.installation == "system"_L1 ? 1 : 0);
         if (score > bestScore) {
             best      = &entry;
             bestScore = score;
@@ -384,15 +404,19 @@ FlatpakItem FlatpakClient::toItem(const FlatpakApp* app, const FlatpakInstalled*
     if (app != nullptr) {
         static_cast<FlatpakApp&>(item) = *app;
     }
-    item.available = app != nullptr;
+    item.available = app != nullptr && (copy == nullptr || (app->ref == copy->ref && app->remote == copy->remote));
     item.installed = copy != nullptr;
     if (copy != nullptr) {
         item.id  = copy->id;
         item.key = copy->key();
         item.ref = copy->ref;
         if (app == nullptr) {  // installed from a remote without a catalogue, or from a file
-            item.title  = copy->name.isEmpty() ? copy->id : copy->name;
+            item.title = copy->name.isEmpty() ? copy->id : copy->name;
+        }
+        if (!item.available) {
+            // Keep the descriptive metadata, but the other offer's version does not apply here.
             item.remote = copy->remote;
+            item.version.clear();
         }
         item.installedVersion = copy->version;
         item.installedFrom    = copy->remote;
