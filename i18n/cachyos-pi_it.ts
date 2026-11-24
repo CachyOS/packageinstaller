@@ -1291,34 +1291,109 @@
     <context>
         <name>HomePage</name>
         <message>
-            <location filename="../qml/HomePage.qml" line="49" />
+            <location filename="../qml/HomePage.qml" line="72" />
             <source>Software for CachyOS</source>
             <translation>Software per CachyOS</translation>
         </message>
         <message>
-            <location filename="../qml/HomePage.qml" line="58" />
+            <location filename="../qml/HomePage.qml" line="81" />
             <source>Optimised packages from the CachyOS and Arch repositories, plus the AUR when you want it.</source>
             <translation>Pacchetti ottimizzati disponibili nei repository di CachyOS e Arch, oltre a quelli dell’AUR, se lo desideri.</translation>
         </message>
         <message>
-            <location filename="../qml/HomePage.qml" line="69" />
+            <location filename="../qml/HomePage.qml" line="92" />
             <source>Browse apps</source>
             <translation>Sfoglia le applicazioni</translation>
         </message>
         <message>
-            <location filename="../qml/HomePage.qml" line="89" />
+            <location filename="../qml/HomePage.qml" line="112" />
             <source>Review updates</source>
             <translation>Esamina gli aggiornamenti</translation>
         </message>
         <message>
-            <location filename="../qml/HomePage.qml" line="146" />
+            <location filename="../qml/HomePage.qml" line="169" />
             <source>Show less</source>
             <translation>Mostra meno</translation>
         </message>
         <message>
-            <location filename="../qml/HomePage.qml" line="146" />
+            <location filename="../qml/HomePage.qml" line="169" />
             <source>Show all %1</source>
             <translation>Mostra tutti (%1)</translation>
+        </message>
+        <message>
+            <location filename="../qml/HomePage.qml" line="17" />
+            <source>Audio</source>
+            <translation>Audio</translation>
+        </message>
+        <message>
+            <location filename="../qml/HomePage.qml" line="18" />
+            <source>Browsers</source>
+            <translation>Browser</translation>
+        </message>
+        <message>
+            <location filename="../qml/HomePage.qml" line="19" />
+            <source>Communication</source>
+            <translation>Comunicazione</translation>
+        </message>
+        <message>
+            <location filename="../qml/HomePage.qml" line="20" />
+            <source>Development</source>
+            <translation>Sviluppo</translation>
+        </message>
+        <message>
+            <location filename="../qml/HomePage.qml" line="21" />
+            <source>Games</source>
+            <translation>Giochi</translation>
+        </message>
+        <message>
+            <location filename="../qml/HomePage.qml" line="22" />
+            <source>Graphics</source>
+            <translation>Grafica</translation>
+        </message>
+        <message>
+            <location filename="../qml/HomePage.qml" line="23" />
+            <source>Hardware Tools</source>
+            <translation>Strumenti hardware</translation>
+        </message>
+        <message>
+            <location filename="../qml/HomePage.qml" line="24" />
+            <source>Internet</source>
+            <translation>Internet</translation>
+        </message>
+        <message>
+            <location filename="../qml/HomePage.qml" line="25" />
+            <source>Mail</source>
+            <translation>Posta elettronica</translation>
+        </message>
+        <message>
+            <location filename="../qml/HomePage.qml" line="26" />
+            <source>Multimedia</source>
+            <translation>Multimedia</translation>
+        </message>
+        <message>
+            <location filename="../qml/HomePage.qml" line="27" />
+            <source>Office</source>
+            <translation>Ufficio</translation>
+        </message>
+        <message>
+            <location filename="../qml/HomePage.qml" line="28" />
+            <source>Security</source>
+            <translation>Sicurezza</translation>
+        </message>
+        <message>
+            <location filename="../qml/HomePage.qml" line="29" />
+            <source>System</source>
+            <translation>Sistema</translation>
+        </message>
+        <message>
+            <location filename="../qml/HomePage.qml" line="30" />
+            <source>Video</source>
+            <translation>Video</translation>
+        </message>
+        <message>
+            <location filename="../qml/HomePage.qml" line="31" />
+            <source>Virtualization</source>
+            <translation>Virtualizzazione</translation>
         </message>
     </context>
     <context>
