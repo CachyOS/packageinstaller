@@ -31,7 +31,7 @@ jobs:
           sed -i '/^\[options\]/a DisableSandboxNetwork' /etc/pacman.conf
           pacman -Syu --noconfirm --needed \
             base-devel cmake ninja git pkgconf \
-            qt6-base qt6-declarative qt6-tools appstream-qt pacman elfutils
+            qt6-base qt6-declarative qt6-tools appstream-qt pacman elfutils vulkan-headers
 
       - uses: actions/checkout@v7
 
