@@ -220,6 +220,24 @@ bool startsForeign(const QHash<QString, QString>& keys, const QString& file) {
         && (keys.value(u"TryExec"_s) == file || appimage::commandLine(keys.value(u"Exec"_s)).contains(file));
 }
 
+/// A launcher in any applications directory may still need this file.
+bool hasLauncher(const QString& file) {
+    const auto refersToFile = [&file](const QString& path) {
+        return path.startsWith(u'/') && QDir::cleanPath(path) == file;
+    };
+    for (const auto& directory : QStandardPaths::standardLocations(QStandardPaths::ApplicationsLocation)) {
+        QDirIterator launchers(directory, {u"*.desktop"_s}, QDir::Files, QDirIterator::Subdirectories);
+        while (launchers.hasNext()) {
+            const auto keys = appimage::mainGroup(readText(launchers.next(), appimage::MAX_ENTRY_BYTES));
+            if (refersToFile(keys.value(appimage::PATH_KEY)) || refersToFile(keys.value(u"TryExec"_s))
+                || std::ranges::any_of(appimage::commandLine(keys.value(u"Exec"_s)), refersToFile)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 /// True when another program already owns a menu entry of this name: a file of the user's
 /// that is not ours, or one that a package installed. The entry the earlier manager of
 /// `takenOver` wrote for that file does not count: it is replaced along with it.
@@ -466,15 +484,13 @@ AppImageResult install(const QString& source, const Cancel& cancel, const Fetche
     // A local file already in the install folder may have lost its menu entry.
     // Restore the entry at its existing path instead of adding another copy.
     const auto localPath    = QDir::cleanPath(sourceInfo.absoluteFilePath());
-    const bool restoreEntry = !downloaded && !fetched.takesOver && previous.isEmpty() && ownedFile(localPath)
-        && std::ranges::none_of(menuEntries(), [&localPath](const auto& entry) {
-               return entry.value(appimage::PATH_KEY) == localPath || startsForeign(entry, localPath);
-           });
+    const bool restoreEntry = !downloaded && !fetched.takesOver && previous.isEmpty() && ownedFile(localPath) && !hasLauncher(localPath);
     const auto destination = restoreEntry ? localPath : freeDestination(fileName, previous);
     if (destination.isEmpty()) {
         return {AppImageClient::tr("Could not find a free file name in %1.").arg(installDirectory()), {}};
     }
-    const bool keepFile = restoreEntry && QFileInfo(destination).isExecutable();
+    const bool makeExecutable = restoreEntry && !QFileInfo(destination).isExecutable();
+    const auto permissions    = makeExecutable ? QFile::permissions(destination) : QFile::Permissions{};
 
     // The new icon waits next to its place until the entry that names it is written.
     QString iconPath;
@@ -505,7 +521,10 @@ AppImageResult install(const QString& source, const Cancel& cancel, const Fetche
     // not deleted, until the new entry is written, and is put back if anything fails.
     QString backup;
     const auto restore = [&] {
-        if (keepFile) {
+        if (restoreEntry) {
+            if (makeExecutable) {
+                QFile::setPermissions(destination, permissions);
+            }
             return;
         }
         QFile::remove(destination);
@@ -513,7 +532,10 @@ AppImageResult install(const QString& source, const Cancel& cancel, const Fetche
             QFile::rename(backup, destination);
         }
     };
-    if (!keepFile) {
+    if (makeExecutable && !QFile::setPermissions(destination, permissions | QFile::ExeOwner)) {
+        return {AppImageClient::tr("Could not make the AppImage executable."), {}};
+    }
+    if (!restoreEntry) {
         if (occupied(destination)) {
             backup = privatePath("bak"_L1);
             if (!QFile::rename(destination, backup)) {
