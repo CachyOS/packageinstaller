@@ -4,11 +4,14 @@
 #include "iconprovider.hpp"
 
 #include <QApplication>
+#include <QDir>
+#include <QFile>
 #include <QFileInfo>
 #include <QIcon>
 #include <QLibraryInfo>
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
+#include <QStandardPaths>
 #include <QTranslator>
 
 #include <backward.hpp>
@@ -16,6 +19,20 @@
 using namespace Qt::StringLiterals;
 
 namespace {
+
+/** Move the settings file from the old mixed-case config directory, if present. */
+void migrateLegacyConfig() {
+    const auto configRoot = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
+    const auto oldDir = configRoot + u"/CachyOS"_s;
+    const auto newDir = configRoot + u"/cachyos"_s;
+    const auto oldFile = oldDir + u"/cachyos-pi.conf"_s;
+    const auto newFile = newDir + u"/cachyos-pi.conf"_s;
+    if (QFile::exists(oldFile) && !QFile::exists(newFile)) {
+        QDir().mkpath(newDir);
+        QFile::rename(oldFile, newFile);
+        QDir().rmdir(oldDir);
+    }
+}
 
 /** Set up translations */
 void initTranslations(QCoreApplication& app) {
@@ -41,9 +58,10 @@ int main(int argc, char** argv) {
 
     // QApplication (not QGuiApplication): icon theme lookups go through the platform theme.
     QApplication app(argc, argv);
-    QCoreApplication::setOrganizationName(u"CachyOS"_s);
+    QCoreApplication::setOrganizationName(u"cachyos"_s);
     QCoreApplication::setApplicationName(u"cachyos-pi"_s);
     QCoreApplication::setApplicationVersion(QString::fromLatin1(PI_VERSION));
+    migrateLegacyConfig();
     QGuiApplication::setDesktopFileName(u"cachyos-pi"_s);
     QGuiApplication::setWindowIcon(QIcon::fromTheme(u"cachyos-pi"_s, QIcon(u":/qt/qml/CachyOS/PackageInstaller/icons/cachyos-pi.png"_s)));
 
