@@ -203,16 +203,8 @@ FlatpakState load(const Load& load) {
         if (row.size() < 7) {
             continue;
         }
-        FlatpakInstalled entry;
-        entry.ref          = row.at(0);
-        entry.id           = row.at(0).section(u'/', 0, 0);
-        entry.name         = row.at(1);
-        entry.version      = row.at(2);
-        entry.remote       = row.at(3);
-        entry.installation = row.at(4);
-        entry.size         = row.at(5);
-        entry.active       = row.at(6);
-        entry.isApp        = apps.contains(entry.key());
+        FlatpakInstalled entry{row.at(0), row.at(0).section(u'/', 0, 0), row.at(1), row.at(2), row.at(3), row.at(4), row.at(5), row.at(6), false};
+        entry.isApp = apps.contains(entry.key());
         state.installed << entry;
     }
     return state;
@@ -340,7 +332,7 @@ void FlatpakClient::clear() {
 
 void FlatpakClient::onLoaded() {
     m_loading = false;
-    releaseFreedMemory();          // the catalogue as AppStream parsed it
+    releaseFreedMemory();  // the catalogue as AppStream parsed it
     if (m_watcher.isCanceled()) {  // cleared while the catalogue was being read: the result is partial
         emit loadingChanged();
         if (std::exchange(m_reloadQueued, false)) {
@@ -436,7 +428,7 @@ const FlatpakInstalled* FlatpakClient::findCopy(const QString& key) const {
 }
 
 const FlatpakInstalled* FlatpakClient::bestCopy(const QString& id) const {
-    const auto* app              = find(id);
+    const auto* app = find(id);
     const FlatpakInstalled* best = nullptr;
     int bestScore                = -1;
     for (const auto& entry : m_state.installed) {
@@ -501,8 +493,7 @@ QString FlatpakClient::installedTitle(const QString& key) const {
         return {};
     }
     const auto* found = find(copy->id);
-    return found != nullptr ? found->title : copy->name.isEmpty() ? copy->id
-                                                                  : copy->name;
+    return found != nullptr ? found->title : copy->name.isEmpty() ? copy->id : copy->name;
 }
 
 QStringList FlatpakClient::installArguments(const QString& id) const {
