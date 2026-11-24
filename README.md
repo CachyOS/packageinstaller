@@ -42,6 +42,7 @@ Flatpak apps and add AppImage files to the menu.
 - **Appearance**: the settings page switches between colour themes (four of our
   own plus Nord, Dracula, three flavours of Catppuccin, Tokyo Night, Solarized,
   Gruvbox, Rosé Pine and Everforest, credited in `THIRD-PARTY.md`) and between light, dark and following the desktop.
+  The "Desktop" theme takes the colours of the desktop's colour scheme.
 - **Privileges**: the GUI runs as the user. Package operations go through
   `cachyos-pi-helper`, a tiny pkexec helper that only accepts
   `install`, `remove`, `upgrade` and `rate-mirrors` (which runs
