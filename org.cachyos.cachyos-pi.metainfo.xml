@@ -52,6 +52,15 @@
   </supports>
   <content_rating type="oars-1.1"/>
   <releases>
+    <release version="2.0.1" date="2026-11-24" type="development">
+      <description>
+        <p>Bug fixes and new translations.</p>
+        <ul>
+          <li>Fix the missing title bar and window controls on GNOME</li>
+          <li>New Catalan, Italian, Portuguese (Portugal), Spanish and Turkish translations</li>
+        </ul>
+      </description>
+    </release>
     <release version="2.0.0" date="2026-11-12" type="development">
       <description>
         <p>Rewritten as a QML application with AUR support and a PKGBUILD check.</p>
