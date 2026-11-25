@@ -16,6 +16,8 @@ class TestHelper : public QObject {
         QFile package(m_dir.filePath(u"foo-1-1-x86_64.pkg.tar.zst"_s));
         QVERIFY(package.open(QIODevice::WriteOnly));
         m_package = QFileInfo(package).canonicalFilePath();
+        QVERIFY(QFile::link(m_package, m_dir.filePath(u"linked.pkg.tar.zst"_s)));
+        QVERIFY(QFile::link(u"/etc/passwd"_s, m_dir.filePath(u"passwd.pkg.tar.zst"_s)));
         // the script names itself, so it stands in for both programs
         QVERIFY(QFile::copy(u"" TEST_DATA_DIR "/fake-pacman.sh"_s, m_dir.filePath(u"cachyos-rate-mirrors"_s)));
     }
@@ -30,6 +32,10 @@ class TestHelper : public QObject {
                                    << u"--sync --needed -- core/foo"_s;
         QTest::newRow("paru upgrade") << QStringList{u"pacman"_s, u"--upgrade"_s, u"--noconfirm"_s, u"--"_s, m_package}
                                       << u"--upgrade --noconfirm -- "_s + m_package;
+        // a link is resolved before it reaches pacman
+        QTest::newRow("paru upgrade via symlink")
+            << QStringList{u"pacman"_s, u"--upgrade"_s, u"--noconfirm"_s, u"--"_s, m_dir.filePath(u"linked.pkg.tar.zst"_s)}
+            << u"--upgrade --noconfirm -- "_s + m_package;
         QTest::newRow("paru database") << QStringList{u"pacman"_s, u"--database"_s, u"--asdeps"_s, u"--"_s, u"foo"_s}
                                        << u"--database --asdeps -- foo"_s;
     }
@@ -56,7 +62,8 @@ class TestHelper : public QObject {
                  QStringList{u"rate-mirrors"_s, u"--help"_s}, QStringList{u"rate-mirrors"_s, QString()},
                  QStringList{u"pacman"_s, u"--remove"_s, u"--"_s, u"foo"_s},
                  QStringList{u"pacman"_s, u"--sync"_s, u"--overwrite"_s, u"--"_s, u"foo"_s},
-                 QStringList{u"pacman"_s, u"--upgrade"_s, u"--"_s, u"/etc/passwd"_s}}) {
+                 QStringList{u"pacman"_s, u"--upgrade"_s, u"--"_s, u"/etc/passwd"_s},
+                 QStringList{u"pacman"_s, u"--upgrade"_s, u"--"_s, m_dir.filePath(u"passwd.pkg.tar.zst"_s)}}) {
             const auto [exitCode, output] = run(args);
             QCOMPARE(exitCode, 2);
             QVERIFY(output.isEmpty());

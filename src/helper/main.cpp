@@ -89,7 +89,11 @@ auto resolve_package_file(std::string_view given) noexcept -> std::optional<std:
     // links and ".." are followed first, so the file that was checked is the one pacman is given
     std::error_code ec{};
     const auto resolved = fs::canonical(path, ec);
-    if (ec || !is_package_file_name(resolved.filename().native()) || !fs::is_regular_file(resolved, ec)) {
+    if (ec) {
+        return std::nullopt;
+    }
+    ec.clear();
+    if (!is_package_file_name(resolved.filename().native()) || !fs::is_regular_file(resolved, ec) || ec) {
         return std::nullopt;
     }
     return resolved.native();
@@ -211,11 +215,31 @@ auto program_path(const char* program) noexcept -> std::string {
     return program;
 }
 
-[[noreturn]] void exec_in_own_session(const char* program, char* const* argv, char* const* envp) noexcept {
+// shortcut: pacman reopens the path after execve, so a same-path content swap remains possible; pass an open fd if pacman ever supports it
+auto still_resolves_to_same_file(const std::string& given) noexcept -> bool {
+    const fs::path path{given};
+    if (!path.is_absolute() || !is_package_file_name(path.filename().native())) {
+        return true;  // not a package file argument
+    }
+    std::error_code ec{};
+    const auto current = fs::canonical(path, ec);
+    if (ec) {
+        return false;
+    }
+    ec.clear();
+    return fs::is_regular_file(current, ec) && !ec && current.native() == given;
+}
+
+[[noreturn]] void exec_in_own_session(const char* program, char* const* argv, char* const* envp, const Args& args) noexcept {
     // out of reach of the caller's terminal and of a signal to its process group
     if (setsid() < 0) {
         std::println(stderr, "cachyos-pi-helper: cannot start a session: {}", std::generic_category().message(errno));
         _exit(kNotStarted);
+    }
+    // pacman reopens the path after we fork, so validate again just before execve
+    if (!std::ranges::all_of(args, still_resolves_to_same_file)) {
+        std::println(stderr, "cachyos-pi-helper: package file changed since validation");
+        _exit(kRefused);
     }
     execve(program, argv, envp);
     std::println(stderr, "cachyos-pi-helper: cannot run {}: {}", program, std::generic_category().message(errno));
@@ -252,7 +276,7 @@ auto run(Command& command) noexcept -> int {
         return kNotStarted;
     }
     if (child == 0) {
-        exec_in_own_session(program.c_str(), argv.data(), envp.data());
+        exec_in_own_session(program.c_str(), argv.data(), envp.data(), args);
     }
     return exit_status_of(child);
 }

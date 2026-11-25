@@ -74,9 +74,7 @@ set_project_warnings(project_warnings)
 set(PI_HELPER_DIR "${CMAKE_INSTALL_FULL_LIBDIR}/cachyos-pi")
 
 # import backend
-if(BUILD_TESTING)
-    include(CTest)
-endif()
+include(CTest)
 add_subdirectory(libpi)
 
 ##

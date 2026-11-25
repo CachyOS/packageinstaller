@@ -19,7 +19,7 @@
 
 set -e
 
-cd "`dirname "$0"`"
+cd "$(dirname "$0")"
 
 if [[ $1 == "--help" ]]; then
 cat<<EOF
@@ -87,6 +87,14 @@ for i in "$@"; do
   esac
 done
 
+# fail closed before values are interpolated into the generated build.sh
+for value in "${_buildpath}" "${_prefix}" "${_libdir}" "${_buildtype}"; do
+  if [[ ! ${value} =~ ^[A-Za-z0-9_./+=:-]+$ ]]; then
+    printf 'configure.sh: invalid option value: %s\n' "${value}" >&2
+    exit 1
+  fi
+done
+
 if ${_use_clang}; then
   export AR=llvm-ar
   export CC=clang
@@ -103,13 +111,13 @@ if command -v lld &> /dev/null; then
   _configure_flags+=('-DCMAKE_EXE_LINKER_FLAGS="-fuse-ld=lld"')
 fi
 
-cmake -S . -B ${_buildpath}/${_buildtype} \
-    -DENABLE_SANITIZER_ADDRESS=${_sanitizer_address} \
-    -DENABLE_SANITIZER_UNDEFINED_BEHAVIOR=${_sanitizer_UB} \
-    -DENABLE_SANITIZER_LEAK=${_sanitizer_leak} \
-    -DCMAKE_BUILD_TYPE=${_buildtype} \
-    -DCMAKE_INSTALL_PREFIX=${_prefix} \
-    -DCMAKE_INSTALL_LIBDIR=${_libdir} \
+cmake -S . -B "${_buildpath}/${_buildtype}" \
+    -DENABLE_SANITIZER_ADDRESS="${_sanitizer_address}" \
+    -DENABLE_SANITIZER_UNDEFINED_BEHAVIOR="${_sanitizer_UB}" \
+    -DENABLE_SANITIZER_LEAK="${_sanitizer_leak}" \
+    -DCMAKE_BUILD_TYPE="${_buildtype}" \
+    -DCMAKE_INSTALL_PREFIX="${_prefix}" \
+    -DCMAKE_INSTALL_LIBDIR="${_libdir}" \
     "${_configure_flags[@]}"
 
 
@@ -137,7 +145,7 @@ set -e
 
 cd "\`dirname "\$0"\`"
 
-cmake --build ${_buildpath}/${_buildtype} --parallel $(nproc)
+cmake --build "${_buildpath}/${_buildtype}" --parallel \$(nproc)
 EOF
 
 chmod +x ./build.sh

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #include "icontheme.hpp"
 
+#include <algorithm>
 #include <cstdint>
 #include <limits>
 
@@ -28,7 +29,13 @@ auto rank(const QSettings& index, const QString& dir) -> std::int32_t {
     if (index.value(dir + u"/Type"_s).toString() == "Scalable"_L1) {
         return std::numeric_limits<std::int32_t>::max();
     }
-    return index.value(dir + u"/Size"_s).toInt() * qMax(1, index.value(dir + u"/Scale"_s, 1).toInt());
+    const int size = index.value(dir + u"/Size"_s).toInt();
+    if (size <= 0) {
+        return -1;
+    }
+    const int scale = qMax(1, index.value(dir + u"/Scale"_s, 1).toInt());
+    const auto scaled = static_cast<std::int64_t>(size) * static_cast<std::int64_t>(scale);
+    return static_cast<std::int32_t>(std::min<std::int64_t>(scaled, std::numeric_limits<std::int32_t>::max()));
 }
 
 bool holdsApps(const QSettings& index, const QString& dir) {

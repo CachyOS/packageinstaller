@@ -68,6 +68,36 @@ Type=Fixed
         write(u"pixmaps/browser.png"_s);
         write(u"pixmaps/legacy-tool.png"_s);
 
+        // Size * Scale overflows int here; the result must clamp, not wrap negative
+        write(u"icons/extreme/index.theme"_s, R"([Icon Theme]
+Name=Extreme
+Directories=apps/small,apps/huge
+
+[apps/small]
+Size=48
+Context=Applications
+Type=Fixed
+
+[apps/huge]
+Size=1073741824
+Scale=2
+Context=Applications
+Type=Fixed
+)");
+        write(u"icons/extreme/apps/small/editor.png"_s);
+        write(u"icons/extreme/apps/huge/editor.svg"_s);
+
+        write(u"icons/invalid/index.theme"_s, R"([Icon Theme]
+Name=Invalid
+Directories=apps/zero
+
+[apps/zero]
+Size=0
+Context=Applications
+Type=Fixed
+)");
+        write(u"icons/invalid/apps/zero/ghost.png"_s);
+
         m_icons = icontheme::appIcons({.name = u"child"_s,
             .searchPaths                     = {path(u"icons"_s), path(u"local"_s), path(u"missing"_s)},
             .fallbackPaths                   = {path(u"pixmaps"_s)}});
@@ -99,6 +129,16 @@ Type=Fixed
         const auto icons = icontheme::appIcons({.name = u"nonexistent"_s, .searchPaths = {path(u"icons"_s)}, .fallbackPaths = {}});
         QCOMPARE(icons.value(u"terminal"_s), path(u"icons/hicolor/48x48/apps/terminal.png"_s));
         QVERIFY(!icons.contains(u"editor"_s));
+    }
+
+    void clampsOverflowingScale() {
+        const auto icons = icontheme::appIcons({.name = u"extreme"_s, .searchPaths = {path(u"icons"_s)}, .fallbackPaths = {}});
+        QCOMPARE(icons.value(u"editor"_s), path(u"icons/extreme/apps/huge/editor.svg"_s));
+    }
+
+    void rejectsNonPositiveSize() {
+        const auto icons = icontheme::appIcons({.name = u"invalid"_s, .searchPaths = {path(u"icons"_s)}, .fallbackPaths = {}});
+        QCOMPARE(icons.value(u"ghost"_s), QString());
     }
 
  private:
