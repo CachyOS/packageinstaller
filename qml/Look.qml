@@ -17,9 +17,54 @@ QtObject {
     readonly property bool dark: settings.mode === "dark"
         || (settings.mode !== "light" && Application.styleHints.colorScheme !== Qt.ColorScheme.Light)
 
+    readonly property SystemPalette sysPal: SystemPalette {
+        colorGroup: SystemPalette.Active
+    }
+
+    function mix(a: color, b: color, t: real): color {
+        return Qt.rgba(a.r + (b.r - a.r) * t, a.g + (b.g - a.g) * t, a.b + (b.b - a.b) * t, a.a + (b.a - a.a) * t)
+    }
+
+    readonly property var systemColors: {
+        const win = sysPal.window
+        const base = sysPal.base
+        const btn = sysPal.button
+        const fg = sysPal.windowText
+        const hi = sysPal.highlight
+        const onHi = sysPal.highlightedText
+        const isDark = win.hslLightness < 0.5
+        const sidebar = isDark
+            ? (base.hslLightness < win.hslLightness ? base : Qt.darker(win, 1.15))
+            : Qt.darker(win, 1.04)
+        const surface = isDark
+            ? (btn.hslLightness > win.hslLightness ? btn : Qt.lighter(win, 1.18))
+            : base
+        const surfaceHover = isDark ? Qt.lighter(surface, 1.12) : mix(surface, win, 0.45)
+        const surfaceAlt = isDark ? Qt.lighter(surface, 1.22) : mix(surface, win, 0.75)
+        const arch = isDark ? "#5ab0f2" : "#1273c4"
+        return {
+            window: win, sidebar: sidebar, surface: surface, surfaceHover: surfaceHover, surfaceAlt: surfaceAlt,
+            border: mix(fg, win, isDark ? 0.84 : 0.82), text: fg, textMuted: mix(fg, win, 0.38),
+            accent: hi, accentHover: isDark ? Qt.lighter(hi, 1.15) : Qt.darker(hi, 1.12),
+            accentSoft: mix(hi, surface, isDark ? 0.80 : 0.85), onAccent: onHi,
+            arch: arch, archSoft: mix(arch, surface, isDark ? 0.82 : 0.86)
+        }
+    }
+
     // The colour themes offered on the settings page, each for dark and light desktops.
     // `hero` is the banner on the start page: gradient, text, button and picture.
     readonly property var themes: ({
+        "system": {
+            title: qsTr("System"), hint: qsTr("Follow the desktop colours"),
+            dark: systemColors,
+            light: systemColors,
+            hero: {
+                stops: [mix(sysPal.highlight, sysPal.window, 0.35), mix(sysPal.highlight, sysPal.window, 0.15), mix(Qt.darker(sysPal.highlight, 1.25), sysPal.window, 0.25)],
+                text: sysPal.highlightedText, sub: mix(sysPal.highlightedText, sysPal.highlight, 0.15),
+                button: sysPal.highlightedText, buttonHover: mix(sysPal.highlightedText, sysPal.highlight, 0.1),
+                ink: Qt.darker(sysPal.highlight, 1.35), image: "icons/cachyos-pi.png"
+            }
+        },
         "classic": {
             title: qsTr("Classic"), hint: qsTr("The original teal look"),
             dark: {
@@ -311,7 +356,7 @@ QtObject {
         }
     })
     /// in the order the settings page shows them
-    readonly property var themeNames: ["classic", "midnight", "graphite", "aurora", "nord", "dracula", "catppuccin", "catppuccinmacchiato", "catppuccinfrappe",
+    readonly property var themeNames: ["system", "classic", "midnight", "graphite", "aurora", "nord", "dracula", "catppuccin", "catppuccinmacchiato", "catppuccinfrappe",
         "tokyonight", "solarized", "gruvbox", "rosepine", "everforest"]
 
     // an unknown name in the settings file falls back to the classic look
