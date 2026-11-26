@@ -146,5 +146,5 @@ the package database, so they are only done in the app.
 | `pkglist.yaml` | the curated "CachyOS picks" on the start page |
 | `org.cachyos.cachyos-pi.metainfo.xml` | AppStream metadata for software centres |
 | `packaging/` | PKGBUILDs |
-| `THIRD-PARTY.md` | credits and licence of the community colour palettes |
+| `THIRD-PARTY.md` | credits and licences of bundled code and the community colour palettes |
 | `screenshots/` | the pictures in this file |

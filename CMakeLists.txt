@@ -118,6 +118,7 @@ qt_add_executable(${PROJECT_NAME}
     src/graphics.hpp src/graphics.cpp
     src/transaction.hpp src/transaction.cpp
     src/updatenotice.hpp src/updatenotice.cpp
+    src/wheelscroll.hpp src/wheelscroll.cpp
     src/backend.hpp src/backend.cpp)
 
 set(PI_QML_FILES
@@ -155,7 +156,6 @@ set(PI_QML_FILES
     qml/WebLink.qml
     qml/SettingsPage.qml
     qml/CodeView.qml
-    qml/WheelScroll.qml
     qml/PlainText.qml
     qml/Heading.qml
     qml/SectionTitle.qml
@@ -300,4 +300,10 @@ if(BUILD_TESTING)
     target_include_directories(test-icontheme PRIVATE src)
     target_link_libraries(test-icontheme PRIVATE project_options project_warnings Qt6::Test)
     add_test(NAME icontheme COMMAND test-icontheme)
+
+    qt_add_executable(test-wheelscroll tests/test_wheelscroll.cpp src/wheelscroll.hpp src/wheelscroll.cpp)
+    target_include_directories(test-wheelscroll PRIVATE src)
+    target_link_libraries(test-wheelscroll PRIVATE project_options project_warnings Qt6::Test Qt6::Qml Qt6::Quick)
+    add_test(NAME wheelscroll COMMAND test-wheelscroll)
+    set_tests_properties(wheelscroll PROPERTIES ENVIRONMENT QT_QPA_PLATFORM=offscreen)
 endif()
