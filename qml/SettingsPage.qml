@@ -33,6 +33,9 @@ ScrollPage {
 
         Row {
             spacing: 8
+            // the desktop theme is as dark or light as the desktop's colour scheme
+            enabled: !Look.followsDesktop
+            opacity: enabled ? 1 : 0.5
 
             Repeater {
                 model: ListModel {
@@ -59,6 +62,13 @@ ScrollPage {
     Section {
         id: colours
         title: qsTr("Colours")
+
+        Muted {
+            width: colours.width
+            text: qsTr("Your own themes are the JSON files in %1. A theme file that changes is applied at once, so tools that make themes from the wallpaper can keep it up to date.").arg(UserThemes.shownFolder)
+            font.pixelSize: Look.fontSmall
+            wrapMode: Text.WordWrap
+        }
 
         Flow {
             id: themeFlow

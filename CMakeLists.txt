@@ -118,6 +118,7 @@ qt_add_executable(${PROJECT_NAME}
     src/graphics.hpp src/graphics.cpp
     src/transaction.hpp src/transaction.cpp
     src/updatenotice.hpp src/updatenotice.cpp
+    src/userthemes.hpp src/userthemes.cpp
     src/backend.hpp src/backend.cpp)
 
 set(PI_QML_FILES
@@ -279,6 +280,11 @@ if(BUILD_TESTING)
     target_link_libraries(test-updatenotice PRIVATE project_options project_warnings
         Qt6::Test Qt6::Qml Qt6::Network)
     add_test(NAME updatenotice COMMAND test-updatenotice)
+
+    qt_add_executable(test-userthemes tests/test_userthemes.cpp src/userthemes.hpp src/userthemes.cpp)
+    target_include_directories(test-userthemes PRIVATE src)
+    target_link_libraries(test-userthemes PRIVATE project_options project_warnings Qt6::Test Qt6::Gui Qt6::Qml)
+    add_test(NAME userthemes COMMAND test-userthemes)
 
     add_executable(cachyos-pi-helper-test src/helper/main.cpp)
     target_compile_definitions(cachyos-pi-helper-test PRIVATE PI_HELPER_TESTING)

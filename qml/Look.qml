@@ -13,13 +13,137 @@ QtObject {
             : look.settings.mode === "dark" ? Qt.ColorScheme.Dark : Qt.ColorScheme.Unknown
     }
 
+    /// The "desktop" theme takes its colours from the system palette, so it follows KDE colour
+    /// schemes, qt6ct and tools that generate them, for example from the wallpaper.
+    readonly property bool followsDesktop: settings.theme === "desktop"
+
     // The setting decides; asking Qt to switch the scheme is not honoured on every desktop.
-    readonly property bool dark: settings.mode === "dark"
-        || (settings.mode !== "light" && Application.styleHints.colorScheme !== Qt.ColorScheme.Light)
+    // The desktop theme has a single palette, which is dark or light by itself.
+    readonly property bool dark: followsDesktop ? luminance(system.window) < 0.5
+        : settings.mode === "dark" || (settings.mode !== "light" && Application.styleHints.colorScheme !== Qt.ColorScheme.Light)
+
+    readonly property SystemPalette system: SystemPalette {
+        colorGroup: SystemPalette.Active
+    }
+
+    /// relative luminance, 0 for black and 1 for white
+    function luminance(c: color): real {
+        return 0.2126 * c.r + 0.7152 * c.g + 0.0722 * c.b
+    }
+
+    /// `a` moved by `amount` (0 to 1) towards `b`
+    function mix(a: color, b: color, amount: real): color {
+        return Qt.rgba(a.r + (b.r - a.r) * amount, a.g + (b.g - a.g) * amount, a.b + (b.b - a.b) * amount, 1)
+    }
+
+    /// black or white, whichever reads better on `background`
+    function inkOn(background: color): color {
+        return contrast("#101418", background) >= contrast("#ffffff", background) ? "#101418" : "#ffffff"
+    }
+
+    /// WCAG contrast ratio of two colours, from 1 to 21
+    function contrast(a: color, b: color): real {
+        const linear = v => v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+        const relative = c => 0.2126 * linear(c.r) + 0.7152 * linear(c.g) + 0.0722 * linear(c.b);
+        const la = relative(a);
+        const lb = relative(b);
+        return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05)
+    }
+
+    /// `foreground`, moved towards `text` until it can be read as small text on `background`
+    function readable(foreground: color, background: color, text: color): color {
+        let result = foreground;
+        for (let step = 0; step < 10 && contrast(result, background) < 4.5; ++step)
+            result = mix(result, text, 0.15);
+        return result
+    }
+
+    /// A palette with only "window", "text" and "accent" (or a few more) filled up with blends
+    /// of them, in the same steps as the hand-made themes. Colours that are given are kept,
+    /// except that accent colours are made readable as text on the cards: generated palettes
+    /// (from a wallpaper, for example) do not always keep to that.
+    function completePalette(given: var): var {
+        const colour = (name, fallback) => given[name] ? Qt.color(given[name]) : fallback;
+        const window = Qt.color(given.window);
+        const text = Qt.color(given.text);
+        const isDark = luminance(window) < 0.5;
+        const surface = colour("surface", mix(window, text, 0.06));
+        const accent = readable(Qt.color(given.accent), surface, text);
+        const arch = readable(colour("arch", Qt.color(isDark ? "#5ab0f2" : "#1273c4")), surface, text);
+        const result = {
+            window: window, sidebar: isDark ? mix(window, "#000000", 0.25) : mix(window, text, 0.05),
+            surface: surface, surfaceHover: mix(window, text, 0.09), surfaceAlt: mix(window, text, 0.12),
+            border: mix(window, text, 0.18), text: text, textMuted: mix(text, window, 0.4),
+            accentHover: mix(accent, text, 0.25), accentSoft: mix(window, accent, 0.2), onAccent: inkOn(accent),
+            archSoft: mix(window, arch, 0.2)
+        };
+        Object.assign(result, given);
+        // the checked colours win over the given ones
+        result.accent = accent;
+        result.arch = arch;
+        if (contrast(Qt.color(result.onAccent), accent) < 4.5)
+            result.onAccent = inkOn(accent);
+        for (const name of ["danger", "warning"]) {
+            if (given[name])
+                result[name] = readable(Qt.color(given[name]), surface, text);
+        }
+        return asNames(result);
+    }
+
+    /// The colours of a palette or banner as "#rrggbb" names. Colour values kept in a plain
+    /// object do not survive being read back through a `color` property: they turn black.
+    function asNames(colours: var): var {
+        const names = {};
+        for (const [key, value] of Object.entries(colours))
+            names[key] = Array.isArray(value) ? value.map(v => String(v)) : String(value);
+        return names;
+    }
+
+    /// the start page banner in the colours of a palette
+    function heroFor(colours: var): var {
+        const window = Qt.color(colours.window);
+        const accent = Qt.color(colours.accent);
+        const start = mix(window, accent, 0.4);
+        const middle = mix(window, accent, 0.6);
+        // the text sits on the left half: it has to read on both ends of that
+        const dark = Qt.color("#101418");
+        const light = Qt.color("#ffffff");
+        const worst = ink => Math.min(contrast(ink, start), contrast(ink, middle));
+        const ink = worst(dark) > worst(light) ? dark : light;
+        return asNames({
+            stops: [start, middle, mix(window, Qt.color(colours.arch), 0.5)], text: ink, sub: mix(ink, middle, 0.15),
+            button: colours.accent, buttonHover: colours.accentHover, ink: colours.onAccent, image: "icons/cachyos-logo.png"
+        });
+    }
+
+    /// a theme with some colours left out, for example from a file, made whole
+    function completeTheme(given: var): var {
+        const dark = completePalette(given.dark);
+        const light = completePalette(given.light);
+        const hero = given.hero ? Object.assign({ image: "icons/cachyos-logo.png" }, given.hero) : heroFor(dark);
+        return { title: given.title, hint: given.hint || qsTr("A theme file of yours"), dark: dark, light: light, hero: hero };
+    }
+
+    readonly property var desktopTheme: {
+        // The highlight, not the newer accent role: every platform theme sets it, while some
+        // (GTK 3) leave the accent at Qt's default blue. Kept as names, like the built-in colours.
+        const colours = { window: system.window.toString(), text: system.windowText.toString(), accent: system.highlight.toString() };
+        return completeTheme({ title: qsTr("Desktop"), hint: qsTr("The colours of your desktop's colour scheme"), dark: colours, light: colours });
+    }
+
+    /// the themes in the user's theme folder, see UserThemes
+    readonly property var userThemes: {
+        const themes = {};
+        for (const [id, theme] of Object.entries(UserThemes.themes))
+            themes[id] = completeTheme(theme);
+        return themes;
+    }
+
+    readonly property var themes: Object.assign({ "desktop": desktopTheme }, userThemes, builtinThemes)
 
     // The colour themes offered on the settings page, each for dark and light desktops.
     // `hero` is the banner on the start page: gradient, text, button and picture.
-    readonly property var themes: ({
+    readonly property var builtinThemes: ({
         "classic": {
             title: qsTr("Classic"), hint: qsTr("The original teal look"),
             dark: {
@@ -311,7 +435,8 @@ QtObject {
         }
     })
     /// in the order the settings page shows them
-    readonly property var themeNames: ["classic", "midnight", "graphite", "aurora", "nord", "dracula", "catppuccin", "catppuccinmacchiato", "catppuccinfrappe",
+    readonly property var themeNames: ["desktop", ...Object.keys(userThemes).sort(), ...builtinThemeNames]
+    readonly property var builtinThemeNames: ["classic", "midnight", "graphite", "aurora", "nord", "dracula", "catppuccin", "catppuccinmacchiato", "catppuccinfrappe",
         "tokyonight", "solarized", "gruvbox", "rosepine", "everforest"]
 
     // an unknown name in the settings file falls back to the classic look
