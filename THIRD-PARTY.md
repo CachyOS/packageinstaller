@@ -19,6 +19,7 @@ the binaries.
 | - | - | - |
 | [subprocess.h](https://github.com/sheredom/subprocess.h) | `libpi/src/third_party/subprocess.h` | public domain |
 | [CachyOS GUCC](https://github.com/cachyos/new-cli-installer) | `libpi/`: files imported from gucc keep its copyright header | GPL-3.0-or-later |
+| [Kirigami](https://invent.kde.org/frameworks/kirigami) `WheelHandler` | `src/wheelscroll.*`: touchpad inertia and pixel rounding, adapted | LGPL-2.0-or-later, text in `LICENSES/LGPL-2.0-or-later.txt` |
 
 ## Colour palettes
 
