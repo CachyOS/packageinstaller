@@ -49,6 +49,7 @@ struct FlatpakInstalled {
     QString remote;
     QString installation;  ///< "system", "user" or the name of another system-wide installation
     QString size;
+    QString active;  ///< deployed ostree commit from `flatpak list`
     bool isApp = false;
 
     /// An app can be installed more than once (per user and system-wide, several branches);

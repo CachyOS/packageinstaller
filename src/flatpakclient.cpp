@@ -12,6 +12,7 @@
 #include <AppStreamQt/release.h>
 
 #include <QDateTime>
+#include <QDir>
 #include <QFileInfo>
 #include <QHash>
 #include <QPromise>
@@ -44,6 +45,49 @@ QList<QStringList> rows(const Load& load, const QString& program, const QStringL
 /// Flatpak keeps the catalogue of a system-wide remote in this directory once it was fetched.
 QString catalogueOf(const QString& remote, const QString& arch) {
     return u"/var/lib/flatpak/appstream/%1/%2/active"_s.arg(remote, arch);
+}
+
+/// Ostree repo that holds the commits of one Flatpak installation.
+QString repoOf(const QString& installation) {
+    if (installation == "user"_L1) {
+        return QDir::homePath() + u"/.local/share/flatpak/repo"_s;
+    }
+    if (installation == "system"_L1) {
+        return u"/var/lib/flatpak/repo"_s;
+    }
+    return {};
+}
+
+/// `xa.alt-id` of a deployed commit, empty when missing (ordinary ostree remotes) or unread.
+QString altIdOf(const QString& installation, const QString& commit) {
+    if (commit.isEmpty() || commit == u"-"_s) {
+        return {};
+    }
+    const auto repo   = repoOf(installation);
+    const auto ostree = QStandardPaths::findExecutable(u"ostree"_s);
+    if (repo.isEmpty() || ostree.isEmpty()) {
+        return {};
+    }
+    const auto lines = outputLines(ostree, {u"--repo="_s + repo, u"show"_s, u"--print-metadata-key=xa.alt-id"_s, commit}, 5s);
+    if (lines.isEmpty()) {
+        return {};
+    }
+    // ostree prints a GVariant string: 'deadbeef…'
+    return lines.first().trimmed().remove(u'\'').remove(u'"');
+}
+
+/// Whether two commit or digest strings name the same object; Flatpak often shortens them.
+bool sameCommit(const QString& a, const QString& b) {
+    return !a.isEmpty() && !b.isEmpty() && a != u"-"_s && b != u"-"_s && (a.startsWith(b) || b.startsWith(a));
+}
+
+/// `remote-ls` prints `app/id/arch/branch` (or `runtime/…`); `list` omits the kind prefix.
+QString installedRef(const QString& remoteRef) {
+    const auto parts = remoteRef.split(u'/');
+    if (parts.size() >= 4 && (parts.at(0) == "app"_L1 || parts.at(0) == "runtime"_L1)) {
+        return parts.sliced(1).join(u'/');
+    }
+    return remoteRef;
 }
 
 /// Which of two offers of the same app is shown: Flathub before other remotes, the stable
@@ -155,11 +199,11 @@ FlatpakState load(const Load& load) {
             apps.insert(row.at(1) + u':' + row.at(0));
         }
     }
-    for (const auto& row : rows(load, program, {u"list"_s, u"--all"_s, u"--columns=ref,name,version,origin,installation,size"_s})) {
-        if (row.size() < 6) {
+    for (const auto& row : rows(load, program, {u"list"_s, u"--all"_s, u"--columns=ref,name,version,origin,installation,size,active:f"_s})) {
+        if (row.size() < 7) {
             continue;
         }
-        FlatpakInstalled entry{row.at(0), row.at(0).section(u'/', 0, 0), row.at(1), row.at(2), row.at(3), row.at(4), row.at(5), false};
+        FlatpakInstalled entry{row.at(0), row.at(0).section(u'/', 0, 0), row.at(1), row.at(2), row.at(3), row.at(4), row.at(5), row.at(6), false};
         entry.isApp = apps.contains(entry.key());
         state.installed << entry;
     }
@@ -194,23 +238,45 @@ FlatpakClient::FlatpakClient(QObject* parent) : QObject(parent) {
             ? QString::fromUtf8(m_checkUpdates.readAllStandardOutput()).split(u'\n', Qt::SkipEmptyParts)
             : QStringList();
         // the listing does not say which installation; an app counts if any copy of it is one
-        QHash<std::pair<QString, QString>, std::pair<bool, QString>> copies;  // ref and remote: isApp and version
+        QHash<std::pair<QString, QString>, QList<const FlatpakInstalled*>> copies;  // ref and remote
         for (const auto& entry : std::as_const(m_state.installed)) {
-            auto& [isApp, version] = copies[{entry.ref, entry.remote}];
-            isApp                  = isApp || entry.isApp;
-            version                = entry.version;
+            copies[{entry.ref, entry.remote}] << &entry;
         }
+        // xa.alt-id only for update candidates, keyed by installation+commit (not every installed ref)
+        QHash<QString, QString> altIds;
+        const auto altIdFor = [&altIds](const FlatpakInstalled& copy) {
+            if (copy.active.isEmpty() || copy.active == u"-"_s) {
+                return QString{};
+            }
+            const auto key = copy.installation + u':' + copy.active;
+            if (const auto it = altIds.constFind(key); it != altIds.cend()) {
+                return *it;
+            }
+            return *altIds.insert(key, altIdOf(copy.installation, copy.active));
+        };
         for (const auto& line : lines) {
             const auto row = line.split(u'\t');
-            if (row.size() < 4) {
+            if (row.size() < 5) {
                 continue;
             }
-            const auto id              = row.at(0).section(u'/', 0, 0);
-            const auto [isApp, before] = copies.value({row.at(0), row.at(3)});
-            const auto* app = isApp ? find(id) : nullptr;
+            const auto ref       = installedRef(row.at(0));
+            const auto& offered  = row.at(4);
+            const auto installed = copies.value({ref, row.at(3)});
+            // OCI: remote-ls offers the digest while the deploy's ostree commit differs; skip when
+            // that digest is already xa.alt-id (or the active commit) so badges match `flatpak update`.
+            // `||` short-circuits: Flathub hits on active and never runs ostree.
+            if (std::ranges::any_of(installed, [&](const FlatpakInstalled* copy) {
+                    return sameCommit(copy->active, offered) || sameCommit(altIdFor(*copy), offered);
+                })) {
+                continue;
+            }
+            const bool isApp  = std::ranges::any_of(installed, [](const FlatpakInstalled* copy) { return copy->isApp; });
+            const auto before = installed.isEmpty() ? QString{} : installed.first()->version;
+            const auto id     = ref.section(u'/', 0, 0);
+            const auto* app   = isApp ? find(id) : nullptr;
             FlatpakItem update;
             update.id               = id;
-            update.ref              = row.at(0);
+            update.ref              = ref;
             update.title            = app != nullptr ? app->title : row.at(1);
             update.version          = row.at(2);
             update.installedVersion = before;
@@ -306,7 +372,7 @@ void FlatpakClient::checkUpdates() {
         return;
     }
     m_checkGeneration = m_generation;
-    m_checkUpdates.start(m_state.program, {u"remote-ls"_s, u"--updates"_s, u"--all"_s, u"--columns=ref,name,version,origin"_s});
+    m_checkUpdates.start(m_state.program, {u"remote-ls"_s, u"--updates"_s, u"--all"_s, u"--columns=ref,name,version,origin,commit:f"_s});
     emit updatesChanged();
 }
 
