@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.21)
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 project(cachyos-pi
-        VERSION 2.0.1
+        VERSION 2.0.2
         LANGUAGES CXX)
 
 include(GNUInstallDirs)
