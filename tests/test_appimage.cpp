@@ -45,6 +45,22 @@ class TestAppImage : public QObject {
         QCOMPARE(appimage::replaceProgram(u"  AppRun   %F  "_s, app), u"/a/App.AppImage %F"_s);
     }
 
+    void launcherPaths() {
+        const auto desktop = u"[Desktop Entry]\n"
+                             "Exec=editor %U\n"
+                             "TryExec=/opt/editor\n"
+                             "X-CachyOS-PI-AppImage=/apps/managed.AppImage\n"
+                             "Actions=New;Missing;\n"
+                             "[Desktop Action New]\n"
+                             "Name=New\n"
+                             "Exec=\"/apps/Other Editor.AppImage\" --new %U\n"
+                             "[Desktop Action Unlisted]\n"
+                             "Name=Unlisted\n"
+                             "Exec=/apps/unlisted.AppImage\n"_s;
+        QCOMPARE(appimage::launcherPaths(desktop),
+            (QStringList{u"editor"_s, u"/apps/managed.AppImage"_s, u"/opt/editor"_s, u"/apps/Other Editor.AppImage"_s, u"--new"_s}));
+    }
+
     void integration() {
         const auto original =
             u"# written by a tool\r\n"

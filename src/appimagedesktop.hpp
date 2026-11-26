@@ -41,6 +41,9 @@ QString replaceProgram(const QString& exec, const QString& program);
 /// resolved, field codes such as %U dropped. The program is the first entry.
 QStringList commandLine(const QString& exec);
 
+/// File references in the main entry and in the desktop actions it registers.
+QStringList launcherPaths(const QString& desktopFile);
+
 /// A new desktop entry made from the one found inside an AppImage. It starts
 /// `appImagePath`, shows `iconPath` (the original icon name when empty) and carries the
 /// mark this app recognises its own entries by, along with `tracking` when it has a source.
