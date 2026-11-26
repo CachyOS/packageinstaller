@@ -6,6 +6,9 @@ import CachyOS.PackageInstaller
 ApplicationWindow {
     id: root
 
+    /// whether main.cpp gave the window an alpha channel, see Look.alphaChannel
+    required property bool alphaChannel
+
     // "home", "browse", "installed", "updates", "aur", "flatpak", "appimage" or "settings"
     property string section: "home"
 
@@ -164,7 +167,22 @@ ApplicationWindow {
     minimumHeight: 520
     visible: true
     title: qsTr("CachyOS Package Installer")
-    color: Look.window
+    // The sidebar and the content area paint their own backgrounds, so that a translucent
+    // theme is not drawn twice under the sidebar.
+    color: "transparent"
+
+    Binding {
+        target: Look
+        property: "alphaChannel"
+        value: root.alphaChannel
+    }
+
+    Rectangle {
+        x: sidebar.width
+        width: root.width - sidebar.width
+        height: root.height
+        color: Look.window
+    }
 
     onActiveFocusItemChanged: if (activeFocusItem !== null) reveal(activeFocusItem)
 

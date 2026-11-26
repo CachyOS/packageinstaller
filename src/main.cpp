@@ -9,6 +9,8 @@
 #include <QLibraryInfo>
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
+#include <QQuickWindow>
+#include <QSettings>
 #include <QTranslator>
 
 #include <backward.hpp>
@@ -52,6 +54,10 @@ int main(int argc, char** argv) {
     // We enforce the custom UI style.
     QQuickStyle::setStyle(u"Basic"_s);
     graphics::selectBackend();
+    // Settings > Appearance > Transparent background: the window needs an alpha channel,
+    // which can only be chosen before it is created. See Look.qml.
+    const bool alphaChannel = QSettings().value(u"appearance/translucent"_s, false).toBool();
+    QQuickWindow::setDefaultAlphaBuffer(alphaChannel);
 
     auto* icons = new IconProvider;  // owned by the engine below
     Backend backend(icons);
@@ -63,6 +69,7 @@ int main(int argc, char** argv) {
     QQmlApplicationEngine engine;
     engine.addImageProvider(u"pkgicon"_s, icons);
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreationFailed, &app, [] { QCoreApplication::exit(1); }, Qt::QueuedConnection);
+    engine.setInitialProperties({{u"alphaChannel"_s, alphaChannel}});
     engine.loadFromModule("CachyOS.PackageInstaller", "Main");
     return QApplication::exec();
 }

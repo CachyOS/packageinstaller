@@ -19,7 +19,7 @@ Popup {
 
     background: Rectangle {
         radius: Look.radiusLarge
-        color: Look.surface
+        color: Look.surfaceSolid
         border.width: 1
         border.color: Look.border
     }
