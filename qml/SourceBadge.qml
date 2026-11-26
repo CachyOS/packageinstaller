@@ -1,6 +1,6 @@
 import QtQuick
 
-// Where a package comes from: "cachyos", "arch", "aur", "flatpak", "appimage" or "local".
+// Where a package comes from: "cachyos", "arch", "chaotic-aur", "aur", "flatpak", "appimage" or "local".
 Pill {
     required property string source
 
@@ -8,6 +8,7 @@ Pill {
         switch (source) {
         case "cachyos": return qsTr("CachyOS");
         case "arch": return qsTr("Arch");
+        case "chaotic-aur": return qsTr("Chaotic-AUR");
         case "aur": return qsTr("AUR");
         case "flatpak": return qsTr("Flatpak");
         case "appimage": return qsTr("AppImage");
@@ -16,7 +17,9 @@ Pill {
         return source;
     }
     ink: source === "cachyos" ? Look.accent : source === "aur" ? Look.warning
+        : source === "chaotic-aur" ? Look.danger
         : source === "arch" || source === "flatpak" ? Look.arch : Look.textMuted
     color: source === "cachyos" ? Look.accentSoft : source === "aur" ? Look.warningSoft
+        : source === "chaotic-aur" ? Look.dangerSoft
         : source === "arch" || source === "flatpak" ? Look.archSoft : Look.surfaceAlt
 }
