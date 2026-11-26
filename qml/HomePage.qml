@@ -10,6 +10,29 @@ ScrollPage {
     signal browse
     signal showUpdates
 
+    // These names come from pkglist.yaml; static qsTr calls let lupdate
+    // extract them. Unknown future categories keep their original name.
+    function localizedSectionTitle(name) {
+        switch (name) {
+        case "Audio": return qsTr("Audio")
+        case "Browsers": return qsTr("Browsers")
+        case "Communication": return qsTr("Communication")
+        case "Development": return qsTr("Development")
+        case "Games": return qsTr("Games")
+        case "Graphics": return qsTr("Graphics")
+        case "Hardware Tools": return qsTr("Hardware Tools")
+        case "Internet": return qsTr("Internet")
+        case "Mail": return qsTr("Mail")
+        case "Multimedia": return qsTr("Multimedia")
+        case "Office": return qsTr("Office")
+        case "Security": return qsTr("Security")
+        case "System": return qsTr("System")
+        case "Video": return qsTr("Video")
+        case "Virtualization": return qsTr("Virtualization")
+        default: return name
+        }
+    }
+
     spacing: 26
 
     Rectangle {
@@ -130,7 +153,7 @@ ScrollPage {
                 PlainText {
                     id: shelfTitle
                     anchors.verticalCenter: shelfHeader.verticalCenter
-                    text: shelf.modelData.title
+                    text: root.localizedSectionTitle(shelf.modelData.title)
                     font.pixelSize: Look.fontSubheading
                     font.weight: Font.Bold
                 }
@@ -144,7 +167,7 @@ ScrollPage {
                     implicitHeight: 28
                     font.pixelSize: Look.fontLabel
                     text: shelf.expanded ? qsTr("Show less") : qsTr("Show all %1").arg(shelf.total)
-                    Accessible.description: shelf.modelData.title
+                    Accessible.description: root.localizedSectionTitle(shelf.modelData.title)
                     onClicked: shelf.expanded = !shelf.expanded
                 }
             }
