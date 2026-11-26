@@ -13,7 +13,7 @@ Button {
         : tone === "hero" ? (hovered ? Look.heroButtonHover : Look.heroButton)
         : tone === "danger" ? Look.dangerSoft
         : (hovered ? Look.border : Look.surfaceAlt)
-    readonly property color ink: tone === "primary" ? Look.onAccent
+    readonly property color ink: tone === "primary" ? Look.accentInk
         : tone === "hero" ? Look.heroInk
         : tone === "danger" ? Look.danger : Look.text
 

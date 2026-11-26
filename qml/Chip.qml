@@ -21,7 +21,7 @@ AbstractButton {
     contentItem: PlainText {
         id: label
         text: root.text
-        color: root.current ? Look.onAccent : Look.text
+        color: root.current ? Look.accentInk : Look.text
         font.pixelSize: Look.fontLabel
         font.weight: root.small ? Font.Normal : Font.DemiBold
         horizontalAlignment: Text.AlignHCenter

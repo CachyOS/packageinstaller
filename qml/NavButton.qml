@@ -49,7 +49,7 @@ AbstractButton {
             anchors.verticalCenter: content.verticalCenter
             width: Math.max(22, implicitWidth - 4)
             text: root.badge
-            ink: Look.onAccent
+            ink: Look.accentInk
             color: Look.accent
             font.weight: Font.Bold
         }
