@@ -5,10 +5,12 @@
   <launchable type="desktop-id">cachyos-pi.desktop</launchable>
   <name>CachyOS Package Installer</name>
   <name xml:lang="es">Instalador de paquetes de CachyOS</name>
+  <name xml:lang="ja">CachyOS パッケージインストーラー</name>
   <name xml:lang="pt_BR">Instalador de Pacotes do CachyOS</name>
   <name xml:lang="zh_CN">CachyOS 软件包安装器</name>
   <summary>Install, remove and update apps and packages</summary>
   <summary xml:lang="es">Instala, quita y actualiza apps y paquetes</summary>
+  <summary xml:lang="ja">アプリやパッケージのインストール、削除、更新</summary>
   <summary xml:lang="pt_BR">Instale, remova e atualize aplicativos e pacotes</summary>
   <summary xml:lang="zh_CN">安装、卸载和更新应用及软件包</summary>
   <metadata_license>CC0-1.0</metadata_license>
@@ -52,6 +54,16 @@
   </supports>
   <content_rating type="oars-1.1"/>
   <releases>
+    <release version="2.0.2" date="2026-11-27" type="development">
+      <description>
+        <p>Bug fixes and new translations.</p>
+        <ul>
+          <li>Offer the app in Open with for AppImage files</li>
+          <li>New Greek and Japanese translations</li>
+          <li>Updated package list entries</li>
+        </ul>
+      </description>
+    </release>
     <release version="2.0.1" date="2026-11-24" type="development">
       <description>
         <p>Bug fixes and new translations.</p>
