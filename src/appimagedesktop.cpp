@@ -15,20 +15,65 @@ bool isGroupHeader(const QString& line) {
     return line.startsWith(u'[') && line.endsWith(u']');
 }
 
-/// Length of the first argument of an Exec value, quotes included.
-qsizetype firstArgumentLength(QStringView exec) {
+/// Walks over an Exec value as commandLine() reads it
+qsizetype scan(QStringView exec, bool stopAtSpace, bool* open = nullptr) {
+    const auto next = [&exec](qsizetype& i) {
+        const auto ch = exec.at(i++);
+        if (ch != u'\\' || i == exec.size()) {
+            return ch;
+        }
+        const auto escaped = exec.at(i++);
+        return escaped == u's' ? QChar(u' ') : escaped == u'n' ? QChar(u'\n')
+            : escaped == u't' ? QChar(u'\t') : escaped == u'r' ? QChar(u'\r') : escaped;
+    };
     bool quoted = false;
-    for (qsizetype i = 0; i < exec.size(); ++i) {
-        const auto ch = exec.at(i);
-        if (ch == u'\\' && quoted) {
-            ++i;
+    for (qsizetype i = 0; i < exec.size();) {
+        const auto start = i;
+        const auto ch    = next(i);
+        if (quoted && ch == u'\\' && i < exec.size()) {
+            next(i);  // escaped by Exec: whatever it is, it does not end the quote
         } else if (ch == u'"') {
             quoted = !quoted;
-        } else if (ch == u' ' && !quoted) {
-            return i;
+        } else if (ch == u' ' && !quoted && stopAtSpace) {
+            return start;
         }
     }
+    if (open != nullptr) {
+        *open = quoted;
+    }
     return exec.size();
+}
+
+/// Length of the first argument of an Exec value, quotes included.
+qsizetype firstArgumentLength(QStringView exec) {
+    return scan(exec, true);
+}
+
+/// An Exec value taken apart: the "env NAME=value" words in front etc
+struct ExecParts {
+    QStringList assignments;  ///< as written
+    QString program;          ///< as written
+    QString arguments;        ///< as written
+};
+
+ExecParts splitExec(const QString& exec) {
+    static const QRegularExpression assignmentWord(u"^[A-Za-z_][A-Za-z0-9_]*="_s);
+    ExecParts parts;
+    QStringView rest = QStringView(exec).trimmed();
+    const auto take  = [&rest] {
+        const auto word = rest.left(firstArgumentLength(rest));
+        rest            = rest.mid(word.size()).trimmed();
+        return word.toString();
+    };
+    if (rest.left(firstArgumentLength(rest)) == "env"_L1) {
+        take();
+        while (assignmentWord.matchView(rest.left(firstArgumentLength(rest))).hasMatch()) {
+            parts.assignments << take();
+        }
+    }
+    parts.program   = take();
+    parts.arguments = rest.toString();
+    return parts;
 }
 
 /// One group of a desktop file: its keys in the order they appear, first value wins.
@@ -273,25 +318,50 @@ QString integrate(const QString& desktopFile, const QString& appImagePath, const
 namespace {
 
 constexpr qsizetype MAX_ARGUMENTS_CHARS = 4096;
+constexpr qsizetype MAX_NAME_CHARS      = 128;
+constexpr qsizetype MAX_VALUE_CHARS     = 4096;
 constexpr qsizetype MAX_WEBSITE_CHARS   = 2048;
 
-/// True when every quote of `arguments` is closed, as firstArgumentLength() reads them.
+/// True when every quote of `arguments` is closed, as commandLine() reads them.
 bool quotesClosed(const QString& arguments) {
-    bool quoted = false;
-    for (qsizetype i = 0; i < arguments.size(); ++i) {
-        if (arguments.at(i) == u'\\' && quoted) {
-            ++i;
-        } else if (arguments.at(i) == u'"') {
-            quoted = !quoted;
-        }
+    bool open = false;
+    scan(arguments, false, &open);
+    return !open;
+}
+
+/// The words in front of the program: "env", then one word per variable, and a space.
+QString environmentWords(const QStringList& environment) {
+    if (environment.isEmpty()) {
+        return {};
     }
-    return !quoted;
+    QStringList words{u"env"_s};
+    for (const auto& entry : environment) {
+        const auto equals = entry.indexOf(u'=');
+        words << entry.left(equals) + u'=' + quoteExec(entry.mid(equals + 1));
+    }
+    return words.join(u' ') + u' ';
 }
 
 }  // namespace
 
 Problem problem(const Options& options) {
+    static const QRegularExpression name(u"^[A-Za-z_][A-Za-z0-9_]*$"_s);
     static const QRegularExpression address(u"^https?://[^\\s]+$"_s);
+    QSet<QString> seen;
+    for (const auto& entry : options.environment) {
+        const auto equals = entry.indexOf(u'=');
+        const auto key    = entry.left(equals);
+        if (equals < 0 || key.size() > MAX_NAME_CHARS || !name.match(key).hasMatch()) {
+            return Problem::Name;
+        }
+        if (seen.contains(key)) {
+            return Problem::Duplicate;
+        }
+        seen.insert(key);
+        if (entry.size() - equals - 1 > MAX_VALUE_CHARS || !printable(entry.mid(equals + 1))) {
+            return Problem::Value;
+        }
+    }
     if (options.arguments.size() > MAX_ARGUMENTS_CHARS || !printable(options.arguments) || !quotesClosed(options.arguments)) {
         return Problem::Arguments;
     }
@@ -302,9 +372,24 @@ Problem problem(const Options& options) {
     return Problem::None;
 }
 
+std::optional<std::pair<QString, QString>> assignment(const QString& word) {
+    static const QRegularExpression name(u"^[A-Za-z_][A-Za-z0-9_]*$"_s);
+    const auto equals = word.indexOf(u'=');
+    if (equals <= 0 || !name.match(word.left(equals)).hasMatch()) {
+        return std::nullopt;
+    }
+    return std::pair{word.left(equals), word.mid(equals + 1)};
+}
+
 Options readOptions(const QHash<QString, QString>& mainGroup) {
-    const auto exec = mainGroup.value(u"Exec"_s).trimmed();
-    return {.arguments = exec.mid(firstArgumentLength(exec)).trimmed(), .website = mainGroup.value(WEBSITE_KEY)};
+    const auto parts = splitExec(mainGroup.value(u"Exec"_s));
+    Options result{.environment = {}, .arguments = parts.arguments.trimmed(), .website = mainGroup.value(WEBSITE_KEY)};
+    for (const auto& word : parts.assignments) {
+        if (const auto resolved = commandLine(word); !resolved.isEmpty()) {
+            result.environment << resolved.first();
+        }
+    }
+    return result;
 }
 
 QString withOptions(const QString& desktopFile, const Options& options) {
@@ -343,10 +428,9 @@ QString withOptions(const QString& desktopFile, const Options& options) {
     if (execLine < 0) {
         return {};
     }
-    const auto exec    = lines.at(execLine).trimmed().mid(5).trimmed();  // behind "Exec="
-    const auto program = exec.left(firstArgumentLength(exec));
-    const auto args    = options.arguments.trimmed();
-    lines[execLine]    = u"Exec="_s + program + (args.isEmpty() ? QString() : u' ' + args);
+    const auto parts = splitExec(lines.at(execLine).trimmed().mid(5));  // behind "Exec="
+    const auto args  = options.arguments.trimmed();
+    lines[execLine]  = u"Exec="_s + environmentWords(options.environment) + parts.program + (args.isEmpty() ? QString() : u' ' + args);
 
     if (siteLine >= 0 && options.website.isEmpty()) {
         lines.removeAt(siteLine);

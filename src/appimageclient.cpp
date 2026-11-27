@@ -13,6 +13,7 @@
 #include <QFileInfo>
 #include <QLocale>
 #include <QProcess>
+#include <QProcessEnvironment>
 #include <QLockFile>
 #include <QNetworkDiskCache>
 #include <QNetworkReply>
@@ -485,9 +486,15 @@ AppImageResult install(const QString& source, const Cancel& cancel, const Fetche
         }
     }
 
-    const auto entry = appimage::integrate(original, destination, iconPath, fetched.tracking);
+    auto entry = appimage::integrate(original, destination, iconPath, fetched.tracking);
     if (entry.isEmpty()) {
         return {AppImageClient::tr("The menu entry inside the AppImage is not usable."), {}};
+    }
+    // an app that is replaced keeps what the user set for it
+    if (const auto earlier = entries.value(fetched.replaces.isEmpty() ? desktopName : fetched.replaces); !earlier.isEmpty()) {
+        if (const auto kept = appimage::withOptions(entry, appimage::readOptions(earlier)); !kept.isEmpty()) {
+            entry = kept;
+        }
     }
     if (cancel->load()) {
         return cancelled;
@@ -1242,18 +1249,41 @@ void AppImageClient::remove(const QString& id, const QString& path) {
 void AppImageClient::launch(const QString& id) {
     const auto keys = managedEntries().value(id + u".desktop"_s);
     const auto path = keys.value(appimage::PATH_KEY);
-    // started the way the menu entry does it: same arguments, nothing passed through a shell
-    const auto command = appimage::commandLine(keys.value(u"Exec"_s));
-    if (!ownedFile(path) || command.isEmpty() || command.first() != path || !QProcess::startDetached(path, command.mid(1), QDir::homePath())) {
+    // started the way the menu entry does it: same variables and arguments, nothing passed through a shell
+    auto command     = appimage::commandLine(keys.value(u"Exec"_s));
+    auto environment = QProcessEnvironment::systemEnvironment();
+    if (!command.isEmpty() && command.first() == "env"_L1) {
+        command.removeFirst();
+        while (!command.isEmpty()) {
+            const auto variable = appimage::assignment(command.first());
+            if (!variable) {
+                break;
+            }
+            environment.insert(variable->first, variable->second);
+            command.removeFirst();
+        }
+    }
+    QProcess process;
+    process.setProgram(path);
+    process.setArguments(command.mid(1));
+    process.setWorkingDirectory(QDir::homePath());
+    process.setProcessEnvironment(environment);
+    if (!ownedFile(path) || command.isEmpty() || command.first() != path || !process.startDetached()) {
         setMessage(tr("Could not start the application."), {});
     }
 }
 
-QString AppImageClient::saveOptions(const QString& id, const QString& arguments, const QString& website) {
-    const appimage::Options options{.arguments = arguments.trimmed(), .website = website.trimmed()};
+QString AppImageClient::saveOptions(const QString& id, const QString& arguments, const QString& website, const QStringList& environment) {
+    const appimage::Options options{.environment = environment, .arguments = arguments.trimmed(), .website = website.trimmed()};
     switch (appimage::problem(options)) {
     case appimage::Problem::None:
         break;
+    case appimage::Problem::Name:
+        return tr("A variable name may only have letters, digits and underscores, and cannot start with a digit.");
+    case appimage::Problem::Duplicate:
+        return tr("A variable is set twice.");
+    case appimage::Problem::Value:
+        return tr("A variable value is too long or has a line break.");
     case appimage::Problem::Arguments:
         return tr("The arguments are too long, have a line break or a quote that is not closed.");
     case appimage::Problem::Website:
@@ -1313,8 +1343,9 @@ void AppImageClient::refresh() {
             .terminal = keys.value(u"Terminal"_s) == "true"_L1,
             .source   = source ? source->slug() : QString(),
             .update   = update,
-            .arguments = options.arguments,
-            .website   = options.website,
+            .arguments   = options.arguments,
+            .website     = options.website,
+            .environment = options.environment,
         };
         const auto icon = keys.value(u"Icon"_s);
         if (icon.startsWith(u'/')) {

@@ -99,6 +99,25 @@ Item {
         }
     }
 
+    component OptionField: TextField {
+        implicitHeight: 36
+        leftPadding: 12
+        rightPadding: 12
+        font.pixelSize: Look.fontBody
+        color: Look.text
+        placeholderTextColor: Look.textMuted
+        selectionColor: Look.accent
+        selectedTextColor: Look.onAccent
+        selectByMouse: true
+
+        background: Rectangle {
+            radius: Look.radius - 4
+            color: Look.surface
+            border.width: parent.activeFocus ? 2 : 1
+            border.color: parent.activeFocus ? Look.accent : Look.border
+        }
+    }
+
     component OptionRow: Item {
         id: optionRow
 
@@ -141,28 +160,12 @@ Item {
                 elide: Text.ElideMiddle
             }
 
-            TextField {
+            OptionField {
                 id: field
                 visible: optionRow.editable
                 width: texts.width
-                implicitHeight: 36
-                leftPadding: 12
-                rightPadding: 12
                 placeholderText: optionRow.placeholder
-                font.pixelSize: Look.fontBody
-                color: Look.text
-                placeholderTextColor: Look.textMuted
-                selectionColor: Look.accent
-                selectedTextColor: Look.onAccent
-                selectByMouse: true
                 Accessible.name: optionRow.label
-
-                background: Rectangle {
-                    radius: Look.radius - 4
-                    color: Look.surface
-                    border.width: field.activeFocus ? 2 : 1
-                    border.color: field.activeFocus ? Look.accent : Look.border
-                }
             }
 
             WebLink {
@@ -380,7 +383,8 @@ Item {
 
             width: list.rowWidth
             height: 72
-            hovered: open.containsMouse
+            // the app whose options are open stays highlighted
+            hovered: open.containsMouse || (optionsDialog.visible && root.inspected.id === modelData.id)
             focused: row.activeFocus
             activeFocusOnTab: true
             Accessible.role: Accessible.Button
@@ -394,10 +398,7 @@ Item {
                 anchors.fill: parent
                 hoverEnabled: true
                 cursorShape: Qt.PointingHandCursor
-                onClicked: {
-                    row.forceActiveFocus(Qt.MouseFocusReason);
-                    root.showOptions(row.modelData);
-                }
+                onClicked: root.showOptions(row.modelData)
             }
 
             AppIcon {
@@ -834,17 +835,43 @@ Item {
 
         readonly property bool hasSource: root.inspected.source.length > 0
         readonly property bool canChange: !root.inspected.missing && root.inspected.owned
-        readonly property bool dirty: argumentsRow.text !== root.inspected.arguments || websiteRow.text !== root.inspected.website
+        // counts every edit of the variables, which live in a model
+        property int edits: 0
+        readonly property bool dirty: {
+            void edits;
+            return argumentsRow.text !== root.inspected.arguments || websiteRow.text !== root.inspected.website
+                || JSON.stringify(assignments()) !== JSON.stringify(Array.from(root.inspected.environment));
+        }
         property string problem
+
+        function assignments(): var {
+            const list = [];
+            for (let i = 0; i < variables.count; ++i) {
+                const variable = variables.get(i);
+                if (variable.varName.trim().length > 0)
+                    list.push(variable.varName.trim() + "=" + variable.varValue);
+            }
+            return list;
+        }
 
         function load(): void {
             argumentsRow.text = root.inspected.arguments;
             websiteRow.text = root.inspected.website;
+            variables.clear();
+            for (const entry of root.inspected.environment) {
+                const equals = entry.indexOf("=");
+                variables.append({varName: entry.substring(0, equals), varValue: entry.substring(equals + 1)});
+            }
             problem = "";
+            edits++;
         }
 
         function save(): void {
-            problem = root.client.saveOptions(root.inspected.id, argumentsRow.text, websiteRow.text);
+            problem = root.client.saveOptions(root.inspected.id, argumentsRow.text, websiteRow.text, assignments());
+        }
+
+        ListModel {
+            id: variables
         }
 
         onAboutToShow: {
@@ -911,6 +938,7 @@ Item {
                     label: qsTr("Command line arguments")
                     editable: true
                     placeholder: "%U"
+                    onTextChanged: optionsDialog.edits++
                 }
 
                 OptionRow {
@@ -923,6 +951,7 @@ Item {
                     buttonGlyph: /^https?:\/\/\S+$/.test(text.trim()) ? "M10 5H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5M14 4h6v6M20 4l-9 9" : ""
                     buttonName: qsTr("Open the website")
                     onButtonClicked: Qt.openUrlExternally(text.trim())
+                    onTextChanged: optionsDialog.edits++
                 }
             }
 
@@ -955,6 +984,119 @@ Item {
                     visible: root.inspected.update.length > 0
                     label: qsTr("Newer release")
                     value: root.inspected.update
+                }
+            }
+
+            Item {
+                width: optionsBody.width
+                height: Math.max(variablesTitle.height, addVariable.height)
+                visible: optionsDialog.canChange
+
+                Column {
+                    id: variablesTitle
+                    width: parent.width - addVariable.width - 12
+                    spacing: 2
+
+                    Heading {
+                        width: parent.width
+                        text: qsTr("Environment variables")
+                        font.pixelSize: Look.fontLead
+                    }
+
+                    Muted {
+                        width: parent.width
+                        text: qsTr("Set for this application when it starts from the menu or from here.")
+                        wrapMode: Text.WordWrap
+                    }
+                }
+
+                PillButton {
+                    id: addVariable
+                    anchors.right: parent.right
+                    anchors.verticalCenter: parent.verticalCenter
+                    size: "small"
+                    tone: "soft"
+                    leftPadding: 10
+                    rightPadding: 10
+                    Accessible.name: qsTr("Add a variable")
+                    onClicked: {
+                        variables.append({varName: "", varValue: ""});
+                        optionsDialog.edits++;
+                    }
+
+                    contentItem: Glyph {
+                        path: "M12 5v14M5 12h14"
+                        size: 16
+                    }
+                }
+            }
+
+            Column {
+                width: optionsBody.width
+                spacing: 8
+                visible: optionsDialog.canChange
+
+                Repeater {
+                    model: variables
+
+                    Row {
+                        id: variable
+
+                        required property int index
+                        required property string varName
+                        required property string varValue
+
+                        width: optionsBody.width
+                        spacing: 8
+
+                        OptionField {
+                            width: (variable.width - equals.width - remove.width - 3 * variable.spacing) * 0.4
+                            text: variable.varName
+                            placeholderText: qsTr("NAME")
+                            Accessible.name: qsTr("Variable name")
+                            onTextEdited: {
+                                variables.setProperty(variable.index, "varName", text);
+                                optionsDialog.edits++;
+                            }
+                        }
+
+                        Muted {
+                            id: equals
+                            anchors.verticalCenter: parent.verticalCenter
+                            text: "="
+                        }
+
+                        OptionField {
+                            width: (variable.width - equals.width - remove.width - 3 * variable.spacing) * 0.6
+                            text: variable.varValue
+                            placeholderText: qsTr("value")
+                            Accessible.name: qsTr("Variable value")
+                            onTextEdited: {
+                                variables.setProperty(variable.index, "varValue", text);
+                                optionsDialog.edits++;
+                            }
+                        }
+
+                        PillButton {
+                            id: remove
+                            anchors.verticalCenter: parent.verticalCenter
+                            size: "small"
+                            tone: "danger"
+                            leftPadding: 10
+                            rightPadding: 10
+                            Accessible.name: qsTr("Remove the variable")
+                            onClicked: {
+                                variables.remove(variable.index);
+                                optionsDialog.edits++;
+                            }
+
+                            contentItem: Glyph {
+                                path: "M4 7h16M10 11v6M14 11v6M6 7l1 12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-12M9 7V4h6v3"
+                                color: Look.danger
+                                size: 16
+                            }
+                        }
+                    }
                 }
             }
 

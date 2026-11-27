@@ -5,6 +5,9 @@
 #include <QString>
 #include <QStringList>
 
+#include <optional>
+#include <utility>
+
 /// Text handling for AppImage integration: no file system access apart from isAppImage().
 namespace appimage {
 
@@ -28,25 +31,29 @@ struct Tracking {
     QString release;  ///< the release it is from; may lack the "v" of a tag
 };
 
-/// What the user can set for one app. The arguments end up in its Exec= line, so the menu
+/// What the user can set for one app. The first two end up in its Exec= line, so the menu
 /// and "Open" start it the same way.
 struct Options {
+    QStringList environment;  ///< "NAME=value", in the order they are set
     QString arguments;  ///< as written after the program in Exec=
     QString website;    ///< an http(s) address, or empty
 
     friend bool operator==(const Options&, const Options&) = default;
 };
 
-enum class Problem { None, Arguments, Website };
+enum class Problem { None, Name, Duplicate, Value, Arguments, Website };
 
-/// What is wrong with `options`, if anything
+/// What is wrong with `options`, if anything.
 Problem problem(const Options& options);
 
-/// The arguments of an Exec= value and the website of a main group.
+/// The environment and arguments of an Exec= value and the website of a main group.
 Options readOptions(const QHash<QString, QString>& mainGroup);
 
-/// `desktopFile` with the arguments of its Exec= line and its website changed to `options`.
-/// The program stays and so does every other line. Empty when `options` are not valid or
+/// The name and value of a "NAME=value" word; nothing for any other word.
+std::optional<std::pair<QString, QString>> assignment(const QString& word);
+
+/// `desktopFile` with the environment and arguments of its Exec= line and its website
+/// changed to `options`. The program stays and so does every other line. Empty when `options` are not valid or
 /// the file has no Exec= line in its main group.
 QString withOptions(const QString& desktopFile, const Options& options);
 
