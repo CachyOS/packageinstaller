@@ -88,17 +88,6 @@ helper it runs `build/cachyos-pi-helper` through pkexec's generic prompt.
 
 Run the tests with `ctest --test-dir build`.
 
-## Packaging
-
-`packaging/` holds two PKGBUILDs: `cachyos-packageinstaller` builds a tagged
-release, `cachyos-packageinstaller-git` the default branch. The release one
-needs its checksum filled in (`updpkgsums`) once the version is tagged.
-
-```sh
-cd packaging/cachyos-packageinstaller-git
-makepkg -si
-```
-
 ## PKGBUILD check
 
 `src/pkgscan.*` looks at the PKGBUILD, the install scriptlet and other scripts
@@ -145,6 +134,5 @@ the package database, so they are only done in the app.
 | `qml/` | the user interface |
 | `pkglist.yaml` | the curated "CachyOS picks" on the start page |
 | `org.cachyos.cachyos-pi.metainfo.xml` | AppStream metadata for software centres |
-| `packaging/` | PKGBUILDs |
 | `THIRD-PARTY.md` | credits and licence of the community colour palettes |
 | `screenshots/` | the pictures in this file |
