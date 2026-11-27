@@ -223,6 +223,9 @@ class AppImageClient : public QObject {
     /// shown; nothing is removed if the entry names another one by now.
     Q_INVOKABLE void remove(const QString& id, const QString& path);
     Q_INVOKABLE void launch(const QString& id);
+    /// Reads the name, description, version and icon from the file again, which runs the
+    /// file's own extractor. What the user set for the app is kept.
+    Q_INVOKABLE void reloadMetadata(const QString& id);
     /// Writes the arguments, the website and the environment ("NAME=value" each) into the menu
     /// entry of the app. Returns why that is not possible, or nothing when it worked.
     Q_INVOKABLE QString saveOptions(const QString& id, const QString& arguments, const QString& website, const QStringList& environment);

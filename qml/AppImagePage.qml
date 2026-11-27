@@ -194,6 +194,55 @@ Item {
         }
     }
 
+    component OptionAction: AbstractButton {
+        id: action
+
+        property string glyph
+        property string description
+
+        implicitHeight: 72
+        opacity: enabled ? 1 : 0.45
+
+        background: Card {
+            hovered: action.hovered
+            focused: action.visualFocus
+        }
+
+        contentItem: Item {
+            Glyph {
+                id: actionIcon
+                x: 6
+                anchors.verticalCenter: parent.verticalCenter
+                path: action.glyph
+                size: 22
+            }
+
+            Column {
+                anchors.left: actionIcon.right
+                anchors.leftMargin: 14
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: 2
+
+                PlainText {
+                    width: parent.width
+                    text: action.text
+                    font.weight: Font.DemiBold
+                }
+
+                Muted {
+                    width: parent.width
+                    text: action.description
+                    wrapMode: Text.WordWrap
+                }
+            }
+        }
+
+        HoverHandler {
+            cursorShape: Qt.PointingHandCursor
+        }
+    }
+
     component OptionGroup: Rectangle {
         default property alias rows: column.data
 
@@ -913,6 +962,16 @@ Item {
                 }
             }
 
+            OptionAction {
+                width: optionsBody.width
+                visible: optionsDialog.canChange
+                enabled: !optionsDialog.dirty && !root.client.busy
+                glyph: "M20 12a8 8 0 1 1-2.34-5.66M20 4v4h-4"
+                text: qsTr("Reload metadata")
+                description: qsTr("Update information like icon, version and description. Useful e.g if the app updated itself. The appimage needs to be run to read them.")
+                onClicked: root.client.reloadMetadata(root.inspected.id)
+            }
+
             Notice {
                 width: optionsBody.width
                 text: root.inspected.missing ? qsTr("The file is gone. Remove this entry or add the AppImage again.") : ""
@@ -1103,7 +1162,7 @@ Item {
             Notice {
                 width: optionsBody.width
                 tone: Notice.Danger
-                text: optionsDialog.problem
+                text: optionsDialog.problem.length > 0 ? optionsDialog.problem : root.client.error
             }
 
             Row {

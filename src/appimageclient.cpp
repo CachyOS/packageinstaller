@@ -360,6 +360,63 @@ QString copyTo(const QString& source, const QString& target, const Cancel& cance
     return {};
 }
 
+/// The menu entry of an AppImage, unpacked below `scratch`. Its extractor is asked for the
+/// menu entry and the icons only; a runtime that does not understand the patterns gets one
+/// run that unpacks everything, up to the size limit. The path of the result is empty when
+/// the file has no menu entry inside.
+std::expected<DesktopFile, AppImageResult> unpack(const Cancel& cancel, const QString& appImage, const QString& scratch) {
+    const auto cancelled = AppImageResult{AppImageClient::tr("Adding the AppImage was stopped."), {}};
+    const auto tooLarge  = AppImageResult{AppImageClient::tr("The AppImage unpacks to more than 1 GiB before its name and icon can be read, so it was not added."), {}};
+    const auto root      = scratch + u"/squashfs-root"_s;
+    for (const auto* pattern : {"*.desktop", "*.png", "*.svg", ".DirIcon", "usr/share/applications/*", "usr/share/icons/*", "usr/share/pixmaps/*"}) {
+        const auto result = extract(cancel, appImage, scratch, QLatin1StringView(pattern), 30000);
+        if (result == Extraction::Cancelled) {
+            return std::unexpected(cancelled);
+        }
+        if (result == Extraction::TooLarge) {
+            return std::unexpected(tooLarge);
+        }
+    }
+    auto desktopFile = findDesktopFile(root);
+    if (desktopFile.path.isEmpty()) {
+        QDir(root).removeRecursively();
+        const auto result = extract(cancel, appImage, scratch, {}, 300000);
+        if (result == Extraction::Cancelled) {
+            return std::unexpected(cancelled);
+        }
+        if (result == Extraction::TooLarge) {
+            return std::unexpected(tooLarge);
+        }
+        if (result != Extraction::Done) {
+            return std::unexpected(AppImageResult{AppImageClient::tr("The AppImage could not be read. It may be damaged, or built for another kind of computer."), {}});
+        }
+        desktopFile = findDesktopFile(root);
+    }
+    return desktopFile;
+}
+
+/// Copies the icon of an unpacked AppImage next to its place as "<id>.svg" or "<id>.png"
+/// plus ".new"; `staged` removes that copy unless it is handed over. Returns the place the
+/// icon belongs at, or nothing when there is no usable icon.
+QString stageIcon(const QString& root, const QString& iconName, const QString& id, Discard& staged) {
+    const auto icon = findIcon(root, iconName);
+    if (icon.isEmpty()) {
+        return {};
+    }
+    QFile file(icon);
+    const bool svg = file.open(QIODevice::ReadOnly) && !file.read(8).startsWith("\x89PNG");
+    file.close();
+    const auto target = iconDirectory() + u'/' + id + (svg ? u".svg"_s : u".png"_s);
+    const auto copy   = target + u".new"_s;
+    QFile::remove(copy);
+    if (!QFile::copy(icon, copy)) {
+        return {};
+    }
+    QFile::setPermissions(copy, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup | QFile::ReadOther);
+    staged.path = copy;
+    return target;
+}
+
 /// Adds `source`, a file of the user's, or the download `fetched` describes.
 AppImageResult install(const QString& source, const Cancel& cancel, const Fetched& fetched) {
     const auto cancelled = AppImageResult{AppImageClient::tr("Adding the AppImage was stopped."), {}};
@@ -395,39 +452,17 @@ AppImageResult install(const QString& source, const Cancel& cancel, const Fetche
     QFile::setPermissions(stagingPath, QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner | QFile::ReadGroup | QFile::ExeGroup
             | QFile::ReadOther | QFile::ExeOther);
 
-    // The menu entry and the icon are inside the file. Ask its extractor for those parts
-    // only; a runtime that does not understand the patterns gets one run that unpacks
-    // everything, up to the size limit. The scratch folder is on disk, not in /tmp.
+    // The menu entry and the icon are inside the file. The scratch folder is on disk, not in /tmp.
     QTemporaryDir scratch(cacheDirectory + u"/appimage-XXXXXX"_s);
     if (!scratch.isValid()) {
         return {AppImageClient::tr("Could not create a temporary folder."), {}};
     }
-    const auto tooLarge = AppImageResult{AppImageClient::tr("The AppImage unpacks to more than 1 GiB before its name and icon can be read, so it was not added."), {}};
     const auto root     = scratch.path() + u"/squashfs-root"_s;
-    for (const auto* pattern : {"*.desktop", "*.png", "*.svg", ".DirIcon", "usr/share/applications/*", "usr/share/icons/*", "usr/share/pixmaps/*"}) {
-        const auto result = extract(cancel, stagingPath, scratch.path(), QLatin1StringView(pattern), 30000);
-        if (result == Extraction::Cancelled) {
-            return cancelled;
-        }
-        if (result == Extraction::TooLarge) {
-            return tooLarge;
-        }
+    const auto unpacked = unpack(cancel, stagingPath, scratch.path());
+    if (!unpacked) {
+        return unpacked.error();
     }
-    auto desktopFile = findDesktopFile(root);
-    if (desktopFile.path.isEmpty()) {
-        QDir(root).removeRecursively();
-        const auto result = extract(cancel, stagingPath, scratch.path(), {}, 300000);
-        if (result == Extraction::Cancelled) {
-            return cancelled;
-        }
-        if (result == Extraction::TooLarge) {
-            return tooLarge;
-        }
-        if (result != Extraction::Done) {
-            return {AppImageClient::tr("The AppImage could not be read. It may be damaged, or built for another kind of computer."), {}};
-        }
-        desktopFile = findDesktopFile(root);
-    }
+    const auto desktopFile = *unpacked;
     const auto original = readText(desktopFile.path, appimage::MAX_ENTRY_BYTES);
     const auto keys     = appimage::mainGroup(original);
     if (desktopFile.path.isEmpty() || keys.value(u"Name"_s).isEmpty()) {
@@ -470,21 +505,8 @@ AppImageResult install(const QString& source, const Cancel& cancel, const Fetche
     }
 
     // The new icon waits next to its place until the entry that names it is written.
-    QString iconPath;
     Discard stagedIcon;
-    if (const auto icon = findIcon(root, keys.value(u"Icon"_s)); !icon.isEmpty()) {
-        QFile file(icon);
-        const bool svg = file.open(QIODevice::ReadOnly) && !file.read(8).startsWith("\x89PNG");
-        file.close();
-        const auto target = iconDirectory() + u'/' + id + (svg ? u".svg"_s : u".png"_s);
-        const auto staged = target + u".new"_s;
-        QFile::remove(staged);
-        if (QFile::copy(icon, staged)) {
-            QFile::setPermissions(staged, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup | QFile::ReadOther);
-            iconPath        = target;
-            stagedIcon.path = staged;
-        }
-    }
+    const auto iconPath = stageIcon(root, keys.value(u"Icon"_s), id, stagedIcon);
 
     auto entry = appimage::integrate(original, destination, iconPath, fetched.tracking);
     if (entry.isEmpty()) {
@@ -548,6 +570,68 @@ AppImageResult install(const QString& source, const Cancel& cancel, const Fetche
     refreshMenu();
     const auto name = keys.value(u"Name"_s);
     return {{}, name, AppImageClient::tr("%1 was added to your menu.").arg(name)};
+}
+
+/// Reads the name, description, version and icon of an app of ours from its file again.
+/// What the user set for it and where it is updated from stay as they are.
+AppImageResult reload(const QString& id, const Cancel& cancel) {
+    const auto desktopName    = id + u".desktop"_s;
+    const auto cacheDirectory = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+    if (!QDir().mkpath(iconDirectory()) || !QDir().mkpath(cacheDirectory)) {
+        return {AppImageClient::tr("Could not create the folders for AppImages in your home directory."), {}};
+    }
+    QLockFile lock(lockPath());
+    if (!lock.tryLock(0)) {
+        return {AppImageClient::tr("Another window of this app is adding or removing an AppImage. Try again when it has finished."), {}};
+    }
+    const auto earlier = managedEntries().value(desktopName);
+    const auto path    = earlier.value(appimage::PATH_KEY);
+    if (earlier.isEmpty() || !ownedFile(path) || !QFileInfo::exists(path) || !appimage::isAppImage(path)) {
+        return {AppImageClient::tr("The file of this app is gone or is not an AppImage any more."), {}};
+    }
+
+    QTemporaryDir scratch(cacheDirectory + u"/appimage-XXXXXX"_s);
+    if (!scratch.isValid()) {
+        return {AppImageClient::tr("Could not create a temporary folder."), {}};
+    }
+    const auto unpacked = unpack(cancel, path, scratch.path());
+    if (!unpacked) {
+        return unpacked.error();
+    }
+    const auto original = readText(unpacked->path, appimage::MAX_ENTRY_BYTES);
+    const auto fresh    = appimage::mainGroup(original);
+    if (unpacked->path.isEmpty() || fresh.value(u"Name"_s).isEmpty()) {
+        return {AppImageClient::tr("The AppImage does not describe an application (no menu entry inside)."), {}};
+    }
+
+    Discard stagedIcon;
+    auto iconPath = stageIcon(scratch.path() + u"/squashfs-root"_s, fresh.value(u"Icon"_s), id, stagedIcon);
+    if (iconPath.isEmpty()) {
+        iconPath = earlier.value(u"Icon"_s);  // nothing usable inside: the icon it has stays
+    }
+    auto entry = appimage::integrate(original, path, iconPath, appimage::tracking(earlier));
+    if (!entry.isEmpty()) {
+        entry = appimage::withOptions(entry, appimage::readOptions(earlier));
+    }
+    if (entry.isEmpty()) {
+        return {AppImageClient::tr("The menu entry inside the AppImage is not usable."), {}};
+    }
+    if (cancel->load()) {
+        return {AppImageClient::tr("Adding the AppImage was stopped."), {}};
+    }
+    QSaveFile menuEntry(menuDirectory() + u'/' + desktopName);
+    if (!menuEntry.open(QIODevice::WriteOnly) || menuEntry.write(entry.toUtf8()) < 0 || !menuEntry.commit()) {
+        return {AppImageClient::tr("Could not write the menu entry. Nothing was changed."), {}};
+    }
+    if (!stagedIcon.path.isEmpty()) {
+        removeIcons(id);
+        if (QFile::rename(stagedIcon.path, iconPath)) {
+            stagedIcon.path.clear();
+        }
+    }
+    refreshMenu();
+    const auto name = fresh.value(u"Name"_s);
+    return {{}, name, AppImageClient::tr("The information of %1 was read again.").arg(name)};
 }
 
 /// An AppImage another program manages, as this app would take it over.
@@ -1271,6 +1355,16 @@ void AppImageClient::launch(const QString& id) {
     if (!ownedFile(path) || command.isEmpty() || command.first() != path || !process.startDetached()) {
         setMessage(tr("Could not start the application."), {});
     }
+}
+
+void AppImageClient::reloadMetadata(const QString& id) {
+    if (m_busy) {
+        return;
+    }
+    clearMessage();
+    const auto app = std::ranges::find(m_apps, id, &AppImageItem::id);
+    setBusy(true, app != m_apps.cend() ? app->name : id);
+    m_watcher.setFuture(QtConcurrent::run(reload, id, m_cancel));
 }
 
 QString AppImageClient::saveOptions(const QString& id, const QString& arguments, const QString& website, const QStringList& environment) {
