@@ -105,6 +105,9 @@ Item {
         property string label
         property string value
         property bool link: false
+        property bool editable: false
+        property string placeholder
+        property alias text: field.text
         property string buttonGlyph
         property string buttonName
         signal buttonClicked
@@ -132,10 +135,34 @@ Item {
             }
 
             PlainText {
-                visible: !optionRow.link
+                visible: !optionRow.editable && !optionRow.link
                 width: texts.width
                 text: optionRow.value
                 elide: Text.ElideMiddle
+            }
+
+            TextField {
+                id: field
+                visible: optionRow.editable
+                width: texts.width
+                implicitHeight: 36
+                leftPadding: 12
+                rightPadding: 12
+                placeholderText: optionRow.placeholder
+                font.pixelSize: Look.fontBody
+                color: Look.text
+                placeholderTextColor: Look.textMuted
+                selectionColor: Look.accent
+                selectedTextColor: Look.onAccent
+                selectByMouse: true
+                Accessible.name: optionRow.label
+
+                background: Rectangle {
+                    radius: Look.radius - 4
+                    color: Look.surface
+                    border.width: field.activeFocus ? 2 : 1
+                    border.color: field.activeFocus ? Look.accent : Look.border
+                }
             }
 
             WebLink {
@@ -801,10 +828,29 @@ Item {
     Sheet {
         id: optionsDialog
         firstButton: optionsClose
-        closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+        // a click beside the sheet must not throw away what was typed
+        closePolicy: dirty ? Popup.CloseOnEscape : Popup.CloseOnEscape | Popup.CloseOnPressOutside
         maxWidth: 620
 
         readonly property bool hasSource: root.inspected.source.length > 0
+        readonly property bool canChange: !root.inspected.missing && root.inspected.owned
+        readonly property bool dirty: argumentsRow.text !== root.inspected.arguments || websiteRow.text !== root.inspected.website
+        property string problem
+
+        function load(): void {
+            argumentsRow.text = root.inspected.arguments;
+            websiteRow.text = root.inspected.website;
+            problem = "";
+        }
+
+        function save(): void {
+            problem = root.client.saveOptions(root.inspected.id, argumentsRow.text, websiteRow.text);
+        }
+
+        onAboutToShow: {
+            root.client.clearMessage();
+            load();
+        }
 
         contentItem: Column {
             id: optionsBody
@@ -857,6 +903,27 @@ Item {
                     buttonName: qsTr("Show in file manager")
                     onButtonClicked: Qt.openUrlExternally(root.folderOf(root.inspected.path))
                 }
+
+                OptionRow {
+                    id: argumentsRow
+                    width: parent.width
+                    enabled: optionsDialog.canChange
+                    label: qsTr("Command line arguments")
+                    editable: true
+                    placeholder: "%U"
+                }
+
+                OptionRow {
+                    id: websiteRow
+                    width: parent.width
+                    enabled: optionsDialog.canChange
+                    label: qsTr("Website")
+                    editable: true
+                    placeholder: "https://"
+                    buttonGlyph: /^https?:\/\/\S+$/.test(text.trim()) ? "M10 5H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5M14 4h6v6M20 4l-9 9" : ""
+                    buttonName: qsTr("Open the website")
+                    onButtonClicked: Qt.openUrlExternally(text.trim())
+                }
             }
 
             Muted {
@@ -891,6 +958,12 @@ Item {
                 }
             }
 
+            Notice {
+                width: optionsBody.width
+                tone: Notice.Danger
+                text: optionsDialog.problem
+            }
+
             Row {
                 anchors.right: optionsBody.right
                 spacing: 10
@@ -909,14 +982,23 @@ Item {
                 PillButton {
                     visible: !root.inspected.missing && !root.inspected.terminal && root.inspected.owned
                     tone: "soft"
+                    enabled: !optionsDialog.dirty
                     text: qsTr("Open")
                     onClicked: root.client.launch(root.inspected.id)
                 }
 
                 PillButton {
                     id: optionsClose
-                    text: qsTr("Close")
+                    tone: optionsDialog.dirty ? "soft" : "primary"
+                    text: optionsDialog.dirty ? qsTr("Discard") : qsTr("Close")
                     onClicked: optionsDialog.close()
+                }
+
+                PillButton {
+                    visible: optionsDialog.canChange && optionsDialog.dirty
+                    enabled: !root.client.busy
+                    text: qsTr("Save")
+                    onClicked: optionsDialog.save()
                 }
             }
         }

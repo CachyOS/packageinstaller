@@ -45,6 +45,52 @@ class TestAppImage : public QObject {
         QCOMPARE(appimage::replaceProgram(u"  AppRun   %F  "_s, app), u"/a/App.AppImage %F"_s);
     }
 
+    void options() {
+        const auto text =
+            u"[Desktop Entry]\n"
+            "Name=Editor\n"
+            "Exec=/a/App.AppImage %U\n"
+            "Icon=editor\n"
+            "\n"
+            "[Desktop Action new]\n"
+            "Name=New\n"
+            "Exec=/a/App.AppImage --new\n"_s;
+        const auto plain = appimage::readOptions(appimage::mainGroup(text));
+        QCOMPARE(plain.arguments, u"%U"_s);
+        QVERIFY(plain.website.isEmpty());
+
+        const appimage::Options wanted{.arguments = u"-r \"/home/u/my saves\" %f"_s, .website = u"https://example.org/app"_s};
+        const auto changed = appimage::withOptions(text, wanted);
+        QVERIFY(!changed.isEmpty());
+        QCOMPARE(appimage::readOptions(appimage::mainGroup(changed)), wanted);
+        QCOMPARE(appimage::commandLine(appimage::mainGroup(changed).value(u"Exec"_s)),
+            (QStringList{u"/a/App.AppImage"_s, u"-r"_s, u"/home/u/my saves"_s}));
+        // the program and every other line stay
+        QVERIFY(changed.contains(u"Icon=editor\nX-CachyOS-PI-Website=https://example.org/app\n"_s));
+        QVERIFY(changed.contains(u"Exec=/a/App.AppImage --new"_s));
+
+        // taking the options away again gives the entry back as it was, without the arguments
+        QCOMPARE(appimage::withOptions(changed, {.arguments = {}, .website = {}}),
+            u"[Desktop Entry]\nName=Editor\nExec=/a/App.AppImage\nIcon=editor\n"
+            "\n[Desktop Action new]\nName=New\nExec=/a/App.AppImage --new\n"_s);
+
+        QCOMPARE(appimage::withOptions(u"[Desktop Entry]\nExec=\"/h/my apps/A.AppImage\" %U\n"_s, {.arguments = u"-x"_s, .website = {}}),
+            u"[Desktop Entry]\nExec=\"/h/my apps/A.AppImage\" -x\n"_s);
+        // nothing without a command
+        QVERIFY(appimage::withOptions(u"[Desktop Entry]\nName=x\n"_s, wanted).isEmpty());
+    }
+
+    void invalidOptions() {
+        using appimage::Problem;
+        QCOMPARE(appimage::problem({.arguments = u"--x \"a b\""_s, .website = u"http://example.org"_s}), Problem::None);
+        QCOMPARE(appimage::problem({.arguments = u"a\nExec=/usr/bin/evil"_s, .website = {}}), Problem::Arguments);
+        QCOMPARE(appimage::problem({.arguments = u"--name \"open"_s, .website = {}}), Problem::Arguments);
+        QCOMPARE(appimage::problem({.arguments = {}, .website = u"ftp://example.org"_s}), Problem::Website);
+        QCOMPARE(appimage::problem({.arguments = {}, .website = u"https://exa mple.org"_s}), Problem::Website);
+        QCOMPARE(appimage::problem({.arguments = {}, .website = u"javascript:alert(1)"_s}), Problem::Website);
+        QVERIFY(appimage::withOptions(u"[Desktop Entry]\nExec=/a/A\n"_s, {.arguments = u"\""_s, .website = {}}).isEmpty());
+    }
+
     void integration() {
         const auto original =
             u"# written by a tool\r\n"

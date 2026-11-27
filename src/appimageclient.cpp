@@ -1249,6 +1249,39 @@ void AppImageClient::launch(const QString& id) {
     }
 }
 
+QString AppImageClient::saveOptions(const QString& id, const QString& arguments, const QString& website) {
+    const appimage::Options options{.arguments = arguments.trimmed(), .website = website.trimmed()};
+    switch (appimage::problem(options)) {
+    case appimage::Problem::None:
+        break;
+    case appimage::Problem::Arguments:
+        return tr("The arguments are too long, have a line break or a quote that is not closed.");
+    case appimage::Problem::Website:
+        return tr("The website has to be an address that starts with http:// or https://.");
+    }
+    const auto desktopName = id + u".desktop"_s;
+    QDir().mkpath(installDirectory());  // the lock lives there
+    QLockFile lock(lockPath());
+    if (!lock.tryLock(0)) {
+        return tr("Another window of this app is adding or removing an AppImage. Try again when it has finished.");
+    }
+    if (!managedEntries().contains(desktopName)) {
+        return tr("This AppImage is not in the list any more.");
+    }
+    const auto path = menuDirectory() + u'/' + desktopName;
+    const auto text = appimage::withOptions(readText(path, appimage::MAX_ENTRY_BYTES), options);
+    if (text.isEmpty()) {
+        return tr("The menu entry could not be changed.");
+    }
+    QSaveFile entry(path);
+    if (!entry.open(QIODevice::WriteOnly) || entry.write(text.toUtf8()) < 0 || !entry.commit()) {
+        return tr("Could not write the menu entry. Nothing was changed.");
+    }
+    refreshMenu();
+    refresh();
+    return {};
+}
+
 void AppImageClient::refresh() {
     const bool fuseAvailable = QFileInfo::exists(u"/usr/lib/libfuse.so.2"_s);
 
@@ -1261,6 +1294,7 @@ void AppImageClient::refresh() {
         const QFileInfo file(path);
         const auto tracked = appimage::tracking(keys);
         const auto source  = appimage::sourceFromValue(tracked.source);
+        const auto options = appimage::readOptions(keys);
         QString update;
         if (source) {
             newerAsset(m_releases, tracked, &update);
@@ -1279,6 +1313,8 @@ void AppImageClient::refresh() {
             .terminal = keys.value(u"Terminal"_s) == "true"_L1,
             .source   = source ? source->slug() : QString(),
             .update   = update,
+            .arguments = options.arguments,
+            .website   = options.website,
         };
         const auto icon = keys.value(u"Icon"_s);
         if (icon.startsWith(u'/')) {

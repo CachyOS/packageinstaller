@@ -36,6 +36,8 @@ struct AppImageItem {
     Q_PROPERTY(bool terminal MEMBER terminal FINAL)
     Q_PROPERTY(QString source MEMBER source FINAL)
     Q_PROPERTY(QString update MEMBER update FINAL)
+    Q_PROPERTY(QString arguments MEMBER arguments FINAL)
+    Q_PROPERTY(QString website MEMBER website FINAL)
 
  public:
     QString id;  ///< name of the menu entry without ".desktop"
@@ -49,6 +51,8 @@ struct AppImageItem {
     bool terminal = false;  ///< a command line tool
     QString source;         ///< "owner/repo" on GitHub when the file came from there
     QString update;         ///< the newer release that can be installed; empty when there is none known
+    QString arguments;  ///< what the menu entry passes to the file, as written in its Exec= line
+    QString website;
 
     friend bool operator==(const AppImageItem&, const AppImageItem&) = default;
 };
@@ -216,6 +220,9 @@ class AppImageClient : public QObject {
     /// shown; nothing is removed if the entry names another one by now.
     Q_INVOKABLE void remove(const QString& id, const QString& path);
     Q_INVOKABLE void launch(const QString& id);
+    /// Writes the arguments and the website into the menu entry of the app. Returns why
+    /// that is not possible, or nothing when it worked.
+    Q_INVOKABLE QString saveOptions(const QString& id, const QString& arguments, const QString& website);
     Q_INVOKABLE void refresh();
     Q_INVOKABLE void clearMessage();
 

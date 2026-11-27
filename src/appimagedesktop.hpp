@@ -15,6 +15,8 @@ inline constexpr QLatin1StringView SOURCE_KEY{"X-CachyOS-PI-Source"};
 inline constexpr QLatin1StringView ASSET_KEY{"X-CachyOS-PI-Asset"};
 inline constexpr QLatin1StringView VARIANT_KEY{"X-CachyOS-PI-Variant"};
 inline constexpr QLatin1StringView RELEASE_KEY{"X-CachyOS-PI-Release"};
+/// The project page of the app, as the user entered it.
+inline constexpr QLatin1StringView WEBSITE_KEY{"X-CachyOS-PI-Website"};
 /// No desktop entry is read or written beyond this size.
 inline constexpr qint64 MAX_ENTRY_BYTES = 256 * 1024;
 
@@ -25,6 +27,28 @@ struct Tracking {
     QString variant;  ///< which file of a release it is, see variant()
     QString release;  ///< the release it is from; may lack the "v" of a tag
 };
+
+/// What the user can set for one app. The arguments end up in its Exec= line, so the menu
+/// and "Open" start it the same way.
+struct Options {
+    QString arguments;  ///< as written after the program in Exec=
+    QString website;    ///< an http(s) address, or empty
+
+    friend bool operator==(const Options&, const Options&) = default;
+};
+
+enum class Problem { None, Arguments, Website };
+
+/// What is wrong with `options`, if anything
+Problem problem(const Options& options);
+
+/// The arguments of an Exec= value and the website of a main group.
+Options readOptions(const QHash<QString, QString>& mainGroup);
+
+/// `desktopFile` with the arguments of its Exec= line and its website changed to `options`.
+/// The program stays and so does every other line. Empty when `options` are not valid or
+/// the file has no Exec= line in its main group.
+QString withOptions(const QString& desktopFile, const Options& options);
 
 /// The keys of the [Desktop Entry] group of a desktop file; other groups are ignored and
 /// the first value of a repeated key counts.

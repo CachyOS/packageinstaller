@@ -270,6 +270,95 @@ QString integrate(const QString& desktopFile, const QString& appImagePath, const
     return entry.toUtf8().size() > MAX_ENTRY_BYTES ? QString() : entry;
 }
 
+namespace {
+
+constexpr qsizetype MAX_ARGUMENTS_CHARS = 4096;
+constexpr qsizetype MAX_WEBSITE_CHARS   = 2048;
+
+/// True when every quote of `arguments` is closed, as firstArgumentLength() reads them.
+bool quotesClosed(const QString& arguments) {
+    bool quoted = false;
+    for (qsizetype i = 0; i < arguments.size(); ++i) {
+        if (arguments.at(i) == u'\\' && quoted) {
+            ++i;
+        } else if (arguments.at(i) == u'"') {
+            quoted = !quoted;
+        }
+    }
+    return !quoted;
+}
+
+}  // namespace
+
+Problem problem(const Options& options) {
+    static const QRegularExpression address(u"^https?://[^\\s]+$"_s);
+    if (options.arguments.size() > MAX_ARGUMENTS_CHARS || !printable(options.arguments) || !quotesClosed(options.arguments)) {
+        return Problem::Arguments;
+    }
+    if (!options.website.isEmpty()
+        && (options.website.size() > MAX_WEBSITE_CHARS || !address.match(options.website).hasMatch() || !printable(options.website))) {
+        return Problem::Website;
+    }
+    return Problem::None;
+}
+
+Options readOptions(const QHash<QString, QString>& mainGroup) {
+    const auto exec = mainGroup.value(u"Exec"_s).trimmed();
+    return {.arguments = exec.mid(firstArgumentLength(exec)).trimmed(), .website = mainGroup.value(WEBSITE_KEY)};
+}
+
+QString withOptions(const QString& desktopFile, const Options& options) {
+    if (problem(options) != Problem::None) {
+        return {};
+    }
+    auto lines         = desktopFile.split(u'\n');
+    bool inMain        = false;
+    bool seenMain      = false;
+    qsizetype execLine = -1;
+    qsizetype siteLine = -1;
+    qsizetype lastLine = -1;  // the last line with a key in the main group
+    for (qsizetype i = 0; i < lines.size(); ++i) {
+        const auto line = lines.at(i).trimmed();
+        if (line.isEmpty() || line.startsWith(u'#')) {
+            continue;
+        }
+        if (isGroupHeader(line)) {
+            const bool isMain = line.mid(1, line.size() - 2) == "Desktop Entry"_L1;
+            inMain            = isMain && !seenMain;
+            seenMain          = seenMain || isMain;
+            continue;
+        }
+        const auto equals = line.indexOf(u'=');
+        if (!inMain || equals <= 0) {
+            continue;
+        }
+        lastLine       = i;
+        const auto key = line.left(equals).trimmed();
+        if (key == "Exec"_L1 && execLine < 0) {
+            execLine = i;
+        } else if (key == WEBSITE_KEY && siteLine < 0) {
+            siteLine = i;
+        }
+    }
+    if (execLine < 0) {
+        return {};
+    }
+    const auto exec    = lines.at(execLine).trimmed().mid(5).trimmed();  // behind "Exec="
+    const auto program = exec.left(firstArgumentLength(exec));
+    const auto args    = options.arguments.trimmed();
+    lines[execLine]    = u"Exec="_s + program + (args.isEmpty() ? QString() : u' ' + args);
+
+    if (siteLine >= 0 && options.website.isEmpty()) {
+        lines.removeAt(siteLine);
+    } else if (siteLine >= 0) {
+        lines[siteLine] = WEBSITE_KEY + u'=' + options.website;
+    } else if (!options.website.isEmpty()) {
+        lines.insert(lastLine + 1, WEBSITE_KEY + u'=' + options.website);
+    }
+    const auto result = lines.join(u'\n');
+    return result.toUtf8().size() > MAX_ENTRY_BYTES ? QString() : result;
+}
+
 Tracking tracking(const QHash<QString, QString>& mainGroup) {
     return {.source  = mainGroup.value(SOURCE_KEY),
             .asset   = mainGroup.value(ASSET_KEY).toLongLong(),
