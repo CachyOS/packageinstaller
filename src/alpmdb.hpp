@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 #pragma once
 
+#include <QDateTime>
 #include <QList>
 #include <QObject>
 #include <QString>
@@ -23,6 +24,8 @@ struct Package {
     Q_PROPERTY(QStringList depends MEMBER depends FINAL)
     Q_PROPERTY(qint64 installSize MEMBER installSize FINAL)
     Q_PROPERTY(qint64 downloadSize MEMBER downloadSize FINAL)
+    Q_PROPERTY(QDateTime buildDate MEMBER buildDate FINAL)
+    Q_PROPERTY(QDateTime installDate MEMBER installDate FINAL)
     Q_PROPERTY(bool upgradable MEMBER upgradable FINAL)
     Q_PROPERTY(bool ignored MEMBER ignored FINAL)
     Q_PROPERTY(bool isApp MEMBER isApp FINAL)
@@ -47,6 +50,8 @@ struct Package {
     QStringList depends;
     qint64 installSize  = 0;
     qint64 downloadSize = 0;
+    QDateTime buildDate;      ///< when the package was built
+    QDateTime installDate;    ///< invalid unless installed
     bool upgradable     = false;
     bool ignored        = false;  ///< held back by IgnorePkg or IgnoreGroup in pacman.conf
 

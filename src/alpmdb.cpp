@@ -60,6 +60,11 @@ QStringList toStringList(alpm_list_t* list, Interned& interned, Proj proj = {}) 
     return out;
 }
 
+/// pacman records an absent date as 0; QML then formats an invalid QDateTime as an empty string.
+QDateTime toDateTime(time_t seconds) {
+    return seconds > 0 ? QDateTime::fromSecsSinceEpoch(seconds) : QDateTime{};
+}
+
 Package fromAlpm(alpm_pkg_t* pkg, const QString& repo, Interned& interned) {
     Package p;
     p.name         = QString::fromUtf8(alpm_pkg_get_name(pkg));
@@ -71,6 +76,8 @@ Package fromAlpm(alpm_pkg_t* pkg, const QString& repo, Interned& interned) {
     p.depends      = toStringList<alpm_depend_t>(alpm_pkg_get_depends(pkg), interned, &alpm_depend_t::name);
     p.installSize  = static_cast<qint64>(alpm_pkg_get_isize(pkg));
     p.downloadSize = static_cast<qint64>(alpm_pkg_get_size(pkg));
+    p.buildDate    = toDateTime(alpm_pkg_get_builddate(pkg));
+    p.installDate  = toDateTime(alpm_pkg_get_installdate(pkg));
     p.title        = p.name;
     p.summary      = p.description;
     return p;
@@ -141,6 +148,7 @@ std::expected<Databases, QString> load() {
         if (const auto found = index.constFind(name); found != index.cend()) {
             auto& p            = packages[*found];
             p.installedVersion = version;
+            p.installDate      = toDateTime(alpm_pkg_get_installdate(pkg));
             // like pacman: held back when the installed package or its update is ignored,
             // which matters when a new version joins an ignored group
             p.ignored    = alpm_pkg_should_ignore(handle, pkg) != 0 || alpm_pkg_should_ignore(handle, candidates.at(*found)) != 0;
