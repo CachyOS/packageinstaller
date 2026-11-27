@@ -14,7 +14,7 @@ struct IconRequest;
 
 /// `image://pkgicon/<pkgname>`: an icon for every package.
 ///
-/// `image://pkgicon/flatpak/<app id>` and `appimage/<id>` are the same for Flatpak apps and AppImages.
+/// `image://pkgicon/flatpak/<app id>`, `appimage/<id>` and `cpak/<origin>` are the same for Flatpak apps, AppImages and cpak apps.
 ///
 /// Lookup order: the Kernel Manager logo for the CachyOS kernels, AppStream cached icon, AppStream stock icon / icon theme,
 /// the same again for shortened names ("foo-bar-bin" -> "foo-bar" -> "foo", which
@@ -34,6 +34,8 @@ class IconProvider : public QQuickAsyncImageProvider {
     void setIndex(IconIndex index, bool flatpak = false);
     /// Icons of the AppImages the user added, asked for as `appimage/<id>`.
     void setAppImageIndex(IconIndex index);
+    /// Icons of the cpak apps, asked for as `cpak/<origin>`.
+    void setCpakIndex(IconIndex index);
     /// The icon theme's application icons by name, from icontheme::appIcons().
     void setThemeIndex(QHash<QString, QString> index);
 
@@ -56,6 +58,7 @@ class IconProvider : public QQuickAsyncImageProvider {
     IconIndex m_index;
     IconIndex m_flatpak;
     IconIndex m_appImages;
+    IconIndex m_cpak;
     QHash<QString, QString> m_theme;
     QList<Request> m_queue;
     bool m_draining = false;

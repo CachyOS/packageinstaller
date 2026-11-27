@@ -911,7 +911,7 @@
 <context>
     <name>Backend</name>
     <message>
-        <location filename="../src/backend.cpp" line="176"/>
+        <location filename="../src/backend.cpp" line="215"/>
         <source>The pacman databases are empty. Refresh them with a system update.</source>
         <translation>Базы данных pacman пусты. Обновите их, выполнив обновление системы.</translation>
     </message>
@@ -1029,6 +1029,136 @@
     </message>
 </context>
 <context>
+    <name>CpakDetailsPage</name>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="32"/>
+        <source>Permissions it asks for</source>
+        <translation type="unfinished">Запрашиваемые разрешения</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="49"/>
+        <source>“%1” is not in the cpak catalogue and not installed.</source>
+        <translation type="unfinished">«%1» нет в каталоге cpak, и приложение не установлено.</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="57"/>
+        <source>Install</source>
+        <translation type="unfinished">Установить</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="65"/>
+        <source>Update all</source>
+        <translation type="unfinished">Обновить все</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="73"/>
+        <source>Remove</source>
+        <translation type="unfinished">Удалить</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="83"/>
+        <source>Repository</source>
+        <translation type="unfinished">Репозиторий</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="89"/>
+        <source>Version</source>
+        <translation type="unfinished">Версия</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="93"/>
+        <source>Installed version</source>
+        <translation type="unfinished">Установленная версия</translation>
+    </message>
+</context>
+<context>
+    <name>CpakPage</name>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="40"/>
+        <source>cpak is turned off</source>
+        <translation type="unfinished">cpak отключён</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="40"/>
+        <source>cpak is not installed</source>
+        <translation type="unfinished">cpak не установлен</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="41"/>
+        <source>Turn it on in the settings to search and install cpak apps.</source>
+        <translation type="unfinished">Включите его в настройках, чтобы искать и устанавливать приложения cpak.</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="42"/>
+        <source>The “cpak” command is needed to install and run these apps. See cpak.it/docs for how to install it.</source>
+        <translation type="unfinished">Для установки и запуска этих приложений нужна команда «cpak». Как её установить, см. на cpak.it/docs.</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="43"/>
+        <source>Open settings</source>
+        <translation type="unfinished">Открыть настройки</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="50"/>
+        <source>cpak</source>
+        <translation type="unfinished">cpak</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="51"/>
+        <source>Apps that run in a sandbox of their own. Not packaged by CachyOS.</source>
+        <translation type="unfinished">Приложения в собственной изолированной среде. Не упакованы CachyOS.</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="57"/>
+        <source>Update all</source>
+        <translation type="unfinished">Обновить все</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="58"/>
+        <source>An update that asks for more permissions is skipped; open the app to update it.</source>
+        <translation type="unfinished">Обновление, которое запрашивает больше разрешений, пропускается; откройте приложение, чтобы обновить его.</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="75"/>
+        <source>Update</source>
+        <translation type="unfinished">Обновить</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="85"/>
+        <source>Installed</source>
+        <translation type="unfinished">Установлено</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="96"/>
+        <source>Loading the app catalogue…</source>
+        <translation type="unfinished">Загрузка каталога приложений…</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="97"/>
+        <source>The app catalogue could not be loaded.</source>
+        <translation type="unfinished">Не удалось загрузить каталог приложений.</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="98"/>
+        <source>No cpak apps match “%1”.</source>
+        <translation type="unfinished">Нет приложений cpak, соответствующих «%1».</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../qml/CpakPage.qml" line="99"/>
+        <source>Type in the search field to find one of %n cpak app(s).</source>
+        <translation type="unfinished">
+            <numerusform>Введите запрос в поле поиска, чтобы найти одно из %n приложения cpak.</numerusform>
+            <numerusform>Введите запрос в поле поиска, чтобы найти одно из %n приложений cpak.</numerusform>
+            <numerusform>Введите запрос в поле поиска, чтобы найти одно из %n приложений cpak.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="100"/>
+        <source>Try again</source>
+        <translation type="unfinished">Повторить</translation>
+    </message>
+</context>
+<context>
     <name>DetailsHero</name>
     <message>
         <location filename="../qml/DetailsHero.qml" line="32"/>
@@ -1107,77 +1237,92 @@
 <context>
     <name>FlatpakDetailsPage</name>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="31"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="38"/>
         <source>“%1” is not available as a Flatpak.</source>
         <translation>«%1» недоступен как Flatpak.</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="40"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="47"/>
         <source>Install</source>
         <translation>Установить</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="48"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="55"/>
+        <source>Install with cpak</source>
+        <translation type="unfinished">Установить через cpak</translation>
+    </message>
+    <message>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="64"/>
+        <source>Remove (cpak)</source>
+        <translation type="unfinished">Удалить (cpak)</translation>
+    </message>
+    <message>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="72"/>
         <source>Update all</source>
         <translation>Обновить все</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="56"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="80"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="66"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="90"/>
         <source>App ID</source>
         <translation>ID приложения</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="70"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="94"/>
         <source>Version</source>
         <translation>Версия</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="74"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="98"/>
         <source>Installed version</source>
         <translation>Установленная версия</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="78"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="102"/>
         <source>Source</source>
         <translation>Источник</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="82"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="106"/>
         <source>Installed size</source>
         <translation>Размер после установки</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="86"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="110"/>
         <source>Installed for</source>
         <translation>Установлено для</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="87"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="111"/>
         <source>Your user only</source>
         <translation>Только для вас</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="88"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="112"/>
         <source>All users</source>
         <translation>Все пользователи</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="91"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="115"/>
+        <source>Installed with cpak</source>
+        <translation type="unfinished">Установлено через cpak</translation>
+    </message>
+    <message>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="119"/>
         <source>Branch</source>
         <translation>Ветка</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="95"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="123"/>
         <source>License</source>
         <translation>Лицензия</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="99"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="127"/>
         <source>Website</source>
         <translation>Веб-сайт</translation>
     </message>
@@ -1407,92 +1552,102 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../qml/Main.qml" line="166"/>
+        <location filename="../qml/Main.qml" line="168"/>
         <source>CachyOS Package Installer</source>
         <translation>Установщик пакетов CachyOS</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="242"/>
+        <location filename="../qml/Main.qml" line="244"/>
         <source>CachyOS</source>
         <translation>CachyOS</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="248"/>
+        <location filename="../qml/Main.qml" line="250"/>
         <source>Package Installer</source>
         <translation>Установщик пакетов</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="264"/>
+        <location filename="../qml/Main.qml" line="266"/>
         <source>Discover</source>
         <translation>Главная</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="265"/>
+        <location filename="../qml/Main.qml" line="267"/>
         <source>Browse</source>
         <translation>Обзор</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="266"/>
+        <location filename="../qml/Main.qml" line="268"/>
         <source>Installed</source>
         <translation>Установлено</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="267"/>
+        <location filename="../qml/Main.qml" line="269"/>
         <source>Updates</source>
         <translation>Обновления</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="268"/>
+        <location filename="../qml/Main.qml" line="270"/>
         <source>AUR</source>
         <translation>AUR</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="269"/>
+        <location filename="../qml/Main.qml" line="271"/>
         <source>Flatpak</source>
         <translation>Flatpak</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="270"/>
+        <location filename="../qml/Main.qml" line="273"/>
+        <source>cpak</source>
+        <translation type="unfinished">cpak</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="272"/>
         <source>AppImage</source>
         <translation>AppImage</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="297"/>
+        <location filename="../qml/Main.qml" line="300"/>
         <source>Settings</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="305"/>
+        <location filename="../qml/Main.qml" line="308"/>
         <source>Version %1</source>
         <translation>Версия %1</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="323"/>
+        <location filename="../qml/Main.qml" line="326"/>
         <source>Search the AUR</source>
         <translation>Поиск в AUR</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="324"/>
+        <location filename="../qml/Main.qml" line="327"/>
         <source>Search Flatpak apps</source>
         <translation>Поиск приложений Flatpak</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="324"/>
+        <location filename="../qml/Main.qml" line="328"/>
         <source>Search apps and packages</source>
         <translation>Поиск приложений и пакетов</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="482"/>
+        <location filename="../qml/Main.qml" line="328"/>
+        <source>Search cpak apps</source>
+        <translation type="unfinished">Поиск приложений cpak</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="500"/>
         <source>A transaction is running</source>
         <translation>Выполняется операция</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="488"/>
+        <location filename="../qml/Main.qml" line="506"/>
         <source>Interrupting it could leave the system in a broken state. The window can be closed once it has finished.</source>
         <translation>Её прерывание может оставить систему в нерабочем состоянии. Окно можно будет закрыть, когда операция завершится.</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="496"/>
+        <location filename="../qml/Main.qml" line="514"/>
         <source>Keep running</source>
         <translation>Продолжить</translation>
     </message>
@@ -1565,6 +1720,11 @@
         <translation>Flatpak не установлен. Его можно установить на странице Flatpak.</translation>
     </message>
     <message>
+        <location filename="../qml/SettingsPage.qml" line="164"/>
+        <source>cpak</source>
+        <translation type="unfinished">cpak</translation>
+    </message>
+    <message>
         <location filename="../qml/SettingsPage.qml" line="156"/>
         <source>AppImage</source>
         <translation>AppImage</translation>
@@ -1575,32 +1735,47 @@
         <translation>Приложения из одного файла, которые вы загрузили сами. Они получают пункт меню и значок. Они не проверяются, не изолируются и не обновляются автоматически.</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="166"/>
+        <location filename="../qml/SettingsPage.qml" line="165"/>
+        <source>Sandboxed apps from cpak&apos;s signed catalogue, and Flatpak apps run in cpak&apos;s sandbox. They are packaged by their developers, not by CachyOS, and run with the permissions shown on their page.</source>
+        <translation type="unfinished">Изолированные приложения из подписанного каталога cpak и приложения Flatpak, работающие в изолированной среде cpak. Их упаковывают сами разработчики, а не CachyOS, и они запускаются с разрешениями, которые показаны на их странице.</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="167"/>
+        <source>cpak is not installed. See cpak.it/docs for how to install it.</source>
+        <translation type="unfinished">cpak не установлен. Как его установить, см. на cpak.it/docs.</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="168"/>
+        <source>cpak&apos;s catalogue could not be read. Check your connection.</source>
+        <translation type="unfinished">Не удалось прочитать каталог cpak. Проверьте подключение.</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="177"/>
         <source>Mirrors</source>
         <translation>Зеркала</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="170"/>
+        <location filename="../qml/SettingsPage.qml" line="181"/>
         <source>Rank the mirrors by speed</source>
         <translation>Сортировка зеркал по скорости</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="171"/>
+        <location filename="../qml/SettingsPage.qml" line="182"/>
         <source>Packages are downloaded from the first mirror that answers. Ranking measures the Arch and CachyOS mirrors from your connection and rewrites the mirror lists to prefer the fast ones. Worth doing when downloads are slow or fail.</source>
         <translation>Пакеты загружаются с первого ответившего зеркала. Ранжирование измеряет скорость зеркал Arch и CachyOS с вашего подключения и переписывает списки зеркал, ставя быстрые первыми. Полезно, если загрузка идёт медленно или прерывается.</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="172"/>
+        <location filename="../qml/SettingsPage.qml" line="183"/>
         <source>Ranking needs the “cachyos-rate-mirrors” package, which is not installed.</source>
         <translation>Для ранжирования нужен пакет «cachyos-rate-mirrors», а он не установлен.</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="176"/>
+        <location filename="../qml/SettingsPage.qml" line="187"/>
         <source>Rank mirrors</source>
         <translation>Ранжировать зеркала</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="176"/>
+        <location filename="../qml/SettingsPage.qml" line="187"/>
         <source>Install cachyos-rate-mirrors</source>
         <translation>Установить cachyos-rate-mirrors</translation>
     </message>
@@ -1629,11 +1804,16 @@
     </message>
     <message>
         <location filename="../qml/SourceBadge.qml" line="13"/>
+        <source>cpak</source>
+        <translation type="unfinished">cpak</translation>
+    </message>
+    <message>
+        <location filename="../qml/SourceBadge.qml" line="14"/>
         <source>AppImage</source>
         <translation>AppImage</translation>
     </message>
     <message>
-        <location filename="../qml/SourceBadge.qml" line="14"/>
+        <location filename="../qml/SourceBadge.qml" line="15"/>
         <source>Local</source>
         <translation>Локальный</translation>
     </message>
@@ -1641,37 +1821,42 @@
 <context>
     <name>Transaction</name>
     <message>
-        <location filename="../src/transaction.cpp" line="81"/>
+        <location filename="../src/transaction.cpp" line="92"/>
         <source>Install %1</source>
         <translation>Установить %1</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="83"/>
+        <location filename="../src/transaction.cpp" line="95"/>
         <source>Remove %1</source>
         <translation>Удалить %1</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="84"/>
+        <location filename="../src/transaction.cpp" line="96"/>
         <source>Update the system</source>
         <translation>Обновить систему</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="85"/>
+        <location filename="../src/transaction.cpp" line="97"/>
         <source>Update Flatpak apps</source>
         <translation>Обновить приложения Flatpak</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="86"/>
+        <location filename="../src/transaction.cpp" line="98"/>
+        <source>Update cpak apps</source>
+        <translation type="unfinished">Обновить приложения cpak</translation>
+    </message>
+    <message>
+        <location filename="../src/transaction.cpp" line="99"/>
         <source>Add Flathub</source>
         <translation>Добавить Flathub</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="87"/>
+        <location filename="../src/transaction.cpp" line="100"/>
         <source>Rank the mirrors</source>
         <translation>Ранжировать зеркала</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="89"/>
+        <location filename="../src/transaction.cpp" line="102"/>
         <source>Build %n package(s) from the AUR</source>
         <translation>
             <numerusform>Собрать %n пакет из AUR</numerusform>
@@ -1680,52 +1865,72 @@
         </translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="90"/>
+        <location filename="../src/transaction.cpp" line="103"/>
         <source>Build %1 from the AUR</source>
         <translation>Собрать %1 из AUR</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="97"/>
+        <location filename="../src/transaction.cpp" line="110"/>
         <source>Flatpak will download the app and the runtime it needs, and install them for all users. It asks for permission itself if that is required.</source>
         <translation>Flatpak загрузит приложение и нужную ему среду выполнения и установит их для всех пользователей. При необходимости он сам запросит разрешение.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="99"/>
+        <location filename="../src/transaction.cpp" line="112"/>
         <source>The app will be removed, and with it the runtimes that no other app needs. Its data in your home directory is kept.</source>
         <translation>Приложение будет удалено вместе со средами выполнения, которые больше не нужны другим приложениям. Его данные в домашнем каталоге сохранятся.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="100"/>
+        <location filename="../src/transaction.cpp" line="113"/>
         <source>Every installed Flatpak app and runtime will be updated.</source>
         <translation>Все установленные приложения и среды выполнения Flatpak будут обновлены.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="101"/>
+        <location filename="../src/transaction.cpp" line="115"/>
+        <source>cpak will download the app and install it for your user. It runs in a sandbox of its own, with the permissions listed on the app&apos;s page.</source>
+        <translation type="unfinished">cpak загрузит приложение и установит его для вашего пользователя. Оно работает в собственной изолированной среде с разрешениями, перечисленными на странице приложения.</translation>
+    </message>
+    <message>
+        <location filename="../src/transaction.cpp" line="117"/>
+        <source>cpak will download the Flatpak app and install it for your user, in cpak&apos;s sandbox instead of Flatpak&apos;s. The output lists the permissions cpak grants and the ones it refuses; change them later with “cpak override”.</source>
+        <translation type="unfinished">cpak загрузит приложение Flatpak и установит его для вашего пользователя в изолированной среде cpak, а не Flatpak. В выводе перечислены разрешения, которые cpak предоставляет и которые отклоняет; позже их можно изменить командой «cpak override».</translation>
+    </message>
+    <message>
+        <location filename="../src/transaction.cpp" line="118"/>
+        <source>The app will be removed. Its data in your home directory is kept.</source>
+        <translation type="unfinished">Приложение будет удалено. Его данные в домашнем каталоге сохранятся.</translation>
+    </message>
+    <message>
+        <location filename="../src/transaction.cpp" line="120"/>
+        <source>Every installed cpak app will be updated. An app whose update asks for more permissions than it has is skipped; update it on its own after reading them.</source>
+        <translation type="unfinished">Все установленные приложения cpak будут обновлены. Приложение, обновление которого запрашивает больше разрешений, чем у него есть, пропускается; обновите его отдельно, прочитав эти разрешения.</translation>
+    </message>
+    <message>
+        <location filename="../src/transaction.cpp" line="121"/>
         <source>Flathub will be added as an app source for all users.</source>
         <translation>Flathub будет добавлен как источник приложений для всех пользователей.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="102"/>
+        <location filename="../src/transaction.cpp" line="122"/>
         <source>The package databases will be refreshed and every available update installed.</source>
         <translation>Базы данных пакетов будут обновлены, и будут установлены все доступные обновления.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="104"/>
+        <location filename="../src/transaction.cpp" line="124"/>
         <source>The download speed of the Arch and CachyOS mirrors will be measured and the mirror lists rewritten to prefer the fast ones. This takes a minute or two; a copy of the current lists is kept until the next ranking.</source>
         <translation>Будет измерена скорость загрузки с зеркал Arch и CachyOS, а списки зеркал переписаны так, чтобы быстрые шли первыми. Это займёт минуту-другую; копия текущих списков хранится до следующего ранжирования.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="107"/>
+        <location filename="../src/transaction.cpp" line="127"/>
         <source>paru will download the sources, build %1 as your user and then ask for permission to install them. This can take a while.</source>
         <translation>paru загрузит исходники, соберёт %1 от вашего имени, а затем запросит разрешение на их установку. Это может занять некоторое время.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="108"/>
+        <location filename="../src/transaction.cpp" line="128"/>
         <source>paru will download the sources, build the package as your user and then ask for permission to install it. This can take a while.</source>
         <translation>paru загрузит исходники, соберёт пакет от вашего имени, а затем запросит разрешение на его установку. Это может занять некоторое время.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="109"/>
+        <location filename="../src/transaction.cpp" line="129"/>
         <source>%n package(s) will be removed:</source>
         <translation>
             <numerusform>Будет удалён %n пакет:</numerusform>
@@ -1734,7 +1939,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="111"/>
+        <location filename="../src/transaction.cpp" line="131"/>
         <source>%n package(s) will be installed (%1 to download):</source>
         <translation>
             <numerusform>Будет установлен %n пакет (загрузить %1):</numerusform>
@@ -1743,42 +1948,42 @@
         </translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="119"/>
+        <location filename="../src/transaction.cpp" line="140"/>
         <source>Remove</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="121"/>
+        <location filename="../src/transaction.cpp" line="143"/>
         <source>Update</source>
         <translation>Обновить</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="122"/>
+        <location filename="../src/transaction.cpp" line="144"/>
         <source>Add</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="123"/>
+        <location filename="../src/transaction.cpp" line="145"/>
         <source>Rank</source>
         <translation>Ранжировать</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="124"/>
+        <location filename="../src/transaction.cpp" line="146"/>
         <source>Install</source>
         <translation>Установить</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="243"/>
+        <location filename="../src/transaction.cpp" line="276"/>
         <source>%1 is missing. Reinstall the package installer.</source>
         <translation>%1 отсутствует. Переустановите установщик пакетов.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="296"/>
+        <location filename="../src/transaction.cpp" line="329"/>
         <source>Could not start %1</source>
         <translation>Не удалось запустить %1</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="339"/>
+        <location filename="../src/transaction.cpp" line="373"/>
         <source>%1 cannot be removed: %n installed package(s) depend on it.</source>
         <translation>
             <numerusform>%1 нельзя удалить: от него зависит %n установленный пакет.</numerusform>
@@ -1787,32 +1992,32 @@
         </translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="340"/>
+        <location filename="../src/transaction.cpp" line="374"/>
         <source>Among them: %1, …</source>
         <translation>Среди них: %1, …</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="340"/>
+        <location filename="../src/transaction.cpp" line="374"/>
         <source>Needed by: %1</source>
         <translation>Нужен для: %1</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="342"/>
+        <location filename="../src/transaction.cpp" line="376"/>
         <source>pacman could not resolve this operation.</source>
         <translation>pacman не смог подготовить эту операцию.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="345"/>
+        <location filename="../src/transaction.cpp" line="379"/>
         <source>Already installed and up to date.</source>
         <translation>Уже установлен, последняя версия.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="345"/>
+        <location filename="../src/transaction.cpp" line="379"/>
         <source>Nothing to do.</source>
         <translation>Нечего выполнять.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="366"/>
+        <location filename="../src/transaction.cpp" line="400"/>
         <source>
 The unused runtimes could not be removed (exit code %1).
 </source>
@@ -1821,12 +2026,17 @@ The unused runtimes could not be removed (exit code %1).
 </translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="380"/>
+        <location filename="../src/transaction.cpp" line="414"/>
         <source>Authentication was cancelled or denied. Nothing was changed.</source>
         <translation>Аутентификация отменена или отклонена. Ничего не изменено.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="382"/>
+        <location filename="../src/transaction.cpp" line="416"/>
+        <source>Stopped before it finished. Nothing was installed.</source>
+        <translation type="unfinished">Остановлено до завершения. Ничего не было установлено.</translation>
+    </message>
+    <message>
+        <location filename="../src/transaction.cpp" line="418"/>
         <source>
 The operation failed (exit code %1).
 </source>

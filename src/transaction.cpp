@@ -20,6 +20,7 @@ namespace {
 
 constexpr std::array HELPER_KINDS{Transaction::Install, Transaction::Remove, Transaction::Upgrade, Transaction::RateMirrors};
 constexpr std::array FLATPAK_KINDS{Transaction::FlatpakInstall, Transaction::FlatpakRemove, Transaction::FlatpakUpdate, Transaction::FlatpakSetup};
+constexpr std::array CPAK_KINDS{Transaction::CpakInstall, Transaction::CpakFlatpakInstall, Transaction::CpakRemove, Transaction::CpakUpdate};
 
 /// What the helper is asked to do. No default: a new kind has to be named here.
 QString helperVerb(Transaction::Kind kind) {
@@ -32,7 +33,11 @@ QString helperVerb(Transaction::Kind kind) {
     case Transaction::FlatpakInstall:
     case Transaction::FlatpakRemove:
     case Transaction::FlatpakUpdate:
-    case Transaction::FlatpakSetup: break;
+    case Transaction::FlatpakSetup:
+    case Transaction::CpakInstall:
+    case Transaction::CpakFlatpakInstall:
+    case Transaction::CpakRemove:
+    case Transaction::CpakUpdate: break;
     }
     return {};
 }
@@ -74,15 +79,23 @@ bool Transaction::isFlatpak() const {
     return std::ranges::contains(FLATPAK_KINDS, m_kind);
 }
 
+bool Transaction::isCpak() const {
+    return std::ranges::contains(CPAK_KINDS, m_kind);
+}
+
 QString Transaction::title() const {
     const auto target = m_targets.value(0);
     switch (m_kind) {
     case Install:
-    case FlatpakInstall: return tr("Install %1").arg(target);
+    case FlatpakInstall:
+    case CpakInstall:
+    case CpakFlatpakInstall: return tr("Install %1").arg(target);
     case Remove:
-    case FlatpakRemove: return tr("Remove %1").arg(target);
+    case FlatpakRemove:
+    case CpakRemove: return tr("Remove %1").arg(target);
     case Upgrade: return tr("Update the system");
     case FlatpakUpdate: return tr("Update Flatpak apps");
+    case CpakUpdate: return tr("Update cpak apps");
     case FlatpakSetup: return tr("Add Flathub");
     case RateMirrors: return tr("Rank the mirrors");
     default:
@@ -98,6 +111,13 @@ QString Transaction::summary() const {
     case FlatpakRemove:
         return tr("The app will be removed, and with it the runtimes that no other app needs. Its data in your home directory is kept.");
     case FlatpakUpdate: return tr("Every installed Flatpak app and runtime will be updated.");
+    case CpakInstall:
+        return tr("cpak will download the app and install it for your user. It runs in a sandbox of its own, with the permissions listed on the app's page.");
+    case CpakFlatpakInstall:
+        return tr("cpak will download the Flatpak app and install it for your user, in cpak's sandbox instead of Flatpak's. The output lists the permissions cpak grants and the ones it refuses; change them later with “cpak override”.");
+    case CpakRemove: return tr("The app will be removed. Its data in your home directory is kept.");
+    case CpakUpdate:
+        return tr("Every installed cpak app will be updated. An app whose update asks for more permissions than it has is skipped; update it on its own after reading them.");
     case FlatpakSetup: return tr("Flathub will be added as an app source for all users.");
     case Upgrade: return tr("The package databases will be refreshed and every available update installed.");
     case RateMirrors:
@@ -116,9 +136,11 @@ QString Transaction::summary() const {
 QString Transaction::confirmLabel() const {
     switch (m_kind) {
     case Remove:
-    case FlatpakRemove: return tr("Remove");
+    case FlatpakRemove:
+    case CpakRemove: return tr("Remove");
     case Upgrade:
-    case FlatpakUpdate: return tr("Update");
+    case FlatpakUpdate:
+    case CpakUpdate: return tr("Update");
     case FlatpakSetup: return tr("Add");
     case RateMirrors: return tr("Rank");
     default: return tr("Install");
@@ -222,6 +244,16 @@ void Transaction::prepareFlatpak(Kind kind, const QStringList& names, const QStr
     m_cleanupArgs = cleanup;
 }
 
+void Transaction::prepareCpak(Kind kind, const QStringList& names, const QStringList& arguments) {
+    if (m_state != Idle || !std::ranges::contains(CPAK_KINDS, kind) || arguments.isEmpty()) {
+        return;
+    }
+    m_program          = u"cpak"_s;
+    m_args             = arguments;
+    m_workingDirectory = u"/"_s;
+    begin(kind, names);
+}
+
 void Transaction::begin(Kind kind, const QStringList& targets) {
     m_kind    = kind;
     m_cleanupArgs.clear();
@@ -235,6 +267,7 @@ void Transaction::begin(Kind kind, const QStringList& targets) {
     m_partial.clear();
     m_lastLine.clear();
     m_helperStarted = false;
+    m_stopped = false;
     m_success = false;
     m_failureReason.clear();
     emit lastLineChanged();
@@ -308,7 +341,8 @@ void Transaction::launch(const QString& program, const QStringList& args, const 
 
 void Transaction::interrupt() {
     if (m_process && m_process->processId() > 0) {
-        ::kill(-static_cast<pid_t>(m_process->processId()), SIGINT);
+        // A running cpak install ignores SIGINT, even when it is sent twice; SIGTERM ends it at once.
+        ::kill(-static_cast<pid_t>(m_process->processId()), isCpak() ? SIGTERM : SIGINT);
     }
 }
 
@@ -378,6 +412,8 @@ void Transaction::onRunFinished(int exitCode, QProcess::ExitStatus status) {
     // end with the same codes, but then the helper has announced itself first.
     if (!success && usesHelper() && (exitCode == 126 || exitCode == 127) && !m_helperStarted) {
         m_failureReason = tr("Authentication was cancelled or denied. Nothing was changed.");
+    } else if (!success && m_stopped) {
+        m_failureReason = tr("Stopped before it finished. Nothing was installed.");
     } else if (!success) {
         appendLog(tr("\nThe operation failed (exit code %1).\n").arg(exitCode));
     }
@@ -412,6 +448,7 @@ void Transaction::cancel() {
     case Running:
         // Never interrupt pacman itself; only work done as the user can be stopped.
         if (cancellable()) {
+            m_stopped = isCpak();
             interrupt();
         }
         break;

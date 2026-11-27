@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE TS>
 <TS version="2.1" language="pt_PT">
 <context>
@@ -144,7 +144,7 @@
     </message>
     <message>
         <location filename="../src/appimageclient.cpp" line="606"/>
-        <source>Shelly's own list could not be updated; it still names the apps that were moved.</source>
+        <source>Shelly&apos;s own list could not be updated; it still names the apps that were moved.</source>
         <translation>Não foi possível atualizar a lista do Shelly; esta continua a incluir as aplicações que foram movidas.</translation>
     </message>
     <message>
@@ -468,7 +468,7 @@
     </message>
     <message>
         <location filename="../qml/AppImagePage.qml" line="655"/>
-        <source>Don't ask again</source>
+        <source>Don&apos;t ask again</source>
         <translation>Não voltar a perguntar</translation>
     </message>
     <message>
@@ -903,7 +903,7 @@
 <context>
     <name>Backend</name>
     <message>
-        <location filename="../src/backend.cpp" line="176"/>
+        <location filename="../src/backend.cpp" line="215"/>
         <source>The pacman databases are empty. Refresh them with a system update.</source>
         <translation>As bases de dados do pacman estão vazias. Atualiza-as através de uma atualização do sistema.</translation>
     </message>
@@ -1020,6 +1020,135 @@
     </message>
 </context>
 <context>
+    <name>CpakDetailsPage</name>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="32"/>
+        <source>Permissions it asks for</source>
+        <translation type="unfinished">Permissões pedidas</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="49"/>
+        <source>“%1” is not in the cpak catalogue and not installed.</source>
+        <translation type="unfinished">“%1” não está no catálogo do cpak e não está instalada.</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="57"/>
+        <source>Install</source>
+        <translation type="unfinished">Instalar</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="65"/>
+        <source>Update all</source>
+        <translation type="unfinished">Atualizar tudo</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="73"/>
+        <source>Remove</source>
+        <translation type="unfinished">Remover</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="83"/>
+        <source>Repository</source>
+        <translation type="unfinished">Repositório</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="89"/>
+        <source>Version</source>
+        <translation type="unfinished">Versão</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakDetailsPage.qml" line="93"/>
+        <source>Installed version</source>
+        <translation type="unfinished">Versão instalada</translation>
+    </message>
+</context>
+<context>
+    <name>CpakPage</name>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="40"/>
+        <source>cpak is turned off</source>
+        <translation type="unfinished">O cpak está desativado</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="40"/>
+        <source>cpak is not installed</source>
+        <translation type="unfinished">O cpak não está instalado</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="41"/>
+        <source>Turn it on in the settings to search and install cpak apps.</source>
+        <translation type="unfinished">Ativa-o nas definições para pesquisar e instalar aplicações cpak.</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="42"/>
+        <source>The “cpak” command is needed to install and run these apps. See cpak.it/docs for how to install it.</source>
+        <translation type="unfinished">O comando “cpak” é necessário para instalar e executar estas aplicações. Consulta cpak.it/docs para saber como o instalar.</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="43"/>
+        <source>Open settings</source>
+        <translation type="unfinished">Abrir definições</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="50"/>
+        <source>cpak</source>
+        <translation type="unfinished">cpak</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="51"/>
+        <source>Apps that run in a sandbox of their own. Not packaged by CachyOS.</source>
+        <translation type="unfinished">Aplicações isoladas que correm no seu próprio sandbox. Não são empacotadas pelo CachyOS.</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="57"/>
+        <source>Update all</source>
+        <translation type="unfinished">Atualizar tudo</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="58"/>
+        <source>An update that asks for more permissions is skipped; open the app to update it.</source>
+        <translation type="unfinished">Uma atualização que pede mais permissões é ignorada; abre a aplicação para a atualizar.</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="75"/>
+        <source>Update</source>
+        <translation type="unfinished">Atualizar</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="85"/>
+        <source>Installed</source>
+        <translation type="unfinished">Instalado</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="96"/>
+        <source>Loading the app catalogue…</source>
+        <translation type="unfinished">A carregar o catálogo de aplicações…</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="97"/>
+        <source>The app catalogue could not be loaded.</source>
+        <translation type="unfinished">Não foi possível carregar o catálogo de aplicações.</translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="98"/>
+        <source>No cpak apps match “%1”.</source>
+        <translation type="unfinished">Nenhuma aplicação cpak corresponde a “%1”.</translation>
+    </message>
+    <message numerus="yes">
+        <location filename="../qml/CpakPage.qml" line="99"/>
+        <source>Type in the search field to find one of %n cpak app(s).</source>
+        <translation type="unfinished">
+            <numerusform>Escreve no campo de pesquisa para encontrares uma das %n aplicações cpak.</numerusform>
+            <numerusform>Escreve no campo de pesquisa para encontrares uma das %n aplicações cpak.</numerusform>
+        </translation>
+    </message>
+    <message>
+        <location filename="../qml/CpakPage.qml" line="100"/>
+        <source>Try again</source>
+        <translation type="unfinished">Tentar novamente</translation>
+    </message>
+</context>
+<context>
     <name>DetailsHero</name>
     <message>
         <location filename="../qml/DetailsHero.qml" line="32"/>
@@ -1098,77 +1227,92 @@
 <context>
     <name>FlatpakDetailsPage</name>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="31"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="38"/>
         <source>“%1” is not available as a Flatpak.</source>
         <translation>“%1” não está disponível como Flatpak.</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="40"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="47"/>
         <source>Install</source>
         <translation>Instalar</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="48"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="55"/>
+        <source>Install with cpak</source>
+        <translation type="unfinished">Instalar com o cpak</translation>
+    </message>
+    <message>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="64"/>
+        <source>Remove (cpak)</source>
+        <translation type="unfinished">Remover (cpak)</translation>
+    </message>
+    <message>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="72"/>
         <source>Update all</source>
         <translation>Atualizar tudo</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="56"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="80"/>
         <source>Remove</source>
         <translation>Remover</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="66"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="90"/>
         <source>App ID</source>
         <translation>ID da aplicação</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="70"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="94"/>
         <source>Version</source>
         <translation>Versão</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="74"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="98"/>
         <source>Installed version</source>
         <translation>Versão instalada</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="78"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="102"/>
         <source>Source</source>
         <translation>Origem</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="82"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="106"/>
         <source>Installed size</source>
         <translation>Espaço ocupado após a instalação</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="86"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="110"/>
         <source>Installed for</source>
         <translation>Instalado para</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="87"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="111"/>
         <source>Your user only</source>
         <translation>Apenas para o teu utilizador</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="88"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="112"/>
         <source>All users</source>
         <translation>Todos os utilizadores</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="91"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="115"/>
+        <source>Installed with cpak</source>
+        <translation type="unfinished">Instalado com o cpak</translation>
+    </message>
+    <message>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="119"/>
         <source>Branch</source>
         <translation>Ramo</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="95"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="123"/>
         <source>License</source>
         <translation>Licença</translation>
     </message>
     <message>
-        <location filename="../qml/FlatpakDetailsPage.qml" line="99"/>
+        <location filename="../qml/FlatpakDetailsPage.qml" line="127"/>
         <source>Website</source>
         <translation>Sítio Web</translation>
     </message>
@@ -1396,92 +1540,102 @@
 <context>
     <name>Main</name>
     <message>
-        <location filename="../qml/Main.qml" line="166"/>
+        <location filename="../qml/Main.qml" line="168"/>
         <source>CachyOS Package Installer</source>
         <translation>Instalador de Pacotes do CachyOS</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="242"/>
+        <location filename="../qml/Main.qml" line="244"/>
         <source>CachyOS</source>
         <translation>CachyOS</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="248"/>
+        <location filename="../qml/Main.qml" line="250"/>
         <source>Package Installer</source>
         <translation>Instalador de Pacotes</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="264"/>
+        <location filename="../qml/Main.qml" line="266"/>
         <source>Discover</source>
         <translation>Descobrir</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="265"/>
+        <location filename="../qml/Main.qml" line="267"/>
         <source>Browse</source>
         <translation>Explorar</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="266"/>
+        <location filename="../qml/Main.qml" line="268"/>
         <source>Installed</source>
         <translation>Instalado</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="267"/>
+        <location filename="../qml/Main.qml" line="269"/>
         <source>Updates</source>
         <translation>Atualizações</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="268"/>
+        <location filename="../qml/Main.qml" line="270"/>
         <source>AUR</source>
         <translation>AUR</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="269"/>
+        <location filename="../qml/Main.qml" line="271"/>
         <source>Flatpak</source>
         <translation>Flatpak</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="270"/>
+        <location filename="../qml/Main.qml" line="273"/>
+        <source>cpak</source>
+        <translation type="unfinished">cpak</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="272"/>
         <source>AppImage</source>
         <translation>AppImage</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="297"/>
+        <location filename="../qml/Main.qml" line="300"/>
         <source>Settings</source>
         <translation>Definições</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="305"/>
+        <location filename="../qml/Main.qml" line="308"/>
         <source>Version %1</source>
         <translation>Versão %1</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="323"/>
+        <location filename="../qml/Main.qml" line="326"/>
         <source>Search the AUR</source>
         <translation>Pesquisar no AUR</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="324"/>
+        <location filename="../qml/Main.qml" line="327"/>
         <source>Search Flatpak apps</source>
         <translation>Pesquisar aplicações Flatpak</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="324"/>
+        <location filename="../qml/Main.qml" line="328"/>
         <source>Search apps and packages</source>
         <translation>Pesquisar aplicações e pacotes</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="482"/>
+        <location filename="../qml/Main.qml" line="328"/>
+        <source>Search cpak apps</source>
+        <translation type="unfinished">Pesquisar aplicações cpak</translation>
+    </message>
+    <message>
+        <location filename="../qml/Main.qml" line="500"/>
         <source>A transaction is running</source>
         <translation>Está em curso uma operação</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="488"/>
+        <location filename="../qml/Main.qml" line="506"/>
         <source>Interrupting it could leave the system in a broken state. The window can be closed once it has finished.</source>
         <translation>Interromper a operação pode deixar o sistema num estado inconsistente. Podes fechar a janela quando a operação terminar.</translation>
     </message>
     <message>
-        <location filename="../qml/Main.qml" line="496"/>
+        <location filename="../qml/Main.qml" line="514"/>
         <source>Keep running</source>
         <translation>Manter em execução</translation>
     </message>
@@ -1554,6 +1708,11 @@
         <translation>O Flatpak não está instalado. Podes instalá-lo na página Flatpak.</translation>
     </message>
     <message>
+        <location filename="../qml/SettingsPage.qml" line="164"/>
+        <source>cpak</source>
+        <translation type="unfinished">cpak</translation>
+    </message>
+    <message>
         <location filename="../qml/SettingsPage.qml" line="156"/>
         <source>AppImage</source>
         <translation>AppImage</translation>
@@ -1564,32 +1723,47 @@
         <translation>Aplicações num único ficheiro, transferidas por ti. Recebem uma entrada no menu e um ícone. Não são verificadas nem executadas num ambiente isolado, e não são atualizadas automaticamente.</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="166"/>
+        <location filename="../qml/SettingsPage.qml" line="165"/>
+        <source>Sandboxed apps from cpak&apos;s signed catalogue, and Flatpak apps run in cpak&apos;s sandbox. They are packaged by their developers, not by CachyOS, and run with the permissions shown on their page.</source>
+        <translation type="unfinished">Aplicações isoladas do catálogo assinado do cpak e aplicações Flatpak executadas no sandbox do cpak. São empacotadas pelos seus programadores, não pelo CachyOS, e correm com as permissões apresentadas na respetiva página.</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="167"/>
+        <source>cpak is not installed. See cpak.it/docs for how to install it.</source>
+        <translation type="unfinished">O cpak não está instalado. Consulta cpak.it/docs para saber como o instalar.</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="168"/>
+        <source>cpak&apos;s catalogue could not be read. Check your connection.</source>
+        <translation type="unfinished">Não foi possível ler o catálogo do cpak. Verifica a tua ligação.</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="177"/>
         <source>Mirrors</source>
         <translation>Espelhos</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="170"/>
+        <location filename="../qml/SettingsPage.qml" line="181"/>
         <source>Rank the mirrors by speed</source>
         <translation>Ordenar os espelhos por velocidade</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="171"/>
+        <location filename="../qml/SettingsPage.qml" line="182"/>
         <source>Packages are downloaded from the first mirror that answers. Ranking measures the Arch and CachyOS mirrors from your connection and rewrites the mirror lists to prefer the fast ones. Worth doing when downloads are slow or fail.</source>
         <translation>Os pacotes são transferidos a partir do primeiro espelho que responde. A ferramenta mede a velocidade dos espelhos do Arch e do CachyOS através da tua ligação e atualiza as listas para dar prioridade aos mais rápidos. É útil quando as transferências são lentas ou falham.</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="172"/>
+        <location filename="../qml/SettingsPage.qml" line="183"/>
         <source>Ranking needs the “cachyos-rate-mirrors” package, which is not installed.</source>
         <translation>A ordenação requer o pacote “cachyos-rate-mirrors”, que não está instalado.</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="176"/>
+        <location filename="../qml/SettingsPage.qml" line="187"/>
         <source>Rank mirrors</source>
         <translation>Ordenar espelhos</translation>
     </message>
     <message>
-        <location filename="../qml/SettingsPage.qml" line="176"/>
+        <location filename="../qml/SettingsPage.qml" line="187"/>
         <source>Install cachyos-rate-mirrors</source>
         <translation>Instalar cachyos-rate-mirrors</translation>
     </message>
@@ -1618,11 +1792,16 @@
     </message>
     <message>
         <location filename="../qml/SourceBadge.qml" line="13"/>
+        <source>cpak</source>
+        <translation type="unfinished">cpak</translation>
+    </message>
+    <message>
+        <location filename="../qml/SourceBadge.qml" line="14"/>
         <source>AppImage</source>
         <translation>AppImage</translation>
     </message>
     <message>
-        <location filename="../qml/SourceBadge.qml" line="14"/>
+        <location filename="../qml/SourceBadge.qml" line="15"/>
         <source>Local</source>
         <translation>Local</translation>
     </message>
@@ -1630,37 +1809,42 @@
 <context>
     <name>Transaction</name>
     <message>
-        <location filename="../src/transaction.cpp" line="81"/>
+        <location filename="../src/transaction.cpp" line="92"/>
         <source>Install %1</source>
         <translation>Instalar %1</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="83"/>
+        <location filename="../src/transaction.cpp" line="95"/>
         <source>Remove %1</source>
         <translation>Remover %1</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="84"/>
+        <location filename="../src/transaction.cpp" line="96"/>
         <source>Update the system</source>
         <translation>Atualizar o sistema</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="85"/>
+        <location filename="../src/transaction.cpp" line="97"/>
         <source>Update Flatpak apps</source>
         <translation>Atualizar aplicações Flatpak</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="86"/>
+        <location filename="../src/transaction.cpp" line="98"/>
+        <source>Update cpak apps</source>
+        <translation type="unfinished">Atualizar aplicações cpak</translation>
+    </message>
+    <message>
+        <location filename="../src/transaction.cpp" line="99"/>
         <source>Add Flathub</source>
         <translation>Adicionar Flathub</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="87"/>
+        <location filename="../src/transaction.cpp" line="100"/>
         <source>Rank the mirrors</source>
         <translation>Classificar os espelhos</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="89"/>
+        <location filename="../src/transaction.cpp" line="102"/>
         <source>Build %n package(s) from the AUR</source>
         <translation>
             <numerusform>Compilar %n pacote do AUR</numerusform>
@@ -1668,52 +1852,72 @@
         </translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="90"/>
+        <location filename="../src/transaction.cpp" line="103"/>
         <source>Build %1 from the AUR</source>
         <translation>Compilar %1 do AUR</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="97"/>
+        <location filename="../src/transaction.cpp" line="110"/>
         <source>Flatpak will download the app and the runtime it needs, and install them for all users. It asks for permission itself if that is required.</source>
         <translation>O Flatpak irá transferir a aplicação e o ambiente de execução de que necessita e instalá-los para todos os utilizadores. Se for necessário, a própria aplicação pedirá autorização.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="99"/>
+        <location filename="../src/transaction.cpp" line="112"/>
         <source>The app will be removed, and with it the runtimes that no other app needs. Its data in your home directory is kept.</source>
         <translation>A aplicação será removida, juntamente com os ambientes de execução de que nenhuma outra aplicação necessite. Os dados guardados no diretório pessoal serão mantidos.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="100"/>
+        <location filename="../src/transaction.cpp" line="113"/>
         <source>Every installed Flatpak app and runtime will be updated.</source>
         <translation>Todas as aplicações Flatpak e todos os ambientes de execução instalados serão atualizados.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="101"/>
+        <location filename="../src/transaction.cpp" line="115"/>
+        <source>cpak will download the app and install it for your user. It runs in a sandbox of its own, with the permissions listed on the app&apos;s page.</source>
+        <translation type="unfinished">O cpak irá transferir a aplicação e instalá-la para o teu utilizador. Corre no seu próprio sandbox, com as permissões indicadas na página da aplicação.</translation>
+    </message>
+    <message>
+        <location filename="../src/transaction.cpp" line="117"/>
+        <source>cpak will download the Flatpak app and install it for your user, in cpak&apos;s sandbox instead of Flatpak&apos;s. The output lists the permissions cpak grants and the ones it refuses; change them later with “cpak override”.</source>
+        <translation type="unfinished">O cpak irá transferir a aplicação Flatpak e instalá-la para o teu utilizador, no sandbox do cpak em vez do Flatpak. O resultado indica as permissões que o cpak concede e as que recusa; altera-as mais tarde com “cpak override”.</translation>
+    </message>
+    <message>
+        <location filename="../src/transaction.cpp" line="118"/>
+        <source>The app will be removed. Its data in your home directory is kept.</source>
+        <translation type="unfinished">A aplicação será removida. Os dados no teu diretório pessoal são mantidos.</translation>
+    </message>
+    <message>
+        <location filename="../src/transaction.cpp" line="120"/>
+        <source>Every installed cpak app will be updated. An app whose update asks for more permissions than it has is skipped; update it on its own after reading them.</source>
+        <translation type="unfinished">Todas as aplicações cpak instaladas serão atualizadas. Uma aplicação cuja atualização peça mais permissões do que as que tem é ignorada; atualiza-a em separado depois de as leres.</translation>
+    </message>
+    <message>
+        <location filename="../src/transaction.cpp" line="121"/>
         <source>Flathub will be added as an app source for all users.</source>
         <translation>O Flathub será adicionado como fonte de aplicações para todos os utilizadores.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="102"/>
+        <location filename="../src/transaction.cpp" line="122"/>
         <source>The package databases will be refreshed and every available update installed.</source>
         <translation>As bases de dados dos pacotes serão atualizadas e todas as atualizações disponíveis serão instaladas.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="104"/>
+        <location filename="../src/transaction.cpp" line="124"/>
         <source>The download speed of the Arch and CachyOS mirrors will be measured and the mirror lists rewritten to prefer the fast ones. This takes a minute or two; a copy of the current lists is kept until the next ranking.</source>
         <translation>A velocidade de transferência dos espelhos do Arch e do CachyOS será medida e as listas serão reescritas para dar prioridade aos mais rápidos. A operação demora um ou dois minutos; será mantida uma cópia das listas atuais até à próxima ordenação.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="107"/>
+        <location filename="../src/transaction.cpp" line="127"/>
         <source>paru will download the sources, build %1 as your user and then ask for permission to install them. This can take a while.</source>
         <translation>O paru irá transferir o código-fonte, compilar %1 com as permissões do utilizador atual e, em seguida, pedir autorização para o instalar. Este processo pode demorar algum tempo.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="108"/>
+        <location filename="../src/transaction.cpp" line="128"/>
         <source>paru will download the sources, build the package as your user and then ask for permission to install it. This can take a while.</source>
         <translation>O paru irá transferir o código-fonte, compilar o pacote com as permissões do utilizador atual e, em seguida, pedir autorização para o instalar. Este processo pode demorar algum tempo.</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="109"/>
+        <location filename="../src/transaction.cpp" line="129"/>
         <source>%n package(s) will be removed:</source>
         <translation>
             <numerusform>Será removido %n pacote:</numerusform>
@@ -1721,7 +1925,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="111"/>
+        <location filename="../src/transaction.cpp" line="131"/>
         <source>%n package(s) will be installed (%1 to download):</source>
         <translation>
             <numerusform>Será instalado %n pacote (%1 a transferir):</numerusform>
@@ -1729,42 +1933,42 @@
         </translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="119"/>
+        <location filename="../src/transaction.cpp" line="140"/>
         <source>Remove</source>
         <translation>Remover</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="121"/>
+        <location filename="../src/transaction.cpp" line="143"/>
         <source>Update</source>
         <translation>Atualizar</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="122"/>
+        <location filename="../src/transaction.cpp" line="144"/>
         <source>Add</source>
         <translation>Adicionar</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="123"/>
+        <location filename="../src/transaction.cpp" line="145"/>
         <source>Rank</source>
         <translation>Classificar</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="124"/>
+        <location filename="../src/transaction.cpp" line="146"/>
         <source>Install</source>
         <translation>Instalar</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="243"/>
+        <location filename="../src/transaction.cpp" line="276"/>
         <source>%1 is missing. Reinstall the package installer.</source>
         <translation>Falta %1. Reinstala o instalador de pacotes.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="296"/>
+        <location filename="../src/transaction.cpp" line="329"/>
         <source>Could not start %1</source>
         <translation>Não foi possível iniciar %1</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/transaction.cpp" line="339"/>
+        <location filename="../src/transaction.cpp" line="373"/>
         <source>%1 cannot be removed: %n installed package(s) depend on it.</source>
         <translation>
             <numerusform>Não é possível remover %1: %n pacote instalado depende dele.</numerusform>
@@ -1772,32 +1976,32 @@
         </translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="340"/>
+        <location filename="../src/transaction.cpp" line="374"/>
         <source>Among them: %1, …</source>
         <translation>Entre eles: %1, …</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="340"/>
+        <location filename="../src/transaction.cpp" line="374"/>
         <source>Needed by: %1</source>
         <translation>Necessário para: %1</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="342"/>
+        <location filename="../src/transaction.cpp" line="376"/>
         <source>pacman could not resolve this operation.</source>
         <translation>O pacman não conseguiu resolver esta operação.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="345"/>
+        <location filename="../src/transaction.cpp" line="379"/>
         <source>Already installed and up to date.</source>
         <translation>Já está instalado e atualizado.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="345"/>
+        <location filename="../src/transaction.cpp" line="379"/>
         <source>Nothing to do.</source>
         <translation>Não há operações a realizar.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="366"/>
+        <location filename="../src/transaction.cpp" line="400"/>
         <source>
 The unused runtimes could not be removed (exit code %1).
 </source>
@@ -1806,12 +2010,17 @@ Não foi possível remover os ambientes de execução não utilizados (código d
 </translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="380"/>
+        <location filename="../src/transaction.cpp" line="414"/>
         <source>Authentication was cancelled or denied. Nothing was changed.</source>
         <translation>A autenticação foi cancelada ou recusada. Não foi efetuada qualquer alteração.</translation>
     </message>
     <message>
-        <location filename="../src/transaction.cpp" line="382"/>
+        <location filename="../src/transaction.cpp" line="416"/>
+        <source>Stopped before it finished. Nothing was installed.</source>
+        <translation type="unfinished">Interrompido antes de terminar. Nada foi instalado.</translation>
+    </message>
+    <message>
+        <location filename="../src/transaction.cpp" line="418"/>
         <source>
 The operation failed (exit code %1).
 </source>
@@ -1954,317 +2163,317 @@ A operação falhou (código de saída %1).
 <context>
     <name>pkgscan</name>
     <message>
-        <location filename="../src/pkgscan.cpp" line="66"/>
+        <location filename="../src/pkgscan.cpp" line="67"/>
         <source>Downloads a script and runs it directly</source>
         <translation>Transfere um script e executa-o diretamente</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="67"/>
+        <location filename="../src/pkgscan.cpp" line="68"/>
         <source>The downloaded code is executed without being stored or verified, so it can change at any time.</source>
         <translation>O código transferido é executado sem ser guardado ou verificado, pelo que pode mudar a qualquer momento.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="70"/>
+        <location filename="../src/pkgscan.cpp" line="71"/>
         <source>Downloads something outside the source list</source>
         <translation>Transfere conteúdo que não consta da lista de fontes</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="71"/>
+        <location filename="../src/pkgscan.cpp" line="72"/>
         <source>Only files listed in source=() are checked against a checksum. This download is not.</source>
         <translation>Apenas os ficheiros indicados em source=() são verificados através de uma soma de verificação. Esta transferência não é.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="74"/>
+        <location filename="../src/pkgscan.cpp" line="75"/>
         <source>Decodes hidden text and runs it</source>
         <translation>Descodifica texto oculto e executa-o</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="75"/>
+        <location filename="../src/pkgscan.cpp" line="76"/>
         <source>Encoding a command before running it has no purpose other than hiding what it does.</source>
         <translation>Codificar um comando antes de o executar não tem outra finalidade senão ocultar o que faz.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="78"/>
+        <location filename="../src/pkgscan.cpp" line="79"/>
         <source>Decodes encoded data</source>
         <translation>Descodifica dados codificados</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="79"/>
+        <location filename="../src/pkgscan.cpp" line="80"/>
         <source>Check what the decoded data is and what happens with it.</source>
         <translation>Verifica o conteúdo dos dados descodificados e o que é feito com eles.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="82"/>
+        <location filename="../src/pkgscan.cpp" line="83"/>
         <source>Opens a network connection from the shell</source>
         <translation>Abre uma ligação de rede a partir da shell</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="83"/>
+        <location filename="../src/pkgscan.cpp" line="84"/>
         <source>This is how remote-control backdoors are started. A build or install script has no reason to do this.</source>
         <translation>É assim que são ativadas portas traseiras de acesso remoto. Um script de compilação ou instalação não tem qualquer motivo para o fazer.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="87"/>
+        <location filename="../src/pkgscan.cpp" line="88"/>
         <source>Accesses keys, passwords or browser data</source>
         <translation>Acede a chaves, palavras-passe ou dados do navegador</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="88"/>
+        <location filename="../src/pkgscan.cpp" line="89"/>
         <source>These files hold your logins. Building or installing a package never needs them.</source>
         <translation>Estes ficheiros contêm os teus dados de acesso. A compilação ou instalação de um pacote nunca precisa de lhes aceder.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="91"/>
+        <location filename="../src/pkgscan.cpp" line="92"/>
         <source>Changes who may become administrator</source>
         <translation>Altera quem pode obter privilégios de administrador</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="92"/>
+        <location filename="../src/pkgscan.cpp" line="93"/>
         <source>Editing sudo, polkit, PAM or the library preload list can give lasting, silent root access.</source>
         <translation>Alterar as definições do sudo, polkit, PAM ou a lista de pré-carregamento de bibliotecas pode conceder acesso root permanente e sem aviso.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="95"/>
+        <location filename="../src/pkgscan.cpp" line="96"/>
         <source>Deletes a whole directory tree</source>
         <translation>Elimina uma árvore de diretórios inteira</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="96"/>
+        <location filename="../src/pkgscan.cpp" line="97"/>
         <source>This removes the root or home directory.</source>
         <translation>Isto elimina o diretório raiz ou o diretório pessoal.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="99"/>
+        <location filename="../src/pkgscan.cpp" line="100"/>
         <source>Contains text hidden as escape codes</source>
         <translation>Contém texto oculto sob a forma de códigos de escape</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="100"/>
+        <location filename="../src/pkgscan.cpp" line="101"/>
         <source>Readable scripts do not need to spell out text byte by byte.</source>
         <translation>Os scripts legíveis não precisam de representar o texto byte a byte.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="103"/>
+        <location filename="../src/pkgscan.cpp" line="104"/>
         <source>Runs text that is put together at run time</source>
         <translation>Executa texto construído durante a execução</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="104"/>
+        <location filename="../src/pkgscan.cpp" line="105"/>
         <source>With eval the command that really runs is not visible in the script. Check where its input comes from.</source>
         <translation>Com eval, o comando efetivamente executado não é visível no script. Verifica a origem dos dados utilizados.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="107"/>
+        <location filename="../src/pkgscan.cpp" line="108"/>
         <source>Asks for administrator rights while building</source>
         <translation>Solicita privilégios de administrador durante a compilação</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="108"/>
+        <location filename="../src/pkgscan.cpp" line="109"/>
         <source>A build runs as your user and must not need root.</source>
         <translation>A compilação é executada com as permissões do utilizador atual e não deve precisar de privilégios de root.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="111"/>
+        <location filename="../src/pkgscan.cpp" line="112"/>
         <source>Touches a home directory</source>
         <translation>Acede ao diretório pessoal</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="112"/>
+        <location filename="../src/pkgscan.cpp" line="113"/>
         <source>Packages install into system directories. Check what is read from or written to the home directory.</source>
         <translation>Os pacotes são instalados em diretórios do sistema. Verifica o que é lido ou escrito no diretório pessoal.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="115"/>
+        <location filename="../src/pkgscan.cpp" line="116"/>
         <source>Sets something up to run automatically</source>
         <translation>Configura a execução automática de algo</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="116"/>
+        <location filename="../src/pkgscan.cpp" line="117"/>
         <source>Cron jobs, autostart entries and shell start-up files keep running after the installation.</source>
         <translation>As tarefas do cron, as entradas de arranque automático e os ficheiros de inicialização da shell continuam ativos após a instalação.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="119"/>
+        <location filename="../src/pkgscan.cpp" line="120"/>
         <source>Enables or starts a service</source>
         <translation>Ativa ou inicia um serviço</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="120"/>
+        <location filename="../src/pkgscan.cpp" line="121"/>
         <source>Packages should leave it to you to enable their services.</source>
         <translation>Os pacotes devem deixar ao utilizador a decisão de ativar os respetivos serviços.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="123"/>
+        <location filename="../src/pkgscan.cpp" line="124"/>
         <source>Gives a program elevated rights</source>
         <translation>Concede privilégios acrescidos a uma aplicação</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="124"/>
+        <location filename="../src/pkgscan.cpp" line="125"/>
         <source>A setuid bit or capability lets the program act with more rights than the user who starts it.</source>
         <translation>Um bit setuid ou uma capacidade permite que a aplicação atue com mais privilégios do que o utilizador que a inicia.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="127"/>
-        <source>Turns off the check of the server's identity</source>
+        <location filename="../src/pkgscan.cpp" line="128"/>
+        <source>Turns off the check of the server&apos;s identity</source>
         <translation>Desativa a verificação da identidade do servidor</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="128"/>
+        <location filename="../src/pkgscan.cpp" line="129"/>
         <source>Without certificate checks anybody on the network can replace the download.</source>
         <translation>Sem a verificação dos certificados, qualquer pessoa na rede pode substituir o ficheiro transferido.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="131"/>
+        <location filename="../src/pkgscan.cpp" line="132"/>
         <source>Changes the system while building</source>
         <translation>Altera o sistema durante a compilação</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="132"/>
+        <location filename="../src/pkgscan.cpp" line="133"/>
         <source>A build only creates files inside its own directory.</source>
         <translation>Uma compilação cria ficheiros apenas no próprio diretório.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="135"/>
+        <location filename="../src/pkgscan.cpp" line="136"/>
         <source>Runs an inline script in another language</source>
         <translation>Executa um script incorporado noutra linguagem</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="136"/>
+        <location filename="../src/pkgscan.cpp" line="137"/>
         <source>Read the embedded code as carefully as the rest.</source>
         <translation>Lê o código incorporado com o mesmo cuidado que o restante código.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="233"/>
+        <location filename="../src/pkgscan.cpp" line="234"/>
         <source>Contains a long block of encoded data</source>
         <translation>Contém um longo bloco de dados codificados</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="234"/>
+        <location filename="../src/pkgscan.cpp" line="235"/>
         <source>Encoded blocks can hide a program or script. Check what it is decoded into.</source>
         <translation>Os blocos codificados podem ocultar uma aplicação ou um script. Verifica o conteúdo obtido após a descodificação.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="442"/>
+        <location filename="../src/pkgscan.cpp" line="443"/>
         <source>The PKGBUILD downloads something .SRCINFO does not list</source>
         <translation>O PKGBUILD transfere conteúdo que não consta do .SRCINFO</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="443"/>
+        <location filename="../src/pkgscan.cpp" line="444"/>
         <source>The AUR shows the sources from .SRCINFO, but makepkg downloads what the PKGBUILD says.</source>
         <translation>O AUR apresenta as fontes indicadas em .SRCINFO, mas o makepkg transfere aquilo que o PKGBUILD especifica.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="594"/>
+        <location filename="../src/pkgscan.cpp" line="595"/>
         <source>Download address is put together from variables</source>
         <translation>O endereço de transferência é construído a partir de variáveis</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="594"/>
+        <location filename="../src/pkgscan.cpp" line="595"/>
         <source>Work out where this source really comes from.</source>
         <translation>Determina a verdadeira origem desta fonte.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="600"/>
+        <location filename="../src/pkgscan.cpp" line="601"/>
         <source>Downloads from a bare IP address</source>
         <translation>Transfere ficheiros a partir de um endereço IP sem nome de domínio</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="601"/>
+        <location filename="../src/pkgscan.cpp" line="602"/>
         <source>Real projects publish their files under a name. %1 cannot be traced to anybody.</source>
         <translation>Os projetos legítimos disponibilizam os ficheiros sob um nome de domínio. Não é possível identificar a quem pertence %1.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="603"/>
+        <location filename="../src/pkgscan.cpp" line="604"/>
         <source>Downloads from a file-sharing, paste or link-shortening service</source>
         <translation>Transfere ficheiros a partir de um serviço de partilha de ficheiros, publicação de texto ou encurtamento de ligações</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="604"/>
+        <location filename="../src/pkgscan.cpp" line="605"/>
         <source>Anybody can upload to %1 anonymously and replace the file later.</source>
         <translation>Qualquer pessoa pode carregar ficheiros anonimamente para %1 e substituí-los mais tarde.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="610"/>
+        <location filename="../src/pkgscan.cpp" line="611"/>
         <source>Builds whatever is in the repository at that moment</source>
         <translation>Compila o conteúdo existente no repositório nesse momento</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="611"/>
+        <location filename="../src/pkgscan.cpp" line="612"/>
         <source>The source is not pinned to a commit or tag, so the code can differ from what the maintainer tested.</source>
         <translation>A origem não está associada a um commit ou tag específico, pelo que o código pode diferir daquele que foi testado pelo responsável pela manutenção.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="625"/>
+        <location filename="../src/pkgscan.cpp" line="626"/>
         <source>Download is not verified</source>
         <translation>A transferência não é verificada</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="626"/>
+        <location filename="../src/pkgscan.cpp" line="627"/>
         <source>This file has no checksum and is fetched without encryption, so anybody on the network can replace it.</source>
         <translation>Este ficheiro não tem uma soma de verificação e é transferido sem encriptação, pelo que qualquer pessoa na rede o pode substituir.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="627"/>
+        <location filename="../src/pkgscan.cpp" line="628"/>
         <source>This file has no checksum (SKIP), so whatever the server sends is accepted.</source>
         <translation>Este ficheiro não tem uma soma de verificação (SKIP), pelo que é aceite qualquer conteúdo enviado pelo servidor.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="629"/>
+        <location filename="../src/pkgscan.cpp" line="630"/>
         <source>Download is only verified with an outdated checksum</source>
         <translation>A transferência é verificada apenas através de uma soma de verificação desatualizada</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="630"/>
+        <location filename="../src/pkgscan.cpp" line="631"/>
         <source>MD5 and SHA-1 can be forged. Current packages use SHA-256 or BLAKE2.</source>
         <translation>As somas MD5 e SHA-1 podem ser falsificadas. Os pacotes atuais utilizam SHA-256 ou BLAKE2.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="800"/>
+        <location filename="../src/pkgscan.cpp" line="801"/>
         <source>Runs a command as soon as the PKGBUILD is read</source>
         <translation>Executa um comando assim que o PKGBUILD é lido</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="801"/>
+        <location filename="../src/pkgscan.cpp" line="802"/>
         <source>Code outside of the build functions already runs when package information is generated, before anything is built.</source>
         <translation>O código que está fora das funções de compilação é executado quando são geradas as informações do pacote, antes de começar qualquer compilação.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="812"/>
+        <location filename="../src/pkgscan.cpp" line="813"/>
         <source>Writes outside the package directory</source>
         <translation>Escreve fora do diretório do pacote</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="813"/>
+        <location filename="../src/pkgscan.cpp" line="814"/>
         <source>A build may only create files below $pkgdir and $srcdir. This line changes the running system directly.</source>
         <translation>Uma compilação só pode criar ficheiros em $pkgdir e $srcdir. Esta linha altera diretamente o sistema em execução.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="842"/>
+        <location filename="../src/pkgscan.cpp" line="843"/>
         <source>Nobody maintains this package</source>
         <translation>Este pacote não tem responsável pela manutenção</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="843"/>
+        <location filename="../src/pkgscan.cpp" line="844"/>
         <source>Orphaned packages can be adopted by anyone, and nobody is watching for problems.</source>
         <translation>Qualquer pessoa pode assumir a manutenção de pacotes órfãos, sem que exista alguém a acompanhar eventuais problemas.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="845"/>
+        <location filename="../src/pkgscan.cpp" line="846"/>
         <source>The maintainer has changed</source>
         <translation>O responsável pela manutenção foi alterado</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="846"/>
+        <location filename="../src/pkgscan.cpp" line="847"/>
         <source>Submitted by %1, now maintained by %2. Taking over an abandoned package is a known way to slip in malware.</source>
         <translation>Submetido por %1 e atualmente mantido por %2. Assumir a manutenção de um pacote abandonado é uma forma conhecida de introduzir malware.</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="849"/>
+        <location filename="../src/pkgscan.cpp" line="850"/>
         <source>This package is very new</source>
         <translation>Este pacote é recente</translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/pkgscan.cpp" line="850"/>
+        <location filename="../src/pkgscan.cpp" line="851"/>
         <source>It was first submitted %n day(s) ago, so few people have looked at it.</source>
         <translation>
             <numerusform>Foi submetido pela primeira vez há %n dia, pelo que poucas pessoas tiveram oportunidade de o analisar.</numerusform>
@@ -2272,7 +2481,7 @@ A operação falhou (código de saída %1).
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/pkgscan.cpp" line="854"/>
+        <location filename="../src/pkgscan.cpp" line="855"/>
         <source>The last change is %n hour(s) old. Malicious updates are usually found and removed within days.</source>
         <translation>
             <numerusform>A última alteração ocorreu há %n hora. As atualizações maliciosas são normalmente detetadas e removidas no espaço de alguns dias.</numerusform>
@@ -2280,7 +2489,7 @@ A operação falhou (código de saída %1).
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../src/pkgscan.cpp" line="859"/>
+        <location filename="../src/pkgscan.cpp" line="860"/>
         <source>It has %n vote(s). Problems in rarely used packages stay unnoticed for longer.</source>
         <translation>
             <numerusform>Tem %n voto. Os problemas em pacotes pouco utilizados podem passar despercebidos durante mais tempo.</numerusform>
@@ -2288,12 +2497,12 @@ A operação falhou (código de saída %1).
         </translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="853"/>
+        <location filename="../src/pkgscan.cpp" line="854"/>
         <source>This package changed very recently</source>
         <translation>Este pacote foi alterado muito recentemente</translation>
     </message>
     <message>
-        <location filename="../src/pkgscan.cpp" line="858"/>
+        <location filename="../src/pkgscan.cpp" line="859"/>
         <source>Hardly anybody uses this package</source>
         <translation>Este pacote é pouco utilizado</translation>
     </message>

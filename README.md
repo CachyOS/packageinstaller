@@ -24,6 +24,14 @@ Flatpak apps and add AppImage files to the menu.
   Flatpak asks for permission itself. The Flatpak page lists the installed apps
   and their updates; remotes other than Flathub are used if they are set up, but
   are not managed here.
+- **cpak** is opt-in as well. The app reads cpak's signed catalogue through
+  `cpak discover list` and runs `cpak` as your user to install, remove and
+  update apps; each app runs in cpak's own sandbox and its page lists the
+  permissions it asks for. "Update all" runs `cpak update --non-interactive`,
+  so an update that wants more permissions is skipped until you update that app
+  by itself. A Flatpak app's page also offers "Install with cpak", which puts
+  it in cpak's sandbox instead of Flatpak's; such apps, and anything else cpak
+  has installed, are listed on the cpak page and can be updated and removed there.
 - **AppImage** is opt-in too. There is no catalogue: a file you downloaded
   (picked, dropped on the page, or given as `cachyos-pi file.AppImage`) is
   copied to `~/Applications` and gets a menu entry and an icon, all as your

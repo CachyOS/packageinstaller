@@ -87,6 +87,11 @@ void IconProvider::setThemeIndex(QHash<QString, QString> index) {
     m_decoded.clear();
 }
 
+void IconProvider::setCpakIndex(IconIndex index) {
+    m_cpak = std::move(index);
+    m_decoded.clear();
+}
+
 void IconProvider::setAppImageIndex(IconIndex index) {
     // A newer file of the same app replaces its icon in place.
     const auto listed = [&](const QString& file) {
@@ -147,6 +152,16 @@ void IconProvider::resolve(const Request& request) {
         // "org.mozilla.firefox": the last part names the app
         const auto tile = app.section(u'.', -1);
         if (!fromFile(request, ref.path, tile) && !fromFile(request, themed(ref, app), tile)) {
+            generate(request, tile);
+        }
+        return;
+    }
+
+    if (id.startsWith("cpak/"_L1)) {
+        // "github.com/bottlesdevs/bottles": the repository names the app
+        const auto origin = id.mid(5);
+        const auto tile   = origin.section(u'/', -1);
+        if (!fromFile(request, m_cpak.value(origin).path, tile)) {
             generate(request, tile);
         }
         return;

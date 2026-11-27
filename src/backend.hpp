@@ -4,6 +4,7 @@
 #include "appimageclient.hpp"
 #include "aurclient.hpp"
 #include "catalog.hpp"
+#include "cpakclient.hpp"
 #include "flatpakclient.hpp"
 #include "packagemodel.hpp"
 #include "transaction.hpp"
@@ -42,6 +43,8 @@ class Backend : public QObject {
     Q_PROPERTY(FlatpakClient* flatpak READ flatpak CONSTANT FINAL)
     Q_PROPERTY(UpdateNotice* updateNotice READ updateNotice CONSTANT FINAL)
     Q_PROPERTY(bool flatpakEnabled READ flatpakEnabled WRITE setFlatpakEnabled NOTIFY flatpakEnabledChanged FINAL)
+    Q_PROPERTY(CpakClient* cpak READ cpak CONSTANT FINAL)
+    Q_PROPERTY(bool cpakEnabled READ cpakEnabled WRITE setCpakEnabled NOTIFY cpakEnabledChanged FINAL)
     Q_PROPERTY(AppImageClient* appImages READ appImages CONSTANT FINAL)
     Q_PROPERTY(bool appImagesEnabled READ appImagesEnabled WRITE setAppImagesEnabled NOTIFY appImagesEnabledChanged FINAL)
     /// The app was started with an AppImage file to add.
@@ -72,6 +75,9 @@ class Backend : public QObject {
     bool flatpakEnabled() const { return m_flatpakEnabled; }
     void setFlatpakEnabled(bool enabled);
     UpdateNotice* updateNotice() { return &m_updateNotice; }
+    CpakClient* cpak() { return &m_cpak; }
+    bool cpakEnabled() const { return m_cpakEnabled; }
+    void setCpakEnabled(bool enabled);
     AppImageClient* appImages() { return &m_appImages; }
     bool appImagesEnabled() const { return m_appImagesEnabled; }
     void setAppImagesEnabled(bool enabled);
@@ -102,6 +108,13 @@ class Backend : public QObject {
     /// Sets up Flathub as a system-wide remote.
     Q_INVOKABLE void addFlathub();
 
+    Q_INVOKABLE void installCpak(const QString& origin);
+    Q_INVOKABLE void removeCpak(const QString& origin);
+    /// Updates the cpak apps that need no new permissions.
+    Q_INVOKABLE void updateCpaks();
+    /// Installs the Flatpak app `id` into cpak's sandbox.
+    Q_INVOKABLE void installFlatpakWithCpak(const QString& id);
+
  signals:
     void loadingChanged();
     void revisionChanged();
@@ -110,6 +123,7 @@ class Backend : public QObject {
     void aurEnabledChanged();
     void paruAvailableChanged();
     void flatpakEnabledChanged();
+    void cpakEnabledChanged();
     void appImagesEnabledChanged();
     void startupFileChanged();
     /// Something the user asked for could not be done, and `text` says why.
@@ -131,6 +145,7 @@ class Backend : public QObject {
     PackageModel m_packages{m_list};
     AurClient m_aur;
     FlatpakClient m_flatpak;
+    CpakClient m_cpak;
     AppImageClient m_appImages;
     Transaction m_transaction;
     UpdateNotice m_updateNotice;
@@ -151,6 +166,7 @@ class Backend : public QObject {
     bool m_checkOutdated   = false;  ///< the databases were reloaded while checkupdates was running
     bool m_aurEnabled      = false;
     bool m_flatpakEnabled  = false;
+    bool m_cpakEnabled     = false;
     bool m_appImagesEnabled = false;
     QUrl m_startupFile;
     bool m_paruAvailable   = false;

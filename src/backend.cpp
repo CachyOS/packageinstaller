@@ -25,6 +25,7 @@ Backend::Backend(IconProvider* icons, QObject* parent)
     s_instance       = this;
     m_aurEnabled     = m_settings.value(u"aur/enabled"_s, false).toBool();
     m_flatpakEnabled = m_settings.value(u"flatpak/enabled"_s, false).toBool();
+    m_cpakEnabled    = m_settings.value(u"cpak/enabled"_s, false).toBool();
     m_appImagesEnabled = m_settings.value(u"appimage/enabled"_s, false).toBool();
     m_paruAvailable  = !QStandardPaths::findExecutable(u"paru"_s).isEmpty();
 
@@ -32,12 +33,15 @@ Backend::Backend(IconProvider* icons, QObject* parent)
         // a Flatpak operation leaves the pacman databases alone
         if (m_transaction.isFlatpak()) {
             m_flatpak.refresh();
+        } else if (m_transaction.isCpak()) {
+            m_cpak.refresh();
         } else if (m_transaction.kind() != Transaction::RateMirrors) {
             // ranking the mirrors changes no package
             reload();
         }
     });
     connect(&m_flatpak, &FlatpakClient::iconsLoaded, this, [this](const IconIndex& index) { m_icons->setIndex(index, true); });
+    connect(&m_cpak, &CpakClient::iconsLoaded, this, [this](const IconIndex& index) { m_icons->setCpakIndex(index); });
     connect(&m_appImages, &AppImageClient::iconsLoaded, this, [this](const IconIndex& index) { m_icons->setAppImageIndex(index); });
     m_checkUpdates.setProcessEnvironment(plainEnvironment());
     connect(&m_checkUpdates, &QProcess::finished, this, &Backend::onUpdatesChecked);
@@ -108,6 +112,17 @@ void Backend::setFlatpakEnabled(bool enabled) {
     }
 }
 
+void Backend::setCpakEnabled(bool enabled) {
+    if (!store(m_cpakEnabled, enabled, u"cpak/enabled"_s, &Backend::cpakEnabledChanged)) {
+        return;
+    }
+    if (enabled) {
+        m_cpak.refresh();
+    } else {
+        m_cpak.clear();
+    }
+}
+
 void Backend::setAppImagesEnabled(bool enabled) {
     if (store(m_appImagesEnabled, enabled, u"appimage/enabled"_s, &Backend::appImagesEnabledChanged) && enabled) {
         m_appImages.refresh();
@@ -144,6 +159,30 @@ void Backend::addFlathub() {
     if (m_flatpakEnabled && m_flatpak.available()) {
         m_transaction.prepareFlatpak(Transaction::FlatpakSetup, {u"Flathub"_s},
             {u"remote-add"_s, u"--system"_s, u"--if-not-exists"_s, u"flathub"_s, u"https://dl.flathub.org/repo/flathub.flatpakrepo"_s});
+    }
+}
+
+void Backend::installCpak(const QString& origin) {
+    if (m_cpakEnabled) {
+        m_transaction.prepareCpak(Transaction::CpakInstall, {m_cpak.title(origin)}, m_cpak.installArguments(origin));
+    }
+}
+
+void Backend::removeCpak(const QString& origin) {
+    if (m_cpakEnabled) {
+        m_transaction.prepareCpak(Transaction::CpakRemove, {m_cpak.title(origin)}, m_cpak.removeArguments(origin));
+    }
+}
+
+void Backend::updateCpaks() {
+    if (m_cpakEnabled) {
+        m_transaction.prepareCpak(Transaction::CpakUpdate, {}, {u"update"_s, u"--non-interactive"_s});
+    }
+}
+
+void Backend::installFlatpakWithCpak(const QString& id) {
+    if (m_cpakEnabled && m_cpak.available()) {
+        m_transaction.prepareCpak(Transaction::CpakFlatpakInstall, {m_flatpak.title(id)}, CpakClient::installFlatpakArguments(id));
     }
 }
 
@@ -249,6 +288,11 @@ void Backend::refreshSources() {
     const bool flatpakChanged = m_flatpak.available() == QStandardPaths::findExecutable(u"flatpak"_s).isEmpty();
     if (m_flatpakEnabled && !m_flatpak.loading() && (first || flatpakChanged)) {
         m_flatpak.refresh();
+    }
+    // also when the cpak package itself was just installed or removed
+    const bool cpakChanged = m_cpak.available() == QStandardPaths::findExecutable(u"cpak"_s).isEmpty();
+    if (m_cpakEnabled && !m_cpak.loading() && (first || cpakChanged)) {
+        m_cpak.refresh();
     }
     if (m_appImagesEnabled) {
         m_appImages.refresh();  // cheap, and notices fuse2 being installed

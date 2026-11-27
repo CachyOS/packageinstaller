@@ -15,6 +15,13 @@ ScrollPage {
 
     readonly property flatpakItem app: lookup(appId, copy, Backend.flatpak.revision)
     readonly property bool known: app.id.length > 0
+    // The copy that cpak has installed, if any; Flatpak itself does not know about it.
+    readonly property cpakItem cpakCopy: cpakLookup(appId, Backend.cpak.revision)
+    readonly property bool inCpak: cpakCopy.origin.length > 0
+
+    function cpakLookup(id: string, revision: int): cpakItem {
+        return Backend.cpak.flatpakCopy(id)
+    }
 
     // `revision` only makes the binding look the app up again after a reload.
     function lookup(id: string, key: string, revision: int): flatpakItem {
@@ -39,6 +46,23 @@ ScrollPage {
             size: "large"
             text: qsTr("Install")
             onClicked: Backend.installFlatpak(root.appId)
+        }
+
+        PillButton {
+            visible: Backend.cpakEnabled && Backend.cpak.available && !root.app.installed && root.app.available && !root.inCpak
+            implicitWidth: 150
+            tone: "soft"
+            text: qsTr("Install with cpak")
+            onClicked: Backend.installFlatpakWithCpak(root.appId)
+        }
+
+        PillButton {
+            visible: root.inCpak
+            implicitWidth: 150
+            tone: "danger"
+            // short enough for the 150 px button, and distinct from the Flatpak "Remove"
+            text: qsTr("Remove (cpak)")
+            onClicked: Backend.removeCpak(root.cpakCopy.origin)
         }
 
         PillButton {
@@ -86,6 +110,10 @@ ScrollPage {
             label: qsTr("Installed for")
             value: root.app.installation === "user" ? qsTr("Your user only")
                 : root.app.installation === "system" ? qsTr("All users") : root.app.installation
+        }
+        InfoItem {
+            label: qsTr("Installed with cpak")
+            value: root.inCpak ? Backend.cpak.shortVersion(root.cpakCopy.installedVersion) : ""
         }
         InfoItem {
             label: qsTr("Branch")
