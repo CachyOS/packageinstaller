@@ -5,6 +5,10 @@
 #include <QRegularExpression>
 #include <QSet>
 
+#include <algorithm>
+#include <array>
+#include <functional>
+
 using namespace Qt::StringLiterals;
 
 namespace appimage {
@@ -15,20 +19,65 @@ bool isGroupHeader(const QString& line) {
     return line.startsWith(u'[') && line.endsWith(u']');
 }
 
-/// Length of the first argument of an Exec value, quotes included.
-qsizetype firstArgumentLength(QStringView exec) {
+/// Walks over an Exec value as commandLine() reads it
+qsizetype scan(QStringView exec, bool stopAtSpace, bool* open = nullptr) {
+    const auto next = [&exec](qsizetype& i) {
+        const auto ch = exec.at(i++);
+        if (ch != u'\\' || i == exec.size()) {
+            return ch;
+        }
+        const auto escaped = exec.at(i++);
+        return escaped == u's' ? QChar(u' ') : escaped == u'n' ? QChar(u'\n')
+            : escaped == u't' ? QChar(u'\t') : escaped == u'r' ? QChar(u'\r') : escaped;
+    };
     bool quoted = false;
-    for (qsizetype i = 0; i < exec.size(); ++i) {
-        const auto ch = exec.at(i);
-        if (ch == u'\\' && quoted) {
-            ++i;
+    for (qsizetype i = 0; i < exec.size();) {
+        const auto start = i;
+        const auto ch    = next(i);
+        if (quoted && ch == u'\\' && i < exec.size()) {
+            next(i);  // escaped by Exec: whatever it is, it does not end the quote
         } else if (ch == u'"') {
             quoted = !quoted;
-        } else if (ch == u' ' && !quoted) {
-            return i;
+        } else if (ch == u' ' && !quoted && stopAtSpace) {
+            return start;
         }
     }
+    if (open != nullptr) {
+        *open = quoted;
+    }
     return exec.size();
+}
+
+/// Length of the first argument of an Exec value, quotes included.
+qsizetype firstArgumentLength(QStringView exec) {
+    return scan(exec, true);
+}
+
+/// An Exec value taken apart: the "env NAME=value" words in front etc
+struct ExecParts {
+    QStringList assignments;  ///< as written
+    QString program;          ///< as written
+    QString arguments;        ///< as written
+};
+
+ExecParts splitExec(const QString& exec) {
+    static const QRegularExpression assignmentWord(u"^[A-Za-z_][A-Za-z0-9_]*="_s);
+    ExecParts parts;
+    QStringView rest = QStringView(exec).trimmed();
+    const auto take  = [&rest] {
+        const auto word = rest.left(firstArgumentLength(rest));
+        rest            = rest.mid(word.size()).trimmed();
+        return word.toString();
+    };
+    if (rest.left(firstArgumentLength(rest)) == "env"_L1) {
+        take();
+        while (assignmentWord.matchView(rest.left(firstArgumentLength(rest))).hasMatch()) {
+            parts.assignments << take();
+        }
+    }
+    parts.program   = take();
+    parts.arguments = rest.toString();
+    return parts;
 }
 
 /// One group of a desktop file: its keys in the order they appear, first value wins.
@@ -268,6 +317,218 @@ QString integrate(const QString& desktopFile, const QString& appImagePath, const
     }
     const auto entry = out.join(u'\n') + u'\n';
     return entry.toUtf8().size() > MAX_ENTRY_BYTES ? QString() : entry;
+}
+
+namespace {
+
+constexpr qsizetype MAX_ARGUMENTS_CHARS = 4096;
+constexpr qsizetype MAX_NAME_CHARS      = 128;
+constexpr qsizetype MAX_VALUE_CHARS     = 4096;
+constexpr qsizetype MAX_WEBSITE_CHARS   = 2048;
+
+/// True when every quote of `arguments` is closed, as commandLine() reads them.
+bool quotesClosed(const QString& arguments) {
+    bool open = false;
+    scan(arguments, false, &open);
+    return !open;
+}
+
+/// The words in front of the program: "env", then one word per variable, and a space.
+QString environmentWords(const QStringList& environment) {
+    if (environment.isEmpty()) {
+        return {};
+    }
+    QStringList words{u"env"_s};
+    for (const auto& entry : environment) {
+        const auto equals = entry.indexOf(u'=');
+        words << entry.left(equals) + u'=' + quoteExec(entry.mid(equals + 1));
+    }
+    return words.join(u' ') + u' ';
+}
+
+}  // namespace
+
+Problem problem(const Options& options) {
+    static const QRegularExpression name(u"^[A-Za-z_][A-Za-z0-9_]*$"_s);
+    static const QRegularExpression address(u"^https?://[^\\s]+$"_s);
+    QSet<QString> seen;
+    for (const auto& entry : options.environment) {
+        const auto equals = entry.indexOf(u'=');
+        const auto key    = entry.left(equals);
+        if (equals < 0 || key.size() > MAX_NAME_CHARS || !name.match(key).hasMatch()) {
+            return Problem::Name;
+        }
+        if (seen.contains(key)) {
+            return Problem::Duplicate;
+        }
+        seen.insert(key);
+        if (entry.size() - equals - 1 > MAX_VALUE_CHARS || !printable(entry.mid(equals + 1))) {
+            return Problem::Value;
+        }
+    }
+    if (options.arguments.size() > MAX_ARGUMENTS_CHARS || !printable(options.arguments) || !quotesClosed(options.arguments)) {
+        return Problem::Arguments;
+    }
+    if (!options.website.isEmpty()
+        && (options.website.size() > MAX_WEBSITE_CHARS || !address.match(options.website).hasMatch() || !printable(options.website))) {
+        return Problem::Website;
+    }
+    return Problem::None;
+}
+
+std::optional<std::pair<QString, QString>> assignment(const QString& word) {
+    static const QRegularExpression name(u"^[A-Za-z_][A-Za-z0-9_]*$"_s);
+    const auto equals = word.indexOf(u'=');
+    if (equals <= 0 || !name.match(word.left(equals)).hasMatch()) {
+        return std::nullopt;
+    }
+    return std::pair{word.left(equals), word.mid(equals + 1)};
+}
+
+Options readOptions(const QHash<QString, QString>& mainGroup) {
+    const auto parts = splitExec(mainGroup.value(u"Exec"_s));
+    Options result{.environment = {}, .arguments = parts.arguments.trimmed(), .website = mainGroup.value(WEBSITE_KEY),
+                    .prereleases = mainGroup.value(PRERELEASES_KEY) == "true"_L1};
+    for (const auto& word : parts.assignments) {
+        if (const auto resolved = commandLine(word); !resolved.isEmpty()) {
+            result.environment << resolved.first();
+        }
+    }
+    return result;
+}
+
+QString withOptions(const QString& desktopFile, const Options& options) {
+    if (problem(options) != Problem::None) {
+        return {};
+    }
+    auto lines         = desktopFile.split(u'\n');
+    bool inMain        = false;
+    bool seenMain      = false;
+    qsizetype execLine = -1;
+    qsizetype siteLine = -1;
+    qsizetype preLine  = -1;
+    qsizetype lastLine = -1;  // the last line with a key in the main group
+    for (qsizetype i = 0; i < lines.size(); ++i) {
+        const auto line = lines.at(i).trimmed();
+        if (line.isEmpty() || line.startsWith(u'#')) {
+            continue;
+        }
+        if (isGroupHeader(line)) {
+            const bool isMain = line.mid(1, line.size() - 2) == "Desktop Entry"_L1;
+            inMain            = isMain && !seenMain;
+            seenMain          = seenMain || isMain;
+            continue;
+        }
+        const auto equals = line.indexOf(u'=');
+        if (!inMain || equals <= 0) {
+            continue;
+        }
+        lastLine       = i;
+        const auto key = line.left(equals).trimmed();
+        if (key == "Exec"_L1 && execLine < 0) {
+            execLine = i;
+        } else if (key == WEBSITE_KEY && siteLine < 0) {
+            siteLine = i;
+        } else if (key == PRERELEASES_KEY && preLine < 0) {
+            preLine = i;
+        }
+    }
+    if (execLine < 0) {
+        return {};
+    }
+    const auto parts = splitExec(lines.at(execLine).trimmed().mid(5));  // behind "Exec="
+    const auto args  = options.arguments.trimmed();
+    lines[execLine]  = u"Exec="_s + environmentWords(options.environment) + parts.program + (args.isEmpty() ? QString() : u' ' + args);
+
+    const std::array<std::pair<qsizetype, QString>, 2> managed{{
+        {siteLine, options.website},
+        {preLine, options.prereleases ? u"true"_s : QString()},
+    }};
+    const std::array<QLatin1StringView, 2> keys{WEBSITE_KEY, PRERELEASES_KEY};
+    QList<qsizetype> gone;
+    QStringList added;
+    for (qsizetype i = 0; i < 2; ++i) {
+        const auto& [line, value] = managed.at(i);
+        if (line >= 0 && value.isEmpty()) {
+            gone << line;
+        } else if (line >= 0) {
+            lines[line] = keys.at(i) + u'=' + value;
+        } else if (!value.isEmpty()) {
+            added << keys.at(i) + u'=' + value;
+        }
+    }
+    std::ranges::sort(gone, std::greater<>());
+    for (const auto line : gone) {
+        lines.removeAt(line);
+        --lastLine;
+    }
+    for (qsizetype i = 0; i < added.size(); ++i) {
+        lines.insert(lastLine + 1 + i, added.at(i));
+    }
+    const auto result = lines.join(u'\n');
+    return result.toUtf8().size() > MAX_ENTRY_BYTES ? QString() : result;
+}
+
+QString withTracking(const QString& desktopFile, const Tracking& tracking) {
+    if (!printable(tracking.source) || !printable(tracking.variant) || !printable(tracking.release)) {
+        return {};
+    }
+    static const QStringList own{SOURCE_KEY, ASSET_KEY, VARIANT_KEY, RELEASE_KEY};
+    auto lines        = desktopFile.split(u'\n');
+    QList<qsizetype> gone;
+    qsizetype headerLine = -1;
+    qsizetype lastLine   = -1;  // the last line with another key in the main group
+    bool inMain        = false;
+    bool seenMain      = false;
+    for (qsizetype i = 0; i < lines.size(); ++i) {
+        const auto line = lines.at(i).trimmed();
+        if (line.isEmpty() || line.startsWith(u'#')) {
+            continue;
+        }
+        if (isGroupHeader(line)) {
+            const bool isMain = line.mid(1, line.size() - 2) == "Desktop Entry"_L1;
+            if (isMain && !seenMain) {
+                headerLine = i;
+            }
+            inMain            = isMain && !seenMain;
+            seenMain          = seenMain || isMain;
+            continue;
+        }
+        const auto equals = line.indexOf(u'=');
+        if (!inMain || equals <= 0) {
+            continue;
+        }
+        if (own.contains(line.left(equals).trimmed())) {
+            gone << i;
+        } else {
+            lastLine = i;
+        }
+    }
+    if (!seenMain) {
+        return {};
+    }
+    lastLine = std::max(lastLine, headerLine);
+    // a removed line may stand behind the last one that stays: only those before it move it
+    qsizetype before = 0;
+    for (const auto line : gone) {
+        before += line < lastLine ? 1 : 0;
+    }
+    for (auto it = gone.crbegin(); it != gone.crend(); ++it) {
+        lines.removeAt(*it);
+    }
+    lastLine -= before;
+    if (!tracking.source.isEmpty()) {
+        QStringList added{SOURCE_KEY + u'=' + tracking.source, ASSET_KEY + u'=' + QString::number(tracking.asset),
+            VARIANT_KEY + u'=' + tracking.variant};
+        if (!tracking.release.isEmpty()) {
+            added << RELEASE_KEY + u'=' + tracking.release;
+        }
+        for (qsizetype i = 0; i < added.size(); ++i) {
+            lines.insert(lastLine + 1 + i, added.at(i));
+        }
+    }
+    const auto result = lines.join(u'\n');
+    return result.toUtf8().size() > MAX_ENTRY_BYTES ? QString() : result;
 }
 
 Tracking tracking(const QHash<QString, QString>& mainGroup) {

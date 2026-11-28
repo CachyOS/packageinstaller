@@ -34,8 +34,9 @@ std::optional<Source> parseSource(const QString& link);
 QString sourceValue(const Source& source);
 std::optional<Source> sourceFromValue(const QString& value);
 
-/// Where the API tells about the newest release.
-QUrl latestReleaseUrl(const Source& source);
+/// Where the API tells about the newest release. The latest one it names is never a
+/// pre-release, so for `prereleases` it is the list of the recent ones.
+QUrl latestReleaseUrl(const Source& source, bool prereleases = false);
 
 /// One AppImage file of a release.
 struct Asset {
@@ -51,7 +52,8 @@ struct Release {
     QList<Asset> assets;  ///< the AppImage files for this kind of computer only
 };
 
-/// Reads the answer for one release. Files that are no AppImage, are built for another
+/// Reads the answer for one release, or for a list of them, of which the first that is no
+/// draft counts. Files that are no AppImage, are built for another
 /// processor or have a name or address that is not usable are left out, so `assets` may
 /// be empty. Nothing when the answer does not describe a release.
 std::optional<Release> parseRelease(const QByteArray& answer);

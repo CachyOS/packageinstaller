@@ -13,6 +13,7 @@
 #include <QFileInfo>
 #include <QLocale>
 #include <QProcess>
+#include <QProcessEnvironment>
 #include <QLockFile>
 #include <QNetworkDiskCache>
 #include <QNetworkReply>
@@ -359,6 +360,63 @@ QString copyTo(const QString& source, const QString& target, const Cancel& cance
     return {};
 }
 
+/// The menu entry of an AppImage, unpacked below `scratch`. Its extractor is asked for the
+/// menu entry and the icons only; a runtime that does not understand the patterns gets one
+/// run that unpacks everything, up to the size limit. The path of the result is empty when
+/// the file has no menu entry inside.
+std::expected<DesktopFile, AppImageResult> unpack(const Cancel& cancel, const QString& appImage, const QString& scratch) {
+    const auto cancelled = AppImageResult{AppImageClient::tr("Adding the AppImage was stopped."), {}};
+    const auto tooLarge  = AppImageResult{AppImageClient::tr("The AppImage unpacks to more than 1 GiB before its name and icon can be read, so it was not added."), {}};
+    const auto root      = scratch + u"/squashfs-root"_s;
+    for (const auto* pattern : {"*.desktop", "*.png", "*.svg", ".DirIcon", "usr/share/applications/*", "usr/share/icons/*", "usr/share/pixmaps/*"}) {
+        const auto result = extract(cancel, appImage, scratch, QLatin1StringView(pattern), 30000);
+        if (result == Extraction::Cancelled) {
+            return std::unexpected(cancelled);
+        }
+        if (result == Extraction::TooLarge) {
+            return std::unexpected(tooLarge);
+        }
+    }
+    auto desktopFile = findDesktopFile(root);
+    if (desktopFile.path.isEmpty()) {
+        QDir(root).removeRecursively();
+        const auto result = extract(cancel, appImage, scratch, {}, 300000);
+        if (result == Extraction::Cancelled) {
+            return std::unexpected(cancelled);
+        }
+        if (result == Extraction::TooLarge) {
+            return std::unexpected(tooLarge);
+        }
+        if (result != Extraction::Done) {
+            return std::unexpected(AppImageResult{AppImageClient::tr("The AppImage could not be read. It may be damaged, or built for another kind of computer."), {}});
+        }
+        desktopFile = findDesktopFile(root);
+    }
+    return desktopFile;
+}
+
+/// Copies the icon of an unpacked AppImage next to its place as "<id>.svg" or "<id>.png"
+/// plus ".new"; `staged` removes that copy unless it is handed over. Returns the place the
+/// icon belongs at, or nothing when there is no usable icon.
+QString stageIcon(const QString& root, const QString& iconName, const QString& id, Discard& staged) {
+    const auto icon = findIcon(root, iconName);
+    if (icon.isEmpty()) {
+        return {};
+    }
+    QFile file(icon);
+    const bool svg = file.open(QIODevice::ReadOnly) && !file.read(8).startsWith("\x89PNG");
+    file.close();
+    const auto target = iconDirectory() + u'/' + id + (svg ? u".svg"_s : u".png"_s);
+    const auto copy   = target + u".new"_s;
+    QFile::remove(copy);
+    if (!QFile::copy(icon, copy)) {
+        return {};
+    }
+    QFile::setPermissions(copy, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup | QFile::ReadOther);
+    staged.path = copy;
+    return target;
+}
+
 /// Adds `source`, a file of the user's, or the download `fetched` describes.
 AppImageResult install(const QString& source, const Cancel& cancel, const Fetched& fetched) {
     const auto cancelled = AppImageResult{AppImageClient::tr("Adding the AppImage was stopped."), {}};
@@ -394,39 +452,17 @@ AppImageResult install(const QString& source, const Cancel& cancel, const Fetche
     QFile::setPermissions(stagingPath, QFile::ReadOwner | QFile::WriteOwner | QFile::ExeOwner | QFile::ReadGroup | QFile::ExeGroup
             | QFile::ReadOther | QFile::ExeOther);
 
-    // The menu entry and the icon are inside the file. Ask its extractor for those parts
-    // only; a runtime that does not understand the patterns gets one run that unpacks
-    // everything, up to the size limit. The scratch folder is on disk, not in /tmp.
+    // The menu entry and the icon are inside the file. The scratch folder is on disk, not in /tmp.
     QTemporaryDir scratch(cacheDirectory + u"/appimage-XXXXXX"_s);
     if (!scratch.isValid()) {
         return {AppImageClient::tr("Could not create a temporary folder."), {}};
     }
-    const auto tooLarge = AppImageResult{AppImageClient::tr("The AppImage unpacks to more than 1 GiB before its name and icon can be read, so it was not added."), {}};
     const auto root     = scratch.path() + u"/squashfs-root"_s;
-    for (const auto* pattern : {"*.desktop", "*.png", "*.svg", ".DirIcon", "usr/share/applications/*", "usr/share/icons/*", "usr/share/pixmaps/*"}) {
-        const auto result = extract(cancel, stagingPath, scratch.path(), QLatin1StringView(pattern), 30000);
-        if (result == Extraction::Cancelled) {
-            return cancelled;
-        }
-        if (result == Extraction::TooLarge) {
-            return tooLarge;
-        }
+    const auto unpacked = unpack(cancel, stagingPath, scratch.path());
+    if (!unpacked) {
+        return unpacked.error();
     }
-    auto desktopFile = findDesktopFile(root);
-    if (desktopFile.path.isEmpty()) {
-        QDir(root).removeRecursively();
-        const auto result = extract(cancel, stagingPath, scratch.path(), {}, 300000);
-        if (result == Extraction::Cancelled) {
-            return cancelled;
-        }
-        if (result == Extraction::TooLarge) {
-            return tooLarge;
-        }
-        if (result != Extraction::Done) {
-            return {AppImageClient::tr("The AppImage could not be read. It may be damaged, or built for another kind of computer."), {}};
-        }
-        desktopFile = findDesktopFile(root);
-    }
+    const auto desktopFile = *unpacked;
     const auto original = readText(desktopFile.path, appimage::MAX_ENTRY_BYTES);
     const auto keys     = appimage::mainGroup(original);
     if (desktopFile.path.isEmpty() || keys.value(u"Name"_s).isEmpty()) {
@@ -469,25 +505,18 @@ AppImageResult install(const QString& source, const Cancel& cancel, const Fetche
     }
 
     // The new icon waits next to its place until the entry that names it is written.
-    QString iconPath;
     Discard stagedIcon;
-    if (const auto icon = findIcon(root, keys.value(u"Icon"_s)); !icon.isEmpty()) {
-        QFile file(icon);
-        const bool svg = file.open(QIODevice::ReadOnly) && !file.read(8).startsWith("\x89PNG");
-        file.close();
-        const auto target = iconDirectory() + u'/' + id + (svg ? u".svg"_s : u".png"_s);
-        const auto staged = target + u".new"_s;
-        QFile::remove(staged);
-        if (QFile::copy(icon, staged)) {
-            QFile::setPermissions(staged, QFile::ReadOwner | QFile::WriteOwner | QFile::ReadGroup | QFile::ReadOther);
-            iconPath        = target;
-            stagedIcon.path = staged;
-        }
-    }
+    const auto iconPath = stageIcon(root, keys.value(u"Icon"_s), id, stagedIcon);
 
-    const auto entry = appimage::integrate(original, destination, iconPath, fetched.tracking);
+    auto entry = appimage::integrate(original, destination, iconPath, fetched.tracking);
     if (entry.isEmpty()) {
         return {AppImageClient::tr("The menu entry inside the AppImage is not usable."), {}};
+    }
+    // an app that is replaced keeps what the user set for it
+    if (const auto earlier = entries.value(fetched.replaces.isEmpty() ? desktopName : fetched.replaces); !earlier.isEmpty()) {
+        if (const auto kept = appimage::withOptions(entry, appimage::readOptions(earlier)); !kept.isEmpty()) {
+            entry = kept;
+        }
     }
     if (cancel->load()) {
         return cancelled;
@@ -541,6 +570,68 @@ AppImageResult install(const QString& source, const Cancel& cancel, const Fetche
     refreshMenu();
     const auto name = keys.value(u"Name"_s);
     return {{}, name, AppImageClient::tr("%1 was added to your menu.").arg(name)};
+}
+
+/// Reads the name, description, version and icon of an app of ours from its file again.
+/// What the user set for it and where it is updated from stay as they are.
+AppImageResult reload(const QString& id, const Cancel& cancel) {
+    const auto desktopName    = id + u".desktop"_s;
+    const auto cacheDirectory = QStandardPaths::writableLocation(QStandardPaths::CacheLocation);
+    if (!QDir().mkpath(iconDirectory()) || !QDir().mkpath(cacheDirectory)) {
+        return {AppImageClient::tr("Could not create the folders for AppImages in your home directory."), {}};
+    }
+    QLockFile lock(lockPath());
+    if (!lock.tryLock(0)) {
+        return {AppImageClient::tr("Another window of this app is adding or removing an AppImage. Try again when it has finished."), {}};
+    }
+    const auto earlier = managedEntries().value(desktopName);
+    const auto path    = earlier.value(appimage::PATH_KEY);
+    if (earlier.isEmpty() || !ownedFile(path) || !QFileInfo::exists(path) || !appimage::isAppImage(path)) {
+        return {AppImageClient::tr("The file of this app is gone or is not an AppImage any more."), {}};
+    }
+
+    QTemporaryDir scratch(cacheDirectory + u"/appimage-XXXXXX"_s);
+    if (!scratch.isValid()) {
+        return {AppImageClient::tr("Could not create a temporary folder."), {}};
+    }
+    const auto unpacked = unpack(cancel, path, scratch.path());
+    if (!unpacked) {
+        return unpacked.error();
+    }
+    const auto original = readText(unpacked->path, appimage::MAX_ENTRY_BYTES);
+    const auto fresh    = appimage::mainGroup(original);
+    if (unpacked->path.isEmpty() || fresh.value(u"Name"_s).isEmpty()) {
+        return {AppImageClient::tr("The AppImage does not describe an application (no menu entry inside)."), {}};
+    }
+
+    Discard stagedIcon;
+    auto iconPath = stageIcon(scratch.path() + u"/squashfs-root"_s, fresh.value(u"Icon"_s), id, stagedIcon);
+    if (iconPath.isEmpty()) {
+        iconPath = earlier.value(u"Icon"_s);  // nothing usable inside: the icon it has stays
+    }
+    auto entry = appimage::integrate(original, path, iconPath, appimage::tracking(earlier));
+    if (!entry.isEmpty()) {
+        entry = appimage::withOptions(entry, appimage::readOptions(earlier));
+    }
+    if (entry.isEmpty()) {
+        return {AppImageClient::tr("The menu entry inside the AppImage is not usable."), {}};
+    }
+    if (cancel->load()) {
+        return {AppImageClient::tr("Adding the AppImage was stopped."), {}};
+    }
+    QSaveFile menuEntry(menuDirectory() + u'/' + desktopName);
+    if (!menuEntry.open(QIODevice::WriteOnly) || menuEntry.write(entry.toUtf8()) < 0 || !menuEntry.commit()) {
+        return {AppImageClient::tr("Could not write the menu entry. Nothing was changed."), {}};
+    }
+    if (!stagedIcon.path.isEmpty()) {
+        removeIcons(id);
+        if (QFile::rename(stagedIcon.path, iconPath)) {
+            stagedIcon.path.clear();
+        }
+    }
+    refreshMenu();
+    const auto name = fresh.value(u"Name"_s);
+    return {{}, name, AppImageClient::tr("The information of %1 was read again.").arg(name)};
 }
 
 /// An AppImage another program manages, as this app would take it over.
@@ -811,10 +902,17 @@ QNetworkRequest request(const QUrl& url) {
     return req;
 }
 
+/// Under which name the newest release of a source is kept: the one that counts pre-releases
+/// is not the same as the one that does not.
+QString releaseKey(const QString& source, bool prereleases) {
+    return prereleases ? source + u"#pre"_s : source;
+}
+
 /// Asks GitHub about the newest release of `source`. `load` says whether an answer that
 /// was kept from an earlier question will do.
-QNetworkReply* askRelease(QNetworkAccessManager& network, const appimage::Source& source, QNetworkRequest::CacheLoadControl load) {
-    auto req = request(appimage::latestReleaseUrl(source));
+QNetworkReply* askRelease(QNetworkAccessManager& network, const appimage::Source& source, QNetworkRequest::CacheLoadControl load,
+    bool prereleases = false) {
+    auto req = request(appimage::latestReleaseUrl(source, prereleases));
     req.setRawHeader("Accept", "application/vnd.github+json");
     req.setRawHeader("X-GitHub-Api-Version", "2022-11-28");
     req.setAttribute(QNetworkRequest::CacheLoadControlAttribute, load);
@@ -850,8 +948,9 @@ std::expected<appimage::Release, QString> readRelease(QNetworkReply* reply, cons
 
 /// The file of the newest known release that takes the place of what `tracked` names;
 /// null when that one is installed or nothing is known. `tag` gets the name of the release.
-const appimage::Asset* newerAsset(const QHash<QString, appimage::Release>& releases, const appimage::Tracking& tracked, QString* tag = nullptr) {
-    const auto release = releases.constFind(tracked.source);
+const appimage::Asset* newerAsset(const QHash<QString, appimage::Release>& releases, const appimage::Tracking& tracked, bool prereleases,
+    QString* tag = nullptr) {
+    const auto release = releases.constFind(releaseKey(tracked.source, prereleases));
     if (release == releases.cend()) {
         return nullptr;
     }
@@ -1058,23 +1157,25 @@ void AppImageClient::clearOffer() {
 
 void AppImageClient::addOffered(int file) {
     if (file >= 0 && file < m_offeredAssets.size()) {
-        download(m_offeredSource, m_offeredAssets.at(file));
+        download(m_offeredSource, m_offeredAssets.at(file), m_offer.release);
     }
 }
 
 void AppImageClient::update(const QString& id) {
     const auto desktopName = id + u".desktop"_s;
-    const auto tracked     = appimage::tracking(appimage::mainGroup(readText(menuDirectory() + u'/' + desktopName, appimage::MAX_ENTRY_BYTES)));
+    const auto keys        = appimage::mainGroup(readText(menuDirectory() + u'/' + desktopName, appimage::MAX_ENTRY_BYTES));
+    const auto tracked     = appimage::tracking(keys);
     const auto source      = appimage::sourceFromValue(tracked.source);
-    const auto* asset      = newerAsset(m_releases, tracked);
+    QString release;
+    const auto* asset = newerAsset(m_releases, tracked, appimage::readOptions(keys).prereleases, &release);
     if (!source || asset == nullptr) {
         refresh();  // what the list showed is out of date
         return;
     }
-    download(*source, *asset, desktopName);
+    download(*source, *asset, release, desktopName);
 }
 
-void AppImageClient::download(const appimage::Source& source, const appimage::Asset& asset, const QString& replaces) {
+void AppImageClient::download(const appimage::Source& source, const appimage::Asset& asset, const QString& release, const QString& replaces) {
     if (m_busy) {
         return;
     }
@@ -1089,8 +1190,7 @@ void AppImageClient::download(const appimage::Source& source, const appimage::As
     auto download     = std::make_unique<Download>();
     download->asset   = asset;
     download->fetched = {.name = asset.name,
-        .tracking = {.source = appimage::sourceValue(source), .asset = asset.id, .variant = appimage::variant(asset.name),
-            .release = m_releases.value(appimage::sourceValue(source)).tag},
+        .tracking = {.source = appimage::sourceValue(source), .asset = asset.id, .variant = appimage::variant(asset.name), .release = release},
         .replaces = replaces};
     // next to where it will end up: install() takes it over as its working copy
     download->file.setFileName(privatePath("part"_L1));
@@ -1163,12 +1263,17 @@ void AppImageClient::checkUpdates(bool now) {
     if (m_checks > 0) {
         return;
     }
-    QHash<QString, appimage::Source> sources;
+    struct Asked {
+        appimage::Source source;
+        bool prereleases;
+    };
+    QHash<QString, Asked> sources;
     const auto entries = managedEntries();
     for (const auto& keys : entries) {
         const auto value = appimage::tracking(keys).source;
         if (const auto source = appimage::sourceFromValue(value)) {
-            sources.insert(value, *source);
+            const auto prereleases = appimage::readOptions(keys).prereleases;
+            sources.insert(releaseKey(value, prereleases), {*source, prereleases});
         }
     }
     if (sources.isEmpty()) {
@@ -1182,8 +1287,9 @@ void AppImageClient::checkUpdates(bool now) {
         return;  // nothing the last answers do not tell already
     }
     m_checkError.clear();
-    for (const auto& [value, source] : sources.asKeyValueRange()) {
-        auto* reply = askRelease(m_network, source, fresh ? QNetworkRequest::PreferNetwork : QNetworkRequest::AlwaysCache);
+    for (const auto& [value, asked] : sources.asKeyValueRange()) {
+        const auto source = asked.source;
+        auto* reply = askRelease(m_network, source, fresh ? QNetworkRequest::PreferNetwork : QNetworkRequest::AlwaysCache, asked.prereleases);
         ++m_checks;
         connect(reply, &QNetworkReply::finished, this, [this, reply, value, source, fresh, now] {
             reply->deleteLater();
@@ -1242,11 +1348,102 @@ void AppImageClient::remove(const QString& id, const QString& path) {
 void AppImageClient::launch(const QString& id) {
     const auto keys = managedEntries().value(id + u".desktop"_s);
     const auto path = keys.value(appimage::PATH_KEY);
-    // started the way the menu entry does it: same arguments, nothing passed through a shell
-    const auto command = appimage::commandLine(keys.value(u"Exec"_s));
-    if (!ownedFile(path) || command.isEmpty() || command.first() != path || !QProcess::startDetached(path, command.mid(1), QDir::homePath())) {
+    // started the way the menu entry does it: same variables and arguments, nothing passed through a shell
+    auto command     = appimage::commandLine(keys.value(u"Exec"_s));
+    auto environment = QProcessEnvironment::systemEnvironment();
+    if (!command.isEmpty() && command.first() == "env"_L1) {
+        command.removeFirst();
+        while (!command.isEmpty()) {
+            const auto variable = appimage::assignment(command.first());
+            if (!variable) {
+                break;
+            }
+            environment.insert(variable->first, variable->second);
+            command.removeFirst();
+        }
+    }
+    QProcess process;
+    process.setProgram(path);
+    process.setArguments(command.mid(1));
+    process.setWorkingDirectory(QDir::homePath());
+    process.setProcessEnvironment(environment);
+    if (!ownedFile(path) || command.isEmpty() || command.first() != path || !process.startDetached()) {
         setMessage(tr("Could not start the application."), {});
     }
+}
+
+void AppImageClient::reloadMetadata(const QString& id) {
+    if (m_busy) {
+        return;
+    }
+    clearMessage();
+    const auto app = std::ranges::find(m_apps, id, &AppImageItem::id);
+    setBusy(true, app != m_apps.cend() ? app->name : id);
+    m_watcher.setFuture(QtConcurrent::run(reload, id, m_cancel));
+}
+
+QString AppImageClient::saveOptions(const QString& id, const QString& arguments, const QString& website, const QString& repository,
+    bool prereleases, const QStringList& environment) {
+    // no repository, no source: nothing is looked up, so there is nothing to allow either
+    const auto source = repository.trimmed().isEmpty() ? std::nullopt : appimage::parseSource(repository);
+    if (!repository.trimmed().isEmpty() && !source) {
+        return tr("This is not a link to a project on GitHub. One looks like https://github.com/owner/project.");
+    }
+    const appimage::Options options{.environment = environment,
+        .arguments                               = arguments.trimmed(),
+        .website                                 = website.trimmed(),
+        .prereleases                             = prereleases && source.has_value()};
+    switch (appimage::problem(options)) {
+    case appimage::Problem::None:
+        break;
+    case appimage::Problem::Name:
+        return tr("A variable name may only have letters, digits and underscores, and cannot start with a digit.");
+    case appimage::Problem::Duplicate:
+        return tr("A variable is set twice.");
+    case appimage::Problem::Value:
+        return tr("A variable value is too long or has a line break.");
+    case appimage::Problem::Arguments:
+        return tr("The arguments are too long, have a line break or a quote that is not closed.");
+    case appimage::Problem::Website:
+        return tr("The website has to be an address that starts with http:// or https://.");
+    }
+    const auto desktopName = id + u".desktop"_s;
+    QDir().mkpath(installDirectory());  // the lock lives there
+    QLockFile lock(lockPath());
+    if (!lock.tryLock(0)) {
+        return tr("Another window of this app is adding or removing an AppImage. Try again when it has finished.");
+    }
+    if (!managedEntries().contains(desktopName)) {
+        return tr("This AppImage is not in the list any more.");
+    }
+    const auto path    = menuDirectory() + u'/' + desktopName;
+    const auto before  = readText(path, appimage::MAX_ENTRY_BYTES);
+    const auto keys    = appimage::mainGroup(before);
+    auto tracked       = appimage::tracking(keys);
+    const auto value   = source ? appimage::sourceValue(*source) : QString();
+    const bool changed = appimage::readOptions(keys).prereleases != options.prereleases || tracked.source != value;
+    if (tracked.source != value) {
+        // a file that was added by hand
+        tracked = value.isEmpty() ? appimage::Tracking{}
+                                  : appimage::Tracking{.source = value,
+                                        .asset                 = 0,
+                                        .variant               = appimage::variant(QFileInfo(keys.value(appimage::PATH_KEY)).fileName()),
+                                        .release               = keys.value(u"X-AppImage-Version"_s)};
+    }
+    const auto text = appimage::withTracking(appimage::withOptions(before, options), tracked);
+    if (text.isEmpty()) {
+        return tr("The menu entry could not be changed.");
+    }
+    QSaveFile entry(path);
+    if (!entry.open(QIODevice::WriteOnly) || entry.write(text.toUtf8()) < 0 || !entry.commit()) {
+        return tr("Could not write the menu entry. Nothing was changed.");
+    }
+    refreshMenu();
+    refresh();
+    if (changed) {
+        checkUpdates(true);  // the newest release may be another one now
+    }
+    return {};
 }
 
 void AppImageClient::refresh() {
@@ -1261,9 +1458,10 @@ void AppImageClient::refresh() {
         const QFileInfo file(path);
         const auto tracked = appimage::tracking(keys);
         const auto source  = appimage::sourceFromValue(tracked.source);
+        const auto options = appimage::readOptions(keys);
         QString update;
         if (source) {
-            newerAsset(m_releases, tracked, &update);
+            newerAsset(m_releases, tracked, options.prereleases, &update);
         }
         apps << AppImageItem{
             .id      = id,
@@ -1279,6 +1477,10 @@ void AppImageClient::refresh() {
             .terminal = keys.value(u"Terminal"_s) == "true"_L1,
             .source   = source ? source->slug() : QString(),
             .update   = update,
+            .arguments   = options.arguments,
+            .website     = options.website,
+            .prereleases = options.prereleases,
+            .environment = options.environment,
         };
         const auto icon = keys.value(u"Icon"_s);
         if (icon.startsWith(u'/')) {

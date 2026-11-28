@@ -45,6 +45,96 @@ class TestAppImage : public QObject {
         QCOMPARE(appimage::replaceProgram(u"  AppRun   %F  "_s, app), u"/a/App.AppImage %F"_s);
     }
 
+    void options() {
+        const auto text =
+            u"[Desktop Entry]\n"
+            "Name=Editor\n"
+            "Exec=/a/App.AppImage %U\n"
+            "Icon=editor\n"
+            "\n"
+            "[Desktop Action new]\n"
+            "Name=New\n"
+            "Exec=/a/App.AppImage --new\n"_s;
+        const auto plain = appimage::readOptions(appimage::mainGroup(text));
+        QCOMPARE(plain.arguments, u"%U"_s);
+        QVERIFY(plain.environment.isEmpty());
+        QVERIFY(plain.website.isEmpty());
+        QVERIFY(!plain.prereleases);
+
+        const appimage::Options wanted{.environment = {u"A=1"_s, u"MSG=two words"_s, u"EMPTY="_s, u"P=50%"_s, u"Q=a\\b\"c"_s},
+            .arguments = u"-r \"/home/u/my saves\" %f"_s,
+            .website   = u"https://example.org/app"_s,
+            .prereleases = true};
+        const auto changed = appimage::withOptions(text, wanted);
+        QVERIFY(!changed.isEmpty());
+        // what is read back is what was written, quoting included
+        QCOMPARE(appimage::readOptions(appimage::mainGroup(changed)), wanted);
+        QCOMPARE(appimage::commandLine(appimage::mainGroup(changed).value(u"Exec"_s)),
+            (QStringList{u"env"_s, u"A=1"_s, u"MSG=two words"_s, u"EMPTY="_s, u"P=50%"_s, u"Q=a\\b\"c"_s,
+                u"/a/App.AppImage"_s, u"-r"_s, u"/home/u/my saves"_s}));
+        // the program and every other line stay; the action keeps its own command
+        QVERIFY(changed.contains(u"Exec=env A=1 "_s));
+        QVERIFY(changed.contains(u"Icon=editor\nX-CachyOS-PI-Website=https://example.org/app\nX-CachyOS-PI-Prereleases=true\n"_s));
+        QVERIFY(changed.contains(u"Exec=/a/App.AppImage --new"_s));
+
+        // changing it again replaces the variables; taking everything away gives the plain entry
+        QCOMPARE(appimage::withOptions(changed, {.environment = {}, .arguments = {}, .website = {}, .prereleases = false}),
+            u"[Desktop Entry]\nName=Editor\nExec=/a/App.AppImage\nIcon=editor\n"
+            "\n[Desktop Action new]\nName=New\nExec=/a/App.AppImage --new\n"_s);
+        // a program with a space in its path survives, with and without variables
+        QCOMPARE(appimage::withOptions(u"[Desktop Entry]\nExec=\"/h/my apps/A.AppImage\" %U\n"_s,
+                     {.environment = {u"X=1"_s}, .arguments = u"%U"_s, .website = {}}),
+            u"[Desktop Entry]\nExec=env X=1 \"/h/my apps/A.AppImage\" %U\n"_s);
+        // nothing without a command
+        QVERIFY(appimage::withOptions(u"[Desktop Entry]\nName=x\n"_s, wanted).isEmpty());
+    }
+
+    void withTracking() {
+        const auto plain = u"[Desktop Entry]\nName=Editor\nExec=/a/App.AppImage\nX-CachyOS-PI-AppImage=/a/App.AppImage\n"
+                           "\n[Desktop Action new]\nName=New\nExec=/a/App.AppImage --new\n"_s;
+        const appimage::Tracking source{.source = u"github:o/r"_s, .asset = 0, .variant = u"app-#-x86_64.appimage"_s, .release = u"1.2"_s};
+        const auto tracked = appimage::withTracking(plain, source);
+        QVERIFY(tracked.contains(u"X-CachyOS-PI-AppImage=/a/App.AppImage\nX-CachyOS-PI-Source=github:o/r\nX-CachyOS-PI-Asset=0\n"_s));
+        QVERIFY(tracked.contains(u"\n[Desktop Action new]"_s));
+        const auto read = appimage::tracking(appimage::mainGroup(tracked));
+        QCOMPARE(read.source, source.source);
+        QCOMPARE(read.variant, source.variant);
+        QCOMPARE(read.release, source.release);
+        // replaced, not added to, and taken away again
+        const auto other = appimage::withTracking(tracked, {.source = u"github:p/q"_s, .asset = 5, .variant = {}, .release = {}});
+        QCOMPARE(other.count(u"X-CachyOS-PI-Source"_s), 1);
+        QCOMPARE(appimage::tracking(appimage::mainGroup(other)).asset, 5);
+        QCOMPARE(appimage::withTracking(other, {}), plain);
+        // a group with nothing else in it
+        QCOMPARE(appimage::withTracking(u"[Desktop Entry]\n"_s, source).left(30), u"[Desktop Entry]\nX-CachyOS-PI-S"_s);
+        QVERIFY(appimage::withTracking(u"Name=x\n"_s, source).isEmpty());
+    }
+
+    void invalidOptions() {
+        using appimage::Problem;
+        const auto check = [](QStringList environment, QString arguments, QString website) {
+            return appimage::problem({.environment = std::move(environment), .arguments = std::move(arguments), .website = std::move(website)});
+        };
+        QCOMPARE(check({}, {}, {}), Problem::None);
+        QCOMPARE(check({u"A=1"_s, u"_B2="_s}, u"--x \"a b\""_s, u"http://example.org"_s), Problem::None);
+        QCOMPARE(check({u"NOEQUALS"_s}, {}, {}), Problem::Name);
+        QCOMPARE(check({u"1A=x"_s}, {}, {}), Problem::Name);
+        QCOMPARE(check({u"A B=x"_s}, {}, {}), Problem::Name);
+        QCOMPARE(check({u"=x"_s}, {}, {}), Problem::Name);
+        QCOMPARE(check({u"A=1"_s, u"A=2"_s}, {}, {}), Problem::Duplicate);
+        QCOMPARE(check({u"A=x\ny"_s}, {}, {}), Problem::Value);
+        QCOMPARE(check({}, u"a\nExec=/usr/bin/evil"_s, {}), Problem::Arguments);
+        QCOMPARE(check({}, u"--name \"open"_s, {}), Problem::Arguments);
+        QCOMPARE(check({}, {}, u"ftp://example.org"_s), Problem::Website);
+        QCOMPARE(check({}, {}, u"https://exa mple.org"_s), Problem::Website);
+        QCOMPARE(check({}, {}, u"javascript:alert(1)"_s), Problem::Website);
+        QVERIFY(appimage::withOptions(u"[Desktop Entry]\nExec=/a/A\n"_s, {.environment = {u"1A=x"_s}, .arguments = {}, .website = {}}).isEmpty());
+
+        QVERIFY(!appimage::assignment(u"/a/App.AppImage"_s));
+        QVERIFY(!appimage::assignment(u"--x=1"_s));
+        QCOMPARE(appimage::assignment(u"A=b=c"_s), (std::pair{u"A"_s, u"b=c"_s}));
+    }
+
     void integration() {
         const auto original =
             u"# written by a tool\r\n"
@@ -484,6 +574,13 @@ manager = GithubUpdater
         QVERIFY(bare->assets.isEmpty());
         QVERIFY(!appimage::parseRelease("{\"message\":\"Not Found\"}").has_value());
         QVERIFY(!appimage::parseRelease("[]").has_value());
+        // of a list the first release that is no draft counts
+        const auto list = appimage::parseRelease(
+            "[{\"tag_name\":\"v3\",\"draft\":true,\"assets\":[]},{\"tag_name\":\"v2-rc1\",\"prerelease\":true,\"assets\":[]},{\"tag_name\":\"v1\",\"assets\":[]}]");
+        QVERIFY(list.has_value());
+        QCOMPARE(list->tag, u"v2-rc1"_s);
+        QVERIFY(appimage::latestReleaseUrl({u"o"_s, u"r"_s, {}}).path().endsWith(u"/releases/latest"_s));
+        QVERIFY(appimage::latestReleaseUrl({u"o"_s, u"r"_s, {}}, true).query().contains(u"per_page"_s));
         QVERIFY(!appimage::parseRelease("<html>").has_value());
         QVERIFY(!appimage::parseRelease(QByteArray()).has_value());
     }

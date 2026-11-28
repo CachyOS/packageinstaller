@@ -8,6 +8,7 @@
 #include <QFutureWatcher>
 #include <QNetworkAccessManager>
 #include <QObject>
+#include <QStringList>
 #include <QUrl>
 #include <QtQml/qqmlregistration.h>
 
@@ -36,6 +37,10 @@ struct AppImageItem {
     Q_PROPERTY(bool terminal MEMBER terminal FINAL)
     Q_PROPERTY(QString source MEMBER source FINAL)
     Q_PROPERTY(QString update MEMBER update FINAL)
+    Q_PROPERTY(QString arguments MEMBER arguments FINAL)
+    Q_PROPERTY(QString website MEMBER website FINAL)
+    Q_PROPERTY(bool prereleases MEMBER prereleases FINAL)
+    Q_PROPERTY(QStringList environment MEMBER environment FINAL)
 
  public:
     QString id;  ///< name of the menu entry without ".desktop"
@@ -49,6 +54,10 @@ struct AppImageItem {
     bool terminal = false;  ///< a command line tool
     QString source;         ///< "owner/repo" on GitHub when the file came from there
     QString update;         ///< the newer release that can be installed; empty when there is none known
+    QString arguments;  ///< what the menu entry passes to the file, as written in its Exec= line
+    QString website;
+    bool prereleases = false;  ///< newer pre-releases are offered as updates
+    QStringList environment;  ///< "NAME=value" for each variable the menu entry sets
 
     friend bool operator==(const AppImageItem&, const AppImageItem&) = default;
 };
@@ -216,6 +225,14 @@ class AppImageClient : public QObject {
     /// shown; nothing is removed if the entry names another one by now.
     Q_INVOKABLE void remove(const QString& id, const QString& path);
     Q_INVOKABLE void launch(const QString& id);
+    /// Reads the name, description, version and icon from the file again, which runs the
+    /// file's own extractor. What the user set for the app is kept.
+    Q_INVOKABLE void reloadMetadata(const QString& id);
+    /// Writes the arguments, the website, the repository to look for updates in (empty for none),
+    /// the pre-release choice and the environment ("NAME=value" each) into the menu
+    /// entry of the app. Returns why that is not possible, or nothing when it worked.
+    Q_INVOKABLE QString saveOptions(const QString& id, const QString& arguments, const QString& website, const QString& repository,
+        bool prereleases, const QStringList& environment);
     Q_INVOKABLE void refresh();
     Q_INVOKABLE void clearMessage();
 
@@ -235,7 +252,7 @@ class AppImageClient : public QObject {
 
     void setMessage(const QString& error, const QString& added);
     void setBusy(bool busy, const QString& subject = {});
-    void download(const appimage::Source& source, const appimage::Asset& asset, const QString& replaces = {});
+    void download(const appimage::Source& source, const appimage::Asset& asset, const QString& release, const QString& replaces = {});
     void onDownloaded();
 
     QFutureWatcher<AppImageResult> m_watcher;
