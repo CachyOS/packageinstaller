@@ -184,6 +184,60 @@ Item {
         }
     }
 
+    component OptionTitle: Column {
+        property string title
+        property string description
+
+        spacing: 2
+
+        Heading {
+            width: parent.width
+            text: parent.title
+            font.pixelSize: Look.fontLead
+        }
+
+        Muted {
+            width: parent.width
+            text: parent.description
+            wrapMode: Text.WordWrap
+        }
+    }
+
+    component OptionSwitch: Item {
+        id: optionSwitch
+
+        property string label
+        property bool active
+
+        signal toggled
+
+        implicitHeight: 58
+
+        Rectangle {
+            visible: optionSwitch.y > 0
+            width: optionSwitch.width
+            height: 1
+            color: Look.border
+        }
+
+        PlainText {
+            x: 16
+            anchors.verticalCenter: optionSwitch.verticalCenter
+            width: optionSwitch.width - 46 - 44
+            text: optionSwitch.label
+            elide: Text.ElideRight
+        }
+
+        Toggle {
+            anchors.right: optionSwitch.right
+            anchors.rightMargin: 16
+            anchors.verticalCenter: optionSwitch.verticalCenter
+            active: optionSwitch.active
+            name: optionSwitch.label
+            onClicked: optionSwitch.toggled()
+        }
+    }
+
     component OptionRow: Item {
         id: optionRow
 
@@ -1134,10 +1188,10 @@ Item {
                         }
                     }
 
-                    Muted {
+                    OptionTitle {
                         width: optionsBody.width
-                        text: qsTr("Update management")
-                        font.weight: Font.DemiBold
+                        title: qsTr("Update management")
+                        description: qsTr("Where to get updates for this app.")
                     }
 
                     OptionGroup {
@@ -1165,6 +1219,14 @@ Item {
                             onTextChanged: optionsDialog.edits++
                         }
 
+                        OptionSwitch {
+                            width: parent.width
+                            visible: optionsDialog.github
+                            label: qsTr("Allow pre-releases")
+                            active: optionsDialog.prereleases
+                            onToggled: optionsDialog.prereleases = !optionsDialog.prereleases
+                        }
+
                         OptionRow {
                             width: parent.width
                             visible: optionsDialog.hasSource && root.inspected.update.length > 0
@@ -1173,40 +1235,16 @@ Item {
                         }
                     }
 
-                    SettingCard {
-                        width: optionsBody.width
-                        visible: optionsDialog.github && optionsDialog.canChange
-                        title: qsTr("Allow pre-releases")
-                        description: qsTr("Also offer releases that are marked as a pre-release on GitHub as updates.")
-
-                        Toggle {
-                            active: optionsDialog.prereleases
-                            name: qsTr("Allow pre-releases")
-                            onClicked: optionsDialog.prereleases = !optionsDialog.prereleases
-                        }
-                    }
-
                     Item {
                         width: optionsBody.width
                         height: Math.max(variablesTitle.height, addVariable.height)
                         visible: optionsDialog.canChange
 
-                        Column {
+                        OptionTitle {
                             id: variablesTitle
                             width: parent.width - addVariable.width - 12
-                            spacing: 2
-
-                            Heading {
-                                width: parent.width
-                                text: qsTr("Environment variables")
-                                font.pixelSize: Look.fontLead
-                            }
-
-                            Muted {
-                                width: parent.width
-                                text: qsTr("Set for this application when it starts from the menu or from here.")
-                                wrapMode: Text.WordWrap
-                            }
+                            title: qsTr("Environment variables")
+                            description: qsTr("Add or customize Enviroment variables for this app.")
                         }
 
                         PillButton {
