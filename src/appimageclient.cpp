@@ -1382,10 +1382,17 @@ void AppImageClient::reloadMetadata(const QString& id) {
     m_watcher.setFuture(QtConcurrent::run(reload, id, m_cancel));
 }
 
-QString AppImageClient::saveOptions(const QString& id, const QString& arguments, const QString& website, bool prereleases,
-    const QStringList& environment) {
-    const appimage::Options options{
-        .environment = environment, .arguments = arguments.trimmed(), .website = website.trimmed(), .prereleases = prereleases};
+QString AppImageClient::saveOptions(const QString& id, const QString& arguments, const QString& website, const QString& repository,
+    bool prereleases, const QStringList& environment) {
+    // no repository, no source: nothing is looked up, so there is nothing to allow either
+    const auto source = repository.trimmed().isEmpty() ? std::nullopt : appimage::parseSource(repository);
+    if (!repository.trimmed().isEmpty() && !source) {
+        return tr("This is not a link to a project on GitHub. One looks like https://github.com/owner/project.");
+    }
+    const appimage::Options options{.environment = environment,
+        .arguments                               = arguments.trimmed(),
+        .website                                 = website.trimmed(),
+        .prereleases                             = prereleases && source.has_value()};
     switch (appimage::problem(options)) {
     case appimage::Problem::None:
         break;
@@ -1411,8 +1418,19 @@ QString AppImageClient::saveOptions(const QString& id, const QString& arguments,
     }
     const auto path    = menuDirectory() + u'/' + desktopName;
     const auto before  = readText(path, appimage::MAX_ENTRY_BYTES);
-    const auto changed = appimage::readOptions(appimage::mainGroup(before)).prereleases != prereleases;
-    const auto text    = appimage::withOptions(before, options);
+    const auto keys    = appimage::mainGroup(before);
+    auto tracked       = appimage::tracking(keys);
+    const auto value   = source ? appimage::sourceValue(*source) : QString();
+    const bool changed = appimage::readOptions(keys).prereleases != options.prereleases || tracked.source != value;
+    if (tracked.source != value) {
+        // a file that was added by hand
+        tracked = value.isEmpty() ? appimage::Tracking{}
+                                  : appimage::Tracking{.source = value,
+                                        .asset                 = 0,
+                                        .variant               = appimage::variant(QFileInfo(keys.value(appimage::PATH_KEY)).fileName()),
+                                        .release               = keys.value(u"X-AppImage-Version"_s)};
+    }
+    const auto text = appimage::withTracking(appimage::withOptions(before, options), tracked);
     if (text.isEmpty()) {
         return tr("The menu entry could not be changed.");
     }

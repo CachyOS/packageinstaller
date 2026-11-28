@@ -60,6 +60,10 @@ std::optional<std::pair<QString, QString>> assignment(const QString& word);
 /// the file has no Exec= line in its main group.
 QString withOptions(const QString& desktopFile, const Options& options);
 
+/// `desktopFile` with the source it was downloaded from changed to `tracking`, or taken
+/// away when that has none
+QString withTracking(const QString& desktopFile, const Tracking& tracking);
+
 /// The keys of the [Desktop Entry] group of a desktop file; other groups are ignored and
 /// the first value of a repeated key counts.
 QHash<QString, QString> mainGroup(const QString& desktopFile);

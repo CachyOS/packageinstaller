@@ -89,6 +89,27 @@ class TestAppImage : public QObject {
         QVERIFY(appimage::withOptions(u"[Desktop Entry]\nName=x\n"_s, wanted).isEmpty());
     }
 
+    void withTracking() {
+        const auto plain = u"[Desktop Entry]\nName=Editor\nExec=/a/App.AppImage\nX-CachyOS-PI-AppImage=/a/App.AppImage\n"
+                           "\n[Desktop Action new]\nName=New\nExec=/a/App.AppImage --new\n"_s;
+        const appimage::Tracking source{.source = u"github:o/r"_s, .asset = 0, .variant = u"app-#-x86_64.appimage"_s, .release = u"1.2"_s};
+        const auto tracked = appimage::withTracking(plain, source);
+        QVERIFY(tracked.contains(u"X-CachyOS-PI-AppImage=/a/App.AppImage\nX-CachyOS-PI-Source=github:o/r\nX-CachyOS-PI-Asset=0\n"_s));
+        QVERIFY(tracked.contains(u"\n[Desktop Action new]"_s));
+        const auto read = appimage::tracking(appimage::mainGroup(tracked));
+        QCOMPARE(read.source, source.source);
+        QCOMPARE(read.variant, source.variant);
+        QCOMPARE(read.release, source.release);
+        // replaced, not added to, and taken away again
+        const auto other = appimage::withTracking(tracked, {.source = u"github:p/q"_s, .asset = 5, .variant = {}, .release = {}});
+        QCOMPARE(other.count(u"X-CachyOS-PI-Source"_s), 1);
+        QCOMPARE(appimage::tracking(appimage::mainGroup(other)).asset, 5);
+        QCOMPARE(appimage::withTracking(other, {}), plain);
+        // a group with nothing else in it
+        QCOMPARE(appimage::withTracking(u"[Desktop Entry]\n"_s, source).left(30), u"[Desktop Entry]\nX-CachyOS-PI-S"_s);
+        QVERIFY(appimage::withTracking(u"Name=x\n"_s, source).isEmpty());
+    }
+
     void invalidOptions() {
         using appimage::Problem;
         const auto check = [](QStringList environment, QString arguments, QString website) {

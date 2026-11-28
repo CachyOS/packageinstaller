@@ -228,10 +228,11 @@ class AppImageClient : public QObject {
     /// Reads the name, description, version and icon from the file again, which runs the
     /// file's own extractor. What the user set for the app is kept.
     Q_INVOKABLE void reloadMetadata(const QString& id);
-    /// Writes the arguments, the website, the pre-release choice and the environment ("NAME=value" each) into the menu
+    /// Writes the arguments, the website, the repository to look for updates in (empty for none),
+    /// the pre-release choice and the environment ("NAME=value" each) into the menu
     /// entry of the app. Returns why that is not possible, or nothing when it worked.
-    Q_INVOKABLE QString saveOptions(const QString& id, const QString& arguments, const QString& website, bool prereleases,
-        const QStringList& environment);
+    Q_INVOKABLE QString saveOptions(const QString& id, const QString& arguments, const QString& website, const QString& repository,
+        bool prereleases, const QStringList& environment);
     Q_INVOKABLE void refresh();
     Q_INVOKABLE void clearMessage();
 

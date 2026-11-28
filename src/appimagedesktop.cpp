@@ -469,6 +469,68 @@ QString withOptions(const QString& desktopFile, const Options& options) {
     return result.toUtf8().size() > MAX_ENTRY_BYTES ? QString() : result;
 }
 
+QString withTracking(const QString& desktopFile, const Tracking& tracking) {
+    if (!printable(tracking.source) || !printable(tracking.variant) || !printable(tracking.release)) {
+        return {};
+    }
+    static const QStringList own{SOURCE_KEY, ASSET_KEY, VARIANT_KEY, RELEASE_KEY};
+    auto lines        = desktopFile.split(u'\n');
+    QList<qsizetype> gone;
+    qsizetype headerLine = -1;
+    qsizetype lastLine   = -1;  // the last line with another key in the main group
+    bool inMain        = false;
+    bool seenMain      = false;
+    for (qsizetype i = 0; i < lines.size(); ++i) {
+        const auto line = lines.at(i).trimmed();
+        if (line.isEmpty() || line.startsWith(u'#')) {
+            continue;
+        }
+        if (isGroupHeader(line)) {
+            const bool isMain = line.mid(1, line.size() - 2) == "Desktop Entry"_L1;
+            if (isMain && !seenMain) {
+                headerLine = i;
+            }
+            inMain            = isMain && !seenMain;
+            seenMain          = seenMain || isMain;
+            continue;
+        }
+        const auto equals = line.indexOf(u'=');
+        if (!inMain || equals <= 0) {
+            continue;
+        }
+        if (own.contains(line.left(equals).trimmed())) {
+            gone << i;
+        } else {
+            lastLine = i;
+        }
+    }
+    if (!seenMain) {
+        return {};
+    }
+    lastLine = std::max(lastLine, headerLine);
+    // a removed line may stand behind the last one that stays: only those before it move it
+    qsizetype before = 0;
+    for (const auto line : gone) {
+        before += line < lastLine ? 1 : 0;
+    }
+    for (auto it = gone.crbegin(); it != gone.crend(); ++it) {
+        lines.removeAt(*it);
+    }
+    lastLine -= before;
+    if (!tracking.source.isEmpty()) {
+        QStringList added{SOURCE_KEY + u'=' + tracking.source, ASSET_KEY + u'=' + QString::number(tracking.asset),
+            VARIANT_KEY + u'=' + tracking.variant};
+        if (!tracking.release.isEmpty()) {
+            added << RELEASE_KEY + u'=' + tracking.release;
+        }
+        for (qsizetype i = 0; i < added.size(); ++i) {
+            lines.insert(lastLine + 1 + i, added.at(i));
+        }
+    }
+    const auto result = lines.join(u'\n');
+    return result.toUtf8().size() > MAX_ENTRY_BYTES ? QString() : result;
+}
+
 Tracking tracking(const QHash<QString, QString>& mainGroup) {
     return {.source  = mainGroup.value(SOURCE_KEY),
             .asset   = mainGroup.value(ASSET_KEY).toLongLong(),

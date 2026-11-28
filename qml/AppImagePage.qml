@@ -118,6 +118,72 @@ Item {
         }
     }
 
+    component OptionChoice: ComboBox {
+        id: control
+
+        implicitHeight: 36
+        font.pixelSize: Look.fontBody
+
+        background: Rectangle {
+            radius: Look.radius - 4
+            color: Look.surface
+            border.width: control.activeFocus ? 2 : 1
+            border.color: control.activeFocus ? Look.accent : Look.border
+        }
+
+        contentItem: PlainText {
+            leftPadding: 12
+            verticalAlignment: Text.AlignVCenter
+            text: control.displayText
+        }
+
+        indicator: Glyph {
+            x: control.width - width - 12
+            anchors.verticalCenter: control.verticalCenter
+            path: "M6 9l6 6 6-6"
+            size: 16
+            color: Look.textMuted
+        }
+
+        delegate: ItemDelegate {
+            required property int index
+            required property string modelData
+            width: parent.width
+            height: 36
+            highlighted: control.currentIndex === index
+
+            background: Rectangle {
+                radius: Look.radius - 6
+                color: parent.hovered ? Look.surfaceHover : "transparent"
+            }
+
+            contentItem: PlainText {
+                verticalAlignment: Text.AlignVCenter
+                text: parent.modelData
+                font.weight: parent.highlighted ? Font.DemiBold : Font.Normal
+            }
+        }
+
+        popup: Popup {
+            y: control.height + 4
+            width: control.width
+            padding: 4
+
+            contentItem: ListView {
+                implicitHeight: contentHeight
+                model: control.popup.visible ? control.delegateModel : null
+                clip: true
+            }
+
+            background: Rectangle {
+                radius: Look.radius - 4
+                color: Look.surface
+                border.width: 1
+                border.color: Look.border
+            }
+        }
+    }
+
     component OptionRow: Item {
         id: optionRow
 
@@ -127,9 +193,12 @@ Item {
         property bool editable: false
         property string placeholder
         property alias text: field.text
+        property var choices: []
+        property int choice
         property string buttonGlyph
         property string buttonName
         signal buttonClicked
+        signal picked(int index)
 
         implicitHeight: Math.max(58, texts.implicitHeight + 24)
 
@@ -154,10 +223,24 @@ Item {
             }
 
             PlainText {
-                visible: !optionRow.editable && !optionRow.link
+                visible: !optionRow.editable && !optionRow.link && optionRow.choices.length === 0
                 width: texts.width
                 text: optionRow.value
                 elide: Text.ElideMiddle
+            }
+
+            OptionChoice {
+                id: picker
+                visible: optionRow.choices.length > 0
+                width: texts.width
+                model: optionRow.choices
+                Accessible.name: optionRow.label
+                onActivated: index => optionRow.picked(index)
+
+                // a pick of the user must not end what the row is told to show
+                Binding on currentIndex {
+                    value: optionRow.choice
+                }
             }
 
             OptionField {
@@ -889,11 +972,14 @@ Item {
         readonly property bool dirty: {
             void edits;
             return argumentsRow.text !== root.inspected.arguments || websiteRow.text !== root.inspected.website
-                || prereleases !== root.inspected.prereleases
+                || prereleases !== root.inspected.prereleases || github !== optionsDialog.hasSource
+                || (github && repositoryRow.text.trim() !== optionsDialog.repository)
                 || JSON.stringify(assignments()) !== JSON.stringify(Array.from(root.inspected.environment));
         }
         property bool prereleases
+        property bool github
         property string problem
+        readonly property string repository: hasSource ? "https://github.com/" + root.inspected.source : ""
 
         function assignments(): var {
             const list = [];
@@ -909,6 +995,8 @@ Item {
             argumentsRow.text = root.inspected.arguments;
             websiteRow.text = root.inspected.website;
             prereleases = root.inspected.prereleases;
+            github = hasSource;
+            repositoryRow.text = repository;
             variables.clear();
             for (const entry of root.inspected.environment) {
                 const equals = entry.indexOf("=");
@@ -919,7 +1007,12 @@ Item {
         }
 
         function save(): void {
-            problem = root.client.saveOptions(root.inspected.id, argumentsRow.text, websiteRow.text, prereleases, assignments());
+            if (github && repositoryRow.text.trim().length === 0) {
+                problem = qsTr("Enter the GitHub repository to look for updates in, or choose None.");
+                return;
+            }
+            problem = root.client.saveOptions(root.inspected.id, argumentsRow.text, websiteRow.text, github ? repositoryRow.text : "",
+                prereleases, assignments());
         }
 
         ListModel {
@@ -931,258 +1024,293 @@ Item {
             load();
         }
 
-        contentItem: Column {
-            id: optionsBody
-            spacing: 16
+        // a fixed size: what does not fit scrolls, the buttons stay
+        height: Math.min(660, (Overlay.overlay?.height ?? 740) - 80)
 
-            Row {
-                width: optionsBody.width
-                spacing: 14
+        contentItem: Item {
+            id: optionsFrame
 
-                AppIcon {
-                    id: optionsIcon
-                    pkgName: "appimage/" + root.inspected.id
-                    size: 56
-                }
+            Flickable {
+                id: optionsScroll
+                anchors.top: parent.top
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: optionsButtons.top
+                anchors.bottomMargin: 16
+                contentHeight: optionsBody.height
+                clip: true
+                boundsBehavior: Flickable.StopAtBounds
 
-                Column {
-                    anchors.verticalCenter: optionsIcon.verticalCenter
-                    width: optionsBody.width - optionsIcon.width - 14
-                    spacing: 2
+                ScrollBar.vertical: ScrollBar {}
 
-                    Heading {
-                        width: parent.width
-                        text: root.inspected.name
-                        elide: Text.ElideRight
-                    }
-
-                    Muted {
-                        width: parent.width
-                        text: [root.inspected.version, root.inspected.size].filter(part => part.length > 0).join(" · ")
-                        visible: text.length > 0
-                        elide: Text.ElideRight
-                    }
-                }
-            }
-
-            OptionAction {
-                width: optionsBody.width
-                visible: optionsDialog.canChange
-                enabled: !optionsDialog.dirty && !root.client.busy
-                glyph: "M20 12a8 8 0 1 1-2.34-5.66M20 4v4h-4"
-                text: qsTr("Reload metadata")
-                description: qsTr("Update information like icon, version and description. Useful e.g if the app updated itself. The appimage needs to be run to read them.")
-                onClicked: root.client.reloadMetadata(root.inspected.id)
-            }
-
-            Notice {
-                width: optionsBody.width
-                text: root.inspected.missing ? qsTr("The file is gone. Remove this entry or add the AppImage again.") : ""
-                tone: Notice.Warning
-            }
-
-            OptionGroup {
-                width: optionsBody.width
-
-                OptionRow {
-                    width: parent.width
-                    label: qsTr("Path")
-                    value: root.inspected.path
-                    buttonGlyph: "M10 5H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5M14 4h6v6M20 4l-9 9"
-                    buttonName: qsTr("Show in file manager")
-                    onButtonClicked: Qt.openUrlExternally(root.folderOf(root.inspected.path))
-                }
-
-                OptionRow {
-                    id: argumentsRow
-                    width: parent.width
-                    enabled: optionsDialog.canChange
-                    label: qsTr("Command line arguments")
-                    editable: true
-                    placeholder: "%U"
-                    onTextChanged: optionsDialog.edits++
-                }
-
-                OptionRow {
-                    id: websiteRow
-                    width: parent.width
-                    enabled: optionsDialog.canChange
-                    label: qsTr("Website")
-                    editable: true
-                    placeholder: "https://"
-                    buttonGlyph: /^https?:\/\/\S+$/.test(text.trim()) ? "M10 5H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5M14 4h6v6M20 4l-9 9" : ""
-                    buttonName: qsTr("Open the website")
-                    onButtonClicked: Qt.openUrlExternally(text.trim())
-                    onTextChanged: optionsDialog.edits++
-                }
-            }
-
-            Muted {
-                width: optionsBody.width
-                text: qsTr("Update management")
-                font.weight: Font.DemiBold
-                visible: optionsDialog.hasSource
-            }
-
-            OptionGroup {
-                width: optionsBody.width
-                visible: optionsDialog.hasSource
-
-                OptionRow {
-                    width: parent.width
-                    label: qsTr("Source")
-                    value: qsTr("GitHub")
-                }
-
-                OptionRow {
-                    width: parent.width
-                    label: qsTr("Repository")
-                    value: "https://" + root.origin(root.inspected.source)
-                    link: true
-                }
-
-                OptionRow {
-                    width: parent.width
-                    visible: root.inspected.update.length > 0
-                    label: qsTr("Newer release")
-                    value: root.inspected.update
-                }
-            }
-
-            SettingCard {
-                width: optionsBody.width
-                visible: optionsDialog.hasSource && optionsDialog.canChange
-                title: qsTr("Allow pre-releases")
-                description: qsTr("Also offer releases that are marked as a pre-release on GitHub as updates.")
-
-                Toggle {
-                    active: optionsDialog.prereleases
-                    name: qsTr("Allow pre-releases")
-                    onClicked: optionsDialog.prereleases = !optionsDialog.prereleases
-                }
-            }
-
-            Item {
-                width: optionsBody.width
-                height: Math.max(variablesTitle.height, addVariable.height)
-                visible: optionsDialog.canChange
+                WheelScroll {}
 
                 Column {
-                    id: variablesTitle
-                    width: parent.width - addVariable.width - 12
-                    spacing: 2
+                    id: optionsBody
+                    // room for the scroll bar
+                    width: optionsScroll.width - 14
+                    spacing: 16
 
-                    Heading {
-                        width: parent.width
-                        text: qsTr("Environment variables")
-                        font.pixelSize: Look.fontLead
-                    }
-
-                    Muted {
-                        width: parent.width
-                        text: qsTr("Set for this application when it starts from the menu or from here.")
-                        wrapMode: Text.WordWrap
-                    }
-                }
-
-                PillButton {
-                    id: addVariable
-                    anchors.right: parent.right
-                    anchors.verticalCenter: parent.verticalCenter
-                    size: "small"
-                    tone: "soft"
-                    leftPadding: 10
-                    rightPadding: 10
-                    Accessible.name: qsTr("Add a variable")
-                    onClicked: {
-                        variables.append({varName: "", varValue: ""});
-                        optionsDialog.edits++;
-                    }
-
-                    contentItem: Glyph {
-                        path: "M12 5v14M5 12h14"
-                        size: 16
-                    }
-                }
-            }
-
-            Column {
-                width: optionsBody.width
-                spacing: 8
-                visible: optionsDialog.canChange
-
-                Repeater {
-                    model: variables
 
                     Row {
-                        id: variable
-
-                        required property int index
-                        required property string varName
-                        required property string varValue
-
                         width: optionsBody.width
-                        spacing: 8
+                        spacing: 14
 
-                        OptionField {
-                            width: (variable.width - equals.width - remove.width - 3 * variable.spacing) * 0.4
-                            text: variable.varName
-                            placeholderText: qsTr("NAME")
-                            Accessible.name: qsTr("Variable name")
-                            onTextEdited: {
-                                variables.setProperty(variable.index, "varName", text);
+                        AppIcon {
+                            id: optionsIcon
+                            pkgName: "appimage/" + root.inspected.id
+                            size: 56
+                        }
+
+                        Column {
+                            anchors.verticalCenter: optionsIcon.verticalCenter
+                            width: optionsBody.width - optionsIcon.width - 14
+                            spacing: 2
+
+                            Heading {
+                                width: parent.width
+                                text: root.inspected.name
+                                elide: Text.ElideRight
+                            }
+
+                            Muted {
+                                width: parent.width
+                                text: [root.inspected.version, root.inspected.size].filter(part => part.length > 0).join(" · ")
+                                visible: text.length > 0
+                                elide: Text.ElideRight
+                            }
+                        }
+                    }
+
+                    OptionAction {
+                        width: optionsBody.width
+                        visible: optionsDialog.canChange
+                        enabled: !optionsDialog.dirty && !root.client.busy
+                        glyph: "M20 12a8 8 0 1 1-2.34-5.66M20 4v4h-4"
+                        text: qsTr("Reload metadata")
+                        description: qsTr("Update information like icon, version and description. Useful e.g if the app updated itself. The appimage needs to be run to read them.")
+                        onClicked: root.client.reloadMetadata(root.inspected.id)
+                    }
+
+                    Notice {
+                        width: optionsBody.width
+                        text: root.inspected.missing ? qsTr("The file is gone. Remove this entry or add the AppImage again.") : ""
+                        tone: Notice.Warning
+                    }
+
+                    OptionGroup {
+                        width: optionsBody.width
+
+                        OptionRow {
+                            width: parent.width
+                            label: qsTr("Path")
+                            value: root.inspected.path
+                            buttonGlyph: "M10 5H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5M14 4h6v6M20 4l-9 9"
+                            buttonName: qsTr("Show in file manager")
+                            onButtonClicked: Qt.openUrlExternally(root.folderOf(root.inspected.path))
+                        }
+
+                        OptionRow {
+                            id: argumentsRow
+                            width: parent.width
+                            enabled: optionsDialog.canChange
+                            label: qsTr("Command line arguments")
+                            editable: true
+                            placeholder: "%U"
+                            onTextChanged: optionsDialog.edits++
+                        }
+
+                        OptionRow {
+                            id: websiteRow
+                            width: parent.width
+                            enabled: optionsDialog.canChange
+                            label: qsTr("Website")
+                            editable: true
+                            placeholder: "https://"
+                            buttonGlyph: /^https?:\/\/\S+$/.test(text.trim()) ? "M10 5H5a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5M14 4h6v6M20 4l-9 9" : ""
+                            buttonName: qsTr("Open the website")
+                            onButtonClicked: Qt.openUrlExternally(text.trim())
+                            onTextChanged: optionsDialog.edits++
+                        }
+                    }
+
+                    Muted {
+                        width: optionsBody.width
+                        text: qsTr("Update management")
+                        font.weight: Font.DemiBold
+                    }
+
+                    OptionGroup {
+                        width: optionsBody.width
+                        enabled: optionsDialog.canChange
+
+                        OptionRow {
+                            width: parent.width
+                            label: qsTr("Source")
+                            choices: [qsTr("None"), qsTr("GitHub")]
+                            choice: optionsDialog.github ? 1 : 0
+                            onPicked: index => {
+                                optionsDialog.github = index === 1;
                                 optionsDialog.edits++;
                             }
                         }
 
-                        Muted {
-                            id: equals
-                            anchors.verticalCenter: parent.verticalCenter
-                            text: "="
+                        OptionRow {
+                            id: repositoryRow
+                            width: parent.width
+                            visible: optionsDialog.github
+                            label: qsTr("Repository")
+                            editable: true
+                            placeholder: qsTr("https://github.com/owner/project")
+                            onTextChanged: optionsDialog.edits++
                         }
 
-                        OptionField {
-                            width: (variable.width - equals.width - remove.width - 3 * variable.spacing) * 0.6
-                            text: variable.varValue
-                            placeholderText: qsTr("value")
-                            Accessible.name: qsTr("Variable value")
-                            onTextEdited: {
-                                variables.setProperty(variable.index, "varValue", text);
-                                optionsDialog.edits++;
+                        OptionRow {
+                            width: parent.width
+                            visible: optionsDialog.hasSource && root.inspected.update.length > 0
+                            label: qsTr("Newer release")
+                            value: root.inspected.update
+                        }
+                    }
+
+                    SettingCard {
+                        width: optionsBody.width
+                        visible: optionsDialog.github && optionsDialog.canChange
+                        title: qsTr("Allow pre-releases")
+                        description: qsTr("Also offer releases that are marked as a pre-release on GitHub as updates.")
+
+                        Toggle {
+                            active: optionsDialog.prereleases
+                            name: qsTr("Allow pre-releases")
+                            onClicked: optionsDialog.prereleases = !optionsDialog.prereleases
+                        }
+                    }
+
+                    Item {
+                        width: optionsBody.width
+                        height: Math.max(variablesTitle.height, addVariable.height)
+                        visible: optionsDialog.canChange
+
+                        Column {
+                            id: variablesTitle
+                            width: parent.width - addVariable.width - 12
+                            spacing: 2
+
+                            Heading {
+                                width: parent.width
+                                text: qsTr("Environment variables")
+                                font.pixelSize: Look.fontLead
+                            }
+
+                            Muted {
+                                width: parent.width
+                                text: qsTr("Set for this application when it starts from the menu or from here.")
+                                wrapMode: Text.WordWrap
                             }
                         }
 
                         PillButton {
-                            id: remove
+                            id: addVariable
+                            anchors.right: parent.right
                             anchors.verticalCenter: parent.verticalCenter
                             size: "small"
-                            tone: "danger"
+                            tone: "soft"
                             leftPadding: 10
                             rightPadding: 10
-                            Accessible.name: qsTr("Remove the variable")
+                            Accessible.name: qsTr("Add a variable")
                             onClicked: {
-                                variables.remove(variable.index);
+                                variables.append({varName: "", varValue: ""});
                                 optionsDialog.edits++;
                             }
 
                             contentItem: Glyph {
-                                path: "M4 7h16M10 11v6M14 11v6M6 7l1 12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-12M9 7V4h6v3"
-                                color: Look.danger
+                                path: "M12 5v14M5 12h14"
                                 size: 16
                             }
                         }
                     }
+
+                    Column {
+                        width: optionsBody.width
+                        spacing: 8
+                        visible: optionsDialog.canChange
+
+                        Repeater {
+                            model: variables
+
+                            Row {
+                                id: variable
+
+                                required property int index
+                                required property string varName
+                                required property string varValue
+
+                                width: optionsBody.width
+                                spacing: 8
+
+                                OptionField {
+                                    width: (variable.width - equals.width - remove.width - 3 * variable.spacing) * 0.4
+                                    text: variable.varName
+                                    placeholderText: qsTr("NAME")
+                                    Accessible.name: qsTr("Variable name")
+                                    onTextEdited: {
+                                        variables.setProperty(variable.index, "varName", text);
+                                        optionsDialog.edits++;
+                                    }
+                                }
+
+                                Muted {
+                                    id: equals
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    text: "="
+                                }
+
+                                OptionField {
+                                    width: (variable.width - equals.width - remove.width - 3 * variable.spacing) * 0.6
+                                    text: variable.varValue
+                                    placeholderText: qsTr("value")
+                                    Accessible.name: qsTr("Variable value")
+                                    onTextEdited: {
+                                        variables.setProperty(variable.index, "varValue", text);
+                                        optionsDialog.edits++;
+                                    }
+                                }
+
+                                PillButton {
+                                    id: remove
+                                    anchors.verticalCenter: parent.verticalCenter
+                                    size: "small"
+                                    tone: "danger"
+                                    leftPadding: 10
+                                    rightPadding: 10
+                                    Accessible.name: qsTr("Remove the variable")
+                                    onClicked: {
+                                        variables.remove(variable.index);
+                                        optionsDialog.edits++;
+                                    }
+
+                                    contentItem: Glyph {
+                                        path: "M4 7h16M10 11v6M14 11v6M6 7l1 12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-12M9 7V4h6v3"
+                                        color: Look.danger
+                                        size: 16
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    Notice {
+                        width: optionsBody.width
+                        tone: Notice.Danger
+                        text: optionsDialog.problem.length > 0 ? optionsDialog.problem : root.client.error
+                    }
                 }
             }
 
-            Notice {
-                width: optionsBody.width
-                tone: Notice.Danger
-                text: optionsDialog.problem.length > 0 ? optionsDialog.problem : root.client.error
-            }
-
             Row {
-                anchors.right: optionsBody.right
+                id: optionsButtons
+                anchors.bottom: parent.bottom
+                anchors.right: optionsFrame.right
                 spacing: 10
 
                 PillButton {
