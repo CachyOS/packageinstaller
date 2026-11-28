@@ -1067,6 +1067,9 @@ Item {
             }
             problem = root.client.saveOptions(root.inspected.id, argumentsRow.text, websiteRow.text, github ? repositoryRow.text : "",
                 prereleases, assignments());
+            // the fields show what was stored, so that "owner/project" turns into the address and is no change any more
+            if (problem.length === 0)
+                load();
         }
 
         ListModel {
