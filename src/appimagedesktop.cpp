@@ -5,6 +5,10 @@
 #include <QRegularExpression>
 #include <QSet>
 
+#include <algorithm>
+#include <array>
+#include <functional>
+
 using namespace Qt::StringLiterals;
 
 namespace appimage {
@@ -383,7 +387,8 @@ std::optional<std::pair<QString, QString>> assignment(const QString& word) {
 
 Options readOptions(const QHash<QString, QString>& mainGroup) {
     const auto parts = splitExec(mainGroup.value(u"Exec"_s));
-    Options result{.environment = {}, .arguments = parts.arguments.trimmed(), .website = mainGroup.value(WEBSITE_KEY)};
+    Options result{.environment = {}, .arguments = parts.arguments.trimmed(), .website = mainGroup.value(WEBSITE_KEY),
+                    .prereleases = mainGroup.value(PRERELEASES_KEY) == "true"_L1};
     for (const auto& word : parts.assignments) {
         if (const auto resolved = commandLine(word); !resolved.isEmpty()) {
             result.environment << resolved.first();
@@ -401,6 +406,7 @@ QString withOptions(const QString& desktopFile, const Options& options) {
     bool seenMain      = false;
     qsizetype execLine = -1;
     qsizetype siteLine = -1;
+    qsizetype preLine  = -1;
     qsizetype lastLine = -1;  // the last line with a key in the main group
     for (qsizetype i = 0; i < lines.size(); ++i) {
         const auto line = lines.at(i).trimmed();
@@ -423,6 +429,8 @@ QString withOptions(const QString& desktopFile, const Options& options) {
             execLine = i;
         } else if (key == WEBSITE_KEY && siteLine < 0) {
             siteLine = i;
+        } else if (key == PRERELEASES_KEY && preLine < 0) {
+            preLine = i;
         }
     }
     if (execLine < 0) {
@@ -432,12 +440,30 @@ QString withOptions(const QString& desktopFile, const Options& options) {
     const auto args  = options.arguments.trimmed();
     lines[execLine]  = u"Exec="_s + environmentWords(options.environment) + parts.program + (args.isEmpty() ? QString() : u' ' + args);
 
-    if (siteLine >= 0 && options.website.isEmpty()) {
-        lines.removeAt(siteLine);
-    } else if (siteLine >= 0) {
-        lines[siteLine] = WEBSITE_KEY + u'=' + options.website;
-    } else if (!options.website.isEmpty()) {
-        lines.insert(lastLine + 1, WEBSITE_KEY + u'=' + options.website);
+    const std::array<std::pair<qsizetype, QString>, 2> managed{{
+        {siteLine, options.website},
+        {preLine, options.prereleases ? u"true"_s : QString()},
+    }};
+    const std::array<QLatin1StringView, 2> keys{WEBSITE_KEY, PRERELEASES_KEY};
+    QList<qsizetype> gone;
+    QStringList added;
+    for (qsizetype i = 0; i < 2; ++i) {
+        const auto& [line, value] = managed.at(i);
+        if (line >= 0 && value.isEmpty()) {
+            gone << line;
+        } else if (line >= 0) {
+            lines[line] = keys.at(i) + u'=' + value;
+        } else if (!value.isEmpty()) {
+            added << keys.at(i) + u'=' + value;
+        }
+    }
+    std::ranges::sort(gone, std::greater<>());
+    for (const auto line : gone) {
+        lines.removeAt(line);
+        --lastLine;
+    }
+    for (qsizetype i = 0; i < added.size(); ++i) {
+        lines.insert(lastLine + 1 + i, added.at(i));
     }
     const auto result = lines.join(u'\n');
     return result.toUtf8().size() > MAX_ENTRY_BYTES ? QString() : result;

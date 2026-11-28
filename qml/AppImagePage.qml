@@ -889,8 +889,10 @@ Item {
         readonly property bool dirty: {
             void edits;
             return argumentsRow.text !== root.inspected.arguments || websiteRow.text !== root.inspected.website
+                || prereleases !== root.inspected.prereleases
                 || JSON.stringify(assignments()) !== JSON.stringify(Array.from(root.inspected.environment));
         }
+        property bool prereleases
         property string problem
 
         function assignments(): var {
@@ -906,6 +908,7 @@ Item {
         function load(): void {
             argumentsRow.text = root.inspected.arguments;
             websiteRow.text = root.inspected.website;
+            prereleases = root.inspected.prereleases;
             variables.clear();
             for (const entry of root.inspected.environment) {
                 const equals = entry.indexOf("=");
@@ -916,7 +919,7 @@ Item {
         }
 
         function save(): void {
-            problem = root.client.saveOptions(root.inspected.id, argumentsRow.text, websiteRow.text, assignments());
+            problem = root.client.saveOptions(root.inspected.id, argumentsRow.text, websiteRow.text, prereleases, assignments());
         }
 
         ListModel {
@@ -1043,6 +1046,19 @@ Item {
                     visible: root.inspected.update.length > 0
                     label: qsTr("Newer release")
                     value: root.inspected.update
+                }
+            }
+
+            SettingCard {
+                width: optionsBody.width
+                visible: optionsDialog.hasSource && optionsDialog.canChange
+                title: qsTr("Allow pre-releases")
+                description: qsTr("Also offer releases that are marked as a pre-release on GitHub as updates.")
+
+                Toggle {
+                    active: optionsDialog.prereleases
+                    name: qsTr("Allow pre-releases")
+                    onClicked: optionsDialog.prereleases = !optionsDialog.prereleases
                 }
             }
 

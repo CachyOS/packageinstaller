@@ -20,6 +20,8 @@ inline constexpr QLatin1StringView VARIANT_KEY{"X-CachyOS-PI-Variant"};
 inline constexpr QLatin1StringView RELEASE_KEY{"X-CachyOS-PI-Release"};
 /// The project page of the app, as the user entered it.
 inline constexpr QLatin1StringView WEBSITE_KEY{"X-CachyOS-PI-Website"};
+/// "true" when updates may be pre-releases.
+inline constexpr QLatin1StringView PRERELEASES_KEY{"X-CachyOS-PI-Prereleases"};
 /// No desktop entry is read or written beyond this size.
 inline constexpr qint64 MAX_ENTRY_BYTES = 256 * 1024;
 
@@ -37,6 +39,7 @@ struct Options {
     QStringList environment;  ///< "NAME=value", in the order they are set
     QString arguments;  ///< as written after the program in Exec=
     QString website;    ///< an http(s) address, or empty
+    bool prereleases = false;  ///< newer pre-releases count as updates
 
     friend bool operator==(const Options&, const Options&) = default;
 };

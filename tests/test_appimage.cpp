@@ -59,10 +59,12 @@ class TestAppImage : public QObject {
         QCOMPARE(plain.arguments, u"%U"_s);
         QVERIFY(plain.environment.isEmpty());
         QVERIFY(plain.website.isEmpty());
+        QVERIFY(!plain.prereleases);
 
         const appimage::Options wanted{.environment = {u"A=1"_s, u"MSG=two words"_s, u"EMPTY="_s, u"P=50%"_s, u"Q=a\\b\"c"_s},
             .arguments = u"-r \"/home/u/my saves\" %f"_s,
-            .website   = u"https://example.org/app"_s};
+            .website   = u"https://example.org/app"_s,
+            .prereleases = true};
         const auto changed = appimage::withOptions(text, wanted);
         QVERIFY(!changed.isEmpty());
         // what is read back is what was written, quoting included
@@ -72,11 +74,11 @@ class TestAppImage : public QObject {
                 u"/a/App.AppImage"_s, u"-r"_s, u"/home/u/my saves"_s}));
         // the program and every other line stay; the action keeps its own command
         QVERIFY(changed.contains(u"Exec=env A=1 "_s));
-        QVERIFY(changed.contains(u"Icon=editor\nX-CachyOS-PI-Website=https://example.org/app\n"_s));
+        QVERIFY(changed.contains(u"Icon=editor\nX-CachyOS-PI-Website=https://example.org/app\nX-CachyOS-PI-Prereleases=true\n"_s));
         QVERIFY(changed.contains(u"Exec=/a/App.AppImage --new"_s));
 
         // changing it again replaces the variables; taking everything away gives the plain entry
-        QCOMPARE(appimage::withOptions(changed, {.environment = {}, .arguments = {}, .website = {}}),
+        QCOMPARE(appimage::withOptions(changed, {.environment = {}, .arguments = {}, .website = {}, .prereleases = false}),
             u"[Desktop Entry]\nName=Editor\nExec=/a/App.AppImage\nIcon=editor\n"
             "\n[Desktop Action new]\nName=New\nExec=/a/App.AppImage --new\n"_s);
         // a program with a space in its path survives, with and without variables
@@ -551,6 +553,13 @@ manager = GithubUpdater
         QVERIFY(bare->assets.isEmpty());
         QVERIFY(!appimage::parseRelease("{\"message\":\"Not Found\"}").has_value());
         QVERIFY(!appimage::parseRelease("[]").has_value());
+        // of a list the first release that is no draft counts
+        const auto list = appimage::parseRelease(
+            "[{\"tag_name\":\"v3\",\"draft\":true,\"assets\":[]},{\"tag_name\":\"v2-rc1\",\"prerelease\":true,\"assets\":[]},{\"tag_name\":\"v1\",\"assets\":[]}]");
+        QVERIFY(list.has_value());
+        QCOMPARE(list->tag, u"v2-rc1"_s);
+        QVERIFY(appimage::latestReleaseUrl({u"o"_s, u"r"_s, {}}).path().endsWith(u"/releases/latest"_s));
+        QVERIFY(appimage::latestReleaseUrl({u"o"_s, u"r"_s, {}}, true).query().contains(u"per_page"_s));
         QVERIFY(!appimage::parseRelease("<html>").has_value());
         QVERIFY(!appimage::parseRelease(QByteArray()).has_value());
     }

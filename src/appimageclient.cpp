@@ -902,10 +902,17 @@ QNetworkRequest request(const QUrl& url) {
     return req;
 }
 
+/// Under which name the newest release of a source is kept: the one that counts pre-releases
+/// is not the same as the one that does not.
+QString releaseKey(const QString& source, bool prereleases) {
+    return prereleases ? source + u"#pre"_s : source;
+}
+
 /// Asks GitHub about the newest release of `source`. `load` says whether an answer that
 /// was kept from an earlier question will do.
-QNetworkReply* askRelease(QNetworkAccessManager& network, const appimage::Source& source, QNetworkRequest::CacheLoadControl load) {
-    auto req = request(appimage::latestReleaseUrl(source));
+QNetworkReply* askRelease(QNetworkAccessManager& network, const appimage::Source& source, QNetworkRequest::CacheLoadControl load,
+    bool prereleases = false) {
+    auto req = request(appimage::latestReleaseUrl(source, prereleases));
     req.setRawHeader("Accept", "application/vnd.github+json");
     req.setRawHeader("X-GitHub-Api-Version", "2022-11-28");
     req.setAttribute(QNetworkRequest::CacheLoadControlAttribute, load);
@@ -941,8 +948,9 @@ std::expected<appimage::Release, QString> readRelease(QNetworkReply* reply, cons
 
 /// The file of the newest known release that takes the place of what `tracked` names;
 /// null when that one is installed or nothing is known. `tag` gets the name of the release.
-const appimage::Asset* newerAsset(const QHash<QString, appimage::Release>& releases, const appimage::Tracking& tracked, QString* tag = nullptr) {
-    const auto release = releases.constFind(tracked.source);
+const appimage::Asset* newerAsset(const QHash<QString, appimage::Release>& releases, const appimage::Tracking& tracked, bool prereleases,
+    QString* tag = nullptr) {
+    const auto release = releases.constFind(releaseKey(tracked.source, prereleases));
     if (release == releases.cend()) {
         return nullptr;
     }
@@ -1149,23 +1157,25 @@ void AppImageClient::clearOffer() {
 
 void AppImageClient::addOffered(int file) {
     if (file >= 0 && file < m_offeredAssets.size()) {
-        download(m_offeredSource, m_offeredAssets.at(file));
+        download(m_offeredSource, m_offeredAssets.at(file), m_offer.release);
     }
 }
 
 void AppImageClient::update(const QString& id) {
     const auto desktopName = id + u".desktop"_s;
-    const auto tracked     = appimage::tracking(appimage::mainGroup(readText(menuDirectory() + u'/' + desktopName, appimage::MAX_ENTRY_BYTES)));
+    const auto keys        = appimage::mainGroup(readText(menuDirectory() + u'/' + desktopName, appimage::MAX_ENTRY_BYTES));
+    const auto tracked     = appimage::tracking(keys);
     const auto source      = appimage::sourceFromValue(tracked.source);
-    const auto* asset      = newerAsset(m_releases, tracked);
+    QString release;
+    const auto* asset = newerAsset(m_releases, tracked, appimage::readOptions(keys).prereleases, &release);
     if (!source || asset == nullptr) {
         refresh();  // what the list showed is out of date
         return;
     }
-    download(*source, *asset, desktopName);
+    download(*source, *asset, release, desktopName);
 }
 
-void AppImageClient::download(const appimage::Source& source, const appimage::Asset& asset, const QString& replaces) {
+void AppImageClient::download(const appimage::Source& source, const appimage::Asset& asset, const QString& release, const QString& replaces) {
     if (m_busy) {
         return;
     }
@@ -1180,8 +1190,7 @@ void AppImageClient::download(const appimage::Source& source, const appimage::As
     auto download     = std::make_unique<Download>();
     download->asset   = asset;
     download->fetched = {.name = asset.name,
-        .tracking = {.source = appimage::sourceValue(source), .asset = asset.id, .variant = appimage::variant(asset.name),
-            .release = m_releases.value(appimage::sourceValue(source)).tag},
+        .tracking = {.source = appimage::sourceValue(source), .asset = asset.id, .variant = appimage::variant(asset.name), .release = release},
         .replaces = replaces};
     // next to where it will end up: install() takes it over as its working copy
     download->file.setFileName(privatePath("part"_L1));
@@ -1254,12 +1263,17 @@ void AppImageClient::checkUpdates(bool now) {
     if (m_checks > 0) {
         return;
     }
-    QHash<QString, appimage::Source> sources;
+    struct Asked {
+        appimage::Source source;
+        bool prereleases;
+    };
+    QHash<QString, Asked> sources;
     const auto entries = managedEntries();
     for (const auto& keys : entries) {
         const auto value = appimage::tracking(keys).source;
         if (const auto source = appimage::sourceFromValue(value)) {
-            sources.insert(value, *source);
+            const auto prereleases = appimage::readOptions(keys).prereleases;
+            sources.insert(releaseKey(value, prereleases), {*source, prereleases});
         }
     }
     if (sources.isEmpty()) {
@@ -1273,8 +1287,9 @@ void AppImageClient::checkUpdates(bool now) {
         return;  // nothing the last answers do not tell already
     }
     m_checkError.clear();
-    for (const auto& [value, source] : sources.asKeyValueRange()) {
-        auto* reply = askRelease(m_network, source, fresh ? QNetworkRequest::PreferNetwork : QNetworkRequest::AlwaysCache);
+    for (const auto& [value, asked] : sources.asKeyValueRange()) {
+        const auto source = asked.source;
+        auto* reply = askRelease(m_network, source, fresh ? QNetworkRequest::PreferNetwork : QNetworkRequest::AlwaysCache, asked.prereleases);
         ++m_checks;
         connect(reply, &QNetworkReply::finished, this, [this, reply, value, source, fresh, now] {
             reply->deleteLater();
@@ -1367,8 +1382,10 @@ void AppImageClient::reloadMetadata(const QString& id) {
     m_watcher.setFuture(QtConcurrent::run(reload, id, m_cancel));
 }
 
-QString AppImageClient::saveOptions(const QString& id, const QString& arguments, const QString& website, const QStringList& environment) {
-    const appimage::Options options{.environment = environment, .arguments = arguments.trimmed(), .website = website.trimmed()};
+QString AppImageClient::saveOptions(const QString& id, const QString& arguments, const QString& website, bool prereleases,
+    const QStringList& environment) {
+    const appimage::Options options{
+        .environment = environment, .arguments = arguments.trimmed(), .website = website.trimmed(), .prereleases = prereleases};
     switch (appimage::problem(options)) {
     case appimage::Problem::None:
         break;
@@ -1392,8 +1409,10 @@ QString AppImageClient::saveOptions(const QString& id, const QString& arguments,
     if (!managedEntries().contains(desktopName)) {
         return tr("This AppImage is not in the list any more.");
     }
-    const auto path = menuDirectory() + u'/' + desktopName;
-    const auto text = appimage::withOptions(readText(path, appimage::MAX_ENTRY_BYTES), options);
+    const auto path    = menuDirectory() + u'/' + desktopName;
+    const auto before  = readText(path, appimage::MAX_ENTRY_BYTES);
+    const auto changed = appimage::readOptions(appimage::mainGroup(before)).prereleases != prereleases;
+    const auto text    = appimage::withOptions(before, options);
     if (text.isEmpty()) {
         return tr("The menu entry could not be changed.");
     }
@@ -1403,6 +1422,9 @@ QString AppImageClient::saveOptions(const QString& id, const QString& arguments,
     }
     refreshMenu();
     refresh();
+    if (changed) {
+        checkUpdates(true);  // the newest release may be another one now
+    }
     return {};
 }
 
@@ -1421,7 +1443,7 @@ void AppImageClient::refresh() {
         const auto options = appimage::readOptions(keys);
         QString update;
         if (source) {
-            newerAsset(m_releases, tracked, &update);
+            newerAsset(m_releases, tracked, options.prereleases, &update);
         }
         apps << AppImageItem{
             .id      = id,
@@ -1439,6 +1461,7 @@ void AppImageClient::refresh() {
             .update   = update,
             .arguments   = options.arguments,
             .website     = options.website,
+            .prereleases = options.prereleases,
             .environment = options.environment,
         };
         const auto icon = keys.value(u"Icon"_s);

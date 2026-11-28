@@ -106,13 +106,22 @@ bool sameRelease(QStringView one, QStringView other) {
     return !one.isEmpty() && withoutV(one) == withoutV(other);
 }
 
-QUrl latestReleaseUrl(const Source& source) {
-    return QUrl(u"https://api.github.com/repos/%1/%2/releases/latest"_s.arg(source.owner, source.repo));
+QUrl latestReleaseUrl(const Source& source, bool prereleases) {
+    return QUrl(u"https://api.github.com/repos/%1/%2/releases%3"_s.arg(source.owner, source.repo, prereleases ? u"?per_page=10"_s : u"/latest"_s));
 }
 
 std::optional<Release> parseRelease(const QByteArray& answer) {
     const auto document = QJsonDocument::fromJson(answer);
-    const auto object   = document.object();
+    auto object         = document.object();
+    if (document.isArray()) {
+        object = {};
+        for (const auto& value : document.array()) {
+            if (!value.toObject().value("draft"_L1).toBool()) {
+                object = value.toObject();
+                break;
+            }
+        }
+    }
     Release release{.tag = object.value("tag_name"_L1).toString().simplified().left(64), .assets = {}};
     if (release.tag.isEmpty() || !object.value("assets"_L1).isArray()) {
         return std::nullopt;
