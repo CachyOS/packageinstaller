@@ -1499,6 +1499,16 @@
         <translation>Εμφάνιση</translation>
     </message>
     <message>
+        <location filename="../qml/SettingsPage.qml" line="60"/>
+        <source>Language</source>
+        <translation>Γλώσσα</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="69"/>
+        <source>Follow the system</source>
+        <translation>Όπως το σύστημα</translation>
+    </message>
+    <message>
         <location filename="../qml/SettingsPage.qml" line="39"/>
         <source>Follow the desktop</source>
         <translation>Όπως η επιφάνεια εργασίας</translation>

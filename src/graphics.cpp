@@ -3,7 +3,7 @@
 
 #include <QQuickWindow>
 
-#if QT_CONFIG(vulkan)
+#if QT_CONFIG(vulkan) && __has_include(<vulkan/vulkan.h>)
 #include <QVulkanFunctions>
 #include <QVulkanInstance>
 #endif
@@ -39,7 +39,7 @@ bool isGnomeSession() {
 }
 
 bool hasVulkanGpu() {
-#if QT_CONFIG(vulkan)
+#if QT_CONFIG(vulkan) && __has_include(<vulkan/vulkan.h>)
     // QML has no fallback of its own once render is enforced,
     // so ask check if it's valid at all.
     QVulkanInstance instance;

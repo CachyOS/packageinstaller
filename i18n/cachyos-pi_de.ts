@@ -1499,6 +1499,16 @@
         <translation>Darstellung</translation>
     </message>
     <message>
+        <location filename="../qml/SettingsPage.qml" line="60"/>
+        <source>Language</source>
+        <translation>Sprache</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="69"/>
+        <source>Follow the system</source>
+        <translation>Dem System folgen</translation>
+    </message>
+    <message>
         <location filename="../qml/SettingsPage.qml" line="39"/>
         <source>Follow the desktop</source>
         <translation>Der Arbeitsumgebung folgen</translation>

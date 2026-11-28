@@ -1510,6 +1510,16 @@
         <translation>Внешний вид</translation>
     </message>
     <message>
+        <location filename="../qml/SettingsPage.qml" line="60"/>
+        <source>Language</source>
+        <translation>Язык</translation>
+    </message>
+    <message>
+        <location filename="../qml/SettingsPage.qml" line="69"/>
+        <source>Follow the system</source>
+        <translation>Как в системе</translation>
+    </message>
+    <message>
         <location filename="../qml/SettingsPage.qml" line="39"/>
         <source>Follow the desktop</source>
         <translation>Как в окружении рабочего стола</translation>
